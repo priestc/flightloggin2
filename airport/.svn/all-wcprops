@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 19
+/!svn/ver/1/airport
+END
+admin.py
+K 25
+svn:wc:ra_dav:version-url
+V 28
+/!svn/ver/1/airport/admin.py
+END
+constants.py
+K 25
+svn:wc:ra_dav:version-url
+V 32
+/!svn/ver/1/airport/constants.py
+END
+imports.py
+K 25
+svn:wc:ra_dav:version-url
+V 30
+/!svn/ver/1/airport/imports.py
+END
+views.py
+K 25
+svn:wc:ra_dav:version-url
+V 28
+/!svn/ver/1/airport/views.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 31
+/!svn/ver/1/airport/__init__.py
+END
+models.py
+K 25
+svn:wc:ra_dav:version-url
+V 29
+/!svn/ver/1/airport/models.py
+END
+urls.py
+K 25
+svn:wc:ra_dav:version-url
+V 27
+/!svn/ver/1/airport/urls.py
+END

@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 21
+/!svn/ver/1/templates
+END
+logbook.html
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/!svn/ver/4/templates/logbook.html
+END
+stats.html
+K 25
+svn:wc:ra_dav:version-url
+V 32
+/!svn/ver/1/templates/stats.html
+END
+pagination_table.html
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/!svn/ver/1/templates/pagination_table.html
+END
+preferences.html
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/!svn/ver/1/templates/preferences.html
+END
+records.html
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/!svn/ver/1/templates/records.html
+END
+planes.html
+K 25
+svn:wc:ra_dav:version-url
+V 33
+/!svn/ver/4/templates/planes.html
+END
+register.html
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/!svn/ver/1/templates/register.html
+END
+general_currency.html
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/!svn/ver/1/templates/general_currency.html
+END
+home.html
+K 25
+svn:wc:ra_dav:version-url
+V 31
+/!svn/ver/1/templates/home.html
+END
+login.html
+K 25
+svn:wc:ra_dav:version-url
+V 32
+/!svn/ver/1/templates/login.html
+END
+nav_bar.html
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/!svn/ver/1/templates/nav_bar.html
+END
+base.html
+K 25
+svn:wc:ra_dav:version-url
+V 31
+/!svn/ver/1/templates/base.html
+END
+new_entry.html
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/!svn/ver/1/templates/new_entry.html
+END
+plane_dropdown.html
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/!svn/ver/1/templates/plane_dropdown.html
+END

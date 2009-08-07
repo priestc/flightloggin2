@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 17
+/!svn/ver/1/plane
+END
+admin.py
+K 25
+svn:wc:ra_dav:version-url
+V 26
+/!svn/ver/1/plane/admin.py
+END
+constants.py
+K 25
+svn:wc:ra_dav:version-url
+V 30
+/!svn/ver/1/plane/constants.py
+END
+views.py
+K 25
+svn:wc:ra_dav:version-url
+V 26
+/!svn/ver/4/plane/views.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 29
+/!svn/ver/1/plane/__init__.py
+END
+tests.py
+K 25
+svn:wc:ra_dav:version-url
+V 26
+/!svn/ver/1/plane/tests.py
+END
+models.py
+K 25
+svn:wc:ra_dav:version-url
+V 27
+/!svn/ver/4/plane/models.py
+END
+forms.py
+K 25
+svn:wc:ra_dav:version-url
+V 26
+/!svn/ver/4/plane/forms.py
+END

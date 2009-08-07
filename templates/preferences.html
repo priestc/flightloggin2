@@ -1,0 +1,477 @@
+{% extends "base.html" %}
+
+
+{% block javascript %}
+	<script type="text/javascript">
+		cat_classes = {{ cat_classes|safe }};
+	</script>
+
+	<script type="text/javascript" src="/site-media/javascripts/{{ title|lower }}.js"></script>
+{% endblock %}
+
+{% block css %}
+<style type="text/css">
+fieldset				{text-align: right}
+legend					{font-size: large; font-weight: bold; color: #11566d}
+input, select				{width: 80%}
+input[type='submit']			{width: auto; margin-top: 15px}
+
+ul					{font-sze: inherit; margin: 0; color: red; font-weight: bold}
+
+.prefs_table				{width:100%; border: 0px solid black; font-size: medium; margin-right: auto; margin-left: auto}
+
+.prefs_table td:first-child		{border: 0px solid green; width: 50%; text-align: right; padding-right: 10px}
+.prefs_table td				{border: 0px solid blue; text-align: left; width: 10%}
+.prefs_table td:last-child		{border: 0px solid red; width: 30%}
+
+.embed + img				{position: relative; right: 19px; top: 3px; cursor: pointer; z-index: 2}
+
+td[colspan='4']				{padding-bottom: 10px; text-align: center}
+
+#columns_table				{margin-right: auto; margin-left: auto}
+#columns_table td:last-child		{text-align: left; width: auto}
+#columns_table td			{font-size: small; text-align: center; padding: 0 !important; width: 3em}
+</style>
+
+{% endblock %}
+
+{% block title %}{{ title }}{% endblock %}
+
+
+{% block body %}
+
+<div class="central_div central_prefs">
+		
+	<h1>Preferences {{ cat_classes|safe }}</h1>
+	
+	<form id="prefs_form" action="." method="post">
+		<fieldset>
+
+			<legend>General</legend>
+		
+			<table class="prefs_table">
+				<tr>
+					<td>{{ profile_form.real_name.label_tag }}</td>
+					<td colspan="2">{{ profile_form.real_name }}</td>
+					<td>{{ profile_form.real_name.errors }}</td>
+				</tr>
+				
+				<tr>
+					<td>{{ profile_form.dob.label_tag }}</td>
+					<td colspan="2">{{ profile_form.dob }}</td>
+					<td>{{ profile_form.date.errors }}</td>
+				</tr>
+				
+				<tr>
+					<td>{{ profile_form.style.label_tag }}</td>
+					<td colspan="2">{{ profile_form.style }}</td>
+					<td></td>
+				</tr>
+				
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				
+			</table>
+		</fieldset>
+
+
+		<fieldset>
+			<legend>Currency Reminders</legend>
+
+			<table class="prefs_table">
+				<tr>
+					<td>{{ currency.medical.label_tag }}</td>
+					<td>{{ currency.medical }}</td>
+					<td></td>
+					<td></td>
+				</tr>
+				
+				<tr>
+					<td>{{ currency.cfi.label_tag }}</td>
+					<td>{{ currency.cfi }}</td>
+					<td></td>
+					<td></td>
+				</tr>
+				
+				<tr>
+					<td>{{ currency.fr.label_tag }}</td>
+					<td>{{ currency.fr }}</td>
+					<td></td>
+					<td></td>
+				</tr>
+				
+				<tr>
+					<td>{{ currency.one35.label_tag }}</td>
+					<td>{{ currency.one35 }}</td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>{{ currency.atp.label_tag }}</td>
+					<td>{{ currency.atp }}</td>
+					<td></td>
+					<td></td>
+				</tr>
+			</table>
+
+			<br />
+				 
+			<table class="prefs_table">
+				<tr id="air-inst">
+					<td>{{ currency.air_inst.label_tag }}</td>
+					<td>{{ currency.air_inst }}</td>
+					<td></td>
+					<td></td>
+				</tr>
+
+				<tr id="heli-inst">
+					<td>{{ currency.heli_inst.label_tag }}</td>
+					<td>{{ currency.heli_inst }}</td>
+					<td></td>
+					<td></td>
+				</tr>
+			</table>
+			
+			<br />
+			
+			<table class="prefs_table">
+				<tr>
+					<td></td>
+					<td>Day</td>
+					<td>Night</td>
+					<td></td>
+				</tr>
+				
+				<tr id="cat_class-1">
+					<td>{{ currency.d_1.label_tag }}</td>
+					<td>{{ currency.d_1 }}</td>
+					<td>{{ currency.n_1 }}</td>
+					<td></td>
+				</tr>
+				
+				<tr id="cat_class-2">
+					<td>{{ currency.d_2.label_tag }}</td>
+					<td>{{ currency.d_2 }}</td>
+					<td>{{ currency.n_2 }}</td>
+					<td></td>
+				</tr>
+				
+				<tr id="cat_class-3">
+					<td>{{ currency.d_3.label_tag }}</td>
+					<td>{{ currency.d_3 }}</td>
+					<td>{{ currency.n_3 }}</td>
+					<td></td>
+				</tr>
+				
+				<tr id="cat_class-4">
+					<td>{{ currency.d_4.label_tag }}</td>
+					<td>{{ currency.d_4 }}</td>
+					<td>{{ currency.n_4 }}</td>
+					<td></td>
+				</tr>
+				
+				<tr id="cat_class-20">
+					<td>{{ currency.d_20.label_tag }}</td>
+					<td>{{ currency.d_20 }}</td>
+					<td>{{ currency.n_20 }}</td>
+					<td></td>
+				</tr>
+				
+				<tr id="cat_class-21">
+					<td>{{ currency.d_21.label_tag }}</td>
+					<td>{{ currency.d_21 }}</td>
+					<td>{{ currency.n_21 }}</td>
+					<td></td>
+				</tr>
+				
+				<tr id="cat_class-5">
+					<td>{{ currency.d_5.label_tag }}</td>
+					<td>{{ currency.d_5 }}</td>
+					<td>{{ currency.n_5 }}</td>
+					<td></td>
+				</tr>
+				
+				<tr id="cat_class-6">
+					<td>{{ currency.d_6.label_tag }}</td>
+					<td>{{ currency.d_6 }}</td>
+					<td>{{ currency.n_6 }}</td>
+					<td></td>
+				</tr>
+				
+				<tr id="cat_class-7">
+					<td>{{ currency.d_7.label_tag }}</td>
+					<td>{{ currency.d_7 }}</td>
+					<td>{{ currency.n_7 }}</td>
+					<td></td>
+				</tr>
+				
+				<tr id="cat_class-8">
+					<td>{{ currency.d_8.label_tag }}</td>
+					<td>{{ currency.d_8 }}</td>
+					<td>{{ currency.n_8 }}</td>
+					<td></td>
+				</tr>
+				
+				<tr id="cat_class-9">
+					<td>{{ currency.d_9.label_tag }}</td>
+					<td>{{ currency.d_9 }}</td>
+					<td>{{ currency.n_9 }}</td>
+					<td></td>
+				</tr>
+				
+				<tr id="cat_class-10">
+					<td>{{ currency.d_10.label_tag }}</td>
+					<td>{{ currency.d_10 }}</td>
+					<td>{{ currency.n_10 }}</td>
+					<td></td>
+				</tr>
+				
+				<tr id="cat_class-11">
+					<td>{{ currency.d_11.label_tag }}</td>
+					<td>{{ currency.d_11 }}</td>
+					<td>{{ currency.n_11 }}</td>
+					<td></td>
+				</tr>
+				
+				<tr id="cat_class-12">
+					<td>{{ currency.d_12.label_tag }}</td>
+					<td>{{ currency.d_12 }}</td>
+					<td>{{ currency.n_12 }}</td>
+					<td></td>
+				</tr>
+				
+				<tr id="cat_class-13">
+					<td>{{ currency.d_13.label_tag }}</td>
+					<td>{{ currency.d_13 }}</td>
+					<td>{{ currency.n_13 }}</td>
+					<td></td>
+				</tr>
+				
+				<tr id="cat_class-14">
+					<td>{{ currency.d_14.label_tag }}</td>
+					<td>{{ currency.d_14 }}</td>
+					<td>{{ currency.n_14 }}</td>
+					<td></td>
+				</tr>
+			</table>
+				
+		</fieldset>
+
+		<fieldset id="logbook_section">
+
+			<legend>Logbook</legend>
+		
+			<table class="prefs_table">	
+				<tr>
+					<td colspan="4">
+						<table id="columns_table">
+							<tr>	
+								<td>entry</td>
+								<td>auto</td>
+								<td>disp</td>
+								<td></td>
+							</tr>
+							
+							<tr>
+								<td>{{ entry.plane }}</td>
+								<td>{{ auto.plane }}</td>
+								<td>{{ column.plane }}</td>
+								<td>{{ column.plane.label }}</td>
+							</tr>
+							
+							<tr>
+								<td>{{ entry.route }}</td>
+								<td>{{ auto.route }}</td>
+								<td>{{ column.route }}</td>
+								<td>{{ column.route.label }}</td>
+							</tr>
+							
+							<tr>
+								<td>{{ entry.total }}</td>
+								<td>{{ auto.total }}</td>
+								<td>{{ column.total }}</td>
+								<td>{{ column.total.label }}</td>
+							</tr>
+							
+							<tr>
+								<td>{{ entry.pic }}</td>
+								<td>{{ auto.pic }}</td>
+								<td>{{ column.pic }}</td>
+								<td>{{ column.pic.label }}</td>
+							</tr>
+							
+							<tr>
+								<td>{{ entry.solo }}</td>
+								<td>{{ auto.solo }}</td>
+								<td>{{ column.solo }}</td>
+								<td>{{ column.solo.label }}</td>
+							</tr>
+							
+							<tr>
+								<td>{{ entry.sic }}</td>
+								<td>{{ auto.sic }}</td>
+								<td>{{ column.sic }}</td>
+								<td>{{ column.sic.label }}</td>
+							</tr>
+							
+							<tr>
+								<td>{{ entry.dual_r }}</td>
+								<td>{{ auto.dual_r }}</td>
+								<td>{{ column.dual_r }}</td>
+								<td>{{ column.dual_r.label }}</td>
+							</tr>
+							
+							<tr>
+								<td>{{ entry.dual_g }}</td>
+								<td>{{ auto.dual_g }}</td>
+								<td>{{ column.dual_g }}</td>
+								<td>{{ column.dual_g.label }}</td>
+							</tr>
+							
+							<tr>
+								<td>{{ entry.act_inst }}</td>
+								<td>{{ auto.act_inst }}</td>
+								<td>{{ column.act_inst }}</td>
+								<td>{{ column.act_inst.label }}</td>
+							</tr>
+							
+							<tr>
+								<td>{{ entry.sim_inst }}</td>
+								<td>{{ auto.sim_inst }}</td>
+								<td>{{ column.sim_inst }}</td>
+								<td>{{ column.sim_inst.label }}</td>
+							</tr>
+							
+							<tr>
+								<td>{{ entry.app }}</td>
+								<td>{{ auto.app }}</td>
+								<td>{{ column.app }}</td>
+								<td>{{ column.app.label }}</td>
+							</tr>
+							
+							<tr>
+								<td>{{ entry.night }}</td>
+								<td>{{ auto.night }}</td>
+								<td>{{ column.night }}</td>
+								<td>{{ column.night.label }}</td>
+							</tr>
+					
+							<tr>
+								<td>{{ entry.xc }}</td>
+								<td>{{ auto.xc }}</td>
+								<td>{{ column.xc }}</td>
+								<td>{{ column.xc.label }}</td>
+							</tr>
+							
+							<tr>
+								<td>{{ entry.day_l }}</td>
+								<td>{{ auto.day_l }}</td>
+								<td>{{ column.day_l }}</td>
+								<td>{{ column.day_l.label }}</td>
+							</tr>
+							
+							<tr>
+								<td>{{ entry.night_l }}</td>
+								<td>{{ auto.night_l }}</td>
+								<td>{{ column.night_l }}</td>
+								<td>{{ column.night_l.label }}</td>
+							</tr>
+							
+							<tr>
+								<td>{{ entry.student }}</td>
+								<td>{{ auto.student }}</td>
+								<td>{{ column.student }}</td>
+								<td>{{ column.student.label }}</td>
+							</tr>
+							
+							<tr>
+								<td>{{ entry.instructor }}</td>
+								<td>{{ auto.instructor }}</td>
+								<td>{{ column.instructor }}</td>
+								<td>{{ column.instructor.label }}</td>
+							</tr>
+							
+							<tr>
+								<td>{{ entry.fo }}</td>
+								<td>{{ auto.fo }}</td>
+								<td>{{ column.fo }}</td>
+								<td>{{ column.fo.label }}</td>
+							</tr>
+							
+							<tr>
+								<td>{{ entry.captain }}</td>
+								<td>{{ auto.captain }}</td>
+								<td>{{ column.captain }}</td>
+								<td>{{ column.captain.label }}</td>
+							</tr>
+							
+							<tr>
+								<td>{{ entry.remarks }}</td>
+								<td>{{ auto.remarks }}</td>
+								<td>{{ column.remarks }}</td>
+								<td>{{ column.remarks.label }}</td>
+							</tr>
+							
+						</table>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>{{ profile_form.per_page.label_tag }}</td>
+					<td colspan="2">{{ profile_form.per_page }}</td>
+					<td>{{ profile_form.per_page.errors }}</td>
+				</tr>
+				<tr>
+					<td>{{ profile_form.date_format.label_tag }}</td>
+					<td colspan="2">{{ profile_form.date_format }}</td>
+					<td>{{ profile_form.date_format.errors }}</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			
+			</table>
+			
+		</fieldset>
+		
+		<fieldset>
+
+			<legend>Automatic Backups</legend>
+			
+			<table class="prefs_table">
+				<tr>
+					<td>{{ profile_form.backup_email.label_tag }}</td>
+					<td colspan="2">{{ profile_form.backup_email }}</td>
+					<td>{{ profile_form.backup_email.errors }}</td>
+				</tr>
+				
+				<tr>
+					<td>{{ profile_form.backup_freq.label_tag }}</td>
+					<td colspan="2">{{ profile_form.backup_freq }}</td>
+					<td>{{ profile_form.backup_freq.errors }}</td>
+				</tr>
+				
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</table>
+		</fieldset>
+		
+		<div>
+			<input class="prefs_submit_button" type="submit" value="Submit" />
+		</div>
+	</form>
+</div>
+{{test}}u
+
+{% endblock %}

@@ -1,0 +1,51 @@
+html, #holder			{min-height: 100%; width:100%; height: 100%;}
+ 
+html>body, html>body #holder	{height: auto;}
+
+body				{background: #cce4eb; margin: 15px; margin-top:0px; padding:0; font-size: small; 
+				 font-family: "Bitstream Vera Sans", sans-serif; min-height: 100%; height: 100%;}
+				 
+#holder				{position: absolute; top: 0; left: 0; overflow: hidden;}
+				 
+#header				{margin:15px; overflow: hidden;}
+				 
+#content			{margin-left: 0px; padding: 15px; padding-top: 0px; height: auto;}
+				 
+#footer				{clear: both; height: 15px; bottom: 0;left: 0; text-align:center; font-size: x-small;
+				 border: 0px solid black; width: 100%;}
+				 
+head:first-child+body div#footer{position: absolute;} 
+
+.nav_bar			{background: #665b1e; border: 0px; width: 100%}
+ 
+.nav_bar_logged			{width: 10%}
+
+#nav_bar_non tr			{width: 33%}
+
+.nav_bar A			{color: white; font-weight: bold; text-decoration: none}
+
+.nav_bar A:hover		{color: silver; font-weight: bold; text-decoration: underline}
+
+.top_nav_selected		{background: #5dc7e9}
+
+.central_div			{background: white; padding: 1em; overflow:hidden; width: 73em; margin-left: auto;
+				 margin-right: auto; text-align: center; border: 1px solid black}
+				 
+A				{color: #11566d}
+
+H1				{text-align: center; font-weight: bold; color: #665b1e; font-size: x-large;}
+
+H2				{font-weight: bold; color: #11566d; font-size: large}
+
+#advert_box			{float:right; height:67px; color: black; text-align: right}
+
+textarea			{border: 1px solid black; font-family: inherit; font-size: inherit; background: white}
+
+select				{border: 1px solid black; background: #EEEEEE; font-size: smaller; font-family: inherit}
+
+input[type="button"]:hover, input[type="submit"]:hover, button:hover	{cursor: pointer}
+
+input[type="submit"], input[type="button"], button			{border: 1px solid black}
+
+input[type="password"], input[type="text"]				{border: 1px solid black; background: white}
+input[type=text]:disabled						{background-color: #DDDDDD; color: #777777; border: 1px dotted #EEEEEE}

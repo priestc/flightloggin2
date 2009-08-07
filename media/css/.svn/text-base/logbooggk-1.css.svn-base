@@ -1,0 +1,21 @@
+.logbook_central_div						{width: 98%; padding: 10px}
+.flying_event							{color: darkred; font-weight: bold}
+
+.pagination_table						{width: 100%; border: 0px solid blue, font-weight: bold}
+
+#logbook_table							{width:100%; border: 1px solid black; background: #cce4eb; font-size: x-small}
+#logbook_table td						{border: 1px solid darkgray; white-space: nowrap;}
+#logbook_table td:last-child:not([colspan])			{white-space: normal; text-align: left}
+
+#logbook_table thead td,
+#logbook_table tfoot td:not([colspan])				{background: #E0FFFF; border: 1px solid darkgray}
+
+#logbook_table tfoot td[colspan]				{border: none; text-align:right}
+
+#logbook_table tbody re:nth-child(even) td			{background: #e2eeee}
+#logbook_table tbody tr:nth-child(odd) td			{background: #FFFFFF}
+
+.even td							{background: #FFFFFF}
+.odd td								{background: #e2eeee}
+
+#new_entry_button						{margin: 10px }

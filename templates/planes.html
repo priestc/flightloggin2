@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% block css %}
+<style type="text/css">
+	input[type=submit],
+	input[type=button]	{margin: 5px}
+	
+	input[type=text],
+	select, textarea	{width: 200px; font-size: small !important}
+	
+	#tags_window		{background: white; font-size: x-small; border: 0px solid blue; padding: 5px;}
+	#tags_window a:hover	{color: lightgreen}
+
+	#p_t			{width:100%; border-collapse: collapse;}
+	#p_t td			{border: 1px solid #DDDDFF}
+	#p_t thead		{background: #DDDDFF }
+	#p_t tbody:nth_child(even)	{background: blue}
+	#p_t tbody:nth_child(odd)	{background: red}
+	#plane_popup		{position: absolute; top: 50px; left: 50px; display: none; width: 380px; background: white; font-size: small !important;
+					 text-align:center; overflow: hidden; border: 2px solid black}
+	#plane_popup table	{margin-left: auto; margin-right: auto}
+
+	#dragbar		{background: lightblue; width:100%; text-align: right; margin-bottom: .5em; border-bottom: 1px solid black}
+	#dragbar td:first-child	{width:100%; text-align:center; font-weight: bold; font-size: larger}
+	#dragbar td:last-child	{text-align:right}
+
+	#close_x		{cursor: pointer; font-weight: bold}
+
+	#plane_buttons		{width:100%; float: left; margin-bottom: 10px}
+</style>
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript" src="/site-media/javascripts/plane_popup.js"></script>
+    <script type="text/javascript" src="/site-media/javascripts/popup.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#new_plane").click(function(){
+				wipe_clean();
+				prepare_new_plane(true)
+				fire_popup("plane_popup");
+			})
+			
+			$("#p_t a").click(function(event){
+				wipe_clean();
+				prepare_edit_plane(true);
+				fill_in_plane(this.id);
+				fire_popup("plane_popup");
+			});
+
+			$("#tags_window a").click(function() {
+				tag = $("#" + this.id).text();
+				val = $("#id_tags").val();
+				$("#id_tags").val(val + ", " + tag)
+			});
+		});
+	</script>	
+{% endblock %}
+
+{% block title %}{{ title }}{% endblock %}
+
+
+{% block body %}
+<div class="central_div">
+
+	<input id="new_plane" type="button" value="New Plane">
+    <input id="manage_planes" type="button" value="Manage Planes">
+
+<table id="p_t">
+	<thead>
+		<tr>
+			<td>Tailnumber</td>
+			<td>Manufacturer</td>
+			<td>Model Name</td>
+			<td>Type</td>
+			<td>Category/Class</td>
+			<td>Tags</td>
+		</tr>
+	</thead>
+	<tbody>
+	{% for plane in planes %}
+		<tr>
+			<td id="p{{ plane.id }}_tailnumber"><a href="" id="p{{ plane.id }}">{{ plane.tailnumber }}</a></td>
+			<td id="p{{ plane.id }}_manufacturer">{{ plane.manufacturer }}</td>
+			<td id="p{{ plane.id }}_model">{{ plane.model }}</td>
+			<td id="p{{ plane.id }}_type">{{ plane.type }}</td>
+			<td id="p{{ plane.id }}_category_class">{{ plane.get_cat_class_display }}</td>
+			<td id="p{{ plane.id }}_tags">{{ plane.tags }}</td>
+		</tr>		
+	{% endfor %}
+	</tbody>
+</table>
+</div>
+
+<div id="plane_popup" title="New Entry">
+	<table id="dragbar">
+		<tr>
+			<td><span id="titlebar">New Plane</span></td>
+			<td><span id="close_x" title="Close this popup">[X]</span></td>
+		</tr>
+	</table>
+	
+	<form id="new_plane_form" action="." method="post">
+		<table>
+			<tbody>
+				<tr>
+					<td>		
+						{# <input type="hidden" name="user" id="id_user" value="{{ user.id }}" /> #}
+						<input type="hidden" name="id" id="id_id" value="" />
+					</td>
+				</tr>
+				<tr>
+					<td>{{ planeform.tailnumber.label_tag }}</td>
+					<td>{{ planeform.tailnumber }}</td>
+				</tr>
+				<tr>
+					<td>{{ planeform.manufacturer.label_tag }}</td>
+					<td>{{ planeform.manufacturer }}</td>
+				</tr>
+			
+				<tr>
+					<td>{{ planeform.type.label_tag }}</td>
+					<td>{{ planeform.type }}</td>
+				</tr>
+				
+				<tr>
+					<td>{{ planeform.model.label_tag }}</td>
+					<td>{{ planeform.model }}</td>
+				</tr>
+				
+				<tr>
+					<td>{{ planeform.cat_class.label_tag }}</td>
+					<td>{{ planeform.cat_class }}</td>
+				</tr>
+				
+				<tr>
+					<td>Tags</td>
+					<td>{{ planeform.tags }}</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<div id="tags_window">
+			<a href="" id="q">High Performance</a>,
+			<a href="" id="w">Complex</a>,
+			<a href="" id="e">Turbine</a>,
+			<a href="" id="r">Tailwheel</a>,
+			<a href="" id="f">Type Rating</a>,
+			<a href="" id="t">G1000</a>,
+			<a href="" id="y">Turboprop</a>,
+			<a href="" id="u">Jet</a>,
+			<a href="" id="i">Rental</a>,
+			<a href="" id="o">GPS</a>,
+			<a href="" id="p">Pressurized</a>,
+			<a href="" id="a">Turbocharged</a>,
+			<a href="" id="s">Glass Cockpit</a>,
+			<a href="" id="d">LSA</a>
+			
+		</div>
+		
+		<div id="new_plane_buttons">
+			<input type="submit" name="submit" value="Create New Plane" id="submit_new_flight" />
+		</div>
+
+		<div id="edit_plane_buttons">
+			<input type="submit" name="submit" value="Submit Changes" id="submit_edit_flight" />
+			<input type="submit" name="submit" value="Delete Plane" id="submit_delete_flight" />
+		</div>
+
+	</form>
+</div>
+
+{{ planeform.errors }}
+
+{% endblock %}
+

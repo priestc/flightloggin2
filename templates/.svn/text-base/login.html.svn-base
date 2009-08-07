@@ -1,0 +1,16 @@
+<div style="font-size: small">
+	<form action='.' method='post'>
+		<label for="email">Email:</label>
+		<input style="width: 110px; margin:1px; font-size: x-small" type="text" name="email" value="" id="email" />
+		
+		<br />
+		
+		<label for="password">Password:</label>
+		<input style="width: 110px; margin:1px; font-size: x-small" type="password" name="password" value="" id="password" />
+		
+		<br />
+
+		<input style="margin:1px; font-size: small" type="submit" value="Login" />
+		<input type="hidden" name="next" value="logbook" />
+	</form>
+</div>

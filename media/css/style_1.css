@@ -1,0 +1,595 @@
+
+				 
+blockquote			{font-style: italic}
+
+
+
+/* Change back in everything except Opera 5 and 6, still hiding from Mac IE5 */
+/* \*/
+ head:first-child+body div#footer		{position: absolute;} 
+/* */
+
+/*--------------------------------------------------------------------------------------------------------------*/
+
+input[type="button"]:hover	{cursor: pointer}
+input[type="submit"]:hover	{cursor: pointer}
+button:hover			{cursor: pointer}
+
+input[type="submit"]		{border: 1px solid black}
+input[type="button"]		{border: 1px solid black}
+button				{border: 1px solid black}
+
+input[type="password"]		{border: 1px solid black;
+				 background: white}
+				 
+input[type="text"]		{border: 1px solid black;
+				 background: white}
+
+textarea			{border: 1px solid black;
+				 font-family: "Bitstream Vera Sans", sans-serif;
+				 background: white}
+
+select				{border: 1px solid black;
+				 background: #EEEEEE}
+				 
+A				{color: #11566d}
+
+H1				{text-align: center;
+				 font-weight: bold;
+				 color: #665b1e;
+				 font-size: x-large;}
+
+H2				{font-weight: bold;
+				 color: #11566d;
+				 font-size: large}
+				 
+.dragme				{cursor: move }
+
+
+.nav_bar			{background: #665b1e;
+				 border: 0px;
+				 width: 100%}
+				 
+.nav_bar_logged			{width: 10%}
+#nav_bar_non tr			{width: 33%}
+
+.nav_bar A			{color: white;
+				 font-weight: bold;
+				 text-decoration: none}
+.nav_bar A:hover		{color: silver;
+				 font-weight: bold;
+				 text-decoration: underline}
+				 				 
+
+				 
+
+				 
+.empty_message			{font-size: large;
+				 margin:20px;
+				 text-align: center}
+				 
+.login				{border: 1px solid black;
+				 font-size: small;
+				 padding-bottom:15px;
+				 background:#5dc7e9;
+				 text-align:center;
+				 width:40em;
+				 margin-right:auto;
+				 margin-left:auto;
+				 margin-bottom:20px;}
+				 
+hr				{display:none}
+
+.news_box			{border: 1px solid black;
+				 width:50em;
+				 margin-right:auto;
+				 margin-left:auto;
+				 margin-bottom: 15px;
+				 padding:5px;
+				 background: #cce4eb}
+
+.news_box p			{font-size: medium}
+
+.news_box big			{font-size: x-large;
+				 font-weight: bold}
+				 
+.news_box small			{font-size: small}
+				
+
+#advert_box			{float:right;
+				 height:67px;
+				 color: black;
+				 text-align: right}
+				 
+.error_page			{font-size: xx-large;
+				 font-weight: bold;}
+
+/*------------------------------central divs----------------------------------------*/
+
+.central_div			{background: white;
+				 padding: 1em;
+				 overflow:hidden;
+				 width: 73em;
+				 margin-left: auto;
+				 margin-right: auto;
+				 text-align: center;
+				 border: 1px solid black}
+				 
+.central_prefs input		{width:35%}
+.central_prefs select		{width:35%}
+
+.logbook_central_div		{width:100%;
+				 padding:0}
+				 
+.import_central_div		{width:100%;
+				 padding:0}
+
+/*---------------------------------------------------- new entry popup--------------*/
+
+#new_entry_popup		{width:50em;				/* THE WHOLE POPUP WINDOW ITSELF */
+				 position:absolute;
+				 display:none;
+				 left:300px;
+				 top:500px;
+				 background: white;
+				 border: 3px double black;
+				 text-align:center;
+				 padding:1em;
+				 padding-top:2.5em;}
+
+		 
+.new_entry_popup_dragbar	{width:100%;				/* THE PART OF THE POPUP WHERE YOU DRAG */
+				 border-bottom:1px solid black;
+				 background: #5dc7e9;
+				 position:absolute;
+				 top:0;
+				 right:0}
+				 
+.new_entry_popup_dragbar big	{font-weight:bold}			/* POPUP WINDOW TITLE TEXT */
+				 
+.inner_title			{float:left;
+				 width:50em;}
+				 
+.close_button			{margin:1px;				/* THE "X" AT THE CORNER OF THE WINDOW */
+				 padding:0;
+				 float:right;
+				 color:black !important;
+				 width:1em;
+				 text-align:center;
+				 text-decoration:none;
+				 border:1px solid black;
+				 font-weight:bold}
+
+
+.title_entry_left		{float:right;				/*THE LEFT SIDE DIVS THAT ALIGN THE TEXTBOXESDF*/
+				 height:25px;
+				 padding-right:10px;
+				 text-align:right;
+				 line-height:25px}
+				 
+.entry_entry_left		{float:right;
+				 width:13.5em;
+				 height:25px}
+				 
+.title_entry_right		{float:left;
+				 height:25px;
+				 text-align:left;
+				 line-height:25px}
+				 
+
+.entry_entry_right		{float:left;
+				 text-align:center;
+				 height:25px}
+
+.keep_vertical			{overflow:hidden;
+				 width:100%;
+				 border:0px solid black}
+
+.events_div			{float:right;
+				 background: #cce4eb;
+				 width:100%;
+				 border: 1px solid black;
+				 margin-top:5px;
+				 margin-bottom:5px}
+				 
+		{width: 3em}
+				 
+.new_entry_left			{overflow:hidden;
+				 float:left;
+				 width:59%}
+
+.new_entry_right		{float:right;
+				 width:37%}
+				 
+.landing_boxes			{float:left;
+				 width:100%;
+				 margin-top:5px;
+				 padding-top:3px;
+				 padding-bottom:3px}
+
+.new_entry_right input[type="button"]	{margin-right:5px}
+
+.new_entry_right input[type=text], .landing_boxes input[type=text]				/* small boxes, both landing boxes and time boxes*/
+
+					{width:3em;
+					 font-size:small;
+					 font-family: "Bitstream Vera Sans", sans-serif}
+					 
+.new_entry_left textarea		{height: 100px}
+					 
+.new_entry_left input[type=text], select, textarea
+
+					{width:150px;
+					 font-size:small;
+					 font-family: "Bitstream Vera Sans", sans-serif}
+
+/*-----------------------------------------------------logbook view--------------------*/
+
+.logbook_inner			{background: #cce4eb;
+				 border: 1px solid black;
+				 margin-bottom: 10px;
+				 margin-left: 10px;
+				 margin-right: 10px;
+				 margin-top: 0}
+				 
+.logbook_table			{background: #cce4eb;
+				 color: black;
+				 width:100%}
+
+.logbook_table td		{border: 1px solid silver;
+				 border-spacing: 0;
+				 font-size: x-small;
+				 text-align: center}
+				 
+.center_page_index		{font-size: small;
+				 font-weight:bold;
+				 text-align:center}
+
+.last_page_index		{font-size: small;
+				 font-weight:bold;
+				 text-align:right}
+				 
+.first_page_index		{font-size: small;
+				 font-weight:bold;
+				 text-align:left}
+
+.odd				{background-color: #e2eeee}
+
+.even				{background-color: #FFFFFF}
+
+.overall_row td			{background-color: #E0FFFF;
+				 border: 1px solid darkgray}
+
+.header_row td			{background-color: #E0FFFF;
+				 border: 1px solid darkgray}
+
+.page_row td			{background-color: #E0FFFF;
+				 border: 1px solid darkgray}
+				 
+.no_plane_alert			{width:150px;
+				 background-color:#ADDFFF;
+				 margin-right:auto;
+				 margin-left:auto}
+				 
+.flying_event			{color:darkred}
+
+.non_flying_event		{color:black;font-weight:bold;
+				 border: 1px solid #999999 !important}
+
+/*------------------------------------------------- preferences.php--------------------*/
+
+.sections			{font-size: x-small;
+				 padding: 10px}
+
+.sections legend		{font-size: large;
+				 font-weight: bold;
+				 color: #11566d}
+
+.pref_title			{font-size: small;
+				 height:25px;
+				 float:left;
+				 text-align: right;
+				 line-height: 25px;
+				 width: 48%;
+				 padding: 0}
+				 
+.pref_form			{font-size: x-small;height:25px;
+				 float:right;
+				 text-align: left;
+				 width: 48%}
+				 
+.prefs_submit_button		{width:10em !important}
+				 
+.currency_day			{font-size: x-small;
+				 height:25px;
+				 float:left;
+				 text-align: center;
+				 line-height: 25px;
+				 width: 5%;
+				 padding: 0px}
+
+
+.currency_night			{font-size: x-small;
+				 height:25px;
+				 float:left;
+				 text-align: center;
+				 line-height: 25px;
+				 width: 5%}
+				 
+.currency_dummy			{font-size: x-small;
+				 height:25px;
+				 float:left;
+				 text-align: left;
+				 width: 35%}
+				 
+
+
+/*------------------------------------------ planes.php-------------------------------*/
+
+.plane_box input[type="text"] 		{width: 9em;
+					 background: #cce4eb;
+					 margin:2px;
+					 text-align: center;
+					 font-weight:bold;
+					 border: 1px solid #cce4eb}
+				 
+.plane_box input[type="text"]:hover 	{width: 9em;
+					 background: #5dc7e9;
+					 margin:2px;
+				 	 border: 1px solid gray}
+				 	 
+.plane_box input[type="text"]:focus 	{width: 9em;
+					 background: #5dc7e9;
+					 margin:2px;
+				 	 border: 1px solid gray}
+					 
+.planes_tail_number		{font-size: x-large;
+				 text-align:left !important;
+				 border: 1px solid #ACCDDD;
+				 width: 6.5em !important;
+				 font-weight:bold;
+				 color: #665b1e;
+				 background: #cce4eb}
+				 					 
+.planes_tail_number:hover:focus	{border: 1px solid gray;
+				 text-align:left;}
+				 				 
+.plane_box input[type="submit"]	{margin:2px;}
+				 
+.plane_box select		{width: 200px;
+				 background: #cce4eb;
+				 margin:2px;
+				 margin-left:10px;}
+				 
+
+				 
+
+				 
+.planes_tags			{width:90% !important;
+				 text-align: left !important;
+				 font-weight:normal !important}
+
+.planes_manufacturer		{width:100%;
+				 font-size:large;
+				 text-align:left}
+
+.plane_box			{overflow:hidden;
+				 color: black;
+				 text-align:left;
+				 padding:5px;
+				 font-size: x-small;
+				 background: #cce4eb;
+				 border: 1px solid black;
+				 margin-top: 1em;
+				 margin-bottom: 1em;}
+				
+
+/*---------------------------------------mass entry section---------------------------*/
+
+
+
+#mass_entry_div			{margin-left: auto;
+				 margin-right: auto;
+				 padding: 15px;
+				 background: white;
+				 border: 1px #111111 solid;}
+
+/*---------------------------------------import section-------------------------------*/
+
+.import-announce		{background: white;
+				 text-align: center;
+				 font-size: large;
+				 width: 80%;
+				 border: 1px solid black;
+				 margin-left: auto;
+				 margin-right: auto;
+				 margin-top: 10px;
+				 margin-bottom: 10px;
+				 padding: 10px}
+				 
+.alert				{color: red;
+				 font-weight: bold}
+				 
+.import_instructions		{text-align:left;
+				 background: white;
+				 border:0px solid black;
+				 padding: 20px;
+				 padding-top: 5px;}
+				 
+.import_records			{width:80%;
+				 border:1px solid black;
+				 background: white;
+				 padding:5px;
+				 margin:10px;
+				 margin-left: auto;
+				 margin-right:auto}
+
+.import_planes_table		{border: 1px solid black;
+				 width:80%;
+				 margin-left: auto;
+				 margin-right: auto;}
+
+.import_planes_table td		{border:1px outset black}
+				 
+/*---------------------------------------stats page-----------------------------------*/
+				 
+.small_select_box		{width:100%;
+				 padding:0px;
+				 display: none;}
+				 
+.big_select_box			{display:none;}
+				 
+.big_time_box			{width:90%;
+				 padding:5px;
+				 border: 1px solid black;
+				 margin-right:auto;
+				 margin-left:auto;
+				 margin-bottom:10px;
+				 font-size: large}
+
+.big_time_box strong		{text-decoration: underline}
+
+.career_totals			{font-size: large;
+				 margin-right:auto;
+				 margin-left:auto;
+				 border:3px double black;
+				 margin-top:20px}
+
+.career_totals td		{width:30%}
+
+.eighty710_table		{font-size: x-small;
+				 border:1px outset black;
+				 empty-cells: show;}
+				 
+.eighty710_table td		{width: 5.88%;
+				 border:1px inset black}
+				 
+.eighty710_blanked		{background-color: silver}
+
+/*--------------------------------------currency section------------------------------*/
+
+.current			{border:1px solid black;
+				 background: #5dc7e9;
+				 float:left;
+				 font-size:small;
+				 margin-bottom:10px;
+				 margin-right:10px;
+				 padding:3px;
+				 width:18em;
+				 height:6em}
+				 
+.current small			{font-size:x-small}
+				 
+.almost_expired			{background: #f184a3}
+
+.not_current			{background: #AAAAAA;}
+
+.landings_currency_container	{width: 100%;
+				 margin: 10px;
+				 margin-top:0;
+				 margin-bottom:0;
+				 float:left}
+				 
+.times_currency_container	{width:100%;
+				 margin: 10px;
+				 margin-top:0;
+				 float:left}
+
+
+.div_135			{border: 1px solid black;
+				 height:220px;
+				 overflow:hidden;
+				 float:left;
+				 background: #F5F5F5;
+				 margin-left:0px;
+				 margin-right: 10px;
+				 padding:3px;
+				 width:33em}
+				 
+.div_ATP			{border: 1px solid black;
+				 height:220px;
+				 overflow:hidden;
+				 float:left;
+				 background: #F5F5F5;
+				 margin-left:0px;
+				 padding:3px;
+				 width:38em;}
+				 
+.landings_currency_container big{text-decoration: underline;
+				 font-size: large}
+				 
+.div_135 table			{margin-left:auto;
+				 font-size:small;
+				 width:100%;
+				 margin-right:auto;
+				 margin-top:10px}
+				 
+.div_135 table td		{text-align:right}
+
+.top_135			{text-align:center !important;
+				 font-size: larger;
+				 border: 1px solid black;
+				 font-weight:bold}
+			
+.qualified			{color: green}
+
+.not_qualified			{color: #8B0000}
+
+.div_ATP table			{margin-left:auto;
+				 border:0px solid black;
+				 font-size:small;
+				 width:50%;
+				 margin-right:auto;
+				 margin-top:10px}
+				 
+.div_ATP table td		{text-align:right}
+
+/*--------------------------------------mass entry section----------------------------*/
+
+
+.mass_grayed			{color: #BABABA !important;
+				 border: 1px solid silver !important;
+				 font-weight: normal !important;}
+
+
+.mass_checkmark_boxes td	{color: black}
+
+input.mass_numbers		{width:2.5em;
+				 font-weight: bold;
+				 font-size:small;
+				 border: 1px solid black;}
+
+input.mass_small_numbers	{width:1.5em; font-weight: bold;
+				 font-size:small;
+				 border: 1px solid black;}
+				 
+input.mass_names 		{width:97%; font-weight: bold;
+				 font-size:x-small;
+				 border: 1px solid black;
+				 margin:2px}
+				 
+.non_remarks			{width:98.5%;
+				 font-size:x-small;
+				 border: 1px solid silver;
+				 margin:2px;
+				 font-weight: bold}
+
+.big_mass_outer_div		{margin:10px !important}
+
+#mass_entry_table		{font-size:x-small;
+				 width:100%;
+				 padding:0}
+
+
+#mass_entry_table select	{width:7em !important;
+				 font-size:x-small}
+
+.mass_color_1			{background: #e2eeee}
+
+.mass_color_1 input		{background: #DDDDDD}
+
+.mass_color_2			{background: #FFFFFF}
+				 
+.mass_color_2 input		{background: #DDDFFF}
+
+

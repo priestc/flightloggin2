@@ -1,0 +1,53 @@
+<style>	
+	#r_b					{width: 50em; background: lightblue; overflow: hidden; padding: 5px;
+							margin-right: auto; margin-left: auto; margin-bottom: 10px}
+	#r_b input[type=text],
+	input[type=password]			{width: 10em}
+	#r_b table:first-child			{float: left}
+	#r_b table:last-child			{float: right}
+</style>
+
+<div id="r_b">
+	<table>
+	<thead>
+		<tr>
+			<td colspan="2">Register a new account</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Username:</td>
+			<td><input type="text" id="username"></td>
+		</tr>
+		
+		<tr>
+			<td>Password:</td>
+			<td><input type="password" id="pass1"></td>
+		</tr>
+		
+		<tr>
+			<td>Reenter password:</td>
+			<td><input type="password" id="pass2"></td>
+		</tr>
+	</tbody>
+	</table>
+	
+	<table>
+	<thead>
+		<tr>
+			<td colspan="2">Log in</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Username:</td>
+			<td><input type="text" id="username"></td>
+		</tr>
+		
+		<tr>
+			<td>Password:</td>
+			<td><input type="password" id="pass1"></td>
+		</tr>
+	</tbody>
+	</table>
+</div>

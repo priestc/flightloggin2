@@ -1,0 +1,373 @@
+{% extends "base.html" %}
+
+
+{% block javascript %}
+	<script type="text/javascript" src="/site-media/javascripts/{{ title|lower }}.js"></script>
+{% endblock %}
+
+{% block title %}{{ title }}{% endblock %}
+
+
+{% block body %}
+
+<div class="central_div">
+	
+	<div style="font-size:x-large;color:red;padding-bottom:1em"></div>
+	
+	<div id="news" style="font-size:medium;text-align:left; display: block">
+	
+		<div style="border:1px solid black;margin-bottom:20px">
+			<h1>
+				<span class="fake_anchor" onclick="front_page_toggle('faq');">F.A.Q.</span>&nbsp;-&nbsp;
+
+				<span>News</span>&nbsp;-&nbsp;
+				<span class="fake_anchor" onclick="front_page_toggle('intro');">Introduction</span>&nbsp;-&nbsp;
+				<span class="fake_anchor" onclick="front_page_toggle('walk');">Walkthrough</span>
+			</h1>
+		</div>
+		
+		{% for item in news %}
+
+		<div class="news_box">
+			<big>{{ item.title }}</big><br />
+			<small>{{ item.date|date:"l, F jS, Y" }}</small>
+			
+			<p>
+				{{ item.text|safe }}
+			</p>
+		</div>
+		
+		{% endfor %}
+	</div>
+
+	
+	
+	<div id="faq" style="font-size:medium;text-align:left;display:none">
+	
+		<div style="border:1px solid black;margin-bottom:20px">
+			<h1>
+				<span>F.A.Q.</span>&nbsp;-&nbsp;
+
+				<span class="fake_anchor" onclick="front_page_toggle('news');">News</span>&nbsp;-&nbsp;
+				<span class="fake_anchor" onclick="front_page_toggle('intro');">Introduction</span>&nbsp;-&nbsp;
+				<span class="fake_anchor" onclick="front_page_toggle('walk');">Walkthrough</span>
+			</h1>
+		</div>
+	
+			<h2>I have a suggestion to make the site better, where can I submit it?</h2>
+
+
+		Click the link above to go to the forum. You don't even have to register to post a comment.
+
+		<h2>I can't figure something out, where can I get help?</h2>
+
+		Go to the forums, you can get help there.
+
+		<h2>I use Internet Explorer and the site doesn't look like it renders correctly, how can I fix this?</h2>
+
+		Install Firefox. The site was designed to work on standard compliant browsers such as Opera and Firefox. If you're using IE, the site will indeed work,
+		but some elements won't look correct.
+
+		<h2>The site doesn't look good on my monitor. All the text is too small/large. What can I do?</h2>
+
+		The default theme was designed for use on monitors with a minimum resolution of 1024*768. If you use a smaller resolution, your browser may have trouble
+		rendering the pages correctly. If you're using firefox, press <strong>Ctrl -</strong> to decrease the font size. This will help on monitors with a lower
+		resolution. Alternately, <strong>Ctrl +</strong> will increase font size if the text size is too small.
+
+		<h2>What do the various colors mean in the currency boxes?</h2>
+
+		If it's gray, then that particular currency requirement is not met. If it's a dark color, its about to expire. If it's a light color then you are qualified.
+		The actual colors will depend on what color scheme you're using.
+
+		<h2>I want to keep track of my helicopter instrument currency, but there is no option for it in my preferences page, what gives?</h2>
+
+		The option to keep track of helicopter instrument currency (or any helicopter currency option) shows up only if you have at least one helicopter in your
+		planes database. Additionally, you can only select weight-shift-control currency options if you have at least one weight-shift-control plane in your database, etc.
+
+		<h2>How does type rating currency work?</h2>
+
+		If you have a plane in your database that is designated as "Type Rating Required", that type will show up in the preferences page. Lets say you
+		have three B-737's in your plane database. If only one is designated as "Type Rating Required", then only that one plane will be counted in currency
+		calculations. So make sure all of your planes of a certain type have that checkbox marked.
+
+		<h2>How is the point-to-point cross country time calculated for the 135 minimums?</h2>
+
+		It goes through each row in your logbook, and adds the total time from any entry where the "route" column is not in the form "XXX-XXX" or "XXXX-XXXX". For instance,
+		if you put "KLGA-KLGA" or "LGA-LGA" in the route column, it will not use that time in the calculation. If you logged a flight as "KLGA-KJFK", "LGA-JFK", or "LGA-JFK-BOS-LGA",
+		it will use the total time from that column and add it towards the 135 p2p XC time. Basically the first three letters have to match the 5th through 7th letters (or the first
+		four letters have to match the 6th through 9th letters) for it to count the time. The site will try it's best to remove any "crap" in the route column that may
+		interfere with determining if you landed at another airport or not. For instance, if you prefer to log all your routes like this: "KBOS - KBOS", it will remove the superfluous
+		spaces and not count that time as p2p XC. To avoid any erroneous readings, it is recommended to log all routes as "INDENT-IDENT-IDENT...", and to only put airports you actually
+		landed at in the route list.
+
+		<h2>What are those little gray buttons next to the entry fields for?</h2>
+
+
+		Those are shortcut buttons that are used to make entering times faster and easier. If you were to enter "1.5" into the Total box and then click the button next to the PIC box, 
+		"1.5" will be copied into the PIC box. Clicking on the button next to the Total box will copy the value in the total box to various other boxes, depending on your logbook mode.
+
+		<h2>Why do you need to know my birthday?</h2>
+
+		Its used to determine how long a 3rd class medical is good for. If you're over 40 at the time of the exam, third class privileges will expire 36 months after the exam,
+		instead of the usual 60 months.
+
+		<h2>Whats the difference between the "FTD" and "Simulator" category/class when entering a new plane?</h2>
+
+		In <strong>AC 120-45A</strong> The FAA defines a "Simulator" as:
+
+		<blockquote><p>An Airplane Simulator is a full size replica of a specific type or make, model, and series airplane cockpit, including the assemblage of equipment and
+		computer software programs necessary to represent the airplane in ground and flight operations, a visual system providing an out-of-the-cockpit view, a force (motion)
+		cueing system which provides cues at least equivalent to that of a three degree of freedom motion system; and is in compliance with the minimum standards for a Level
+		A simulator specified in AC 120-40, as amended.</p></blockquote>
+
+		and a "Flight Training device as:
+
+		<blockquote><p>An Airplane Flight Training Device is a full scale replica of an airplane’s instruments, equipment, panels, and controls in an open flight deck area or
+		an enclosed airplane cockpit, including the assemblage of equipment and computer software programs necessary to represent the airplane in ground and flight conditions
+		to the extent of the systems installed in the device; does not require a force (motion) cueing or visual system; is found to meet the criteria outlined in this AC for
+		a specific flight training device level; and in which any flight training event or flight checking event is accomplished.</p></blockquote>
+
+
+		Generally speaking, if it's full motion, then it's a "Simulator". If it's not full motion, it is most likley an FTD. Full motion is required for it to be approved as a
+		"Simulator". To be sure, check with the operator of the machine.
+
+		<h2>Whats with PCATD's, and why can't I enter a plane as one?</h2>
+
+		A PCATD is like a FTD, but does not fully meet the requirements of being an FTD. According to <strong>AC 61-126</strong>, the only use of PCATD time is to fulfill 10
+		of the 20 required hours of instrument time allowed in a FTD thats required for the instrument rating. After you reveive the instrument rating, that PCATD time is worthless.
+		The reason why it is not included in the site, is because it's only use requires a certified flight instructor's signature for it to be valid. If that signature is not
+		present, the time has absolutly no use.
+	
+	
+	</div>
+	
+	<div id="intro" style="font-size:medium;text-align:left; display: none">
+	
+		<div style="border:1px solid black;margin-bottom:20px">
+			<h1>
+				<span class="fake_anchor" onclick="front_page_toggle('faq');">F.A.Q.</span>&nbsp;-&nbsp;
+
+				<span class="fake_anchor" onclick="front_page_toggle('news');">News</span>&nbsp;-&nbsp;
+				<span>Introduction</span>&nbsp;-&nbsp;
+				<span class="fake_anchor" onclick="front_page_toggle('walk');">Walkthrough</span>
+			</h1>
+		</div>
+		
+		<h2>What is this, and why is it here?</h2>
+
+
+		Its a logbook web application. It's here to assist pilots in keeping track of their flight time. Paper logbooks are prone to getting lost or destroyed,
+		and are a pain to create calculations and summaries. With this site, you never have to worry about leaving your logbook at home, or at the airport,
+		because it's always accessible from a internet ready computer, which are very easy to come by these days.
+		
+		<h2>What sets this apart from all the other online pilot logbook applications?</h2>
+
+		Flightlogg.in' has a lot more features that other pilot logbook applications do not have. Here is a quick rundown of what the site can do:<br /><br />
+		
+		<div style="text-align:center">
+			<img src="site-media/intro/map_lines.jpg" alt="Google Map route map" /><br />
+			Map out each route you've flown with Google Maps.<br /><br />
+		
+			<img src="/site-media/intro/map_points.jpg" alt="Google Map airport map" /><br />
+			Create an interactive map with each airport you've flown into.<br /><br />
+
+			
+			<img src="/site-media/intro/backup.png" alt="backup" /><br />
+			Automatically recieve a complete backup file of you logbook weekly.<br /><br />
+			
+			<img src="/site-media/intro/sig.png" style="padding:5px" alt="sig image 1" /><img src="/site-media/intro/sig2.png" style="padding:5px" alt="sig image 3" /><br />
+			<img src="/site-media/intro/sig3.png" style="padding:5px" alt="sig image 2" /><img src="/site-media/intro/sig4.png" style="padding:5px" alt="sig image 4" /><br />
+			Custom signature images displaying to the world your flight times. Place this image on your blogs, in your forum signature; anywhere you please.<br /><br />
+		
+			<img src="/site-media/intro/8710.png" alt="8710" /><br />
+			Easily calculate 8710 data<br /><br />
+
+			<img src="/site-media/intro/graphs.png" alt="graphs" /><br />
+			Easily create graphs comparing flight times in various types of airplanes<br /><br />
+		
+			<img src="/site-media/intro/atp-135.png" alt="ATP and 135 minimums" /><br />
+			Quickly and automatically determine if you have the APT minimums or Part 135 PIC minimums, includinf automatic point-to-point cross country time
+			calculation.<br /><br />
+		
+			<img src="/site-media/intro/currency.png" alt="Currency" /><br />
+			Automatic currency reminders for every category/class combination you can think of. Including type rating currency.<br /><br />
+		
+			<img src="/site-media/intro/totals.png" alt="Totals" /><br />
+
+			Calculate specialized logbook totals.
+		</div>
+
+		<h2>OK great! I'm convinced, I'll sign up! How much does it cost for a years membership?</h2>
+		
+		Zero dollars. I don't believe in charging for things just because you can. Now-a-days webhosting is dirt cheap. There are plenty of site out there
+		that have a ton of traffic and get by without resorting to littering the site with ads, or charging a membership fee. Currently I pay 8 dollars a 
+		month to run the webserver this site runs on. I'm not a rich person by any means, but $8 a month is nothing. Furthermore, it probably won't be until
+		at least a few years from now before the sites outgrows it current hosting and will need to relocate to more expensive hosting.<br /><br />
+		
+		In summary, the site doesn't need to charge for membership, therefore the site will not charge for membership.
+		
+		<h2>I've come to learn that you usually get what you pay for. Since this site is free, it probably isn't any good, I'll rather pay $90 a year on this other site.</h2>
+		
+		Good for you! Just remember, some of the best sites on the internet are free: Facebook, Google, Yahoo, YouTube, <a href="http://runwayfinder.com">RunwayFinder</a>,
+		<a href="http://airnav.com">AirNav</a>, etc.
+		
+		<h2>Ah, I see. I changed my mind, I think I'll sign up! Only one problem, though. I already have my logbook digitalized in another format. Will I have to start all
+		over again from scratch?</h2>
+
+		
+		No you will not have to start over again from scratch! Flightlogg.in' has a feature that allows you to import flights from another format, such as LogShare backup files,
+		and spreadsheet files. If your logbook is in any other format thats not already supported, fell free to send in the file, and we'll figure out a way to get it to work.
+		
+		<h2>Whats the history behind FlightLogg.in'?</h2>
+		
+		I started using a certain other electronic logbook website around early 2004. I thought it was a brilliant idea being able to access your logbook from anywhere, as
+		well as never having to worry about losing your logbook in a fire, or losing all your logbook data in a computer crash. The only problem was the site was very lacking
+		in features, and I knew I could do better. In October 2007, I began working on FlightLogg.in' and eventually launched the site in early May, 2008.
+		
+
+	</div>
+		
+	<div id="walk" style="font-size:medium;text-align:left;display:none">
+		
+		<div style="border:1px solid black;margin-bottom:20px">
+			<h1>
+				<span class="fake_anchor" onclick="front_page_toggle('news');">F.A.Q.</span>&nbsp;-&nbsp;
+
+				<span class="fake_anchor" onclick="front_page_toggle('news');">News</span>&nbsp;-&nbsp;
+				<span class="fake_anchor" onclick="front_page_toggle('intro');">Introduction</span>&nbsp;-&nbsp;
+				<span>Walkthrough</span>
+			</h1>
+		</div>
+
+						
+		After you fist sign up, go to the "Planes" section and enter at least one airplane. You can not log any flights until you have entered at least one
+		plane into your plane database.
+	
+		<div style="text-align: center; padding:10px">
+
+			<img alt="Planes screenshot" src="/site-media/walkthrough/planes-1.png" />
+		</div>
+	
+		Only "Tailnumber" and either "type" or "model" is required for each plane. Each tag must be comma separated, are not case sensitive, and may contain spaces.
+		Common tags include "Complex", "High Performance", the name of the operator such as "Express Jet" or "Airnet", "Glass", "G1000", "Turbo", "Turbine",
+		and "Jet". These tags are used to tally up totals based on hours flown in aircraft with various tags.<br /><br /> Also note that the Boeing has the "Type Rating Required"
+		checkbox checked. This is so we can track type rating currency for this type.
+	
+		Now go to the Preferences section by clicking the link on the top navigation bar.
+	
+		<div style="text-align: center; padding:10px">
+			<img alt="Preferences screenshot" src="/site-media/walkthrough/prefs-1.png" />
+		</div>
+	
+		Both date of birth and Real name are optional. Your <strong>real name</strong> is only used for two things: printing your name at
+		the top of each page telling you who is logged in, and for in the header when you export as a the printer friendly logbook.<br /><br />
+
+	
+		<strong>Date of birth</strong>, on the other hand, has a little more utility. It is used	to determine if your medical certificate should expire
+		based on whether or not you are over 40 years old. If this field is left blank, it will assume you are over the age of 40, and will indicate your
+		medical certificates will expire accordingly.<br /><br />
+	
+		You can also select from a few different <strong>Styles</strong>. For the rest of the /site-media/walkthrough, we'll use the "Red" scheme.
+	
+		<div style="text-align: center; padding:10px">
+			<img alt="Preferences screenshot" src="/site-media/walkthrough/prefs-2.png" />
+		</div>
+	
+		Under the "<strong>Currency Reminders</strong>" section there is a series of checkboxes. If you only have single engine airplanes in your plane database,
+		only single engine airplane related currencies will be shown. Since we have both single and multi-engine aircraft in our plane database,
+		single and multi-engine currencies are shown. Also, since we have one aircraft that has been checked "Type rating required", we have an
+		option to track day and night landing currency for that type.<br /><br />
+
+	
+		We have also changed various options effecting the look and feel of the logbook screen, such as entries to show per page, and the format of the date column.<br /><br />
+	
+		There are seven different "<strong>Logbook Modes</strong>" that the user can select.
+		Each mode hides a different set of fields from the new entry popup with the intent of reducing clutter and streamlining the user interface. If you are an
+		Airline First Officer, for instance, you are not going to be logging PIC or Simulated Instrument time on a regular basis, so selecting this mode will hide those
+		fields from the new entry popup and the logbook view. More on this feature later.<br /><br />
+	
+		Now you are ready to start logging flights. Navigate to the Logbook section, and click on the "New Entry" button at the top.
+	
+		<div style="text-align: center; padding:10px">
+			<img alt="New Entry screenshot" src="/site-media/walkthrough/new_entry-1.png" />
+		</div>
+	
+		Since we are in "Airline First Officer" mode, the only entry fields shown are Total, SIC, Actual Instrument, Night, and Cross Country. If, for whatever reason, you needed
+		to log time into another field such as Simulated Instrument, click on the <strong>Show all Fields</strong> link at the bottom and all fields will be shown.<br /><br />
+
+	
+		Notice how the <strong>Route</strong> section is composed. First the three or four letter identifier of the departure airport followed by a single dash,
+		then the identifier of the second airport, etc. It is recommended that all routes be logged this way. Local flights should be logged either
+		"LGA-LGA", "LGA-LOCAL" or just "LGA". A space can also be used to seperate the identifiers instead of a dash. You have the freedom to log the route however you like,
+		but not logging it in the recommended manner may cause problems with the <strong>Google Map route plotting feature</strong> and the <strong>Part 135 minimums</strong>
+		calculator.<br /><br /> More on this below.
+	
+		The button next to each field is called a <strong>shortcut button</strong> that allows you to fill out fields faster and easier. If you click on the button next to the
+		Cross Country field, it will copy the Total value to the Cross Country field. This way you don't have to type "12.5" into each box appropriate box individually.<br /><br />
+
+	
+		The button next to the Total box works a little differently. In "Airline First Officer" mode, it will copy the contents of Total to Cross Country and SIC. Since
+		theoretically every flight you do as an airline first officer will be cross country time and SIC time, this button saves a little more time. The total button's
+		behaviour is different for each mode.<br /><br />
+	
+		Another neat time saving feature is to enter a mathematical expression into the field. Instead of pulling out your calculator to add up the time of each leg, just enter
+		"2.5+3.5+6.5" and press the shortcut button and it will evaluate the total for you. This feature comes in handy for determine total time from Hobbs start and end
+		values, and for airline pilots who log flights from company paperwork where time is represented by each leg.<br /><br />
+	
+		If you'd like to use this site to keep track of your medical certificates, CFI renewals, and various other aviation events not associated with flight time,
+		click the "<strong>New Non-flying Event</strong>" link in the new entry popup. Here you can enter the type of event, as well as a comment describing the event.
+	
+		<div style="text-align: center; padding:10px">
+			<img alt="New Entry screenshot" src="/site-media/walkthrough/new_entry-2.png" />
+		</div>
+	
+		After a few flights have been logged, the logbook screen should look like this. Since we are in "Airline First Officer" mode, columns like Dual Given and PIC are hidden.
+		To show all columns, click the "<strong>Show all columns</strong>" link at the bottom.
+	
+		<div style="text-align: center; padding:10px">
+
+			<img alt="Logbook screenshot" src="/site-media/walkthrough/logbook-1.png" />
+		</div>
+	
+		The flight on August 5th, 2006 has "[Pilot Checkride]" in the comments section because that flight was checked off as a "<strong>Pilot Checkride</strong>" in the
+		new entry popup. The date of this flight is whats used to determine your Pilot Certificate Currency. Since pilot checkrides count as a flight
+		review, it will reset your status just as a flight tagged as "<strong>Flight Review</strong>" would. As you can see in the grey box at the bottom, this pilot is
+		not current since his last flight review/pilot checkride was more than 24 calendar months ago.<br /><br />
+	
+		This pilot is Boeing 737-400 current, since he has 3 landings in the past 90 days in a plane of that type. Any landing in a plane with a type of "B-737-400" will
+		be counted towards that <strong>type rating currency</strong>, even if that particular tail number has not been checked as "Type Rating Required". He is also
+		multi-engine current since the Boeing is a multi-engine airplane. His logbook does not show any single engine landings in the past 90 days, so that
+		box is grayed.<br /><br />
+	
+		Since this pilot has no flights checked as "<strong>Instructor Checkride</strong>", or as  "<strong>Instructor Refresher</strong>", any CFI currency can not be calculated.
+		It should be noted that a flight checked "Instructor checkride" does not reset the Flight Review currency status. The FAA has came out and officially said that flight
+		instructor checkrides do not implicitly imply that your pilot skills were being evaluated, so the site does not count for a Flight Review. Only if during your
+		instructor checkride the examiner were to sign your logbook saying he explicitly gave you a Flight Review, you may check that flight as both
+		"Instructor Checkride", and "Flight Review".
+	
+		<div style="text-align: center; padding:10px">
+
+			<img alt="Currency screenshot" src="/site-media/walkthrough/ATP-1.png" />
+		</div>
+	
+		Below all the currency boxes, you will see two additional boxes that show your flight times in relation to the minimum flight times required to take the ATP checkride,
+		and the flight times required to act as PIC on a part 135 flight. Most of these values are taken directly from the totals in your logbook, such as Night, PIC and Total.
+		Other times are calculated conditionally. For instance, XC time required for the 135 minimums does not require a landing at an airport 50 miles away. To calculate this
+		time, it goes by the route field. If you logged the flight as going to another airport, it will count all that time as <strong>p2p (point to point) XC</strong>. In our
+		example, all the flights logged count as 135 XC except for the "LGA-LGA" flight, and the three "LRR-LRR" flights.<br /><br />
+	
+		The number in parenthesis after your night hours in the ATP box represents the number of extra hours added due to night landings. The regulations say that if you have
+		more than 20 night landings, you can substitute one night landing for one night flight hour towards that requirement. Since we have a total of 31 night landings, we add
+		an additional 11 night hours towards that requirement, hence the "(+11)".<br /><br />
+	
+		There may also be a number next to the Instrument requirements due to the fact that up to a maximum of 25 hours of instrument time can be used towards that requirement
+		if it's in an FTD or Simulator. Additionally, up to 100 hours of Simulator time will be added to the total time in the ATP requirement box in the same manner.<br /><br />
+	
+		That should just about do it. The rest of the site's features should be self explanitory. If something is still unclear, consult the FAQ section, or head on over to
+		the forums and make a post there.
+
+	</div>
+</div>
+
+{% endblock %}
+

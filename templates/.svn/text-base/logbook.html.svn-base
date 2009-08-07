@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+
+{% block javascript %}
+<script type="text/javascript" src="/site-media/javascripts/popup.js"></script>
+<script type="text/javascript" src="/site-media/javascripts/logbook.js"></script>
+{% endblock %}
+
+{% block css %}
+<style type="text/css">     
+    .logbook_central_div                         {width: 98%; padding: 10px}
+    .flying_event                                {color: darkred; font-weight: bold}
+
+    span.unformatted_date                        {display: none}
+
+    .pagination_table                            {width: 100%; border: 0px solid blue; font-weight: bold}
+
+    #logbook_table                               {width:100%; border: 1px solid black; background: #cce4eb; font-size: x-small}
+    #logbook_table td                            {border: 1px solid darkgray; white-space: nowrap;}
+    #logbook_table td:last-child:not([colspan])			{white-space: normal; text-align: left}
+
+    #logbook_table thead td,
+    #logbook_table tfoot td:not([colspan])       {background: #E0FFFF; border: 1px solid darkgray}
+
+    #logbook_table tfoot td[colspan]             {border: none; text-align:right}
+
+    #logbook_table tbody tr:nth-child(even) td   {background: #e2eeee}
+    #logbook_table tbody tr:nth-child(odd) td    {background: #FFFFFF}
+
+    td.empty_logbook                             {font-weight: bold; font-size: large; padding: 10px}
+
+    #new_entry_button                            {margin: 10px }
+
+    /**********************************************************************************************/
+
+    #new_entry_popup                             {position: absolute;
+                                                  top: 50px;
+                                                  left: 50px;
+                                                  display: none;
+                                                  width: 480px;
+                                                  background: white;
+                                                  font-size: small !important;
+                                                  text-align:center;
+                                                  border: 2px solid black}
+
+    #dragbar                                    {background: lightblue; width:100%; text-align: right; margin-bottom: .5em; border-bottom: 1px solid black}
+    #dragbar td:first-child                     {width:100%; text-align:center; font-weight: bold; font-size: larger}
+    #dragbar td:last-child                      {text-align:right}
+
+    #close_x                                    {cursor: pointer; font-weight: bold}
+					 
+    #new_entry_popup td                         {padding: 0}
+
+    #flying_div                                 {padding: 5px}
+    #table_holder                               {overflow: hidden; width:100%; border: 0px solid green}
+
+    #flight_left_table                          {width: 53%; border: 0px solid black; float: left; margin-right: -10px}
+
+    #flight_left_table input[type=text],
+    textarea, select                            {width: 145px}
+
+    #flight_left_table textarea                 {height: 5.5em}
+    #flight_left_table tr td:first-child        {text-align: right; padding-right: 5px}
+    #flight_left_table tr td:last-child	        {text-align: left}
+
+    #flight_right_table                         {width: 47%; border: 0px solid black; float: right}
+    #flight_right_table input[type=text]		{width: 2.5em}
+    #flight_right_table input[type=button]		{margin-left: 5px}
+    #flight_right_table tr td:last-child		{text-align: left; padding-left: 5px}
+    #flight_right_table tr td:first-child		{text-align: right}
+
+    #landings_table                             {width: 100%; margin-top: 5px; margin-bottom: 5px}
+    #landings_table input[type=text]            {width: 2em}
+
+    #flight_events_table                        {width: 99%;
+                                                 border:1px solid black;
+                                                 margin-left: auto;
+                                                 margin-right: auto;
+                                                 margin-bottom: 5px;
+                                                 background: lightblue}
+
+    #flight_events_table td                     {text-align: left;}
+
+    #non_events_table                           {width: 100%; border:0px solid black; margin: 0em; background: lightblue}
+    #non_events_table td                        {text-align: left; width: 33%}
+
+    #non_flying_div                             {text-align: center}
+    #non_flying_div table:first-child, 
+    #non_flying_div textarea                    {width: 85%; height: 5.5em;}
+    #non_flying_div table:first-child td:first-child  {width: 30%; text-align: right; padding-right: 5px}
+    #non_flying_div table:first-child td:last-child   {text-align: left}
+    #non_flying_div input[type=text]            {width: 120px}
+
+
+    #flight_buttons, #non_buttons               {width:100%; float: left; margin-bottom: 10px}
+
+
+    #flight_left_table tr:first-child           {display:none}
+    .embed + img                                {position: relative; left: -19px; top: 3px; cursor: pointer; z-index: 2}
+
+</style>
+{% endblock %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+
+<div class="central_div logbook_central_div">
+
+	<input id="new_entry_button" type="button" value="New Entry" />
+	
+	{% include "pagination_table.html" %}
+		
+	<table id="logbook_table" summary="logbook table">
+		<thead>
+			<tr>
+                    {{ columns.header_row|safe }}
+			</tr>
+		</thead>
+		
+		<tfoot>
+			<tr>
+				<td colspan="3" id="page_total_title">Page Totals:</td>
+    
+                    {{ page_totals }}
+
+				<td colspan="6"></td>
+			</tr>
+			<tr>
+				<td colspan="3" id="overall_total_title">Overall Totals:</td>
+
+                    {{ overal_totals }}
+
+				<td colspan="6">
+					<a href="/mass_entry/{{ pagination.this_page }}">Mass Edit</a>
+					
+					&nbsp; &nbsp;
+					
+					<a href="" id="toggle_columns">Show All Columns</a>
+				</td>
+			</tr>
+		</tfoot>
+		
+		<tbody>
+
+		{% for e in logbook %}
+	    <tr class="{% cycle 'odd' 'even' %}" id="tr{{ e.id }}">
+
+            <td title="Date (click to edit)">
+        	    <span class="unformatted_date">{{ e.date }}</span>
+                <a href="">{{ e.date }}</a>
+            </td>
+
+            <td title="Plane">{{e.plane}}</td>
+
+            <td title="Route">{{e.route}}</td>
+
+            {% for item in e %}
+            <td title="{{item.title}}">{{item.disp}}</td>
+            {% endfor %}
+		</tr>
+		{% empty %}
+	
+		<tr>
+			<td colspan="21" class="empty_logbook">No flights to display</td>
+		</tr>
+			
+		{% endfor %}
+		</tbody>
+	</table>
+	
+	{% include "pagination_table.html" %}
+	
+	{% include "general_currency.html" %}
+</div>
+
+{% include "new_entry.html" %}
+
+{% endblock body %}

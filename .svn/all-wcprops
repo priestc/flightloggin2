@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 12
+/!svn/ver/1/
+END
+manage.py
+K 25
+svn:wc:ra_dav:version-url
+V 21
+/!svn/ver/1/manage.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 23
+/!svn/ver/2/__init__.py
+END
+urls.py
+K 25
+svn:wc:ra_dav:version-url
+V 19
+/!svn/ver/4/urls.py
+END
