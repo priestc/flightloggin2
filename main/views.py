@@ -7,7 +7,7 @@ def home(request):
     title = "Home"
     news = NewsItem.objects.all()[:15]
     return locals()
-    
+
 @render_to("preferences.html")
 def prefs(request):
     title="Preferences"

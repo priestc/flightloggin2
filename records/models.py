@@ -7,6 +7,6 @@ class Records(models.Model):
 
     def __unicode__(self):
         return str(self.user)
-		
+
     class Meta:
         verbose_name_plural = "Records"

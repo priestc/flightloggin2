@@ -8,6 +8,6 @@ class NewsItem(models.Model):
 
     def __unicode__(self):
         return self.title
-	
+
     class Meta:
         ordering = ["-date"]

@@ -15,7 +15,7 @@ class Plane(models.Model):
     model =          models.CharField(    "Model Name",         max_length=32, blank=True)
     manufacturer =   models.CharField(                          max_length=32, blank=True)
     cat_class =      models.IntegerField( "Category/Class",     choices=CATEGORY_CLASSES, null=False, default=0)
-    
+
     tags =           TagField()
 
     def __unicode__(self):
@@ -23,5 +23,5 @@ class Plane(models.Model):
 
     class Meta:
         ordering = ["manufacturer"]
-        
+
 #tagging.register(Plane)

@@ -21,12 +21,12 @@ DATE_FORMATS = (
     (5, "d-m-Y"),
     (6, "D j-n-y"),
 )
-				
-DATE_FORMATS_D =	(	
+
+DATE_FORMATS_D =        (
     (1, "M-D-YY"),
     (3, "MM-DD-YYYY"),
     (5, "Day MM-DD-YY"),
-					
+
     (6, "D-M-YY"),
     (7, "DD-MM-YYYY"),
     (9, "Day DD-MM-YYYY"),

@@ -88,11 +88,11 @@ INSTALLED_APPS = (
     'main',
     'stats',
     'profile',
-    
+
     'tagging',
     'django_extensions',
     'debug_toolbar',
-    
+
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.auth',

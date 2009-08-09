@@ -6,7 +6,7 @@ from psycopg2 import IntegrityError
 
 def ia():   #import airport
     """
-id	 "ident"	type	name	latitude_deg	longitude_deg	elevation_ft	continent	iso_country	iso_region	municipality	scheduled_service	gps_code	iata_code	local_code	home_link	wikipedia_link	keywords
+id       "ident"        type    name    latitude_deg    longitude_deg   elevation_ft    continent       iso_country     iso_region      municipality    scheduled_service       gps_code        iata_code       local_code      home_link       wikipedia_link  keywords
     """
 
     f = open('/home/chris/Desktop/airports.csv', 'rb')
@@ -87,7 +87,7 @@ id	 "ident"	type	name	latitude_deg	longitude_deg	elevation_ft	continent	iso_coun
 
 def ir():   #import region
     """
-    id	code	local_code	name	continent	iso_country	wikipedia_link	keywords
+    id  code    local_code      name    continent       iso_country     wikipedia_link  keywords
     """
 
     f = open('/home/chris/Desktop/regions.csv', 'rb')
@@ -114,7 +114,7 @@ def ir():   #import region
 
 def ic():   #import country
     """
-    id	code	name	continent	wikipedia_link	keywords
+    id  code    name    continent       wikipedia_link  keywords
     """
 
     f = open('/home/chris/Desktop/countries.csv', 'rb')

@@ -15,7 +15,7 @@ FIELDS = [
           'turbine', 't_pic', 'mt', 'mt_pic',
           'person', 'remarks',
           ]
-          
+
 FIELD_TITLES = {
     "date": "Date",
     "plane": "Plane",

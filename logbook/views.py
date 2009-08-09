@@ -28,7 +28,7 @@ def logbook(request, page=0):
     if flights:
         for flight in flights:
             row = LogbookRow()
-            
+
             for column in columns.as_list():
                 if column == "date":
                     row.date = flight.column(column)
