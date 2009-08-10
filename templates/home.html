@@ -2,7 +2,7 @@
 
 
 {% block javascript %}
-	<script type="text/javascript" src="/site-media/javascripts/{{ title|lower }}.js"></script>
+	<script type="text/javascript" src="{{ MEDIA_URL }}javascripts/{{ title|lower }}.js"></script>
 {% endblock %}
 
 {% block title %}{{ title }}{% endblock %}
@@ -168,31 +168,31 @@
 			<img src="site-media/intro/map_lines.jpg" alt="Google Map route map" /><br />
 			Map out each route you've flown with Google Maps.<br /><br />
 		
-			<img src="/site-media/intro/map_points.jpg" alt="Google Map airport map" /><br />
+			<img src="{{ MEDIA_URL }}intro/map_points.jpg" alt="Google Map airport map" /><br />
 			Create an interactive map with each airport you've flown into.<br /><br />
 
 			
-			<img src="/site-media/intro/backup.png" alt="backup" /><br />
+			<img src="{{ MEDIA_URL }}intro/backup.png" alt="backup" /><br />
 			Automatically recieve a complete backup file of you logbook weekly.<br /><br />
 			
-			<img src="/site-media/intro/sig.png" style="padding:5px" alt="sig image 1" /><img src="/site-media/intro/sig2.png" style="padding:5px" alt="sig image 3" /><br />
-			<img src="/site-media/intro/sig3.png" style="padding:5px" alt="sig image 2" /><img src="/site-media/intro/sig4.png" style="padding:5px" alt="sig image 4" /><br />
+			<img src="{{ MEDIA_URL }}intro/sig.png" style="padding:5px" alt="sig image 1" /><img src="{{ MEDIA_URL }}intro/sig2.png" style="padding:5px" alt="sig image 3" /><br />
+			<img src="{{ MEDIA_URL }}intro/sig3.png" style="padding:5px" alt="sig image 2" /><img src="{{ MEDIA_URL }}intro/sig4.png" style="padding:5px" alt="sig image 4" /><br />
 			Custom signature images displaying to the world your flight times. Place this image on your blogs, in your forum signature; anywhere you please.<br /><br />
 		
-			<img src="/site-media/intro/8710.png" alt="8710" /><br />
+			<img src="{{ MEDIA_URL }}intro/8710.png" alt="8710" /><br />
 			Easily calculate 8710 data<br /><br />
 
-			<img src="/site-media/intro/graphs.png" alt="graphs" /><br />
+			<img src="{{ MEDIA_URL }}intro/graphs.png" alt="graphs" /><br />
 			Easily create graphs comparing flight times in various types of airplanes<br /><br />
 		
-			<img src="/site-media/intro/atp-135.png" alt="ATP and 135 minimums" /><br />
+			<img src="{{ MEDIA_URL }}intro/atp-135.png" alt="ATP and 135 minimums" /><br />
 			Quickly and automatically determine if you have the APT minimums or Part 135 PIC minimums, includinf automatic point-to-point cross country time
 			calculation.<br /><br />
 		
-			<img src="/site-media/intro/currency.png" alt="Currency" /><br />
+			<img src="{{ MEDIA_URL }}intro/currency.png" alt="Currency" /><br />
 			Automatic currency reminders for every category/class combination you can think of. Including type rating currency.<br /><br />
 		
-			<img src="/site-media/intro/totals.png" alt="Totals" /><br />
+			<img src="{{ MEDIA_URL }}intro/totals.png" alt="Totals" /><br />
 
 			Calculate specialized logbook totals.
 		</div>
@@ -245,7 +245,7 @@
 	
 		<div style="text-align: center; padding:10px">
 
-			<img alt="Planes screenshot" src="/site-media/walkthrough/planes-1.png" />
+			<img alt="Planes screenshot" src="{{ MEDIA_URL }}walkthrough/planes-1.png" />
 		</div>
 	
 		Only "Tailnumber" and either "type" or "model" is required for each plane. Each tag must be comma separated, are not case sensitive, and may contain spaces.
@@ -256,7 +256,7 @@
 		Now go to the Preferences section by clicking the link on the top navigation bar.
 	
 		<div style="text-align: center; padding:10px">
-			<img alt="Preferences screenshot" src="/site-media/walkthrough/prefs-1.png" />
+			<img alt="Preferences screenshot" src="{{ MEDIA_URL }}walkthrough/prefs-1.png" />
 		</div>
 	
 		Both date of birth and Real name are optional. Your <strong>real name</strong> is only used for two things: printing your name at
@@ -267,10 +267,10 @@
 		based on whether or not you are over 40 years old. If this field is left blank, it will assume you are over the age of 40, and will indicate your
 		medical certificates will expire accordingly.<br /><br />
 	
-		You can also select from a few different <strong>Styles</strong>. For the rest of the /site-media/walkthrough, we'll use the "Red" scheme.
+		You can also select from a few different <strong>Styles</strong>. For the rest of the {{ MEDIA_URL }}walkthrough, we'll use the "Red" scheme.
 	
 		<div style="text-align: center; padding:10px">
-			<img alt="Preferences screenshot" src="/site-media/walkthrough/prefs-2.png" />
+			<img alt="Preferences screenshot" src="{{ MEDIA_URL }}walkthrough/prefs-2.png" />
 		</div>
 	
 		Under the "<strong>Currency Reminders</strong>" section there is a series of checkboxes. If you only have single engine airplanes in your plane database,
@@ -289,7 +289,7 @@
 		Now you are ready to start logging flights. Navigate to the Logbook section, and click on the "New Entry" button at the top.
 	
 		<div style="text-align: center; padding:10px">
-			<img alt="New Entry screenshot" src="/site-media/walkthrough/new_entry-1.png" />
+			<img alt="New Entry screenshot" src="{{ MEDIA_URL }}walkthrough/new_entry-1.png" />
 		</div>
 	
 		Since we are in "Airline First Officer" mode, the only entry fields shown are Total, SIC, Actual Instrument, Night, and Cross Country. If, for whatever reason, you needed
@@ -318,7 +318,7 @@
 		click the "<strong>New Non-flying Event</strong>" link in the new entry popup. Here you can enter the type of event, as well as a comment describing the event.
 	
 		<div style="text-align: center; padding:10px">
-			<img alt="New Entry screenshot" src="/site-media/walkthrough/new_entry-2.png" />
+			<img alt="New Entry screenshot" src="{{ MEDIA_URL }}walkthrough/new_entry-2.png" />
 		</div>
 	
 		After a few flights have been logged, the logbook screen should look like this. Since we are in "Airline First Officer" mode, columns like Dual Given and PIC are hidden.
@@ -326,7 +326,7 @@
 	
 		<div style="text-align: center; padding:10px">
 
-			<img alt="Logbook screenshot" src="/site-media/walkthrough/logbook-1.png" />
+			<img alt="Logbook screenshot" src="{{ MEDIA_URL }}walkthrough/logbook-1.png" />
 		</div>
 	
 		The flight on August 5th, 2006 has "[Pilot Checkride]" in the comments section because that flight was checked off as a "<strong>Pilot Checkride</strong>" in the
@@ -347,7 +347,7 @@
 	
 		<div style="text-align: center; padding:10px">
 
-			<img alt="Currency screenshot" src="/site-media/walkthrough/ATP-1.png" />
+			<img alt="Currency screenshot" src="{{ MEDIA_URL }}walkthrough/ATP-1.png" />
 		</div>
 	
 		Below all the currency boxes, you will see two additional boxes that show your flight times in relation to the minimum flight times required to take the ATP checkride,

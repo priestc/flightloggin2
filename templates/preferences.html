@@ -6,7 +6,7 @@
 		cat_classes = {{ cat_classes|safe }};
 	</script>
 
-	<script type="text/javascript" src="/site-media/javascripts/{{ title|lower }}.js"></script>
+	<script type="text/javascript" src="{{ MEDIA_URL }}javascripts/{{ title|lower }}.js"></script>
 {% endblock %}
 
 {% block css %}

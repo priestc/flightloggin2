@@ -30,8 +30,8 @@
 {% endblock %}
 
 {% block javascript %}
-    <script type="text/javascript" src="/site-media/javascripts/plane_popup.js"></script>
-    <script type="text/javascript" src="/site-media/javascripts/popup.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}javascripts/plane_popup.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}javascripts/popup.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$("#new_plane").click(function(){
