@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from models import *
 from logbook.models import Columns
-from currency.models import CurrencyDo
+from profile.models import CurrencyDo
 
 class ProfileForm(ModelForm):
     class Meta:

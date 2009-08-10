@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from constants import *
+from plane.constants import CATEGORY_CLASSES, FAKE_CLASSES
 
 class Profile(models.Model):
     user =           models.ForeignKey(User, primary_key=True)
