@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Sign in using OpenID{% endblock %}
+
+{#######################################################################################}
+
+{% block javascript %}
+<script type="text/javascript" src="{{ MEDIA_URL }}openid-realselector/js/jquery.openid.min.js"></script>	
+<link rel="stylesheet" href="{{ MEDIA_URL }}openid-realselector/css/style.css">
+
+<script type="text/javascript">
+		$(document).ready(function() {
+			$('#openid').openid({
+       			img_path: '{{ MEDIA_URL }}/openid-realselector/img/',
+      });
+	});
+</script>
+
+
+{% endblock %}
+
+{% block edit %}{%endblock %}
+
+{% block canvas %}
+
+<form method="post" action="." id="openid">
+		<div><input type="hidden" name="action" value="verify" /></div>
+</form>
+
+{% endblock %}
