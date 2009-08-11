@@ -19,4 +19,10 @@ urlpatterns = patterns('',
 
     (r'^admin/doc/',                          include('django.contrib.admindocs.urls')),
     (r'^admin/',                              include(admin.site.urls)),
+    (r'^openid/',                             include('django_openid_auth.urls')),
+
+)
+
+urlpatterns += patterns('django.contrib.auth',
+    url(r'^accounts/logout/$','views.logout', {"template_name": "home.html"}, name="logout"),
 )
