@@ -2,10 +2,14 @@
 
 {% block javascript %}
 	<script type="text/javascript" src="{{ MEDIA_URL }}javascripts/{{ title|lower }}.js"></script>
+    {% endblock %}
+
+{% block css %}
+    img     {border: 2px solid black}
 {% endblock %}
 
 {% block title %}{{ title }}{% endblock %}
-{% block body %}
+{% block canvas %}
 
 		After you fist sign up, go to the "Planes" section and enter at least one airplane. You can not log any flights until you have entered at least one
 		plane into your plane database.
@@ -132,9 +136,6 @@
 	
 		That should just about do it. The rest of the site's features should be self explanitory. If something is still unclear, consult the FAQ section, or head on over to
 		the forums and make a post there.
-
-	</div>
-</div>
 
 {% endblock %}
 

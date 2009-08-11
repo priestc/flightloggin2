@@ -12,3 +12,14 @@ def home(request):
 def prefs(request):
     title="Preferences"
     return locals()
+
+@render_to("walkthrough.html")
+def walkthrough(request):
+    title="Walkthrough"
+    return locals()
+
+@render_to("faq.html")
+def faq(request):
+    title="FAQ"
+    return locals()
+

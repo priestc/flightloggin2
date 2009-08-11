@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block javascript %}
+	<script type="text/javascript" src="{{ MEDIA_URL }}javascripts/{{ title|lower }}.js"></script>
+    {% endblock %}
+
+{% block css %}
+    #canvas     {color: green}
+{% endblock %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block canvas %}
+
+    <h2>I have a suggestion to make the site better, where can I submit it?</h2>
+	
+    Click the link above to go to the forum. You don't even have to register to post a comment.
+
+    <h2>I can't figure something out, where can I get help?</h2>
+
+    Go to the forums, you can get help there.
+
+    <h2>I use Internet Explorer and the site doesn't look like it renders correctly, how can I fix this?</h2>
+
+    Install Firefox. The site was designed to work on standard compliant browsers such as Opera and Firefox. If you're using IE, the site will indeed work,
+    but some elements won't look correct.
+
+    <h2>The site doesn't look good on my monitor. All the text is too small/large. What can I do?</h2>
+
+    The default theme was designed for use on monitors with a minimum resolution of 1024*768. If you use a smaller resolution, your browser may have trouble
+    rendering the pages correctly. If you're using firefox, press <strong>Ctrl -</strong> to decrease the font size. This will help on monitors with a lower
+    resolution. Alternately, <strong>Ctrl +</strong> will increase font size if the text size is too small.
+
+    <h2>What do the various colors mean in the currency boxes?</h2>
+
+    If it's gray, then that particular currency requirement is not met. If it's a dark color, its about to expire. If it's a light color then you are qualified.
+    The actual colors will depend on what color scheme you're using.
+
+    <h2>I want to keep track of my helicopter instrument currency, but there is no option for it in my preferences page, what gives?</h2>
+
+    The option to keep track of helicopter instrument currency (or any helicopter currency option) shows up only if you have at least one helicopter in your
+    planes database. Additionally, you can only select weight-shift-control currency options if you have at least one weight-shift-control plane in your database, etc.
+
+    <h2>How does type rating currency work?</h2>
+
+    If you have a plane in your database that is designated as "Type Rating Required", that type will show up in the preferences page. Lets say you
+    have three B-737's in your plane database. If only one is designated as "Type Rating Required", then only that one plane will be counted in currency
+    calculations. So make sure all of your planes of a certain type have that checkbox marked.
+
+    <h2>How is the point-to-point cross country time calculated for the 135 minimums?</h2>
+
+    It goes through each row in your logbook, and adds the total time from any entry where the "route" column is not in the form "XXX-XXX" or "XXXX-XXXX". For instance,
+    if you put "KLGA-KLGA" or "LGA-LGA" in the route column, it will not use that time in the calculation. If you logged a flight as "KLGA-KJFK", "LGA-JFK", or "LGA-JFK-BOS-LGA",
+    it will use the total time from that column and add it towards the 135 p2p XC time. Basically the first three letters have to match the 5th through 7th letters (or the first
+    four letters have to match the 6th through 9th letters) for it to count the time. The site will try it's best to remove any "crap" in the route column that may
+    interfere with determining if you landed at another airport or not. For instance, if you prefer to log all your routes like this: "KBOS - KBOS", it will remove the superfluous
+    spaces and not count that time as p2p XC. To avoid any erroneous readings, it is recommended to log all routes as "INDENT-IDENT-IDENT...", and to only put airports you actually
+    landed at in the route list.
+	
+    <h2>What are those little gray buttons next to the entry fields for?</h2>
+
+    Those are shortcut buttons that are used to make entering times faster and easier. If you were to enter "1.5" into the Total box and then click the button next to the PIC box, 
+    "1.5" will be copied into the PIC box. Clicking on the button next to the Total box will copy the value in the total box to various other boxes, depending on your logbook mode.
+
+    <h2>Why do you need to know my birthday?</h2>
+
+    Its used to determine how long a 3rd class medical is good for. If you're over 40 at the time of the exam, third class privileges will expire 36 months after the exam,
+    instead of the usual 60 months.
+	
+    <h2>Whats the difference between the "FTD" and "Simulator" category/class when entering a new plane?</h2>
+	
+    In <strong>AC 120-45A</strong> The FAA defines a "Simulator" as:
+	
+    <blockquote><p>An Airplane Simulator is a full size replica of a specific type or make, model, and series airplane cockpit, including the assemblage of equipment and
+    computer software programs necessary to represent the airplane in ground and flight operations, a visual system providing an out-of-the-cockpit view, a force (motion)
+    cueing system which provides cues at least equivalent to that of a three degree of freedom motion system; and is in compliance with the minimum standards for a Level
+    A simulator specified in AC 120-40, as amended.</p></blockquote>
+	
+    and a "Flight Training device as:
+	
+    <blockquote><p>An Airplane Flight Training Device is a full scale replica of an airplane’s instruments, equipment, panels, and controls in an open flight deck area or
+    an enclosed airplane cockpit, including the assemblage of equipment and computer software programs necessary to represent the airplane in ground and flight conditions
+    to the extent of the systems installed in the device; does not require a force (motion) cueing or visual system; is found to meet the criteria outlined in this AC for
+    a specific flight training device level; and in which any flight training event or flight checking event is accomplished.</p></blockquote>
+
+	
+    Generally speaking, if it's full motion, then it's a "Simulator". If it's not full motion, it is most likley an FTD. Full motion is required for it to be approved as a
+    "Simulator". To be sure, check with the operator of the machine.
+	
+    <h2>Whats with PCATD's, and why can't I enter a plane as one?</h2>
+	
+    A PCATD is like a FTD, but does not fully meet the requirements of being an FTD. According to <strong>AC 61-126</strong>, the only use of PCATD time is to fulfill 10
+    of the 20 required hours of instrument time allowed in a FTD thats required for the instrument rating. After you reveive the instrument rating, that PCATD time is worthless.
+    The reason why it is not included in the site, is because it's only use requires a certified flight instructor's signature for it to be valid. If that signature is not
+    present, the time has absolutly no use.
+
+
+{% endblock %}
+
