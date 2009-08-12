@@ -16,6 +16,17 @@ FIELDS = [
           'person', 'remarks',
           ]
 
+AGG_FIELDS = [
+          'total', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
+            ]
+
+EXTRA_AGG = [
+          'p2p',
+          'multi', 'm_pic',
+          'sea', 'sea_pic', 'mes', 'mes_pic',
+          'turbine', 't_pic', 'mt', 'mt_pic',
+          ]
+ 
 FIELD_TITLES = {
     "date": "Date",
     "plane": "Plane",
@@ -79,5 +90,3 @@ FIELD_ABBV = {
     "person": "Person",
     "remarks": "Remarks",
 }
-
-EDITABLE_FIELDS = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,27]

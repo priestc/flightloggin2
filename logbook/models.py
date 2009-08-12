@@ -45,47 +45,44 @@ class Flight(models.Model):
         ordering = ["date", "id"]
 
     def column(self, cn):
-        cn = cn.lower()
-        ret = 0
+        ret = "0"
         try:
             ret = str(getattr(self, cn))
 
         except AttributeError:
 
-            if cn == "t_pic" and self.plane == "turbine":
+            if cn == "t_pic" and self.plane.is_turbine():
                 ret = self.pic
 
-            if cn == "mt" and self.plane == "turbine":
+            if cn == "mt" and self.plane.is_turbine():
                 ret = self.pic
 
-                if cn == "mt_pic" and self.plane.cat_class in [2,4] and self.plane == "turbine":
+            if cn == "mt_pic" and self.plane.is_multi() and self.plane.is_turbine():
                     ret = self.pic
 
-            if cn == "m_pic" and self.plane.cat_class in [2,4]:
+            if cn == "m_pic" and self.plane.is_multi():
                 ret = self.pic
 
-                #####################
-
-            if cn == "multi" and self.plane.cat_class in [2,4]:
+            if cn == "multi" and self.plane.is_multi():
                 ret = self.total
 
-            if cn == "sea" and self.plane.cat_class in [3,4]:
+            if cn == "sea" and self.plane.is_sea():
                 ret = self.sim_inst
 
-            if cn == "mes" and self.plane.cat_class == 4:
+            if cn == "mes" and self.plane.is_mes():
                 ret = self.total
 
-            if cn == "mes_pic" and self.plane.cat_class == 4:
+            if cn == "mes_pic" and self.plane.is_mes():
+                ret = self.total
+               
+            if cn == "turbine" and self.plane.is_turbine():
                 ret = self.total
 
-            #####################
+            if cn == "p2p" and self.route:
+                if route.is_p2p():
+                    ret = self.total
 
-            if cn == "turbine" and self.plane == "turbine":
-                ret = self.total
-
-            if cn == "p2p" and self.route.is_p2p():
-                ret = self.total
-
+        #####################################
         if cn == "date":
             return ret
 
@@ -117,6 +114,16 @@ class Route(models.Model):
             ret.append(point)
 
         return "-".join(ret)
+
+    def fancy_display(self):
+        ret = []
+        for point in self.routebase_set.all():
+            ret.append("<span title='%s'>%s</span>" % (point.location_summary(), point.identifier, ) )
+
+        return "-".join(ret)
+
+    def is_p2p(self):
+        return True 
 
 class RouteBase(models.Model):
     route =    models.ForeignKey("Route")

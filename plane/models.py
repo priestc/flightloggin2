@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from annoying.functions import get_object_or_None
 from tagging.fields import TagField
 import tagging
 
@@ -23,5 +24,25 @@ class Plane(models.Model):
 
     class Meta:
         ordering = ["manufacturer"]
+
+    def is_turbine(self):
+        return get_object_or_None(Plane, pk=self.pk, tags__icontains="turbine") == self
+
+    def is_hp(self):
+        return get_object_or_None(Plane, pk=self.pk, tags__icontains="high performance") == self
+ 
+    def is_type_rating(self):
+        return get_object_or_None(Plane, pk=self.pk, tags__icontains="type rating") == self
+
+    #############################
+
+    def is_multi(self):
+        return self.pk in [2,4]
+
+    def is_sea(self):
+        return self.pk in [3,4]
+
+    def is_mes(self):
+        return self.pk == 3
 
 #tagging.register(Plane)

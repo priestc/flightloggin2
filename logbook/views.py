@@ -1,17 +1,19 @@
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
 
 from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
 
 from models import Flight, Columns
 from forms import *
+#from constants import *
 
 @login_required()
 @render_to("logbook.html")
 def logbook(request, page=0):
     title="Logbook"
-    flights = Flight.objects.all()
+    flights = Flight.objects.filter(user=request.user)
     flightform = FlightForm()
     columns = get_object_or_None(Columns, user=request.user)
 
@@ -46,5 +48,14 @@ def logbook(request, page=0):
         del flight, row, column
 
     #assert False
+   
+    args = []
+    for field in columns.as_list():
+        if field in AGG_FIELDS:
+            args.append(Sum(field))
+
+    overall_totals = Flight.objects.filter(user=request.user).aggregate(*args)
+
+
 
     return locals()
