@@ -3,13 +3,27 @@ from django.contrib.gis.geos import Point
 from models import Airport, Region, Country
 from psycopg2 import IntegrityError
 
+import os, sys
+
+THIS_PATH = os.path.abspath(os.path.dirname(__file__))
+
+def do_import():
+    print "Importing Countries"
+    ic()
+
+    print "Importing Regions"
+    ir()
+
+    print "Importing Airports"
+    ia()
+
 
 def ia():   #import airport
     """
-id       "ident"        type    name    latitude_deg    longitude_deg   elevation_ft    continent       iso_country     iso_region      municipality    scheduled_service       gps_code        iata_code       local_code      home_link       wikipedia_link  keywords
+id	 ident	type	name	latitude_deg	longitude_deg	elevation_ft	continent	iso_country	iso_region	municipality	scheduled_service	gps_code	iata_code	local_code	home_link	wikipedia_link	keywords
     """
-
-    f = open('/home/chris/Desktop/airports.csv', 'rb')
+    path = os.path.join(THIS_PATH, 'fixtures/airports.csv')
+    f = open(path, 'rb')
     reader = csv.reader(f, "excel")
     titles = reader.next()
     reader = csv.DictReader(f, titles)
@@ -43,8 +57,9 @@ id       "ident"        type    name    latitude_deg    longitude_deg   elevatio
             elev=None
 
         type = line["type"]
+        local = line["local_code"]
 
-        ident = line[' "ident"'].upper()
+        ident = line['ident'].upper()
         name = line["name"]
 
         country = line["iso_country"].upper()
@@ -62,7 +77,9 @@ id       "ident"        type    name    latitude_deg    longitude_deg   elevatio
                     ident = ident[1:]               ## get rid of the K
 
         if ident[:3] == "US-":
-            ident = ident[3:]                       ## get rid of the "US-" part
+            ident = local
+            #ident = ident[3:]                       ## get rid of the "US-" part
+
 
         if not throw_out:
 
@@ -87,10 +104,11 @@ id       "ident"        type    name    latitude_deg    longitude_deg   elevatio
 
 def ir():   #import region
     """
-    id  code    local_code      name    continent       iso_country     wikipedia_link  keywords
+    id	code	local_code	name	continent	iso_country	wikipedia_link	keywords
     """
 
-    f = open('/home/chris/Desktop/regions.csv', 'rb')
+    path = os.path.join(THIS_PATH, 'fixtures/regions.csv')
+    f = open(path, 'rb')
     reader = csv.reader(f, "excel")
     titles = reader.next()
     reader = csv.DictReader(f, titles)
@@ -114,10 +132,11 @@ def ir():   #import region
 
 def ic():   #import country
     """
-    id  code    name    continent       wikipedia_link  keywords
+    id	code	name	continent	wikipedia_link	keywords
     """
 
-    f = open('/home/chris/Desktop/countries.csv', 'rb')
+    path = os.path.join(THIS_PATH, 'fixtures/countries.csv')
+    f = open(path, 'rb')
     reader = csv.reader(f, "excel")
     titles = reader.next()
     reader = csv.DictReader(f, titles)

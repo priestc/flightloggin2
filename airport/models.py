@@ -12,6 +12,8 @@ class Airport(models.Model):
 
     elevation       =       models.IntegerField(null=True)
     location        =       models.PointField()
+    
+    objects         =       models.GeoManager()
 
     class Meta:
         ordering = ["identifier", "country"]
@@ -31,6 +33,12 @@ class Airport(models.Model):
                 ret.append(item)
 
         return ", ".join(ret)
+        
+    def line_display(self):
+        return self.identifier
+        
+    def title_display(self):
+        return self.location_summary()
 
 class Region(models.Model):
     code = models.CharField(max_length=48)

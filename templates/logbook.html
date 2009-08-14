@@ -28,6 +28,11 @@
     td.empty_logbook                             {font-weight: bold; font-size: large; padding: 10px}
 
     #new_entry_button                            {margin: 10px }
+    
+    span.found_airport                           {padding-bottom: -1px; color: MediumSlateBlue; border: 1px dotted MediumSlateBlue; border-width: 2px;}
+    span.found_navaid                            {padding-bottom: -1px; color: SeaGreen;        border: 1px dotted SeaGreen;        border-width: 2px;}
+                                                  
+    span.not_found                               {color: gray}
 
     /**********************************************************************************************/
 
@@ -141,19 +146,19 @@
 		<tbody>
 
 		{% for e in logbook %}
-	    <tr class="{% cycle 'odd' 'even' %}" id="tr{{ e.id }}">
+	    <tr class="{% cycle 'odd' 'even' %}" id="tr{{ e.pk }}">
 
             <td title="Date (click to edit)">
         	    <span class="unformatted_date">{{ e.date }}</span>
-                <a href="">{{ e.date }}</a>
+                <a href="">{{ e.date }}</a>                         {# date #}
             </td>
 
-            <td title="Plane">{{e.plane}}</td>
+            <td title="Plane">{{ e.plane }}</td>                    {# plane #}
 
-            <td title="Route">{{e.route}}</td>
+            <td title="Route">{{ e.route|safe }}</td>               {# route #}
 
             {% for item in e %}
-            <td title="{{item.title}}">{{item.disp}}</td>
+            <td title="{{item.title}}">{{item.disp}}</td>           {# all other columns #} 
             {% endfor %}
 		</tr>
 		{% empty %}

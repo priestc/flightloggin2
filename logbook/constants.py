@@ -15,6 +15,12 @@ FIELDS = [
           'turbine', 't_pic', 'mt', 'mt_pic',
           'person', 'remarks',
           ]
+          
+DB_FIELDS = [
+          'date', 'plane', 'route',
+          'total', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
+          'person', 'remarks'
+          ]
 
 AGG_FIELDS = [
           'total', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',

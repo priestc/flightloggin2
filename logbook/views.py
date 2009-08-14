@@ -24,12 +24,15 @@ def logbook(request, page=0):
         date = ""
         plane = ""
         route = ""
+        pk = 0
 
     logbook = []
 
     if flights:
         for flight in flights:
             row = LogbookRow()
+            
+            row.pk = flight.pk
 
             for column in columns.as_list():
                 if column == "date":
