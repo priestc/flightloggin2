@@ -1,21 +1,40 @@
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
+from django.http import HttpResponseRedirect
+from django.forms import ModelForm
+
 
 from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
 
 from models import Flight, Columns
 from forms import *
-#from constants import *
 
 @login_required()
 @render_to("logbook.html")
 def logbook(request, page=0):
     title="Logbook"
+    
+    #####################################################
+    
+    form = FlightForm(planes_queryset=Plane.objects.filter(user=request.user))
+    
+    if request.POST:
+        flight = Flight(user=request.user)
+        form = FlightForm(request.POST, instance=flight, planes_queryset=Plane.objects.filter(user=request.user))
+        
+        if form.is_valid():
+            form.save()
+    
+   
+    
+    
+    ##############################################################
+    
     flights = Flight.objects.filter(user=request.user)
-    flightform = FlightForm()
     columns = get_object_or_None(Columns, user=request.user)
+    planes = Plane.objects.filter(user=request.user)
 
     if not columns:
         columns=Columns(user=request.user)
@@ -58,7 +77,33 @@ def logbook(request, page=0):
             args.append(Sum(field))
 
     overall_totals = Flight.objects.filter(user=request.user).aggregate(*args)
-
-
-
     return locals()
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        

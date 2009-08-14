@@ -37,9 +37,9 @@
     /**********************************************************************************************/
 
     #new_entry_popup                             {position: absolute;
-                                                  top: 50px;
+                                                  top: 500px;
                                                   left: 50px;
-                                                  display: none;
+                                                  display: block;
                                                   width: 480px;
                                                   background: white;
                                                   font-size: small !important;
@@ -83,6 +83,8 @@
                                                  background: lightblue}
 
     #flight_events_table td                     {text-align: left;}
+    
+    ul.errorlist                                {color: red; margin: 0px; margin-right: 5px; padding: 0px; list-style-type: none; text-align: center; border: 1px solid red}
 
     #non_events_table                           {width: 100%; border:0px solid black; margin: 0em; background: lightblue}
     #non_events_table td                        {text-align: left; width: 33%;}
@@ -176,6 +178,6 @@
 	{% include "general_currency.html" %}
 </div>
 
-{% include "new_entry.html" %}
+{% include "new_flight.html" %}
 
 {% endblock %}

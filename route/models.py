@@ -131,8 +131,10 @@ def create_route_from_string(ostring):
         
 def normalize(string):
     import re
-    rex = re.compile(r'[^a-zA-Z0-9_@]+')
-    return rex.sub(' ', string).upper()
+    string = string.upper()
+    string = string.replace("LOCAL", " ")
+    string = string.replace(" TO ", " ")
+    return re.sub(r'[^a-zA-Z0-9_@]+', ' ', string).strip()
     
     
     
