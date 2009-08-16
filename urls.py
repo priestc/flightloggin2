@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'^preferences/$',                    "profile.views.profile",  name="profile"),
     url(r'^records/$',                        "records.views.records",  name="records"),
     url(r'^planes/$',                         "plane.views.planes",     name="planes"),
+    url(r'^import/$',                         "import.views.import_s",  name="import"),
     
     url(r'^logbook/$',                        "logbook.views.logbook",  name="logbook"),
     url(r'^logbook-page-(?P<page>\d+)',       "logbook.views.logbook",  name="logbook_page"),

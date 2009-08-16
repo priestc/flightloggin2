@@ -1,8 +1,9 @@
 {% extends "base.html" %}
+{% load tagging_tags %}
 {% block css %}
-<style type="text/css">
-	input[type=submit],
-	input[type=button]	        {margin: 5px}
+{{block.super}}
+	input[type="submit"],
+	input[type="button"]        {margin-bottom: 10px}
 	
 	input[type=text],
 	select, textarea	        {width: 200px; font-size: small !important}
@@ -11,10 +12,11 @@
 	#tags_window a:hover        {color: lightgreen}
 
 	#p_t                        {width:100%; border-collapse: collapse;}
-	#p_t td                     {border: 1px solid #DDDDFF}
+	#p_t td                     {border: 1px solid #DDDDFF; padding: 2px}
 	#p_t thead                  {background: #DDDDFF }
 	#p_t tbody:nth_child(even)  {background: blue}
 	#p_t tbody:nth_child(odd)   {background: red}
+	
 	#popup                      {position: absolute; top: 50px; left: 50px; display: none; width: 380px; background: white; font-size: small !important;
                                  text-align:center; overflow: hidden; border: 2px solid black}
 	#popup table                {margin-left: auto; margin-right: auto}
@@ -23,10 +25,21 @@
 	#dragbar td:first-child     {width:100%; text-align:center; font-weight: bold; font-size: larger}
 	#dragbar td:last-child      {text-align:right}
 
-	#close_x		{cursor: pointer; font-weight: bold}
+	#close_x                    {cursor: pointer; font-weight: bold}
 
-	#plane_buttons		{width:100%; float: left; margin-bottom: 10px}
-</style>
+	#plane_buttons              {width:100%; float: left; margin-bottom: 10px}
+	
+	textarea                    {height: 50px}
+	
+	span.help_text              {color: gray; font-size: x-small; font-style: italic}
+	
+	td.empty_row                {font-weight: bold; font-size: large; padding: 10px}
+	
+	.tag1       {font-size: xx-small}
+	.tag2       {font-size: xx--small}
+	.tag3       {font-size: x-small}
+	.tag4       {font-size: small}
+	.tag5       {font-size: medium}
 {% endblock %}
 
 {% block javascript %}
@@ -48,8 +61,8 @@
 			});
 
 			$("#tags_window a").click(function() {
-				tag = $("#" + this.id).text();
-				
+				tag= $(this).text()
+
 				if(tag.search(' ') >= 0)
 				    tag = '"' + tag + '"';
 				
@@ -82,6 +95,7 @@
 			<td>Type</td>
 			<td>Category/Class</td>
 			<td>Tags</td>
+			<td>Description</td>
 		</tr>
 	</thead>
 	<tbody>
@@ -92,9 +106,16 @@
 			<td id="p{{ plane.id }}_model">{{ plane.model }}</td>
 			<td id="p{{ plane.id }}_type">{{ plane.type }}</td>
 			<td id="p{{ plane.id }}_category_class">{{ plane.get_cat_class_display }}</td>
-			<td id="p{{ plane.id }}_tags">{{ plane.tags }}</td>
+			<td id="p{{ plane.id }}_tags">{{ plane.get_tags|join:", " }}</td>
+			<td id="p{{ plane.id }}_description">{{ plane.description }}</td>
 		</tr>		
+	{% empty %}
+	    <tr>
+	        <td class="empty_row" colspan="7">No planes</td>
+	    </tr>
 	{% endfor %}
+	
+	
 	</tbody>
 </table>
 </div>
@@ -117,27 +138,32 @@
 					</td>
 				</tr>
 				<tr>
-					<td>{{ form.tailnumber.label_tag }}</td>
-					<td>{{ form.tailnumber }}</td>
+					<td>{{ form.tailnumber.label_tag }}<br>&nbsp;</td>
+					<td>{{ form.tailnumber }}<br><span class="help_text">{{form.tailnumber.help_text}}</span></td>
 				</tr>
 				<tr>
-					<td>{{ form.manufacturer.label_tag }}</td>
-					<td>{{ form.manufacturer }}</td>
+					<td>{{ form.manufacturer.label_tag }}<br>&nbsp;</td>
+					<td>{{ form.manufacturer }}<br><span class="help_text">{{form.manufacturer.help_text}}</span></td>
 				</tr>
 			
 				<tr>
-					<td>{{ form.type.label_tag }}</td>
-					<td>{{ form.type }}</td>
+					<td>{{ form.type.label_tag }}<br>&nbsp;</td>
+					<td>{{ form.type }}<br><span class="help_text">{{form.type.help_text}}</span></td>
 				</tr>
 				
 				<tr>
-					<td>{{ form.model.label_tag }}</td>
-					<td>{{ form.model }}</td>
+					<td>{{ form.model.label_tag }}<br>&nbsp;</td>
+					<td>{{ form.model }}<br><span class="help_text">{{form.model.help_text}}</span></td>
 				</tr>
 				
 				<tr>
 					<td>{{ form.cat_class.label_tag }}</td>
 					<td>{{ form.cat_class }}</td>
+				</tr>
+				
+				<tr>
+					<td>{{ form.description.label_tag }}</td>
+					<td>{{ form.description }}</td>
 				</tr>
 				
 				<tr>
@@ -148,21 +174,11 @@
 		</table>
 		
 		<div id="tags_window">
-			<a href="" id="q">High Performance</a>,
-			<a href="" id="w">Complex</a>,
-			<a href="" id="e">Turbine</a>,
-			<a href="" id="r">Tailwheel</a>,
-			<a href="" id="f">Type Rating</a>,
-			<a href="" id="t">G1000</a>,
-			<a href="" id="y">Turboprop</a>,
-			<a href="" id="u">Jet</a>,
-			<a href="" id="i">Rental</a>,
-			<a href="" id="o">GPS</a>,
-			<a href="" id="p">Pressurized</a>,
-			<a href="" id="a">Turbocharged</a>,
-			<a href="" id="s">Glass Cockpit</a>,
-			<a href="" id="d">LSA</a>
+			{% tag_cloud_for_model plane.Plane as cloud with distribution=log min_count=20 steps=5 %}
 			
+			{% for tag in cloud %}
+            <a href="" class="tag{{tag.font_size}}">{{ tag }}</a>
+            {% endfor %}
 		</div>
 		
 		<div id="new_plane_buttons">

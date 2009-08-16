@@ -1,7 +1,13 @@
 from django.contrib import admin
 from models import *
 
-admin.site.register(Columns)
+class FlightAdmin(admin.ModelAdmin):
+    list_display = ('user', 'date', 'plane', 'route', 'remarks', )
+    search_fields = ('user', 'remarks')
+    raw_id_fields = ('plane', )
+    #filter_horizontal = ('user', )
 
-admin.site.register(Flight)
+admin.site.register(Flight, FlightAdmin)
+
+admin.site.register(Columns)
 admin.site.register(NonFlight)

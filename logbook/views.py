@@ -35,7 +35,6 @@ def logbook(request, page=0):
     
     flights = Flight.objects.filter(user=request.user)
     columns = get_object_or_None(Columns, user=request.user)
-    planes = Plane.objects.filter(user=request.user)
 
     if not columns:
         columns=Columns(user=request.user)

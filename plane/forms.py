@@ -5,7 +5,7 @@ from django import forms
 
 class PlaneForm(ModelForm):
     
-    tags = TagField(widget=forms.Textarea)
+    tags = TagField(widget=forms.Textarea, required=False)
     
     class Meta:
         model = Plane
