@@ -39,8 +39,7 @@ function fire_popup(popup_id) {
 $(document).ready(function() {
 
 	$("#close_x").click(function(event) {
-		$("#new_entry_popup").hide("slow");
-		$("#plane_popup").hide("slow");
+		$("#popup").hide("slow");
 	});
 });
 

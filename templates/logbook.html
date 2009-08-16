@@ -2,6 +2,7 @@
 
 {% block javascript %}
 <script type="text/javascript" src="{{ MEDIA_URL }}javascripts/popup.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}javascripts/new_entry_popup.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}javascripts/logbook.js"></script>
 {% endblock %}
 <style>
@@ -9,7 +10,8 @@
     .logbook_central_div                         {width: 98%; padding: 10px}
     .flying_event                                {color: darkred; font-weight: bold}
 
-    span.unformatted_date                        {display: none}
+    span.unformatted_date,
+    span.unformatted_route                       {display: none}
 
     .pagination_table                            {width: 100%; border: 0px solid blue; font-weight: bold}
 
@@ -27,24 +29,24 @@
 
     td.empty_logbook                             {font-weight: bold; font-size: large; padding: 10px}
 
-    #new_entry_button                            {margin: 10px }
+    #new_flight_button                            {margin: 10px }
     
-    span.found_airport                           {padding-bottom: -1px; color: MediumSlateBlue; border: 1px dotted MediumSlateBlue; border-width: 2px;}
-    span.found_navaid                            {padding-bottom: -1px; color: SeaGreen;        border: 1px dotted SeaGreen;        border-width: 2px;}
+    span.found_airport                           {padding-bottom: -1px; color: MediumSlateBlue; border: 0px dotted MediumSlateBlue; border-width: 2px;}
+    span.found_navaid                            {padding-bottom: -1px; color: SeaGreen;        border: 0px dotted SeaGreen;        border-width: 2px;}
                                                   
     span.not_found                               {color: gray}
 
     /**********************************************************************************************/
 
-    #new_entry_popup                             {position: absolute;
-                                                  top: 500px;
-                                                  left: 50px;
-                                                  display: block;
-                                                  width: 480px;
-                                                  background: white;
-                                                  font-size: small !important;
-                                                  text-align:center;
-                                                  border: 2px solid black}
+    #popup                                      {position: absolute;
+                                                 top: 500px;
+                                                 left: 50px;
+                                                 display: none;
+                                                 width: 480px;
+                                                 background: white;
+                                                 font-size: small !important;
+                                                 text-align:center;
+                                                 border: 2px solid black}
 
     #dragbar                                    {background: lightblue; width:100%; text-align: right; margin-bottom: .5em; border-bottom: 1px solid black}
     #dragbar td:first-child                     {width:100%; text-align:center; font-weight: bold; font-size: larger}
@@ -109,9 +111,7 @@
 
 {% block canvas %}
 
-<div class="central_div logbook_central_div">
-
-	<input id="new_entry_button" type="button" value="New Entry" />
+	<input id="new_flight_button" type="button" value="New Flight" />
 	
 	{% include "pagination_table.html" %}
 		
@@ -147,21 +147,28 @@
 		
 		<tbody>
 
-		{% for e in logbook %}
-	    <tr class="{% cycle 'odd' 'even' %}" id="tr{{ e.pk }}">
+		{% for row in logbook %}
+	    <tr class="{% cycle 'odd' 'even' %}" id="tr{{ row.pk }}">
 
-            <td title="Date (click to edit)">
-        	    <span class="unformatted_date">{{ e.date }}</span>
-                <a href="">{{ e.date }}</a>                         {# date #}
+            <td class="date_col" title="Date (click to edit)">
+        	    <span class="unformatted_date">{{ row.date }}</span>
+                <a href="" id="f{{row.pk}}">{{ row.date }}</a>                                         {# date #}
             </td>
 
-            <td title="Plane">{{ e.plane }}</td>                    {# plane #}
+            <td class="plane_col" title="Plane">{{ row.plane }}</td>                                   {# plane #}
 
-            <td title="Route">{{ e.route|safe }}</td>               {# route #}
+            <td class="route_col" title="Route">                                                       {# route #}
+                <span class="unformatted_route">{{row.raw_route}}</span>{{ row.route|safe }}
+            </td>
 
-            {% for item in e %}
-            <td title="{{item.title}}">{{item.disp}}</td>           {# all other columns #} 
+            {% for item in row %}
+            <td title="{{item.title}}" class="{{item.system}}_col">{{item.extra}}{{item.disp}}</td>    {# all other columns #}
             {% endfor %}
+            
+             <td class="remarks_col" title="Remarks">                                                  {# remarks #}
+                <span class="flying_event">{{row.events}}</span>
+                <span class="remarks">{{ row.remarks }}</span>
+             </td>
 		</tr>
 		{% empty %}
 	
@@ -174,10 +181,6 @@
 	</table>
 	
 	{% include "pagination_table.html" %}
-	
-	{% include "general_currency.html" %}
-</div>
-
 {% include "new_flight.html" %}
-
 {% endblock %}
+

@@ -10,6 +10,7 @@ from annoying.functions import get_object_or_None
 
 from models import Flight, Columns
 from forms import *
+from constants import FIELD_TITLES
 
 @login_required()
 @render_to("logbook.html")
@@ -43,6 +44,7 @@ def logbook(request, page=0):
         date = ""
         plane = ""
         route = ""
+        raw_route = ""
         pk = 0
 
     logbook = []
@@ -55,22 +57,25 @@ def logbook(request, page=0):
 
             for column in columns.as_list():
                 if column == "date":
-                    row.date = flight.column(column)
+                    row.date = flight.column("date")
 
                 elif column == "plane":
-                    row.plane = flight.column(column)
+                    row.plane = flight.column("plane")
 
                 elif column == "route":
-                    row.route = flight.column(column)
+                    row.route = flight.column("route")
+                    row.raw_route = flight.route.fallback_string
+                    
+                elif column == "remarks":
+                    row.remarks = flight.column("remarks")
+                    row.events = flight.column("events")
                 else:
-                    row.append( {"title": column, "disp": flight.column(column)} )
+                    row.append( {"system": column, "disp": flight.column(column), "title": FIELD_TITLES[column]} )
 
             logbook.append(row)
 
         del flight, row, column
-
-    #assert False
-   
+        
     args = []
     for field in columns.as_list():
         if field in AGG_FIELDS:

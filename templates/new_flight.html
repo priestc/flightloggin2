@@ -1,15 +1,14 @@
-<div id="new_entry_popup" title="New Entry">
-	<table id="dragbar">
-		<tr>
-			<td><span id="titlebar">New Entry</span></td>
-			<td><span id="close_x" title="Close this popup">[X]</span></td>
-		</tr>
-	</table>
-	
+<div id="popup" title="New Entry">
 	<form id="new_entry_form" action="." method="post">
+		<table id="dragbar">
+		    <tr>
+			    <td><span id="titlebar">New Entry</span></td>
+			    <td><span id="close_x" title="Close this popup">[X]</span></td>
+		    </tr>
+	    </table>
 	
-		<div id="flying_div">
-			<div id="table_holder">
+
+		<div id="table_holder">
 			<table id="flight_left_table">
 				<tbody>
 					<tr>
@@ -38,8 +37,8 @@
 					</tr>
 					
 					<tr class="person_field">
-						<td>{{ form.instructor.label_tag }}</td>
-						<td>{{ form.instructor }}<br>{{form.person.errors}}</td>
+						<td>{{ form.person.label_tag }}</td>
+						<td>{{ form.person }}<br>{{form.person.errors}}</td>
 					</tr>
 							
 					<tr class="remarks_field">
@@ -102,7 +101,7 @@
 					</tr>
 				</tbody>
 			</table>
-			</div>
+		</div>
 
 			<table id="landings_table">
 				<tbody>					
@@ -114,7 +113,7 @@
 				</tbody>
 			</table>
 			
-			<table id="flight_events_table" summary="Non-flying event selection">
+			<table id="flight_events_table" summary="flying event selection">
 				<tbody>
 					<tr>
 						<td>{{ form.pilot_checkride }}</td>
@@ -140,16 +139,10 @@
 			</table>
 		
 			<div id="flight_buttons">
-			
-				<div id="new_flight_buttons">
+				<div id="new_buttons">
 					<input type="submit" name="submit" value="Submit New Flight" id="submit_new_flight"/>
-			
-					<br />
-					<br />
-			
-					<a href="" id="toggle_entry_fields">Show All Entry Fields</a>	
+			    </div>
 			</div>
-		</div>
 	</form>
 </div>
 {{form.errors}}

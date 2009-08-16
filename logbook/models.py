@@ -14,27 +14,27 @@ class Flight(models.Model):
     plane =    models.ForeignKey(Plane, blank=False, null=False)
     route =    models.ForeignKey(Route, blank=True, null=True)
 
-    total =    models.DecimalField(             "Total Time",           max_digits=4, decimal_places=1, default=0, null=False)
-    sim_inst = models.DecimalField(             "Simulated Instrument", max_digits=4, decimal_places=1, default=0, null=False)
-    act_inst = models.DecimalField(             "Actual Instrument",    max_digits=4, decimal_places=1, default=0, null=False)
-    night =    models.DecimalField(             "Night",                max_digits=4, decimal_places=1, default=0, null=False)
-    xc =       models.DecimalField(             "Cross Country",        max_digits=4, decimal_places=1, default=0, null=False)
-    pic =      models.DecimalField(             "PIC",                  max_digits=4, decimal_places=1, default=0, null=False)
-    sic =      models.DecimalField(             "SIC",                  max_digits=4, decimal_places=1, default=0, null=False)
-    dual_g =   models.DecimalField(             "Dual Given",           max_digits=4, decimal_places=1, default=0, null=False)
-    dual_r =   models.DecimalField(             "Dual Received",        max_digits=4, decimal_places=1, default=0, null=False)
-    solo =     models.DecimalField(             "Solo",                 max_digits=4, decimal_places=1, default=0, null=False)
+    total =    models.FloatField(        "Total Time",            default="")
+    sim_inst = models.FloatField(        "Simulated Instrument",  default=0)
+    act_inst = models.FloatField(        "Actual Instrument",     default=0)
+    night =    models.FloatField(        "Night",                 default=0)
+    xc =       models.FloatField(        "Cross Country",         default=0)
+    pic =      models.FloatField(        "PIC",                   default=0)
+    sic =      models.FloatField(        "SIC",                   default=0)
+    dual_g =   models.FloatField(        "Dual Given",            default=0)
+    dual_r =   models.FloatField(        "Dual Received",         default=0)
+    solo =     models.FloatField(        "Solo",                  default=0)
 
-    day_l =    models.PositiveIntegerField(     "Day Landings",                                         default=0, null=False)
-    night_l =  models.PositiveIntegerField(     "Night Landings",                                       default=0, null=False)
-    app =      models.PositiveIntegerField(     "Approaches",                                           default=0, null=False)
+    day_l =    models.PositiveIntegerField(     "Day Landings",   default=0, null=False)
+    night_l =  models.PositiveIntegerField(     "Night Landings", default=0, null=False)
+    app =      models.PositiveIntegerField(     "Approaches",     default=0, null=False)
 
-    holding =           models.BooleanField(                                            default=False)
-    tracking =          models.BooleanField(            "Intercepting & Tracking",      default=False)
-    pilot_checkride =   models.BooleanField(            "Pilot Checkride",              default=False)
-    cfi_checkride =     models.BooleanField(            "CFI Checkride",                default=False)
-    flight_review =     models.BooleanField(            "Flight Review",                default=False)
-    ipc =               models.BooleanField(            "IPC",                          default=False)
+    holding =           models.BooleanField(                                    default=False)
+    tracking =          models.BooleanField(    "Intercepting & Tracking",      default=False)
+    pilot_checkride =   models.BooleanField(    "Pilot Checkride",              default=False)
+    cfi_checkride =     models.BooleanField(    "CFI Checkride",                default=False)
+    flight_review =     models.BooleanField(    "Flight Review",                default=False)
+    ipc =               models.BooleanField(    "IPC",                          default=False)
 
     person =   models.CharField(                                        max_length=30, blank=True, null=True)
 
@@ -43,15 +43,59 @@ class Flight(models.Model):
 
     class Meta:
         ordering = ["date", "id"]
+        
+    def disp_app(self):
+        if self.app == 0:
+           app = ""
+        else:
+           app = str(self.app)
+        
+        if (self.holding or self.tracking) and self.app:
+            app += " "
+        
+        if self.holding:
+            app += "H"
+            
+        if self.tracking:
+            app += "T"
+                
+        return app 
+    
+    def disp_events(self):
+        ret = ""
+        
+        if self.ipc:
+            ret += "[IPC]"
+            
+        if self.pilot_checkride:
+            ret += "[Pilot Checkride]"
+            
+        if self.cfi_checkride:
+            ret += "[Instructor Checkride]"
+            
+        if self.flight_review:
+            ret += "[Flight Review]"
+            
+        return ret   
 
     def column(self, cn):
         ret = "0"
-        if cn in DB_FIELDS and not cn == "route":       # any field in the databse, except for route
+        if cn in DB_FIELDS and not cn == "route" and not cn == "app":       # any field in the databse, except for route, remarks, and app
             ret = str(getattr(self, cn))
+            
+        #######################################
 
         if cn == "route" and self.route:                # the route field
             return self.route.fancy_display()
-
+        
+        if cn == "events":
+            return self.disp_events()
+          
+        if cn == "app":
+           return self.disp_app()
+           
+        ######################################
+                
         if cn == "t_pic" and self.plane.is_turbine():
             ret = self.pic
 
@@ -84,8 +128,6 @@ class Flight(models.Model):
                 ret = self.total
 
         #####################################
-        if cn == "date":
-            return ret
 
         if ret == "0" or ret == "0.0":
             return ""
