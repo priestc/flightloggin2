@@ -1,7 +1,12 @@
 from django.forms import ModelChoiceField, ModelForm
 from models import *
+from tagging.forms import TagField
+from django import forms
 
 class PlaneForm(ModelForm):
+    
+    tags = TagField(widget=forms.Textarea)
+    
     class Meta:
         model = Plane
 

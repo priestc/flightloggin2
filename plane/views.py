@@ -11,5 +11,5 @@ from forms import PlaneForm
 def planes(request):
     title="Planes"
     planes = Plane.objects.filter(user=request.user)
-    planeform = PlaneForm()
+    form = PlaneForm()
     return locals()

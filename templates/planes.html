@@ -2,26 +2,26 @@
 {% block css %}
 <style type="text/css">
 	input[type=submit],
-	input[type=button]	{margin: 5px}
+	input[type=button]	        {margin: 5px}
 	
 	input[type=text],
-	select, textarea	{width: 200px; font-size: small !important}
+	select, textarea	        {width: 200px; font-size: small !important}
 	
-	#tags_window		{background: white; font-size: x-small; border: 0px solid blue; padding: 5px;}
-	#tags_window a:hover	{color: lightgreen}
+	#tags_window                {background: white; font-size: x-small; border: 0px solid blue; padding: 5px;}
+	#tags_window a:hover        {color: lightgreen}
 
-	#p_t			{width:100%; border-collapse: collapse;}
-	#p_t td			{border: 1px solid #DDDDFF}
-	#p_t thead		{background: #DDDDFF }
-	#p_t tbody:nth_child(even)	{background: blue}
-	#p_t tbody:nth_child(odd)	{background: red}
-	#plane_popup		{position: absolute; top: 50px; left: 50px; display: none; width: 380px; background: white; font-size: small !important;
-					 text-align:center; overflow: hidden; border: 2px solid black}
-	#plane_popup table	{margin-left: auto; margin-right: auto}
+	#p_t                        {width:100%; border-collapse: collapse;}
+	#p_t td                     {border: 1px solid #DDDDFF}
+	#p_t thead                  {background: #DDDDFF }
+	#p_t tbody:nth_child(even)  {background: blue}
+	#p_t tbody:nth_child(odd)   {background: red}
+	#popup                      {position: absolute; top: 50px; left: 50px; display: none; width: 380px; background: white; font-size: small !important;
+                                 text-align:center; overflow: hidden; border: 2px solid black}
+	#popup table                {margin-left: auto; margin-right: auto}
 
-	#dragbar		{background: lightblue; width:100%; text-align: right; margin-bottom: .5em; border-bottom: 1px solid black}
-	#dragbar td:first-child	{width:100%; text-align:center; font-weight: bold; font-size: larger}
-	#dragbar td:last-child	{text-align:right}
+	#dragbar                    {background: lightblue; width:100%; text-align: right; margin-bottom: .5em; border-bottom: 1px solid black}
+	#dragbar td:first-child     {width:100%; text-align:center; font-weight: bold; font-size: larger}
+	#dragbar td:last-child      {text-align:right}
 
 	#close_x		{cursor: pointer; font-weight: bold}
 
@@ -37,20 +37,28 @@
 			$("#new_plane").click(function(){
 				wipe_clean();
 				prepare_new_plane(true)
-				fire_popup("plane_popup");
+				fire_popup("popup");
 			})
 			
 			$("#p_t a").click(function(event){
 				wipe_clean();
 				prepare_edit_plane(true);
 				fill_in_plane(this.id);
-				fire_popup("plane_popup");
+				fire_popup("popup");
 			});
 
 			$("#tags_window a").click(function() {
 				tag = $("#" + this.id).text();
+				
+				if(tag.search(' ') >= 0)
+				    tag = '"' + tag + '"';
+				
 				val = $("#id_tags").val();
-				$("#id_tags").val(val + ", " + tag)
+				
+				if(val == "")
+    				$("#id_tags").val(val + tag);
+    		    else
+    		        $("#id_tags").val(val + " " + tag);
 			});
 		});
 	</script>	
@@ -59,7 +67,7 @@
 {% block title %}{{ title }}{% endblock %}
 
 
-{% block body %}
+{% block canvas %}
 <div class="central_div">
 
 	<input id="new_plane" type="button" value="New Plane">
@@ -91,7 +99,7 @@
 </table>
 </div>
 
-<div id="plane_popup" title="New Entry">
+<div id="popup" title="New Entry">
 	<table id="dragbar">
 		<tr>
 			<td><span id="titlebar">New Plane</span></td>
@@ -109,32 +117,32 @@
 					</td>
 				</tr>
 				<tr>
-					<td>{{ planeform.tailnumber.label_tag }}</td>
-					<td>{{ planeform.tailnumber }}</td>
+					<td>{{ form.tailnumber.label_tag }}</td>
+					<td>{{ form.tailnumber }}</td>
 				</tr>
 				<tr>
-					<td>{{ planeform.manufacturer.label_tag }}</td>
-					<td>{{ planeform.manufacturer }}</td>
+					<td>{{ form.manufacturer.label_tag }}</td>
+					<td>{{ form.manufacturer }}</td>
 				</tr>
 			
 				<tr>
-					<td>{{ planeform.type.label_tag }}</td>
-					<td>{{ planeform.type }}</td>
+					<td>{{ form.type.label_tag }}</td>
+					<td>{{ form.type }}</td>
 				</tr>
 				
 				<tr>
-					<td>{{ planeform.model.label_tag }}</td>
-					<td>{{ planeform.model }}</td>
+					<td>{{ form.model.label_tag }}</td>
+					<td>{{ form.model }}</td>
 				</tr>
 				
 				<tr>
-					<td>{{ planeform.cat_class.label_tag }}</td>
-					<td>{{ planeform.cat_class }}</td>
+					<td>{{ form.cat_class.label_tag }}</td>
+					<td>{{ form.cat_class }}</td>
 				</tr>
 				
 				<tr>
 					<td>Tags</td>
-					<td>{{ planeform.tags }}</td>
+					<td>{{ form.tags }}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -169,7 +177,7 @@
 	</form>
 </div>
 
-{{ planeform.errors }}
+{{ form.errors }}
 
 {% endblock %}
 
