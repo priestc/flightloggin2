@@ -34,7 +34,17 @@ class Plane(models.Model):
         return u"%s (%s)" % (self.tailnumber, disp)
     
     def get_tags(self):
-        return Tag.objects.get_for_object(self)  
+        return Tag.objects.get_for_object(self)
+        
+    def get_tags_quote(self):
+        tags =  Tag.objects.get_for_object(self)
+        ret = []
+        
+        for tag in tags:
+            if tag.name.find(' ') > 0:
+                tag = "\"" + tag.name + "\""
+            ret.append(tag)
+        return ret
 
     class Meta:
         ordering = ["manufacturer"]

@@ -106,7 +106,7 @@
 			<td id="p{{ plane.id }}_model">{{ plane.model }}</td>
 			<td id="p{{ plane.id }}_type">{{ plane.type }}</td>
 			<td id="p{{ plane.id }}_category_class">{{ plane.get_cat_class_display }}</td>
-			<td id="p{{ plane.id }}_tags">{{ plane.get_tags|join:", " }}</td>
+			<td id="p{{ plane.id }}_tags">{{ plane.get_tags_quote|join:", " }}</td>
 			<td id="p{{ plane.id }}_description">{{ plane.description }}</td>
 		</tr>		
 	{% empty %}
