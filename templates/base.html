@@ -127,7 +127,7 @@
                     {% endifequal %}
 
 					{% ifequal title "Import/Export" %}<td class="nav_bar_logged top_nav_selected" ><a href=".">Import/Export</a></td>
-					{% else %}<td class="nav_bar_logged" ><a href="import">Import/Export</a></td>
+					{% else %}<td class="nav_bar_logged" ><a href="{% url import %}">Import/Export</a></td>
                     {% endifequal %}
                 {% else %}
     

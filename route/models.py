@@ -1,3 +1,5 @@
+import re
+
 from django.db import models
 from django.db.models import Q
 
@@ -43,16 +45,15 @@ class Route(models.Model):
         
     def is_p2p(self):
     
-        airports = Airport.objects.filter(routebase__route=self).distinct()
-        if airports.count() > 1:
-            return "more than 1 airports"
+        route = unicode(self)
         
-        unknown_airports = self.routebase_set.exclude(unknown__startswith='@').distinct()
+        wo_navaids = re.compile(r'@.+-').sub("", route)
         
-        if unknown_airports > 1:
-            return "more than 1 unknowns"
-            
-        return False
+        points = wo_navaids.replace("-"," ").split()     # an array with all non-navaid identifiers
+        
+        #return points
+        
+        return len(set(points)) > 1     # return whether or not there are unique non-navaid identifiers
     
         
 
@@ -62,13 +63,12 @@ class RouteBase(models.Model):
     route =    models.ForeignKey(Route)
     
     airport =  models.ForeignKey(Airport, null=True, blank=True)
-    navaid  =  models.ForeignKey(Navaid,  null=True, blank=True)
+    navaid  =  models.ForeignKey(Navaid, null=True, blank=True)
+    custom =   models.ForeignKey(Custom, null=True, blank=True)
     
     unknown =  models.CharField(max_length=30, blank=True, null=True)
     
     sequence = models.PositiveIntegerField()
-    
-    land =     models.BooleanField(default=True)
     
     def __unicode__(self):
         if self.airport:
@@ -96,12 +96,30 @@ def create_route_from_string(ostring):
     print points
     
     for i, ident in enumerate(points):
+        
+        airport = None
+        navaid = None
     
         if ident[0] == "@":
-            navaid = get_object_or_None(Navaid, identifier=ident[1:])
+        
+            first_rb = len(routebases) == 0
             
-            found = navaid
-            if found:
+            if not first_rb and not routebases[i-1].unknown:
+                last_point = routebases[i-1].airport or routebases[i-1].navaid
+                navaid = Navaid.objects.filter(identifier=ident[1:]).distance(last_point.location).order_by('distance')[:1]
+                
+                try:
+                    navaid = navaid[0]
+                except IndexError:
+                    navaid = None
+                    
+            else:
+                navaid = get_object_or_None(Navaid, identifier=ident[1:])
+            
+            
+            
+            #assert False
+            if navaid:
                 routebases.append(RouteBase(navaid=navaid, sequence=i))
             
         else:
@@ -110,14 +128,12 @@ def create_route_from_string(ostring):
             if not airport and len(ident) == 3:
                 airport = get_object_or_None(Airport, pk="K" + ident)
         
-            found = airport
-            if found:
+            if airport:
                 routebases.append(RouteBase(airport=airport, sequence=i))
        
-        if not found:
+        if not (airport or navaid):
             routebases.append(RouteBase(unknown=ident, sequence=i))
-
-            
+   
             
     route = Route(fallback_string=ostring)
     route.save()
@@ -135,13 +151,4 @@ def normalize(string):
     string = string.replace("LOCAL", " ")
     string = string.replace(" TO ", " ")
     return re.sub(r'[^a-zA-Z0-9_@]+', ' ', string).strip()
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+

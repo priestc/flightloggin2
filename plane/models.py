@@ -64,12 +64,12 @@ class Plane(models.Model):
     #############################
 
     def is_multi(self):
-        return self.pk in [2,4]
+        return self.cat_class in [2,4]
 
     def is_sea(self):
-        return self.pk in [3,4]
+        return self.cat_class in [3,4]
 
     def is_mes(self):
-        return self.pk == 3
+        return self.cat_class == 4
 
 #tagging.register(Plane)

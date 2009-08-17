@@ -2,7 +2,7 @@ from django.contrib.gis.db import models
 from constants import NAVAID_TYPE
 
 class Navaid(models.Model):
-    identifier      =       models.CharField(max_length=8, primary_key=True)
+    identifier      =       models.CharField(max_length=8)
     name            =       models.CharField(max_length=96)
     municipality    =       models.CharField(max_length=60, blank=True)
     type            =       models.IntegerField(choices=NAVAID_TYPE)

@@ -137,6 +137,11 @@ td[colspan='4']               {padding-bottom: 10px; text-align: center}
 					<td>{{ profile_form.per_page.errors }}</td>
 				</tr>
 				<tr>
+					<td>{{ profile_form.minutes.label_tag }}</td>
+					<td colspan="2">{{ profile_form.minutes }}</td>
+					<td>{{ profile_form.minutes.errors }}</td>
+				</tr>
+				<tr>
 					<td>{{ profile_form.date_format.label_tag }}</td>
 					<td colspan="2">{{ profile_form.date_format }}</td>
 					<td>{{ profile_form.date_format.errors }}</td>

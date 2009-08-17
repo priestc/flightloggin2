@@ -28,9 +28,6 @@ def logbook(request, page=0):
         if form.is_valid():
             form.save()
     
-   
-    
-    
     ##############################################################
     
     flights = Flight.objects.filter(user=request.user)
@@ -47,6 +44,7 @@ def logbook(request, page=0):
         pk = 0
 
     logbook = []
+    format = "minutes"
 
     if flights:
         for flight in flights:
@@ -69,7 +67,7 @@ def logbook(request, page=0):
                     row.remarks = flight.column("remarks")
                     row.events = flight.column("events")
                 else:
-                    row.append( {"system": column, "disp": flight.column(column), "title": FIELD_TITLES[column]} )
+                    row.append( {"system": column, "disp": flight.column(column, format), "title": FIELD_TITLES[column]} )
 
             logbook.append(row)
 

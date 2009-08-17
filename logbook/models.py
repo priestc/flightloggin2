@@ -78,67 +78,76 @@ class Flight(models.Model):
             
         return ret   
 
-    def column(self, cn):
-        ret = "0"
+    def column(self, cn, format="decimal", ret=0.0):
         if cn in DB_FIELDS and not cn == "route" and not cn == "app":       # any field in the databse, except for route, remarks, and app
-            ret = str(getattr(self, cn))
+            ret = getattr(self, cn)
             
         #######################################
 
-        if cn == "route" and self.route:                # the route field
+        elif cn == "route" and self.route:                # the route field
             return self.route.fancy_display()
         
-        if cn == "events":
+        elif cn == "events":
             return self.disp_events()
           
-        if cn == "app":
+        elif cn == "app":
            return self.disp_app()
            
         ######################################
                 
-        if cn == "t_pic" and self.plane.is_turbine():
+        elif cn == "t_pic" and self.plane.is_turbine():
             ret = self.pic
 
-        if cn == "mt" and self.plane.is_turbine():
+        elif cn == "mt" and self.plane.is_turbine():
             ret = self.pic
 
-        if cn == "mt_pic" and self.plane.is_multi() and self.plane.is_turbine():
-                ret = self.pic
-
-        if cn == "m_pic" and self.plane.is_multi():
+        elif cn == "mt_pic" and self.plane.is_multi() and self.plane.is_turbine():
             ret = self.pic
 
-        if cn == "multi" and self.plane.is_multi():
+        elif cn == "m_pic" and self.plane.is_multi():
+            ret = self.pic
+
+        elif cn == "multi" and self.plane.is_multi():
             ret = self.total
 
-        if cn == "sea" and self.plane.is_sea():
-            ret = self.sim_inst
+        elif cn == "sea" and self.plane.is_sea():
+            ret = self.total
+            
+        elif cn == "sea_pic" and self.plane.is_sea():
+            ret = self.pic
 
-        if cn == "mes" and self.plane.is_mes():
+        elif cn == "mes" and self.plane.is_mes():
             ret = self.total
 
-        if cn == "mes_pic" and self.plane.is_mes():
+        elif cn == "mes_pic" and self.plane.is_mes():
             ret = self.total
            
-        if cn == "turbine" and self.plane.is_turbine():
+        elif cn == "turbine" and self.plane.is_turbine():
             ret = self.total
             
-        if cn == "complex" and self.plane.is_complex():
+        elif cn == "complex" and self.plane.is_complex():
             ret = self.total
             
-        if cn == "hp" and self.plane.is_hp():
+        elif cn == "hp" and self.plane.is_hp():
             ret = self.total
 
-        if cn == "p2p" and self.route:
+        elif cn == "p2p" and self.route:
             if self.route.is_p2p():
                 ret = self.total
 
         #####################################
 
-        if ret == "0" or ret == "0.0":
+        if ret == "0" or ret == "0.0" or ret == 0:
             return ""
-        else:
+            
+        elif format == "decimal":
             return ret
+            
+        elif format == "minutes" and type(ret) == type(0.0):
+            value = str(ret)
+            h,d = value.split(".")
+            minutes = float("0." + d) * 60
+            return str(h) + ":" + "%02.f" % minutes
 
 ######################################################################################################
 
@@ -161,8 +170,8 @@ class Columns(models.Model):
     date =      True
     route =     True
     plane =     True
+    total =     True
     
-    total =     models.BooleanField(default=True)
     pic =       models.BooleanField(FIELDS[5],  default=True)
     sic =       models.BooleanField(FIELDS[6],  default=True)
     solo =      models.BooleanField(            default=True)

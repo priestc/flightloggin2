@@ -1,13 +1,25 @@
+import re
 from django import forms
 from django.forms import ModelForm, ModelChoiceField
 from models import *
 from route.forms import RouteField
 from plane.forms import PlaneField
 
-class BlankFloatField(forms.FloatField):
+class BlankFloatField(forms.CharField):
     def clean(self, value):
+    
         if not value:
-            value = 0.0
+            return 0.0
+            
+        if not (re.match("^\d+:\d{2}$", value) or re.match("^\d+\.*\d+$", value)):
+            raise forms.ValidationError("Invalid formatting")
+            
+        if value.find(":") > 0:
+            hh,mm = value.split(":")
+            mm = float(mm)
+            hh = float(hh)
+            value = (mm / 60) + hh
+            
         return float(value)
         
 class BlankIntField(forms.IntegerField):
@@ -22,6 +34,7 @@ class FlightForm(ModelForm):
     route = RouteField(widget=forms.TextInput, required=False, queryset=Route.objects.get_empty_query_set())
     plane = PlaneField(queryset=Plane.objects.get_empty_query_set(), required=True)
     
+    total =    BlankFloatField()
     pic =      BlankFloatField()
     sic =      BlankFloatField()
     solo =     BlankFloatField()
@@ -55,3 +68,10 @@ class FlightForm(ModelForm):
     class Meta:
         model = Flight
         exclude = ('user', )
+    
+    
+    
+    
+    
+    
+    
