@@ -122,6 +122,12 @@ class Flight(models.Model):
            
         if cn == "turbine" and self.plane.is_turbine():
             ret = self.total
+            
+        if cn == "complex" and self.plane.is_complex():
+            ret = self.total
+            
+        if cn == "hp" and self.plane.is_hp():
+            ret = self.total
 
         if cn == "p2p" and self.route:
             if self.route.is_p2p():
@@ -171,7 +177,7 @@ class Columns(models.Model):
     night_l =   models.BooleanField(FIELDS[14], default=True)
     day_l =     models.BooleanField(FIELDS[15], default=True)
     app =       models.BooleanField(FIELDS[16], default=True)
-
+    
     p2p =       models.BooleanField(FIELDS[17], default=False)
     multi =     models.BooleanField(FIELDS[18], default=False)
     m_pic =     models.BooleanField(FIELDS[19], default=False)
@@ -183,6 +189,9 @@ class Columns(models.Model):
     t_pic =     models.BooleanField(FIELDS[25], default=False)
     mt =        models.BooleanField(FIELDS[26], default=False)
     mt_pic =    models.BooleanField(FIELDS[27], default=False)
+    
+    complex =   models.BooleanField(FIELDS[28], default=True)
+    hp =        models.BooleanField(FIELDS[29], default=True)
     
     person =    models.BooleanField(            default=True)
     remarks =   models.BooleanField(            default=True)
@@ -201,7 +210,7 @@ class Columns(models.Model):
             if FIELD_ABBV.get(column):
                 name = FIELD_ABBV[column]
             else:
-                name = FIELD_TITLE[column]
+                name = FIELD_TITLES[column]
 
             ret.append("<td>" + name + "</td>")
 

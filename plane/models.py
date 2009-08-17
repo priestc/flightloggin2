@@ -57,6 +57,9 @@ class Plane(models.Model):
  
     def is_type_rating(self):
         return get_object_or_None(Plane, pk=self.pk, tags__icontains="type rating") == self
+        
+    def is_complex(self):
+        return get_object_or_None(Plane, pk=self.pk, tags__icontains="complex") == self
 
     #############################
 
@@ -69,4 +72,4 @@ class Plane(models.Model):
     def is_mes(self):
         return self.pk == 3
 
-tagging.register(Plane)
+#tagging.register(Plane)

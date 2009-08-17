@@ -39,7 +39,7 @@ class Entries(models.Model):
     night_l =       models.BooleanField(default=True)
 
     student =       models.BooleanField(default=True)
-    instructor =models.BooleanField(default=True)
+    instructor =    models.BooleanField(default=True)
     captain =       models.BooleanField(default=True)
     fo =            models.BooleanField(default=True)
     remarks =       models.BooleanField(default=True)

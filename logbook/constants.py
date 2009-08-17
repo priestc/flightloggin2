@@ -9,10 +9,11 @@ NON_FLYING_CHOICES = (
 FIELDS = [
           'date', 'plane', 'route',
           'total', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
-          'p2p',
+          'p2p', 
           'multi', 'm_pic',
           'sea', 'sea_pic', 'mes', 'mes_pic',
           'turbine', 't_pic', 'mt', 'mt_pic',
+          'complex', 'hp',
           'person', 'remarks',
           ]
           
@@ -27,10 +28,21 @@ AGG_FIELDS = [
             ]
 
 EXTRA_AGG = [
+          'p2p', 'complex', 'hp',
+          'multi', 'm_pic',
+          'sea', 'sea_pic', 'mes', 'mes_pic',
+          'turbine', 't_pic', 'mt', 'mt_pic',
+          'complex', 'hp',
+          ]
+          
+OPTION_FIELDS = [
+          'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
           'p2p',
           'multi', 'm_pic',
           'sea', 'sea_pic', 'mes', 'mes_pic',
           'turbine', 't_pic', 'mt', 'mt_pic',
+          'complex', 'hp',
+          'person', 'remarks',
           ]
  
 FIELD_TITLES = {
@@ -63,6 +75,8 @@ FIELD_TITLES = {
     "mt_pic": "Multi-Engine Turbine PIC",
     "person": "Person",
     "remarks": "Remarks",
+    "complex": "Complex",
+    "hp": "High Performance",
 }
 
 FIELD_ABBV = {
@@ -95,4 +109,6 @@ FIELD_ABBV = {
     "mt_pic": "Multi Turbine PIC",
     "person": "Person",
     "remarks": "Remarks",
+    "complex": "Complex",
+    "hp": "HP",
 }
