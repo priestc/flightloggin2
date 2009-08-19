@@ -43,7 +43,7 @@ class Plane(models.Model):
         for tag in tags:
             if tag.name.find(' ') > 0:
                 tag = "\"" + tag.name + "\""
-            ret.append(tag)
+            ret.append(str(tag))
         return ret
 
     class Meta:

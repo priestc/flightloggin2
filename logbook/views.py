@@ -10,7 +10,7 @@ from annoying.functions import get_object_or_None
 
 from models import Flight, Columns
 from forms import *
-from constants import FIELD_TITLES
+from constants import *
 
 @login_required()
 @render_to("logbook.html")
@@ -81,7 +81,38 @@ def logbook(request, page=0):
     overall_totals = Flight.objects.filter(user=request.user).aggregate(*args)
     return locals()
     
+def backup(request):
+    import csv
+    from django.http import HttpResponse
+    from records.models import Records
+
+    response = HttpResponse(mimetype='text/plain')
+    #response['Content-Disposition'] = 'attachment; filename=somefilename.csv'
     
+    flights = Flight.objects.filter(user=request.user)
+    planes = Plane.objects.filter(user=request.user)
+
+    writer = csv.writer(response, dialect='excel')
+    writer.writerow([FIELD_TITLES[field] for field in BACKUP_FIELDS])
+    
+    for flight in flights:
+        writer.writerow([flight.column(field) for field in BACKUP_FIELDS])
+        
+    writer.writerow(["#####RECORDS"])
+    
+    records = get_object_or_None(Records, user=request.user)
+    if records:
+        writer.writerow([records.text])
+        
+    writer.writerow(["#####PLANES"])
+        
+    for p in planes:
+        writer.writerow([p.tailnumber, p.manufacturer, p.model, p.cat_class, " ".join(p.get_tags_quote())])
+
+    return response
+
+    
+       
 
 
 

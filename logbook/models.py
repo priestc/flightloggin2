@@ -87,6 +87,15 @@ class Flight(models.Model):
         elif cn == "route" and self.route:                # the route field
             return self.route.fancy_display()
         
+        elif cn == "route_backup" and self.route:
+            return self.route
+            
+        elif cn == "date_backup":
+            return self.date
+            
+        elif cn == "plane_backup" and self.plane:
+            return self.plane.tailnumber
+                    
         elif cn == "events":
             return self.disp_events()
           

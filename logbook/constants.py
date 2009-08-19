@@ -16,6 +16,10 @@ FIELDS = [
           'complex', 'hp',
           'person', 'remarks',
           ]
+BACKUP_FIELDS = ['date_backup', 'plane_backup', 'route_backup',
+          'total', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
+          'person', 'remarks'
+          ]
           
 DB_FIELDS = [
           'date', 'plane', 'route',
@@ -47,8 +51,11 @@ OPTION_FIELDS = [
  
 FIELD_TITLES = {
     "date": "Date",
+    "date_backup": "Date",
     "plane": "Plane",
+    "plane_backup": "Plane",
     "route": "Route",
+    "route_backup": "Route",
     "total": "Total",
     "pic": "PIC",
     "sic": "SIC",

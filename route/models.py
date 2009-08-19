@@ -5,8 +5,7 @@ from django.db.models import Q
 
 from annoying.functions import get_object_or_None
 
-from airport.models import Airport
-from navaid.models import Navaid
+from airport.models import Airport, Custom, Navaid
 
 class Route(models.Model):
 
@@ -64,7 +63,7 @@ class RouteBase(models.Model):
     
     airport =  models.ForeignKey(Airport, null=True, blank=True)
     navaid  =  models.ForeignKey(Navaid, null=True, blank=True)
-    custom =   models.ForeignKey(Custom, null=True, blank=True)
+    custom =   models.ForeignKey(Custom, null=True, blank=True, related_name="custom")
     
     unknown =  models.CharField(max_length=30, blank=True, null=True)
     
@@ -87,6 +86,9 @@ class RouteBase(models.Model):
 
 def create_route_from_string(ostring):
     string = ostring
+    
+    if not string:
+        return None
     
     string = normalize(string)
     points = string.split()
