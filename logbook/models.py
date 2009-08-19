@@ -35,6 +35,8 @@ class Flight(models.Model):
     cfi_checkride =     models.BooleanField(    "CFI Checkride",                default=False)
     flight_review =     models.BooleanField(    "Flight Review",                default=False)
     ipc =               models.BooleanField(    "IPC",                          default=False)
+    
+    staging = models.BooleanField(default=False)
 
     person =   models.CharField(                                        max_length=30, blank=True, null=True)
 
