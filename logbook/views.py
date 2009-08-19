@@ -19,14 +19,25 @@ def logbook(request, page=0):
     
     #####################################################
     
-    form = FlightForm(planes_queryset=Plane.objects.filter(user=request.user))
+    form = FlightForm(planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,request.user.id]))
     
-    if request.POST:
+    if request.POST.get('submit', "") == "Submit New Flight":
         flight = Flight(user=request.user)
-        form = FlightForm(request.POST, instance=flight, planes_queryset=Plane.objects.filter(user=request.user))
+        form = FlightForm(request.POST, instance=flight, planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,request.user.id]))
         
         if form.is_valid():
             form.save()
+            return HttpResponseRedirect('/logbook/')
+     
+    if request.POST.get('submit', "") == "Edit Flight":
+        flight_id = request.POST['id']
+        flight = Flight(pk=flight_id, user=request.user)
+        
+        form = FlightForm(request.POST, instance=flight, planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,request.user.id]))
+        
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/logbook/')
     
     ##############################################################
     
@@ -61,7 +72,8 @@ def logbook(request, page=0):
 
                 elif column == "route":
                     row.route = flight.column("route")
-                    row.raw_route = flight.route.fallback_string
+                    if flight.route:                                        # dont try to get fallback string if there is no route, (attribute error)
+                        row.raw_route = flight.route.fallback_string
                     
                 elif column == "remarks":
                     row.remarks = flight.column("remarks")
@@ -74,11 +86,13 @@ def logbook(request, page=0):
         del flight, row, column
         
     args = []
+    asl = columns.as_list()
     for field in columns.as_list():
         if field in AGG_FIELDS:
             args.append(Sum(field))
 
-    overall_totals = Flight.objects.filter(user=request.user).aggregate(*args)
+    overall_totals = Flight.objects.filter(user=request.user).aggregate(*args).values()
+    #assert False
     return locals()
     
 def backup(request):

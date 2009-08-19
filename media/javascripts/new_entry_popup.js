@@ -11,11 +11,8 @@ function prepare_new_flight() {					//prepares the new entry popup
 	
 	$('#titlebar').text("New Flight");
 	$("#id_date").val(todays_date);
-	$("#edit_flight_buttons").hide();
-	$("#new_flight_buttons").show();
-	
-	$("#non_flying_div").hide();
-	$("#flying_div").show();
+	$("#edit_buttons").hide();
+	$("#new_buttons").show();
 }
 
 function prepare_edit_flight(wipe) {					//prepares the new entry popup
@@ -23,11 +20,8 @@ function prepare_edit_flight(wipe) {					//prepares the new entry popup
 		wipe_clean();
 	
 	$('#titlebar').text("Edit Flight");
-	$("#new_flight_buttons").hide();
-	$("#edit_flight_buttons").show();
-	
-	$("#non_flying_div").hide();
-	$("#flying_div").show();
+	$("#new_buttons").hide();
+	$("#edit_buttons").show();
 }
 
 function prepare_and_fire_popup(type, id, date, remarks, flightarray, non_flying) {		//add values to the edit entry popup
@@ -52,19 +46,16 @@ function prepare_and_fire_popup(type, id, date, remarks, flightarray, non_flying
 	$("#id_day_l").val(flightarray[13]);
 	$("#id_night_l").val(flightarray[14]);
 
-	$("#id_student").val(flightarray[15]);
-	$("#id_instructor").val(flightarray[16]);
-	$("#id_fo").val(flightarray[17]);
-	$("#id_captain").val(flightarray[18]);
-
+	$("#id_person").val(flightarray[15]);
 	$("#id_remarks").val(remarks);
 
-	$("#id_holding").attr("checked", flightarray[19]);	
-	$("#id_tracking").attr("checked", flightarray[20]);
-	$("#id_flight_review").attr("checked", flightarray[21]);
-	$("#id_ipc").attr("checked", flightarray[22]);
-	$("#id_pilot_checkride").attr("checked", flightarray[23]);
-	$("#id_cfi_checkride").attr("checked", flightarray[24]);
+	$("#id_holding").attr("checked", flightarray[16]);	
+	$("#id_tracking").attr("checked", flightarray[17]);
+	
+	$("#id_flight_review").attr("checked", flightarray[18]);
+	$("#id_ipc").attr("checked", flightarray[19]);
+	$("#id_pilot_checkride").attr("checked", flightarray[20]);
+	$("#id_cfi_checkride").attr("checked", flightarray[21]);
 		
 	///////////////////////////////////
 	

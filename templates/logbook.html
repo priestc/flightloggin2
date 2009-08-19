@@ -133,8 +133,10 @@
 			<tr>
 				<td colspan="3" id="overall_total_title">Overall Totals:</td>
 
-                    {{ overal_totals }}
-
+                    {% for column in overall_totals %}
+                        <td>{{column|floatformat:"1"}}</td>
+                    {% endfor %}
+                    
 				<td colspan="6">
 					<a href="/mass_entry/{{ pagination.this_page }}">Mass Edit</a>
 					
