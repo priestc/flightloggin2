@@ -84,9 +84,9 @@ class Flight(models.Model):
         if cn in DB_FIELDS and not cn == "route" and not cn == "app":       # any field in the databse, except for route, remarks, and app
             ret = getattr(self, cn)
             
-        #######################################
+        ####################################### # return these immediately because they are strings
 
-        elif cn == "route" and self.route:                # the route field
+        elif cn == "route" and self.route:
             return self.route.fancy_display()
         
         elif cn == "route_backup" and self.route:
@@ -95,8 +95,11 @@ class Flight(models.Model):
         elif cn == "date_backup":
             return self.date
             
-        elif cn == "plane_backup" and self.plane:
+        elif cn == "tailnumber" and self.plane:
             return self.plane.tailnumber
+            
+        elif cn == "plane_type" and self.plane:
+            return self.plane.type
                     
         elif cn == "events":
             return self.disp_events()
@@ -159,6 +162,8 @@ class Flight(models.Model):
             h,d = value.split(".")
             minutes = float("0." + d) * 60
             return str(h) + ":" + "%02.f" % minutes
+            
+        return ret
 
 ######################################################################################################
 
