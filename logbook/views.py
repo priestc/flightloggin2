@@ -11,6 +11,7 @@ from annoying.functions import get_object_or_None
 from models import Flight, Columns
 from forms import *
 from constants import *
+from totals import total_column
 
 @login_required()
 @render_to("logbook.html")
@@ -24,24 +25,20 @@ def logbook(request, page=0):
     if request.POST.get('submit', "") == "Submit New Flight":
         flight = Flight(user=request.user)
         form = FlightForm(request.POST, instance=flight, planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,request.user.id]))
-        
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/logbook/')
      
-    if request.POST.get('submit', "") == "Edit Flight":
+    elif request.POST.get('submit', "") == "Edit Flight":
         flight_id = request.POST['id']
         flight = Flight(pk=flight_id, user=request.user)
         
         form = FlightForm(request.POST, instance=flight, planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,request.user.id]))
         
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/logbook/')
+    if request.POST and form.is_valid():
+        form.save()
+        return HttpResponseRedirect('/logbook/')
     
     ##############################################################
     
-    flights = Flight.objects.filter(user=request.user)
+    all_flights = flights = Flight.objects.filter(user=request.user)
     columns = get_object_or_None(Columns, user=request.user)
 
     if not columns:
@@ -55,7 +52,7 @@ def logbook(request, page=0):
         pk = 0
 
     logbook = []
-    format = "minutes"
+    format = "decimal"
 
     if flights:
         for flight in flights:
@@ -85,15 +82,16 @@ def logbook(request, page=0):
 
         del flight, row, column
         
-    args = []
-    asl = columns.as_list()
-    for field in columns.as_list():
-        if field in AGG_FIELDS:
-            args.append(Sum(field))
-
-    overall_totals = Flight.objects.filter(user=request.user).aggregate(*args).values()
-    #assert False
+    overall_totals = total_column(all_flights, columns.as_list(), format='decimal')
+    page_totals = total_column(flights, columns.as_list(), format='decimal')
+    
     return locals()
+    
+
+    
+    
+    
+    
     
 def backup(request):
     import csv

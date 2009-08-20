@@ -25,16 +25,16 @@ class Flight(models.Model):
     dual_r =   models.FloatField(        "Dual Received",         default=0)
     solo =     models.FloatField(        "Solo",                  default=0)
 
-    day_l =    models.PositiveIntegerField(     "Day Landings",   default=0, null=False)
-    night_l =  models.PositiveIntegerField(     "Night Landings", default=0, null=False)
-    app =      models.PositiveIntegerField(     "Approaches",     default=0, null=False)
+    day_l =    models.PositiveIntegerField(   "Day Landings",   default=0, null=False)
+    night_l =  models.PositiveIntegerField(   "Night Landings", default=0, null=False)
+    app =      models.PositiveIntegerField(   "Approaches",     default=0, null=False)
 
-    holding =           models.BooleanField(                                    default=False)
-    tracking =          models.BooleanField(    "Intercepting & Tracking",      default=False)
-    pilot_checkride =   models.BooleanField(    "Pilot Checkride",              default=False)
-    cfi_checkride =     models.BooleanField(    "CFI Checkride",                default=False)
-    flight_review =     models.BooleanField(    "Flight Review",                default=False)
-    ipc =               models.BooleanField(    "IPC",                          default=False)
+    holding =           models.BooleanField(                                  default=False)
+    tracking =          models.BooleanField(  "Intercepting & Tracking",      default=False)
+    pilot_checkride =   models.BooleanField(  "Pilot Checkride",              default=False)
+    cfi_checkride =     models.BooleanField(  "CFI Checkride",                default=False)
+    flight_review =     models.BooleanField(  "Flight Review",                default=False)
+    ipc =               models.BooleanField(  "IPC",                          default=False)
     
     staging = models.BooleanField(default=False)
 
@@ -81,6 +81,8 @@ class Flight(models.Model):
         return ret   
 
     def column(self, cn, format="decimal", ret=0.0):
+        """Returns a string that represents the column being passed"""
+    
         if cn in DB_FIELDS and not cn == "route" and not cn == "app":       # any field in the databse, except for route, remarks, and app
             ret = getattr(self, cn)
             
@@ -89,7 +91,7 @@ class Flight(models.Model):
         elif cn == "route" and self.route:
             return self.route.fancy_display()
         
-        elif cn == "route_backup" and self.route:
+        elif cn == "fixed_route" and self.route:
             return self.route
             
         elif cn == "date_backup":
@@ -154,8 +156,11 @@ class Flight(models.Model):
         if ret == "0" or ret == "0.0" or ret == 0:
             return ""
             
-        elif format == "decimal":
-            return ret
+        elif format == "decimal" and type(ret) == type(0.0):
+            return "%.1f" % ret
+            
+        elif format == "decimal" and type(ret) == type(0):
+            return str(ret)
             
         elif format == "minutes" and type(ret) == type(0.0):
             value = str(ret)

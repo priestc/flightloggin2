@@ -23,15 +23,15 @@ class Plane(models.Model):
 
     def __unicode__(self):
         if self.type:
-            disp = self.type
+            disp = " (" + self.type + ")"
         elif self.model:
-            disp = self.model
+            disp = " (" + self.model + ")"
         elif self.manufacturer:
-            disp = self.manufacturer
+            disp = " (" + self.manufacturer + ")"
         else:
             disp = ""
             
-        return u"%s (%s)" % (self.tailnumber, disp)
+        return u"%s%s" % (self.tailnumber, disp)
     
     def get_tags(self):
         return Tag.objects.get_for_object(self)

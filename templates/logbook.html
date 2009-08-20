@@ -31,8 +31,8 @@
 
     #new_flight_button                            {margin: 10px }
     
-    span.found_airport                           {padding-bottom: -1px; color: MediumSlateBlue; border: 0px dotted MediumSlateBlue; border-width: 2px;}
-    span.found_navaid                            {padding-bottom: -1px; color: SeaGreen;        border: 0px dotted SeaGreen;        border-width: 2px;}
+    span.found_airport                           {color: MediumSlateBlue; text-decoration: underline}
+    span.found_navaid                            {color: SeaGreen;        text-decoration: underline}
                                                   
     span.not_found                               {color: gray}
 
@@ -126,7 +126,9 @@
 			<tr>
 				<td colspan="3" id="page_total_title">Page Totals:</td>
     
-                    {{ page_totals }}
+                   {% for column in page_totals %}
+                        <td>{{column}}</td>
+                   {% endfor %}
 
 				<td colspan="6"></td>
 			</tr>
@@ -134,7 +136,7 @@
 				<td colspan="3" id="overall_total_title">Overall Totals:</td>
 
                     {% for column in overall_totals %}
-                        <td>{{column|floatformat:"1"}}</td>
+                        <td>{{column}}</td>
                     {% endfor %}
                     
 				<td colspan="6">
