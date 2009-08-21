@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from plane.models import Plane
 from route.models import Route
 from constants import *
+from utils import to_minutes
 
 class Flight(models.Model):
 
@@ -15,18 +16,18 @@ class Flight(models.Model):
     route =    models.ForeignKey(Route, blank=True, null=True)
 
     total =    models.FloatField(        "Total Time",            default="")
-    sim_inst = models.FloatField(        "Simulated Instrument",  default=0)
-    act_inst = models.FloatField(        "Actual Instrument",     default=0)
-    night =    models.FloatField(        "Night",                 default=0)
-    xc =       models.FloatField(        "Cross Country",         default=0)
     pic =      models.FloatField(        "PIC",                   default=0)
     sic =      models.FloatField(        "SIC",                   default=0)
-    dual_g =   models.FloatField(        "Dual Given",            default=0)
-    dual_r =   models.FloatField(        "Dual Received",         default=0)
     solo =     models.FloatField(        "Solo",                  default=0)
-
-    day_l =    models.PositiveIntegerField(   "Day Landings",   default=0, null=False)
+    night =    models.FloatField(        "Night",                 default=0)
+    dual_r =   models.FloatField(        "Dual Received",         default=0)
+    dual_g =   models.FloatField(        "Dual Given",            default=0)
+    xc =       models.FloatField(        "Cross Country",         default=0)
+    act_inst = models.FloatField(        "Actual Instrument",     default=0)
+    sim_inst = models.FloatField(        "Simulated Instrument",  default=0)
+    
     night_l =  models.PositiveIntegerField(   "Night Landings", default=0, null=False)
+    day_l =    models.PositiveIntegerField(   "Day Landings",   default=0, null=False)
     app =      models.PositiveIntegerField(   "Approaches",     default=0, null=False)
 
     holding =           models.BooleanField(                                  default=False)
@@ -114,8 +115,8 @@ class Flight(models.Model):
         elif cn == "t_pic" and self.plane.is_turbine():
             ret = self.pic
 
-        elif cn == "mt" and self.plane.is_turbine():
-            ret = self.pic
+        elif cn == "mt" and self.plane.is_multi() and self.plane.is_turbine():
+            ret = self.total
 
         elif cn == "mt_pic" and self.plane.is_multi() and self.plane.is_turbine():
             ret = self.pic
@@ -148,7 +149,7 @@ class Flight(models.Model):
             ret = self.total
 
         elif cn == "p2p" and self.route:
-            if self.route.is_p2p():
+            if self.route.p2p:
                 ret = self.total
 
         #####################################
@@ -163,10 +164,7 @@ class Flight(models.Model):
             return str(ret)
             
         elif format == "minutes" and type(ret) == type(0.0):
-            value = str(ret)
-            h,d = value.split(".")
-            minutes = float("0." + d) * 60
-            return str(h) + ":" + "%02.f" % minutes
+            return to_minutes(ret)
             
         return ret
 

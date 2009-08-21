@@ -1,4 +1,6 @@
 settings.py
+manage.py
 *.bak
 *.pyc
 *.swp
+*.json.bz2

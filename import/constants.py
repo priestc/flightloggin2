@@ -8,8 +8,8 @@ COLUMN_NAMES = {
     "DURATION OF FLIGHT": 'total',
     "TOTAL DURATION OF FLIGHT": 'total',
 				
-    "AIRCRAFT TYPE": 'type'
-    "AIRCRAFT MAKE & MODEL": 'type'
+    "AIRCRAFT TYPE": 'type',
+    "AIRCRAFT MAKE & MODEL": 'type',
     "TYPE": 'type',
 
     "ROUTE OF FLIGHT": 'route',

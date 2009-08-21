@@ -17,10 +17,10 @@
 {% block canvas %}
 
     <form action="." method="post" enctype="multipart/form-data">
-    {{form}}
+    {{fileform}}
     <input type="submit">
     </form>
-    {{form.errors}}
+    {{fileform.errors}}
     
     {% for l in out %}
     {{l}}<br>

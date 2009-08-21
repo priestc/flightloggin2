@@ -10,6 +10,7 @@ from airport.models import Airport, Custom, Navaid
 class Route(models.Model):
 
     fallback_string = models.CharField(max_length=100, blank=True, null=True)
+    p2p =             models.BooleanField()
 
     def __unicode__(self):
         ret = []
@@ -41,22 +42,8 @@ class Route(models.Model):
                 ret.append("??")
 
         return "-".join(ret)
-        
-    def is_p2p(self):
-    
-        route = unicode(self)
-        
-        wo_navaids = re.compile(r'@.+-').sub("", route)
-        
-        points = wo_navaids.replace("-"," ").split()     # an array with all non-navaid identifiers
-        
-        #return points
-        
-        return len(set(points)) > 1     # return whether or not there are unique non-navaid identifiers
-    
-        
 
-######################################################################################################
+#####################################################################################################
 
 class RouteBase(models.Model):
     route =    models.ForeignKey(Route)
@@ -94,6 +81,7 @@ def create_route_from_string(ostring):
     points = string.split()
     unknown = False
     routebases = []
+    p2p = []
     
     print points
     
@@ -104,7 +92,7 @@ def create_route_from_string(ostring):
     
         if ident[0] == "@":
         
-            first_rb = len(routebases) == 0
+            first_rb = len(routebases) == 0  # is this the first routebase? if so don't try to guess which navaid is closest to the previous point
             
             if not first_rb and not routebases[i-1].unknown:
                 last_point = routebases[i-1].airport or routebases[i-1].navaid
@@ -117,10 +105,7 @@ def create_route_from_string(ostring):
                     
             else:
                 navaid = get_object_or_None(Navaid, identifier=ident[1:])
-            
-            
-            
-            #assert False
+
             if navaid:
                 routebases.append(RouteBase(navaid=navaid, sequence=i))
             
@@ -132,17 +117,23 @@ def create_route_from_string(ostring):
         
             if airport:
                 routebases.append(RouteBase(airport=airport, sequence=i))
+                p2p.append(airport.pk)
        
         if not (airport or navaid):
             routebases.append(RouteBase(unknown=ident, sequence=i))
+            if not ident[0] == "@":                                         # not a unidentified navaid, assume a landing
+                p2p.append(unknown)
    
             
-    route = Route(fallback_string=ostring)
+    is_p2p = len(set(p2p)) > 1
+    route = Route(fallback_string=ostring, p2p=is_p2p)
     route.save()
     
     for routebase in routebases:
         routebase.route = route
         routebase.save()
+        
+    
     
     return route
     

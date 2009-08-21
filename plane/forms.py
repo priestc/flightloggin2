@@ -1,4 +1,4 @@
-from django.forms import ModelChoiceField, ModelForm
+from django.forms import ModelChoiceField, ModelForm, CharField
 from models import *
 from tagging.forms import TagField
 from django import forms
@@ -12,4 +12,8 @@ class PlaneForm(ModelForm):
 
 class PlaneField(ModelChoiceField):
     def label_from_instance(self, obj):
-        return "%s (%s)" % (obj.tailnumber, obj.type)
+        return unicode(obj)
+        
+class SimplePlaneField(CharField):
+    def clean(self, value):
+        return Plane.objects.get(pk=1) #(tailnumber=value)

@@ -4,6 +4,7 @@ from django.forms import ModelForm, ModelChoiceField
 from models import *
 from route.forms import RouteField
 from plane.forms import PlaneField
+from logbook.utils import from_minutes
 
 class BlankFloatField(forms.CharField):
     def clean(self, value):
@@ -11,21 +12,29 @@ class BlankFloatField(forms.CharField):
         if not value:
             return 0.0
             
-        if not (re.match("^\d+:\d{2}$", value) or re.match("^\d+\.*\d+$", value)):
+        if re.match("^\d+:\d{2}$", value):
+            value = from_minutes(value)
+            
+        try:
+            value = eval(value)
+        except:
             raise forms.ValidationError("Invalid formatting")
             
-        if value.find(":") > 0:
-            hh,mm = value.split(":")
-            mm = float(mm)
-            hh = float(hh)
-            value = (mm / 60) + hh
+        if float(value) < 0:
+            raise forms.ValidationError("Values can't be negative")
             
-        return float(value)
+        return value
         
 class BlankIntField(forms.IntegerField):
     def clean(self, value):
         if not value:
-            value = 0
+            return 0
+            
+        try:
+            value = eval(value)
+        except:
+            raise forms.ValidationError("Invalid formatting")
+
         return int(value)
 
 
@@ -34,20 +43,20 @@ class FlightForm(ModelForm):
     route = RouteField(widget=forms.TextInput, required=False, queryset=Route.objects.get_empty_query_set())
     plane = PlaneField(queryset=Plane.objects.get_empty_query_set(), required=True)
     
-    total =    BlankFloatField()
-    pic =      BlankFloatField()
-    sic =      BlankFloatField()
-    solo =     BlankFloatField()
-    dual_g =   BlankFloatField()
-    dual_r =   BlankFloatField()
-    xc =       BlankFloatField()
-    act_inst = BlankFloatField()
-    sim_inst = BlankFloatField()
-    night =    BlankFloatField()
+    total =    BlankFloatField(label="Total Time")
+    pic =      BlankFloatField(label="PIC")
+    sic =      BlankFloatField(label="SIC")
+    solo =     BlankFloatField(label="Solo")
+    dual_g =   BlankFloatField(label="Dual Given")
+    dual_r =   BlankFloatField(label="Dual Received")
+    xc =       BlankFloatField(label="Cross Country")
+    act_inst = BlankFloatField(label="Actual Instrument")
+    sim_inst = BlankFloatField(label="Simulated Instrument")
+    night =    BlankFloatField(label="Night")
     
-    day_l =    BlankIntField()
-    night_l =  BlankIntField()
-    app =      BlankIntField()
+    day_l =    BlankIntField(label="Day Landings")
+    night_l =  BlankIntField(label="Night Landings")
+    app =      BlankIntField(label="Approaches")
     
     
     def __init__(self, *args, **kwargs):
@@ -59,17 +68,15 @@ class FlightForm(ModelForm):
         super(FlightForm, self).__init__(*args, **kwargs)
         if custom_queryset:
             self.fields['plane'].queryset = custom_queryset
-            
-    def clean(self):
-        if self.cleaned_data.get('total',-1) <= 0.0:
-            raise forms.ValidationError("'Total Time' must be positive")
-        return self.cleaned_data
 
     class Meta:
         model = Flight
         exclude = ('user', )
     
-    
+class NonFlightForm(ModelForm):
+    class Meta:
+        model = NonFlight
+        exclude = ('user', )
     
     
     

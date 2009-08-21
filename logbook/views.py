@@ -52,7 +52,10 @@ def logbook(request, page=0):
         pk = 0
 
     logbook = []
-    format = "decimal"
+    if request.user.get_profile().minutes:
+        format = "minutes"
+    else:
+        format = "decimal"
 
     if flights:
         for flight in flights:
@@ -82,8 +85,8 @@ def logbook(request, page=0):
 
         del flight, row, column
         
-    overall_totals = total_column(all_flights, columns.as_list(), format='decimal')
-    page_totals = total_column(flights, columns.as_list(), format='decimal')
+    overall_totals = total_column(all_flights, columns.as_list(), format=format)
+    page_totals = total_column(flights, columns.as_list(), format=format)
     
     return locals()
     
