@@ -12,11 +12,16 @@ from models import Flight, Columns
 from forms import *
 from constants import *
 from totals import total_column
+from profile.models import Profile
 
 @login_required()
 @render_to("logbook.html")
 def logbook(request, page=0):
     title="Logbook"
+    try:
+        profile = request.user.get_profile()
+    except:
+        profile = Profile()
     
     #####################################################
     
@@ -52,7 +57,7 @@ def logbook(request, page=0):
         pk = 0
 
     logbook = []
-    if request.user.get_profile().minutes:
+    if profile.minutes:
         format = "minutes"
     else:
         format = "decimal"
