@@ -4,6 +4,7 @@ from utils import to_minutes
 
 def total_column(queryset, columns, format='decimal'):
     ret = []
+    agg_columns = []   
     for cn in columns:
     
         if cn in AGG_FIELDS:
@@ -52,9 +53,8 @@ def total_column(queryset, columns, format='decimal'):
             else:
                 total = 99.9
                 
-                
-                
         if cn in AGG_FIELDS or cn in EXTRA_AGG:
+            agg_columns.append(cn)
             if not total:
                 total = 0
                 
@@ -65,4 +65,5 @@ def total_column(queryset, columns, format='decimal'):
                     ret.append( "%.1f" % total )
                 else:
                     ret.append( to_minutes(total) )
-    return ret
+                    
+    return (ret, agg_columns)

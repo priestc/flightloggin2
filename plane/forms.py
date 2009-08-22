@@ -13,8 +13,3 @@ class PlaneForm(ModelForm):
 class PlaneField(ModelChoiceField):
     def label_from_instance(self, obj):
         return unicode(obj)
-        
-class SimplePlaneField(ModelChoiceField):
-    widget=forms.Textarea
-    def clean(self, value):
-        return Plane.objects.get(pk=value) #(tailnumber=value)

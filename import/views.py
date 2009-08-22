@@ -14,6 +14,7 @@ from logbook.forms import NonFlightForm
 from logbook.models import NonFlight, Flight
 from plane.models import Plane
 from route.models import Route
+from records.models import Records
 from constants import COLUMN_NAMES
 
 @render_to('import.html')
@@ -29,10 +30,20 @@ def do_import(request, f):
     
     for line in dr:
         count += 1
-        #if count > 15: break
         line.update({"staging": True})
         
-        if line.get('date')[:3] == "###": break
+        instructor = line.get('instructor', "")
+        student = line.get('student', "")
+        captain = line.get('captain', "")
+        fo = line.get('fo', "")
+        
+        #if line.get('dual_r'):
+        #    person = fo = student = captain += instructor
+        #    person = instrutor
+        #else:
+            
+        
+        if line.get('date')[:12] == "#####RECORDS": break
         
         if line.get('non_flying'):
             nf = NonFlight(user=request.user)
@@ -58,8 +69,34 @@ def do_import(request, f):
             else:
                 out.append(form.errors)
                 out.append(str(count) + "---------------------")
+
+
+    if line.get('date')[:12] == "#####RECORDS":
+        line = dr.next()
+        r,c=Records.objects.get_or_create(user=request.user)
+        r.text=line['date'].replace('\r', '\n')
+        r.save()
+    
+    line = dr.next()        
+    
+    if line.get('date')[:11] == "#####PLANES":       
+        for line in dr:
+            tailnumber = line['date']
+            manufacturer = line['tailnumber']
+            model = line['type']
+            type = line['route']
+            cat_class = line['total']
+            rt = line['pic']
+            tags = line['solo']
             
-    #del form
+            p=Plane.objects.get(user=request.user, tailnumber=tailnumber, type=type)
+            p.manufacturer=manufacturer
+            p.model=model
+            p.cat_class=cat_class
+            p.tags=tags
+            
+            print p.save()
+        
             
     return locals()
 

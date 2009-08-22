@@ -3,9 +3,7 @@
 {% block title %}{{ title }}{% endblock %}
 
 
-{% block body %}
-<div class="central_div" style="text-align:center">
-
+{% block canvas %}
 	<div>
 		Use this space to record any information you'd normally put in the back of a paper logbook.
 		Phone numbers and addresses of contacts; dates of endorsements; student signoffs and outcomes; notes, etc.
@@ -15,7 +13,7 @@
 
 	<form action="." method="post">
 		<div>
-			<textarea style="width:80%;height:400px" cols="50" rows="10" name="records">{{ records }}</textarea>
+			<textarea style="width:80%;height:400px" cols="50" rows="10" name="records">{{ records.text }}</textarea>
 	
 			<br />
 			<br />
@@ -33,4 +31,4 @@
 	</form>
 </div>
 
-{% endblock body %}
+{% endblock %}

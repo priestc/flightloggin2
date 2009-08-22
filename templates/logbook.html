@@ -126,9 +126,9 @@
 			<tr>
 				<td colspan="3" id="page_total_title">Page Totals:</td>
     
-                   {% for column in page_totals %}
-                        <td>{{column}}</td>
-                   {% endfor %}
+                   {% for column in totals_columns %}
+                        <td class="{{column}} pt"></td>
+                    {% endfor %}
 
 				<td colspan="6"></td>
 			</tr>

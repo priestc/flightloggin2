@@ -116,8 +116,8 @@ def logbook(request, page=0):
 
         del flight, row, column
         
-    overall_totals = total_column(all_flights, columns.as_list(), format=format)
-    #page_totals = total_column(flights, columns.as_list(), format=format)
+    overall_totals, totals_columns = total_column(all_flights, columns.as_list(), format=format)
+    #assert False
     
     return locals()
     
