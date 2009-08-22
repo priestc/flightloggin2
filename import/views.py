@@ -32,16 +32,33 @@ def do_import(request, f):
         count += 1
         line.update({"staging": True})
         
+        #############################################
+        
         instructor = line.get('instructor', "")
         student = line.get('student', "")
         captain = line.get('captain', "")
         fo = line.get('fo', "")
         
-        #if line.get('dual_r'):
-        #    person = fo = student = captain += instructor
-        #    person = instrutor
-        #else:
+        person=""
+        l = []
+        if line.get('dual_r'):
+            l = [instructor, captain, student, fo]
             
+        if line.get('dual_g'):
+            l = [student, fo, instructor, captain]
+            
+        if line.get('sic'):
+            l = [captain, instructor, student, fo]
+            
+        if line.get('pic'):
+            l = [fo, captain, instructor, student]
+
+        for x in l:
+            if x:
+                person = x
+                break
+
+        #############################################
         
         if line.get('date')[:12] == "#####RECORDS": break
         
@@ -55,18 +72,14 @@ def do_import(request, f):
         else:
             flight = Flight(user=request.user)
             plane, created = Plane.objects.get_or_create(tailnumber=line.get("tailnumber"), type=line.get("type"), user=request.user)
-            #route = line.pop("route")
-            line.update({"plane": plane.pk})
+            line.update({"plane": plane.pk, "person": person})
             form = ImportFlightForm(line, instance=flight)
-            
-            #assert False
             
             if form.is_valid():
                 form.save()
-                #flight.route = Route(fallback_string=route).save()
-                #flight.save()
                 out.append("good: " + line['date'] + line['tailnumber'])
             else:
+                out.append(str(count) + "---------------------")
                 out.append(form.errors)
                 out.append(str(count) + "---------------------")
 
