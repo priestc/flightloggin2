@@ -87,7 +87,7 @@ def do_import(request, f):
     if line.get('date')[:12] == "#####RECORDS":
         line = dr.next()
         r,c=Records.objects.get_or_create(user=request.user)
-        r.text=line['date'].replace('\r', '\n')
+        r.text=line['date'].replace('\\r', '\n')
         r.save()
     
     line = dr.next()        
