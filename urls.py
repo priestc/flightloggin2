@@ -18,7 +18,7 @@ urlpatterns = patterns('',
     url(r'^backup/$',                         "logbook.views.backup",   name="backup"),
     
     url(r'^logbook/$',                        "logbook.views.logbook",  name="logbook"),
-    url(r'^logbook-page-(?P<page>\d+)',       "logbook.views.logbook",  name="logbook_page"),
+    url(r'^logbook-page-(?P<page>\d+)',       "logbook.views.logbook",  name="logbook-page"),
     
 
     (r'^admin/doc/',                          include('django.contrib.admindocs.urls')),

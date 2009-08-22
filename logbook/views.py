@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from django.http import HttpResponseRedirect
 from django.forms import ModelForm
-
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
 
 from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
@@ -14,14 +14,12 @@ from constants import *
 from totals import total_column
 from profile.models import Profile
 
+
+
 @login_required()
 @render_to("logbook.html")
 def logbook(request, page=0):
     title="Logbook"
-    try:
-        profile = request.user.get_profile()
-    except:
-        profile = Profile()
     
     #####################################################
     
@@ -42,14 +40,11 @@ def logbook(request, page=0):
         return HttpResponseRedirect('/logbook/')
     
     ##############################################################
-    
-    all_flights = Flight.objects.filter(user=request.user)
-    flights = Flight.objects.filter(user=request.user).select_related()
-    columns = get_object_or_None(Columns, user=request.user)
-
-    if not columns:
-        columns=Columns(user=request.user)
-
+    try:
+        profile = request.user.get_profile()
+    except:
+        profile = Profile()
+        
     class LogbookRow(list):
         date = ""
         plane = ""
@@ -58,13 +53,43 @@ def logbook(request, page=0):
         pk = 0
 
     logbook = []
+    
     if profile.minutes:
         format = "minutes"
     else:
         format = "decimal"
+    
+    
+    all_flights = Flight.objects.filter(user=request.user)
+    flights = all_flights.select_related()
+    columns, created = Columns.objects.get_or_create(user=request.user)
+    
+    
+    
 
     if flights:
-        for flight in flights:
+    
+        ###################
+        
+        page = int(page)
+
+        paginator = Paginator(flights, per_page=profile.per_page, orphans=5)		#define how many flights will be on each page
+
+        try:
+            page_of_flights = paginator.page(page)				#get the pertinent page
+
+        except (EmptyPage, InvalidPage):
+            page_of_flights = paginator.page(paginator.num_pages)		#if that page is invalid, use the last page
+            page = paginator.num_pages
+
+        do_pagination = paginator.num_pages > 1					#if there is only one pago, do not make the pagination table
+
+        before_block = range(1, page)[-5:]                       # a list from 1 to the page number, limited to the 5th from last to the end
+        after_block = range(page, paginator.num_pages+1)[1:6]    # a list from the current page to the last page, limited to the first 5 items
+	    
+	    #####################
+        
+        for flight in page_of_flights.object_list:
             row = LogbookRow()
             
             row.pk = flight.pk

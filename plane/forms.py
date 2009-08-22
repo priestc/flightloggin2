@@ -11,7 +11,6 @@ class PlaneForm(ModelForm):
         model = Plane
 
 class PlaneField(ModelChoiceField):
-    widget=forms.Textarea
     def label_from_instance(self, obj):
         return unicode(obj)
         
