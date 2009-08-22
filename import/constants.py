@@ -26,11 +26,13 @@ COLUMN_NAMES = {
     "PLANE": 'tailnumber',
     "AIRCRAFT REGISTRATION": 'tailnumber',
 
-    "DAY LANDINGS": 'day_landings',
-    "LANDINGS DAY": 'day_landings',
+    "DAY LANDINGS": 'day_l',
+    "LANDINGS DAY": 'day_l',
+    "DAY LAND": 'day_l',
 
-    "NIGHT LANDINGS": 'night_landings',
-    "LANDINGS NIGHT": 'night_landings',
+    "NIGHT LANDINGS": 'night_l',
+    "LANDINGS NIGHT": 'night_l',
+    "NIGHT LAND": 'night_l',
 
     "SIMULATOR": 'simulator',
     "FLIGHT SIMULATOR": 'simulator',

@@ -9,7 +9,9 @@ from airport.models import Airport, Custom, Navaid
 
 class Route(models.Model):
 
-    fallback_string = models.CharField(max_length=100, blank=True, null=True)
+    rendered =        models.TextField(blank=True, null=True)
+    fallback_string = models.TextField(blank=True, null=True)
+    
     p2p =             models.BooleanField()
 
     def __unicode__(self):
@@ -80,6 +82,7 @@ def create_route_from_string(ostring):
     string = normalize(string)
     points = string.split()
     unknown = False
+    rendered = []
     routebases = []
     p2p = []
     
@@ -90,24 +93,31 @@ def create_route_from_string(ostring):
         airport = None
         navaid = None
     
-        if ident[0] == "@":
+        if ident[0] == "@":  #must be a navaid
         
             first_rb = len(routebases) == 0  # is this the first routebase? if so don't try to guess which navaid is closest to the previous point
             
             if not first_rb and not routebases[i-1].unknown:
-                last_point = routebases[i-1].airport or routebases[i-1].navaid
-                navaid = Navaid.objects.filter(identifier=ident[1:]).distance(last_point.location).order_by('distance')[:1]
+                navaid = Navaid.objects.filter(identifier=ident[1:])
                 
-                try:
-                    navaid = navaid[0]
-                except IndexError:
+                if navaid.count() > 1:
+                    last_point = routebases[i-1].airport or routebases[i-1].navaid
+                    navaid = navaid.distance(last_point.location).order_by('distance')[0]
+                    
+                elif navaid.count() == 0:
                     navaid = None
+                    
+                else:
+                    navaid = navaid[0]
                     
             else:
                 navaid = get_object_or_None(Navaid, identifier=ident[1:])
 
             if navaid:
-                routebases.append(RouteBase(navaid=navaid, sequence=i))
+                routebase = RouteBase(navaid=navaid, sequence=i)
+                routebases.append(routebase)
+                rendered.append("<span class='found_navaid' title='%s'>%s</span>" % (routebase.navaid.title_display(), routebase.navaid.line_display(), ) )
+            
             
         else:
             airport = get_object_or_None(Airport, pk=ident)
@@ -116,24 +126,32 @@ def create_route_from_string(ostring):
                 airport = get_object_or_None(Airport, pk="K" + ident)
         
             if airport:
-                routebases.append(RouteBase(airport=airport, sequence=i))
+                routebase = RouteBase(airport=airport, sequence=i)
+                routebases.append(routebase)
                 p2p.append(airport.pk)
+                rendered.append("<span class='found_airport' title='%s'>%s</span>" % (routebase.airport.title_display(), routebase.airport.line_display(), ) )
+            
        
         if not (airport or navaid):
-            routebases.append(RouteBase(unknown=ident, sequence=i))
+            routebase = RouteBase(unknown=ident, sequence=i)
+            routebases.append(routebase)
+            
             if not ident[0] == "@":                                         # not a unidentified navaid, assume a landing
                 p2p.append(unknown)
+                
+            rendered.append("<span class='not_found'>%s</span>" % (routebase.unknown, ) )
    
-            
+    
+    rendered = "-".join(rendered)
+    
+           
     is_p2p = len(set(p2p)) > 1
-    route = Route(fallback_string=ostring, p2p=is_p2p)
+    route = Route(rendered=rendered, fallback_string=ostring, p2p=is_p2p)
     route.save()
     
     for routebase in routebases:
         routebase.route = route
-        routebase.save()
-        
-    
+        routebase.save()    
     
     return route
     

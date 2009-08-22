@@ -90,7 +90,10 @@ class Flight(models.Model):
         ####################################### # return these immediately because they are strings
 
         elif cn == "route" and self.route:
-            return self.route.fancy_display()
+            if self.route.rendered:
+                return self.route.rendered
+            else:
+                return self.route.fallback_string
         
         elif cn == "fixed_route" and self.route:
             return self.route

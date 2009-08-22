@@ -11,9 +11,11 @@ class PlaneForm(ModelForm):
         model = Plane
 
 class PlaneField(ModelChoiceField):
+    widget=forms.Textarea
     def label_from_instance(self, obj):
         return unicode(obj)
         
-class SimplePlaneField(CharField):
+class SimplePlaneField(ModelChoiceField):
+    widget=forms.Textarea
     def clean(self, value):
-        return Plane.objects.get(pk=1) #(tailnumber=value)
+        return Plane.objects.get(pk=value) #(tailnumber=value)

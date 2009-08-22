@@ -43,7 +43,8 @@ def logbook(request, page=0):
     
     ##############################################################
     
-    all_flights = flights = Flight.objects.filter(user=request.user)
+    all_flights = Flight.objects.filter(user=request.user)
+    flights = Flight.objects.filter(user=request.user).select_related()
     columns = get_object_or_None(Columns, user=request.user)
 
     if not columns:
@@ -91,7 +92,7 @@ def logbook(request, page=0):
         del flight, row, column
         
     overall_totals = total_column(all_flights, columns.as_list(), format=format)
-    page_totals = total_column(flights, columns.as_list(), format=format)
+    #page_totals = total_column(flights, columns.as_list(), format=format)
     
     return locals()
     

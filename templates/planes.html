@@ -177,7 +177,7 @@
 			{% tag_cloud_for_model plane.Plane as cloud with distribution=log min_count=20 steps=5 %}
 			
 			{% for tag in cloud %}
-            <a href="" class="tag{{tag.font_size}}">{{ tag }}</a>
+            <a href="" title="Add this tag" class="tag{{tag.font_size}}">{{ tag }}</a>
             {% endfor %}
 		</div>
 		
