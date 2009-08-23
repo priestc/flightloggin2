@@ -7,8 +7,10 @@
 {% endblock %}
 <style>
 {% block css %}
-    .logbook_central_div                         {width: 98%; padding: 10px}
-    .flying_event                                {color: darkred; font-weight: bold}
+    .flying_event                   {color: darkred; font-weight: bold}
+    #canvas                         {max-width: 100% !important}
+    .preview                        {border-collapse: collapse; border: 1px solid gray; margin: 10px auto auto auto}
+    .preview td                     {font-size: x-small; border: 1px solid gray}
 
 
 {% endblock %}
@@ -17,14 +19,42 @@
 {% block canvas %}
 
     <form action="." method="post" enctype="multipart/form-data">
-    {{fileform}}
-    <input type="submit">
+    <div>
+        <ul>
+        {{fileform.as_ul}}
+        </ul>
+        <input type="submit">
+    </div>
     </form>
     {{fileform.errors}}
+
+    {% if flight_out %}
+        <table class="preview">
+        {{your_header|safe}}
+        {{official_header|safe}}
+        {% for l in flight_out %}
+        {{l|safe}}
+        {% endfor %}
+        </table>
+    {% endif %}
     
-    {% for l in out %}
-    {{l}}<br>
-    {% endfor %}
+    {% if non_out %}
+        <h2>Non Flying Events:</h2>
+        <table class="preview">
+        {% for l in non_out %}
+        {{l|safe}}
+        {% endfor %}
+        </table>
+    {% endif %}
+    
+    {% if plane_out %}
+        <h2>Planes:</h2>
+        <table class="preview">
+        {% for l in plane_out %}
+        {{l|safe}}
+        {% endfor %}
+        </table>
+    {% endif %}
     
     {{count}}
 	

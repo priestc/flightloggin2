@@ -36,6 +36,7 @@ COLUMN_NAMES = {
 
     "SIMULATOR": 'simulator',
     "FLIGHT SIMULATOR": 'simulator',
+    "FLIGHT SIM": 'simulator',
     "SIM": 'simulator',
 
     "APPROACHES": 'app',
@@ -101,11 +102,28 @@ PLANE_COLUMN_NAMES = {
     
 }
 
+CSV_FIELDS = [
+          'date', 'tailnumber', 'type', 'route',
+          'total', 'pic', 'solo', 'sic', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
+          'person', 'remarks'
+          ]
 
 
-
-
-
+NON_FLIGHT_TRANSLATE_NUM = {
+        "1": 1,
+        "2": 2,
+        "3": 3,
+        "R": 4,
+        "S": 5,
+        }
+        
+NON_FLIGHT_TRANSLATE_TEXT = {
+        "1": "1st Class Medical",
+        "2": "2nd Class Medical",
+        "3": "3rd Class Medical",
+        "R": "CFI Refresher",
+        "S": "Student Signoff",
+        }
 
 
 

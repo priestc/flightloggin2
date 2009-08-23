@@ -9,12 +9,12 @@ from django.http import HttpResponseRedirect
 from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
 
-from logbook.constants import DB_FIELDS
 from logbook.forms import NonFlightForm
 from logbook.models import NonFlight, Flight
 from records.models import Records
 
-from constants import COLUMN_NAMES
+from logbook.constants import FIELD_TITLES
+from constants import *
 from forms import ImportForm, ImportFlightForm
 
 @render_to('import.html')
@@ -22,46 +22,66 @@ def do_import(request, f, preview=True):
 
     reader = csv.reader(f, delimiter='\t')
     titles = reader.next()
+    
+    your_header = "<tr>" + "".join(["<td>" + title + "</td>" for title in titles])
+    
     titles = swap_out_flight_titles(titles)
+    
+    official_header = "<tr>" + "".join(["<td>" + FIELD_TITLES.get(title, "") + "</td>" for title in titles])
+    
     dr = csv.DictReader(f, titles, delimiter='\t')
     dr.next()
-    out = []
+    
+    non_out = []
+    flight_out = []
+    plane_out = []
+    records_out = []
+    
+    records=False
     count = 0
     
     for line in dr:
         count += 1
         
-        line_type, line = prepare_line(line)
+        line_type, dict_line = prepare_line(line)
 
         if line_type == "FLIGHT":
-            print "flight " + str(count)
             if preview:
-                out = make_preview_flight(line, out)
+                flight_out = make_preview_flight(dict_line, flight_out)
             else:
-                out = make_commit_flight(line, request.user, out)
+                flight_out = make_commit_flight(dict_line, request.user, flight_out)
 
         elif line_type == "NON-FLIGHT":
-            print "non-flight " + str(count)
             if preview:
-                out = make_preview_nonflight(line, out)
+                non_out = make_preview_nonflight(dict_line, non_out)
             else:
-                out = make_commit_nonflight(line, request.user, out)
-
-        elif line_type == "PLANE":
-            print "plane " + str(count)
-            if preview:
-                out = make_preview_plane(line, out)
-            else:
-                out = make_commit_plane(line, request.user, out)
-
+                non_out = make_commit_nonflight(dict_line, request.user, non_out)
+                
         elif line_type == "RECORDS":
-            print "records " + str(count)
-            if preview:
-                out = make_preview_records(line['date'], out)
-            else:
-                out = make_commit_records(line['date'], request.user, out)
+            records = True
+            break
+     
+    if records:
+        line = dr.next()
+        print "records " + str(count)
+        
+        if preview:
+            records_out = make_preview_records(line.get('date'), records_out)
+        else:
+            records_out = make_commit_records(line.get('date'), request.user, records_out)
             
-    return {"out": out}
+        header = dr.next()
+        line = dr.next()
+        count += 1
+        
+        for line in dr:
+            count += 1
+            if preview:
+                plane_out = make_preview_plane(line, plane_out)
+            else:
+                plane_out = make_commit_plane(line, request.user, plane_out)
+            
+    return {"your_header": your_header, "official_header": official_header, "flight_out": flight_out, "plane_out": plane_out, "non_out": non_out, "records_out": records_out}
 
 #########################################################################################
 
@@ -79,6 +99,9 @@ def prepare_line(line):
     student = line.get('student', "")
     captain = line.get('captain', "")
     fo = line.get('fo', "")
+    
+    if line.get("simulator") and not line.get("total"):
+        line['total'] = line.get("simulator")
     
     person=""
     l = []
@@ -104,22 +127,28 @@ def prepare_line(line):
 ###############################################
 
 def make_preview_flight(line, out):
-    row = ["<td>" + line[field] + "</td>" for field in DB_FIELDS]
+    row = ["<td>" + line.get(field, "") + "</td>" for field in CSV_FIELDS]
     out.append("<tr>" + "".join(row) + "</tr>")
     return out
     
 def make_preview_nonflight(line, out):
-    row = ["<td>" + line[field] + "</td>" for field in ['date', 'non_flying']]
+    row = ["<td>" + line.get('date', "") + "</td>",
+           "<td>" + NON_FLIGHT_TRANSLATE_TEXT[line.get('non_flying', "")] + "</td>",
+           "<td>" + line.get('remarks', "") + "</td>",
+          ]
     out.append("<tr colspan='20'>" + "".join(row) + "</tr>")
     return out
 
 def make_preview_plane(line, out):
-    row = ["<td>" + line[field] + "</td>" for field in DB_FIELDS[:7]]
+    row = []
+    for field in CSV_FIELDS[:7]:
+        row.append("<td>" + line.get(field, "") + "</td>")
+        
     out.append("<tr>" + "".join(row) + "</tr>")
     return out
     
 def make_preview_records(line, out):
-    out.append("<tr><td>" + line + "</td></tr>")
+    out.append("<tr><td colspan='20'>" + line + "</td></tr>")
     return out
     
 ################################################
