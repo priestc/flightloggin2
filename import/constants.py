@@ -78,3 +78,42 @@ COLUMN_NAMES = {
 				
     "FLYING": 'flying',
 }
+
+PLANE_COLUMN_NAMES = {
+				
+    "TAILNUMBER": 'tailnumber',
+    "TAIL NUMBER": 'tailnumber',
+				
+    "TYPE": 'type',
+    "AIRCRAFT TYPE": 'type',
+    
+    "MODEL": 'model',
+    
+    "MANUFACTURER": "manufacturer",
+    
+    "CATEGORY/CLASS": 'cat_class',
+    
+    "TAGS": 'tags',
+    
+    "RT": "rt",
+    
+    "DESCRIPTION": 'description',
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    

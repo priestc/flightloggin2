@@ -2,27 +2,27 @@ from datetime import datetime
 import re
 import csv
 
+import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 
 from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
 
-import settings
-from forms import ImportForm, ImportFlightForm
+from logbook.constants import DB_FIELDS
 from logbook.forms import NonFlightForm
 from logbook.models import NonFlight, Flight
-from plane.models import Plane
-from route.models import Route
 from records.models import Records
+
 from constants import COLUMN_NAMES
+from forms import ImportForm, ImportFlightForm
 
 @render_to('import.html')
-def do_import(request, f):
+def do_import(request, f, preview=True):
 
     reader = csv.reader(f, delimiter='\t')
     titles = reader.next()
-    titles = swap_out_titles(titles)
+    titles = swap_out_flight_titles(titles)
     dr = csv.DictReader(f, titles, delimiter='\t')
     dr.next()
     out = []
@@ -30,89 +30,170 @@ def do_import(request, f):
     
     for line in dr:
         count += 1
-        line.update({"staging": True})
         
-        #############################################
-        
-        instructor = line.get('instructor', "")
-        student = line.get('student', "")
-        captain = line.get('captain', "")
-        fo = line.get('fo', "")
-        
-        person=""
-        l = []
-        if line.get('dual_r'):
-            l = [instructor, captain, student, fo]
-            
-        if line.get('dual_g'):
-            l = [student, fo, instructor, captain]
-            
-        if line.get('sic'):
-            l = [captain, instructor, student, fo]
-            
-        if line.get('pic'):
-            l = [fo, captain, instructor, student]
+        line_type, line = prepare_line(line)
 
-        for x in l:
-            if x:
-                person = x
-                break
-
-        #############################################
-        
-        if line.get('date')[:12] == "#####RECORDS": break
-        
-        if line.get('non_flying'):
-            nf = NonFlight(user=request.user)
-            form = NonFlightForm(line, instance=nf)
-            
-            if form.is_valid():
-                form.save()
-                out.append("good: nonflight")
-        else:
-            flight = Flight(user=request.user)
-            plane, created = Plane.objects.get_or_create(tailnumber=line.get("tailnumber"), type=line.get("type"), user=request.user)
-            line.update({"plane": plane.pk, "person": person})
-            form = ImportFlightForm(line, instance=flight)
-            
-            if form.is_valid():
-                form.save()
-                out.append("good: " + line['date'] + line['tailnumber'])
+        if line_type == "FLIGHT":
+            print "flight " + str(count)
+            if preview:
+                out = make_preview_flight(line, out)
             else:
-                out.append(str(count) + "---------------------")
-                out.append(form.errors)
-                out.append(str(count) + "---------------------")
+                out = make_commit_flight(line, request.user, out)
 
+        elif line_type == "NON-FLIGHT":
+            print "non-flight " + str(count)
+            if preview:
+                out = make_preview_nonflight(line, out)
+            else:
+                out = make_commit_nonflight(line, request.user, out)
 
-    if line.get('date')[:12] == "#####RECORDS":
-        line = dr.next()
-        r,c=Records.objects.get_or_create(user=request.user)
-        r.text=line['date'].replace('\\r', '\n')
-        r.save()
-    
-    line = dr.next()        
-    
-    if line.get('date')[:11] == "#####PLANES":       
-        for line in dr:
-            tailnumber = line['date']
-            manufacturer = line['tailnumber']
-            model = line['type']
-            type = line['route']
-            cat_class = line['total']
-            rt = line['pic']
-            tags = line['solo']
+        elif line_type == "PLANE":
+            print "plane " + str(count)
+            if preview:
+                out = make_preview_plane(line, out)
+            else:
+                out = make_commit_plane(line, request.user, out)
+
+        elif line_type == "RECORDS":
+            print "records " + str(count)
+            if preview:
+                out = make_preview_records(line['date'], out)
+            else:
+                out = make_commit_records(line['date'], request.user, out)
             
-            p=Plane.objects.get(user=request.user, tailnumber=tailnumber, type=type)
-            p.manufacturer=manufacturer
-            p.model=model
-            p.cat_class=cat_class
-            p.tags=tags
-            
-            print p.save()
+    return {"out": out}
+
+#########################################################################################
+
+def prepare_line(line):
+    if line.get('non_flying'):
+        return "NON-FLIGHT", line
         
-            
-    return locals()
+    if line.get('date')[:12] == "##Records":
+        return "RECORDS", line
+        
+    if line.get('date')[:11] == "##Tailnumber":
+        return "PLANE", line
+        
+    instructor = line.get('instructor', "")
+    student = line.get('student', "")
+    captain = line.get('captain', "")
+    fo = line.get('fo', "")
+    
+    person=""
+    l = []
+    if line.get('dual_r'):
+        l = [instructor, captain, student, fo]
+        
+    if line.get('dual_g'):
+        l = [student, fo, instructor, captain]
+        
+    if line.get('sic'):
+        l = [captain, instructor, student, fo]
+        
+    if line.get('pic'):
+        l = [fo, captain, instructor, student]
 
+    for x in l:
+        if x:
+            person = x
+            break
+
+    return "FLIGHT", line
+
+###############################################
+
+def make_preview_flight(line, out):
+    row = ["<td>" + line[field] + "</td>" for field in DB_FIELDS]
+    out.append("<tr>" + "".join(row) + "</tr>")
+    return out
+    
+def make_preview_nonflight(line, out):
+    row = ["<td>" + line[field] + "</td>" for field in ['date', 'non_flying']]
+    out.append("<tr colspan='20'>" + "".join(row) + "</tr>")
+    return out
+
+def make_preview_plane(line, out):
+    row = ["<td>" + line[field] + "</td>" for field in DB_FIELDS[:7]]
+    out.append("<tr>" + "".join(row) + "</tr>")
+    return out
+    
+def make_preview_records(line, out):
+    out.append("<tr><td>" + line + "</td></tr>")
+    return out
+    
+################################################
+    
+def make_commit_flight(line, user, out):
+    plane, created = Plane.objects.get_or_create(tailnumber=line.get("tailnumber"), type=line.get("type"), user=user)
+    flight = Flight(user=request.user)
+    line.update({"plane": plane.pk})
+    form = ImportFlightForm(line, instance=flight)
+    if form.is_valid():
+        form.save()
+        out.append("good: " + line.get('date') + "  " + line.get('remarks'))
+    else:
+        out.append(str(count) + "---------------------")
+        out.append(" ".join(line))
+        out.append(form.errors)
+        out.append(str(count) + "---------------------")
+        
+    return out
+
+#########################
+       
+def make_commit_nonflight(line, user, out):
+    nf = NonFlight(user=user)
+    form = NonFlightForm(line, instance=nf)
+
+    if form.is_valid():
+        form.save()
+        out.append("good: " + line.get('date') + "  " + line.get('remarks'))
+        
+    else:
+        out.append(str(count) + "---------------------")
+        out.append(" ".join(line))
+        out.append(form.errors)
+        out.append(str(count) + "---------------------")
+        
+    return out
+        
+#########################
+      
+def make_commit_plane(line, user, out):
+    tailnumber = line.get('tailnumber')
+    manufacturer = line.get('manufacturer')
+    model = line.get('model')
+    type = line.get('type')
+    cat_class = line.get('cat_class')
+    rt = line.get('rt')
+    tags = line.get('tags')
+    
+    p=Plane.objects.get(user=user, tailnumber=tailnumber, type=type)
+    p.manufacturer=manufacturer
+    p.model=model
+    p.cat_class=cat_class
+    p.tags=tags
+    p.save()
+    
+    out.append("good: " + line.get('tailnumber'))
+    
+    return out
+
+#########################
+   
+def make_commit_records(line, user, out):
+    r,c=Records.objects.get_or_create(user=user)
+    r.text=line.replace('\\r', '\n')
+    r.save()
+    
+    out.append("good: " + line[:100])
+    
+    return out
+
+#####################################################################################################
+
+@login_required()
 @render_to('import.html')
 def import_s(request):
     title = "Import/Export"
@@ -134,7 +215,9 @@ def import_s(request):
         
     return locals()
     
-def swap_out_titles(original):
+#####################################################################################################
+    
+def swap_out_flight_titles(original):
     new = []
     for title in original:
     
@@ -146,6 +229,22 @@ def swap_out_titles(original):
             new.append("??")
             
     return new
+    
+#####################################################################################################
+
+def swap_out_plane_titles(original):
+    new = []
+    for title in original:
+    
+        title = title.upper().strip().replace("\"", '').replace(".", "")
+    
+        if title in PLANE_COLUMN_NAMES.keys():
+            new.append(PLANE_COLUMN_NAMES[title])
+        else:
+            new.append("??")
+            
+    return new
+    
 
 
 

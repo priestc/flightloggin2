@@ -10,18 +10,22 @@
             body                    {background: #cce4eb; margin: 15px; margin-top:0px; padding:0; font-size: small; 
                                      font-family: "Bitstream Vera Sans", sans-serif; min-height: 100%; height: 100%;}
 
-            #header                 {margin:5px; overflow: hidden;}
-            #main_content           {margin-left: 0px; padding: 5px; padding-top: 0px; height: auto;}
-            #footer                 {text-align:center; font-size: x-small; color: gray;
-                                     border: 0px solid black; width: 100%;}
+            #header                 {margin:5px; overflow: hidden;border: 0px solid black}
+            #main_content           {margin:5px; overflow: hidden;border: 0px solid black}
+                                     
+            #logo                   {float: left; height: 67px}
+            #advert_box             {float: right; height:85px; color: black; text-align: right}
+            #logged_in_as           {font-weight: 700}
+            
+            #nav_bar                {background: #665b1e; border: 0px; width: 100%; float: left}
+            #nav_bar td             {width: 10%; text-align: center}
+            
+            td.nav_bar_not          {width: 33%}
+            
+            #nav_bar A              {color: white; font-weight: bold; text-decoration: none}
+            #nav_bar A:hover        {color: silver; font-weight: bold; text-decoration: underline}
 
-            .nav_bar                {background: #665b1e; border: 0px; width: 100%}
-            .nav_bar_logged         {width: 10%}
-            #nav_bar_non tr         {width: 33%}
-            .nav_bar A              {color: white; font-weight: bold; text-decoration: none}
-            .nav_bar A:hover        {color: silver; font-weight: bold; text-decoration: underline}
-
-            .top_nav_selected       {background: #5dc7e9}
+            .nav_selected           {background: #5dc7e9}
 
             #canvas                 {background: white; padding: 1em; overflow:hidden; max-width: 73em; margin-left: auto;
                                      margin-right: auto; text-align: center; border: 1px solid black}
@@ -30,7 +34,7 @@
             h1                      {text-align: center; font-weight: bold; color: #665b1e; font-size: x-large;}
             h2                      {font-weight: bold; color: #11566d; font-size: large}
 
-            #advert_box             {float:right; height:67px; color: black; text-align: right}
+            
 
             textarea                {border: 1px solid black; font-family: inherit; font-size: inherit; background: white}
             select                  {border: 1px solid black; background: #EEEEEE; font-size: smaller; font-family: inherit}
@@ -47,6 +51,9 @@
             input[type="text"]      {border: 1px solid black; background: white}
 
             input[type=text]:disabled {background-color: #DDDDDD; color: #777777; border: 1px dotted #EEEEEE}
+            
+            #footer                 {text-align:center; font-size: x-small; color: gray;
+                                     border: 0px solid black; width: 100%;}
 
             /************************/
 
@@ -60,7 +67,14 @@
 		<script type="text/javascript" src="{{ MEDIA_URL }}javascripts/master.js"></script>		
 		{% block javascript %}{% endblock %}
 
-				
+		<script type="text/javascript"><!--
+            google_ad_client = "pub-7210120729072266";
+            /* 468x60, created 8/22/09 */
+            google_ad_slot = "7862372281";
+            google_ad_width = 468;
+            google_ad_height = 60;
+            //-->
+        </script>		
         <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
@@ -80,73 +94,83 @@
 	<div id="holder">
 	
 		<div id="header">
-			<img style="float:left" src="{{ MEDIA_URL }}logo/loggin_{{ user.profile.style|default:"1" }}.png" height="67" alt="FlightLogg.in' Logo" />
+			<img id="logo" src="{{ MEDIA_URL }}logo/loggin_{{ user.profile.style|default:"1" }}.png" alt="FlightLogg.in' Logo" />
 			
 			<div id="advert_box">
 				{% if user.is_authenticated and not user.is_guest %}
-					<strong>Logged in as: {% firstof profile.real_name user.email %}</strong>
+					<span id="logged_in_as">Logged in as: {% firstof profile.real_name user.email %}</span>
 				{% else %}
 					{% if user.is_guest%}
-						<strong>Viewing the logbook of: {% firstof profile.real_name user.email %}</strong>
+						<span id="logged_in_as">Viewing the logbook of: {% firstof profile.real_name user.email %}</span>
 					{% endif %}
 				{% endif %}
+				
+			<br><script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+			
 			</div>
 
-			<table style="float:left" class="nav_bar" summary="Top navigation bar">
-				<tr align="center">
+			<table id="nav_bar" summary="Top navigation bar">
+				<tr>
                 {% if user.is_authenticated %}
 
-                    {% ifequal title "Home" %}<td class="nav_bar_logged top_nav_selected" ><a href=".">Help</a></td>
-					{% else %}<td class="nav_bar_logged" ><a href="{% url walkthrough %}">Help</a></td>
-                    {% endifequal %}
+                    <td class="{% block help-sel %}{% endblock%}" >
+                        <a href="{% url help %}">Help</a></td>
 
-					<td class="nav_bar_logged" ><a href="http://forums.flightlogg.in">Forums</a></td>
+                    <td class="" >
+                        <a href="http://forums.flightlogg.in">Forums</a>
+                    </td>
 
-					{% ifequal title "Logbook" %}<td class="nav_bar_logged top_nav_selected" ><a href=".">Logbook</a></td>
-					{% else %}<td class="nav_bar_logged" ><a href="{% url logbook %}">Logbook</a></td>
-                    {% endifequal %}
+                    <td class="{% block logbook-sel %}{% endblock%}" >
+                        <a href="{% url logbook %}">Logbook</a>
+                    </td>
 
-					{% ifequal title "Preferences" %}<td class="nav_bar_logged top_nav_selected" ><a href=".">Preferences</a></td>
-					{% else %}<td class="nav_bar_logged" ><a href="{% url profile %}">Preferences</a></td>
-                    {% endifequal %}
+                    <td class="{% block profile-sel %}{% endblock%}" >
+                        <a href="{% url profile %}">Preferences</a>
+                    </td>
 
-					{% ifequal title "Stats" %}<td class="nav_bar_logged top_nav_selected" ><a href=".">Stats</a></td>
-					{% else %}<td class="nav_bar_logged" ><a href="stats">Stats</a></td>
-                    {% endifequal %}
+                    <td class="{% block stats-sel %}{% endblock%}" >
+                        <a href="stats">Stats</a>
+                    </td>
 
-					{% ifequal title "Records" %}<td class="nav_bar_logged top_nav_selected" ><a href=".">Records</a></td>
-					{% else %}<td class="nav_bar_logged" ><a href="{% url records %}">Records</a></td>
-                    {% endifequal %}
+                    <td class="{% block records-sel %}{% endblock%}" >
+                        <a href="{% url records %}">Records</a>
+                    </td>
 
-					{% ifequal title "Planes" %}<td class="nav_bar_logged top_nav_selected" ><a href=".">Planes</a></td>
-					{% else %}<td class="nav_bar_logged" ><a href="{% url planes %}">Planes</a></td>
-                    {% endifequal %}
+                    <td class="{% block planes-sel %}{% endblock%}" >
+                        <a href="{% url planes %}">Planes</a>
+                    </td>
 
-					{% ifequal title "Mass Entry" %}<td class="nav_bar_logged top_nav_selected" ><a href=".">Mass Entry</a></td>
-					{% else %}<td class="nav_bar_logged" ><a href="mass_entry">Mass Entry</a></td>
-                    {% endifequal %}
+                    <td class="{% block mass-sel %}{% endblock%}" >
+                        <a href="mass_entry">Mass Entry</a>
+                    </td>
 
-					{% ifequal title "Import/Export" %}<td class="nav_bar_logged top_nav_selected" ><a href=".">Import/Export</a></td>
-					{% else %}<td class="nav_bar_logged" ><a href="{% url import %}">Import/Export</a></td>
-                    {% endifequal %}
+                    <td class="{% block import-sel %}{% endblock%}" >
+                        <a href="{% url import %}">Import/Export</a>
+                    </td>
+                    
+                    <td>
+                    <a href="{% url logout %}">Log Out</a>
+                    </td>
+                    
                 {% else %}
     
-                    {% ifequal title "Home" %}<td class="nav_bar_logged top_nav_selected" ><a href=".">Introduction</a></td>
-					{% else %}<td class="nav_bar_logged" ><a href="{% url faq %}">Introduction</a></td>
-                    {% endifequal %}
+                    <td class="nav_bar_not {% block intro-sel %}{% endblock%}" >
+                        <a href="{% url faq %}">Introduction</a>
+                    </td>
 
-                    {% ifequal title "Home" %}<td class="nav_bar_logged top_nav_selected" ><a href=".">Help</a></td>
-					{% else %}<td class="nav_bar_logged" ><a href="{% url faq %}">Help</a></td>
-                    {% endifequal %}
+                    <td class="nav_bar_not {% block faq-sel %}{% endblock%}" >
+                        <a href="{% url faq %}">Help</a>
+                    </td>
 
-					<td class="nav_bar_logged" ><a href="http://forums.flightlogg.in">Forums</a></td>
+					<td class="nav_bar_not" >
+					    <a href="http://forums.flightlogg.in">Forums</a>
+					</td>
 
-                    {% ifequal title "Sign-in/Register" %}<td class="nav_bar_logged top_nav_selected" ><a href=".">Sign-in/Register</a></td>
-					{% else %}<td class="nav_bar_logged" ><a href="/openid/login">Sign-in/Register</a></td>
-                    {% endifequal %}
+                    <td class="nav_bar_not {% block signin-sel %}{% endblock%}" >
+                        <a href="/openid/login">Sign-in/Register</a>
+                    </td>
 
                 {% endif %}
-					<td class="nav_bar_logged"><a href="/logout">Log Out</a></td>
 	
 				</tr>
 			</table>

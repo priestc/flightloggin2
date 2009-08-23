@@ -14,7 +14,7 @@ def prefs(request):
     return locals()
 
 @render_to("walkthrough.html")
-def walkthrough(request):
+def help(request):
     title="Walkthrough"
     return locals()
 

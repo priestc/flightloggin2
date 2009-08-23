@@ -10,7 +10,7 @@ urlpatterns = patterns('',
     url(r'^$',                                "main.views.home",        name="root"),
     url(r'^home/$',                           "main.views.home",        name="home"),
     url(r'^faq/$',                            "main.views.faq",         name="faq"),
-    url(r'^walkthrough/$',                    "main.views.walkthrough", name="walkthrough"),
+    url(r'^help/$',                           "main.views.help",        name="help"),
     url(r'^preferences/$',                    "profile.views.profile",  name="profile"),
     url(r'^records/$',                        "records.views.records",  name="records"),
     url(r'^planes/$',                         "plane.views.planes",     name="planes"),
@@ -28,5 +28,5 @@ urlpatterns = patterns('',
 )
 
 urlpatterns += patterns('django.contrib.auth',
-    url(r'^accounts/logout/$','views.logout', {"template_name": "home.html"}, name="logout"),
+    url(r'^logout/$','views.logout', {"template_name": "home.html"}, name="logout"),
 )
