@@ -9,9 +9,9 @@ from django.http import HttpResponseRedirect
 from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
 
-from logbook.forms import NonFlightForm
-from logbook.models import NonFlight, Flight
-from records.models import Records
+from records.forms import NonFlightForm
+from logbook.models import Flight
+from records.models import Records, NonFlight
 
 from logbook.constants import FIELD_TITLES
 from constants import *

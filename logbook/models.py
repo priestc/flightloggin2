@@ -173,21 +173,6 @@ class Flight(models.Model):
 
 ######################################################################################################
 
-class NonFlight(models.Model):
-
-    date =      models.DateField()
-    user =      models.ForeignKey(User, blank=False)
-    remarks =   models.TextField(blank=True)
-    
-    staging = models.BooleanField(default=False)
-
-    non_flying = models.IntegerField(choices=NON_FLYING_CHOICES, default=0, blank=False)
-
-    def __unicode__(self):
-        return u"%s -- %s" % (self.date, self.get_non_flying_display() )
-
-######################################################################################################
-
 class Columns(models.Model):
     user =      models.ForeignKey(User, blank=False, primary_key=True)
     

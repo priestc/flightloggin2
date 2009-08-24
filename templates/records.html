@@ -1,9 +1,39 @@
 {% extends "base.html" %}
 
 {% block title %}{{ title }}{% endblock %}
+{% block css%}
 
+    select                            {font-size: small}
+    table.new_nonflight               {background: #DDDDDD; width: 100%; border-collapse: collapse}
+    table.new_nonflight td            {border: 1px solid black; padding: 5px}
+    td.remarks textarea               {height: 50px}
+    td.date input                     {width: 100px}
+    
+{% endblock %}
 
 {% block canvas %}
+<form action="." method="post">
+    <table class="new_nonflight">
+       <tr>
+           <td>Date</td><td>Type</td><td>Remarks</td><td>Delete?{{formset.management_form}}</td>
+       </tr>
+    {% for form in formset.forms %}
+        <tr>
+            <td class="date">{{form.date}}</td>
+            <td class="non_flying">{{form.non_flying}}</td>
+            <td class="remarks">{{form.remarks}}</td>
+            {% if form.instance.pk %}
+            <td class="delete">{{form.DELETE}}</td>
+        </tr>
+            {% else %}
+            <td class="delete"></td>
+        <tr><td colspan="5"><input type="submit" value="Save"/></td>
+        </tr>
+            {% endif %}
+    {% endfor %}
+    </table>
+    
+
 	<div>
 		Use this space to record any information you'd normally put in the back of a paper logbook.
 		Phone numbers and addresses of contacts; dates of endorsements; student signoffs and outcomes; notes, etc.
@@ -11,24 +41,23 @@
 	
 	<br />
 
-	<form action="." method="post">
-		<div>
-			<textarea style="width:80%;height:400px" cols="50" rows="10" name="records">{{ records.text }}</textarea>
-	
-			<br />
-			<br />
+	<div>
+		<textarea style="width:80%;height:400px" cols="50" rows="10" name="records">{{ records.text }}</textarea>
 
-			<input type="submit" value="Save" />
-			
-			{% if saved %}
-			
-			<br /><br />
-			<span style="color: red; font-weight: bold">Saved</span>
-			
-			{% endif %}
+		<br />
+		<br />
 
-		</div>
-	</form>
+		<input type="submit" value="Save" />
+		
+		{% if saved %}
+		
+		<br /><br />
+		<span style="color: red; font-weight: bold">Saved</span>
+		
+		{% endif %}
+
+	</div>
+</form>
 </div>
 
 {% endblock %}

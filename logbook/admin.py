@@ -8,6 +8,4 @@ class FlightAdmin(admin.ModelAdmin):
     #filter_horizontal = ('user', )
 
 admin.site.register(Flight, FlightAdmin)
-
 admin.site.register(Columns)
-admin.site.register(NonFlight)

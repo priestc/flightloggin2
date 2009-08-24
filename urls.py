@@ -7,16 +7,18 @@ urlpatterns = patterns('',
     (r'^site-media/(?P<path>.*)$','django.views.static.serve', {'document_root': '/home/chris/Websites/flightloggin/media', 'show_indexes': True}),
 
 
-    url(r'^$',                                "main.views.home",        name="root"),
-    url(r'^home/$',                           "main.views.home",        name="home"),
+    url(r'^$',                                "main.views.news",        name="root"),
+    url(r'^news/$',                           "main.views.news",        name="news"),
     url(r'^faq/$',                            "main.views.faq",         name="faq"),
     url(r'^help/$',                           "main.views.help",        name="help"),
     url(r'^preferences/$',                    "profile.views.profile",  name="profile"),
     url(r'^records/$',                        "records.views.records",  name="records"),
+    url(r'^stats/$',                          "stats.views.stats",      name="stats"),
     url(r'^planes/$',                         "plane.views.planes",     name="planes"),
     url(r'^import/$',                         "import.views.import_s",  name="import"),
     url(r'^backup/$',                         "logbook.views.backup",   name="backup"),
     
+    url(r'^mass_entry/$',                     "logbook.views.mass_entry",name="mass_entry"),
     url(r'^logbook/$',                        "logbook.views.logbook",  name="logbook"),
     url(r'^logbook-page-(?P<page>\d+)',       "logbook.views.logbook",  name="logbook-page"),
     

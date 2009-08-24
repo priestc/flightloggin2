@@ -126,7 +126,7 @@ def logbook(request, page=0):
     
     
     
-    
+@login_required()   
 def backup(request):
     import csv
     from django.http import HttpResponse
@@ -158,8 +158,10 @@ def backup(request):
     return response
 
     
-       
-
+@login_required()
+@render_to("mass_entry.html")     
+def mass_entry(request, page=0):
+    return locals()
 
 
 

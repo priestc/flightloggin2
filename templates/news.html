@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block javascript %}
+	<script type="text/javascript" src="{{ MEDIA_URL }}javascripts/{{ title|lower }}.js"></script>
+    {% endblock %}
+
+{% block css %}
+    #canvas             {text-align: left}
+
+    .news_box			{border: 1px solid black;
+		                 width:50em;
+		                 margin-right:auto;
+		                 margin-left:auto;
+		                 margin-bottom: 15px;
+		                 padding:5px;
+		                 background: #cce4eb}
+
+    .news_box p			{font-size: medium}
+
+    .news_box big       {font-size: x-large;
+		                 font-weight: bold}
+		     
+    .news_box small     {font-size: small}
+    
+{% endblock %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block canvas %}
+
+{% for item in news %}
+
+    <div class="news_box">
+        <big>{{ item.title }}</big><br />
+        <small>{{ item.date|date:"l, F jS, Y" }}</small>
+
+        <p>
+        {{ item.text|safe|linebreaksbr }}
+        </p>
+    </div>
+
+{% endfor %}
+
+{% endblock %}

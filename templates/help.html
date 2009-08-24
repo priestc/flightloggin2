@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block javascript %}
+	<script type="text/javascript" src="{{ MEDIA_URL }}javascripts/{{ title|lower }}.js"></script>
+    {% endblock %}
+
+{% block css %}
+    #canvas     {color: green}
+{% endblock %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block canvas %}
+
+HELP
+
+{% endblock %}

@@ -73,12 +73,6 @@ class FlightForm(ModelForm):
         model = Flight
         exclude = ('user', )
     
-class NonFlightForm(ModelForm):
-    class Meta:
-        model = NonFlight
-        exclude = ('user', )
-    
-    
     
     
     
