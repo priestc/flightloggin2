@@ -7,25 +7,27 @@
 		{#<link rel="icon" type="image/png" href="/icons/favicon_{{ user.profile.style }}.png" />#}
 		
         <style type="text/css">
-            body                    {background: #cce4eb; margin: 15px; margin-top:0px; padding:0; font-size: small; 
+            body                    {background: #CCF2D4; margin: 15px; margin-top:0px; padding:0; font-size: small; 
                                      font-family: "Bitstream Vera Sans", sans-serif; min-height: 100%; height: 100%;}
 
             #header                 {margin:5px; overflow: hidden;border: 0px solid black}
             #main_content           {margin:5px; overflow: hidden;border: 0px solid black}
-                                     
-            #logo                   {float: left; height: 67px}
-            #advert_box             {float: right; height:85px; color: black; text-align: right}
-            #logged_in_as           {font-weight: 700}
+            
+            #logo                   {height: 44px; margin-top: 11px; border: 0px solid black;}
+            #logo_box               {float: left}
+            #advert_box             {float: right; height:60px}
+            #logged_in_as           {float: right; text-align: right; font-weight: 700; color: #665B1E; width: 100%; border: 0px solid black}
             
             #nav_bar                {background: #665b1e; border: 0px; width: 100%; float: left}
             #nav_bar td             {width: 10%; text-align: center}
             
             td.nav_bar_not          {width: 33%}
             
-            #nav_bar A              {color: white; font-weight: bold; text-decoration: none}
-            #nav_bar A:hover        {color: silver; font-weight: bold; text-decoration: underline}
+            #nav_bar a              {color: white; font-weight: bold; text-decoration: none}
+            #nav_bar a:hover        {color: silver; font-weight: bold; text-decoration: underline}
 
-            .nav_selected           {background: #5dc7e9}
+            .nav_selected           {background: #81d38f}
+            .nav_selected a         {color: black !important}
 
             #canvas                 {background: white; padding: 1em; overflow:hidden; max-width: 73em; margin-left: auto;
                                      margin-right: auto; text-align: center; border: 1px solid black}
@@ -94,21 +96,27 @@
 	<div id="holder">
 	
 		<div id="header">
-			<img id="logo" src="{{ MEDIA_URL }}logo/loggin_{{ user.profile.style|default:"1" }}.png" alt="FlightLogg.in' Logo" />
+			<div id="logo_box">
+			    <img id="logo" src="{{ MEDIA_URL }}logo/new-logo.png" alt="FlightLogg.in' Logo" />
+			</div>
 			
-			<div id="advert_box">
-				{% if user.is_authenticated and not user.is_guest %}
-					<span id="logged_in_as">Logged in as: {% firstof profile.real_name user.email %}</span>
-				{% else %}
-					{% if user.is_guest%}
-						<span id="logged_in_as">Viewing the logbook of: {% firstof profile.real_name user.email %}</span>
-					{% endif %}
-				{% endif %}
-				
-			<br><script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
-			
+			<div id="advert_box">	
+			    <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
 			</div>
 
+            <div id="logged_in_as">
+				{% if user.is_authenticated and not user.is_guest %}
+				
+					Logged in as: {% firstof profile.real_name user.email %}
+					
+				{% else %}
+			    {% if user.is_guest%}
+			    
+					Viewing the logbook of: {% firstof profile.real_name user.email %}
+					
+				{% endif %}
+				{% endif %}
+            </div>
 			<table id="nav_bar" summary="Top navigation bar">
 				<tr>
                 {% if user.is_authenticated %}
