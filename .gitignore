@@ -4,3 +4,4 @@ manage.py
 *.pyc
 *.swp
 *.json.bz2
+uploads

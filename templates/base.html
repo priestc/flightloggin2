@@ -28,6 +28,9 @@
 
             .nav_selected           {background: #81d38f}
             .nav_selected a         {color: black !important}
+            
+            .display_user           {color: black}
+            .logged_user            {color: black}
 
             #canvas                 {background: white; padding: 1em; overflow:hidden; max-width: 73em; margin-left: auto;
                                      margin-right: auto; text-align: center; border: 1px solid black}
@@ -105,24 +108,27 @@
 			</div>
 
             <div id="logged_in_as">
-				{% if user.is_authenticated and not user.is_guest %}
-				
-					Logged in as: {% firstof profile.real_name user.email %}
+				{% if user.is_authenticated %}
+		
+					Logged in as: <span class="logged_user">{{ user.username }}</span>
+					
+				{% endif %}
+			    {% ifnotequal display_user user %}
+			    
+					Viewing the logbook of: <span class="display_user">{{ display_user }}</span>
 					
 				{% else %}
-			    {% if user.is_guest%}
-			    
-					Viewing the logbook of: {% firstof profile.real_name user.email %}
-					
-				{% endif %}
-				{% endif %}
+				
+				    &nbsp;	
+				    
+				{% endifnotequal %}
             </div>
 			<table id="nav_bar" summary="Top navigation bar">
 				<tr>
                 {% if user.is_authenticated %}
                 
                     <td class="{% block logbook-sel %}{% endblock%}" >
-                        <a href="{% url logbook %}">Logbook</a>
+                        <a href="{% url logbook request.user.username %}">Logbook</a>
                     </td>
 
                     <td class="{% block profile-sel %}{% endblock%}" >
@@ -142,7 +148,7 @@
                     </td>
 
                     <td class="{% block mass-sel %}{% endblock%}" >
-                        <a href="{% url mass_entry %}">Mass Entry</a>
+                        <a href="{% url mass_entry request.user.username %}">Mass Entry</a>
                     </td>
 
                     <td class="{% block import-sel %}{% endblock%}" >

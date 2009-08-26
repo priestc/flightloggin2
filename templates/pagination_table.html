@@ -3,25 +3,25 @@
 <table class="pagination_table" summary="pagination">
 	<tr>
 		<td style="width:20%;text-align:left;border:0;">
-			<span class="first_page_index"><a href="/logbook-page-1">First Page</a></span>
+			<span class="first_page_index"><a href="{% url logbook-page display_user.username 1 %}">First Page</a></span>
 		</td>
 		
 		<td style="width:60%;border:0;">
 			<div class="center_page_index">
 				{% for p in before_block %}
-					<a href="{% url logbook-page p %}">{{ p }}</a>
+					<a href="{% url logbook-page display_user.username p %}">{{ p }}</a>
 				{% endfor %}
 											
 				{{ page_of_flights.number }}
 				
 				{% for p in after_block %}
-					<a href="{% url logbook-page p %}">{{ p }}</a>
+					<a href="{% url logbook-page display_user.username p %}">{{ p }}</a>
 				{% endfor %}
 			</div>
 		</td>
 		
 		<td style="width:20%;text-align:right;border:0;">
-			<span class="last_page_index"><a href="{% url logbook-page page_of_flights.paginator.num_pages %}">Last Page</a></span>
+			<span class="last_page_index"><a href="{% url logbook-page display_user.username page_of_flights.paginator.num_pages %}">Last Page</a></span>
 		</td>
 	</tr>
 </table>

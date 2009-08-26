@@ -12,22 +12,57 @@ from annoying.functions import get_object_or_None
 from records.forms import NonFlightForm
 from logbook.models import Flight
 from records.models import Records, NonFlight
+from plane.models import Plane
 
 from logbook.constants import FIELD_TITLES
 from constants import *
 from forms import ImportForm, ImportFlightForm
 
+@login_required()
 @render_to('import.html')
+def import_s(request):
+    title = "Import/Export"
+    results={}
+    
+    post = request.POST.copy()
+    
+    if request.method == 'POST':
+        if request.POST['submit'] == 'Import':
+            preview = False
+            preview_str=""
+        elif request.POST['submit'] == 'Preview':
+            preview = True
+            preview_str="p"
+            
+        fileform = ImportForm(request.POST, request.FILES)
+        
+        if fileform.is_valid():
+            filename = "%s/uploads/%s%s_%s.txt" % (settings.PROJECT_PATH, request.user.id, preview_str, datetime.now())
+            f = request.FILES['file']
+            destination = open( filename , 'wb+')
+            
+            for chunk in f.chunks():
+                destination.write(chunk)
+            destination.close()
+            
+            results = do_import(request, f, preview=preview)
+
+    else:
+        fileform = ImportForm()
+        
+    loc=locals()    
+    loc.update(results)
+    return loc
+
+####################################################################################################
+
 def do_import(request, f, preview=True):
 
     reader = csv.reader(f, delimiter='\t')
     titles = reader.next()
-    
-    your_header = "<tr>" + "".join(["<td>" + title + "</td>" for title in titles])
-    
     titles = swap_out_flight_titles(titles)
     
-    official_header = "<tr>" + "".join(["<td>" + FIELD_TITLES.get(title, "") + "</td>" for title in titles])
+    official_header = "<tr>" + "".join(["<td>" + FIELD_TITLES.get(title, "") + "</td>" for title in CSV_FIELDS])
     
     dr = csv.DictReader(f, titles, delimiter='\t')
     dr.next()
@@ -38,10 +73,8 @@ def do_import(request, f, preview=True):
     records_out = []
     
     records=False
-    count = 0
     
     for line in dr:
-        count += 1
         
         line_type, dict_line = prepare_line(line)
 
@@ -63,7 +96,6 @@ def do_import(request, f, preview=True):
      
     if records:
         line = dr.next()
-        print "records " + str(count)
         
         if preview:
             records_out = make_preview_records(line.get('date'), records_out)
@@ -71,17 +103,16 @@ def do_import(request, f, preview=True):
             records_out = make_commit_records(line.get('date'), request.user, records_out)
             
         header = dr.next()
+        #dr.fieldnames = header
         line = dr.next()
-        count += 1
         
         for line in dr:
-            count += 1
             if preview:
                 plane_out = make_preview_plane(line, plane_out)
             else:
                 plane_out = make_commit_plane(line, request.user, plane_out)
             
-    return {"your_header": your_header, "official_header": official_header, "flight_out": flight_out, "plane_out": plane_out, "non_out": non_out, "records_out": records_out}
+    return {"official_header": official_header, "flight_out": flight_out, "plane_out": plane_out, "non_out": non_out, "records_out": records_out}
 
 #########################################################################################
 
@@ -89,10 +120,10 @@ def prepare_line(line):
     if line.get('non_flying'):
         return "NON-FLIGHT", line
         
-    if line.get('date')[:12] == "##Records":
+    if line.get('date')[:12] == "##RECORDS":
         return "RECORDS", line
         
-    if line.get('date')[:11] == "##Tailnumber":
+    if line.get('date')[:11] == "##PLANES":
         return "PLANE", line
         
     instructor = line.get('instructor', "")
@@ -102,6 +133,12 @@ def prepare_line(line):
     
     if line.get("simulator") and not line.get("total"):
         line['total'] = line.get("simulator")
+        
+    if line.get('route_to') and line.get('route_from') and not line.get('route_via'):
+        line.update({"route": line.get('route_from') + " " + line.get('route_to')})
+        
+    elif line.get('route_to') and line.get('route_from') and line.get('route_via'):
+        line.update({"route": line.get('route_from') + " " + line.get('route_via') + " " + line.get('route_to')})
     
     person=""
     l = []
@@ -121,6 +158,9 @@ def prepare_line(line):
         if x:
             person = x
             break
+    
+    if person:
+       line.update({"person": person}) 
 
     return "FLIGHT", line
 
@@ -155,17 +195,17 @@ def make_preview_records(line, out):
     
 def make_commit_flight(line, user, out):
     plane, created = Plane.objects.get_or_create(tailnumber=line.get("tailnumber"), type=line.get("type"), user=user)
-    flight = Flight(user=request.user)
+    flight = Flight(user=user)
     line.update({"plane": plane.pk})
     form = ImportFlightForm(line, instance=flight)
     if form.is_valid():
         form.save()
         out.append("good: " + line.get('date') + "  " + line.get('remarks'))
     else:
-        out.append(str(count) + "---------------------")
+        out.append("---------------------")
         out.append(" ".join(line))
         out.append(form.errors)
-        out.append(str(count) + "---------------------")
+        out.append("---------------------")
         
     return out
 
@@ -177,32 +217,40 @@ def make_commit_nonflight(line, user, out):
 
     if form.is_valid():
         form.save()
-        out.append("good: " + line.get('date') + "  " + line.get('remarks'))
+        out.append("<tr><td>good:</td><td>" + line.get('date') + "</td><td>" + line.get('remarks') + "</td></tr>")
         
     else:
-        out.append(str(count) + "---------------------")
-        out.append(" ".join(line))
+        out.append("<tr class='bad'><td>bad:</td><td>" + line.get('date') + "</td><td>" + line.get('remarks') + "</td></tr>")
+        out.append("<tr><td colspan='5'>")
         out.append(form.errors)
-        out.append(str(count) + "---------------------")
+        out.append("</td></tr>")
         
     return out
         
 #########################
       
 def make_commit_plane(line, user, out):
-    tailnumber = line.get('tailnumber')
-    manufacturer = line.get('manufacturer')
-    model = line.get('model')
-    type = line.get('type')
-    cat_class = line.get('cat_class')
-    rt = line.get('rt')
-    tags = line.get('tags')
+    tailnumber = line.get('date')
+    manufacturer = line.get('tailnumber')
+    model = line.get('type')
+    type = line.get('route')
+    cat_class = line.get('total')
+    rt = line.get('pic')
+    tags = line.get('solo')
     
     p=Plane.objects.get(user=user, tailnumber=tailnumber, type=type)
     p.manufacturer=manufacturer
     p.model=model
     p.cat_class=cat_class
-    p.tags=tags
+    
+    the_tags = []
+    for tag in tags.split(","):
+        tag = tag.trim()
+        if tag.find(" ") > 0:
+            tag = "\"" + tag + "\""
+            the_tags.append(tag)
+    
+    p.tags = " ".join(the_tags)
     p.save()
     
     out.append("good: " + line.get('tailnumber'))
@@ -220,30 +268,6 @@ def make_commit_records(line, user, out):
     
     return out
 
-#####################################################################################################
-
-@login_required()
-@render_to('import.html')
-def import_s(request):
-    title = "Import/Export"
-    
-    if request.method == 'POST':
-        fileform = ImportForm(request.POST, request.FILES)
-        if fileform.is_valid():
-            filename = "%s/uploads/%s_%s.txt" % (settings.PROJECT_PATH, request.user.id, datetime.now())
-            f = request.FILES['file']
-            destination = open( filename , 'wb+')
-            
-            for chunk in f.chunks():
-                destination.write(chunk)
-            destination.close()
-            
-            return do_import(request, f)
-    else:
-        fileform = ImportForm()
-        
-    return locals()
-    
 #####################################################################################################
     
 def swap_out_flight_titles(original):

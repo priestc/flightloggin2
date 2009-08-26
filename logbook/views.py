@@ -1,9 +1,9 @@
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.http import HttpResponseRedirect
 from django.forms import ModelForm
-from django.core.paginator import Paginator, InvalidPage, EmptyPage
 
 from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
@@ -13,27 +13,26 @@ from forms import *
 from constants import *
 from totals import total_column
 from profile.models import Profile
+from is_shared import is_shared
 
-
-
-@login_required()
 @render_to("logbook.html")
-def logbook(request, page=0):
-    title="Logbook"
+def logbook(request, username, page=0):
+    
+    shared, display_user = is_shared(request, username)
     
     #####################################################
     
-    form = FlightForm(planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,request.user.id]))
+    form = FlightForm(planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
     
     if request.POST.get('submit', "") == "Submit New Flight":
-        flight = Flight(user=request.user)
-        form = FlightForm(request.POST, instance=flight, planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,request.user.id]))
+        flight = Flight(user=user)
+        form = FlightForm(request.POST, instance=flight, planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
      
     elif request.POST.get('submit', "") == "Edit Flight":
         flight_id = request.POST['id']
-        flight = Flight(pk=flight_id, user=request.user)
+        flight = Flight(pk=flight_id, user=user)
         
-        form = FlightForm(request.POST, instance=flight, planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,request.user.id]))
+        form = FlightForm(request.POST, instance=flight, planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
         
     if request.POST and form.is_valid():
         form.save()
@@ -41,7 +40,7 @@ def logbook(request, page=0):
     
     ##############################################################
     try:
-        profile = request.user.get_profile()
+        profile = display_user.get_profile()
     except:
         profile = Profile()
         
@@ -60,9 +59,9 @@ def logbook(request, page=0):
         format = "decimal"
     
     
-    all_flights = Flight.objects.filter(user=request.user)
+    all_flights = Flight.objects.filter(user=display_user)
     flights = all_flights.select_related()
-    columns, created = Columns.objects.get_or_create(user=request.user)
+    columns, created = Columns.objects.get_or_create(user=display_user)
     
     
     
@@ -131,12 +130,14 @@ def backup(request):
     import csv
     from django.http import HttpResponse
     from records.models import Records
+    
+    shared, display_user = is_shared(request, username)
 
     response = HttpResponse(mimetype='text/plain')
     #response['Content-Disposition'] = 'attachment; filename=somefilename.csv'
     
-    flights = Flight.objects.filter(user=request.user)
-    planes = Plane.objects.filter(user=request.user)
+    flights = Flight.objects.filter(user=display_user)
+    planes = Plane.objects.filter(user=display_user)
 
     writer = csv.writer(response, dialect='excel')
     writer.writerow([FIELD_TITLES[field] for field in BACKUP_FIELDS])
@@ -144,13 +145,13 @@ def backup(request):
     for flight in flights:
         writer.writerow([flight.column(field) for field in BACKUP_FIELDS])
         
-    writer.writerow(["#####RECORDS"])
+    writer.writerow(["##RECORDS"])
     
-    records = get_object_or_None(Records, user=request.user)
+    records = get_object_or_None(Records, user=display_user)
     if records:
         writer.writerow([records.text])
         
-    writer.writerow(["#####PLANES"])
+    writer.writerow(["##PLANES"])
         
     for p in planes:
         writer.writerow([p.tailnumber, p.manufacturer, p.model, p.cat_class, " ".join(p.get_tags_quote())])
@@ -160,7 +161,7 @@ def backup(request):
     
 @login_required()
 @render_to("mass_entry.html")     
-def mass_entry(request, page=0):
+def mass_entry(request, username, page=0):
     return locals()
 
 

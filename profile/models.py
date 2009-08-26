@@ -16,6 +16,7 @@ class Profile(models.Model):
     backup_freq =    models.IntegerField(          "Backup Frequency",          choices=BACKUP_FREQUENCY, default=0)
     type_str =       models.CharField(                                          blank=True, max_length=128)
     minutes =        models.BooleanField(  "Display times as HH:MM",            default=False)
+    share =          models.BooleanField(  "Allow others to see your logbook?", default=True)
 
     def __unicode__(self):
         return u"%s - %s" % (self.user, self.real_name)
