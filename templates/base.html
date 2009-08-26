@@ -100,7 +100,7 @@
 	
 		<div id="header">
 			<div id="logo_box">
-			    <img id="logo" src="{{ MEDIA_URL }}logo/new-logo.png" alt="FlightLogg.in' Logo" />
+			    <a href="/"><img id="logo" src="{{ MEDIA_URL }}logo/new-logo.png" alt="FlightLogg.in' Logo" /></a>
 			</div>
 			
 			<div id="advert_box">	
@@ -119,13 +119,13 @@
 					
 				{% endif %}
 				
-				    &nbsp;
+				    &nbsp;  {# so the space doesnt collapse #}
             </div>
 			<table id="nav_bar" summary="Top navigation bar">
 				<tr>
-                
+                {% if display_user %}
                     <td class="{% block logbook-sel %}{% endblock%}" >
-                        <a href="{% url logbook display_user %}">Logbook</a>
+                        <a href="{% url logbook display_user.username %}">Logbook</a>
                     </td>
                     
     			    {% if not shared %}
@@ -165,7 +165,13 @@
                         <a href="/openid/login">Sign-in/Register</a>
                     </td>
                     {% endif %}
-	
+                {% else %}
+                    <td class="nav_bar_not" >
+                        <a href="/openid/login">Sign-in/Register</a>
+                    </td>
+                {% endif %}
+                
+                
 				</tr>
 			</table>
 		</div>

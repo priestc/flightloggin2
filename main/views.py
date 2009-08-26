@@ -6,11 +6,10 @@ from models import NewsItem
 def news(request):
     title = "News"
     news = NewsItem.objects.all()[:15]
-    return locals()
-
-@render_to("preferences.html")
-def prefs(request):
-    title="Preferences"
+    
+    if request.user.is_authenticated():
+        display_user = request.user
+        
     return locals()
 
 @render_to("faq.html")
