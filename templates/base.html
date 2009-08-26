@@ -113,71 +113,58 @@
 					Logged in as: <span class="logged_user">{{ user.username }}</span>
 					
 				{% endif %}
-			    {% ifnotequal display_user user %}
+				{% if shared %}
 			    
 					Viewing the logbook of: <span class="display_user">{{ display_user }}</span>
 					
-				{% else %}
+				{% endif %}
 				
-				    &nbsp;	
-				    
-				{% endifnotequal %}
+				    &nbsp;
             </div>
 			<table id="nav_bar" summary="Top navigation bar">
 				<tr>
-                {% if user.is_authenticated %}
                 
                     <td class="{% block logbook-sel %}{% endblock%}" >
-                        <a href="{% url logbook request.user.username %}">Logbook</a>
+                        <a href="{% url logbook display_user %}">Logbook</a>
                     </td>
-
+                    
+    			    {% if not shared %}
                     <td class="{% block profile-sel %}{% endblock%}" >
                         <a href="{% url profile %}">Preferences</a>
                     </td>
-
+                    {% endif %}
+                    
                     <td class="{% block stats-sel %}{% endblock%}" >
-                        <a href="{% url stats %}">Stats</a>
+                        <a href="{% url stats display_user.username %}">Stats</a>
                     </td>
 
                     <td class="{% block records-sel %}{% endblock%}" >
-                        <a href="{% url records %}">Records</a>
+                        <a href="{% url records display_user.username %}">Records</a>
                     </td>
 
                     <td class="{% block planes-sel %}{% endblock%}" >
-                        <a href="{% url planes %}">Planes</a>
+                        <a href="{% url planes display_user.username %}">Planes</a>
                     </td>
 
                     <td class="{% block mass-sel %}{% endblock%}" >
-                        <a href="{% url mass_entry request.user.username %}">Mass Entry</a>
+                        <a href="{% url mass_entry display_user.username %}">Mass Entry</a>
                     </td>
-
+                    
+                    {% if not shared %}
                     <td class="{% block import-sel %}{% endblock%}" >
                         <a href="{% url import %}">Import/Export</a>
                     </td>
+                    {% endif %}
                     
+                    {% if user.is_authenticated %}
                     <td>
                     <a href="{% url logout %}">Log Out</a>
                     </td>
-                    
-                {% else %}
-    
-                    <td class="nav_bar_not {% block intro-sel %}{% endblock%}" >
-                        <a href="{% url faq %}">Introduction</a>
-                    </td>
-
-                    <td class="nav_bar_not {% block faq-sel %}{% endblock%}" >
-                        <a href="{% url faq %}">Help</a>
-                    </td>
-
-					<td class="nav_bar_not" >
-					    <a href="http://forums.flightlogg.in">Forums</a>
-					</td>
-
+                    {% else %}
                     <td class="nav_bar_not {% block signin-sel %}{% endblock%}" >
                         <a href="/openid/login">Sign-in/Register</a>
                     </td>
-
-                {% endif %}
+                    {% endif %}
 	
 				</tr>
 			</table>

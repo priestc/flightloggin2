@@ -137,7 +137,7 @@ def backup(request):
     #response['Content-Disposition'] = 'attachment; filename=somefilename.csv'
     
     flights = Flight.objects.filter(user=display_user)
-    planes = Plane.objects.filter(user=display_user)
+    planes = Plane.objects.filter(user=user)
 
     writer = csv.writer(response, dialect='excel')
     writer.writerow([FIELD_TITLES[field] for field in BACKUP_FIELDS])
@@ -147,7 +147,7 @@ def backup(request):
         
     writer.writerow(["##RECORDS"])
     
-    records = get_object_or_None(Records, user=display_user)
+    records = get_object_or_None(Records, user=user)
     if records:
         writer.writerow([records.text])
         

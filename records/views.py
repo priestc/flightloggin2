@@ -2,10 +2,12 @@ from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
 from models import Records
 from forms import *
+from is_shared import is_shared
 
 @render_to("records.html")
-def records(request):
-    title="records"
+def records(request, username):
+    shared, display_user = is_shared(request, username)
+    
     records,c = Records.objects.get_or_create(user=request.user)
     
 

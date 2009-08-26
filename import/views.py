@@ -21,7 +21,6 @@ from forms import ImportForm, ImportFlightForm
 @login_required()
 @render_to('import.html')
 def import_s(request):
-    title = "Import/Export"
     results={}
     
     post = request.POST.copy()
