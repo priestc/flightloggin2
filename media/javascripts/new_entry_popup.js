@@ -79,7 +79,7 @@ $(document).ready(function() {
 	///////////////////////////////////////////
 	
 	$("#id_date").datepicker({							// add the date pickers
-			dateFormat: "mm/dd/yy",
+			dateFormat: "yy-mm-dd",
 			yearRange: "-10:+1", 
 			showOn: "button", 
 			buttonImage: "/site-media/images/calendar.gif", 

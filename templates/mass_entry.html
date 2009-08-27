@@ -3,13 +3,66 @@
 
 {% block javascript %}
 	<script type="text/javascript" src="{{ MEDIA_URL }}javascripts/{{ title|lower }}.js"></script>
-    {% endblock %}
+	<script>
+	    $(document).ready(function() {
+	        $(".vDateField").datepicker({							// add the date pickers
+			        dateFormat: "yy-mm-dd",
+			        yearRange: "-10:+1", 
+			        showOn: "button", 
+			        buttonImage: "/site-media/images/calendar.gif", 
+			        buttonImageOnly: true 
+	        }).addClass("embed");
+	    });
+	
+	
+	</script>
+{% endblock %}
 
 {% block css %}
-    #canvas     {color: green}
+    #canvas             {max-width: 100%;}
+    
+    table.mass_table    {width: 100%; border-collapse: collapse}
+    
+    
+    table.mass_table tr:nth-child(even)    {background: #DDDDDD}
+    
+    .vDateField         {width: 7.5em !important}
+    .remarks_line       {width: 10em !important}
+    .person_line        {width: 10em !important}
+    .route_line         {width: 10em !important}
+    
+    input[type="text"]  {width: 2em; margin: 2px}
 {% endblock %}
 
 {% block title %}{{ title }}{% endblock %}
 {% block canvas %}
-mass entry
+<table class="mass_table">
+<tr>
+    <td>Date</td><td>Plane</td><td>Route</td><td>Total</td><td>PIC</td><td>SIC</td>
+    <td>Solo</td><td>Night</td><td>Dual R.</td><td>Dual G.</td><td>XC</td><td>Actual</td>
+    <td>Hood</td><td>Night L.</td><td>Day L.</td><td>App.</td><td>Person</td><td>Remarks</td>
+</tr>
+{% for form in formset.forms %}
+<tr>
+    <td>{{form.date}}</td>
+    <td>{{form.plane}}</td>
+    <td>{{form.route}}</td>
+    <td>{{form.total}}</td>
+    <td>{{form.pic}}</td>
+    <td>{{form.sic}}</td>
+    <td>{{form.solo}}</td>
+    <td>{{form.night}}</td>
+    <td>{{form.dual_r}}</td>
+    <td>{{form.dual_g}}</td>
+    <td>{{form.xc}}</td>
+    <td>{{form.act_inst}}</td>
+    <td>{{form.sim_inst}}</td>
+    <td>{{form.night_l}}</td>
+    <td>{{form.day_l}}</td>
+    <td>{{form.app}}</td>
+    <td>{{form.person}}</td>
+    <td>{{form.remarks}}</td>
+</tr>
+{% endfor %}
+</table>
 {% endblock %}

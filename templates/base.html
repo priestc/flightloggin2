@@ -34,6 +34,8 @@
 
             #canvas                 {background: white; padding: 1em; overflow:hidden; max-width: 73em; margin-left: auto;
                                      margin-right: auto; text-align: center; border: 1px solid black}
+                                     
+            .embed + img            {position: relative; left: -19px; top: 3px; cursor: pointer;}
 				 
             a                       {color: #11566d}
             h1                      {text-align: center; font-weight: bold; color: #665b1e; font-size: x-large;}
@@ -147,7 +149,7 @@
                     </td>
 
                     <td class="{% block mass-sel %}{% endblock%}" >
-                        <a href="{% url mass_entry display_user.username %}">Mass Entry</a>
+                        <a href="{% url mass_entry %}">Mass Entry</a>
                     </td>
                     
                     {% if not shared %}

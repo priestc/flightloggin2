@@ -161,10 +161,17 @@ def backup(request):
     
 @login_required()
 @render_to("mass_entry.html")     
-def mass_entry(request, username, page=0):
+def mass_entry(request):
+    display_user = request.user
+    formset = NewFlightFormset(queryset=Flight.objects.get_empty_query_set())
     return locals()
 
-
+@login_required()
+@render_to("mass_entry.html")     
+def mass_edit(request, page=0):
+    display_user = request.user
+    formset = NewFlightFormset(queryset=Flight.objects.all()[:20])
+    return locals()
 
 
 

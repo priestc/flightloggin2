@@ -1,6 +1,10 @@
 import re
+
+from django.forms.models import modelformset_factory
 from django import forms
 from django.forms import ModelForm, ModelChoiceField
+from django.contrib.admin import widgets
+
 from models import *
 from route.forms import RouteField
 from plane.forms import PlaneField
@@ -66,13 +70,19 @@ class FlightForm(ModelForm):
             del kwargs['planes_queryset']
             
         super(FlightForm, self).__init__(*args, **kwargs)
+        self.fields['date'].widget = widgets.AdminDateWidget()
         if custom_queryset:
             self.fields['plane'].queryset = custom_queryset
 
     class Meta:
         model = Flight
         exclude = ('user', )
+        
+class FormsetFlightForm(FlightForm):
+    remarks = forms.CharField(widget=forms.TextInput(attrs={"class": "remarks_line"}))
+    person = forms.CharField(widget=forms.TextInput(attrs={"class": "person_line"}))
+    route = forms.CharField(widget=forms.TextInput(attrs={"class": "route_line"}))
     
-    
+NewFlightFormset = modelformset_factory(Flight, form=FormsetFlightForm, extra=20)
     
     
