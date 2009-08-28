@@ -17,9 +17,6 @@ class NonFlight(models.Model):
     date =      models.DateField()
     user =      models.ForeignKey(User, blank=False)
     remarks =   models.TextField(blank=True)
-    
-    staging = models.BooleanField(default=False)
-
     non_flying = models.IntegerField(choices=NON_FLYING_CHOICES, default=0, blank=False)
 
     def __unicode__(self):
