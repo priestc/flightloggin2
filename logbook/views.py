@@ -60,6 +60,10 @@ def logbook(request, username, page=0):
     else:
         format = "decimal"
     
+    if profile.date_format:
+        date_format = profile.date_format
+    else:
+        date_format = "Y-m-d"
     
     all_flights = Flight.objects.filter(user=display_user)
     flights = all_flights.select_related()

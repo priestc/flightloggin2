@@ -150,7 +150,9 @@ td[colspan='4']               {padding-bottom: 10px; text-align: center}
 				<tr>
 					<td>{{ profile_form.date_format.label_tag }}</td>
 					<td colspan="2">{{ profile_form.date_format }}</td>
-					<td>{{ profile_form.date_format.errors }}</td>
+					<td>{{ profile_form.date_format.errors }}<br>
+					    Default: "Y-m-d" For a guide to date formatting, <a target="_blank" href="http://us3.php.net/manual/en/function.date.php">click here</a>
+					</td>
 				</tr>
 				<tr>
 					<td></td>
