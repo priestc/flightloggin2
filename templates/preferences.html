@@ -45,7 +45,7 @@ td[colspan='4']               {padding-bottom: 10px; text-align: center}
 		
 	<h1>Preferences {{ cat_classes|safe }}</h1>
 	
-	<form id="prefs_form" action="." method="post">
+	<form id="prefs_form" action="{% url profile %}" method="post">
 		<fieldset>
 
 			<legend>General</legend>
