@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.http import HttpResponseRedirect
 from django.forms import ModelForm
+from django.forms.models import modelformset_factory
 
 from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
@@ -11,6 +12,7 @@ from annoying.functions import get_object_or_None
 from models import Flight, Columns
 from forms import *
 from constants import *
+from plane.models import Plane
 from totals import total_column
 from profile.models import Profile
 from is_shared import is_shared
@@ -25,18 +27,18 @@ def logbook(request, username, page=0):
     form = FlightForm(planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
     
     if request.POST.get('submit', "") == "Submit New Flight":
-        flight = Flight(user=user)
+        flight = Flight(user=display_user)
         form = FlightForm(request.POST, instance=flight, planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
      
     elif request.POST.get('submit', "") == "Edit Flight":
         flight_id = request.POST['id']
-        flight = Flight(pk=flight_id, user=user)
+        flight = Flight(pk=flight_id, user=display_user)
         
         form = FlightForm(request.POST, instance=flight, planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
         
     if request.POST and form.is_valid():
         form.save()
-        return HttpResponseRedirect('/logbook/')
+        return HttpResponseRedirect('/' + display_user.username + '/logbook.html')
     
     ##############################################################
     try:
@@ -163,7 +165,16 @@ def backup(request):
 @render_to("mass_entry.html")     
 def mass_entry(request):
     display_user = request.user
-    formset = NewFlightFormset(queryset=Flight.objects.get_empty_query_set())
+    
+    class FormsetFlightForm(FlightForm):
+        remarks = forms.CharField(widget=forms.TextInput(attrs={"class": "remarks_line"}))
+        person = forms.CharField(widget=forms.TextInput(attrs={"class": "person_line"}))
+        route = forms.CharField(widget=RouteWidget)
+    
+    NewFlightFormset = modelformset_factory(Flight, form=FormsetFlightForm, extra=20) # planes_queryset=Plane.objects.filter(user=request.user)
+    
+    
+    formset = NewFlightFormset(queryset=Flight.objects.get_empty_query_set(), )
     return locals()
 
 @login_required()

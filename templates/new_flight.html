@@ -1,5 +1,5 @@
 <div id="popup" title="New Entry">
-	<form id="new_entry_form" action="." method="post">
+	<form id="new_entry_form" action="{% url logbook display_user.username %}" method="post">
 		<table id="dragbar">
 		    <tr>
 			    <td><span id="titlebar">New Entry</span></td>

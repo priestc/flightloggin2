@@ -1,12 +1,11 @@
 import re
 
-from django.forms.models import modelformset_factory
 from django import forms
 from django.forms import ModelForm, ModelChoiceField
 from django.contrib.admin import widgets
 
 from models import *
-from route.forms import RouteField
+from route.forms import RouteField, RouteWidget
 from plane.forms import PlaneField
 from logbook.utils import from_minutes
 
@@ -20,7 +19,7 @@ class BlankFloatField(forms.CharField):
             value = from_minutes(value)
             
         try:
-            value = eval(value)
+            value = eval(str(value))
         except:
             raise forms.ValidationError("Invalid formatting")
             
@@ -77,12 +76,5 @@ class FlightForm(ModelForm):
     class Meta:
         model = Flight
         exclude = ('user', )
-        
-class FormsetFlightForm(FlightForm):
-    remarks = forms.CharField(widget=forms.TextInput(attrs={"class": "remarks_line"}))
-    person = forms.CharField(widget=forms.TextInput(attrs={"class": "person_line"}))
-    route = forms.CharField(widget=forms.TextInput(attrs={"class": "route_line"}))
-    
-NewFlightFormset = modelformset_factory(Flight, form=FormsetFlightForm, extra=20)
-    
-    
+
+ 

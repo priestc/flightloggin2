@@ -22,8 +22,7 @@ from forms import ImportForm, ImportFlightForm
 @render_to('import.html')
 def import_s(request):
     results={}
-    
-    post = request.POST.copy()
+    preview = False
     
     if request.method == 'POST':
         if request.POST['submit'] == 'Import':
@@ -49,6 +48,13 @@ def import_s(request):
     else:
         fileform = ImportForm()
         
+    display_user=request.user
+    
+    if preview:
+        flight_header = "<tr>" + "".join(["<td>" + FIELD_TITLES.get(title, "") + "</td>" for title in CSV_FIELDS]) + "</tr>"
+        plane_header = "<tr>" + "".join(["<td>" + title + "</td>" for title in ['Tailnumber','Manufacturer','Type','Model','Category/Class','TR','Tags']]) + "</tr>"
+        nonflight_header = "<tr>" + "".join(["<td>" + title + "</td>" for title in ['Date','Type','Remarks']]) + "</tr>"
+        
     loc=locals()    
     loc.update(results)
     return loc
@@ -60,8 +66,6 @@ def do_import(request, f, preview=True):
     reader = csv.reader(f, delimiter='\t')
     titles = reader.next()
     titles = swap_out_flight_titles(titles)
-    
-    official_header = "<tr>" + "".join(["<td>" + FIELD_TITLES.get(title, "") + "</td>" for title in CSV_FIELDS])
     
     dr = csv.DictReader(f, titles, delimiter='\t')
     dr.next()
@@ -103,7 +107,6 @@ def do_import(request, f, preview=True):
             
         header = dr.next()
         #dr.fieldnames = header
-        line = dr.next()
         
         for line in dr:
             if preview:
@@ -111,7 +114,7 @@ def do_import(request, f, preview=True):
             else:
                 plane_out = make_commit_plane(line, request.user, plane_out)
             
-    return {"official_header": official_header, "flight_out": flight_out, "plane_out": plane_out, "non_out": non_out, "records_out": records_out}
+    return {"flight_out": flight_out, "plane_out": plane_out, "non_out": non_out, "records_out": records_out}
 
 #########################################################################################
 
@@ -175,7 +178,7 @@ def make_preview_nonflight(line, out):
            "<td>" + NON_FLIGHT_TRANSLATE_TEXT[line.get('non_flying', "")] + "</td>",
            "<td>" + line.get('remarks', "") + "</td>",
           ]
-    out.append("<tr colspan='20'>" + "".join(row) + "</tr>")
+    out.append("<tr><td>" + "".join(row) + "</td></tr>")
     return out
 
 def make_preview_plane(line, out):
@@ -199,12 +202,12 @@ def make_commit_flight(line, user, out):
     form = ImportFlightForm(line, instance=flight)
     if form.is_valid():
         form.save()
-        out.append("good: " + line.get('date') + "  " + line.get('remarks'))
+        out.append("<tr><td>good</td><td>" + str(line.get('date')) + "</td><td>" + str(line.get('remarks')) + "</td></tr>")
     else:
-        out.append("---------------------")
+        out.append("<tr class='bad' ><td>")
         out.append(" ".join(line))
         out.append(form.errors)
-        out.append("---------------------")
+        out.append("</td></tr>")
         
     return out
 
@@ -212,11 +215,13 @@ def make_commit_flight(line, user, out):
        
 def make_commit_nonflight(line, user, out):
     nf = NonFlight(user=user)
+    new_nf = NON_FLIGHT_TRANSLATE_NUM[line.get('non_flying', "")]
+    line.update({'non_flying': new_nf})
     form = NonFlightForm(line, instance=nf)
 
     if form.is_valid():
         form.save()
-        out.append("<tr><td>good:</td><td>" + line.get('date') + "</td><td>" + line.get('remarks') + "</td></tr>")
+        out.append("<tr><td>good</td><td>" + line.get('date') + "</td><td>" + line.get('remarks') + "</td></tr>")
         
     else:
         out.append("<tr class='bad'><td>bad:</td><td>" + line.get('date') + "</td><td>" + line.get('remarks') + "</td></tr>")
@@ -244,15 +249,16 @@ def make_commit_plane(line, user, out):
     
     the_tags = []
     for tag in tags.split(","):
-        tag = tag.trim()
+        tag = tag.strip()
         if tag.find(" ") > 0:
             tag = "\"" + tag + "\""
-            the_tags.append(tag)
+            
+        the_tags.append(tag)
     
     p.tags = " ".join(the_tags)
     p.save()
     
-    out.append("good: " + line.get('tailnumber'))
+    out.append("<tr><td>good</td><td>" + line.get('tailnumber') + "</td></tr>")
     
     return out
 

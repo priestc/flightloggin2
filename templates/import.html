@@ -31,7 +31,7 @@
 
     {% if flight_out %}
         <table class="preview">
-        {{official_header|safe}}
+        {{flight_header|safe}}
         {% for l in flight_out %}
         {{l|safe}}
         {% endfor %}
@@ -41,6 +41,7 @@
     {% if non_out %}
         <h2>Non Flying Events:</h2>
         <table class="preview">
+        {{nonflight_header|safe}}
         {% for l in non_out %}
         {{l|safe}}
         {% endfor %}
@@ -50,6 +51,7 @@
     {% if plane_out %}
         <h2>Planes:</h2>
         <table class="preview">
+        {{plane_header|safe}}
         {% for l in plane_out %}
         {{l|safe}}
         {% endfor %}
