@@ -8,7 +8,7 @@ class Profile(models.Model):
 
     dob =            models.DateField(             "Date of Birth",             blank=True, default="1900-01-01")
     style =          models.IntegerField(                                       choices=STYLES, default=1)
-    date_format =    models.CharField(                                          blank=True, max_length=32)
+    date_format =    models.CharField(                                          blank=True, max_length=32, default="Y-m-d")
 
     real_name =      models.CharField(             "Real Name",                 blank=True, max_length=32)
     per_page =       models.PositiveIntegerField(  "Logbook Entries Per Page",  default=50)
