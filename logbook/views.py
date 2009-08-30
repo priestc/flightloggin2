@@ -10,6 +10,7 @@ from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
 
 from models import Flight, Columns
+from route.forms import *
 from forms import *
 from constants import *
 from plane.models import Plane
@@ -170,11 +171,6 @@ def backup(request):
 def mass_entry(request):
     display_user = request.user
     
-    class FormsetFlightForm(FlightForm):
-        remarks = forms.CharField(widget=forms.TextInput(attrs={"class": "remarks_line"}))
-        person = forms.CharField(widget=forms.TextInput(attrs={"class": "person_line"}))
-        route = forms.CharField(widget=RouteWidget)
-    
     NewFlightFormset = modelformset_factory(Flight, form=FormsetFlightForm, extra=20) # planes_queryset=Plane.objects.filter(user=request.user)
     
     
@@ -185,6 +181,9 @@ def mass_entry(request):
 @render_to("mass_entry.html")     
 def mass_edit(request, page=0):
     display_user = request.user
+        
+    NewFlightFormset = modelformset_factory(Flight, form=FormsetFlightForm, extra=0) # planes_queryset=Plane.objects.filter(user=request.user)    
+    
     formset = NewFlightFormset(queryset=Flight.objects.all()[:20])
     return locals()
 

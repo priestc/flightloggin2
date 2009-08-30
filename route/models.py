@@ -44,6 +44,21 @@ class Route(models.Model):
                 ret.append("??")
 
         return "-".join(ret)
+        
+    def as_list(self):
+        l = []
+        
+        class point(object):
+            lat = 0
+            lng = 0
+        
+        for rb in self.routebase_set.all():
+            p = point()
+            p.lat = rb.destination().location.x
+            p.lng = rb.destination().location.y
+            l.append(p)
+            
+        return l
 
 #####################################################################################################
 
@@ -70,6 +85,9 @@ class RouteBase(models.Model):
             
         else:
             return "????"
+            
+    def destination(self):
+        return self.airport or self.navaid or self.custom or self.unknown
     
 ######################################################################################################  
 

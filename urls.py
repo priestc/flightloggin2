@@ -7,7 +7,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     (r'^site-media/(?P<path>.*)$','django.views.static.serve', {'document_root': '/home/chris/Websites/flightloggin/media', 'show_indexes': True}),
 
-
+    
     url(r'^$',                                                     "main.views.news",         name="root"),
     url(r'^news.html$',                                            "main.views.news",         name="news"),
     url(r'^faq.html$',                                             "main.views.faq",          name="faq"),
@@ -22,8 +22,13 @@ urlpatterns = patterns('',
     url(r'^backup.tsv$',                                           "logbook.views.backup",     name="backup"),
     url(r'^mass_entry.html$',                                      "logbook.views.mass_entry", name="mass_entry"),
     url(r'^mass_edit-page-(?P<page>\d+).html$',                    "logbook.views.mass_edit",  name="mass_edit"),
+    
+       (r'^(?P<username>\w+)/$',                                   "django.views.generic.simple.redirect_to", {'url': 'logbook.html'}   ),
     url(r'^(?P<username>\w+)/logbook.html$',                       "logbook.views.logbook",    name="logbook"),
     url(r'^(?P<username>\w+)/logbook-page-(?P<page>\d+).html',     "logbook.views.logbook",    name="logbook-page"),
+    
+    url(r'^(?P<username>\w+)/airports.kml$',                       "maps.views.airports_kml",  name="airports-kml"),
+    url(r'^(?P<username>\w+)/routes.kml$',                         "maps.views.routes_kml",    name="routes-kml"),
     
 
     (r'^admin/doc/',                          include('django.contrib.admindocs.urls')),

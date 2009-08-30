@@ -3,13 +3,29 @@ import re
 from django import forms
 from django.forms import ModelForm, ModelChoiceField
 from django.contrib.admin import widgets
+from django.forms.widgets import TextInput
 
 from models import *
 from route.forms import RouteField, RouteWidget
 from plane.forms import PlaneField
 from logbook.utils import from_minutes
 
+class BlankZeroWidget(TextInput):
+     def _format_value(self, value):
+         text = unicode(value)
+         return text
+
+     def render(self, name, value, attrs=None):
+        if value == 0:
+            value = ""
+        return super(BlankZeroWidget, self).render(name, value, attrs={"class": "float_line"})
+        
+#####################################################################################################
+        
 class BlankFloatField(forms.CharField):
+
+    widget=BlankZeroWidget
+    
     def clean(self, value):
     
         if not value:
@@ -29,6 +45,9 @@ class BlankFloatField(forms.CharField):
         return value
         
 class BlankIntField(forms.IntegerField):
+    
+    widget=BlankZeroWidget
+    
     def clean(self, value):
         if not value:
             return 0
@@ -39,7 +58,8 @@ class BlankIntField(forms.IntegerField):
             raise forms.ValidationError("Invalid formatting")
 
         return int(value)
-
+        
+#####################################################################################################
 
 class FlightForm(ModelForm):
 
@@ -77,4 +97,10 @@ class FlightForm(ModelForm):
         model = Flight
         exclude = ('user', )
 
+#############################################################################################################
+
+class FormsetFlightForm(FlightForm):
+        remarks = forms.CharField(widget=forms.TextInput(attrs={"class": "remarks_line"}))
+        person = forms.CharField(widget=forms.TextInput(attrs={"class": "person_line"}))
+        route = RouteField(queryset=Route.objects.get_empty_query_set(), widget=RouteWidget)
  

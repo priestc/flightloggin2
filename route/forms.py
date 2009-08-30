@@ -1,14 +1,21 @@
+from django import forms
 from django.forms import widgets
 from django.forms import ModelChoiceField, CharField
 from models import create_route_from_string, Route
 from django.utils.safestring import mark_safe
 
-class RouteWidget(widgets.TextInput):
-    input_type = None
-    def render(self, name, value, attrs=None):
-        return mark_safe("<input class=\"route_line\" type=\"text\" value=\"" + str(value) + "\" name=\"" + name + "\"/>")
+from django.forms.widgets import TextInput
+
+class RouteWidget(TextInput):
+     def _format_value(self, value):
+         text = unicode(value)
+         return text
+
+     def render(self, name, value, attrs=None):
+        value = Route.objects.filter(pk=value).values_list('fallback_string')[0][0]
+        return super(RouteWidget, self).render(name, value, attrs={"class": "route_line"})
         
+       
 class RouteField(ModelChoiceField):
-    widget = RouteWidget
     def clean(self, value):
         return create_route_from_string(value)
