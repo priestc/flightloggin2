@@ -23,15 +23,22 @@
     
     table.mass_table    {width: 100%; border-collapse: collapse}
     
+    table.mass_table tr:nth-child(even)       {background: #DDDDDD}
     
-    table.mass_table tr:nth-child(even)    {background: #DDDDDD}
+    td:has(input.vDateField)                  {width: 10% !important}
+    input.vDateField                          {width:80% !important}
     
-    .vDateField         {width: 7.5em !important}
-    .remarks_line       {width: 10em !important}
-    .person_line        {width: 10em !important}
-    .route_line         {width: 10em !important}
+    td:has(input.remarks_line)                {width: 10% !important}
+    input.remarks_line                        {width:80% !important}
     
-    input[type="text"]  {width: 2em; margin: 2px}
+    td:has(input.person_line)                 {width: 10% !important}
+    input.person_line                         {width:80% !important}
+    
+    td:has(input.route_line)                  {width: 10% !important}
+    input.route_line                          {width:80% !important}
+    
+    td:has(input.float_line)                  {width:5% !important}
+    input.float_line                          {width: 3em; margin: 2px}
 {% endblock %}
 
 {% block title %}{{ title }}{% endblock %}
