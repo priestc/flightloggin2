@@ -13,44 +13,50 @@
 			        buttonImageOnly: true 
 	        }).addClass("embed");
 	    });
-	
-	
 	</script>
 {% endblock %}
 
 {% block css %}
-    #canvas             {max-width: 100%;}
+    #canvas                                   {max-width: 100%}
     
-    table.mass_table    {width: 100%; border-collapse: collapse}
+    table.mass_table                          {width: 100%; border-collapse: collapse}
+    table.mass_table input                    {font-size: small}
     
+    tr.header_row td                          {font-size: x-small; background: white; padding: 0}
     table.mass_table tr:nth-child(even)       {background: #DDDDDD}
     
-    td:has(input.vDateField)                  {width: 10% !important}
-    input.vDateField                          {width:80% !important}
+    input.route_line                          {width: 8em}
+    input.person_line                         {width: 8em}
+    input.vDateField                          {width: 8em;}
+    input.float_line                          {width: 2.4em; margin: 1px}
     
-    td:has(input.remarks_line)                {width: 10% !important}
-    input.remarks_line                        {width:80% !important}
-    
-    td:has(input.person_line)                 {width: 10% !important}
-    input.person_line                         {width:80% !important}
-    
-    td:has(input.route_line)                  {width: 10% !important}
-    input.route_line                          {width:80% !important}
-    
-    td:has(input.float_line)                  {width:5% !important}
-    input.float_line                          {width: 3em; margin: 2px}
 {% endblock %}
 
 {% block title %}{{ title }}{% endblock %}
 {% block canvas %}
+{% include "pagination_table.html" %}
+
+{% if edit %}
+<form action="{% url mass-edit page %}" method="post">
+{% else %}
+<form action="{% url mass-entry %}" method="post">
+{% endif %}
+
 <table class="mass_table">
-<tr>
+<tr class="header_row">
+    {% if edit %}
+    <td>Delete</td>
+    {% endif %}
     <td>Date</td><td>Plane</td><td>Route</td><td>Total</td><td>PIC</td><td>SIC</td>
     <td>Solo</td><td>Night</td><td>Dual R.</td><td>Dual G.</td><td>XC</td><td>Actual</td>
     <td>Hood</td><td>Night L.</td><td>Day L.</td><td>App.</td><td>Person</td><td>Remarks</td>
 </tr>
 {% for form in formset.forms %}
 <tr>
+    {% if edit %}
+    <td>{{form.DELETE}}</td>
+    {% endif %}
+    
     <td>{{form.date}}</td>
     <td>{{form.plane}}</td>
     <td>{{form.route}}</td>
@@ -71,5 +77,15 @@
     <td>{{form.remarks}}</td>
 </tr>
 {% endfor %}
+<tr class="header_row">
+    {% if edit %}
+    <td>Delete</td>
+    {% endif %}
+    <td>Date</td><td>Plane</td><td>Route</td><td>Total</td><td>PIC</td><td>SIC</td>
+    <td>Solo</td><td>Night</td><td>Dual R.</td><td>Dual G.</td><td>XC</td><td>Actual</td>
+    <td>Hood</td><td>Night L.</td><td>Day L.</td><td>App.</td><td>Person</td><td>Remarks</td>
+</tr>
 </table>
+</form>
+{% include "pagination_table.html" %}
 {% endblock %}

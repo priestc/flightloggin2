@@ -9,43 +9,20 @@ from airport.models import Airport, Custom, Navaid
 
 class Route(models.Model):
 
-    rendered =        models.TextField(blank=True, null=True)
+    fancy_rendered =  models.TextField(blank=True, null=True)
     fallback_string = models.TextField(blank=True, null=True)
+    simple_rendered = models.TextField(blank=True, null=True)
     
     p2p =             models.BooleanField()
-
+    
     def __unicode__(self):
-        ret = []
-        for routebase in self.routebase_set.all():
-            if routebase.airport:
-                ret.append(routebase.airport.identifier)
-                
-            elif routebase.navaid:
-                ret.append("@" + routebase.navaid.identifier)
-                
-            else:
-                ret.append(routebase.unknown)
-
-        return "-".join(ret)
-
-    def fancy_display(self):
-        ret = []
-        for routebase in self.routebase_set.all():
-            if routebase.airport:
-                ret.append("<span class='found_airport' title='%s'>%s</span>" % (routebase.airport.title_display(), routebase.airport.line_display(), ) )
-                
-            elif routebase.navaid:
-                ret.append("<span class='found_navaid' title='%s'>%s</span>" % (routebase.navaid.title_display(), routebase.navaid.line_display(), ) )
-                
-            elif routebase.unknown:
-                ret.append("<span class='not_found'>%s</span>" % (routebase.unknown, ) )
-                
-            else:
-                ret.append("??")
-
-        return "-".join(ret)
+        return self.simple_rendered
         
     def as_list(self):
+        """Returns a list of custom point objects that have
+        consistent lat/lng properties no matter if it's a
+        airport, navaid or an unknown point"""
+        
         l = []
         
         class point(object):
@@ -54,9 +31,12 @@ class Route(models.Model):
         
         for rb in self.routebase_set.all():
             p = point()
-            p.lat = rb.destination().location.x
-            p.lng = rb.destination().location.y
-            l.append(p)
+            try:
+                p.lat = rb.destination().location.x
+                p.lng = rb.destination().location.y
+                l.append(p)
+            except AttributeError:
+                pass                # .location will fail if the point is unknown. Just skit this point if this happens
             
         return l
 
@@ -100,11 +80,10 @@ def create_route_from_string(ostring):
     string = normalize(string)
     points = string.split()
     unknown = False
-    rendered = []
+    fancy_rendered = []
+    simple_rendered = []
     routebases = []
     p2p = []
-    
-    print points
     
     for i, ident in enumerate(points):
         
@@ -134,7 +113,8 @@ def create_route_from_string(ostring):
             if navaid:
                 routebase = RouteBase(navaid=navaid, sequence=i)
                 routebases.append(routebase)
-                rendered.append("<span class='found_navaid' title='%s'>%s</span>" % (routebase.navaid.title_display(), routebase.navaid.line_display(), ) )
+                fancy_rendered.append("<span class='found_navaid' title='%s'>%s</span>" % (routebase.navaid.title_display(), routebase.navaid.line_display(), ) )
+                simple_rendered.append("@" + routebase.navaid.identifier)
             
             
         else:
@@ -146,8 +126,9 @@ def create_route_from_string(ostring):
             if airport:
                 routebase = RouteBase(airport=airport, sequence=i)
                 routebases.append(routebase)
-                p2p.append(airport.pk)
-                rendered.append("<span class='found_airport' title='%s'>%s</span>" % (routebase.airport.title_display(), routebase.airport.line_display(), ) )
+                p2p.append(airport.pk)          # a landing airport, eligable for p2p testing
+                fancy_rendered.append("<span class='found_airport' title='%s'>%s</span>" % (routebase.airport.title_display(), routebase.airport.line_display(), ) )
+                simple_rendered.append(routebase.airport.identifier)
             
        
         if not (airport or navaid):
@@ -157,14 +138,14 @@ def create_route_from_string(ostring):
             if not ident[0] == "@":                                         # not a unidentified navaid, assume a landing
                 p2p.append(unknown)
                 
-            rendered.append("<span class='not_found'>%s</span>" % (routebase.unknown, ) )
-   
+            fancy_rendered.append("<span class='not_found'>%s</span>" % (routebase.unknown, ) )
+            simple_rendered.append(routebase.unknown)
     
-    rendered = "-".join(rendered)
-    
+    fancy_rendered = "-".join(fancy_rendered)
+    simple_rendered = "-".join(simple_rendered)
            
     is_p2p = len(set(p2p)) > 1
-    route = Route(rendered=rendered, fallback_string=ostring, p2p=is_p2p)
+    route = Route(fancy_rendered=fancy_rendered, simple_rendered=simple_rendered, fallback_string=ostring, p2p=is_p2p)
     route.save()
     
     for routebase in routebases:

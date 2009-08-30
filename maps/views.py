@@ -30,7 +30,20 @@ def routes_kml(request, username):
     
     shared, display_user = is_shared(request, username)
     
-    routes = Route.objects.filter(flight__user=display_user)
+    from_database = Route.objects.filter(flight__user=display_user)
+    
+    class point(object):
+        lat = 0
+        lng = 0
+    
+    all_routes = []
+    routes = []
+    for route in from_database:
+        if route not in all_routes:
+            all_routes.append(unicode(route))
+            routes.append(route)
+            
+    #assert False
     
     kml = get_template('base.kml').render(Context(locals() ))
-    return HttpResponse(kml, mimetype="application/vnd.google-earth.kml+xml")
+    return HttpResponse(kml, mimetype="text/plain" )#application/vnd.google-earth.kml+xml")

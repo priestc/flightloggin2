@@ -20,8 +20,8 @@ urlpatterns = patterns('',
     url(r'^(?P<username>\w+)/planes.html$',                        "plane.views.planes",      name="planes"),
     
     url(r'^backup.tsv$',                                           "logbook.views.backup",     name="backup"),
-    url(r'^mass_entry.html$',                                      "logbook.views.mass_entry", name="mass_entry"),
-    url(r'^mass_edit-page-(?P<page>\d+).html$',                    "logbook.views.mass_edit",  name="mass_edit"),
+    url(r'^massentry.html$',                                       "logbook.views.mass_entry", name="mass-entry"),
+    url(r'^massedit-page-(?P<page>\d+).html$',                     "logbook.views.mass_edit",  name="mass-edit"),
     
        (r'^(?P<username>\w+)/$',                                   "django.views.generic.simple.redirect_to", {'url': 'logbook.html'}   ),
     url(r'^(?P<username>\w+)/logbook.html$',                       "logbook.views.logbook",    name="logbook"),

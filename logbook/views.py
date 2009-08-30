@@ -5,6 +5,7 @@ from django.db.models import Sum
 from django.http import HttpResponseRedirect
 from django.forms import ModelForm
 from django.forms.models import modelformset_factory
+from django.forms.formsets import formset_factory
 
 from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
@@ -17,6 +18,40 @@ from plane.models import Plane
 from totals import total_column
 from profile.models import Profile
 from is_shared import is_shared
+
+@login_required()   
+def backup(request):
+    import csv
+    from django.http import HttpResponse
+    from records.models import Records
+    
+    shared, display_user = is_shared(request, username)
+
+    response = HttpResponse(mimetype='text/plain')
+    #response['Content-Disposition'] = 'attachment; filename=somefilename.csv'
+    
+    flights = Flight.objects.filter(user=display_user)
+    planes = Plane.objects.filter(user=user)
+
+    writer = csv.writer(response, dialect='excel')
+    writer.writerow([FIELD_TITLES[field] for field in BACKUP_FIELDS])
+    
+    for flight in flights:
+        writer.writerow([flight.column(field) for field in BACKUP_FIELDS])
+        
+    writer.writerow(["##RECORDS"])
+    
+    records = get_object_or_None(Records, user=user)
+    if records:
+        writer.writerow([records.text])
+        
+    writer.writerow(["##PLANES"])
+        
+    for p in planes:
+        writer.writerow([p.tailnumber, p.manufacturer, p.model, p.cat_class, " ".join(p.get_tags_quote())])
+
+    return response
+
 
 @render_to("logbook.html")
 def logbook(request, username, page=0):
@@ -126,44 +161,8 @@ def logbook(request, username, page=0):
     #assert False
     
     return locals()
-    
 
-    
-    
-    
-    
-@login_required()   
-def backup(request):
-    import csv
-    from django.http import HttpResponse
-    from records.models import Records
-    
-    shared, display_user = is_shared(request, username)
-
-    response = HttpResponse(mimetype='text/plain')
-    #response['Content-Disposition'] = 'attachment; filename=somefilename.csv'
-    
-    flights = Flight.objects.filter(user=display_user)
-    planes = Plane.objects.filter(user=user)
-
-    writer = csv.writer(response, dialect='excel')
-    writer.writerow([FIELD_TITLES[field] for field in BACKUP_FIELDS])
-    
-    for flight in flights:
-        writer.writerow([flight.column(field) for field in BACKUP_FIELDS])
-        
-    writer.writerow(["##RECORDS"])
-    
-    records = get_object_or_None(Records, user=user)
-    if records:
-        writer.writerow([records.text])
-        
-    writer.writerow(["##PLANES"])
-        
-    for p in planes:
-        writer.writerow([p.tailnumber, p.manufacturer, p.model, p.cat_class, " ".join(p.get_tags_quote())])
-
-    return response
+ 
 
     
 @login_required()
@@ -171,20 +170,58 @@ def backup(request):
 def mass_entry(request):
     display_user = request.user
     
-    NewFlightFormset = modelformset_factory(Flight, form=FormsetFlightForm, extra=20) # planes_queryset=Plane.objects.filter(user=request.user)
+    NewFlightFormset = formset_factory(form=FormsetFlightForm, extra=20) # planes_queryset=Plane.objects.filter(user=request.user)
     
     
-    formset = NewFlightFormset(queryset=Flight.objects.get_empty_query_set(), )
+    formset = NewFlightFormset()
     return locals()
 
 @login_required()
 @render_to("mass_entry.html")     
 def mass_edit(request, page=0):
     display_user = request.user
-        
-    NewFlightFormset = modelformset_factory(Flight, form=FormsetFlightForm, extra=0) # planes_queryset=Plane.objects.filter(user=request.user)    
+    edit = True
     
-    formset = NewFlightFormset(queryset=Flight.objects.all()[:20])
+    flights = Flight.objects.filter(user=display_user)
+    
+    try:
+        profile = display_user.get_profile()
+    except:
+        profile = Profile()
+    
+    if flights:
+        
+        page = int(page)
+
+        paginator = Paginator(flights, per_page=profile.per_page, orphans=5)		#define how many flights will be on each page
+
+        try:
+            page_of_flights = paginator.page(page)				#get the pertinent page
+
+        except (EmptyPage, InvalidPage):
+            page_of_flights = paginator.page(paginator.num_pages)		#if that page is invalid, use the last page
+            page = paginator.num_pages
+
+        do_pagination = paginator.num_pages > 1					#if there is only one pago, do not make the pagination table
+
+        before_block = range(1, page)[-5:]                       # a list from 1 to the page number, limited to the 5th from last to the end
+        after_block = range(page, paginator.num_pages+1)[1:6]    # a list from the current page to the last page, limited to the first 5 items
+        
+    NewFlightFormset = modelformset_factory(Flight, form=FormsetFlightForm, extra=0, can_delete=True) # planes_queryset=Plane.objects.filter(user=request.user)    
+    
+    start = (int(page)-1) * int(profile.per_page)
+    duration = int(profile.per_page)
+    
+    qs = Flight.objects.filter(user=display_user)[start:start+duration]
+
+    sql = qs.query.as_sql()    
+    
+    #assert False
+
+    formset = NewFlightFormset(queryset=qs)
+    
+    
+    
     return locals()
 
 
