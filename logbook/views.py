@@ -208,14 +208,14 @@ def mass_edit(request, page=0):
         before_block = range(1, page)[-5:]                       # a list from 1 to the page number, limited to the 5th from last to the end
         after_block = range(page, paginator.num_pages+1)[1:6]    # a list from the current page to the last page, limited to the first 5 items
         
-    NewFlightFormset = modelformset_factory(Flight, form=FormsetFlightForm, extra=0, can_delete=True) # planes_queryset=Plane.objects.filter(user=request.user)    
+    NewFlightFormset = modelformset_factory(Flight, form=FormsetFlightForm, formset=FixedPlaneModelFormset, extra=0, can_delete=True)
     
     start = (int(page)-1) * int(profile.per_page)
     duration = int(profile.per_page)
     
     qs = Flight.objects.filter(user=display_user)[start:start+duration]
 
-    formset = NewFlightFormset(queryset=qs)
+    formset = NewFlightFormset(queryset=qs, planes_queryset=Plane.objects.filter(user=request.user))
     
     return locals()
 

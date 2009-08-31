@@ -121,6 +121,20 @@ class FixedPlaneFormset(BaseFormSet):
         super(FixedPlaneFormset, self).add_fields(form, index)
         form.fields["plane"] = PlaneField(queryset=Plane.objects.get_empty_query_set(), required=True)
         form.fields['plane'].queryset = self.custom_queryset
+        
+        
+from django.forms.models import BaseModelFormSet
+class FixedPlaneModelFormset(BaseModelFormSet):
+    def __init__(self, *args, **kwargs): 
+        if kwargs.has_key('planes_queryset'):
+            self.custom_queryset = kwargs['planes_queryset']
+            del kwargs['planes_queryset']         
+        super(FixedPlaneModelFormset, self).__init__(*args, **kwargs)
+
+    def add_fields(self, form, index):
+        super(FixedPlaneModelFormset, self).add_fields(form, index)
+        form.fields["plane"] = PlaneField(queryset=Plane.objects.get_empty_query_set(), required=True)
+        form.fields['plane'].queryset = self.custom_queryset
 
 
 
