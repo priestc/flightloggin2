@@ -147,6 +147,7 @@ def create_route_from_string(ostring):
     is_p2p = len(set(p2p)) > 1
     route = Route(fancy_rendered=fancy_rendered, simple_rendered=simple_rendered, fallback_string=ostring, p2p=is_p2p)
     route.save()
+    print "made new route"
     
     for routebase in routebases:
         routebase.route = route

@@ -170,52 +170,48 @@ def logbook(request, username, page=0):
 def mass_entry(request):
     display_user = request.user
     
-   
-    NewFlightFormset = formset_factory(form=FormsetFlightForm, formset=FixedPlaneFormset, extra=20, ) # planes_queryset=Plane.objects.filter(user=request.user)
-    
-    
-    formset = NewFlightFormset(planes_queryset=Plane.objects.filter(user=request.user))
+    try:
+        profile = display_user.get_profile()
+    except:
+        profile = Profile()
+        
+    NewFlightFormset = formset_factory(form=FormsetFlightForm, extra=profile.per_page, formset=FixedPlaneFormset)
+
+        
+    if request.POST.get('submit'):
+        formset = NewFlightFormset(request.POST, planes_queryset=Plane.objects.filter(user=request.user))
+        
+        if formset.is_valid():
+            formset.save()
+    else:
+        formset = NewFlightFormset(planes_queryset=Plane.objects.filter(user=request.user))
+
     return locals()
 
 @login_required()
 @render_to("mass_entry.html")     
 def mass_edit(request, page=0):
     display_user = request.user
-    edit = True
-    
+    edit = True 
     flights = Flight.objects.filter(user=display_user)
     
     try:
         profile = display_user.get_profile()
     except:
         profile = Profile()
-    
-    if flights:
         
-        page = int(page)
-
-        paginator = Paginator(flights, per_page=profile.per_page, orphans=5)		#define how many flights will be on each page
-
-        try:
-            page_of_flights = paginator.page(page)				#get the pertinent page
-
-        except (EmptyPage, InvalidPage):
-            page_of_flights = paginator.page(paginator.num_pages)		#if that page is invalid, use the last page
-            page = paginator.num_pages
-
-        do_pagination = paginator.num_pages > 1					#if there is only one pago, do not make the pagination table
-
-        before_block = range(1, page)[-5:]                       # a list from 1 to the page number, limited to the 5th from last to the end
-        after_block = range(page, paginator.num_pages+1)[1:6]    # a list from the current page to the last page, limited to the first 5 items
-        
-    NewFlightFormset = modelformset_factory(Flight, form=FormsetFlightForm, formset=FixedPlaneModelFormset, extra=0, can_delete=True)
-    
     start = (int(page)-1) * int(profile.per_page)
     duration = int(profile.per_page)
-    
     qs = Flight.objects.filter(user=display_user)[start:start+duration]
-
-    formset = NewFlightFormset(queryset=qs, planes_queryset=Plane.objects.filter(user=request.user))
+    NewFlightFormset = modelformset_factory(Flight, form=FormsetFlightForm, formset=FixedPlaneModelFormset, extra=0, can_delete=True)
+        
+    if request.POST.get('submit'):
+        formset = NewFlightFormset(request.POST, queryset=qs, planes_queryset=Plane.objects.filter(user=request.user))
+        
+        if formset.is_valid():
+            formset.save()
+    else:
+        formset = NewFlightFormset(queryset=qs, planes_queryset=Plane.objects.filter(user=request.user))
     
     return locals()
 

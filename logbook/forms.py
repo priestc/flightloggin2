@@ -10,55 +10,76 @@ from route.forms import RouteField, RouteWidget
 from plane.forms import PlaneField
 from logbook.utils import from_minutes
 
-class BlankZeroWidget(TextInput):
-     def _format_value(self, value):
-         text = unicode(value)
-         return text
-
-     def render(self, name, value, attrs=None):
+class BlankHourWidget(TextInput):
+    def _format_value_out(self, value):
+        """In: decimal number
+           Out: a string formatted to HH:MM
+           a zero value outputs an empty string"""
+        
         if value == 0:
-            value = ""
-        return super(BlankZeroWidget, self).render(name, value, attrs={"class": "float_line"})
-        
-#####################################################################################################
-        
-class BlankFloatField(forms.CharField):
+            return ""
 
-    widget=BlankZeroWidget
+        return to_minutes(value)
+
+    def render(self, name, value, attrs=None):
+        value = self._format_value_out(value)
+        attrs.update({"class": "float_line"})
+        return super(BlankHourWidget, self).render(name, value, attrs)
+
+    def _has_changed(self, initial, data):
+        return super(BlankHourWidget, self)._has_changed(self._format_value(initial), data)
+        
+class BlankDecimalWidget(BlankHourWidget):
+    def _format_value_out(self, value):
+        """Prepare value for outout in the mass entry form
+           In: decimal number
+           Out: a string of that decimal number
+           a zero value outputs an empty string"""
+        
+        if value == 0:
+            return ""
+        else:
+            return str(value)
     
+class BlankIntWidget(BlankHourWidget):
+    def _format_value_out(self, value):
+        """Prepare value for outout in the mass entry form
+           In: an int
+           Out: a string of that int
+           a zero value outputs an empty string"""
+        
+        if value == 0:
+            return ""
+        else:
+            return str(value)
+    
+    
+########################################################################################
+
+class BlankHourField(forms.Field):
+    widget = BlankHourWidget
+
     def clean(self, value):
-    
-        if not value:
-            return 0.0
-            
-        if re.match("^\d+:\d{2}$", value):
-            value = from_minutes(value)
+        super(BlankHourField, self).clean(value)
+        
+        match = re.match("^([0-9]{1,3}):([0-9]{2})$", value)
+        if match:
+            dec = from_minutes(value)
+        else:
+            dec = value
             
         try:
-            value = eval(str(value))
+            ev = eval(value)
         except:
-            raise forms.ValidationError("Invalid formatting")
-            
-        if float(value) < 0:
-            raise forms.ValidationError("Values can't be negative")
-            
+            raise ValidationError("Invalid Formatting")
+
         return value
         
-class BlankIntField(forms.IntegerField):
-    
-    widget=BlankZeroWidget
-    
-    def clean(self, value):
-        if not value:
-            return 0
-            
-        try:
-            value = eval(value)
-        except:
-            raise forms.ValidationError("Invalid formatting")
+class BlankDecimalField(BlankHourField):
+    widget = BlankDecimalWidget
 
-        return int(value)
-        
+class BlankIntField(BlankHourField):
+    widget = BlankIntWidget
 #####################################################################################################
 
 class FlightForm(ModelForm):
@@ -66,16 +87,16 @@ class FlightForm(ModelForm):
     route =    RouteField(widget=forms.TextInput, required=False, queryset=Route.objects.get_empty_query_set())
     plane =    PlaneField(queryset=Plane.objects.get_empty_query_set(), required=True)
     
-    total =    BlankFloatField(label="Total Time")
-    pic =      BlankFloatField(label="PIC")
-    sic =      BlankFloatField(label="SIC")
-    solo =     BlankFloatField(label="Solo")
-    dual_g =   BlankFloatField(label="Dual Given")
-    dual_r =   BlankFloatField(label="Dual Received")
-    xc =       BlankFloatField(label="Cross Country")
-    act_inst = BlankFloatField(label="Actual Instrument")
-    sim_inst = BlankFloatField(label="Simulated Instrument")
-    night =    BlankFloatField(label="Night")
+    total =    BlankDecimalField(label="Total Time")
+    pic =      BlankDecimalField(label="PIC")
+    sic =      BlankDecimalField(label="SIC")
+    solo =     BlankDecimalField(label="Solo")
+    dual_g =   BlankDecimalField(label="Dual Given")
+    dual_r =   BlankDecimalField(label="Dual Received")
+    xc =       BlankDecimalField(label="Cross Country")
+    act_inst = BlankDecimalField(label="Actual Instrument")
+    sim_inst = BlankDecimalField(label="Simulated Instrument")
+    night =    BlankDecimalField(label="Night")
     
     day_l =    BlankIntField(label="Day Landings")
     night_l =  BlankIntField(label="Night Landings")
@@ -100,14 +121,13 @@ class FlightForm(ModelForm):
 #############################################################################################################
 
 class FormsetFlightForm(FlightForm):
-    remarks = forms.CharField(widget=forms.TextInput(attrs={"class": "remarks_line"}))
-    person = forms.CharField(widget=forms.TextInput(attrs={"class": "person_line"}))
+    remarks = forms.CharField(widget=forms.TextInput(attrs={"class": "remarks_line"}), required=False)
+    person = forms.CharField(widget=forms.TextInput(attrs={"class": "person_line"}), required=False)
     route = RouteField(queryset=Route.objects.get_empty_query_set(), widget=RouteWidget)
-    #plane = None
     
     class Meta:
         model = Flight
-        exclude = ('user', 'pic', )
+        exclude = ('user', )
 
 from django.forms.formsets import BaseFormSet
 class FixedPlaneFormset(BaseFormSet):
