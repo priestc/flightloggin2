@@ -76,6 +76,11 @@
     <td>{{form.person}}</td>
     <td>{{form.remarks}}</td>
 </tr>
+{% if form.errors %}
+<tr>
+    <td>{{ form.errors }}</td>
+</td>
+{% endif%}
 {% endfor %}
 <tr class="header_row">
     {% if edit %}

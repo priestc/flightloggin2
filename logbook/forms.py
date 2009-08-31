@@ -4,6 +4,7 @@ from django import forms
 from django.forms import ModelForm, ModelChoiceField
 from django.contrib.admin import widgets
 from django.forms.widgets import TextInput
+from django.forms.util import ValidationError
 
 from models import *
 from route.forms import RouteField, RouteWidget
@@ -27,7 +28,7 @@ class BlankHourWidget(TextInput):
         return super(BlankHourWidget, self).render(name, value, attrs)
 
     def _has_changed(self, initial, data):
-        return super(BlankHourWidget, self)._has_changed(self._format_value(initial), data)
+        return super(BlankHourWidget, self)._has_changed(self._format_value_out(initial), data)
         
 class BlankDecimalWidget(BlankHourWidget):
     def _format_value_out(self, value):
@@ -39,7 +40,7 @@ class BlankDecimalWidget(BlankHourWidget):
         if value == 0:
             return ""
         else:
-            return str(value)
+            return "%.1f" % value
     
 class BlankIntWidget(BlankHourWidget):
     def _format_value_out(self, value):
@@ -52,28 +53,35 @@ class BlankIntWidget(BlankHourWidget):
             return ""
         else:
             return str(value)
-    
-    
+
 ########################################################################################
 
 class BlankHourField(forms.Field):
     widget = BlankHourWidget
-
     def clean(self, value):
         super(BlankHourField, self).clean(value)
         
+        if not value:
+            return 0
+        
         match = re.match("^([0-9]{1,3}):([0-9]{2})$", value)
         if match:
-            dec = from_minutes(value)
+            print value
+            dec = str(from_minutes(value))
+            print dec
         else:
-            dec = value
+            dec = str(value)
             
         try:
-            ev = eval(value)
+            ev = eval(dec)
         except:
             raise ValidationError("Invalid Formatting")
-
-        return value
+            
+        return ev
+        
+    def __init__(self, *args, **kwargs):
+        super(BlankHourField, self).__init__(required=False, widget=None, label=None, initial=None,
+                 help_text=None, error_messages=None, show_hidden_initial=False)
         
 class BlankDecimalField(BlankHourField):
     widget = BlankDecimalWidget
