@@ -175,7 +175,8 @@ def mass_entry(request):
     except:
         profile = Profile()
         
-    NewFlightFormset = formset_factory(form=FormsetFlightForm, extra=profile.per_page, formset=FixedPlaneFormset)
+    NewFlightFormset = modelformset_factory(Flight, form=FormsetFlightForm, extra=profile.per_page, formset=FixedPlaneModelFormset)
+                      #modelformset_factory(Flight, form=FormsetFlightForm, formset=FixedPlaneModelFormset, extra=0, can_delete=True)
 
         
     if request.POST.get('submit'):
@@ -184,7 +185,7 @@ def mass_entry(request):
         if formset.is_valid():
             formset.save()
     else:
-        formset = NewFlightFormset(planes_queryset=Plane.objects.filter(user=request.user))
+        formset = NewFlightFormset(initial=[{"user_id": request.user.pk}], queryset=Flight.objects.get_empty_query_set(), planes_queryset=Plane.objects.filter(user=request.user))
 
     return locals()
 

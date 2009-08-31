@@ -17,7 +17,7 @@ class BlankHourWidget(TextInput):
            Out: a string formatted to HH:MM
            a zero value outputs an empty string"""
         
-        if value == 0:
+        if not value or value == 0:
             return ""
 
         return to_minutes(value)
@@ -37,7 +37,7 @@ class BlankDecimalWidget(BlankHourWidget):
            Out: a string of that decimal number
            a zero value outputs an empty string"""
         
-        if value == 0:
+        if not value or value == 0:
             return ""
         else:
             return "%.1f" % value
@@ -49,7 +49,7 @@ class BlankIntWidget(BlankHourWidget):
            Out: a string of that int
            a zero value outputs an empty string"""
         
-        if value == 0:
+        if not value or value == 0:
             return ""
         else:
             return str(value)
@@ -80,14 +80,14 @@ class BlankHourField(forms.Field):
         return ev
         
     def __init__(self, *args, **kwargs):
-        super(BlankHourField, self).__init__(required=False, widget=None, label=None, initial=None,
-                 help_text=None, error_messages=None, show_hidden_initial=False)
+        super(BlankHourField, self).__init__(required=False, *args, **kwargs)
         
 class BlankDecimalField(BlankHourField):
     widget = BlankDecimalWidget
 
 class BlankIntField(BlankHourField):
     widget = BlankIntWidget
+    
 #####################################################################################################
 
 class FlightForm(ModelForm):
@@ -147,8 +147,7 @@ class FixedPlaneFormset(BaseFormSet):
 
     def add_fields(self, form, index):
         super(FixedPlaneFormset, self).add_fields(form, index)
-        form.fields["plane"] = PlaneField(queryset=Plane.objects.get_empty_query_set(), required=True)
-        form.fields['plane'].queryset = self.custom_queryset
+        form.fields["plane"] = PlaneField(queryset=self.custom_queryset, required=True)
         
         
 from django.forms.models import BaseModelFormSet
