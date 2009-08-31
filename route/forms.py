@@ -12,7 +12,10 @@ class RouteWidget(TextInput):
          return text
 
      def render(self, name, value, attrs=None):
-        value = Route.objects.filter(pk=value).values_list('fallback_string')[0][0]
+        try:
+            value = Route.objects.filter(pk=value).values_list('fallback_string')[0][0]
+        except:
+            value = ""
         return super(RouteWidget, self).render(name, value, attrs={"class": "route_line"})
         
        

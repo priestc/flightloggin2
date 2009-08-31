@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>{{title}}</name>
+	<Style id="line_style">
+		<LineStyle>
+			<color>ccff0099</color>
+			<width>2</width>
+		</LineStyle>
+	</Style>
+	
+	<Style id="base_icon">
+		<IconStyle>
+			<scale>1.0</scale>
+			<Icon>
+				<href>{{ MEDIA_URL }}/icons/big/base_pad.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+
+	<Style id="route_icon">
+		<IconStyle>
+			<scale>1.0</scale>
+			<Icon>
+				<href>{{ MEDIA_URL }}/icons/small/base_pad.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+
+	{% for route in routes %}
+	<Placemark>
+		<name>{{route}}</name>
+		<styleUrl>#line_style</styleUrl>
+		<LineString>
+			<tessellate>1</tessellate>
+			<coordinates>
+			{% for point in route.as_list %}{{point.lat}},{{point.lng}},0
+			{% endfor %}
+			</coordinates>
+		</LineString>
+	</Placemark>
+	{% endfor %}
+	{% for point in routebases %}
+	<Placemark>
+		<name>{{point.identifier}}</name>
+		<description>
+		<![CDATA[
+                <b>{{point.name}}</b><br>{{point.location_summary}}
+        ]]>
+        </description>
+		<styleUrl>#route_icon</styleUrl>
+		<Point>
+			<coordinates>{{point.location.x}},{{point.location.y}},0</coordinates>
+		</Point>
+	</Placemark>
+	{% endfor %}
+	{% for point in bases %}
+	<Placemark>
+		<name>{{point.identifier}}</name>
+		<description>
+		<![CDATA[
+                <b>{{point.name}}</b><br>{{point.location_summary}}
+        ]]>
+        </description>
+		<styleUrl>#base_icon</styleUrl>
+		<Point>
+			<coordinates>{{point.location.x}},{{point.location.y}},0</coordinates>
+		</Point>
+	</Placemark>
+	{% endfor %}
+</Document>
+</kml>

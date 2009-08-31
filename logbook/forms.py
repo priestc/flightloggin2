@@ -63,8 +63,8 @@ class BlankIntField(forms.IntegerField):
 
 class FlightForm(ModelForm):
 
-    route = RouteField(widget=forms.TextInput, required=False, queryset=Route.objects.get_empty_query_set())
-    plane = PlaneField(queryset=Plane.objects.get_empty_query_set(), required=True)
+    route =    RouteField(widget=forms.TextInput, required=False, queryset=Route.objects.get_empty_query_set())
+    plane =    PlaneField(queryset=Plane.objects.get_empty_query_set(), required=True)
     
     total =    BlankFloatField(label="Total Time")
     pic =      BlankFloatField(label="PIC")
@@ -100,7 +100,42 @@ class FlightForm(ModelForm):
 #############################################################################################################
 
 class FormsetFlightForm(FlightForm):
-        remarks = forms.CharField(widget=forms.TextInput(attrs={"class": "remarks_line"}))
-        person = forms.CharField(widget=forms.TextInput(attrs={"class": "person_line"}))
-        route = RouteField(queryset=Route.objects.get_empty_query_set(), widget=RouteWidget)
- 
+    remarks = forms.CharField(widget=forms.TextInput(attrs={"class": "remarks_line"}))
+    person = forms.CharField(widget=forms.TextInput(attrs={"class": "person_line"}))
+    route = RouteField(queryset=Route.objects.get_empty_query_set(), widget=RouteWidget)
+    #plane = None
+    
+    class Meta:
+        model = Flight
+        exclude = ('user', 'pic', )
+
+from django.forms.formsets import BaseFormSet
+class FixedPlaneFormset(BaseFormSet):
+    def __init__(self, *args, **kwargs): 
+        if kwargs.has_key('planes_queryset'):
+            self.custom_queryset = kwargs['planes_queryset']
+            del kwargs['planes_queryset']         
+        super(FixedPlaneFormset, self).__init__(*args, **kwargs)
+
+    def add_fields(self, form, index):
+        super(FixedPlaneFormset, self).add_fields(form, index)
+        form.fields["plane"] = PlaneField(queryset=Plane.objects.get_empty_query_set(), required=True)
+        form.fields['plane'].queryset = self.custom_queryset
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

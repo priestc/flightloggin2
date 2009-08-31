@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" width="110" height="110" id="svg2">
+  <defs id="defs4">
+    <linearGradient id="linearGradient2762">
+      <stop id="stop2764" style="stop-color: rgb(53, 53, 53); stop-opacity: 1;" offset="0"/>
+      <stop id="stop2766" style="stop-color: rgb(37, 37, 37); stop-opacity: 1;" offset="1"/>
+    </linearGradient>
+    <radialGradient cx="80" cy="242.58746" r="97.352219" fx="80" fy="242.58746" id="radialGradient1886" xlink:href="#linearGradient2762" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.54003, 0, 0, 0.513599, 11.7976, -69.5927)"/>
+  </defs>
+  <path d="M 55.000002,4.99999 L 67.409171,43.19887 L 107.57312,43.1966 L 75.07846,66.80252 L 87.491974,105.00001 L 55,81.39038 L 22.508023,105.00001 L 34.921537,66.80253 L 2.4268805,43.1966 L 42.590827,43.19887 L 55.000002,4.99999 z" id="path1874" style="fill: url(#radialGradient1886) rgb(0, 0, 0); fill-opacity: 1; fill-rule: evenodd; stroke: none; stroke-width: 10; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 4; stroke-dasharray: none; stroke-opacity: 1;"/>
+</svg>

@@ -41,7 +41,7 @@
 {% else %}
 <form action="{% url mass-entry %}" method="post">
 {% endif %}
-
+<div>{{ formset.management_form }}</div>
 <table class="mass_table">
 <tr class="header_row">
     {% if edit %}

@@ -170,10 +170,11 @@ def logbook(request, username, page=0):
 def mass_entry(request):
     display_user = request.user
     
-    NewFlightFormset = formset_factory(form=FormsetFlightForm, extra=20) # planes_queryset=Plane.objects.filter(user=request.user)
+   
+    NewFlightFormset = formset_factory(form=FormsetFlightForm, formset=FixedPlaneFormset, extra=20, ) # planes_queryset=Plane.objects.filter(user=request.user)
     
     
-    formset = NewFlightFormset()
+    formset = NewFlightFormset(planes_queryset=Plane.objects.filter(user=request.user))
     return locals()
 
 @login_required()
@@ -214,13 +215,7 @@ def mass_edit(request, page=0):
     
     qs = Flight.objects.filter(user=display_user)[start:start+duration]
 
-    sql = qs.query.as_sql()    
-    
-    #assert False
-
     formset = NewFlightFormset(queryset=qs)
-    
-    
     
     return locals()
 
