@@ -23,9 +23,9 @@ urlpatterns = patterns('',
     url(r'^massentry.html$',                                       "logbook.views.mass_entry", name="mass-entry"),
     url(r'^massedit-page-(?P<page>\d+).html$',                     "logbook.views.mass_edit",  name="mass-edit"),
     
-    (r'^admin/doc/',                          include('django.contrib.admindocs.urls')),
-    (r'^admin/',                              include(admin.site.urls)),
-    (r'^openid/',                             include('django_openid_auth.urls')),    
+    (r'^admin/doc/',                                               include('django.contrib.admindocs.urls')),
+    (r'^admin/',                                                   include(admin.site.urls)),
+    (r'^openid/',                                                  include('django_openid_auth.urls')),    
     
 
     url(r'^(?P<username>\w+)/logbook.html$',                       "logbook.views.logbook",    name="logbook"),

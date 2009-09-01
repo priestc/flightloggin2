@@ -2,6 +2,7 @@ from django.forms import ModelForm
 from models import *
 from logbook.models import Columns
 from profile.models import CurrencyDo
+from django.contrib.auth.models import User
 
 class ProfileForm(ModelForm):
     class Meta:
@@ -17,8 +18,8 @@ class AutoForm(ModelForm):
     class Meta:
         model = AutoButton
         exclude = ('user', )
-
-class Currency(ModelForm):
+        
+class UserForm(ModelForm):
     class Meta:
-        model = CurrencyDo
-        exclude = ('user', )
+        model = User
+        fields = ['username', ]

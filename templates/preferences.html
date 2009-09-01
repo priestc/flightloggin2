@@ -14,6 +14,7 @@
 fieldset                      {text-align: right}
 legend                        {font-size: large; font-weight: bold; color: #11566d}
 input, select                 {width: 80%}
+input[type="checkbox"]        {width: auto}
 input[type='submit']          {width: auto; margin-top: 15px}
 
 ul                            {font-sze: inherit; margin: 0; color: red; font-weight: bold}
@@ -52,9 +53,9 @@ td[colspan='4']               {padding-bottom: 10px; text-align: center}
 		
 			<table class="prefs_table">
 			    <tr>
-					<td>{{ profile_form.username.label_tag }}</td>
-					<td colspan="2">{{ profile_form.username }}</td>
-					<td>{{ profile_form.username.errors }}</td>
+					<td>{{ user_form.username.label_tag }}</td>
+					<td colspan="2">{{ user_form.username }}</td>
+					<td>{{ user_form.username.errors }}</td>
 				</tr>
 				
 				<tr>
@@ -98,26 +99,7 @@ td[colspan='4']               {padding-bottom: 10px; text-align: center}
 		</fieldset>
 
 
-		<fieldset>
-			<legend>Currency Reminders</legend>
-
-			<table class="prefs_table">
-				<tr>
-					<td></td>
-					<td>Day</td>
-					<td>Night</td>
-					<td></td>
-				</tr>
-				
-{% for field in currency_fields %}
-{{field}}
-{% endfor %}
-				
-			</table>
-				
-		</fieldset>
-
-		<fieldset id="logbook_section">
+    	<fieldset id="logbook_section">
 
 			<legend>Logbook</legend>
 		
