@@ -23,17 +23,19 @@ urlpatterns = patterns('',
     url(r'^massentry.html$',                                       "logbook.views.mass_entry", name="mass-entry"),
     url(r'^massedit-page-(?P<page>\d+).html$',                     "logbook.views.mass_edit",  name="mass-edit"),
     
-       (r'^(?P<username>\w+)/$',                                   "django.views.generic.simple.redirect_to", {'url': 'logbook.html'}   ),
+    (r'^admin/doc/',                          include('django.contrib.admindocs.urls')),
+    (r'^admin/',                              include(admin.site.urls)),
+    (r'^openid/',                             include('django_openid_auth.urls')),    
+    
+
     url(r'^(?P<username>\w+)/logbook.html$',                       "logbook.views.logbook",    name="logbook"),
     url(r'^(?P<username>\w+)/logbook-page-(?P<page>\d+).html',     "logbook.views.logbook",    name="logbook-page"),
     
     url(r'^(?P<username>\w+)/airports.kml$',                       "maps.views.airports_kml",  name="airports-kml"),
     url(r'^(?P<username>\w+)/routes.kml$',                         "maps.views.routes_kml",    name="routes-kml"),
     
+    (r'^(?P<username>\w+)/$',                                   "django.views.generic.simple.redirect_to", {'url': 'logbook.html'}   ),
 
-    (r'^admin/doc/',                          include('django.contrib.admindocs.urls')),
-    (r'^admin/',                              include(admin.site.urls)),
-    (r'^openid/',                             include('django_openid_auth.urls')),
 
 )
 
