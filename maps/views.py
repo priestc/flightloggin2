@@ -7,7 +7,9 @@ from django.http import HttpResponse
 from django.template.loader import get_template
 from django.template import Context
 
-
+@render_to('logbook.html')
+def maps(request):
+    return locals()
 
 def airports_kml(request, username):
     from settings import MEDIA_URL

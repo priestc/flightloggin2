@@ -3,7 +3,7 @@ import re
 from django import forms
 from django.forms import ModelForm, ModelChoiceField
 from django.contrib.admin import widgets
-from django.forms.widgets import TextInput
+from django.forms.widgets import TextInput, HiddenInput
 from django.forms.util import ValidationError
 
 from models import *
@@ -20,7 +20,7 @@ class BlankHourWidget(TextInput):
         if not value or value == 0:
             return ""
 
-        return to_minutes(value)
+        return str(to_minutes(value))
 
     def render(self, name, value, attrs=None):
         value = self._format_value_out(value)
@@ -40,7 +40,7 @@ class BlankDecimalWidget(BlankHourWidget):
         if not value or value == 0:
             return ""
         else:
-            return "%.1f" % value
+            return value
     
 class BlankIntWidget(BlankHourWidget):
     def _format_value_out(self, value):
@@ -66,9 +66,7 @@ class BlankHourField(forms.Field):
         
         match = re.match("^([0-9]{1,3}):([0-9]{2})$", value)
         if match:
-            print value
             dec = str(from_minutes(value))
-            print dec
         else:
             dec = str(value)
             
@@ -92,6 +90,7 @@ class BlankIntField(BlankHourField):
 
 class FlightForm(ModelForm):
 
+    user =     forms.ModelChoiceField(queryset=User.objects.all(), widget=HiddenInput)
     route =    RouteField(widget=forms.TextInput, required=False, queryset=Route.objects.get_empty_query_set())
     plane =    PlaneField(queryset=Plane.objects.get_empty_query_set(), required=True)
     
@@ -124,7 +123,6 @@ class FlightForm(ModelForm):
 
     class Meta:
         model = Flight
-        exclude = ('user', )
 
 #############################################################################################################
 

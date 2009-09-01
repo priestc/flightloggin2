@@ -20,7 +20,6 @@ class RouteWidget(TextInput):
         return super(RouteWidget, self).render(name, value, attrs={"class": "route_line"})
         
     def _has_changed(self, initial, data):
-        print self._format_value_out(initial), data
         return super(RouteWidget, self)._has_changed(self._format_value_out(initial), data)
         
        

@@ -16,8 +16,9 @@ urlpatterns = patterns('',
     url(r'^import.html$',                                          "import.views.import_s",   name="import"),
     
     url(r'^(?P<username>\w+)/records.html$',                       "records.views.records",   name="records"),
-    url(r'^(?P<username>\w+)/stats.html$',                         "stats.views.stats",       name="stats"),
+    url(r'^(?P<username>\w+)/graphs.html$',                        "graphs.views.graphs",     name="graphs"),
     url(r'^(?P<username>\w+)/planes.html$',                        "plane.views.planes",      name="planes"),
+    url(r'^(?P<username>\w+)/maps.html$',                          "maps.views.maps",         name="maps"),
     
     url(r'^backup.tsv$',                                           "logbook.views.backup",     name="backup"),
     url(r'^massentry.html$',                                       "logbook.views.mass_entry", name="mass-entry"),

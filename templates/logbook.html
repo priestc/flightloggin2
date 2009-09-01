@@ -16,9 +16,14 @@
 
 {% block title %}Flights{% endblock %}
 
-{% block canvas %}
 
+
+
+{% block canvas %}
+    
+    {% if not shared %}
 	<input id="new_flight_button" type="button" value="New Flight" />
+	{% endif %}
 	
 	{% include "pagination_table.html" %}
 		

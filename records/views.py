@@ -10,11 +10,18 @@ def records(request, username):
     
     records,c = Records.objects.get_or_create(user=request.user)
     
-
     formset = NonFlightFormset(queryset=NonFlight.objects.filter(user=request.user))
     
     if request.POST:
-        formset=NonFlightFormset(request.POST, queryset=NonFlight.objects.filter(user=request.user))
+        post = request.POST.copy()
+        qs=NonFlight.objects.filter(user=request.user)
+        
+        for pk in range(0, qs.count()+1):
+            post.update({"form-" + str(pk) + "-user": str(request.user.pk)})
+            
+        #assert False
+            
+        formset=NonFlightFormset(post, queryset=qs)
         if formset.is_valid():
             formset.save()
             

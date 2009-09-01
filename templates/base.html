@@ -82,8 +82,12 @@
                     </td>
                     {% endif %}
                     
-                    <td class="{% block stats-sel %}{% endblock%}" >
-                        <a href="{% url stats display_user.username %}">Stats</a>
+                    <td class="{% block graphs-sel %}{% endblock%}" >
+                        <a href="{% url graphs display_user.username %}">Graphs</a>
+                    </td>
+                    
+                    <td class="{% block maps-sel %}{% endblock%}" >
+                        <a href="{% url maps display_user.username %}">Maps</a>
                     </td>
 
                     <td class="{% block records-sel %}{% endblock%}" >

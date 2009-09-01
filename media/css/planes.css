@@ -1,0 +1,38 @@
+input[type="submit"],
+input[type="button"]        {margin-bottom: 10px}
+
+input[type=text],
+select, textarea	        {width: 200px; font-size: small !important}
+
+#tags_window                {background: white; font-size: x-small; border: 0px solid blue; padding: 5px;}
+#tags_window a:hover        {color: lightgreen}
+
+#p_t                        {width:100%; border-collapse: collapse;}
+#p_t td                     {border: 1px solid #DDDDFF; padding: 2px}
+#p_t thead                  {background: #DDDDFF }
+#p_t tbody:nth_child(even)  {background: blue}
+#p_t tbody:nth_child(odd)   {background: red}
+
+#popup                      {position: absolute; top: 50px; left: 50px; display: none; width: 380px; background: white; font-size: small !important;
+                             text-align:center; overflow: hidden; border: 2px solid black}
+#popup table                {margin-left: auto; margin-right: auto}
+
+#dragbar                    {background: lightblue; width:100%; text-align: right; margin-bottom: .5em; border-bottom: 1px solid black}
+#dragbar td:first-child     {width:100%; text-align:center; font-weight: bold; font-size: larger}
+#dragbar td:last-child      {text-align:right}
+
+#close_x                    {cursor: pointer; font-weight: bold}
+
+#plane_buttons              {width:100%; float: left; margin-bottom: 10px}
+
+textarea                    {height: 50px}
+
+span.help_text              {color: gray; font-size: x-small; font-style: italic}
+
+td.empty_row                {font-weight: bold; font-size: large; padding: 10px}
+
+.tag1                       {font-size: xx-small}
+.tag2                       {font-size: xx-small}
+.tag3                       {font-size: x-small}
+.tag4                       {font-size: small}
+.tag5                       {font-size: medium}

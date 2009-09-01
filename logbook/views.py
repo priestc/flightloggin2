@@ -180,13 +180,26 @@ def mass_entry(request):
 
         
     if request.POST.get('submit'):
-        formset = NewFlightFormset(request.POST, planes_queryset=Plane.objects.filter(user=request.user))
+        post = request.POST.copy()
+        for pk in range(0, profile.per_page):
+            if post["form-" + str(pk) + "-date"]:
+                post.update({"form-" + str(pk) + "-user": str(request.user.pk)})
+            else:
+                post.update({"form-" + str(pk) + "-user": u''})
+            
+        formset = NewFlightFormset(post, queryset=Flight.objects.get_empty_query_set(), planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
+        
+        
         
         if formset.is_valid():
+            import pdb; pdb.set_trace()
             formset.save()
             return HttpResponseRedirect('/' + display_user.username + '/logbook.html')
+            
+        
+        
     else:
-        formset = NewFlightFormset(initial=[{"user_id": request.user.pk}], queryset=Flight.objects.get_empty_query_set(), planes_queryset=Plane.objects.filter(user=request.user))
+        formset = NewFlightFormset(queryset=Flight.objects.get_empty_query_set(), planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
 
     return locals()
 
@@ -208,13 +221,13 @@ def mass_edit(request, page=0):
     NewFlightFormset = modelformset_factory(Flight, form=FormsetFlightForm, formset=FixedPlaneModelFormset, extra=0, can_delete=True)
         
     if request.POST.get('submit'):
-        formset = NewFlightFormset(request.POST, queryset=qs, planes_queryset=Plane.objects.filter(user=request.user))
+        formset = NewFlightFormset(request.POST, queryset=qs, planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
         
         if formset.is_valid():
             formset.save()
             return HttpResponseRedirect('/' + display_user.username + '/logbook.html')
     else:
-        formset = NewFlightFormset(queryset=qs, planes_queryset=Plane.objects.filter(user=request.user))
+        formset = NewFlightFormset(queryset=qs, planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
     
     return locals()
 
