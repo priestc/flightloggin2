@@ -184,6 +184,7 @@ def mass_entry(request):
         
         if formset.is_valid():
             formset.save()
+            return HttpResponseRedirect('/' + display_user.username + '/logbook.html')
     else:
         formset = NewFlightFormset(initial=[{"user_id": request.user.pk}], queryset=Flight.objects.get_empty_query_set(), planes_queryset=Plane.objects.filter(user=request.user))
 
@@ -211,6 +212,7 @@ def mass_edit(request, page=0):
         
         if formset.is_valid():
             formset.save()
+            return HttpResponseRedirect('/' + display_user.username + '/logbook.html')
     else:
         formset = NewFlightFormset(queryset=qs, planes_queryset=Plane.objects.filter(user=request.user))
     
