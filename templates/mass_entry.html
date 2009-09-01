@@ -14,25 +14,16 @@
 	        }).addClass("embed");
 	    });
 	</script>
+	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/mass_entry.css">
 {% endblock %}
 
-{% block css %}
-    #canvas                                   {max-width: 100%}
-    
-    table.mass_table                          {width: 100%; border-collapse: collapse}
-    table.mass_table input                    {font-size: small}
-    
-    tr.header_row td                          {font-size: x-small; background: white; padding: 0}
-    table.mass_table tr:nth-child(even)       {background: #DDDDDD}
-    
-    input.route_line                          {width: 8em}
-    input.person_line                         {width: 8em}
-    input.vDateField                          {width: 8em;}
-    input.float_line                          {width: 2.4em; margin: 1px}
-    
-{% endblock %}
 
-{% block title %}{{ title }}{% endblock %}
+
+{% block title %}{% if edit %}Mass Edit{% else %}Mass Entry{% endif %}{% endblock %}
+
+
+
+
 {% block canvas %}
 {% include "pagination_table.html" %}
 

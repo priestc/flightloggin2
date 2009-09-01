@@ -4,74 +4,20 @@
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<meta name="DESCRIPTION" content="An electronic logbook application for pilots.">
 		<meta name="KEYWORDS" content="Pilot Logbook, Online Logbook, Pilot Log, Flight Log, Flight Logbook, web application, Private Pilot">
-		{#<link rel="icon" type="image/png" href="/icons/favicon_{{ user.profile.style }}.png" />#}
+		<link rel="icon" type="image/png" href="/icons/favicon.png">
 		
         <style type="text/css">
-            body                    {background: #CCF2D4; margin: 15px; margin-top:0px; padding:0; font-size: small; 
-                                     font-family: "Bitstream Vera Sans", sans-serif; min-height: 100%; height: 100%;}
-
-            #header                 {margin:5px; overflow: hidden;border: 0px solid black}
-            #main_content           {margin:5px; overflow: hidden;border: 0px solid black}
-            
-            #logo                   {height: 44px; margin-top: 11px; border: 0px solid black;}
-            #logo_box               {float: left}
-            #advert_box             {float: right; height:60px}
-            #logged_in_as           {float: right; text-align: right; font-weight: 700; color: #665B1E; width: 100%; border: 0px solid black}
-            
-            #nav_bar                {background: #665b1e; border: 0px; width: 100%; float: left}
-            #nav_bar td             {width: 10%; text-align: center}
-            
-            td.nav_bar_not          {width: 33%}
-            
-            #nav_bar a              {color: white; font-weight: bold; text-decoration: none}
-            #nav_bar a:hover        {color: silver; font-weight: bold; text-decoration: underline}
-
-            .nav_selected           {background: #81d38f}
-            .nav_selected a         {color: black !important}
-            
-            .display_user           {color: black}
-            .logged_user            {color: black}
-
-            #canvas                 {background: white; padding: 1em; overflow:hidden; max-width: 73em; margin-left: auto;
-                                     margin-right: auto; text-align: center; border: 1px solid black}
-                                     
-            .embed + img            {position: relative; left: -19px; top: 3px; cursor: pointer;}
-				 
-            a                       {color: #11566d}
-            h1                      {text-align: center; font-weight: bold; color: #665b1e; font-size: x-large;}
-            h2                      {font-weight: bold; color: #11566d; font-size: large}
-
-            
-
-            textarea                {border: 1px solid black; font-family: inherit; font-size: inherit; background: white}
-            select                  {border: 1px solid black; background: #EEEEEE; font-size: smaller; font-family: inherit}
-
-            input[type="button"]:hover,
-            input[type="submit"]:hover,
-            button:hover            {cursor: pointer}
-
-            input[type="submit"],
-            input[type="button"],
-            button                  {border: 1px solid black}
-
-            input[type="password"],
-            input[type="text"]      {border: 1px solid black; background: white}
-
-            input[type=text]:disabled {background-color: #DDDDDD; color: #777777; border: 1px dotted #EEEEEE}
-            
-            #footer                 {text-align:center; font-size: x-small; color: gray;
-                                     border: 0px solid black; width: 100%;}
-
-            /************************/
-
             {% block css %}{% endblock %}
         </style>
-
+        
+        
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/base.css">
 		<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/jquery/css/black-tie/jquery-ui-1.7.1.custom.css">
 		
 		<script type="text/javascript" src="{{ MEDIA_URL }}/jquery/jquery-1.3.2.min.js"></script>
 		<script type="text/javascript" src="{{ MEDIA_URL }}/jquery/jquery-ui-1.7.1.custom.min.js"></script>
-		<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/master.js"></script>		
+		<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/master.js"></script>
+				
 		{% block javascript %}{% endblock %}
 
 		<script type="text/javascript"><!--
@@ -127,7 +73,7 @@
 				<tr>
                 {% if display_user %}
                     <td class="{% block logbook-sel %}{% endblock%}" >
-                        <a href="{% url logbook display_user.username %}">Logbook</a>
+                        <a href="{% url logbook display_user.username %}">Flights</a>
                     </td>
                     
     			    {% if not shared %}

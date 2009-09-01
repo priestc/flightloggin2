@@ -1,0 +1,22 @@
+fieldset                              {text-align: right}
+legend                                {font-size: large; font-weight: bold; color: #11566d}
+input, select                         {width: 80%}
+input[type="checkbox"]                {width: auto}
+input[type='submit']                  {width: auto; margin-top: 15px}
+
+ul                                    {font-sze: inherit; margin: 0; color: red; font-weight: bold}
+
+.prefs_table                          {width:100%; border: 0px solid black; font-size: medium; margin-right: auto; margin-left: auto}
+
+.prefs_table td:first-child           {border: 0px solid green; width: 50%; text-align: right; padding-right: 10px}
+.prefs_table td                       {border: 0px solid blue; text-align: left; width: 10%}
+.prefs_table td:last-child            {border: 0px solid red; width: 30%}
+
+.embed + img                          {position: relative; right: 19px; top: 3px; cursor: pointer; z-index: 2}
+
+td[colspan='4']                       {padding-bottom: 10px; text-align: center}
+
+#columns_table                        {margin-right: auto; margin-left: auto; border: 1px solid purple}
+#columns_table td:last-child          {text-align: left; width: 13em}
+#columns_table tr:first-child > td    {padding: 3px !important;}
+#columns_table td                     {font-size: small; text-align: center; padding: 0px !important; width: 3em}
