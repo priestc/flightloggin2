@@ -16,25 +16,42 @@ def profile(request):
     #assert False
     
     if request.POST:
-        profile_form = ProfileForm(request.POST, instance=profile)
-        user_form = UserForm(request.POST, instance=display_user)
-        column_form = ColumnsForm(request.POST, prefix="column", instance=column)
-        auto_form = AutoForm(request.POST, prefix="auto", instance=auto)
-    
-        if auto_form.is_valid():
-            auto_form.save()
-            
-        if profile_form.is_valid():
-            profile_form.save()
-            
-        if column_form.is_valid():
-            column_form.save()
-         
-        if user_form.is_valid():
-            user_form.save()
-        #else:
-         #   assert False
+        if request.POST.get("submit") == "Delete All Flights":
+            Flight.objects.filter(user=display_user).delete()
         
+        elif request.POST.get("submit") == "Delete All Non-Flights":
+            NonFlight.objects.filter(user=display_user).delete()
+        
+        elif request.POST.get("submit") == "Delete All Planes":
+            Plane.objects.filter(user=display_user).delete()
+        
+        elif request.POST.get("submit") == "Delete Unused Planes":
+            Plane.objects.filter(flight__isnull=True, user=display_user).delete()
+            
+        elif request.POST.get("submit") == "Completely Reset All Data":
+            Plane.objects.filter(user=display_user).delete()
+            NonFlight.objects.filter(user=display_user).delete()
+            Flight.objects.filter(user=display_user).delete()
+            Records.objects.filter(user=display_user).delete()
+        
+        else:
+    
+            profile_form = ProfileForm(request.POST, instance=profile)
+            user_form = UserForm(request.POST, instance=display_user)
+            column_form = ColumnsForm(request.POST, prefix="column", instance=column)
+            auto_form = AutoForm(request.POST, prefix="auto", instance=auto)
+        
+            if auto_form.is_valid():
+                auto_form.save()
+                
+            if profile_form.is_valid():
+                profile_form.save()
+                
+            if column_form.is_valid():
+                column_form.save()
+             
+            if user_form.is_valid():
+                user_form.save()        
     
     else:
         profile_form = ProfileForm(instance=profile)

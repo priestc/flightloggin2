@@ -6,11 +6,47 @@
 	    $(document).ready(function() {
 	        $("#id_dob").datepicker({							// add the date pickers
 			        dateFormat: "yy-mm-dd",
-			        yearRange: "-80:+1", 
+			        yearRange: "1900:2008", 
 			        showOn: "button", 
 			        buttonImage: "{{ MEDIA_URL }}/images/calendar.gif", 
-			        buttonImageOnly: true 
+			        buttonImageOnly: true,
+			        changeYear: true
 	        }).addClass("embed");
+	        
+	        $('.verify_flights').click(function() {
+                if ( $("input.verify_flights:not(:checked)").size() == 0 )
+                    $('#delete_all_flights').removeAttr("disabled")
+                else
+                    $('#delete_all_flights').attr("disabled", "disabled")
+            });
+            
+            $('.verify_nonflights').click(function() {
+                if ( $("input.verify_nonflights:not(:checked)").size() == 0 )
+                    $('#delete_all_nonflights').removeAttr("disabled")
+                else
+                    $('#delete_all_nonflights').attr("disabled", "disabled")
+            });
+            
+            $('.verify_planes').click(function() {
+                if ( $("input.verify_planes:not(:checked)").size() == 0 )
+                    $('#delete_all_planes').removeAttr("disabled")
+                else
+                    $('#delete_all_planes').attr("disabled", "disabled")
+            });
+            
+            $('.verify_unusedplanes').click(function() {
+                if ( $("input.verify_unusedplanes:not(:checked)").size() == 0 )
+                    $('#delete_unusedplanes').removeAttr("disabled")
+                else
+                    $('#delete_unusedplanes').attr("disabled", "disabled")
+            });
+            
+            $('.verify_everything').click(function() {
+                if ( $("input.verify_everything:not(:checked)").size() == 0 )
+                    $('#delete_everything').removeAttr("disabled")
+                else
+                    $('#delete_everything').attr("disabled", "disabled")
+            });	
 	    });
 	</script>
 	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/preferences.css">
@@ -22,142 +58,189 @@
 
 {% block canvas %}
 
-<div class="central_div central_prefs">
-		
-	<h1>Preferences</h1>
+<form id="prefs_form" action="{% url profile %}" method="post">
+	<fieldset>
+
+		<legend>General</legend>
 	
-	<form id="prefs_form" action="{% url profile %}" method="post">
-		<fieldset>
-
-			<legend>General</legend>
-		
-			<table class="prefs_table">
-			    <tr>
-					<td>{{ user_form.username.label_tag }}</td>
-					<td colspan="2">{{ user_form.username }}</td>
-					<td>{{ user_form.username.errors }}</td>
-				</tr>
-				
-				<tr>
-					<td>{{ profile_form.email.label_tag }}</td>
-					<td colspan="2">{{ profile_form.email }}</td>
-					<td>{{ profile_form.email.errors }}</td>
-				</tr>
-				
-				<tr>
-					<td>{{ profile_form.real_name.label_tag }}</td>
-					<td colspan="2">{{ profile_form.real_name }}</td>
-					<td>{{ profile_form.real_name.errors }}</td>
-				</tr>
-				
-				<tr>
-					<td>{{ profile_form.dob.label_tag }}</td>
-					<td colspan="2">{{ profile_form.dob }}</td>
-					<td>{{ profile_form.date.errors }}</td>
-				</tr>
-				
-				<tr>
-					<td>{{ profile_form.style.label_tag }}</td>
-					<td colspan="2">{{ profile_form.style }}</td>
-					<td></td>
-				</tr>
-				
-				<tr>
-					<td>{{ profile_form.share.label_tag }}</td>
-					<td colspan="2">{{ profile_form.share }}</td>
-					<td></td>
-				</tr>
-				
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-				
-			</table>
-		</fieldset>
+		<table class="prefs_table">
+		    <tr>
+				<td>{{ user_form.username.label_tag }}</td>
+				<td colspan="2">{{ user_form.username }}</td>
+				<td>{{ user_form.username.errors }}</td>
+			</tr>
+			
+			<tr>
+				<td>{{ profile_form.email.label_tag }}</td>
+				<td colspan="2">{{ profile_form.email }}</td>
+				<td>{{ profile_form.email.errors }}</td>
+			</tr>
+			
+			<tr>
+				<td>{{ profile_form.real_name.label_tag }}</td>
+				<td colspan="2">{{ profile_form.real_name }}</td>
+				<td>{{ profile_form.real_name.errors }}</td>
+			</tr>
+			
+			<tr>
+				<td>{{ profile_form.dob.label_tag }}</td>
+				<td colspan="2">{{ profile_form.dob }}</td>
+				<td>{{ profile_form.date.errors }}</td>
+			</tr>
+			
+			<tr>
+				<td>{{ profile_form.style.label_tag }}</td>
+				<td colspan="2">{{ profile_form.style }}</td>
+				<td></td>
+			</tr>
+			
+			<tr>
+				<td>{{ profile_form.share.label_tag }}</td>
+				<td colspan="2">{{ profile_form.share }}</td>
+				<td></td>
+			</tr>
+			
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			
+		</table>
+	</fieldset>
 
 
-    	<fieldset id="logbook_section">
+	<fieldset id="logbook_section">
 
-			<legend>Logbook</legend>
-		
-			<table class="prefs_table">	
-				<tr>
-					<td colspan="4">
-						<table id="columns_table">
-							<tr>	
-								<td>Auto Button</td>
-								<td>Display Column</td>
-								<td></td>
-							</tr>
+		<legend>Logbook</legend>
+	
+		<table class="prefs_table">	
+			<tr>
+				<td colspan="4">
+					<table id="columns_table">
+						<tr>	
+							<td>Auto Button</td>
+							<td>Display Column</td>
+							<td></td>
+						</tr>
 {% for field in bool_fields %}
 {{field|safe}}
 {% endfor %}
-						</table>
-					</td>
-				</tr>
-				
-				<tr>
-					<td>{{ profile_form.per_page.label_tag }}</td>
-					<td colspan="2">{{ profile_form.per_page }}</td>
-					<td>{{ profile_form.per_page.errors }}</td>
-				</tr>
-				<tr>
-					<td>{{ profile_form.minutes.label_tag }}</td>
-					<td colspan="2">{{ profile_form.minutes }}</td>
-					<td>{{ profile_form.minutes.errors }}</td>
-				</tr>
-				<tr>
-					<td>{{ profile_form.date_format.label_tag }}</td>
-					<td colspan="2">{{ profile_form.date_format }}</td>
-					<td>{{ profile_form.date_format.errors }}<br>
-					    Default: "Y-m-d" For a guide to date formatting, <a target="_blank" href="http://us3.php.net/manual/en/function.date.php">click here</a>
-					</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
+					</table>
+				</td>
+			</tr>
 			
-			</table>
-			
-		</fieldset>
+			<tr>
+				<td>{{ profile_form.per_page.label_tag }}</td>
+				<td colspan="2">{{ profile_form.per_page }}</td>
+				<td>{{ profile_form.per_page.errors }}</td>
+			</tr>
+			<tr>
+				<td>{{ profile_form.minutes.label_tag }}</td>
+				<td colspan="2">{{ profile_form.minutes }}</td>
+				<td>{{ profile_form.minutes.errors }}</td>
+			</tr>
+			<tr>
+				<td>{{ profile_form.date_format.label_tag }}</td>
+				<td colspan="2">{{ profile_form.date_format }}</td>
+				<td>{{ profile_form.date_format.errors }}<br>
+				    Default: "Y-m-d" For a guide to date formatting, <a target="_blank" href="http://us3.php.net/manual/en/function.date.php">click here</a>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
 		
-		<fieldset>
+		</table>
+		
+	</fieldset>
+	
+	<fieldset>
 
-			<legend>Automatic Backups</legend>
-			
-			<table class="prefs_table">
-				<tr>
-					<td>{{ profile_form.backup_email.label_tag }}</td>
-					<td colspan="2">{{ profile_form.backup_email }}</td>
-					<td>{{ profile_form.backup_email.errors }}</td>
-				</tr>
-				
-				<tr>
-					<td>{{ profile_form.backup_freq.label_tag }}</td>
-					<td colspan="2">{{ profile_form.backup_freq }}</td>
-					<td>{{ profile_form.backup_freq.errors }}</td>
-				</tr>
-				
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-			</table>
-		</fieldset>
+		<legend>Automatic Backups</legend>
 		
-		<div>
-			<input class="prefs_submit_button" type="submit" value="Submit" />
-		</div>
-	</form>
-</div>
+		<table class="prefs_table">
+			<tr>
+				<td>{{ profile_form.backup_email.label_tag }}</td>
+				<td colspan="2">{{ profile_form.backup_email }}</td>
+				<td>{{ profile_form.backup_email.errors }}</td>
+			</tr>
+			
+			<tr>
+				<td>{{ profile_form.backup_freq.label_tag }}</td>
+				<td colspan="2">{{ profile_form.backup_freq }}</td>
+				<td>{{ profile_form.backup_freq.errors }}</td>
+			</tr>
+			
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+		</table>
+	</fieldset>
+	
+	<fieldset>
+	    <legend>Clear Data</legend>
+	    <div style="text-align: left">Check each checkbox on either side to enable each button.</div>
+	    <div class="delete_box">
+            <input type="checkbox" class="verify_flights">
+            <input type="checkbox" class="verify_flights">
+            <input id="delete_all_flights" type="submit" name="submit" value="Delete All Flights" disabled="disabled">
+            <input type="checkbox" class="verify_flights">
+            <input type="checkbox" class="verify_flights"> 
+        </div>
+            
+            <br>
+            
+        <div class="delete_box">
+            <input type="checkbox" class="verify_nonflights">
+            <input type="checkbox" class="verify_nonflights">
+            <input id="delete_all_nonflights" type="submit" name="submit" value="Delete All Non-Flights" disabled="disabled">
+            <input type="checkbox" class="verify_nonflights">
+            <input type="checkbox" class="verify_nonflights">
+        </div>
+            
+        <br>
+            
+        <div class="delete_box">
+            <input type="checkbox" class="verify_planes">
+            <input type="checkbox" class="verify_planes">
+            <input id="delete_all_planes" type="submit" name="submit" value="Delete All Planes" disabled="disabled">
+            <input type="checkbox" class="verify_planes">
+            <input type="checkbox" class="verify_planes">
+        </div>
+            
+        <br>
+            
+        <div class="delete_box">
+            <input type="checkbox" class="verify_unusedplanes">
+            <input type="checkbox" class="verify_unusedplanes">
+            <input id="delete_unusedplanes" type="submit" name="submit" value="Delete Unused Planes" disabled="disabled">
+            <input type="checkbox" class="verify_unusedplanes">
+            <input type="checkbox" class="verify_unusedplanes">
+        </div>
+            
+        <br>
+            
+        <div class="delete_box">
+            <input type="checkbox" class="verify_everything">
+            <input type="checkbox" class="verify_everything">
+            <input id="delete_everything" type="submit" name="submit" value="Completely Reset All Data" disabled="disabled">
+            <input type="checkbox" class="verify_everything">
+            <input type="checkbox" class="verify_everything">
+        </div>
+	
+	    </fieldset>
+
+		<input class="prefs_submit_button" type="submit" value="Submit Preferences" />
+	</div>
+</form>
 {{profile_form.errors}}
 {{auto_form.errors}}
 {{column_form.errors}}

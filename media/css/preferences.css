@@ -20,3 +20,5 @@ td[colspan='4']                       {padding-bottom: 10px; text-align: center}
 #columns_table td:last-child          {text-align: left; width: 13em}
 #columns_table tr:first-child > td    {padding: 3px !important;}
 #columns_table td                     {font-size: small; text-align: center; padding: 0px !important; width: 3em}
+
+.delete_box                           {text-align: center }

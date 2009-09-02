@@ -20,7 +20,7 @@ from profile.models import Profile
 from is_shared import is_shared
 
 @login_required()   
-def backup(request):
+def backup(request, username):
     import csv
     from django.http import HttpResponse
     from records.models import Records
@@ -28,10 +28,10 @@ def backup(request):
     shared, display_user = is_shared(request, username)
 
     response = HttpResponse(mimetype='text/plain')
-    #response['Content-Disposition'] = 'attachment; filename=somefilename.csv'
+    response['Content-Disposition'] = 'attachment; filename=somefilename.csv'
     
     flights = Flight.objects.filter(user=display_user)
-    planes = Plane.objects.filter(user=user)
+    planes = Plane.objects.filter(user=display_user)
 
     writer = csv.writer(response, dialect='excel')
     writer.writerow([FIELD_TITLES[field] for field in BACKUP_FIELDS])
@@ -41,7 +41,7 @@ def backup(request):
         
     writer.writerow(["##RECORDS"])
     
-    records = get_object_or_None(Records, user=user)
+    records = get_object_or_None(Records, user=display_user)
     if records:
         writer.writerow([records.text])
         

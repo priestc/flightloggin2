@@ -22,7 +22,7 @@ urlpatterns = patterns('',
     url(r'^(?P<username>\w+)/maps.html$',                          "maps.views.maps",         name="maps"),
     url(r'^(?P<username>\w+)/currency.html$',                      "currency.views.currency", name="currency"),
     
-    url(r'^backup.tsv$',                                           "logbook.views.backup",     name="backup"),
+    url(r'^(?P<username>\w+)/backup/$',                            "logbook.views.backup",     name="backup"),
     url(r'^massentry.html$',                                       "logbook.views.mass_entry", name="mass-entry"),
     url(r'^massedit-page-(?P<page>\d+).html$',                     "logbook.views.mass_edit",  name="mass-edit"),
     
@@ -38,8 +38,6 @@ urlpatterns = patterns('',
     url(r'^(?P<username>\w+)/routes.kml$',                         "maps.views.routes_kml",    name="routes-kml"),
     
     (r'^(?P<username>\w+)/$',                                   "django.views.generic.simple.redirect_to", {'url': 'logbook.html'}   ),
-
-
 )
 
 urlpatterns += patterns('django.contrib.auth',

@@ -22,16 +22,10 @@ from forms import ImportForm, ImportFlightForm
 @render_to('manage.html')
 def manage(request):
     display_user = request.user
+    button=request.POST.get("submit") or "sdfsf" 
     
-    if request.POST.get("submit") == "Delete All Flights":
-        Flight.objects.filter(user=display_user).delete()
     
-    if request.POST.get("submit") == "Delete All Planes":
-        Plane.objects.filter(user=display_user).delete()
-    
-    if request.POST.get("submit") == "Delete All Unused Planes":
-        Plane.objects.filter(flight__isnull=True, user=display_user).delete()
-    
+        
     return locals()
 
 @login_required()
@@ -247,8 +241,9 @@ def make_commit_nonflight(line, user, out):
         out.append("<tr><td>good</td><td>" + line.get('date') + "</td><td>" + line.get('remarks') + "</td></tr>")
         
     else:
+        out.append("<tr class='bad'><td>")
         out.append("<tr class='bad'><td>bad:</td><td>" + line.get('date') + "</td><td>" + line.get('remarks') + "</td></tr>")
-        out.append("<tr><td colspan='5'>")
+        out.append("</td><tr class='bad'><td colspan=5>")
         out.append(form.errors)
         out.append("</td></tr>")
         

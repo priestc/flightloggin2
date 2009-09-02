@@ -9,7 +9,8 @@
 
 
 {% block canvas %}
-
+    <button onclick="window.location = '/{{ display_user }}/backup/'; return false;">Export</button>
+    
     <form action="/import.html" method="post" enctype="multipart/form-data">
     <div>
         <ul>
