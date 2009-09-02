@@ -27,13 +27,6 @@
                     $('#delete_all_nonflights').attr("disabled", "disabled")
             });
             
-            $('.verify_planes').click(function() {
-                if ( $("input.verify_planes:not(:checked)").size() == 0 )
-                    $('#delete_all_planes').removeAttr("disabled")
-                else
-                    $('#delete_all_planes').attr("disabled", "disabled")
-            });
-            
             $('.verify_unusedplanes').click(function() {
                 if ( $("input.verify_unusedplanes:not(:checked)").size() == 0 )
                     $('#delete_unusedplanes').removeAttr("disabled")
@@ -204,16 +197,6 @@
             <input id="delete_all_nonflights" type="submit" name="submit" value="Delete All Non-Flights" disabled="disabled">
             <input type="checkbox" class="verify_nonflights">
             <input type="checkbox" class="verify_nonflights">
-        </div>
-            
-        <br>
-            
-        <div class="delete_box">
-            <input type="checkbox" class="verify_planes">
-            <input type="checkbox" class="verify_planes">
-            <input id="delete_all_planes" type="submit" name="submit" value="Delete All Planes" disabled="disabled">
-            <input type="checkbox" class="verify_planes">
-            <input type="checkbox" class="verify_planes">
         </div>
             
         <br>

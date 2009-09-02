@@ -29,9 +29,6 @@ def profile(request):
         elif request.POST.get("submit") == "Delete All Non-Flights":
             NonFlight.objects.filter(user=display_user).delete()
         
-        elif request.POST.get("submit") == "Delete All Planes":
-            Plane.objects.filter(user=display_user).delete()
-        
         elif request.POST.get("submit") == "Delete Unused Planes":
             Plane.objects.filter(flight__isnull=True, user=display_user).delete()
             
