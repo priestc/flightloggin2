@@ -97,12 +97,16 @@
                     <td class="{% block planes-sel %}{% endblock%}" >
                         <a href="{% url planes display_user.username %}">Planes</a>
                     </td>
-
-                    <td class="{% block mass-sel %}{% endblock%}" >
-                        <a href="{% url mass-entry %}">Mass Entry</a>
+                    
+                    <td class="{% block currency-sel %}{% endblock%}" >
+                        <a href="{% url currency display_user.username %}">Currency</a>
                     </td>
                     
                     {% if not shared %}
+                    <td class="{% block mass-sel %}{% endblock%}" >
+                        <a href="{% url mass-entry %}">Mass Entry</a>
+                    </td>
+
                     <td class="{% block manage-sel %}{% endblock%}" >
                         <a href="{% url manage %}">Manage</a>
                     </td>

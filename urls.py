@@ -20,6 +20,7 @@ urlpatterns = patterns('',
     url(r'^(?P<username>\w+)/graphs.html$',                        "graphs.views.graphs",     name="graphs"),
     url(r'^(?P<username>\w+)/planes.html$',                        "plane.views.planes",      name="planes"),
     url(r'^(?P<username>\w+)/maps.html$',                          "maps.views.maps",         name="maps"),
+    url(r'^(?P<username>\w+)/currency.html$',                      "currency.views.currency", name="currency"),
     
     url(r'^backup.tsv$',                                           "logbook.views.backup",     name="backup"),
     url(r'^massentry.html$',                                       "logbook.views.mass_entry", name="mass-entry"),
