@@ -18,6 +18,11 @@ def profile(request):
     #assert False
     
     if request.POST:
+        profile_form = ProfileForm(request.POST, instance=profile)
+        user_form = UserForm(request.POST, instance=display_user)
+        column_form = ColumnsForm(request.POST, prefix="column", instance=column)
+        auto_form = AutoForm(request.POST, prefix="auto", instance=auto)
+    
         if request.POST.get("submit") == "Delete All Flights":
             Flight.objects.filter(user=display_user).delete()
         
@@ -37,12 +42,6 @@ def profile(request):
             Records.objects.filter(user=display_user).delete()
         
         else:
-    
-            profile_form = ProfileForm(request.POST, instance=profile)
-            user_form = UserForm(request.POST, instance=display_user)
-            column_form = ColumnsForm(request.POST, prefix="column", instance=column)
-            auto_form = AutoForm(request.POST, prefix="auto", instance=auto)
-        
             if auto_form.is_valid():
                 auto_form.save()
                 
