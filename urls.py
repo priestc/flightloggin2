@@ -13,7 +13,7 @@ urlpatterns = patterns('',
     url(r'^faq.html$',                                             "main.views.faq",          name="faq"),
     url(r'^help.html$',                                            "main.views.help",         name="help"),
     url(r'^preferences.html$',                                     "profile.views.profile",   name="profile"),
-    url(r'^import.html$',                                          "import.views.import_s",   name="import"),
+    url(r'^import.html$',                                          "manage.views.import_s",   name="import"),
     
     url(r'^(?P<username>\w+)/records.html$',                       "records.views.records",   name="records"),
     url(r'^(?P<username>\w+)/graphs.html$',                        "graphs.views.graphs",     name="graphs"),

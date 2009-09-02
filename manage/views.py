@@ -100,19 +100,22 @@ def do_import(request, f, preview=True):
     if records:
         line = dr.next()
         
-        if preview:
-            records_out = make_preview_records(line.get('date'), records_out)
-        else:
-            records_out = make_commit_records(line.get('date'), request.user, records_out)
-            
-        header = dr.next()
-        #dr.fieldnames = header
-        
-        for line in dr:
+        if not line['date'] == "##PLANES":
             if preview:
-                plane_out = make_preview_plane(line, plane_out)
+                records_out = make_preview_records(line.get('date'), records_out)
             else:
-                plane_out = make_commit_plane(line, request.user, plane_out)
+                records_out = make_commit_records(line.get('date'), request.user, records_out)
+        
+        try:
+            header = dr.next()
+            for line in dr:
+                if preview:
+                    plane_out = make_preview_plane(line, plane_out)
+                else:
+                    plane_out = make_commit_plane(line, request.user, plane_out)
+        except StopIteration:                                                       #most likley an empty planes section, just do nothing
+            pass
+
             
     return {"flight_out": flight_out, "plane_out": plane_out, "non_out": non_out, "records_out": records_out}
 
@@ -155,6 +158,8 @@ def prepare_line(line):
         
     if line.get('pic'):
         l = [fo, captain, instructor, student]
+    else:
+        l = [instructor, fo, captain, student]
 
     for x in l:
         if x:
@@ -200,12 +205,14 @@ def make_commit_flight(line, user, out):
     flight = Flight(user=user)
     line.update({"plane": plane.pk})
     form = ImportFlightForm(line, instance=flight)
+    #import pdb; pdb.set_trace()
     if form.is_valid():
         form.save()
         out.append("<tr><td>good</td><td>" + str(line.get('date')) + "</td><td>" + str(line.get('remarks')) + "</td></tr>")
     else:
-        out.append("<tr class='bad' ><td>")
-        out.append(" ".join(line))
+        out.append("<tr class='bad'><td>")
+        out.append("</td><td>".join([str(v) for v in line.values()]))
+        out.append("</td><tr class='bad'><td colspan=21>")
         out.append(form.errors)
         out.append("</td></tr>")
         
@@ -242,7 +249,7 @@ def make_commit_plane(line, user, out):
     rt = line.get('pic')
     tags = line.get('solo')
     
-    p=Plane.objects.get(user=user, tailnumber=tailnumber, type=type)
+    p,c=Plane.objects.get_or_create(user=user, tailnumber=tailnumber, type=type)
     p.manufacturer=manufacturer
     p.model=model
     p.cat_class=cat_class

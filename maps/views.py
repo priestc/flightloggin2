@@ -7,8 +7,11 @@ from django.http import HttpResponse
 from django.template.loader import get_template
 from django.template import Context
 
-@render_to('logbook.html')
-def maps(request):
+from is_shared import is_shared
+
+@render_to('maps.html')
+def maps(request, username):
+    shared, display_user = is_shared(request, username)
     return locals()
 
 def airports_kml(request, username):

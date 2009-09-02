@@ -10,5 +10,6 @@ class NonFlightForm(ModelForm):
     user = forms.ModelChoiceField(queryset=User.objects.all(), widget=HiddenInput)
     class Meta:
         model = NonFlight
+        exclude = ('user' )
         
 NonFlightFormset = modelformset_factory(NonFlight, form=NonFlightForm, extra=1, can_delete=True)

@@ -192,8 +192,14 @@ def mass_entry(request):
         
         
         if formset.is_valid():
-            import pdb; pdb.set_trace()
-            formset.save()
+            
+            for form in formset.forms:
+                instance = form.save(commit=False)
+                instance.user = display_user
+                #import pdb; pdb.set_trace()
+                if instance.date:
+                    instance.save()
+            
             return HttpResponseRedirect('/' + display_user.username + '/logbook.html')
             
         

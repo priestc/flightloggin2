@@ -90,7 +90,7 @@ class BlankIntField(BlankHourField):
 
 class FlightForm(ModelForm):
 
-    user =     forms.ModelChoiceField(queryset=User.objects.all(), widget=HiddenInput)
+    #user =     forms.ModelChoiceField(queryset=User.objects.all(), widget=HiddenInput, required=False)
     route =    RouteField(widget=forms.TextInput, required=False, queryset=Route.objects.get_empty_query_set())
     plane =    PlaneField(queryset=Plane.objects.get_empty_query_set(), required=True)
     
@@ -123,6 +123,7 @@ class FlightForm(ModelForm):
 
     class Meta:
         model = Flight
+        exclude = ('user', )
 
 #############################################################################################################
 
