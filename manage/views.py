@@ -22,10 +22,6 @@ from forms import ImportForm, ImportFlightForm
 @render_to('manage.html')
 def manage(request):
     display_user = request.user
-    button=request.POST.get("submit") or "sdfsf" 
-    
-    
-        
     return locals()
 
 @login_required()

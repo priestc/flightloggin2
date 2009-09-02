@@ -1,6 +1,8 @@
 from annoying.decorators import render_to
 from forms import ProfileForm, ColumnsForm, AutoForm, UserForm
 from models import *
+from plane.models import Plane
+from records.models import Records
 from logbook.models import Columns
 from logbook.constants import OPTION_FIELDS, FIELD_TITLES
 
