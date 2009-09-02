@@ -3,11 +3,59 @@
 
 {% block javascript %}
 	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/manage.css">
+	<script>
+	    $(document).ready(function() {
+            $('.verify_flights').click(function() {
+                if ( $("input.verify_flights:not(:checked)").size() == 0 )
+                    $('#delete_all_flights').removeAttr("disabled")
+            });
+            
+            $('.verify_planes').click(function() {
+                if ( $("input.verify_planes:not(:checked)").size() == 0 )
+                    $('#delete_all_planes').removeAttr("disabled")
+            });
+            
+            $('.verify_unusedplanes').click(function() {
+                if ( $("input.verify_unusedplanes:not(:checked)").size() == 0 )
+                    $('#delete_unusedplanes').removeAttr("disabled")
+            });	
+        });
+	</script>
 {% endblock %}
 
 {% block title %}Manage{% endblock %}
 
 {% block canvas %}
-manage
-
+<form action="{% url manage %}" method="post">
+    <div class="delete_box">
+    To delete all <strong>flights</strong> in your logbook, check each checkbox, then click the button:
+    <input type="checkbox" class="verify_flights">
+    <input type="checkbox" class="verify_flights">
+    <input type="checkbox" class="verify_flights">
+    <input type="checkbox" class="verify_flights">
+    <input id="delete_all_flights" type="submit" value="Delete All Flights" disabled="disabled">
+    </div>
+    
+    <br>
+    
+    <div class="delete_box">
+    To delete all <strong>planes</strong> in your logbook, check each checkbox, then click the button:
+    <input type="checkbox" class="verify_planes">
+    <input type="checkbox" class="verify_planes">
+    <input type="checkbox" class="verify_planes">
+    <input type="checkbox" class="verify_planes">
+    <input id="delete_all_planes" type="submit" value="Delete All Planes" disabled="disabled">
+    </div>
+    
+    <br>
+    
+    <div class="delete_box">
+    To delete only the <strong>unused planes</strong> in your logbook, check each checkbox, then click the button:
+    <input type="checkbox" class="verify_unusedplanes">
+    <input type="checkbox" class="verify_unusedplanes">
+    <input type="checkbox" class="verify_unusedplanes">
+    <input type="checkbox" class="verify_unusedplanes">
+    <input id="delete_unusedplanes" type="submit" value="Delete Unused Planes" disabled="disabled">
+    </div>
+</form>
 {% endblock %}

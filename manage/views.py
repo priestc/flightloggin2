@@ -18,9 +18,20 @@ from logbook.constants import FIELD_TITLES
 from constants import *
 from forms import ImportForm, ImportFlightForm
 
+@login_required
 @render_to('manage.html')
 def manage(request):
     display_user = request.user
+    
+    if request.POST.get("submit") == "Delete All Flights":
+        Flight.objects.filter(user=display_user).delete()
+    
+    if request.POST.get("submit") == "Delete All Planes":
+        Plane.objects.filter(user=display_user).delete()
+    
+    if request.POST.get("submit") == "Delete All Unused Planes":
+        Plane.objects.filter(flight__isnull=True, user=display_user).delete()
+    
     return locals()
 
 @login_required()
