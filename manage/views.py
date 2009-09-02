@@ -18,6 +18,11 @@ from logbook.constants import FIELD_TITLES
 from constants import *
 from forms import ImportForm, ImportFlightForm
 
+@render_to('manage.html')
+def manage(request):
+    display_user = request.user
+    return locals()
+
 @login_required()
 @render_to('import.html')
 def import_s(request):
