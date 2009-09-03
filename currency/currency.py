@@ -5,25 +5,25 @@ from dateutil.relativedelta import *
 from logbook.models import Flight
 from records.models import NonFlight
 
-def translate_units(value):
+def get_date(expire_time, start):
     try:
-        number, unit = re.match("^(\d+)([a-z]+)$", value).groups()
+        number, unit = re.match("^(\d+)([a-z]+)$", expire_time).groups()
     except:
         raise ValueError("FL: Invalid unit formatting")
     
     number = int(number)
         
     if unit == "d":
-        return timedelta(days=number)
+        return timedelta(days=number) + start
         
     elif unit == "m":
-        return timedelta(months=number)
+        return timedelta(months=number) + start
 
     elif unit == "y":
-        return timedelta(years=e_number)
+        return timedelta(years=number) + start
 
     elif unit == "cm":
-        return relativedelta(months=+number + 1).replace(day=1) + relativedelta(days=-1)
+        return (start + relativedelta(months=+number + 1)).replace(day=1) + relativedelta(days=-1)
         
     else:
         raise ValueError("FL: Invalid unit formatting")
@@ -44,7 +44,7 @@ class FAA_Currency(object):
     def __init__(self, user):
         self.user=user
                     
-    def determine(self, method, start_date):
+    def _determine(self, method, start_date):
         """determine if the current date is before, after, or in the alert timeframe."""
         
         TODAY = date.today()
@@ -52,21 +52,33 @@ class FAA_Currency(object):
         expire_time   =   self.CURRENCY_DATA[method][0]     #get the alert and expire times based on the master dict
         alert_time    =   self.CURRENCY_DATA[method][1]
         
-        expire_date = translate_units(expire_time) + start_date
-        alert_date = translate_units(expire_time) + start_date
+        expire_date = get_date(expire_time, start_date)
+        alert_date = get_date(expire_time, start_date)
         
 
         if TODAY > expire_date:                                 #today is later than expire date, EXPIRED
             return "EXPIRED"
 
-        elif TODAY < expire_date and TODAY > alert_delta:       #today is later than alert, but not past expired date, ALERT
+        elif TODAY < expire_date and TODAY > alert_date:       #today is later than alert, but not past expired date, ALERT
             return "ALERT"
 
-        elif TODAY < expire_date and TODAY < alert_delta:       #today is before expire date, and before alert date, CURRENT
+        elif TODAY < expire_date and TODAY < alert_date:       #today is before expire date, and before alert date, CURRENT
             return "CURRENT"
         
         else:
             assert False
+
+
+
+
+
+
+
+
+
+
+
+
 
     def flight_review(self):
 
@@ -99,7 +111,7 @@ class FAA_Currency(object):
 
         ################################################################################
 
-        return self.determine("flight_review", start_date)
+        return self._determine("flight_review", start_date)
 
         
 
@@ -134,7 +146,7 @@ class FAA_Currency(object):
 
         ############
 
-        return self.get_status("flight_instructor", start_date)
+        return self._determine("flight_instructor", start_date)
 
 
 
