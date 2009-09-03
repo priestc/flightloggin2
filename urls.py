@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     url(r'^preferences.html$',                                     "profile.views.profile",   name="profile"),
     url(r'^manage.html$',                                          "manage.views.manage",     name="manage"),
     url(r'^import.html$',                                          "manage.views.import_s",   name="import"),
+    url(r'^test.png$',                                             "graphs.views.test",       name="test"),
     
     url(r'^(?P<username>\w+)/records.html$',                       "records.views.records",   name="records"),
     url(r'^(?P<username>\w+)/graphs.html$',                        "graphs.views.graphs",     name="graphs"),

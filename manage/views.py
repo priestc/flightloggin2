@@ -209,8 +209,27 @@ def make_preview_records(line, out):
 def make_commit_flight(line, user, out):
     plane, created = Plane.objects.get_or_create(tailnumber=line.get("tailnumber"), type=line.get("type"), user=user)
     flight = Flight(user=user)
+    
+    if "P" in line.get("flying", []):
+        line.update({"pilot_checkride": True})
+    
+    if "H" in line.get("flying", []):
+        line.update({"holding": True})
+        
+    if "T" in line.get("flying", []):
+        line.update({"tracking": True})
+        
+    if "C" in line.get("flying", []):
+        line.update({"cfi_checkride": True})
+        
+    if "I" in line.get("flying", []):
+        line.update({"ipc": True})
+          
     line.update({"plane": plane.pk})
     form = ImportFlightForm(line, instance=flight)
+    
+    
+    
     #import pdb; pdb.set_trace()
     if form.is_valid():
         form.save()

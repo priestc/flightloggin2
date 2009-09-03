@@ -2,6 +2,8 @@ import re
 from datetime import *
 from dateutil.relativedelta import *
 
+from django.db.models import Q
+
 from logbook.models import Flight
 from records.models import NonFlight
 
@@ -54,27 +56,64 @@ class FAA_Currency(object):
         
         expire_date = get_date(expire_time, start_date)
         alert_date = get_date(expire_time, start_date)
-        
 
         if TODAY > expire_date:                                 #today is later than expire date, EXPIRED
-            return "EXPIRED"
+            return ("EXPIRED", expire_date)
 
         elif TODAY < expire_date and TODAY > alert_date:       #today is later than alert, but not past expired date, ALERT
-            return "ALERT"
+            return ("ALERT", expire_date)
 
         elif TODAY < expire_date and TODAY < alert_date:       #today is before expire date, and before alert date, CURRENT
-            return "CURRENT"
+            return ("CURRENT", expire_date)
         
         else:
             assert False
 
 
+    def day_landing(self, cat_class=0, tr=None, tail=False):
+        """Returns the date of the third to last day/night landing,
+        and whether or not it qualifies the user to be current"""
+        
+        last_three = Flight.objects.filter(user=self.user, plane__cat_class=cat_class).filter(Q(day_l__gte=1) | Q(night_l__gte=1)).order_by('-date').values('date', 'day_l', 'night_l')[:3]
+        
+        total = 0
+        for flight in last_three:
+            total += flight['night_l'] + flight['day_l']
+            if total >= 3:
+                start_date = flight['date']
+                break;
+                
+        if total < 3:
+            return ("NEVER", None, None)
+            
+        status, end_date = self._determine("landings", start_date)
+        
+        return (status, start_date, end_date)
+        
+        
 
 
+    def night_landing(self, cat_class=0, tr=None, tail=False):
+        """Returns the date of the third to last night landing,
+        and whether or not it qualifies the user to be current"""
+        
+        last_three = Flight.objects.filter(user=self.user, night_l__gte=1, plane__cat_class=cat_class).order_by('-date').values('date', 'night_l')[:3]
 
-
-
-
+        total = 0
+        for flight in last_three:
+            total += flight['night_l']
+            if total >= 3:
+                start_date = flight['date']
+                break;
+                
+        if total < 3:
+            return ("NEVER", None, None)
+            
+        status, end_date = self._determine("landings", start_date)
+        
+        return (status, start_date, end_date)
+            
+        
 
 
 
@@ -111,7 +150,9 @@ class FAA_Currency(object):
 
         ################################################################################
 
-        return self._determine("flight_review", start_date)
+        status, end_date = self._determine("flight_review", start_date)
+
+        return (status, start_date, end_date)
 
         
 
@@ -130,7 +171,7 @@ class FAA_Currency(object):
         ############
 
         if not refresher_date and not checkride_date:           # no checkrides nor flight reviews in database, return "never"
-            return "NEVER"
+            return ("NEVER", None, None)
 
         elif checkride_date and not refresher_date:
             start_date = checkride_date
@@ -146,8 +187,9 @@ class FAA_Currency(object):
 
         ############
 
-        return self._determine("flight_instructor", start_date)
+        status, end_date = self._determine("flight_review", start_date)
 
+        return (status, start_date, end_date)
 
 
 
