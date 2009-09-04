@@ -8,6 +8,21 @@ from plane.models import Plane
 from logbook.models import Flight
 from records.models import NonFlight
 
+def minus_alert(alert_time, expire):
+    try:
+        number, unit = re.match("^(\d+)([a-z]+)$", alert_time).groups()
+    except:
+        raise ValueError("FL: Invalid unit formatting")
+    
+    number = int(number)
+        
+    if unit == "d":
+        return expire - timedelta(days=number)
+    else:
+        raise NotImplementedError("FL: Not yet")
+        
+#######################################
+
 def get_date(expire_time, start):
     try:
         number, unit = re.match("^(\d+)([a-z]+)$", expire_time).groups()
@@ -69,10 +84,10 @@ class FAA_Currency(object):
         expire_time   =   self.CURRENCY_DATA[method][0]     #get the alert and expire times based on the master dict
         alert_time    =   self.CURRENCY_DATA[method][1]
         
-        
+        print expire_time, alert_time
         
         expire_date = get_date(expire_time, start_date)
-        alert_date = get_date(alert_time, start_date)
+        alert_date = minus_alert(alert_time, expire_date)
         
         print expire_date, alert_date
 
@@ -232,11 +247,11 @@ class FAA_Currency(object):
 
     def first_class(self):
     
-        if not self.medical_date or not self.over_40:
+        if not self.medical_date:
             self._get_medical_info()
             
         if not self.medical_class or not self.medical_class == 1:           #if medical was not issued as a first, it can never be a first
-            return "NEVER"
+            return ("NEVER", None, None)
             
         if self.over_40:
             method = "first_over"
@@ -254,7 +269,7 @@ class FAA_Currency(object):
             self._get_medical_info()
 
         if not self.medical_class or self.medical_class == 3:           #if medical was issued as a third, it can never be a second
-            return "NEVER"
+            return ("NEVER", None, None)
             
         if self.over_40:
             method = "second_over"
@@ -271,7 +286,7 @@ class FAA_Currency(object):
             self._get_medical_info()
 
         if not self.medical_class:
-            return "NEVER"
+            return ("NEVER", None, None)
             
         if self.over_40:
             method = "third_over"

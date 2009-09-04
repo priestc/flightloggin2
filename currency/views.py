@@ -18,6 +18,15 @@ def currency(request, username):
     cat_classes = Plane.objects.filter(user=display_user).values_list('cat_class', flat=True).order_by().distinct()
     tailwheels = Plane.objects.filter(user=display_user).filter( Q(tags__icontains="tailwheel")).values_list('cat_class', flat=True).order_by().distinct()
     
+    
+    medi_currbox = CurrBox(method="medical")
+    medi_currbox.first = currency.first_class()
+    medi_currbox.second = currency.second_class()
+    medi_currbox.third = currency.third_class()
+    medi_currbox.medi_issued = currency.medical_class
+    
+    #medi_currbox.render()
+    
     cat_classes_out = []
     for item in cat_classes:
         currbox = CurrBox(cat_class=item, method="landings")
@@ -36,7 +45,7 @@ def currency(request, username):
         
         tailwheels_out.append(currbox)
     
-    types_out = []   
+    types_out = []
     for item in type_ratings:
         currbox = CurrBox(tr=item, method="landings")
         
