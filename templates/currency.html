@@ -3,13 +3,35 @@
 
 {% block javascript %}
 	<script type="text/javascript" src="{{ MEDIA_URL }}javascripts/{{ title|lower }}.js"></script>
+	<style>
+	        div.currbox                    {width: 100%; overflow: hidden; margin-bottom: 10px}
+	        div.currbox p                  {margin-top: 3px}
+	        h2                             {font-size: large; color: black; margin-bottom: 3px}
+	        
+	        div.inner_currbox              {border: 1px solid black; width: 49%; height: 100px}
+	        
+	        div.day                        {float: left}
+	        div.night                      {float: right}
+	        
+	        .expired                       {background-color: gray}
+	        .current                       {background-color: DarkSeaGreen}
+	        .alert                         {background-color: Crimson}
+	</style>
 {% endblock %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}Currency{% endblock %}
 
 
 {% block canvas %}
 
-Currency
+{% for currbox in currboxes %}
+
+    {{currbox.render}}
+    
+{% empty %}
+
+    <span>Nothing to show here, sorry.</span>
+
+{% endfor %}
 
 {% endblock %}

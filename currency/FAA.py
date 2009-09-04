@@ -105,12 +105,14 @@ class FAA_Currency(object):
             if night:
                 last_three = Flight.objects.filter(user=self.user, plane__in=plane, night_l__gte=1).order_by('-date').values('date', 'night_l')[:3]
             
-        else:
+        elif cat_class < 15:
             if not night:
                 last_three = Flight.objects.filter(user=self.user, plane__cat_class=cat_class).filter(Q(day_l__gte=1) | Q(night_l__gte=1)).order_by('-date').values('date', 'day_l', 'night_l')[:3]
                 
             if night:
                 last_three = Flight.objects.filter(user=self.user, plane__cat_class=cat_class, night_l__gte=1).order_by('-date').values('date', 'day_l', 'night_l')[:3]
+        else:
+            return
  
         total = 0
         for flight in last_three:
