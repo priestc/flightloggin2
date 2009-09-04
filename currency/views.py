@@ -18,14 +18,34 @@ def currency(request, username):
     cat_classes = Plane.objects.filter(user=display_user).values_list('cat_class', flat=True).order_by().distinct()
     tailwheels = Plane.objects.filter(user=display_user).filter( Q(tags__icontains="tailwheel")).values_list('cat_class', flat=True).order_by().distinct()
     
-    currboxes = []
+    cat_classes_out = []
     for item in cat_classes:
         currbox = CurrBox(cat_class=item, method="landings")
         
         currbox.day = currency.landing(night=False, cat_class=item)
         currbox.night = currency.landing(night=True, cat_class=item)
         
-        currboxes.append(currbox)
+        cat_classes_out.append(currbox)
+     
+    tailwheels_out = []   
+    for item in tailwheels:
+        currbox = CurrBox(cat_class=item, method="landings", tail=True)
+        
+        currbox.day = currency.landing(night=False, cat_class=item, tail=True)
+        currbox.night = currency.landing(night=True, cat_class=item, tail=True)
+        
+        tailwheels_out.append(currbox)
+    
+    types_out = []   
+    for item in type_ratings:
+        currbox = CurrBox(tr=item, method="landings")
+        
+        currbox.day = currency.landing(night=False, tr=item)
+        currbox.night = currency.landing(night=True, tr=item)
+        
+        types_out.append(currbox)
+        
+    
     
     #assert False
     #import pdb; pdb.set_trace()

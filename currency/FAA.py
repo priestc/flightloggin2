@@ -69,8 +69,12 @@ class FAA_Currency(object):
         expire_time   =   self.CURRENCY_DATA[method][0]     #get the alert and expire times based on the master dict
         alert_time    =   self.CURRENCY_DATA[method][1]
         
+        
+        
         expire_date = get_date(expire_time, start_date)
-        alert_date = get_date(expire_time, start_date)
+        alert_date = get_date(alert_time, start_date)
+        
+        print expire_date, alert_date
 
         if self.TODAY > expire_date:                                 #today is later than expire date, EXPIRED
             return ("EXPIRED", expire_date)
@@ -96,7 +100,7 @@ class FAA_Currency(object):
             if night:
                 last_three = Flight.objects.filter(user=self.user, plane__type=tr, night_l__gte=1).order_by('-date').values('date', 'night_l')[:3]
             
-        elif tail and cat_class > 0:
+        elif tail and cat_class > 0:  #cat_class above 0 is just a bug check
             plane = Plane.objects.filter(user=self.user, cat_class=cat_class, tags__icontains="tailwheel")
             
             if not night:
@@ -105,7 +109,7 @@ class FAA_Currency(object):
             if night:
                 last_three = Flight.objects.filter(user=self.user, plane__in=plane, night_l__gte=1).order_by('-date').values('date', 'night_l')[:3]
             
-        elif cat_class < 15:
+        elif cat_class < 15:  #forget simulators and FTD's (cat_classes above 15)
             if not night:
                 last_three = Flight.objects.filter(user=self.user, plane__cat_class=cat_class).filter(Q(day_l__gte=1) | Q(night_l__gte=1)).order_by('-date').values('date', 'day_l', 'night_l')[:3]
                 

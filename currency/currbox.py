@@ -8,10 +8,19 @@ class CurrBox(object):
     day = False
     night = False
     
-    def __init__(self, cat_class=0, method="", date_format=""):
+    def __init__(self, cat_class=0, tr=None, method="", date_format="", tail=False):
         self.cat_class = cat_class
         self.method = method
         self.date_format = date_format
+        
+        if cat_class:
+            self.title = CATEGORY_CLASSES[self.cat_class][1]
+        
+        elif tr:
+            self.title = tr
+            
+        if tail:
+            self.title += " Tailwheel"
         
     def render(self):
         
@@ -30,10 +39,10 @@ class CurrBox(object):
                     (str(getattr(self, time)[2]), days_ago)
                     
                     lines.append("<div class='%s inner_currbox %s'>" % (class_name, time) )
-                    lines.append("<h2>%s %s</h2>" % (time.capitalize(), CATEGORY_CLASSES[self.cat_class][1]) )
+                    lines.append("<h3>%s %s</h3>" % (time.capitalize(), self.title) )
                     lines.append("<p>Date of third-to-last landing: <strong>%s</strong><br>" % start_date )
                     if current:
-                        lines.append("Last day of currency: <strong>%s</strong> (%s Days from now)</p>" % (end_date, days_ago) )
+                        lines.append("Last day of currency: <strong>%s</strong> (%s Days remain)</p>" % (end_date, days_ago) )
                     else:
                         lines.append("Last day of currency: <strong>%s</strong> (%s Days ago)</p>" % (end_date, days_ago) )
                     
@@ -41,7 +50,7 @@ class CurrBox(object):
                 else:
                 
                     lines.append("<div class='expired inner_currbox %s'>" % time)
-                    lines.append("<h2>%s %s</h2>" % (time.capitalize(), CATEGORY_CLASSES[self.cat_class][1]) )
+                    lines.append("<h3>%s %s</h3>" % (time.capitalize(), self.title) )
                     lines.append("<p>You do not have 3 landings</p>")
                     lines.append("</div>")
             

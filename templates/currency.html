@@ -3,20 +3,7 @@
 
 {% block javascript %}
 	<script type="text/javascript" src="{{ MEDIA_URL }}javascripts/{{ title|lower }}.js"></script>
-	<style>
-	        div.currbox                    {width: 100%; overflow: hidden; margin-bottom: 10px}
-	        div.currbox p                  {margin-top: 3px}
-	        h2                             {font-size: large; color: black; margin-bottom: 3px}
-	        
-	        div.inner_currbox              {border: 1px solid black; width: 49%; height: 100px}
-	        
-	        div.day                        {float: left}
-	        div.night                      {float: right}
-	        
-	        .expired                       {background-color: gray}
-	        .current                       {background-color: DarkSeaGreen}
-	        .alert                         {background-color: Crimson}
-	</style>
+	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/currency.css">
 {% endblock %}
 
 {% block title %}Currency{% endblock %}
@@ -24,14 +11,35 @@
 
 {% block canvas %}
 
-{% for currbox in currboxes %}
+{% for currbox in cat_classes_out %}
+    {% if forloop.first %}
+        <h2>Category/Class:</h2>
+    {% endif %}
 
-    {{currbox.render}}
-    
-{% empty %}
-
-    <span>Nothing to show here, sorry.</span>
+    {{currbox.render}} 
 
 {% endfor %}
+
+{% for currbox in tailwheels_out %}
+    {% if forloop.first %}
+        <h2>Tailwheel:</h2>
+    {% endif %}
+
+    {{currbox.render}} 
+
+{% endfor %}
+
+{% for currbox in types_out %}
+    {% if forloop.first %}
+        <h2>Types:</h2>
+    {% endif %}
+
+    {{currbox.render}} 
+
+{% endfor %}
+
+{% if not types_out and not tailwheels_out and not cat_classes_out%}
+<span>Nothing to show here, sorry.</span>
+{% endif %}
 
 {% endblock %}
