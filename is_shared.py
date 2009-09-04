@@ -5,7 +5,7 @@ from django.http import Http404
 def is_shared(request, username):
     if request.user.is_authenticated():
         if username == request.user.username:
-            shared = False                         #viewing own logbook (passed username is the authenticated user)
+            return False, request.user             #viewing own logbook (passed username is the authenticated user)
         else:
             shared = True                          #viewing a shared logbook (user is logged into his own account)
     else:
@@ -21,7 +21,7 @@ def is_shared(request, username):
     except:
         ok_to_share = True
       
-    if not user or not ok_to_share:
+    if not user or ( not ok_to_share and shared ):
         raise Http404
         
     return shared, user
