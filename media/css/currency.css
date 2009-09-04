@@ -14,3 +14,5 @@ div.night           {float: right}
 .expired            {background-color: gray}
 .current            {background-color: DarkSeaGreen}
 .alert              {background-color: #d53823}
+
+.nothing            {font-size: large; margin: 10px; text-align: center}

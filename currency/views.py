@@ -25,6 +25,9 @@ def currency(request, username):
     medi_currbox.third = currency.third_class()
     medi_currbox.medi_issued = currency.medical_class
     
+    if not currency.medical_class:
+        del medi_currbox                #if there are no medicals, then delete this box so it doesn't show up in the template
+    
     #medi_currbox.render()
     
     cat_classes_out = []
