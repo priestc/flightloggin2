@@ -30,6 +30,4 @@ def currency(request, username):
     #assert False
     #import pdb; pdb.set_trace()
     
-    currboxes[0].render()
-    
     return locals()
