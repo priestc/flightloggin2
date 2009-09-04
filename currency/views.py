@@ -22,8 +22,8 @@ def currency(request, username):
     for item in cat_classes:
         currbox = CurrBox(cat_class=item, method="landings")
         
-        currbox.night = currency.landing(night=False, cat_class=item)
-        currbox.day = currency.landing(night=True, cat_class=item)
+        currbox.day = currency.landing(night=False, cat_class=item)
+        currbox.night = currency.landing(night=True, cat_class=item)
         
         currboxes.append(currbox)
     
