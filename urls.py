@@ -19,7 +19,9 @@ urlpatterns += patterns('',
     url(r'^preferences.html$',                                     "profile.views.profile",   name="profile"),
     url(r'^manage.html$',                                          "manage.views.manage",     name="manage"),
     url(r'^import.html$',                                          "manage.views.import_s",   name="import"),
-    url(r'^test.png$',                                             "graphs.views.test",       name="test"),
+    
+    (r'^histogram-(?P<column>\w+).png$',                           "graphs.views.histogram"),
+    (r'^line-(?P<column>\w+).png$',                           "graphs.views.line"),
     
     url(r'^(?P<username>\w+)/records.html$',                       "records.views.records",   name="records"),
     url(r'^(?P<username>\w+)/graphs.html$',                        "graphs.views.graphs",     name="graphs"),
