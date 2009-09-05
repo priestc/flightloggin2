@@ -2,75 +2,83 @@ from django.contrib.gis.db import models
 from constants import AIRPORT_TYPE, NAVAID_TYPE
 from django.contrib.auth.models import User
 
-class Navaid(models.Model):
+class Location(models.Model):
     identifier      =       models.CharField(max_length=8)
-    name            =       models.CharField(max_length=96)
-    municipality    =       models.CharField(max_length=60, blank=True)
-    type            =       models.IntegerField(choices=NAVAID_TYPE)
-    location        =       models.PointField()
-    
-    objects         =       models.GeoManager()
-
-    class Meta:
-        ordering = ["identifier"]
-        verbose_name_plural = "Navaids"
-
-    def __unicode__(self):
-        return u"%s - %s" % (self.identifier, self.name)
-
-    def display_name(self):
-        return " - ".join([self.identifier, self.name])
-
-    def location_summary(self):
-        return "not yet implemented"
-        
-    def title_display(self):
-        return self.name + " " + self.get_type_display()
-        
-    def line_display(self):
-        return self.identifier
-
-class Airport(models.Model):
-    identifier      =       models.CharField(max_length=8, primary_key=True)
 
     name            =       models.CharField(max_length=96, blank=True)
     municipality    =       models.CharField(max_length=60, blank=True)
     country         =       models.ForeignKey("Country", null=True, blank=True)
     region          =       models.ForeignKey("Region", null=True, blank=True)
-    type            =       models.IntegerField(choices=AIRPORT_TYPE)
 
     elevation       =       models.IntegerField(null=True)
-    location        =       models.PointField()
+    location        =       models.PointField(null=True, blank=True)
     
     objects         =       models.GeoManager()
 
     class Meta:
-        ordering = ["identifier", "country"]
-        verbose_name_plural = "Airports"
+        abstract = True
 
     def __unicode__(self):
-        return u"%s - %s" % (self.identifier, self.location_summary())
+        return u"%s" % self.identifier
+        
+    def region_name(self):
+        if self.region:
+            return self.region.name
+        return "(unassigned)"
+        
+    def country_name(self):
+        if self.country:
+            return self.country.name
+        return "(unassigned)"
 
-    def display_name(self):
-        return " - ".join([self.identifier, self.name])
+   # def display_name(self):
+   #     """Forward facing __unicode__, used in KML and similiar"""
+   #     return "%s - %s" % (self.identifier, self.name)
+        
+    def line_display(self):
+        "What gets put on the line on the route column"
+        return self.identifier
+        
+    def title_display(self):
+        "What gets put in the tooltip on the route column"
+        return self.location_summary()
+        
 
+#####################################################################
+#####################################################################
+
+
+class Navaid(Location):
+    type = models.IntegerField(choices=NAVAID_TYPE, null=True, blank=True)
+    
     def location_summary(self):
+        return u"%s - %s" % (self.name, self.get_type_display() )
+        
+class Custom(Location):
+    user = models.ForeignKey(User)
+    type = models.IntegerField(choices=AIRPORT_TYPE, null=True, blank=True)
+    
+    def location_summary(self):
+        if self.name:
+            return self.name
+        return "Custom"
+        
+class Airport(Location):
+    type = models.IntegerField(choices=AIRPORT_TYPE, null=True, blank=True)
+    
+    def location_summary(self):
+        """A friendly named location
+           EX: 'Newark, Ohio', 'Lilongwe, Malawi'. 
+        """
+          
         ret = []
-
-        for item in (self.municipality, self.region.name, self.country.name, ):
+        for item in (self.municipality, self.region_name(), self.country_name(), ):
             if item and item != "United States" and item != "(unassigned)":
                 ret.append(item)
 
         return ", ".join(ret)
-        
-    def line_display(self):
-        return self.identifier
-        
-    def title_display(self):
-        return self.location_summary()
-        
-class Custom(Airport):
-    user = models.ForeignKey(User, blank=True, null=True)
+    
+#####################################################################
     
 class Region(models.Model):
     code = models.CharField(max_length=48)

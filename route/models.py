@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import Q
 
 from annoying.functions import get_object_or_None
+from mid.middleware import threadlocals
 
 from airport.models import Airport, Custom, Navaid
 
@@ -12,6 +13,7 @@ class Route(models.Model):
     fancy_rendered =  models.TextField(blank=True, null=True)
     fallback_string = models.TextField(blank=True, null=True)
     simple_rendered = models.TextField(blank=True, null=True)
+    kml_rendered = models.TextField(blank=True, null=True)
     
     p2p =             models.BooleanField()
     
@@ -63,6 +65,9 @@ class RouteBase(models.Model):
         elif self.unknown:
             return "other: " + self.unknown
             
+        elif self.custom:
+            return "custom: " + self.custom.identifier
+            
         else:
             return "????"
             
@@ -82,84 +87,145 @@ def create_route_from_string(ostring):
     unknown = False
     fancy_rendered = []
     simple_rendered = []
+    kml_rendered = []
     routebases = []
     p2p = []
     
     for i, ident in enumerate(points):
-        
-        airport = None
-        navaid = None
+    
+        print ident[0]
     
         if ident[0] == "@":  #must be a navaid
         
             first_rb = len(routebases) == 0  # is this the first routebase? if so don't try to guess which navaid is closest to the previous point
-            
             if not first_rb and not routebases[i-1].unknown:
-                navaid = Navaid.objects.filter(identifier=ident[1:])
-                
-                if navaid.count() > 1:
-                    last_point = routebases[i-1].airport or routebases[i-1].navaid
-                    navaid = navaid.distance(last_point.location).order_by('distance')[0]
-                    
-                elif navaid.count() == 0:
-                    navaid = None
-                    
-                else:
-                    navaid = navaid[0]
-                    
+                routebase, rendered = find_navaid(ident, i, last_rb=routebases[i-1])
             else:
-                navaid = get_object_or_None(Navaid, identifier=ident[1:])
-
-            if navaid:
-                routebase = RouteBase(navaid=navaid, sequence=i)
-                routebases.append(routebase)
-                fancy_rendered.append("<span class='found_navaid' title='%s'>%s</span>" % (routebase.navaid.title_display(), routebase.navaid.line_display(), ) )
-                simple_rendered.append("@" + routebase.navaid.identifier)
-            
-            
-        else:
-            airport = get_object_or_None(Airport, pk=ident)
+                routebase, rendered = find_navaid(ident, i)
         
-            if not airport and len(ident) == 3:
-                airport = get_object_or_None(Airport, pk="K" + ident)
+        elif ident[0] == "!":  #must be custom
         
-            if airport:
-                routebase = RouteBase(airport=airport, sequence=i)
-                routebases.append(routebase)
-                p2p.append(airport.pk)          # a landing airport, eligable for p2p testing
-                fancy_rendered.append("<span class='found_airport' title='%s'>%s</span>" % (routebase.airport.title_display(), routebase.airport.line_display(), ) )
-                simple_rendered.append(routebase.airport.identifier)
+            routebase, rendered = find_custom(ident, i)
             
+        else:                  #must be an airport
+            
+            routebase, rendered = find_airport(ident, i, p2p=p2p)
+            
+        ########################################################################
        
-        if not (airport or navaid):
+        if not routebase:                                           ## no routebase? must unknown
             routebase = RouteBase(unknown=ident, sequence=i)
-            routebases.append(routebase)
             
             if not ident[0] == "@":                                         # not a unidentified navaid, assume a landing
                 p2p.append(unknown)
                 
-            fancy_rendered.append("<span class='not_found'>%s</span>" % (routebase.unknown, ) )
-            simple_rendered.append(routebase.unknown)
+            rendered['fancy'] = "<span class='not_found'>%s</span>" % ident
+            rendered['simple'] = ident
+            rendered['kml'] = ""            # unknown airports get ignored when mapping routes
+            
+        
+        routebases.append(routebase)
+        fancy_rendered.append(rendered["fancy"])
+        simple_rendered.append(rendered["simple"])
+        kml_rendered.append(rendered["kml"])
     
-    fancy_rendered = "-".join(fancy_rendered)
+    fancy_rendered = "-\n".join(fancy_rendered)
     simple_rendered = "-".join(simple_rendered)
+    kml_rendered = "\n".join(kml_rendered)
            
     is_p2p = len(set(p2p)) > 1
-    route = Route(fancy_rendered=fancy_rendered, simple_rendered=simple_rendered, fallback_string=ostring, p2p=is_p2p)
+    route = Route(fancy_rendered=fancy_rendered, kml_rendered=kml_rendered, simple_rendered=simple_rendered, fallback_string=ostring, p2p=is_p2p)
     route.save()
-    print "made new route"
+    
+    print("made new route")
     
     for routebase in routebases:
         routebase.route = route
         routebase.save()    
     
     return route
-    
+
+###########################################################
+###########################################################    
         
 def normalize(string):
+    """removes all cruf away from the route string, returns only the
+       alpha numeric characters with clean seperators"""
+    
     import re
     string = string.upper()
     string = string.replace("LOCAL", " ")
     string = string.replace(" TO ", " ")
-    return re.sub(r'[^a-zA-Z0-9_@]+', ' ', string).strip()
+    return re.sub(r'[^A-Z0-9!@]+', ' ', string).strip()
+    
+def find_navaid(ident, i, last_rb=None):
+    """Searches the database for the navaid object according to ident. if it finds a match,
+       it renders the 'kml', 'fancy', and 'simple' strings, and then creates and returns the
+       routebase object"""
+           
+    if last_rb:     #done just assume no
+        navaid = Navaid.objects.filter(identifier=ident[1:])
+        if navaid.count() > 1:                                                          #if more than 1 navaids come up,
+            last_point = last_rb.airport or last_rb.navaid                              #run another query to find the nearest
+            navaid = navaid.distance(last_point.location).order_by('distance')[0]  
+        elif navaid.count() == 0:
+            navaid = None
+        else:
+            navaid = navaid[0]
+    else:
+        navaid = get_object_or_None(Navaid, identifier=ident[1:])       # no previous routebases, 
+                                                                        # dont other with the extra queries trying to find the nearest based on the last
+        
+    if navaid:
+        routebase = RouteBase(navaid=navaid, sequence=i)
+        fancy = "<span class='found_navaid' title='%s'>%s</span>" % (navaid.title_display(), navaid.line_display(), )
+        simple = "@" + navaid.identifier
+        kml = "<coordinates>%f,%f,0</coordinates>" % (navaid.location.x, navaid.location.y)
+    else:
+        routebase=None; fancy=None; simple=None; kml=None
+        
+    return routebase, {"fancy": fancy, "simple": simple, "kml": kml}
+    
+##############################################################################################
+
+def find_custom(ident, i):
+    """Tries to find the custom point, if it can't find one, it adds it to the user's
+       custom list
+    """
+    user = threadlocals.get_current_user()
+    print "a custom!"
+    custom,created = Custom.objects.get_or_create(user=user, identifier=ident[1:], type=8)      #type 8 -> off airport
+
+   
+    routebase = RouteBase(custom=custom, sequence=i)
+    fancy = "<span class='found_custom' title='%s'>%s</span>" % (custom.title_display(), custom.line_display(), )
+    simple = "!" + custom.identifier
+    
+    if custom.location:
+        kml = "<coordinates>%f,%f,0</coordinates>" % (custom.location.x, custom.location.y)
+    else:
+        kml = ""
+
+        
+    return routebase, {"fancy": fancy, "simple": simple, "kml": kml}
+
+##############################################################################################
+
+def find_airport(ident, i, p2p):
+    airport = get_object_or_None(Airport, identifier=ident)
+        
+    if not airport and len(ident) == 3:                         # if the ident is 3 letters and no hit, try again with an added 'K'
+        airport = get_object_or_None(Airport, identifier="K" + ident)
+
+    if airport:
+        routebase = RouteBase(airport=airport, sequence=i)
+        p2p.append(airport.pk)          # a landing airport, eligable for p2p testing
+
+        fancy = "<span class='found_airport' title='%s'>%s</span>" % (airport.title_display(), airport.line_display(), )
+        simple = airport.identifier
+        kml = "<coordinates>%f,%f,0</coordinates>" % (airport.location.x, airport.location.y)
+    else:
+        routebase=None; fancy=None; simple=None; kml=None
+        
+    return routebase, {"fancy": fancy, "simple": simple, "kml": kml}
 

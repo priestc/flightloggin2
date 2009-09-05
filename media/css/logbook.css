@@ -22,5 +22,6 @@
     
     span.found_airport                           {color: MediumSlateBlue; text-decoration: underline}
     span.found_navaid                            {color: SeaGreen;        text-decoration: underline}
+    span.found_custom                            {color: Navy;            text-decoration: underline}
                                                   
     span.not_found                               {color: gray}
