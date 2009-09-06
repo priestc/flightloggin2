@@ -6,7 +6,14 @@ from route.models import Route
 from constants import *
 from utils import to_minutes
 
+class NoSimManager(models.Manager):
+    def get_query_set(self):                                #all airports which are an opbase
+        return super(NoSimManager, self).get_query_set().exclude(plane__cat_class__gte=15).distinct()
+
 class Flight(models.Model):
+
+    objects =   models.Manager()
+    nosim =     NoSimManager()
 
     date =      models.DateField()
     user =      models.ForeignKey(User, blank=False)

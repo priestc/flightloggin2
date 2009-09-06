@@ -20,8 +20,11 @@ urlpatterns += patterns('',
     url(r'^manage.html$',                                          "manage.views.manage",     name="manage"),
     url(r'^import.html$',                                          "manage.views.import_s",   name="import"),
     
-    (r'^histogram-(?P<column>\w+).png$',                           "graphs.views.histogram"),
-    (r'^line-(?P<column>\w+).png$',                           "graphs.views.line"),
+    (r'^(?P<username>\w+)/histogram-(?P<column>\w+).png$',         "graphs.views.histogram"),
+
+    (r'^(?P<username>\w+)/line-(?P<column>\w+)(--(?P<s>\d{4}.\d{1,2}.\d{1,2})-(?P<e>\d{4}.\d{1,2}.\d{1,2}))?.(?P<ext>[a-z]{3})$',
+    
+                                                                   "graphs.views.line"),
     
     url(r'^(?P<username>\w+)/records.html$',                       "records.views.records",   name="records"),
     url(r'^(?P<username>\w+)/graphs.html$',                        "graphs.views.graphs",     name="graphs"),
