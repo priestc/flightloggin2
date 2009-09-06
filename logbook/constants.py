@@ -1,14 +1,12 @@
-FIELDS = [
-          'date', 'plane', 'route',
-          'total', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
-          'p2p', 
-          'multi', 'm_pic',
-          'sea', 'sea_pic', 'mes', 'mes_pic',
-          'turbine', 't_pic', 'mt', 'mt_pic',
-          'complex', 'hp',
-          'person', 'remarks',
+
+
+FIELDS = ["date", "plane", "reg", "f_route", "s_route", "r_route", "total_s", "total",                                     #needs to be in column order
+          "pic", "sic", "solo", "dual_r", "dual_g", "xc", "act_inst", "sim_inst", "night", "night_l", "day_l", "app",
+          "p2p", "multi", "m_pic", "sea", "sea_pic", "mes", "mes_pic", "turbine", "t_pic", "mt", "mt_pic", "complex",
+          "hp", "sim", "tail", "jet", "jet_pic", "person", "remarks"
           ]
-BACKUP_FIELDS = ['date_backup', 'plane_backup', 'route_backup',
+          
+BACKUP_FIELDS = ['date_backup', 'reg', 'r_route',
           'total', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
           'person', 'remarks'
           ]
@@ -20,7 +18,7 @@ DB_FIELDS = [
           ]
 
 AGG_FIELDS = [
-          'total', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
+          'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
             ]
 
 EXTRA_AGG = [
@@ -28,7 +26,7 @@ EXTRA_AGG = [
           'multi', 'm_pic',
           'sea', 'sea_pic', 'mes', 'mes_pic',
           'turbine', 't_pic', 'mt', 'mt_pic',
-          'complex', 'hp',
+          'complex', 'hp', 'sim', 'tail', 'jet', 'jet_pic',
           ]
           
 OPTION_FIELDS = [
@@ -42,13 +40,18 @@ OPTION_FIELDS = [
           ]
  
 FIELD_TITLES = {
+    "s_route": "Route (Simple)",
+    "f_route": "Route (Fancy)",
+    "r_route": "Route (Raw)",
+    
+    "total_s": "Total (with Sim)",
+    "total": "Total",
+    
     "date": "Date",
     "date_backup": "Date",
     "plane": "Plane",
-    "plane_backup": "Plane",
-    "route": "Route",
-    "route_backup": "Route",
-    "total": "Total",
+    "reg": "Registration",
+
     "pic": "PIC",
     "sic": "SIC",
     "solo": "Solo",
@@ -61,6 +64,7 @@ FIELD_TITLES = {
     "night_l": "Night Landings",
     "day_l": "Day Landings",
     "app": "Approaches",
+    
     "p2p": "Point to Point Cross Country",
     "multi": "Multi-Engine",
     "m_pic": "Multi-Engine PIC",
@@ -76,13 +80,23 @@ FIELD_TITLES = {
     "remarks": "Remarks",
     "complex": "Complex",
     "hp": "High Performance",
+    "sim": "Sim",
+    "jet": "Jet",
+    "jet_pic": "Jet PIC",
+    "tail": "Tailwheel",
 }
 
 FIELD_ABBV = {
+    "s_route": "Route",
+    "f_route": "Route",
+    "r_route": "Route",
+    
+    "total_s": "Total",
+    "total": "Total",
+
     "date": "Date",
     "plane": "Plane",
-    "route": "Route",
-    "total": "Total",
+    
     "pic": "PIC",
     "sic": "SIC",
     "solo": "Solo",
@@ -95,6 +109,7 @@ FIELD_ABBV = {
     "night_l": "Night L.",
     "day_l": "Day L.",
     "app": "App's",
+    
     "p2p": "P2P",
     "multi": "Multi",
     "m_pic": "Multi PIC",
@@ -110,4 +125,8 @@ FIELD_ABBV = {
     "remarks": "Remarks",
     "complex": "Complex",
     "hp": "HP",
+    "sim": "Simulator",
+    "jet": "Jet",
+    "jet_pic": "Jet PIC",
+    "tail": "Tailwheel",
 }

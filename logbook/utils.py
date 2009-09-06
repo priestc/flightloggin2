@@ -1,3 +1,8 @@
+from django.db.models import Q
+
+sim = Q(plane__cat_class__gte=15)
+
+
 def to_minutes(flt):
     value = str(flt + 0.0)
     h,d = value.split(".")

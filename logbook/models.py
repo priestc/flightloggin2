@@ -5,6 +5,7 @@ from plane.models import Plane
 from route.models import Route
 from constants import *
 from utils import to_minutes
+from django.utils.safestring import mark_safe
 
 class NoSimManager(models.Manager):
     def get_query_set(self):                                #all airports which are an opbase
@@ -13,7 +14,6 @@ class NoSimManager(models.Manager):
 class Flight(models.Model):
 
     objects =   models.Manager()
-    nosim =     NoSimManager()
 
     date =      models.DateField()
     user =      models.ForeignKey(User, blank=False)
@@ -89,19 +89,27 @@ class Flight(models.Model):
     def column(self, cn, format="decimal", ret=0.0):
         """Returns a string that represents the column being passed"""
     
-        if cn in DB_FIELDS and not cn == "route" and not cn == "app":       # any field in the databse, except for route, remarks, and app
+        if cn in DB_FIELDS and not cn == "app" and not cn == "total":       # any field in the databse, except for total, remarks, and app
             ret = getattr(self, cn)
             
         ####################################### # return these immediately because they are strings
 
-        elif cn == "route" and self.route:
+        elif cn == "f_route" and self.route:
             if self.route.fancy_rendered:
-                return self.route.fancy_rendered
+                return mark_safe(self.route.fancy_rendered)
+            else:
+                return self.route.fallback_string
+            
+        elif cn == "s_route" and self.route:
+            if self.route.fancy_rendered:
+                return mark_safe(self.route.simple_rendered)
             else:
                 return self.route.fallback_string
         
-        elif cn == "fixed_route" and self.route:
-            return self.route
+        elif cn == "r_route" and self.route:
+            return self.route.fallback_string
+        
+        ########
             
         elif cn == "date_backup":
             return self.date
@@ -119,6 +127,14 @@ class Flight(models.Model):
            return self.disp_app()
            
         ######################################
+        
+        elif cn == "total" and not self.plane.is_not_sim():
+            ret = self.total
+            
+        elif cn == "total_s" and not self.plane.is_sim():
+            ret = self.total
+        elif cn == "total_s" and self.plane.is_sim():
+            ret = "(%s)" % self.total
                 
         elif cn == "t_pic" and self.plane.is_turbine():
             ret = self.pic
@@ -155,6 +171,15 @@ class Flight(models.Model):
             
         elif cn == "hp" and self.plane.is_hp():
             ret = self.total
+            
+        elif cn == "tail" and self.plane.is_tail():
+            ret = self.total
+            
+        elif cn == "jet" and self.plane.is_jet():
+            ret = self.total
+            
+        elif cn == "jet_pic" and self.plane.is_jet():
+            ret = self.pic
 
         elif cn == "p2p" and self.route:
             if self.route.p2p:
@@ -165,13 +190,13 @@ class Flight(models.Model):
         if ret == "0" or ret == "0.0" or ret == 0:
             return ""
             
-        elif format == "decimal" and type(ret) == type(0.0):
+        elif format == "decimal" and type(ret) == type(0.0):    # decimals are padded to one decimal space, converted to string, then returned
             return "%.1f" % ret
             
-        elif format == "decimal" and type(ret) == type(0):
+        elif type(ret) == type(5):                              # int's are straight converted to string and returned
             return str(ret)
             
-        elif format == "minutes" and type(ret) == type(0.0):
+        elif format == "minutes" and type(ret) == type(0.0):    # convert to HH:MM
             return to_minutes(ret)
             
         return ret
@@ -182,42 +207,52 @@ class Columns(models.Model):
     user =      models.ForeignKey(User, blank=False, primary_key=True)
     
     date =      True
-    route =     True
-    plane =     True
-    total =     True
     
-    pic =       models.BooleanField(FIELDS[5],  default=True)
-    sic =       models.BooleanField(FIELDS[6],  default=True)
-    solo =      models.BooleanField(            default=True)
-    dual_r =    models.BooleanField(FIELDS[9],  default=True)
-    dual_g =    models.BooleanField(FIELDS[10], default=True)
-    xc =        models.BooleanField(FIELDS[11], default=True)
-    act_inst =  models.BooleanField(FIELDS[12], default=True)
-    sim_inst =  models.BooleanField(FIELDS[13], default=True)
-    night =     models.BooleanField(            default=True)
-
+    plane =     models.BooleanField(FIELD_TITLES[FIELDS[1]],  default=True)
+    reg =       models.BooleanField(FIELD_TITLES[FIELDS[2]],  default=False)
     
-    night_l =   models.BooleanField(FIELDS[14], default=True)
-    day_l =     models.BooleanField(FIELDS[15], default=True)
-    app =       models.BooleanField(FIELDS[16], default=True)
+    f_route =   models.BooleanField(FIELD_TITLES[FIELDS[3]],  default=True)
+    s_route =   models.BooleanField(FIELD_TITLES[FIELDS[4]],  default=False)
+    r_route =   models.BooleanField(FIELD_TITLES[FIELDS[5]],  default=False)
     
-    p2p =       models.BooleanField(FIELDS[17], default=False)
-    multi =     models.BooleanField(FIELDS[18], default=False)
-    m_pic =     models.BooleanField(FIELDS[19], default=False)
-    sea =       models.BooleanField(FIELDS[20], default=False)
-    sea_pic =   models.BooleanField(FIELDS[21], default=False)
-    mes =       models.BooleanField(FIELDS[22], default=False)
-    mes_pic =   models.BooleanField(FIELDS[23], default=False)
-    turbine =   models.BooleanField(FIELDS[24], default=False)
-    t_pic =     models.BooleanField(FIELDS[25], default=False)
-    mt =        models.BooleanField(FIELDS[26], default=False)
-    mt_pic =    models.BooleanField(FIELDS[27], default=False)
+    total_s =   models.BooleanField(FIELD_TITLES[FIELDS[6]],  default=True)
+    total =     models.BooleanField(FIELD_TITLES[FIELDS[7]],  default=False)
     
-    complex =   models.BooleanField(FIELDS[28], default=True)
-    hp =        models.BooleanField(FIELDS[29], default=True)
+    pic =       models.BooleanField(FIELD_TITLES[FIELDS[8]],  default=True)
+    sic =       models.BooleanField(FIELD_TITLES[FIELDS[9]],  default=True)
+    solo =      models.BooleanField(FIELD_TITLES[FIELDS[10]], default=True)
+    dual_r =    models.BooleanField(FIELD_TITLES[FIELDS[11]], default=True)
+    dual_g =    models.BooleanField(FIELD_TITLES[FIELDS[12]], default=True)
+    xc =        models.BooleanField(FIELD_TITLES[FIELDS[13]], default=True)
+    act_inst =  models.BooleanField(FIELD_TITLES[FIELDS[14]], default=True)
+    sim_inst =  models.BooleanField(FIELD_TITLES[FIELDS[15]], default=True)
+    night =     models.BooleanField(FIELD_TITLES[FIELDS[16]], default=True)
+    night_l =   models.BooleanField(FIELD_TITLES[FIELDS[17]], default=True)
+    day_l =     models.BooleanField(FIELD_TITLES[FIELDS[18]], default=True)
+    app =       models.BooleanField(FIELD_TITLES[FIELDS[19]], default=True)
     
-    person =    models.BooleanField(            default=True)
-    remarks =   models.BooleanField(            default=True)
+    p2p =       models.BooleanField(FIELD_TITLES[FIELDS[20]], default=False)
+    multi =     models.BooleanField(FIELD_TITLES[FIELDS[21]], default=False)
+    m_pic =     models.BooleanField(FIELD_TITLES[FIELDS[22]], default=False)
+    sea =       models.BooleanField(FIELD_TITLES[FIELDS[23]], default=False)
+    sea_pic =   models.BooleanField(FIELD_TITLES[FIELDS[24]], default=False)
+    mes =       models.BooleanField(FIELD_TITLES[FIELDS[25]], default=False)
+    mes_pic =   models.BooleanField(FIELD_TITLES[FIELDS[26]], default=False)
+    turbine =   models.BooleanField(FIELD_TITLES[FIELDS[27]], default=False)
+    t_pic =     models.BooleanField(FIELD_TITLES[FIELDS[28]], default=False)
+    mt =        models.BooleanField(FIELD_TITLES[FIELDS[29]], default=False)
+    mt_pic =    models.BooleanField(FIELD_TITLES[FIELDS[30]], default=False)
+    
+    complex =   models.BooleanField(FIELD_TITLES[FIELDS[31]], default=True)
+    hp =        models.BooleanField(FIELD_TITLES[FIELDS[32]], default=True)
+    
+    sim =       models.BooleanField(FIELD_TITLES[FIELDS[33]], default=False)
+    tail =      models.BooleanField(FIELD_TITLES[FIELDS[34]], default=False)
+    jet =       models.BooleanField(FIELD_TITLES[FIELDS[35]], default=False)
+    jet_pic =   models.BooleanField(FIELD_TITLES[FIELDS[36]], default=False)
+    
+    person =    models.BooleanField(FIELD_TITLES[FIELDS[37]], default=True)
+    remarks =   models.BooleanField(FIELD_TITLES[FIELDS[38]], default=True)
 
     def as_list(self):
         ret=[]

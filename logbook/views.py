@@ -85,7 +85,6 @@ def logbook(request, username, page=0):
     class LogbookRow(list):
         date = ""
         plane = ""
-        route = ""
         raw_route = ""
         pk = 0
 

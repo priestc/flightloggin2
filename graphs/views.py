@@ -62,11 +62,6 @@ def line(display_user, column, s=None, e=None):
     
     fig = plt.figure()
     
-    #from matplotlib import rcParams
-    #rcParams['text.usetex']=True
-    #rcParams['text.latex.unicode']=True
-
-    
     df = "F jS, Y"
     sub = "From %s to %s" % (dj_date_format(s, df), dj_date_format(e, df))
     fig.suptitle(r'\textit{Velocity (5/sec)}' )#%s%s' % (FIELD_TITLES[column], sub), fontsize=18)

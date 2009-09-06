@@ -60,6 +60,12 @@ class Plane(models.Model):
         
     def is_complex(self):
         return get_object_or_None(Plane, pk=self.pk, tags__icontains="complex") == self
+    
+    def is_jet(self):
+        return get_object_or_None(Plane, pk=self.pk, tags__icontains="jet") == self
+    
+    def is_tail(self):
+        return get_object_or_None(Plane, pk=self.pk, tags__icontains="tailwheel") == self
 
     #############################
 
@@ -71,5 +77,8 @@ class Plane(models.Model):
 
     def is_mes(self):
         return self.cat_class == 4
+    
+    def is_sim(self):
+        return self.cat_class >= 15
 
 #tagging.register(Plane)

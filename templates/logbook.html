@@ -69,13 +69,10 @@
             <td class="date_col" title="Date (click to edit)">
         	    <span class="unformatted_date">{{ row.date }}</span>
                 <a href="" id="f{{row.pk}}">{{ row.date|date:date_format }}</a>                        {# date #}
+                <span class="unformatted_route">{{row.raw_route}}</span>
             </td>
 
             <td class="plane_col" title="Plane">{{ row.plane }}</td>                                   {# plane #}
-
-            <td class="route_col" title="Route">                                                       {# route #}
-                <span class="unformatted_route">{{row.raw_route}}</span>{{ row.route|safe }}
-            </td>
 
             {% for item in row %}
             <td title="{{item.title}}" class="{{item.system}}_col">{{item.extra}}{{item.disp}}</td>    {# all other columns #}

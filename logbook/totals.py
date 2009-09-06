@@ -1,13 +1,19 @@
 from django.db.models import Sum
 from constants import AGG_FIELDS, EXTRA_AGG
 from utils import to_minutes
+from utils import sim
 
 def total_column(queryset, columns, format='decimal'):
     ret = []
     agg_columns = []   
     for cn in columns:
+        if cn == "total":
+            total = queryset.exclude(sim).aggregate(Sum('total')).values()[0]
+            
+        elif cn == "simulator":
+            total = queryset.filter(sim).aggregate(Sum('total')).values()[0]
     
-        if cn in AGG_FIELDS:
+        elif cn in AGG_FIELDS:
             total = queryset.aggregate(Sum(cn)).values()[0]
             
         elif cn in EXTRA_AGG:

@@ -1,7 +1,6 @@
 from django.forms import ModelForm
 from models import *
 from logbook.models import Columns
-from profile.models import CurrencyDo
 from django.contrib.auth.models import User
 
 class ProfileForm(ModelForm):

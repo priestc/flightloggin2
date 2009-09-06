@@ -127,7 +127,7 @@ def create_route_from_string(ostring):
         simple_rendered.append(rendered["simple"])
         kml_rendered.append(rendered["kml"])
     
-    fancy_rendered = "-\n".join(fancy_rendered)
+    fancy_rendered = "-".join(fancy_rendered)
     simple_rendered = "-".join(simple_rendered)
     kml_rendered = "\n".join(kml_rendered)
            
