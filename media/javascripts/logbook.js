@@ -8,7 +8,7 @@ function fill_in_flight(dom_id) {
 	
 	$("#id_plane option:contains(" + trim($("#tr" + id + " td.plane_col").text()) + ")").attr("selected", "selected");
 	
-	$("#id_route").val(trim($("#tr" + id + " td.route_col span.unformatted_route").text()));
+	$("#id_route").val(trim($("#tr" + id + " span.unformatted_route").text()));
 	
 	$("#id_total").val(trim($("#tr" + id + " td.total_col").text()));
 	$("#id_pic").val(trim($("#tr" + id + " td.pic_col").text()));

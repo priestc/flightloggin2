@@ -96,18 +96,18 @@ class Flight(models.Model):
 
         elif cn == "f_route" and self.route:
             if self.route.fancy_rendered:
-                return mark_safe(self.route.fancy_rendered)
+                return mark_safe(self.route.fancy_rendered + "<span class='unformatted_route'>%s</span>" % self.route.fallback_string)
             else:
                 return self.route.fallback_string
             
         elif cn == "s_route" and self.route:
             if self.route.fancy_rendered:
-                return mark_safe(self.route.simple_rendered)
+                return mark_safe(self.route.simple_rendered + "<span class='unformatted_route'>%s</span>" % self.route.fallback_string)
             else:
                 return self.route.fallback_string
         
         elif cn == "r_route" and self.route:
-            return self.route.fallback_string
+            return mark_safe(self.route.fallback_string + "<span class='unformatted_route'>%s</span>" % self.route.fallback_string)
         
         ########
             
