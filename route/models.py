@@ -93,8 +93,6 @@ def create_route_from_string(ostring):
     
     for i, ident in enumerate(points):
     
-        print ident[0]
-    
         if ident[0] == "@":  #must be a navaid
         
             first_rb = len(routebases) == 0  # is this the first routebase? if so don't try to guess which navaid is closest to the previous point
@@ -193,7 +191,6 @@ def find_custom(ident, i):
        custom list
     """
     user = threadlocals.get_current_user()
-    print "a custom!"
     custom,created = Custom.objects.get_or_create(user=user, identifier=ident[1:], type=8)      #type 8 -> off airport
 
    
