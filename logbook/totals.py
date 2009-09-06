@@ -7,17 +7,21 @@ def total_column(queryset, columns, format='decimal'):
     ret = []
     agg_columns = []   
     for cn in columns:
-        if cn == "total":
-            total = queryset.exclude(sim).aggregate(Sum('total')).values()[0]
             
-        elif cn == "simulator":
-            total = queryset.filter(sim).aggregate(Sum('total')).values()[0]
+
     
-        elif cn in AGG_FIELDS:
+        if cn in AGG_FIELDS:
             total = queryset.aggregate(Sum(cn)).values()[0]
             
         elif cn in EXTRA_AGG:
-            if cn == 'complex':
+            
+            if cn == "total_s" or cn == "total":
+                total = queryset.exclude(sim).aggregate(Sum('total')).values()[0]
+                
+            elif cn == "sim":
+                total = queryset.filter(sim).aggregate(Sum('total')).values()[0]
+                
+            elif cn == 'complex':
                 total = queryset.filter(plane__tags__icontains='complex').aggregate(Sum('total')).values()[0]
                 
             elif cn == 'hp':

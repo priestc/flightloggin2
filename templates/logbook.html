@@ -71,16 +71,14 @@
                 <a href="" id="f{{row.pk}}">{{ row.date|date:date_format }}</a>                        {# date #}
             </td>
 
-            <td class="plane_col" title="Plane">{{ row.plane }}</td>                                   {# plane #}
-
             {% for item in row %}
             <td title="{{item.title}}" class="{{item.system}}_col">{{item.extra}}{{item.disp}}</td>    {# all other columns #}
             {% endfor %}
             
-             <td class="remarks_col" title="Remarks">                                                  {# remarks #}
+            <td class="remarks_col" title="Remarks">                                                  {# remarks #}
                 <span class="flying_event">{{row.events}}</span>
                 <span class="remarks">{{ row.remarks }}</span>
-             </td>
+            </td>
 		</tr>
 		{% empty %}
 	

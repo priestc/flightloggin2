@@ -136,14 +136,6 @@ def logbook(request, username, page=0):
             for column in columns.as_list():
                 if column == "date":
                     row.date = flight.column("date")
-
-                elif column == "plane":
-                    row.plane = flight.column("plane")
-
-                elif column == "route":
-                    row.route = flight.column("route")
-                    if flight.route:                                        # dont try to get fallback string if there is no route, (attribute error)
-                        row.raw_route = flight.route.fallback_string
                     
                 elif column == "remarks":
                     row.remarks = flight.column("remarks")

@@ -109,6 +109,12 @@ class Flight(models.Model):
         elif cn == "r_route" and self.route:
             return mark_safe(self.route.fallback_string + "<span class='unformatted_route'>%s</span>" % self.route.fallback_string)
         
+        elif cn == "plane":
+            return self.plane
+        
+        elif cn == "reg":
+            return self.plane.tailnumber
+        
         ########
             
         elif cn == "date_backup":
@@ -128,13 +134,18 @@ class Flight(models.Model):
            
         ######################################
         
-        elif cn == "total" and not self.plane.is_not_sim():
+        elif cn == "total" and not self.plane.is_sim():     #total
             ret = self.total
             
-        elif cn == "total_s" and not self.plane.is_sim():
+        elif cn == "sim" and self.plane.is_sim():           #sim
+            ret = self.total
+            
+        elif cn == "total_s" and not self.plane.is_sim():   #total (sim)
             ret = self.total
         elif cn == "total_s" and self.plane.is_sim():
             ret = "(%s)" % self.total
+            
+        ######################################
                 
         elif cn == "t_pic" and self.plane.is_turbine():
             ret = self.pic
