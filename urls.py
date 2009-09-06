@@ -24,7 +24,7 @@ urlpatterns += patterns('',
 
     (r'^(?P<username>\w+)/line-(?P<column>\w+)(--(?P<s>\d{4}.\d{1,2}.\d{1,2})-(?P<e>\d{4}.\d{1,2}.\d{1,2}))?.(?P<ext>[a-z]{3})$',
     
-                                                                   "graphs.views.line"),
+                                                                   "graphs.views.line_generator"),
     
     url(r'^(?P<username>\w+)/records.html$',                       "records.views.records",   name="records"),
     url(r'^(?P<username>\w+)/graphs.html$',                        "graphs.views.graphs",     name="graphs"),

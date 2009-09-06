@@ -9,7 +9,7 @@ class plot_png(object):
         fig = self.view(*args, **kwargs)
         canvas=FigureCanvas(fig)
         response=HttpResponse(content_type='image/png')
-        canvas.print_svg(response)
+        canvas.print_png(response)
         return response
         
 class plot_svg(object):
@@ -19,6 +19,6 @@ class plot_svg(object):
     def __call__(self, *args, **kwargs):
         fig = self.view(*args, **kwargs)
         canvas=FigureCanvas(fig)
-        response=HttpResponse(content_type='image/svg')
+        response=HttpResponse(content_type='image/svg+xml')
         canvas.print_svg(response)
         return response

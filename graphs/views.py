@@ -27,31 +27,10 @@ from format_ticks import format_line_ticks
 def graphs(request, username):
     shared, display_user = is_shared(request, username)
     return locals()
-
-@plot_png    
-def histogram(request, column):
-    display_user = request.user
-    kwargs = {str(column + "__gt"): "0"}
-    flights = Flight.objects.filter(user=display_user, **kwargs).values_list(column, flat=True)
-
     
-    #del results
     
-    ################################################################
+def line(display_user, column, s=None, e=None):
     
-    fig = Figure()
-    ax = fig.add_subplot(111)
-    
-    ax.hist(flights, normed=1, facecolor='green', alpha=0.75)
-    
-    #ax.xaxis.set_major_formatter(DateFormatter('%Y-%m-%d'))
-    
-    #################################################
-    return image_output(fig)
-
-@plot_svg
-def line(request, username, column,s=None ,e=None, ext=None):
-    shared, display_user = is_shared(request, username)
     #kwargs = {str(column + "__gt"): 0}    
     
     if s and e:
@@ -113,3 +92,45 @@ def line(request, username, column,s=None ,e=None, ext=None):
     #################################################
     
     return fig
+    
+   
+def histogram(request, column):
+    display_user = request.user
+    kwargs = {str(column + "__gt"): "0"}
+    flights = Flight.objects.filter(user=display_user, **kwargs).values_list(column, flat=True)
+
+    
+    #del results
+    
+    ################################################################
+    
+    fig = Figure()
+    ax = fig.add_subplot(111)
+    
+    ax.hist(flights, normed=1, facecolor='green', alpha=0.75)
+    
+    #ax.xaxis.set_major_formatter(DateFormatter('%Y-%m-%d'))
+    
+    #################################################
+    return fig
+    
+
+
+
+
+
+
+
+
+
+
+def line_generator(request, username, column, s=None, e=None, ext=None):
+    shared, display_user = is_shared(request, username)
+    
+    if ext == "png":
+        line2 = plot_png(line)
+        
+    if ext == "svg":
+        line2 = plot_svg(line)
+        
+    return line2(display_user, column, s, e)
