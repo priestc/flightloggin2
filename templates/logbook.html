@@ -8,6 +8,34 @@
 
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/logbook.css">
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/new_flight_popup.css">
+<script type="text/javascript">
+    $(document).ready(function() {
+    
+        columns = {{totals_columns|safe}}
+        for(i=0;i<columns.length;i++) {
+            column = columns[i]
+            count = 0;
+        	$("td." + column + "_col").each(function(){
+        	
+        	    if( column == 'app' || column == 'day_l' || column == 'night_l')
+        	        val=parseInt($(this).text());
+        	    else
+            	    val=parseFloat($(this).text());
+            	    
+        	    if(!isNaN(val))  
+        	      count = count + val
+              
+            });
+
+            if(!( column == 'app' || column == 'day_l' || column == 'night_l'))
+                result = count.toFixed(1)
+            else
+                result = count
+            
+            $("tfoot #" + column + "_pt").html(result);
+    	}
+    });
+</script>
 {% endblock %}
 
 
@@ -15,9 +43,6 @@
 
 
 {% block title %}Flights{% endblock %}
-
-
-
 
 {% block canvas %}
     
@@ -36,16 +61,19 @@
 		
 		<tfoot>
 			<tr>
-				<td colspan="3" id="page_total_title">Page Totals:</td>
+				<td colspan="3" id="page_total_title">Page Totals:
+				</td>
     
                    {% for column in totals_columns %}
-                        <td class="{{column}} pt"></td>
+                        <td id="{{ column }}_pt" class="{{column}} pt"></td>
                     {% endfor %}
 
-				<td colspan="6"></td>
+				<td colspan="6">
+				</td>
 			</tr>
 			<tr>
-				<td colspan="3" id="overall_total_title">Overall Totals:</td>
+				<td colspan="3" id="overall_total_title">Overall Totals:
+				</td>
 
                     {% for column in overall_totals %}
                         <td>{{column}}</td>
