@@ -49,3 +49,29 @@ function fill_in_flight(dom_id) {
 		
     return
 }
+
+
+function page_totals(columns){
+    for(i=0;i<columns.length;i++) {
+        column = columns[i]
+        count = 0;
+	    $("td." + column + "_col").each(function(){
+	
+	        if( column == 'app' || column == 'day_l' || column == 'night_l')
+	            val=parseInt($(this).text());
+	        else
+        	    val=parseFloat($(this).text());
+        	    
+	        if(!isNaN(val))  
+	          count = count + val
+          
+        });
+
+        if(!( column == 'app' || column == 'day_l' || column == 'night_l'))
+            result = count.toFixed(1)
+        else
+            result = count
+        
+        $("tfoot #" + column + "_pt").html(result);
+    }
+}

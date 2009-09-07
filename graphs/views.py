@@ -13,12 +13,14 @@ from matplotlib.dates import DateFormatter
 
 from django.db.models import Max, Min, Sum
 from django.utils.dateformat import format as dj_date_format
+from django.utils.safestring import mark_safe
 
 from annoying.decorators import render_to
 from is_shared import is_shared
 from datetime import date, timedelta
 from logbook.models import Flight
 from logbook.constants import FIELD_TITLES
+from logbook.utils import sim
 
 from image_formats import plot_png, plot_svg
 from format_ticks import format_line_ticks
@@ -26,6 +28,14 @@ from format_ticks import format_line_ticks
 @render_to('graphs.html')
 def graphs(request, username):
     shared, display_user = is_shared(request, username)
+    from logbook.constants import AGG_FIELDS, FIELD_TITLES
+    
+    column_options = []
+    for field in AGG_FIELDS:
+        column_options.append("<option value=\"%s\">%s</option>" % (field, FIELD_TITLES[field] ) )
+        
+    column_options = mark_safe("\n".join(column_options))
+    #assert False
     return locals()
     
     
@@ -36,11 +46,11 @@ def line(display_user, column, s=None, e=None):
     if s and e:
         s = datetime.date(*[int(foo) for foo in s.split('.')])
         e = datetime.date(*[int(foo) for foo in e.split('.')])
-        prev_total = Flight.nosim.filter(user=display_user, date__lt=s).aggregate(total=Sum(column))['total'] or 0
-        flights = list(Flight.nosim.filter(user=display_user, date__gte=s, date__lte=e).values('date').annotate(value=Sum(column)).order_by('date'))
+        prev_total = Flight.objects.exclude(sim).filter(user=display_user, date__lt=s).aggregate(total=Sum(column))['total'] or 0
+        flights = list(Flight.objects.exclude(sim).filter(user=display_user, date__gte=s, date__lte=e).values('date').annotate(value=Sum(column)).order_by('date'))
     else:
         prev_total = 0
-        flights = list(Flight.nosim.filter(user=display_user).values('date').annotate(value=Sum(column)).order_by('date'))
+        flights = list(Flight.objects.exclude(sim).filter(user=display_user).values('date').annotate(value=Sum(column)).order_by('date'))
         e = flights[-1]['date']
         s = flights[0]['date']
     
@@ -62,27 +72,36 @@ def line(display_user, column, s=None, e=None):
     
     fig = plt.figure()
     
-    df = "F jS, Y"
-    sub = "From %s to %s" % (dj_date_format(s, df), dj_date_format(e, df))
-    fig.suptitle(r'\textit{Velocity (5/sec)}' )#%s%s' % (FIELD_TITLES[column], sub), fontsize=18)
+
+
     
     ax = fig.add_subplot(111)
     ax.plot(dates, acc_values, '-', drawstyle='steps')
     ax.set_xlim(s, e)
     
-    format_line_ticks(ax, year_range)
+    df = "F jS, Y"
+    sub = "From %s to %s" % (dj_date_format(s, df), dj_date_format(e, df))
+    plt.figtext(.5,.94,'%s Progession' % (FIELD_TITLES[column]), fontsize=18, ha='center')
+    plt.figtext(.5,.91,sub,fontsize=10,ha='center')
     
-    ax.set_ylabel('Flight Hours')
+    format_line_ticks(ax, year_range)                      # format the ticks based on the range of the dates
+    
+    if column in ['day_l', 'night_l']:
+        ax.set_ylabel('%ss' % FIELD_TITLES[column] )       #add "s" to the end
+    elif column == "app":
+        ax.set_ylabel('%ses' % FIELD_TITLES[column] )      #add "es" to the end
+    else:
+        ax.set_ylabel('Flight Hours' )
 
     # format the coords message box
-    def price(x): return '$%1.1f'%x
-    ax.format_xdata = mdates.DateFormatter('%Y-%m-%d')
-    ax.format_ydata = price
+    #def price(x): return '$%1.1f'%x
+    #ax.format_xdata = mdates.DateFormatter('%Y-%m-%d')
+    #ax.format_ydata = price
     ax.grid(True)
 
     # rotates and right aligns the x labels, and moves the bottom of the
     # axes up to make room for them
-    fig.autofmt_xdate()
+    #fig.autofmt_xdate()
 
     #################################################
     

@@ -2,14 +2,61 @@
 {% block graphs-sel %}nav_selected{% endblock%}
 
 {% block javascript %}
-	<script type="text/javascript" src="{{ MEDIA_URL }}javascripts/{{ title|lower }}.js"></script>
+    <style>
+        .date       {width: 8em}
+    </style>
+	<script type="text/javascript">
+	date_button = "{{MEDIA_URL}}/images/calendar.gif"
+	
+	function render_line_graph(id) {
+	
+	    column = $("#line_column").val();
+	    
+	    start = $("#line_start").val().replace(/-/g,'.');         //change all dashes to dots
+	    end = $("#line_end").val().replace(/-/g,'.');
+	    
+	    url = "line-"+ column +"--" + start + "-" + end + ".png";
+	    $("#image").attr("src", url);
+	}
+	
+	$(document).ready(function() {
+        
+        $(".render_button").click(function() {
+        
+            if(this.id == "line_graph")
+                render_line_graph();
+            
+            if(this.id == "bar_graph")
+                render_bar_graph();
+        
+        });
+        
+        $(".date").datepicker({			// add the date pickers
+			    dateFormat: "yy-mm-dd",
+			    yearRange: "-10:+1", 
+			    showOn: "button", 
+			    buttonImage: date_button, 
+			    buttonImageOnly: true 
+	    }).addClass("embed");
+
+    });
+	
+	</script>
 {% endblock %}
 
 {% block title %}{{ title }}{% endblock %}
 
 
 {% block canvas %}
-
-<img src="/test.png">
+    <h2>Line Graph:</h2>
+        <select id="line_column">
+        {{ column_options }}
+        </select>
+        <input type="date" class="date" id="line_start"> <input type="date" class="date" id="line_end">
+        <input id="line_graph" class="render_button" name="line_render" value="Render" type="button"><br>
+        
+        
+    {#################################}
+    <img src="line-sic.png" id="image">
 
 {% endblock %}
