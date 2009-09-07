@@ -82,15 +82,7 @@ $(document).ready(function() {
 			dateFormat: "yy-mm-dd",
 			yearRange: "-10:+1", 
 			showOn: "button", 
-			buttonImage: "/site-media/images/calendar.gif", 
-			buttonImageOnly: true 
-	}).addClass("embed");
-	
-	$("#id_non-date").datepicker({
-			dateFormat: "mm/dd/yy",
-			yearRange: "-10:+1", 
-			showOn: "button", 
-			buttonImage: "/site-media/images/calendar.gif", 
+			buttonImage: date_button, 
 			buttonImageOnly: true 
 	}).addClass("embed");
 	
