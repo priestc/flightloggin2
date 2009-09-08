@@ -60,7 +60,7 @@
 	
 	
 	
-    {% for folder in folders %}
+    {% for folder in route_folders %}
     <Folder>
     <name>{{folder.name}}</name>
 	    {% for route in folder %}
@@ -78,47 +78,25 @@
 	</Folder>
 	{% endfor %}
 	
-	
-	
-	
-	
-	
-	{% for point in routebases %}
-	<Placemark>
-		<name>{{point.identifier}}</name>
-		<description>
-		<![CDATA[
-                <b>{{point.name}}</b><br>{{point.location_summary}}
-        ]]>
-        </description>
-		<styleUrl>#route_icon</styleUrl>
-		<Point>
-			<coordinates>{{point.location.x}},{{point.location.y}},0</coordinates>
-		</Point>
-	</Placemark>
+	{% for folder in point_folders %}
+	<Folder>
+	<name>{{folder.name}}</name>
+        {% for point in bases %}
+	    <Placemark>
+		    <name>{{point.identifier}}</name>
+		    <description>
+		    <![CDATA[
+                    <b>{{point.name}}</b><br>{{point.location_summary}}
+            ]]>
+            </description>
+		    <styleUrl>#base_icon</styleUrl>
+		    <Point>
+			    <coordinates>{{point.location.x}},{{point.location.y}},0</coordinates>
+		    </Point>
+	    </Placemark>
+	    {% endfor %}
+	</Folder>
 	{% endfor %}
-	
-	
-	
-	
-	
-	{% for point in bases %}
-	<Placemark>
-		<name>{{point.identifier}}</name>
-		<description>
-		<![CDATA[
-                <b>{{point.name}}</b><br>{{point.location_summary}}
-        ]]>
-        </description>
-		<styleUrl>#base_icon</styleUrl>
-		<Point>
-			<coordinates>{{point.location.x}},{{point.location.y}},0</coordinates>
-		</Point>
-	</Placemark>
-	{% endfor %}
-	
-	
-	
-	
+		
 </Document>
 </kml>

@@ -12,10 +12,11 @@ from is_shared import is_shared
 @render_to('maps.html')
 def maps(request, username):
     shared, display_user = is_shared(request, username)
+    from settings import MEDIA_URL, SITE_URL
     return locals()
 
 def airports_kml(request, username):
-    from settings import MEDIA_URL
+    from settings import MEDIA_URL, SITE_URL
     shared, display_user = is_shared(request, username)
     
     points = RouteBase.objects.filter(route__flight__user=display_user)
@@ -33,6 +34,8 @@ def airports_kml(request, username):
     
 def routes_kml(request, username, type):
     shared, display_user = is_shared(request, username)
+    
+    
     
     class RenderedRoute(object):
         
@@ -133,8 +136,8 @@ def routes_kml(request, username, type):
         if inst:
             folders.append(Folder(name="Actual Instrument", qs=inst, style="#green_line"))
         
-        
-        
+    route_folders = folders
+    del folders
         
     
     kml = get_template('base.kml').render(Context(locals() ))
