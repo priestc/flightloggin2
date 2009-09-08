@@ -10,10 +10,20 @@
 
 {% block canvas %}
 
-<h2>All Routes:</h2>
+All Routes:
 <a href="{% url kml-route display_user "all" %}">kml</a>
 
-<h2>By Single-Engine/Multi-Engine:</h2>
+<br>
+
+<span style="color:#D20014">Red: Single-Engine</span>, <span style="color:#0078FF">Blue: Multi-Engine</span>
 <a href="{% url kml-route display_user "cat_class" %}">kml</a>
+
+<br>
+
+<span style="color:#00F014">Green: Instrument</span>,
+<span style="color:#D20014">Red: PIC/Dual Given/Solo</span>,
+<span style="color:#780078">Purple: SIC</span>,
+<span style="color:#0078FF">Blue: Dual Received</span>
+<a href="{% url kml-route display_user "flight_time" %}">kml</a>
 
 {% endblock %}

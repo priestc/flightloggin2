@@ -3,30 +3,37 @@
 <Document>
 	<name>{{title}}</name>
 	
-	<Style id="base_line">
+	<Style id="purple_line">
 		<LineStyle>
-			<color>ccff0099</color>
+			<color>50780078</color> {# 780078 #}
 			<width>2</width>
 		</LineStyle>
 	</Style>
 	
-	<Style id="multi_line">
+	<Style id="blue_line">
 		<LineStyle>
-			<color>ccf68310</color>
+			<color>50FF7800</color> {# 0078FF #}
 			<width>2</width>
 		</LineStyle>
 	</Style>
 	
-	<Style id="single_line">
+	<Style id="red_line">
 		<LineStyle>
-			<color>cc293af6</color>
+			<color>501400D2</color> {# D20014 #}
 			<width>2</width>
 		</LineStyle>
 	</Style>
 	
-	<Style id="other_line">
+	<Style id="orange_line">
 		<LineStyle>
-			<color>cc293af6</color>
+			<color>5014B1FF</color>  {# FFB114 #}
+			<width>2</width>
+		</LineStyle>
+	</Style>
+	
+	<Style id="green_line">
+		<LineStyle>
+			<color>5014F000</color> {# 00F014 #}
 			<width>2</width>
 		</LineStyle>
 	</Style>
