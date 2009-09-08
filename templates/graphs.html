@@ -7,24 +7,28 @@
     </style>
 	<script type="text/javascript">
 	date_button = "{{MEDIA_URL}}/images/calendar.gif"
+	year_range = "1990:2008"
 	
-	function render_line_graph(id) {
+	function render_line_graph(ext) {
 	
 	    column = $("#line_column").val();
 	    
 	    start = $("#line_start").val().replace(/-/g,'.');         //change all dashes to dots
 	    end = $("#line_end").val().replace(/-/g,'.');
+	    url = "line-"+ column +"--" + start + "-" + end + "." + ext;
 	    
-	    url = "line-"+ column +"--" + start + "-" + end + ".png";
-	    $("#image").attr("src", url);
+  	    $("#object").attr("data", url).css("display", "block")
+
 	}
 	
 	$(document).ready(function() {
         
         $(".render_button").click(function() {
         
+            ext=$(this).attr('class').split(' ').slice(-1);
+        
             if(this.id == "line_graph")
-                render_line_graph();
+                render_line_graph(ext);
             
             if(this.id == "bar_graph")
                 render_bar_graph();
@@ -33,10 +37,11 @@
         
         $(".date").datepicker({			// add the date pickers
 			    dateFormat: "yy-mm-dd",
-			    yearRange: "-10:+1", 
+			    yearRange: year_range, 
 			    showOn: "button", 
-			    buttonImage: date_button, 
-			    buttonImageOnly: true 
+			    buttonImage: date_button,
+			    buttonImageOnly: true,
+			    changeYear: true
 	    }).addClass("embed");
 
     });
@@ -53,10 +58,15 @@
         {{ column_options }}
         </select>
         <input type="date" class="date" id="line_start"> <input type="date" class="date" id="line_end">
-        <input id="line_graph" class="render_button" name="line_render" value="Render" type="button"><br>
+        <input id="line_graph" class="render_button png" name="line_render" value="PNG" type="button">
+        <input id="line_graph" class="render_button svg" name="line_render" value="SVG" type="button"><br>
         
         
     {#################################}
-    <img src="line-sic.png" id="image">
+    
+    <br>
+    <object style="display:none; margin-right: auto; margin-left: auto" id="object" data="blank.svg" height="480" width="640" type="image/svg+xml">
+    </object>
+
 
 {% endblock %}

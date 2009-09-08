@@ -44,10 +44,14 @@ def line(display_user, column, s=None, e=None):
     #kwargs = {str(column + "__gt"): 0}    
     
     if s and e:
+        padding=datetime.timedelta(days=1)
         s = datetime.date(*[int(foo) for foo in s.split('.')])
         e = datetime.date(*[int(foo) for foo in e.split('.')])
-        prev_total = Flight.objects.exclude(sim).filter(user=display_user, date__lt=s).aggregate(total=Sum(column))['total'] or 0
-        flights = list(Flight.objects.exclude(sim).filter(user=display_user, date__gte=s, date__lte=e).values('date').annotate(value=Sum(column)).order_by('date'))
+        prev_total = Flight.objects.exclude(sim).filter(user=display_user, date__lt=s-padding).aggregate(total=Sum(column))['total'] or 0
+        flights = list(Flight.objects.exclude(sim).filter(user=display_user, date__gte=s-padding, date__lte=e+padding).values('date').annotate(value=Sum(column)).order_by('date'))
+        #import pdb; pdb.set_trace()
+        flights.insert(0, {"date": s-datetime.timedelta(days=1), "value": prev_total})
+        #assert False
     else:
         prev_total = 0
         flights = list(Flight.objects.exclude(sim).filter(user=display_user).values('date').annotate(value=Sum(column)).order_by('date'))
@@ -63,7 +67,8 @@ def line(display_user, column, s=None, e=None):
         values.append(day['value'])
         dates.append(day['date'])
         
-    values[0] = values[0] + prev_total
+    #values.append(prev_total)
+    #dates.append(
     acc_values = np.cumsum(values)
     
     #assert False, prev_total
@@ -72,12 +77,20 @@ def line(display_user, column, s=None, e=None):
     
     fig = plt.figure()
     
-
-
-    
+    d_color='#c14242'
     ax = fig.add_subplot(111)
-    ax.plot(dates, acc_values, '-', drawstyle='steps')
+
+    ax2 = ax.twinx()
+    
+    ax2.plot(dates, values, color=d_color)
+    for tl in ax2.get_yticklabels():
+        tl.set_color(d_color)
+    
+    ax.plot(dates, acc_values, '-', drawstyle='steps', lw=2)
     ax.set_xlim(s, e)
+    
+    
+
     
     df = "F jS, Y"
     sub = "From %s to %s" % (dj_date_format(s, df), dj_date_format(e, df))
@@ -92,6 +105,9 @@ def line(display_user, column, s=None, e=None):
         ax.set_ylabel('%ses' % FIELD_TITLES[column] )      #add "es" to the end
     else:
         ax.set_ylabel('Flight Hours' )
+        ax2.set_ylabel('Flight Hours per day', color=d_color)
+
+
 
     # format the coords message box
     #def price(x): return '$%1.1f'%x

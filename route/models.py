@@ -178,7 +178,7 @@ def find_navaid(ident, i, last_rb=None):
         routebase = RouteBase(navaid=navaid, sequence=i)
         fancy = "<span class='found_navaid' title='%s'>%s</span>" % (navaid.title_display(), navaid.line_display(), )
         simple = "@" + navaid.identifier
-        kml = "<coordinates>%f,%f,0</coordinates>" % (navaid.location.x, navaid.location.y)
+        kml = "%f,%f,0" % (navaid.location.x, navaid.location.y)
     else:
         routebase=None; fancy=None; simple=None; kml=None
         
@@ -191,7 +191,7 @@ def find_custom(ident, i):
        custom list
     """
     user = threadlocals.get_current_user()
-    custom,created = Custom.objects.get_or_create(user=user, identifier=ident[1:], type=8)      #type 8 -> off airport
+    custom,created = Custom.objects.get_or_create(user=user, identifier=ident[1:])
 
    
     routebase = RouteBase(custom=custom, sequence=i)
@@ -199,7 +199,7 @@ def find_custom(ident, i):
     simple = "!" + custom.identifier
     
     if custom.location:
-        kml = "<coordinates>%f,%f,0</coordinates>" % (custom.location.x, custom.location.y)
+        kml = "%f,%f,0" % (custom.location.x, custom.location.y)
     else:
         kml = ""
 
@@ -220,7 +220,7 @@ def find_airport(ident, i, p2p):
 
         fancy = "<span class='found_airport' title='%s'>%s</span>" % (airport.title_display(), airport.line_display(), )
         simple = airport.identifier
-        kml = "<coordinates>%f,%f,0</coordinates>" % (airport.location.x, airport.location.y)
+        kml = "%f,%f,0" % (airport.location.x, airport.location.y)
     else:
         routebase=None; fancy=None; simple=None; kml=None
         

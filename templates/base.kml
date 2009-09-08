@@ -2,9 +2,31 @@
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Document>
 	<name>{{title}}</name>
-	<Style id="line_style">
+	
+	<Style id="base_line">
 		<LineStyle>
 			<color>ccff0099</color>
+			<width>2</width>
+		</LineStyle>
+	</Style>
+	
+	<Style id="multi_line">
+		<LineStyle>
+			<color>ccf68310</color>
+			<width>2</width>
+		</LineStyle>
+	</Style>
+	
+	<Style id="single_line">
+		<LineStyle>
+			<color>cc293af6</color>
+			<width>2</width>
+		</LineStyle>
+	</Style>
+	
+	<Style id="other_line">
+		<LineStyle>
+			<color>cc293af6</color>
 			<width>2</width>
 		</LineStyle>
 	</Style>
@@ -28,20 +50,32 @@
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
 	</Style>
-
-	{% for route in routes %}
-	<Placemark>
-		<name>{{route}}</name>
-		<styleUrl>#line_style</styleUrl>
-		<LineString>
-			<tessellate>1</tessellate>
-			<coordinates>
-			{% for point in route.as_list %}{{point.lat}},{{point.lng}},0
-			{% endfor %}
-			</coordinates>
-		</LineString>
-	</Placemark>
+	
+	
+	
+    {% for folder in folders %}
+    <Folder>
+    <name>{{folder.name}}</name>
+	    {% for route in folder %}
+	    <Placemark>
+		    <name>{{route.name}}</name>
+		    <styleUrl>{{folder.style}}</styleUrl>
+		    <LineString>
+			    <tessellate>1</tessellate>		
+			    <coordinates>
+			    {{route.kml}}
+			    </coordinates>
+		    </LineString>
+	    </Placemark>
+	    {% endfor %}
+	</Folder>
 	{% endfor %}
+	
+	
+	
+	
+	
+	
 	{% for point in routebases %}
 	<Placemark>
 		<name>{{point.identifier}}</name>
@@ -56,6 +90,11 @@
 		</Point>
 	</Placemark>
 	{% endfor %}
+	
+	
+	
+	
+	
 	{% for point in bases %}
 	<Placemark>
 		<name>{{point.identifier}}</name>
@@ -70,5 +109,9 @@
 		</Point>
 	</Placemark>
 	{% endfor %}
+	
+	
+	
+	
 </Document>
 </kml>

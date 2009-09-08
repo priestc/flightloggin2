@@ -31,24 +31,82 @@ def airports_kml(request, username):
     
     
     
-def routes_kml(request, username):
-    
+def routes_kml(request, username, type):
     shared, display_user = is_shared(request, username)
     
-    from_database = Route.objects.filter(flight__user=display_user)
-    
-    class point(object):
-        lat = 0
-        lng = 0
-    
-    all_routes = []
-    routes = []
-    for route in from_database:
-        if route not in all_routes:
-            all_routes.append(unicode(route))
-            routes.append(route)
+    class RenderedRoute(object):
+        
+        name = ""
+        kml = ""
+        
+        
+        def __init__(self, name, kml):
+            self.kml = kml
+            self.name = name
+  
+        
+    class Folder(object):
+        name = ""
+        rendered_routes = []
+        index = 0
+        style="#base_line"
+        
+        def __init__(self, name, qs, style=None):
+            self.rendered_routes=[]
+            self.name = name
+            self.qs = qs
+            if style:
+                self.style = style
+                
+            self.figure_qs()
+        
+        def figure_qs(self):
+            for route in self.qs:
+                self.rendered_routes.append(RenderedRoute(name=route['simple_rendered'], kml=route['kml_rendered']))
+                
+        def append(self, route):
+            self.rendered_routes.append(route)
             
-    #assert False
+        def __iter__(self):
+            return self
+        
+        def next(self):
+            try:
+                ret = self.rendered_routes[self.index]
+            except IndexError:
+                raise StopIteration
+                
+            self.index+=1
+            return ret
+        
+    if type=="all":
+        all_r = Route.objects.filter(flight__user=display_user).values('kml_rendered', 'simple_rendered').order_by().distinct()
+
+        folders=[]
+        if all_r:
+            folders.append(Folder(name="All Routes", qs=all_r))
+        
+    elif type=="cat_class":
+        single = Route.objects.filter(flight__user=display_user, flight__plane__cat_class__in=[1,3]).values('kml_rendered', 'simple_rendered').order_by().distinct()
+        multi = Route.objects.filter(flight__user=display_user, flight__plane__cat_class__in=[2,4]).values('kml_rendered', 'simple_rendered').order_by().distinct()
+        other = Route.objects.filter(flight__user=display_user).\
+                exclude(flight__plane__cat_class__in=[2,4,1,3]).\
+                values('kml_rendered', 'simple_rendered').order_by().distinct()
+        
+        folders = []
+        if single:
+            folders.append(Folder(name="Single-Engine", qs=single, style="#single_line"))
+            
+        if multi:
+            folders.append(Folder(name="Multi-Engine", qs=multi, style="#multi_line"))
+        
+        if other:
+            folders.append(Folder(name="Multi-Engine", qs=multi, style="#multi_line"))
+    
+    
+    
+    
+    
     
     kml = get_template('base.kml').render(Context(locals() ))
-    return HttpResponse(kml, mimetype="text/plain" )#application/vnd.google-earth.kml+xml")
+    return HttpResponse(kml, mimetype="application/vnd.google-earth.kml+xml")

@@ -83,7 +83,8 @@ $(document).ready(function() {
 			yearRange: "-10:+1", 
 			showOn: "button", 
 			buttonImage: date_button, 
-			buttonImageOnly: true 
+			buttonImageOnly: true,
+			changeYear: true 
 	}).addClass("embed");
 	
 	/////////////////////////////////////////

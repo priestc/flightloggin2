@@ -10,6 +10,10 @@
 
 {% block canvas %}
 
-maps
+<h2>All Routes:</h2>
+<a href="{% url kml-route display_user "all" %}">kml</a>
+
+<h2>By Single-Engine/Multi-Engine:</h2>
+<a href="{% url kml-route display_user "cat_class" %}">kml</a>
 
 {% endblock %}
