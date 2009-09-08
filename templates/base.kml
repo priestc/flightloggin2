@@ -5,35 +5,35 @@
 	
 	<Style id="purple_line">
 		<LineStyle>
-			<color>50780078</color> {# 780078 #}
+			<color>ccFF78B4</color> {# B478FF #}
 			<width>2</width>
 		</LineStyle>
 	</Style>
 	
 	<Style id="blue_line">
 		<LineStyle>
-			<color>50FF7800</color> {# 0078FF #}
+			<color>ccF02814</color> {# 1428F0 #}
 			<width>2</width>
 		</LineStyle>
 	</Style>
 	
 	<Style id="red_line">
 		<LineStyle>
-			<color>501400D2</color> {# D20014 #}
+			<color>cc1400D2</color> {# D20014 #}
 			<width>2</width>
 		</LineStyle>
 	</Style>
 	
 	<Style id="orange_line">
 		<LineStyle>
-			<color>5014B1FF</color>  {# FFB114 #}
+			<color>cc14B1FF</color>  {# FFB114 #}
 			<width>2</width>
 		</LineStyle>
 	</Style>
 	
 	<Style id="green_line">
 		<LineStyle>
-			<color>5014F000</color> {# 00F014 #}
+			<color>cc14F000</color> {# 00F014 #}
 			<width>2</width>
 		</LineStyle>
 	</Style>
