@@ -87,6 +87,17 @@ $(document).ready(function() {
 			changeYear: true 
 	}).addClass("embed");
 	
+	/////////////////////////////////////////                 confirm checkboxes for delete flight
+	
+	$("#edit_buttons input[type='checkbox']").click(function() {
+	
+	    if ( $("#edit_buttons input[type='checkbox']:not(:checked)").size() == 0 )
+            $('#delete_flight').removeAttr("disabled")
+        else
+            $('#delete_flight').attr("disabled", "disabled")
+	    
+	});
+	
 	/////////////////////////////////////////                     shortcut buttons
 	
 	$('#auto_button').click(do_auto_button);
@@ -129,7 +140,7 @@ $(document).ready(function() {
 		fire_popup("popup");
 	});
 	
-	$("#logbook_table a").click(function(){			//make the popup when the date is clicked
+	$("#logbook_table a").click(function(){			//make the edit popup when the date is clicked
 		wipe_clean();
 		prepare_edit_flight(true);
 		fill_in_flight(this.id);
