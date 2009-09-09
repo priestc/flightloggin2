@@ -88,7 +88,7 @@ function page_totals(columns){
                     hour=list[0];
                     dec="." + list[1];
                     mins = dec * 60
-                    result = sprintf("%s:%2.0f", hour, mins);
+                    result = sprintf("%s:%02.0f", hour, mins);
                     //result="45"
                     
                 }
