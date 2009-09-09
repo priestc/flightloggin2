@@ -132,6 +132,7 @@ def logbook(request, username, page=0):
             row = LogbookRow()
             
             row.pk = flight.pk
+            row.plane = flight.plane
 
             for column in columns.as_list():
                 if column == "date":

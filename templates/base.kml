@@ -81,17 +81,16 @@
 	{% for folder in point_folders %}
 	<Folder>
 	<name>{{folder.name}}</name>
-        {% for point in bases %}
+        {% for point in folder %}
 	    <Placemark>
 		    <name>{{point.identifier}}</name>
 		    <description>
 		    <![CDATA[
-                    <b>{{point.name}}</b><br>{{point.location_summary}}
+                <b>{{point.name}}</b><br>{{point.ls}}
             ]]>
             </description>
-		    <styleUrl>#base_icon</styleUrl>
 		    <Point>
-			    <coordinates>{{point.location.x}},{{point.location.y}},0</coordinates>
+			    <coordinates>{{point.kml}}</coordinates>
 		    </Point>
 	    </Placemark>
 	    {% endfor %}

@@ -15,72 +15,27 @@ def maps(request, username):
     from settings import MEDIA_URL, SITE_URL
     return locals()
 
-def airports_kml(request, username):
-    from settings import MEDIA_URL, SITE_URL
+def airports_kml(request, username, type):
+    from utils import AirportFolder 
+    from airport.models import *
     shared, display_user = is_shared(request, username)
     
-    points = RouteBase.objects.filter(route__flight__user=display_user)
-    
-    ret = []
-    for point in points:
-        ret.append(point.destination())
+    if type=="all":
+        title = "All Airports"
+        points = Airport.objects.filter(routebase__route__flight__user=display_user).distinct()
         
-    bases = set(ret)
+        folders = []
+        if points:
+            folders.append(AirportFolder(name="All Airports", qs=points))
     
-    kml = get_template('base.kml').render(Context(locals() ))
+    kml = get_template('base.kml').render(Context({"point_folders": folders, "title": title} ))
     return HttpResponse(kml, mimetype="application/vnd.google-earth.kml+xml")
     
     
     
 def routes_kml(request, username, type):
     shared, display_user = is_shared(request, username)
-    
-    
-    
-    class RenderedRoute(object):
-        
-        name = ""
-        kml = ""
-        
-        
-        def __init__(self, name, kml):
-            self.kml = kml
-            self.name = name
-  
-        
-    class Folder(object):
-        name = ""
-        rendered_routes = []
-        index = 0
-        style="#base_line"
-        
-        def __init__(self, name, qs, style=None):
-            self.rendered_routes=[]
-            self.name = name
-            self.qs = qs
-            if style:
-                self.style = style
-                
-            self.figure_qs()
-        
-        def figure_qs(self):
-            for route in self.qs:
-                self.rendered_routes.append(RenderedRoute(name=route['simple_rendered'], kml=route['kml_rendered']))
-                
-        def append(self, route):
-            self.rendered_routes.append(route)
-            
-        def __iter__(self):
-            return self
-        
-        def next(self):
-            try:
-                ret = self.rendered_routes[self.index]
-            except IndexError:
-                raise StopIteration
-                
-            self.index+=1
-            return ret
+    from utils import RouteFolder 
         
     if type=="all":
         title = "All Routes"
@@ -88,7 +43,7 @@ def routes_kml(request, username, type):
 
         folders=[]
         if all_r:
-            folders.append(Folder(name="All Routes", qs=all_r))
+            folders.append(RouteFolder(name="All Routes", qs=all_r))
         
     elif type=="cat_class":
         title = "Routes by Multi/Single Engine"
@@ -100,13 +55,13 @@ def routes_kml(request, username, type):
         
         folders = []
         if single:
-            folders.append(Folder(name="Single-Engine", qs=single, style="#red_line"))
+            folders.append(RouteFolder(name="Single-Engine", qs=single, style="#red_line"))
             
         if multi:
-            folders.append(Folder(name="Multi-Engine", qs=multi, style="#blue_line"))
+            folders.append(RouteFolder(name="Multi-Engine", qs=multi, style="#blue_line"))
         
         if other:
-            folders.append(Folder(name="Other", qs=multi, style="#green_line"))
+            folders.append(RouteFolder(name="Other", qs=multi, style="#green_line"))
             
     elif type=="flight_time":
         title = "Routes by type of flight time"
@@ -115,30 +70,27 @@ def routes_kml(request, username, type):
         solo =   Route.objects.filter(flight__user=display_user,   flight__solo__gt=0).values('kml_rendered', 'simple_rendered').order_by().distinct()
         sic =    Route.objects.filter(flight__user=display_user,    flight__sic__gt=0).values('kml_rendered', 'simple_rendered').order_by().distinct()
         inst =   Route.objects.filter(flight__user=display_user,flight__act_inst__gt=0).values('kml_rendered', 'simple_rendered').order_by().distinct()
-        pic =    Route.objects.filter(flight__user=display_user,    flight__pic__gt=0, flight__dual_g=0, flight__solo=0).values('kml_rendered', 'simple_rendered').order_by().distinct()
+        pic =    Route.objects.filter(flight__user=display_user,    flight__pic__gt=0, flight__dual_g=0, flight__solo=0).\
+                    values('kml_rendered', 'simple_rendered').order_by().distinct()
         
         folders = []
         if dual_g:
-            folders.append(Folder(name="Dual Given", qs=dual_g, style="#red_line"))
+            folders.append(RouteFolder(name="Dual Given", qs=dual_g, style="#red_line"))
             
         if solo:
-            folders.append(Folder(name="Solo", qs=solo, style="#red_line"))
+            folders.append(RouteFolder(name="Solo", qs=solo, style="#red_line"))
             
         if pic:
-            folders.append(Folder(name="PIC", qs=pic, style="#red_line"))
+            folders.append(RouteFolder(name="PIC", qs=pic, style="#red_line"))
             
         if dual_r:
-            folders.append(Folder(name="Dual Received", qs=dual_r, style="#blue_line"))
+            folders.append(RouteFolder(name="Dual Received", qs=dual_r, style="#blue_line"))
 
         if sic:
-            folders.append(Folder(name="SIC", qs=sic, style="#purple_line"))
+            folders.append(RouteFolder(name="SIC", qs=sic, style="#purple_line"))
 
         if inst:
-            folders.append(Folder(name="Actual Instrument", qs=inst, style="#green_line"))
+            folders.append(RouteFolder(name="Actual Instrument", qs=inst, style="#green_line"))
         
-    route_folders = folders
-    del folders
-        
-    
-    kml = get_template('base.kml').render(Context(locals() ))
+    kml = get_template('base.kml').render(Context({"route_folders": folders, "title": title} ))
     return HttpResponse(kml, mimetype="application/vnd.google-earth.kml+xml")

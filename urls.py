@@ -33,7 +33,7 @@ urlpatterns += patterns('',
     
     url(r'^(?P<username>\w+)/routes-(?P<type>\w+).kml$',              "maps.views.routes_kml",       name="kml-route"),
     
-    
+    url(r'^(?P<username>\w+)/airports-(?P<type>\w+).kml$',            "maps.views.airports_kml",     name="kml-airport"),
     
     
     url(r'^(?P<username>\w+)/records.html$',                       "records.views.records",   name="records"),

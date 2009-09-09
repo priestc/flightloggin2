@@ -10,7 +10,7 @@
 
 {% block canvas %}
 <h2>Routes</h2>
-<table id="maps_table">
+<table class="maps_table">
     <tr>
         <td>All Routes:</td>
         <td>{% url kml-route display_user "all" as all_routes_url %}
@@ -21,8 +21,8 @@
     </tr>
     <tr>
         <td>
-            <span style="color:#D20014">Red: Single-Engine</span><br>
-            <span style="color:#0078FF">Blue: Multi-Engine</span>
+            <span class="red">Red: Single-Engine</span><br>
+            <span class="blue">Blue: Multi-Engine</span>
         </td>
         <td>{% url kml-route display_user "cat_class" as cat_class_url %}
             <a href="{{cat_class_url }}">Earth</a>&nbsp;&nbsp;
@@ -32,15 +32,15 @@
     
     <tr>
         <td>
-            <span style="color:#00F014">Green: Instrument</span><br>
-            <span style="color:#D20014">Red: PIC/Dual Given/Solo</span><br>
-            <span style="color:#780078">Purple: SIC</span><br>
-            <span style="color:#0078FF">Blue: Dual Received</span>
+            <span class="green">Green: Instrument</span><br>
+            <span class="red">Red: PIC/Dual Given/Solo</span><br>
+            <span class="purple">Purple: SIC</span><br>
+            <span class="blue">Blue: Dual Received</span>
         </td>
         
         <td>{% url kml-route display_user "flight_time" as flight_time_url %}
             <a href="{{ cat_class_url }}">Earth</a>&nbsp;&nbsp;
-            <a href="http://maps.google.com?q={{ SITE_URL }}{{ cat_class_url|urlencode }}">Maps</a>
+            <a href="http://maps.google.com?q={{ SITE_URL }}{{ cat_class_url|urlencode }}" target="_blank">Maps</a>
         </td>
     </tr>
 </table>
@@ -48,38 +48,14 @@
 
 <h2>Airports</h2>
 
-<table id="maps_table">
+<table class="maps_table">
     <tr>
         <td>All Airports:</td>
-        <td>{% url kml-point display_user "all" as all_points_url %}
+        <td>{% url kml-airport display_user "all" as all_points_url %}
             <a href="{{ all_points_url }}">Earth</a>&nbsp;&nbsp;
-            <a href="http://maps.google.com?q={{ SITE_URL }}{{ all_points_url|urlencode }}">Maps</a>
+            <a href="http://maps.google.com?q={{ SITE_URL }}{{ all_points_url|urlencode }}" target="_blank">Maps</a>
         </td>
         
-    </tr>
-    <tr>
-        <td>
-            <span style="color:#D20014">Red: Single-Engine</span><br>
-            <span style="color:#0078FF">Blue: Multi-Engine</span>
-        </td>
-        <td>{% url kml-route display_user "cat_class" as cat_class_url %}
-            <a href="{{cat_class_url }}">Earth</a>&nbsp;&nbsp;
-            <a href="http://maps.google.com?q={{ SITE_URL }}{{cat_class_url|urlencode}}">Maps</a>
-        </td>
-    </tr>
-    
-    <tr>
-        <td>
-            <span style="color:#00F014">Green: Instrument</span><br>
-            <span style="color:#D20014">Red: PIC/Dual Given/Solo</span><br>
-            <span style="color:#780078">Purple: SIC</span><br>
-            <span style="color:#0078FF">Blue: Dual Received</span>
-        </td>
-        
-        <td>{% url kml-route display_user "flight_time" as flight_time_url %}
-            <a href="{{ cat_class_url }}">Earth</a>&nbsp;&nbsp;
-            <a href="http://maps.google.com?q={{ SITE_URL }}{{ cat_class_url|urlencode }}">Maps</a>
-        </td>
     </tr>
 </table>
 {% endblock %}

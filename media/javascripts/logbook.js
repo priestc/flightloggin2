@@ -10,7 +10,18 @@ function fill_in_flight(dom_id) {
 	
 	$("#id_route").val(trim($("#tr" + id + " span.unformatted_route").text()));
 	
-	$("#id_total").val(trim($("#tr" + id + " td.total_col").text()));
+	total_s = $("#tr" + id + " td.total_s_col").text()      //total (sim) column
+	total = $("#tr" + id + " td.total_col").text()        //total column
+
+	if (!total && total_s){
+	    if(total_s[0] == "("){
+	        total = total_s.substring(1,total_s.length-1);                 //remove parentheses if present
+	    }
+	    else
+	        total = total_s                                             //no parentheses, use value as is
+	}
+	
+	$("#id_total").val(trim(total));
 	$("#id_pic").val(trim($("#tr" + id + " td.pic_col").text()));
 	$("#id_sic").val(trim($("#tr" + id + " td.sic_col").text()));
 	$("#id_solo").val(trim($("#tr" + id + " td.solo_col").text()));
