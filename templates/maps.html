@@ -39,8 +39,8 @@
         </td>
         
         <td>{% url kml-route display_user "flight_time" as flight_time_url %}
-            <a href="{{ cat_class_url }}">Earth</a>&nbsp;&nbsp;
-            <a href="http://maps.google.com?q={{ SITE_URL }}{{ cat_class_url|urlencode }}" target="_blank">Maps</a>
+            <a href="{{ flight_time_url }}">Earth</a>&nbsp;&nbsp;
+            <a href="http://maps.google.com?q={{ SITE_URL }}{{ flight_time_url|urlencode }}" target="_blank">Maps</a>
         </td>
     </tr>
 </table>
