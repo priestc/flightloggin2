@@ -87,6 +87,23 @@ $(document).ready(function() {
 			changeYear: true 
 	}).addClass("embed");
 	
+	/////////////////////////////////////////                     shortcut buttons
+	
+	$('#auto_button').click(do_auto_button);
+	
+	$("input[type='button'].shortcut").click(function(){
+	    column = $(this).attr("class").split(" ")[0];
+	    
+	    prev_value = $("#id_" + column).val()
+	    total_value = $("#id_total").val()
+	    
+	    if( total_value == prev_value)
+	        $("#id_" + column).val("");
+    	else
+    	    $("#id_" + column).val( total_value );
+	    
+	});
+	
 	/////////////////////////////////////////
 	
 	$("#id_date").attr("autocomplete", "off");					// disable auto complete
@@ -119,3 +136,8 @@ $(document).ready(function() {
 		fire_popup("popup");
 	});
 });
+
+function do_auto_button() {
+	for(b=0;b<auto_button.length; b++)
+		$("#id_" + auto_button[b]).val( $("#id_total").val() );
+}

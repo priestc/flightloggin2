@@ -99,6 +99,9 @@ def logbook(request, username, page=0):
     else:
         date_format = "Y-m-d"
     
+    from profile.models import AutoButton   
+    auto_button,c = AutoButton.objects.get_or_create(user=display_user)
+    
     all_flights = Flight.objects.filter(user=display_user)
     flights = all_flights.select_related()
     columns, created = Columns.objects.get_or_create(user=display_user)

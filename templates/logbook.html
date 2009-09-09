@@ -13,6 +13,7 @@
     });
     
     date_button = "{{MEDIA_URL}}/images/calendar.gif"
+    auto_button = {{ auto_button.as_jslist|safe|default:"[]" }}
 </script>
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/logbook.css">
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/new_flight_popup.css">

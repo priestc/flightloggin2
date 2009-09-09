@@ -69,4 +69,12 @@ class AutoButton(models.Model):
 
     def __unicode__(self):
         return "%s" % (self.user, )
+    
+    def as_jslist(self):
+        ret = []
+        for field in ['pic','sic','solo','dual_g','dual_r','xc','night','sim_inst', 'act_inst']:
+            if getattr(self, field):
+                ret.append(field)
+        return ret
+        
 
