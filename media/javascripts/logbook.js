@@ -6,7 +6,7 @@ function fill_in_flight(dom_id) {
 	$("#id_date").val(trim($("#tr" + id + " td.date_col span.unformatted_date").text()));
 	
 	
-	$("#id_plane option:contains(" + trim($("#tr" + id + " td.plane_col").text()) + ")").attr("selected", "selected");
+	$("#id_plane option:contains(" + trim($("#tr" + id + " span.unformatted_plane").text()) + ")").attr("selected", "selected");
 	
 	$("#id_route").val(trim($("#tr" + id + " span.unformatted_route").text()));
 	

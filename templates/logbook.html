@@ -76,7 +76,8 @@
 	    <tr class="{% cycle 'odd' 'even' %}" id="tr{{ row.pk }}">
 
             <td class="date_col" title="Date (click to edit)">
-        	    <span class="unformatted_date">{{ row.date }}</span>
+        	    <span style="display: none" class="unformatted_date">{{ row.date }}</span>
+        	    <span style="display: none" class="unformatted_plane">{{ row.plane }}</span>
                 <a href="" id="f{{row.pk}}">{{ row.date|date:date_format }}</a>                        {# date #}
             </td>
 
