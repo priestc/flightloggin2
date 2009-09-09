@@ -72,6 +72,11 @@ def logbook(request, username, page=0):
         
         form = FlightForm(request.POST, instance=flight, planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
         
+    elif request.POST.get('submit', "") == "Delete Flight":
+        flight_id = request.POST['id']
+        flight = Flight(pk=flight_id, user=display_user)
+        flight.delete()
+        
     if request.POST and form.is_valid():
         form.save()
         return HttpResponseRedirect('/' + display_user.username + '/logbook.html')

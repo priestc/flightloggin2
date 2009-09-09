@@ -75,7 +75,7 @@ def routes_kml(request, username, type):
         
         folders = []
         if dual_g:
-            folders.append(RouteFolder(name="Dual Given", qs=dual_g, style="#red_line"))
+            folders.append(RouteFolder(name="Dual Given", qs=dual_g, style="#orange_line"))
             
         if solo:
             folders.append(RouteFolder(name="Solo", qs=solo, style="#red_line"))
