@@ -52,6 +52,7 @@ function fill_in_flight(dom_id) {
 
 
 function page_totals(columns){
+    COLON=false
     for(i=0;i<columns.length;i++) {
         column = columns[i]
         count = 0;
