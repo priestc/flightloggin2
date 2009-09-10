@@ -1,10 +1,14 @@
 function fill_in_event(dom_id) {
 	
 	id = dom_id.substr(1);
+	
+	//alert(id);
 
 	$("#id_id").val(id);
-	$("#id_non_flying").val(trim($("#p" + id + "_non_flying").text()));
-	$("#id_remarks").val(trim($("#p" + id + "_remarks").text()));
+	$("#id_date").val(trim($("tr#row_" + id + " span.unformatted_date").text()));
+	$("#id_remarks").val(trim($("tr#row_" + id + " td.remarks").text()));
+	
+	$("#id_non_flying option:contains(" + trim($("tr#row_" + id + " td.non_flying").text()) + ")").attr("selected", "selected");
 }
 
 

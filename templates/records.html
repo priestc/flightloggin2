@@ -15,17 +15,19 @@
 	        }).addClass("embed");
 	        
 	        
-	        $("a.popup_link").click(function() {
+	        $("#nonflight_table a").click(function() {
 	        
-	            prepare_edit_event(true)
-	            fire_popup()
+	            prepare_edit_event(true);
+	            fill_in_event(this.id);
+	            fire_popup();
 	    
 	        });
 	        
 	        $("#new_event").click(function() {
 	        
-	            prepare_new_event(true)
-	            fire_popup()
+	            prepare_new_event(true);
+	            
+	            fire_popup();
 	    
 	        });
 	        
@@ -44,13 +46,13 @@
 	</div>
 	
 <form action="{% url records display_user %}" method="post">
-    <table class="new_nonflight">
+    <table id="nonflight_table">
        <tr>
            <td>Date{{formset.management_form}}</td><td>Type</td><td>Remarks</td>
        </tr>
     {% for nf in nonflights %}
-       <tr>
-           <td id="n{{nf.id}}"class="date"><a href="">{{ nf.date|date:date_format }}</a></td>
+       <tr id="row_{{nf.id}}">
+           <td class="date"><span class="unformatted_date">{{nf.date}}</span><a id="n{{nf.id}}" href="">{{ nf.date|date:date_format }}</a></td>
            <td class="non_flying">{{ nf.get_non_flying_display }}</td>
            <td class="remarks">{{ nf.remarks }}</td>
        </tr>

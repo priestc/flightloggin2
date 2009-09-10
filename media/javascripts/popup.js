@@ -1,5 +1,5 @@
 function wipe_clean() {
-	$("#popup input[type=text], textarea, select").val("");
+	$("#popup input[type=text], #popup textarea, #popup select").val("");
 	$("#popup input[type=checkbox]").attr("checked", "");
 }
 

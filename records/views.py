@@ -39,9 +39,9 @@ def records(request, username):
             if form.is_valid():
                 form.save()
                 
-        records.text=request.POST.get('records')
-        records.save()
-        saved=True
+        #records.text=request.POST.get('records')
+        #records.save()
+        #saved=True
 
     else:
         form = NonFlightForm()
