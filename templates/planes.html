@@ -9,7 +9,7 @@
 		$(document).ready(function() {
 			$("#new_plane").click(function(){
 				wipe_clean();
-				prepare_new_plane(true)
+				prepare_new_plane(true);
 				fire_popup("popup");
 			})
 			
@@ -35,6 +35,7 @@
 			});
 		});
 	</script>
+	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/popup.css">
 	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/planes.css">
 {% endblock %}
 

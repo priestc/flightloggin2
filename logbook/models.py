@@ -109,6 +109,9 @@ class Flight(models.Model):
         elif cn == "r_route" and self.route:
             return mark_safe(self.route.fallback_string + "<span class='unformatted_route'>%s</span>" % self.route.fallback_string)
         
+        elif cn == "rr_route" and self.route:                   # for the backup file
+            return mark_safe(self.route.fallback_string)
+        
         elif cn == "plane":
             return self.plane
         

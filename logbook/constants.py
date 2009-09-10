@@ -1,6 +1,6 @@
 
 
-FIELDS = [               #needs to be in column order
+FIELDS = [               #all columns, needs to be in column display order
           "date", "plane", "reg", "f_route", "s_route", "r_route", "total_s", "total","sim",
           "pic", "sic", "solo", "dual_r", "dual_g", "xc", "act_inst", "sim_inst", "night", "night_l", "day_l", "app",
           "p2p", "multi", "m_pic", "sea", "sea_pic", "mes", "mes_pic", "turbine", "t_pic", "mt", "mt_pic", "complex",
@@ -8,8 +8,8 @@ FIELDS = [               #needs to be in column order
           ]
           
 BACKUP_FIELDS = [       #fields included in the backup file
-          'date_backup', 'reg', 'r_route',
-          'total', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
+          'r_date', 'reg', 'rr_route',
+          'total', 'sim', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
           'person', 'remarks'
           ]
           
@@ -46,12 +46,14 @@ FIELD_TITLES = {
     "s_route": "Route (Simple)",
     "f_route": "Route (Fancy)",
     "r_route": "Route (Raw)",
-    
+    "rr_route": "Route",            #for the backup file
+     
     "total_s": "Total (with Sim)",
     "total": "Total",
     
     "date": "Date",
-    "date_backup": "Date",
+    "r_date": "Date",
+    
     "plane": "Plane",
     "reg": "Registration",
 
@@ -98,6 +100,8 @@ FIELD_ABBV = {
     "total": "Total",
 
     "date": "Date",
+    "r_date": "Date",
+    
     "plane": "Plane",
     "reg": "Reg.",
     

@@ -1,9 +1,9 @@
 function wipe_clean() {
-	$("input[type=text], textarea, select").val("");
-	$("input[type=checkbox]").attr("checked", "");
+	$("#popup input[type=text], textarea, select").val("");
+	$("#popup input[type=checkbox]").attr("checked", "");
 }
 
-function fire_popup(popup_id) {
+function fire_popup() {
 
 	// Determine how much the visitor had scrolled
 
@@ -25,10 +25,10 @@ function fire_popup(popup_id) {
 		scrolledY = document.body.scrollTop;
 	}
 
-	top = ((window.innerHeight - $('#' + popup_id).innerHeight()) / 2) + scrolledY;
-	left = (window.innerWidth - $('#' + popup_id).innerWidth()) / 2;
+	top = ((window.innerHeight - $('#popup').innerHeight()) / 2) + scrolledY;
+	left = (window.innerWidth - $('#popup').innerWidth()) / 2;
 
-	$('#' + popup_id).draggable({ 
+	$('#popup').draggable({ 
 		zIndex: 20,
 		cursor: 'move',
 		opacity: 1.0,

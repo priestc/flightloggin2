@@ -2,6 +2,8 @@
 {% block records-sel %}nav_selected{% endblock%}
 
 {% block javascript %}
+    <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/popup.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/new_event_popup.js"></script>
 	<script type="text/javascript">
 	    $(document).ready(function() {
 	        $("input[id$=date]").datepicker({
@@ -11,46 +13,52 @@
 			        buttonImage: "{{ MEDIA_URL }}/images/calendar.gif", 
 			        buttonImageOnly: true 
 	        }).addClass("embed");
+	        
+	        
+	        $("a.popup_link").click(function() {
+	        
+	            prepare_edit_event(true)
+	            fire_popup()
+	    
+	        });
+	        
+	        $("#new_event").click(function() {
+	        
+	            prepare_new_event(true)
+	            fire_popup()
+	    
+	        });
+	        
 	    });
+    
 	</script>
 	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/records.css">
+	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/popup.css">
 {% endblock %}
 
 {% block title %}Records{% endblock %}
 
 {% block canvas %}
 	<div id="nonflights_instructions">
-		Enter Non flying events for currenct tracking
+		<input type="button" id="new_event" value="New Event">
 	</div>
 	
 <form action="{% url records display_user %}" method="post">
     <table class="new_nonflight">
        <tr>
-           <td>Date{{formset.management_form}}</td><td>Type</td><td>Remarks</td><td>Delete?</td>
+           <td>Date{{formset.management_form}}</td><td>Type</td><td>Remarks</td>
        </tr>
-    {% for form in formset.forms %}
-        <tr>
-            <td class="date">{{form.date}}</td>
-            <td class="non_flying">{{form.non_flying}}</td>
-            <td class="remarks">{{form.remarks}}</td>
-            
-            {% if form.instance.pk %}
-                <td class="delete">{{form.DELETE}}{{form.id}}</td>
-            </tr>
-            {% else %}
-                <td class="delete"></td>
-            </tr>
-            {% endif %}
-            
-            {% if form.errors %}
-                {{form.errors}}
-            {% endif %}
-    {% endfor %}
+    {% for nf in nonflights %}
+       <tr>
+           <td id="n{{nf.id}}"class="date"><a href="">{{ nf.date|date:date_format }}</a></td>
+           <td class="non_flying">{{ nf.get_non_flying_display }}</td>
+           <td class="remarks">{{ nf.remarks }}</td>
+       </tr>
+    {% empty %}
     
-    <tr>
-        <td colspan="5"><input type="submit" value="Save"/></td>
-    </tr>
-    
+       <tr><td>Nothing to show here</td></tr>
+       
+    {% endfor %}    
     </table>
     
 
@@ -59,13 +67,13 @@
 		Phone numbers and addresses of contacts; dates of endorsements; student signoffs and outcomes; notes, etc.
 	</div>
 	
-	<br />
+	<br>
 
 	<div>
 		<textarea style="width:80%;height:400px" cols="50" rows="10" name="records">{{ records.text }}</textarea>
 
-		<br />
-		<br />
+		<br>
+		<br>
 
 		<input type="submit" value="Save" />
 		
@@ -78,6 +86,51 @@
 
 	</div>
 </form>
+
+<div id="popup" title="New Entry">
+	<table id="dragbar">
+		<tr>
+			<td><span id="titlebar">New Event</span></td>
+			<td><span id="close_x" title="Close this popup">[X]</span></td>
+		</tr>
+	</table>
+	
+	<form id="new_plane_form" action="{% url records user.username %}" method="post">
+		<table>
+			<tbody>
+				<tr>
+					<td>		
+						{# <input type="hidden" name="user" id="id_user" value="{{ user.id }}" /> #}
+						<input type="hidden" name="id" id="id_id" value="" />
+					</td>
+				</tr>
+				<tr>
+					<td>{{ form.date.label_tag }}</td>
+					<td>{{ form.date }}<br><span class="help_text">{{form.date.help_text}}</span></td>
+				</tr>
+				<tr>
+					<td>Event</td>
+					<td>{{ form.non_flying }}<br><span class="help_text">{{form.non_flying.help_text}}</span></td>
+				</tr>
+			
+				<tr>
+					<td>{{ form.remarks.label_tag }}</td>
+					<td>{{ form.remarks }}<br><span class="help_text">{{form.remarks.help_text}}</span></td>
+				</tr>
+			</tbody>
+		</table>
+		
+    	<div id="new_buttons">
+			<input type="submit" name="submit" value="Create New Event" />
+		</div>
+
+		<div id="edit_buttons">
+			<input type="submit" name="submit" value="Submit Changes" />
+			<input type="submit" name="submit" value="Delete Event" />
+		</div>
+
+	</form>
 </div>
+
 
 {% endblock %}

@@ -7,3 +7,8 @@ td.date input                     {width: 100px}
 #records_instructions             {margin: 20px}
 
 #nonflights_instructions          {margin: 20px}
+
+
+
+textarea                          {width: 250px; height: 100px}
+#popup td:nth-child(2)            {text-align: left}

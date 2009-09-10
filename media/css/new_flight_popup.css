@@ -1,18 +1,5 @@
-#popup                                      {position: absolute;
-                                             top: 500px;
-                                             left: 50px;
-                                             display: none;
-                                             width: 480px;
-                                             background: white;
-                                             font-size: small !important;
-                                             text-align:center;
-                                             border: 2px solid black}
-
-#dragbar                                    {background: lightblue; width:100%; text-align: right; margin-bottom: .5em; border-bottom: 1px solid black}
-#dragbar td:first-child                     {width:100%; text-align:center; font-weight: bold; font-size: larger}
-#dragbar td:last-child                      {text-align:right}
-
-#close_x                                    {cursor: pointer; font-weight: bold}
+#popup                                      {
+                                             width: 480px;}
 				 
 #new_entry_popup td                         {padding: 0}
 

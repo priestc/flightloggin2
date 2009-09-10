@@ -6,14 +6,17 @@ from django.db.models import Q
 from annoying.functions import get_object_or_None
 from mid.middleware import threadlocals
 
+#from logbook.models import Flight
 from airport.models import Airport, Custom, Navaid
 
 class Route(models.Model):
+    
+    #flight = models.OneToOneField(Flight, related_name="route")
 
     fancy_rendered =  models.TextField(blank=True, null=True)
     fallback_string = models.TextField(blank=True, null=True)
     simple_rendered = models.TextField(blank=True, null=True)
-    kml_rendered = models.TextField(blank=True, null=True)
+    kml_rendered =    models.TextField(blank=True, null=True)
     
     p2p =             models.BooleanField()
     

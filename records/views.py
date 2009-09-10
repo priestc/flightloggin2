@@ -8,25 +8,42 @@ from is_shared import is_shared
 def records(request, username):
     shared, display_user = is_shared(request, username)
     
+    ##################################################
+    
+    try:
+        profile = display_user.get_profile()
+    except:
+        profile = Profile()
+        
+    if profile.date_format:
+        date_format = profile.date_format
+    else:
+        date_format = "Y-m-d"
+    
+    ##################################################
+    
     records,c = Records.objects.get_or_create(user=request.user)
     
-    formset = NonFlightFormset(queryset=NonFlight.objects.filter(user=request.user))
+    nonflights = NonFlight.objects.filter(user=request.user)
     
     if request.POST:
-        post = request.POST.copy()
-        qs=NonFlight.objects.filter(user=request.user)
         
-        for pk in range(0, qs.count()+1):
-            post.update({"form-" + str(pk) + "-user": str(request.user.pk)})
-            
-        #assert False
-            
-        formset=NonFlightFormset(post, queryset=qs)
-        if formset.is_valid():
-            formset.save()
-            
+        if request.POST.get("submit") == "Edit Event":
+            nf = NonFlight(pk=request.POST['id'])
+            form=NonFlightForm(request.POST, instance=nf)
+            if form.is_valid():
+                form.save()
+                
+        elif request.POST.get("submit") == "New Event":
+            form=NonFlightForm(request.POST)
+            if form.is_valid():
+                form.save()
+                
         records.text=request.POST.get('records')
         records.save()
         saved=True
+
+    else:
+        form = NonFlightForm()
     
     return locals()
