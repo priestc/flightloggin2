@@ -21,16 +21,17 @@ from is_shared import is_shared
 
 @login_required()   
 def backup(request, username):
-    import csv, zipfile
+    import csv, zipfile, StringIO, datetime
     from django.http import HttpResponse
     from records.models import Records
     
     shared, display_user = is_shared(request, username)
+    
+    date = datetime.date.today()
+    
+    output = StringIO.StringIO()
 
-    response = HttpResponse(mimetype='text/plain')
-    response['Content-Disposition'] = 'attachment; filename=somefilename.csv'
-
-    writer = csv.writer(response, dialect='excel')
+    writer = csv.writer(output, dialect='excel')
     
     ##########################
     
@@ -56,9 +57,13 @@ def backup(request, username):
         
     ###########################
     
-    z = zipfile.ZipFile(response,'w')
+    response = HttpResponse(mimetype='application/zip')
+    response['Content-Disposition'] = 'attachment; filename=logbook-backup-%s.csv.zip' % date
+    
+    z = zipfile.ZipFile(response,'w', compression=zipfile.ZIP_DEFLATED)
+    z.writestr("logbook-backup-%s.csv" % date, output.getvalue())
 
-    return z
+    return response
 
 ######################################################################################################################################
 
