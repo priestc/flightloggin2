@@ -14,7 +14,7 @@ def currency(request, username):
     
     currency = FAA_Currency(display_user)
     
-    type_ratings = Plane.objects.filter(user=display_user).filter( Q(tags__icontains="type rating") | Q(tags__icontains="landing currency")).values_list('type', flat=True).order_by().distinct()
+    type_ratings = Plane.objects.filter(user=display_user).filter( Q(tags__icontains="type rating") | Q(tags__icontains="currency")).values_list('type', flat=True).order_by().distinct()
     cat_classes = Plane.objects.filter(user=display_user).values_list('cat_class', flat=True).order_by().distinct()
     tailwheels = Plane.objects.filter(user=display_user).filter( Q(tags__icontains="tailwheel")).values_list('cat_class', flat=True).order_by().distinct()
     

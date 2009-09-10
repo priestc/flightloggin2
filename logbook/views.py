@@ -62,25 +62,35 @@ def logbook(request, username, page=0):
     
     form = FlightForm(planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
     
-    if request.POST.get('submit', "") == "Submit New Flight":
-        flight = Flight(user=display_user)
-        form = FlightForm(request.POST, instance=flight, planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
-     
-    elif request.POST.get('submit', "") == "Edit Flight":
-        flight_id = request.POST['id']
-        flight = Flight(pk=flight_id, user=display_user)
-        
-        form = FlightForm(request.POST, instance=flight, planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
-        
-    elif request.POST.get('submit', "") == "Delete Flight":
-        flight_id = request.POST['id']
-        flight = Flight(pk=flight_id, user=display_user)
-        flight.delete()
-        
-    if request.POST and form.is_valid():
-        form.save()
-        return HttpResponseRedirect('/' + display_user.username + '/logbook.html')
-    
+    if request.POST:
+        if request.POST.get('submit', "") == "Submit New Flight":
+            flight = Flight(user=display_user)
+            form = FlightForm(request.POST, instance=flight, planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
+            
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect('/' + display_user.username + '/logbook.html')
+            else:
+                ERROR = "'new'"
+                
+        elif request.POST.get('submit', "") == "Edit Flight":
+            flight_id = request.POST['id']
+            flight = Flight(pk=flight_id, user=display_user)
+            
+            form = FlightForm(request.POST, instance=flight, planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
+            
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect('/' + display_user.username + '/logbook.html')
+            else:
+                ERROR = "'edit'"
+                
+        elif request.POST.get('submit', "") == "Delete Flight":
+            flight_id = request.POST['id']
+            flight = Flight(pk=flight_id, user=display_user)
+            flight.delete()
+            ERROR = 'false'
+                
     ##############################################################
     try:
         profile = display_user.get_profile()

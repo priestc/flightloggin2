@@ -69,7 +69,7 @@ function page_totals(columns){
         count = 0;
 	    $("td." + column + "_col").each(function(){
             val = $(this).text();
-            //alert("dfd");
+
             if(val.indexOf(":") > 0){
                 COLON = true
                 list=val.split(":");
@@ -83,7 +83,6 @@ function page_totals(columns){
         	   
 	        if(!isNaN(val))  
 	          count = count + val;
-          
         });
 
         if( column == 'app' || column == 'day_l' || column == 'night_l')
@@ -93,23 +92,18 @@ function page_totals(columns){
                 if(count == 0)
                     result = "00:00";
                 else {
-                    
                     str=count.toString();
                     list=str.split(".");
                     hour=list[0];
                     dec="." + list[1];
                     mins = dec * 60
                     result = sprintf("%s:%02.0f", hour, mins);
-                    //result="45"
-                    
                 }
             }
             else
                 result = count.toFixed(1);
         }
-        
-        
-        
+
         $("tfoot #" + column + "_pt").html(result);
     }
 }

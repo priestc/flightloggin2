@@ -6,16 +6,19 @@ var todays_date = month + "/" + day + "/" + d.getFullYear();
 
 //////////////////////////////////////////////////////////////////
 
-function prepare_new_flight() {					//prepares the new entry popup
-	wipe_clean();
+function prepare_new_flight(wipe) {					    //prepares the new entry popup
+
+	if(wipe) {
+    	wipe_clean();
+	    $("#id_date").val(todays_date);
+	}
 	
 	$('#titlebar').text("New Flight");
-	$("#id_date").val(todays_date);
 	$("#edit_buttons").hide();
 	$("#new_buttons").show();
 }
 
-function prepare_edit_flight(wipe) {					//prepares the new entry popup
+function prepare_edit_flight(wipe) {				//prepares the new entry popup
 	if(wipe)
 		wipe_clean();
 	
@@ -24,9 +27,11 @@ function prepare_edit_flight(wipe) {					//prepares the new entry popup
 	$("#edit_buttons").show();
 }
 
+
+
 function prepare_and_fire_popup(type, id, date, remarks, flightarray, non_flying) {		//add values to the edit entry popup
 	
-	prepare_edit_flight();
+	prepare_edit_flight(true);
 	
 	$("#id").val(id);
 	$("#id_date").val(date);
@@ -78,9 +83,18 @@ $(document).ready(function() {
 	
 	///////////////////////////////////////////
 	
+	if(ERROR == 'new') {
+	    prepare_new_flight(false)
+	    fire_popup("popup");
+	}
+	else if (ERROR == 'edit') {
+	    prepare_edit_flight(false)
+	    fire_popup("popup");
+	}
+	
 	$("#id_date").datepicker({							// add the date pickers
 			dateFormat: "yy-mm-dd",
-			yearRange: "-10:+1", 
+			yearRange: "1999:2009", 
 			showOn: "button", 
 			buttonImage: date_button, 
 			buttonImageOnly: true,
@@ -136,7 +150,7 @@ $(document).ready(function() {
 	////////////////////////////////////////////////////////
 	
 	$("#new_flight_button").click(function(event) {			//make the popup when the new flight button is clicked
-		prepare_new_flight();
+		prepare_new_flight(true);
 		fire_popup("popup");
 	});
 	

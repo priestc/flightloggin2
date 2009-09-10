@@ -29,7 +29,7 @@ textarea, select                            {width: 145px}
 #flight_left_table tr td:last-child	        {text-align: left}
 
 #flight_right_table                         {width: 47%; border: 0px solid black; float: right}
-#flight_right_table input[type=text]		{width: 2.5em}
+#flight_right_table input[type=text]		{width: 2.9em}
 #flight_right_table input[type=button]		{margin-left: 5px}
 #flight_right_table tr td:last-child		{text-align: left; padding-left: 5px}
 #flight_right_table tr td:first-child		{text-align: right}
@@ -46,7 +46,8 @@ textarea, select                            {width: 145px}
 
 #flight_events_table td                     {text-align: left;}
 
-ul.errorlist                                {color: red; margin: 0px; margin-right: 5px; padding: 0px; list-style-type: none; text-align: center; border: 1px solid red}
+ul.errorlist                                {color: red; margin: 0px; margin-right: 5px; padding: 0px; 
+                                             width: 145px; list-style-type: none; text-align: center; border: 1px solid red}
 
 #non_events_table                           {width: 100%; border:0px solid black; margin: 0em; background: lightblue}
 #non_events_table td                        {text-align: left; width: 33%;}

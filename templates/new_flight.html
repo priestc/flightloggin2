@@ -14,8 +14,7 @@
 					<tr>
 						<td>		
 							<input type="hidden" name="page" value="{{ flights.number }}" />
-							<input type="hidden" name="id" id="id_id" value="" />
-							<input type="hidden" name="non-id" id="id_non-id" value="" />
+							<input type="hidden" name="id" id="id_id" value="{{form.instance.pk}}" />
 						</td>
 					</tr>
 		
@@ -151,4 +150,3 @@
 			</div>
 	</form>
 </div>
-{{form.errors}}
