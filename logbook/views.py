@@ -21,7 +21,7 @@ from is_shared import is_shared
 
 @login_required()   
 def backup(request, username):
-    import csv
+    import csv, zipfile
     from django.http import HttpResponse
     from records.models import Records
     
@@ -29,13 +29,14 @@ def backup(request, username):
 
     response = HttpResponse(mimetype='text/plain')
     response['Content-Disposition'] = 'attachment; filename=somefilename.csv'
-    
-    flights = Flight.objects.filter(user=display_user)
-    planes = Plane.objects.filter(user=display_user)
 
     writer = csv.writer(response, dialect='excel')
+    
+    ##########################
+    
     writer.writerow([FIELD_TITLES[field] for field in BACKUP_FIELDS])
     
+    flights = Flight.objects.filter(user=display_user)
     for flight in flights:
         writer.writerow([flight.column(field) for field in BACKUP_FIELDS])
         
@@ -43,15 +44,23 @@ def backup(request, username):
     
     records = get_object_or_None(Records, user=display_user)
     if records:
-        writer.writerow([records.text])
+        writer.writerow([records.text.replace("\n","\\n")])
+    else:
+        writer.writerow([])
         
     writer.writerow(["##PLANES"])
-        
+    
+    planes = Plane.objects.filter(user=display_user)    
     for p in planes:
         writer.writerow([p.tailnumber, p.manufacturer, p.model, p.cat_class, " ".join(p.get_tags_quote())])
+        
+    ###########################
+    
+    z = zipfile.ZipFile(response,'w')
 
-    return response
+    return z
 
+######################################################################################################################################
 
 @render_to("logbook.html")
 def logbook(request, username, page=0):
@@ -87,8 +96,8 @@ def logbook(request, username, page=0):
                 
         elif request.POST.get('submit', "") == "Delete Flight":
             flight_id = request.POST['id']
-            flight = Flight(pk=flight_id, user=display_user)
-            flight.delete()
+            Flight(pk=flight_id, user=display_user).delete()
+            Route.objects.get(flight__pk=flight_id).delete()
             ERROR = 'false'
                 
     ##############################################################
@@ -120,9 +129,6 @@ def logbook(request, username, page=0):
     all_flights = Flight.objects.filter(user=display_user)
     flights = all_flights.select_related()
     columns, created = Columns.objects.get_or_create(user=display_user)
-    
-    
-    
 
     if flights:
     
@@ -167,12 +173,10 @@ def logbook(request, username, page=0):
         del flight, row, column
         
     overall_totals, totals_columns = total_column(all_flights, columns.as_list(), format=format)
-    #assert False
     
     return locals()
 
- 
-
+#######################################################################################################################################
     
 @login_required()
 @render_to("mass_entry.html")     
