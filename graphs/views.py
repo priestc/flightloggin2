@@ -78,7 +78,6 @@ def progress_rate(display_user, column, s=None, e=None):
                  
             flights = qs.filter_by_column(column).values('date').annotate(value=Sum(db_column)).order_by('date')
         
-        
         flights=list(flights)
 
         if not (s and e):

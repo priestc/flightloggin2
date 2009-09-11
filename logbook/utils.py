@@ -61,7 +61,6 @@ class QuerySet(QuerySet):
     ## by cat_class
         
     def multi(self, f=True):
-        return self.filter()
         kwarg={"plane__cat_class__in": (2,4)}
         if not f:
             return self.exclude(**kwarg)
@@ -69,7 +68,6 @@ class QuerySet(QuerySet):
     #multi=property(multi)
     
     def single(self, f=True):
-        return self.filter()
         kwarg={"plane__cat_class__in": (1,3)}
         if not f:
             return self.exclude(**kwarg)
@@ -77,7 +75,6 @@ class QuerySet(QuerySet):
     #single=property(single)
     
     def sea(self, f=True):
-        return self.filter()
         kwarg={"plane__cat_class__in": (3,4)}
         if not f:
             return self.exclude(**kwarg)
@@ -85,7 +82,6 @@ class QuerySet(QuerySet):
     #sea=property(sea)
     
     def fixed_wing(self, f=True):
-        return self.filter()
         kwarg={"plane__cat_class__lte": 4}
         if not f:
             return self.exclude(**kwarg)
@@ -93,7 +89,6 @@ class QuerySet(QuerySet):
     #fixed_wing=property(fixed_wing)
       
     def sim(self, f=True):
-        return self.filter()
         kwarg={"plane__cat_class__gte": 15}
         if not f:
             return self.exclude(**kwarg)
@@ -101,7 +96,6 @@ class QuerySet(QuerySet):
     #sim=property(sim)
     
     def glider(self, f=True):
-        return self.filter()
         kwarg={"plane__cat_class": 5}
         if not f:
             return self.exclude(**kwarg)
@@ -109,7 +103,6 @@ class QuerySet(QuerySet):
     #glider=property(glider)
     
     def helicopter(self, f=True):
-        return self.filter()
         kwarg={"plane__cat_class": 6}
         if not f:
             return self.exclude(**kwarg)
