@@ -18,6 +18,15 @@ DB_FIELDS = [           #fields that have a database column all to themseves
           'total', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
           'person', 'remarks'
           ]
+          
+GRAPH_FIELDS = [        #fields to be fair game for the graphing functions
+          'total', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
+          'p2p', 'complex', 'hp', 'sim',
+          'multi', 'm_pic',
+          'sea', 'sea_pic', 'mes', 'mes_pic',
+          'turbine', 't_pic', 'mt', 'mt_pic',
+          'complex', 'hp', 'sim', 'tail', 'jet', 'jet_pic',
+          ]
 
 AGG_FIELDS = [          #fields that get their totals straight from the SUM(x) database command, must be in DB_FIELDS
           'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
@@ -29,6 +38,10 @@ EXTRA_AGG = [           #fields that do get totals calculated, but require some 
           'sea', 'sea_pic', 'mes', 'mes_pic',
           'turbine', 't_pic', 'mt', 'mt_pic',
           'complex', 'hp', 'sim', 'tail', 'jet', 'jet_pic',
+          ]
+          
+PIC_FIELDS = [         #columns that are represented by PIC in teh database
+          'mt_pic', 'mes_pic', 'm_pic', 'sea_pic',
           ]
           
 OPTION_FIELDS = [       #fields that are optionally turned on and off, used to create the bug list of checkboxes in the prefs page

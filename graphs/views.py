@@ -19,11 +19,12 @@ from annoying.decorators import render_to
 from is_shared import is_shared
 from datetime import date, timedelta
 from logbook.models import Flight
-from logbook.constants import FIELD_TITLES
-from logbook.utils import sim
+from logbook.constants import *
 
 from image_formats import plot_png, plot_svg
 from format_ticks import format_line_ticks
+
+from logbook.constants import AGG_FIELDS, EXTRA_AGG, FIELD_TITLES
 
 def datetimeRange(from_date, to_date=None):
     while to_date is None or from_date <= to_date:
@@ -34,10 +35,10 @@ def datetimeRange(from_date, to_date=None):
 @render_to('graphs.html')
 def graphs(request, username):
     shared, display_user = is_shared(request, username)
-    from logbook.constants import AGG_FIELDS, FIELD_TITLES
+    
     
     column_options = []
-    for field in AGG_FIELDS:
+    for field in GRAPH_FIELDS:
         column_options.append("<option value=\"%s\">%s</option>" % (field, FIELD_TITLES[field] ) )
         
     column_options = mark_safe("\n".join(column_options))
@@ -50,20 +51,41 @@ def graphs(request, username):
 def progress_rate(display_user, column, s=None, e=None):
 
     for column in [column]:
+        
+        if column in DB_FIELDS:
+            db_column = column
+            
+        elif column in PIC_FIELDS:
+            db_column = 'pic'
+        else:
+            db_column = 'total'
+            
+        qs=Flight.objects.user(display_user)                ## starting queryset
+        
         if s and e:
-            assert e > s
-            padding=datetime.timedelta(days=1)
+            assert e > s        #start time is before end time or else code 500 error
+            pad=datetime.timedelta(days=1)
             s = datetime.date(*[int(foo) for foo in s.split('.')])
             e = datetime.date(*[int(foo) for foo in e.split('.')])
-            prev_total = Flight.objects.exclude(sim).filter(user=display_user, date__lt=s-padding).aggregate(total=Sum(column))['total'] or 0
-            flights = list(Flight.objects.exclude(sim).filter(user=display_user, date__gte=s-padding, date__lte=e+padding).\
-                values('date').annotate(value=Sum(column)).order_by('date'))
-            flights.insert(0, {"date": s-datetime.timedelta(days=1), "value": prev_total})
+
+            flights = qs.filter_by_column(column).filter(date__lt=e+pad, date__gt=s-pad).values('date').annotate(value=Sum(db_column)).order_by('date')
+            
+            before_graph = qs.filter(date__lt=s-pad)        ## all stuff before the graph begins
+            
+            prev_total = before_graph.agg(column)
         else:
             prev_total = 0
-            flights = list(Flight.objects.exclude(sim).filter(user=display_user).values('date').annotate(value=Sum(column)).order_by('date'))
+                 
+            flights = qs.filter_by_column(column).values('date').annotate(value=Sum(db_column)).order_by('date')
+        
+        
+        flights=list(flights)
+
+        if not (s and e):
             e = flights[-1]['date']
             s = flights[0]['date']
+        else:
+            flights.insert(0, {"date": s-datetime.timedelta(days=1), "value": prev_total})
     
     dates=[]
     values=[]

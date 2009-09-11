@@ -15,7 +15,7 @@ from route.forms import *
 from forms import *
 from constants import *
 from plane.models import Plane
-from totals import total_column
+from totals import column_total_by_list
 from profile.models import Profile
 from is_shared import is_shared
 
@@ -131,7 +131,7 @@ def logbook(request, username, page=0):
     from profile.models import AutoButton   
     auto_button,c = AutoButton.objects.get_or_create(user=display_user)
     
-    all_flights = Flight.objects.filter(user=display_user)
+    all_flights = Flight.objects.user(display_user)
     flights = all_flights.select_related()
     columns, created = Columns.objects.get_or_create(user=display_user)
 
@@ -177,7 +177,7 @@ def logbook(request, username, page=0):
 
         del flight, row, column
         
-    overall_totals, totals_columns = total_column(all_flights, columns.as_list(), format=format)
+    overall_totals, totals_columns = column_total_by_list(all_flights, columns.as_list(), format=format)
     
     return locals()
 

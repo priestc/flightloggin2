@@ -51,6 +51,10 @@ class Flight(models.Model):
     ipc =               models.BooleanField(  "IPC",                          default=False)
 
     person =   models.CharField(                                        max_length=30, blank=True, null=True)
+    
+    @classmethod
+    def get_agg_by_column(column):      ## only to be used by the class
+        pass
             
     def __unicode__(self):
         return u"%s -- %s" % (self.date, self.remarks)
