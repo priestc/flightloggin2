@@ -25,6 +25,12 @@ from logbook.utils import sim
 from image_formats import plot_png, plot_svg
 from format_ticks import format_line_ticks
 
+def datetimeRange(from_date, to_date=None):
+    while to_date is None or from_date <= to_date:
+        yield from_date
+        from_date = from_date + timedelta(days = 1)
+
+
 @render_to('graphs.html')
 def graphs(request, username):
     shared, display_user = is_shared(request, username)
@@ -38,76 +44,123 @@ def graphs(request, username):
     #assert False
     return locals()
     
+############################################################################################################################################
+############################################################################################################################################
     
-def line(display_user, column, s=None, e=None):
-    
-    #kwargs = {str(column + "__gt"): 0}    
-    
-    if s and e:
-        padding=datetime.timedelta(days=1)
-        s = datetime.date(*[int(foo) for foo in s.split('.')])
-        e = datetime.date(*[int(foo) for foo in e.split('.')])
-        prev_total = Flight.objects.exclude(sim).filter(user=display_user, date__lt=s-padding).aggregate(total=Sum(column))['total'] or 0
-        flights = list(Flight.objects.exclude(sim).filter(user=display_user, date__gte=s-padding, date__lte=e+padding).values('date').annotate(value=Sum(column)).order_by('date'))
-        #import pdb; pdb.set_trace()
-        flights.insert(0, {"date": s-datetime.timedelta(days=1), "value": prev_total})
-        #assert False
-    else:
-        prev_total = 0
-        flights = list(Flight.objects.exclude(sim).filter(user=display_user).values('date').annotate(value=Sum(column)).order_by('date'))
-        e = flights[-1]['date']
-        s = flights[0]['date']
-    
-    
-    year_range = (e-s).days / 365.0 #subtract both dates, convert timedelta to days, divide by 365 = X.XX years
+def progress_rate(display_user, column, s=None, e=None):
+
+    for column in [column]:
+        if s and e:
+            assert e > s
+            padding=datetime.timedelta(days=1)
+            s = datetime.date(*[int(foo) for foo in s.split('.')])
+            e = datetime.date(*[int(foo) for foo in e.split('.')])
+            prev_total = Flight.objects.exclude(sim).filter(user=display_user, date__lt=s-padding).aggregate(total=Sum(column))['total'] or 0
+            flights = list(Flight.objects.exclude(sim).filter(user=display_user, date__gte=s-padding, date__lte=e+padding).\
+                values('date').annotate(value=Sum(column)).order_by('date'))
+            flights.insert(0, {"date": s-datetime.timedelta(days=1), "value": prev_total})
+        else:
+            prev_total = 0
+            flights = list(Flight.objects.exclude(sim).filter(user=display_user).values('date').annotate(value=Sum(column)).order_by('date'))
+            e = flights[-1]['date']
+            s = flights[0]['date']
     
     dates=[]
     values=[]
+    dict = {}
     for day in flights:
         values.append(day['value'])
         dates.append(day['date'])
-        
-    #values.append(prev_total)
-    #dates.append(
+        dict.update({day['date']: day['value']})
+    
+    ############## make accumulation plot
+       
     acc_values = np.cumsum(values)
     
-    #assert False, prev_total
+    ############## make rate plot
     
-    ####################################################################
+    padded = [dict.get(day, 0) for day in datetimeRange(s, e)]   #with zeroes for days that have no flights logged
+
+    month_avg=[]
+    padding_dates=[]
+    date=s
+    r=30   #range, 30 days
+    for i, day in enumerate(padded):
+        bottom = i-r
+        if bottom < 0:      #don't allow negative indexes, this is not what we want
+            bottom=0
+            
+        month_avg.append(  sum(padded[bottom:i])  )
+        date += datetime.timedelta(days=1)
+        padding_dates.append(date)
+
+    ############ format graph variables
+    
+    title = '%s Progession' % FIELD_TITLES[column]
+    
+    df = "F jS, Y"
+    subtitle = "From %s to %s" % (dj_date_format(s, df), dj_date_format(e, df))
+    
+    if column in ['day_l', 'night_l', 'app']:
+        acc_unit = '%s' % FIELD_TITLES[column]
+        rate_unit = '%s per month' % FIELD_TITLES[column]
+    else:
+        acc_unit = 'Flight Hours'
+        rate_unit = 'Flight Hours per month'
+        
+    plot1={"x": dates,
+           "y": acc_values,
+           "y_unit": acc_unit,
+           "color": "b"}
+           
+    plot2={"x": padding_dates,
+           "y": month_avg,
+           "y_unit": rate_unit,
+           "color": '#c14242'}
+    
+    return line_plot("twin", title, subtitle, s, e, plot1, plot2)
+    
+############################################################################################################################################
+############################################################################################################################################
+
+def line_plot(twin, title, subtitle, s, e, *plots):
+    
+    x=[]
+    y=[]
+    for plot in plots:       #each plot, there might be many
+        x.append(plot["x"])
+        y.append(plot["y"])
+        
+    year_range = (e-s).days / 365.0                      #subtract both dates, convert timedelta to days, divide by 365 = X.XX years
     
     fig = plt.figure()
     
-    d_color='#c14242'
-    ax = fig.add_subplot(111)
+    
+    if twin == "twin":
+        plot1 = plots[0]
+        plot2 = plots[1]
+        
+        ax = fig.add_subplot(111)
+        ax.plot(plot1['x'], plot1['y'], color=plot1['color'], drawstyle='steps', lw=2)
+        ax.set_ylabel( plot1['y_unit'] )
+        ax.set_xlim(s, e)
+        
+        ax2 = ax.twinx()
+        d_color='#c14242'
+        ax2.plot(plot2['x'], plot2['y'], color=plot2['color'], drawstyle='default')
+        ax2.set_ylabel( plot2['y_unit'], color=plot2['color'], )
+        for tl in ax2.get_yticklabels():
+            tl.set_color(d_color)
+    
+    ax2.set_xlim(s, e)
+    
+    
 
-    ax2 = ax.twinx()
     
-    ax2.plot(dates, values, color=d_color)
-    for tl in ax2.get_yticklabels():
-        tl.set_color(d_color)
+    plt.figtext(.5,.94,title, fontsize=18, ha='center')
+    plt.figtext(.5,.91,subtitle,fontsize=10,ha='center')
     
-    ax.plot(dates, acc_values, '-', drawstyle='steps', lw=2)
-    ax.set_xlim(s, e)
-    
-    
-
-    
-    df = "F jS, Y"
-    sub = "From %s to %s" % (dj_date_format(s, df), dj_date_format(e, df))
-    plt.figtext(.5,.94,'%s Progession' % (FIELD_TITLES[column]), fontsize=18, ha='center')
-    plt.figtext(.5,.91,sub,fontsize=10,ha='center')
-    
-    format_line_ticks(ax, year_range)                      # format the ticks based on the range of the dates
-    
-    if column in ['day_l', 'night_l']:
-        ax.set_ylabel('%ss' % FIELD_TITLES[column] )       #add "s" to the end
-    elif column == "app":
-        ax.set_ylabel('%ses' % FIELD_TITLES[column] )      #add "es" to the end
-    else:
-        ax.set_ylabel('Flight Hours' )
-        ax2.set_ylabel('Flight Hours per day', color=d_color)
-
-
+    format_line_ticks(ax, plt, year_range)                      # format the ticks based on the range of the dates
 
     # format the coords message box
     #def price(x): return '$%1.1f'%x
@@ -154,13 +207,32 @@ def histogram(request, column):
 
 
 
-def line_generator(request, username, column, s=None, e=None, ext=None):
+def line_generator(request, username, type, column, s=None, e=None, ext=None):
     shared, display_user = is_shared(request, username)
     
-    if ext == "png":
-        line2 = plot_png(line)
+    if type=="pr":
+        func = progress_rate
         
-    if ext == "svg":
-        line2 = plot_svg(line)
+    elif type=="mp":
+        func = multiple_progress
+        
+    elif type=="mp":
+        func = multiple_rate
+    
+    #######
+    
+    if ext == "png":
+        line2 = plot_png(func)     #decorate function to output to the appropriate format
+        
+    elif ext == "svg":
+        line2 = plot_svg(func)
         
     return line2(display_user, column, s, e)
+
+
+
+
+
+
+
+

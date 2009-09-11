@@ -24,7 +24,8 @@ urlpatterns += patterns('',
     
     (r'^(?P<username>\w+)/histogram-(?P<column>\w+).png$',         "graphs.views.histogram"),
 
-    (r'^(?P<username>\w+)/line-(?P<column>\w+)(--(?P<s>\d{4}.\d{1,2}.\d{1,2})-(?P<e>\d{4}.\d{1,2}.\d{1,2}))?.(?P<ext>[a-z]{3})$',
+    (r'^(?P<username>\w+)/line-(?P<type>\w+)-(?P<column>\w+)(--(?P<s>\d{4}.\d{1,2}.\d{1,2})-(?P<e>\d{4}.\d{1,2}.\d{1,2}))?.(?P<ext>(png|svg))$',
+    # username/line-type-column--start_date-end_date.extension
     
                                                                    "graphs.views.line_generator"),
     

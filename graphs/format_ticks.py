@@ -1,19 +1,21 @@
 import matplotlib.dates as mdates
 import matplotlib.ticker as ticker
 
-def format_line_ticks(ax, year_range):
+def format_line_ticks(ax, plt, year_range):
 
     if year_range < 0.05:       #about two months showing
         ax.xaxis.set_major_locator(mdates.DayLocator())
         ax.xaxis.set_minor_locator(mdates.DayLocator())
 
-        ax.xaxis.set_major_formatter(mdates.DateFormatter('%a %d %b'))
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%d'))
     
-    elif year_range < 0.2:       #about two months showing
+    elif year_range < 0.2:       #less than a month
         ax.xaxis.set_major_locator(mdates.WeekdayLocator(byweekday=1))
         ax.xaxis.set_minor_locator(mdates.WeekdayLocator(byweekday=1))
 
-        ax.xaxis.set_major_formatter(mdates.DateFormatter('%d %b %Y'))
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%d %b'))
+        
+         
 
     elif year_range < 0.5:       #about two months showing
         ax.xaxis.set_major_locator(mdates.MonthLocator())

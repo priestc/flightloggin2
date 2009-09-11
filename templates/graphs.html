@@ -4,24 +4,32 @@
 {% block javascript %}
     <style>
         .date       {width: 8em}
+        select      {font-size: small}
     </style>
-	<script type="text/javascript">
-	date_button = "{{MEDIA_URL}}/images/calendar.gif"
-	year_range = "1990:2008"
-	
-	function render_line_graph(ext) {
-	
-	    column = $("#line_column").val();
-	    
-	    start = $("#line_start").val().replace(/-/g,'.');         //change all dashes to dots
-	    end = $("#line_end").val().replace(/-/g,'.');
-	    url = "line-"+ column +"--" + start + "-" + end + "." + ext;
-	    
-  	    $("#object").attr("data", url).css("display", "block")
+    <script type="text/javascript">
+    date_button = "{{MEDIA_URL}}/images/calendar.gif"
+    year_range = "1990:2009"
 
-	}
-	
-	$(document).ready(function() {
+    function render_line_graph(ext) {
+
+        column = $("#line_column").val();
+        
+        start = $("#line_start").val().replace(/-/g,'.');         //change all dashes to dots
+        end = $("#line_end").val().replace(/-/g,'.');
+        
+        if(start && end)
+            url = "line-pr-"+ column +"--" + start + "-" + end + "." + ext;
+        else
+            url = "line-pr-"+ column + "." + ext;
+            
+        if(ext=="png")
+      	    $("#image").attr("src", url).css("display", "block")
+      	else if(ext=="svg")
+      	    window.open(url) //$("#svg_link").attr("href", url)
+
+    }
+
+    $(document).ready(function() {
         
         $(".render_button").click(function() {
         
@@ -31,41 +39,66 @@
                 render_line_graph(ext);
             
             if(this.id == "bar_graph")
-                render_bar_graph();
+                render_bar_graph(ext);
         
         });
         
         $(".date").datepicker({			// add the date pickers
-			    dateFormat: "yy-mm-dd",
-			    yearRange: year_range, 
-			    showOn: "button", 
-			    buttonImage: date_button,
-			    buttonImageOnly: true,
-			    changeYear: true
-	    }).addClass("embed");
+	            dateFormat: "yy-mm-dd",
+	            yearRange: year_range, 
+	            showOn: "button", 
+	            buttonImage: date_button,
+	            buttonImageOnly: true,
+	            changeYear: true
+        }).addClass("embed");
 
     });
 	
 	</script>
 {% endblock %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}Graphs{% endblock %}
 
 
 {% block canvas %}
-    <h2>Line Graph:</h2>
+    <h2>Progression with Rate:</h2>
         <select id="line_column">
         {{ column_options }}
         </select>
-        <input type="date" class="date" id="line_start"> <input type="date" class="date" id="line_end">
-        <input id="line_graph" class="render_button png" name="line_render" value="PNG" type="button">
-        <input id="line_graph" class="render_button svg" name="line_render" value="SVG" type="button"><br>
+        <div style="padding: 10px">
+        Start: <input type="date" class="date" id="line_start">   End: <input type="date" class="date" id="line_end">
+        </div>
+        <input id="line_graph" class="render_button png" name="line_render" value="PNG" type="submit">
+        <a href="" target="_blank" id="svg_link"><input id="line_graph" class="render_button svg" value="SVG" type="button"></a>
+        <br>
+        <hr>
+    <h2>Compare Progression:</h2>
+        <select id="line_column">
+        {{ column_options }}
+        </select>
+        <div style="padding: 10px">
+        Start: <input type="date" class="date" id="line_start">   End: <input type="date" class="date" id="line_end">
+        </div>
+        <input id="line_graph" class="render_button png" name="line_render" value="PNG" type="submit">
+        <a href="" target="_blank" id="svg_link"><input id="line_graph" class="render_button svg" value="SVG" type="button"></a>
+        <br>
+        <hr>
+    <h2>Compare Rate:</h2>
+        <select id="line_column">
+        {{ column_options }}
+        </select>
+        <div style="padding: 10px">
+        Start: <input type="date" class="date" id="line_start">   End: <input type="date" class="date" id="line_end">
+        </div>
+        <input id="line_graph" class="render_button png" name="line_render" value="PNG" type="submit">
+        <a href="" target="_blank" id="svg_link"><input id="line_graph" class="render_button svg" value="SVG" type="button"></a>
+        <br>
         
         
     {#################################}
     
     <br>
-    <object style="display:none; margin-right: auto; margin-left: auto" id="object" data="blank.svg" height="480" width="640" type="image/svg+xml">
+    <img src="" id="image" style="display:none; margin-right: auto; margin-left: auto"> {# id="object" height="480" width="640">#}
     </object>
 
 

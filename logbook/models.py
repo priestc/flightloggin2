@@ -1,23 +1,29 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.safestring import mark_safe
 
 from plane.models import Plane
 from route.models import Route
 from constants import *
 from utils import to_minutes
-from django.utils.safestring import mark_safe
+    
+class QuerySetManager(models.Manager):
+    def get_query_set(self):
+        return self.model.QuerySet(self.model)
+    
+    def __getattr__(self, name):
+        return getattr(self.get_query_set(), name)
 
-class NoSimManager(models.Manager):
-    def get_query_set(self):                                #all airports which are an opbase
-        return super(NoSimManager, self).get_query_set().exclude(plane__cat_class__gte=15).distinct()
 
 class Flight(models.Model):
 
-    objects =   models.Manager()
+    from utils import QuerySet          ## add custom filters to custom manager
+    
+    objects =  QuerySetManager()        ## add custom filterset manager
 
-    date =      models.DateField()
-    user =      models.ForeignKey(User, blank=False)
-    remarks =   models.TextField(blank=True)
+    date =     models.DateField()
+    user =     models.ForeignKey(User, blank=False)
+    remarks =  models.TextField(blank=True)
 
     plane =    models.ForeignKey(Plane, blank=False, null=False)
     route =    models.ForeignKey(Route, blank=True, null=True)
@@ -45,7 +51,7 @@ class Flight(models.Model):
     ipc =               models.BooleanField(  "IPC",                          default=False)
 
     person =   models.CharField(                                        max_length=30, blank=True, null=True)
-
+            
     def __unicode__(self):
         return u"%s -- %s" % (self.date, self.remarks)
 
