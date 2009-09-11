@@ -162,7 +162,7 @@ def line_plot(twin, title, subtitle, s, e, *plots):
         plot2 = plots[1]
         
         ax = fig.add_subplot(111)
-        ax.plot(plot1['x'], plot1['y'], color=plot1['color'], drawstyle='steps', lw=2)
+        ax.plot(plot1['x'], plot1['y'], color=plot1['color'], drawstyle='steps-post', lw=2)
         ax.set_ylabel( plot1['y_unit'] )
         ax.set_xlim(s, e)
         

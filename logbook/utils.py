@@ -273,8 +273,11 @@ class QuerySet(QuerySet):
         elif cn == 'mt' or cn == 'mt_pic':
             return self.multi().turbine()
             
-        elif cn == 'multi' or cn == 'm_pic':
+        elif cn == 'multi':
             return self.multi()
+        
+        elif cn == 'm_pic':
+            return self.multi().pic()
         
         elif cn == 'sea' or cn == 'sea_pic':
             return self.sea()
