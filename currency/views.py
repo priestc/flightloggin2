@@ -13,11 +13,8 @@ def currency(request, username):
     from FAA import FAA_Currency
     
     currency = FAA_Currency(display_user)
-    
-    type_ratings = Plane.objects.filter(user=display_user).filter( Q(tags__icontains="type rating") | Q(tags__icontains="currency")).values_list('type', flat=True).order_by().distinct()
-    cat_classes = Plane.objects.filter(user=display_user).values_list('cat_class', flat=True).order_by().distinct()
-    tailwheels = Plane.objects.filter(user=display_user).filter( Q(tags__icontains="tailwheel")).values_list('cat_class', flat=True).order_by().distinct()
-    
+
+    ############################################
     
     medi_currbox = CurrBox(method="medical")
     medi_currbox.first = currency.first_class()
@@ -27,9 +24,19 @@ def currency(request, username):
     
     if not currency.medical_class:
         del medi_currbox                #if there are no medicals, then delete this box so it doesn't show up in the template
+        
+    ############################################
     
-    #medi_currbox.render()
+    cert_currbox = CurrBox(method="cert")
+    cert_currbox.cfi = currency.flight_instructor()
+    cert_currbox.bfr = currency.flight_review()
     
+    if not (currency.pilot or currency.cfi):
+        del cert_currbox
+    
+    ############################################
+        
+    cat_classes = Plane.objects.filter(user=display_user).values_list('cat_class', flat=True).order_by().distinct()
     cat_classes_out = []
     for item in cat_classes:
         currbox = CurrBox(cat_class=item, method="landings")
@@ -38,7 +45,10 @@ def currency(request, username):
         currbox.night = currency.landing(night=True, cat_class=item)
         
         cat_classes_out.append(currbox)
-     
+    
+    ############################################
+    
+    tailwheels = Plane.objects.filter(user=display_user).filter( Q(tags__icontains="tailwheel")).values_list('cat_class', flat=True).order_by().distinct()
     tailwheels_out = []   
     for item in tailwheels:
         currbox = CurrBox(cat_class=item, method="landings", tail=True)
@@ -47,7 +57,11 @@ def currency(request, username):
         currbox.night = currency.landing(night=True, cat_class=item, tail=True)
         
         tailwheels_out.append(currbox)
+        
+    ############################################
     
+    type_ratings = Plane.objects.filter(user=display_user).\
+        filter( Q(tags__icontains="type rating") | Q(tags__icontains="currency")).values_list('type', flat=True).order_by().distinct()
     types_out = []
     for item in type_ratings:
         currbox = CurrBox(tr=item, method="landings")
@@ -57,9 +71,21 @@ def currency(request, username):
         
         types_out.append(currbox)
         
-    
-    
-    #assert False
-    #import pdb; pdb.set_trace()
-    
     return locals()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

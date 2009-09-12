@@ -4,7 +4,14 @@ from datetime import *
 import math
 
 class CurrBox(object):
+    """takes the already calculated values of a currency state, and makes
+       it into an HTML box, no database calls nor calculations are made here"""
+       
     cat_class = 0
+    
+    cfi = False
+    bfr = False
+    
     day = False
     night = False
     
@@ -71,7 +78,41 @@ class CurrBox(object):
         return mark_safe(" ".join(lines))
         
         
+    def _render_cert(self):
         
+        lines = []
+        lines.append("<div class='currbox'>")
+        
+        title = {'cfi': "Flight Instructor", 'bfr': "Flight Review"}
+        eq = {'cfi': "Flight Instructor Renewall", 'bfr': "Flight Review / Pilot Checkride"}
+            
+        for time in ["cfi", "bfr"]:
+            if not getattr(self, time)[0] == "NEVER":
+                days_ago = abs((date.today() - getattr(self, time)[2]).days)
+                current = bool(getattr(self, time)[0] == "ALERT" or getattr(self, time)[0] == "CURRENT")        # true if current
+                class_name = getattr(self, time)[0].lower()
+                start_date = str(getattr(self, time)[1])
+                end_date = str(getattr(self, time)[2])
+                
+                lines.append("<div class='%s inner_currbox %s'>" % (class_name, time) )
+                lines.append("<h3>%s</h3>" % title[time] )
+                lines.append("<p>Date of last %s: <strong>%s</strong><br>" % (eq[time], start_date) )
+                
+                if current:
+                    lines.append("Last day of privileges: <strong>%s</strong> (%s Days remain)</p>" % (end_date, days_ago) )
+                else:
+                    lines.append("Last day of privileges: <strong>%s</strong> (%s Days ago)</p>" % (end_date, days_ago) )
+                
+                lines.append("</div>")
+            else:
+            
+                lines.append("<div class='expired inner_currbox %s'>" % time)
+                lines.append("<h3>%s</h3>" % title[time] )
+                lines.append("<p>&nbsp;</p>")
+                lines.append("</div>")
+                
+        lines.append("</div>")         
+        return mark_safe(" ".join(lines))   
         
         
         
@@ -115,6 +156,9 @@ class CurrBox(object):
         
         if self.method == "medical":
             return self._render_medical()
+        
+        if self.method == "cert":
+            return self._render_cert()
 
 
 

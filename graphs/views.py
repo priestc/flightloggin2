@@ -15,6 +15,8 @@ from format_ticks import format_line_ticks
 
 from logbook.constants import AGG_FIELDS, EXTRA_AGG, FIELD_TITLES
 
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 def datetimeRange(from_date, to_date=None):
@@ -138,8 +140,6 @@ def make_twin_plot(fig, display_user, column, s=None, e=None):
 def make_twin_graph(fig, s, e, plot1, plot2):
     """give it a plot and it will return a graph image"""
     
-    import matplotlib
-    matplotlib.use('Agg')
     import matplotlib.dates as mdates
     import matplotlib.ticker as ticker
     import matplotlib.mlab as mlab

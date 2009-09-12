@@ -10,6 +10,8 @@ div.medical_third   {border: 1px solid black; width: 32%; height: 100px; float: 
 div.day             {float: left}
 div.night           {float: right}
 
+div.bfr             {float: left}
+div.cfi             {float: right}
 
 .expired            {background-color: gray}
 .current            {background-color: DarkSeaGreen}

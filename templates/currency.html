@@ -8,13 +8,7 @@
 
 {% block title %}Currency{% endblock %}
 
-
 {% block canvas %}
-{% if medi_currbox %}
-    <h2>Medical:</h2>
-    {{medi_currbox.render}}
-    
-{% endif %}
 
 {#################################################}
 
@@ -51,7 +45,22 @@
 
 {#################################################}
 
-{% if not types_out and not tailwheels_out and not cat_classes_out and not medi_currbox %}
+{% if cert_currbox %}
+    <h2>Certificates:</h2>
+    {{cert_currbox.render}}
+{% endif %}
+
+{#################################################}
+
+
+{% if medi_currbox %}
+    <h2>Medical:</h2>
+    {{medi_currbox.render}}
+{% endif %}
+
+{#################################################}
+
+{% if not types_out and not tailwheels_out and not cat_classes_out and not medi_currbox and not certs_out %}
 <div class="nothing">Nothing to show here, sorry.</div>
 {% endif %}
 
