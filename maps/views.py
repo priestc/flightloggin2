@@ -37,11 +37,11 @@ def airports_kml(request, username, type):
     
     sio = StringIO.StringIO()
     
-    icon = settings.MEDIA_ROOT + "/icons/big/red_pad.png"
+    icon = settings.MEDIA_ROOT + "/icons/big/white_pad.png"
     
     z = zipfile.ZipFile(sio,'w', compression=zipfile.ZIP_DEFLATED)
     z.writestr("doc.kml", kml)
-    z.write(icon, "icon.png")
+    z.write(icon, "files/icon.png")
     z.close()
 
     response = HttpResponse(sio.getvalue(), mimetype="application/vnd.google-earth.kmz")

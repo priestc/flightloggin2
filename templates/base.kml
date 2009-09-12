@@ -3,6 +3,7 @@
 <Document>
 	<name>{{title}}</name>
 	
+	{% if route_folders %}
 	<Style id="purple_line">
 		<LineStyle>
 			<color>ccFF78B4</color>{# B478FF #}
@@ -37,27 +38,20 @@
 			<width>2</width>
 		</LineStyle>
 	</Style>
+	{% endif %}
 	
-	<Style id="base_icon">
+	{% if point_folders %}
+	<Style id="icon">
 		<IconStyle>
+		    <color>ff0000ff</color>
 			<scale>1.0</scale>
 			<Icon>
-				<href>icon.png</href>
+				<href>files/icon.png</href>
 			</Icon>
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
 	</Style>
-
-	<Style id="route_icon">
-		<IconStyle>
-			<scale>1.0</scale>
-			<Icon>
-				<href>{{ MEDIA_URL }}/icons/small/base_pad.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-	</Style>
-	
+	{% endif %}
 	
 	
     {% for folder in route_folders %}
@@ -86,9 +80,9 @@
         {% for point in folder %}
 	    <Placemark>
 		    <name>{{point.identifier}}</name>
-		    <styleUrl>#base_icon</styleUrl>
+		    <styleUrl>#icon</styleUrl>
 		    <description>
-		        <![CDATA[<b>{{point.name}}</b><br>{{point.ls}}]]>
+		        <![CDATA[<b>{{point.name}}</b> <br>{{point.ls}}]]>
             </description>
 		    <Point>
 			    <coordinates>{{point.kml}}</coordinates>
