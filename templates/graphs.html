@@ -18,9 +18,9 @@
         end = $("#line_end").val().replace(/-/g,'.');
         
         if(start && end)
-            url = "line-pr-"+ column +"--" + start + "-" + end + "." + ext;
+            url = "line/pr/"+ column +"/" + start + "-" + end + "." + ext;
         else
-            url = "line-pr-"+ column + "." + ext;
+            url = "line/pr/"+ column + "/all." + ext;
             
         if(ext=="png")
       	    $("#image").attr("src", url).css("display", "block")
