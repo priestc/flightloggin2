@@ -28,6 +28,8 @@ urlpatterns += patterns('',
     # username/line/type/columns/(start_date-end_date) or (all).extension
     
                                                                    "graphs.views.line_generator"),
+                                                                   
+    (r'(?P<username>\w+)/states.png',         "maps.states.state_map", ),
     
     ############################ maps
     
