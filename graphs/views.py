@@ -1,5 +1,15 @@
 import datetime
 
+import matplotlib
+matplotlib.use('Agg')
+
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import matplotlib.ticker as ticker
+import matplotlib.mlab as mlab
+from matplotlib.figure import Figure
+from matplotlib.dates import DateFormatter
+
 from django.db.models import Max, Min, Sum
 from django.utils.dateformat import format as dj_date_format
 from django.utils.safestring import mark_safe
@@ -14,16 +24,6 @@ from image_formats import plot_png, plot_svg
 from format_ticks import format_line_ticks
 
 from logbook.constants import AGG_FIELDS, EXTRA_AGG, FIELD_TITLES
-
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-
-import matplotlib.dates as mdates
-import matplotlib.ticker as ticker
-import matplotlib.mlab as mlab
-from matplotlib.figure import Figure
-from matplotlib.dates import DateFormatter
 
 def datetimeRange(from_date, to_date=None):
     while to_date is None or from_date <= to_date:
