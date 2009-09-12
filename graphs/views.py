@@ -1,15 +1,4 @@
 import datetime
-import numpy as np
-
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-import matplotlib.ticker as ticker
-import matplotlib.mlab as mlab
-
-from matplotlib.figure import Figure
-from matplotlib.dates import DateFormatter
 
 from django.db.models import Max, Min, Sum
 from django.utils.dateformat import format as dj_date_format
@@ -25,6 +14,8 @@ from image_formats import plot_png, plot_svg
 from format_ticks import format_line_ticks
 
 from logbook.constants import AGG_FIELDS, EXTRA_AGG, FIELD_TITLES
+
+import matplotlib.pyplot as plt
 
 def datetimeRange(from_date, to_date=None):
     while to_date is None or from_date <= to_date:
@@ -48,43 +39,43 @@ def graphs(request, username):
 ############################################################################################################################################
 ############################################################################################################################################
     
-def progress_rate(display_user, column, s=None, e=None):
+def make_twin_plot(fig, display_user, column, s=None, e=None):
+    """give it a column and a date range and it will return a
+       twin plot of that column"""
+       
+    import numpy as np
 
-    for column in [column]:
+    if column in DB_FIELDS:
+        db_column = column
         
-        if column in DB_FIELDS:
-            db_column = column
-            
-        elif column in PIC_FIELDS:
-            db_column = 'pic'
-        else:
-            db_column = 'total'
-            
-        qs=Flight.objects.user(display_user)                ## starting queryset
+    elif column in PIC_FIELDS:
+        db_column = 'pic'
+    else:
+        db_column = 'total'
         
-        if s and e:
-            assert e > s        #start time is before end time or else code 500 error
-            pad=datetime.timedelta(days=1)
-            s = datetime.date(*[int(foo) for foo in s.split('.')])
-            e = datetime.date(*[int(foo) for foo in e.split('.')])
+    qs=Flight.objects.user(display_user)                ## starting queryset
+    
+    if s and e:
+        assert e > s        #start time is before end time or else code 500 error
+        pad=datetime.timedelta(days=1)
 
-            flights = qs.filter_by_column(column).filter(date__lt=e+pad, date__gt=s-pad).values('date').annotate(value=Sum(db_column)).order_by('date')
-            
-            before_graph = qs.filter(date__lt=s-pad)        ## all stuff before the graph begins
-            
-            prev_total = before_graph.agg(column)
-        else:
-            prev_total = 0
-                 
-            flights = qs.filter_by_column(column).values('date').annotate(value=Sum(db_column)).order_by('date')
+        flights = qs.filter_by_column(column).filter(date__lt=e+pad, date__gt=s-pad).values('date').annotate(value=Sum(db_column)).order_by('date')
         
-        flights=list(flights)
+        before_graph = qs.filter(date__lt=s-pad)        ## all stuff before the graph begins
+        
+        prev_total = before_graph.agg(column)
+    else:
+        prev_total = 0
+             
+        flights = qs.filter_by_column(column).values('date').annotate(value=Sum(db_column)).order_by('date')
+    
+    flights=list(flights)
 
-        if not (s and e):
-            e = flights[-1]['date']
-            s = flights[0]['date']
-        else:
-            flights.insert(0, {"date": s-datetime.timedelta(days=1), "value": prev_total})
+    if not (s and e):
+        e = flights[-1]['date']
+        s = flights[0]['date']
+    else:
+        flights.insert(0, {"date": s-datetime.timedelta(days=1), "value": prev_total})
     
     dates=[]
     values=[]
@@ -139,54 +130,40 @@ def progress_rate(display_user, column, s=None, e=None):
            "y_unit": rate_unit,
            "color": '#c14242'}
     
-    return line_plot("twin", title, subtitle, s, e, plot1, plot2)
+    return (title, subtitle, s, e, plot1, plot2)
     
 ############################################################################################################################################
 ############################################################################################################################################
 
-def line_plot(twin, title, subtitle, s, e, *plots):
+def make_twin_graph(fig, s, e, plot1, plot2):
+    """give it a plot and it will return a graph image"""
     
-    x=[]
-    y=[]
-    for plot in plots:       #each plot, there might be many
-        x.append(plot["x"])
-        y.append(plot["y"])
-        
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.dates as mdates
+    import matplotlib.ticker as ticker
+    import matplotlib.mlab as mlab
+    from matplotlib.figure import Figure
+    from matplotlib.dates import DateFormatter
+    
     year_range = (e-s).days / 365.0                      #subtract both dates, convert timedelta to days, divide by 365 = X.XX years
     
-    fig = plt.figure()
+   
+    ax = fig.add_subplot(111)
+    ax.plot(plot1['x'], plot1['y'], color=plot1['color'], drawstyle='steps-post', lw=2)
     
+    ax.set_xlim(s, e)
     
-    if twin == "twin":
-        plot1 = plots[0]
-        plot2 = plots[1]
-        
-        ax = fig.add_subplot(111)
-        ax.plot(plot1['x'], plot1['y'], color=plot1['color'], drawstyle='steps-post', lw=2)
-        ax.set_ylabel( plot1['y_unit'] )
-        ax.set_xlim(s, e)
-        
-        ax2 = ax.twinx()
-        d_color='#c14242'
-        ax2.plot(plot2['x'], plot2['y'], color=plot2['color'], drawstyle='default')
-        ax2.set_ylabel( plot2['y_unit'], color=plot2['color'], )
-        for tl in ax2.get_yticklabels():
-            tl.set_color(d_color)
+    ax2 = ax.twinx()
+    d_color='#c14242'
+    ax2.plot(plot2['x'], plot2['y'], color=plot2['color'], drawstyle='default')
+    ax2.set_ylabel( plot2['y_unit'], color=plot2['color'], )
     
-    ax2.set_xlim(s, e)
-    
-    
+    for tl in ax2.get_yticklabels():
+        tl.set_color(d_color)
 
-    
-    plt.figtext(.5,.94,title, fontsize=18, ha='center')
-    plt.figtext(.5,.91,subtitle,fontsize=10,ha='center')
-    
     format_line_ticks(ax, plt, year_range)                      # format the ticks based on the range of the dates
-
-    # format the coords message box
-    #def price(x): return '$%1.1f'%x
-    #ax.format_xdata = mdates.DateFormatter('%Y-%m-%d')
-    #ax.format_ydata = price
+    
     ax.grid(True)
 
     # rotates and right aligns the x labels, and moves the bottom of the
@@ -198,26 +175,32 @@ def line_plot(twin, title, subtitle, s, e, *plots):
     return fig
     
    
-def histogram(request, column):
-    display_user = request.user
-    kwargs = {str(column + "__gt"): "0"}
-    flights = Flight.objects.filter(user=display_user, **kwargs).values_list(column, flat=True)
-
+def progress_rate(display_user, columns, s, e):
     
-    #del results
+    columns = columns.split("-")
     
-    ################################################################
+    if s and e:    
+        s = datetime.date(*[int(foo) for foo in s.split('.')])  #convert string dates from the URL to real dates
+        e = datetime.date(*[int(foo) for foo in e.split('.')])
     
-    fig = Figure()
-    ax = fig.add_subplot(111)
+    fig = plt.figure()
     
-    ax.hist(flights, normed=1, facecolor='green', alpha=0.75)
+    for column in columns:
+        if s and e:
+            title, subtitle, s, e, plot1, plot2 = make_twin_plot(fig, display_user, column, s, e)
+        else:
+            title, subtitle, s, e, plot1, plot2 = make_twin_plot(fig, display_user, column)     #this will return a new s and e depending on the database
+        
+        fig = make_twin_graph(fig, s, e, plot1, plot2)
+        
+    if len(columns) > 1:
+        plt.figtext(.5,.94,"Flight Time Progression", fontsize=18, ha='center')
+        plt.figtext(.5,.91,subtitle,fontsize=10,ha='center')
+    else:
+        plt.figtext(.5,.94,title, fontsize=18, ha='center')
+        plt.figtext(.5,.91,subtitle,fontsize=10,ha='center')
     
-    #ax.xaxis.set_major_formatter(DateFormatter('%Y-%m-%d'))
-    
-    #################################################
     return fig
-    
 
 
 
@@ -226,9 +209,7 @@ def histogram(request, column):
 
 
 
-
-
-def line_generator(request, username, type, column, s=None, e=None, ext=None):
+def line_generator(request, username, type, columns, s=None, e=None, ext=None):
     shared, display_user = is_shared(request, username)
     
     if type=="pr":
@@ -248,7 +229,7 @@ def line_generator(request, username, type, column, s=None, e=None, ext=None):
     elif ext == "svg":
         line2 = plot_svg(func)
         
-    return line2(display_user, column, s, e)
+    return line2(display_user, columns, s, e)
 
 
 
