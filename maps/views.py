@@ -1,3 +1,5 @@
+import zipfile
+
 from logbook.models import Flight
 from route.models import RouteBase, Route
 from is_shared import is_shared
@@ -29,7 +31,18 @@ def airports_kml(request, username, type):
             folders.append(AirportFolder(name="All Airports", qs=points))
     
     kml = get_template('base.kml').render(Context({"point_folders": folders, "title": title} ))
-    return HttpResponse(kml, mimetype="application/vnd.google-earth.kml+xml")
+    
+    kml=kml.encode('utf-8')
+    #assert False
+    
+    ####################################
+    
+    response = HttpResponse(mimetype="application/vnd.google-earth.kmz")
+    
+    z = zipfile.ZipFile(response,'w', compression=zipfile.ZIP_DEFLATED)
+    z.writestr("doc.kml", kml)
+    
+    return response
     
     
     
@@ -93,4 +106,21 @@ def routes_kml(request, username, type):
             folders.append(RouteFolder(name="Actual Instrument", qs=inst, style="#green_line"))
         
     kml = get_template('base.kml').render(Context({"route_folders": folders, "title": title} ))
-    return HttpResponse(kml, mimetype="application/vnd.google-earth.kml+xml")
+    
+    ###############################################
+    
+    response = HttpResponse(mimetype="application/vnd.google-earth.kmz")
+    
+    z = zipfile.ZipFile(response,'w', compression=zipfile.ZIP_DEFLATED)
+    z.writestr("doc.kml", kml)
+    
+    return response
+
+
+
+
+
+
+
+
+

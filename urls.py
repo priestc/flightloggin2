@@ -32,9 +32,9 @@ urlpatterns += patterns('',
     ############################ maps
     
     
-    url(r'^(?P<username>\w+)/routes-(?P<type>\w+).kml$',              "maps.views.routes_kml",       name="kml-route"),
+    url(r'^(?P<username>\w+)/routes-(?P<type>\w+).kmz$',              "maps.views.routes_kml",       name="kml-route"),
     
-    url(r'^(?P<username>\w+)/airports-(?P<type>\w+).kml$',            "maps.views.airports_kml",     name="kml-airport"),
+    url(r'^(?P<username>\w+)/airports-(?P<type>\w+).kmz$',            "maps.views.airports_kml",     name="kml-airport"),
     
     
     url(r'^(?P<username>\w+)/records.html$',                       "records.views.records",   name="records"),
@@ -54,9 +54,6 @@ urlpatterns += patterns('',
 
     url(r'^(?P<username>\w+)/logbook.html$',                       "logbook.views.logbook",    name="logbook"),
     url(r'^(?P<username>\w+)/logbook-page-(?P<page>\d+).html',     "logbook.views.logbook",    name="logbook-page"),
-    
-    url(r'^(?P<username>\w+)/airports.kml$',                       "maps.views.airports_kml",  name="airports-kml"),
-    url(r'^(?P<username>\w+)/routes.kml$',                         "maps.views.routes_kml",    name="routes-kml"),
     
     (r'^(?P<username>\w+)/$',                                      "django.views.generic.simple.redirect_to", {'url': 'logbook.html'}   ),
 )
