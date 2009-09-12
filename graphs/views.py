@@ -19,6 +19,12 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
+import matplotlib.dates as mdates
+import matplotlib.ticker as ticker
+import matplotlib.mlab as mlab
+from matplotlib.figure import Figure
+from matplotlib.dates import DateFormatter
+
 def datetimeRange(from_date, to_date=None):
     while to_date is None or from_date <= to_date:
         yield from_date
@@ -139,12 +145,6 @@ def make_twin_plot(fig, display_user, column, s=None, e=None):
 
 def make_twin_graph(fig, s, e, plot1, plot2):
     """give it a plot and it will return a graph image"""
-    
-    import matplotlib.dates as mdates
-    import matplotlib.ticker as ticker
-    import matplotlib.mlab as mlab
-    from matplotlib.figure import Figure
-    from matplotlib.dates import DateFormatter
     
     year_range = (e-s).days / 365.0                      #subtract both dates, convert timedelta to days, divide by 365 = X.XX years
     

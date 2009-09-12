@@ -2,7 +2,6 @@
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Document>
 	<name>{{title}}</name>
-	
 	{% if route_folders %}
 	<Style id="purple_line">
 		<LineStyle>
@@ -38,23 +37,7 @@
 			<width>2</width>
 		</LineStyle>
 	</Style>
-	{% endif %}
-	
-	{% if point_folders %}
-	<Style id="icon">
-		<IconStyle>
-		    <color>ff0000ff</color>
-			<scale>1.0</scale>
-			<Icon>
-				<href>files/icon.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-	</Style>
-	{% endif %}
-	
-	
-    {% for folder in route_folders %}
+	{% for folder in route_folders %}
     <Folder>
     <name>{{folder.name}}</name>
 	    {% for route in folder %}
@@ -71,9 +54,18 @@
 	    {% endfor %}
 	</Folder>
 	{% endfor %}
-	
-	
-	
+	{% endif %}
+	{% if point_folders %}
+	<Style id="icon">
+		<IconStyle>
+		    <color>ff0000ff</color>
+			<scale>1.0</scale>
+			<Icon>
+				<href>files/icon.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
 	{% for folder in point_folders %}
 	<Folder>
 	<name>{{folder.name}}</name>
@@ -91,6 +83,6 @@
 	    {% endfor %}
 	</Folder>
 	{% endfor %}
-		
+	{% endif %}
 </Document>
 </kml>
