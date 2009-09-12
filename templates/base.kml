@@ -5,35 +5,35 @@
 	
 	<Style id="purple_line">
 		<LineStyle>
-			<color>ccFF78B4</color> {# B478FF #}
+			<color>ccFF78B4</color>{# B478FF #}
 			<width>2</width>
 		</LineStyle>
 	</Style>
 	
 	<Style id="blue_line">
 		<LineStyle>
-			<color>ccF02814</color> {# 1428F0 #}
+			<color>ccF02814</color>{# 1428F0 #}
 			<width>2</width>
 		</LineStyle>
 	</Style>
 	
 	<Style id="red_line">
 		<LineStyle>
-			<color>cc1400D2</color> {# D20014 #}
+			<color>cc1400D2</color>{# D20014 #}
 			<width>2</width>
 		</LineStyle>
 	</Style>
 	
 	<Style id="orange_line">
 		<LineStyle>
-			<color>cc14B1FF</color>  {# FFB114 #}
+			<color>cc14B1FF</color>{# FFB114 #}
 			<width>2</width>
 		</LineStyle>
 	</Style>
 	
 	<Style id="green_line">
 		<LineStyle>
-			<color>cc14F000</color> {# 00F014 #}
+			<color>cc14F000</color>{# 00F014 #}
 			<width>2</width>
 		</LineStyle>
 	</Style>
@@ -42,7 +42,7 @@
 		<IconStyle>
 			<scale>1.0</scale>
 			<Icon>
-				<href>{{ MEDIA_URL }}/icons/big/base_pad.png</href>
+				<href>icon.png</href>
 			</Icon>
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
@@ -78,16 +78,17 @@
 	</Folder>
 	{% endfor %}
 	
+	
+	
 	{% for folder in point_folders %}
 	<Folder>
 	<name>{{folder.name}}</name>
         {% for point in folder %}
 	    <Placemark>
 		    <name>{{point.identifier}}</name>
+		    <styleUrl>#base_icon</styleUrl>
 		    <description>
-		    <![CDATA[
-                <b>{{point.name}}</b><br>{{point.ls}}
-            ]]>
+		        <![CDATA[<b>{{point.name}}</b><br>{{point.ls}}]]>
             </description>
 		    <Point>
 			    <coordinates>{{point.kml}}</coordinates>

@@ -1,4 +1,4 @@
-import zipfile
+import zipfile, StringIO
 
 from logbook.models import Flight
 from route.models import RouteBase, Route
@@ -18,6 +18,7 @@ def maps(request, username):
     return locals()
 
 def airports_kml(request, username, type):
+    import settings
     from utils import AirportFolder 
     from airport.models import *
     shared, display_user = is_shared(request, username)
@@ -30,18 +31,20 @@ def airports_kml(request, username, type):
         if points:
             folders.append(AirportFolder(name="All Airports", qs=points))
     
-    kml = get_template('base.kml').render(Context({"point_folders": folders, "title": title} ))
-    
-    kml=kml.encode('utf-8')
-    #assert False
+    kml = get_template('base.kml').render(Context({"point_folders": folders, "title": title} )).encode('utf-8')
     
     ####################################
     
-    response = HttpResponse(mimetype="application/vnd.google-earth.kmz")
+    sio = StringIO.StringIO()
     
-    z = zipfile.ZipFile(response,'w', compression=zipfile.ZIP_DEFLATED)
+    icon = settings.MEDIA_ROOT + "/icons/big/red_pad.png"
+    
+    z = zipfile.ZipFile(sio,'w', compression=zipfile.ZIP_DEFLATED)
     z.writestr("doc.kml", kml)
-    
+    z.write(icon, "icon.png")
+    z.close()
+
+    response = HttpResponse(sio.getvalue(), mimetype="application/vnd.google-earth.kmz")
     return response
     
     
@@ -105,7 +108,7 @@ def routes_kml(request, username, type):
         if inst:
             folders.append(RouteFolder(name="Actual Instrument", qs=inst, style="#green_line"))
         
-    kml = get_template('base.kml').render(Context({"route_folders": folders, "title": title} ))
+    kml = get_template('base.kml').render(Context({"route_folders": folders, "title": title} )).encode('utf-8')
     
     ###############################################
     
