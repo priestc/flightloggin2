@@ -1,9 +1,7 @@
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.db.models import Sum
 from django.http import HttpResponseRedirect
-from django.forms import ModelForm
 from django.forms.models import modelformset_factory
 from django.forms.formsets import formset_factory
 
@@ -11,59 +9,11 @@ from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
 
 from models import Flight, Columns
-from route.forms import *
 from forms import *
 from constants import *
-from plane.models import Plane
 from totals import column_total_by_list
 from profile.models import Profile
 from is_shared import is_shared
-
-@login_required()   
-def backup(request, username):
-    import csv, zipfile, StringIO, datetime
-    from django.http import HttpResponse
-    from records.models import Records
-    
-    shared, display_user = is_shared(request, username)
-    
-    date = datetime.date.today()
-    
-    output = StringIO.StringIO()
-
-    writer = csv.writer(output, dialect='excel')
-    
-    ##########################
-    
-    writer.writerow([FIELD_TITLES[field] for field in BACKUP_FIELDS])
-    
-    flights = Flight.objects.filter(user=display_user)
-    for flight in flights:
-        writer.writerow([flight.column(field) for field in BACKUP_FIELDS])
-        
-    writer.writerow(["##RECORDS"])
-    
-    records = get_object_or_None(Records, user=display_user)
-    if records:
-        writer.writerow([records.text.replace("\n","\\n")])
-    else:
-        writer.writerow([])
-        
-    writer.writerow(["##PLANES"])
-    
-    planes = Plane.objects.filter(user=display_user)    
-    for p in planes:
-        writer.writerow([p.tailnumber, p.manufacturer, p.model, p.cat_class, " ".join(p.get_tags_quote())])
-        
-    ###########################
-    
-    response = HttpResponse(mimetype='application/zip')
-    response['Content-Disposition'] = 'attachment; filename=logbook-backup-%s.csv.zip' % date
-    
-    z = zipfile.ZipFile(response,'w', compression=zipfile.ZIP_DEFLATED)
-    z.writestr("logbook-backup-%s.csv" % date, output.getvalue())
-
-    return response
 
 ######################################################################################################################################
 
@@ -71,8 +21,6 @@ def backup(request, username):
 def logbook(request, username, page=0):
     
     shared, display_user = is_shared(request, username)
-    
-    #####################################################
     
     form = FlightForm(planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
     
@@ -194,8 +142,6 @@ def mass_entry(request):
         profile = Profile()
         
     NewFlightFormset = modelformset_factory(Flight, form=FormsetFlightForm, extra=profile.per_page, formset=FixedPlaneModelFormset)
-                      #modelformset_factory(Flight, form=FormsetFlightForm, formset=FixedPlaneModelFormset, extra=0, can_delete=True)
-
         
     if request.POST.get('submit'):
         post = request.POST.copy()
@@ -207,20 +153,14 @@ def mass_entry(request):
             
         formset = NewFlightFormset(post, queryset=Flight.objects.get_empty_query_set(), planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
         
-        
-        
         if formset.is_valid():
-            
             for form in formset.forms:
                 instance = form.save(commit=False)
                 instance.user = display_user
-                #import pdb; pdb.set_trace()
                 if instance.date:
                     instance.save()
             
             return HttpResponseRedirect('/' + display_user.username + '/logbook.html')
-            
-        
         
     else:
         formset = NewFlightFormset(queryset=Flight.objects.get_empty_query_set(), planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))

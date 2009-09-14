@@ -19,10 +19,9 @@ urlpatterns += patterns('',
     url(r'^preferences.html$',                                     "profile.views.profile",   name="profile"),
     url(r'^manage.html$',                                          "manage.views.manage",     name="manage"),
     url(r'^import.html$',                                          "manage.views.import_s",   name="import"),
+    url(r'^auto-(?P<group>\w+)$',                                  "backup.views.emailbackup",   name="import"),
     
     ############################ graphs
-    
-    #(r'^(?P<username>\w+)/histogram-(?P<column>\w+).png$',         "graphs.views.histogram"),
 
     (r'^(?P<username>\w+)/line/(?P<type>\w+)/(?P<columns>[\w\-]+)/((?P<s>\d{4}.\d{1,2}.\d{1,2})-(?P<e>\d{4}.\d{1,2}.\d{1,2}))?(all)?.(?P<ext>(png|svg))$',
     # username/line/type/columns/(start_date-end_date) or (all).extension
@@ -45,7 +44,7 @@ urlpatterns += patterns('',
     url(r'^(?P<username>\w+)/maps.html$',                          "maps.views.maps",         name="maps"),
     url(r'^(?P<username>\w+)/currency.html$',                      "currency.views.currency", name="currency"),
     
-    url(r'^(?P<username>\w+)/backup/$',                            "logbook.views.backup",     name="backup"),
+    url(r'^(?P<username>\w+)/backup/$',                            "backup.views.backup",     name="backup"),
     url(r'^massentry.html$',                                       "logbook.views.mass_entry", name="mass-entry"),
     url(r'^massedit-page-(?P<page>\d+).html$',                     "logbook.views.mass_edit",  name="mass-edit"),
     
