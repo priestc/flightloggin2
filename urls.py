@@ -19,7 +19,7 @@ urlpatterns += patterns('',
     url(r'^preferences.html$',                                     "profile.views.profile",   name="profile"),
     url(r'^manage.html$',                                          "manage.views.manage",     name="manage"),
     url(r'^import.html$',                                          "manage.views.import_s",   name="import"),
-    url(r'^auto-(?P<group>\w+)$',                                  "backup.views.emailbackup",   name="import"),
+    #url(r'^auto-(?P<group>\w+)$',                                  "backup.views.emailbackup",   name="import"),
     
     ############################ graphs
 
@@ -28,7 +28,7 @@ urlpatterns += patterns('',
     
                                                                    "graphs.views.line_generator"),
                                                                    
-    url(r'^(?P<username>\w+)/states.png',         "maps.states.state_map", name="state-map"),
+    url(r'^(?P<username>\w+)/states-?(?P<type_>[\-\w]+)?.png',      "maps.states.state_map", name="state-map"),
     
     ############################ maps
     

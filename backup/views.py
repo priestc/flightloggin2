@@ -69,12 +69,14 @@ def emailbackup(response, group):
     from django.core.mail import EmailMessage, SMTPConnection, send_mail
     import datetime
     
-    profiles = Profile.objects.filter(backup_freq=group)
+    assert group > 0
+    
+    profiles = Profile.objects.filter(backup_freq__lte=group).exclude(backup_freq=0)
     
     emails = []
     for profile in profiles:
-        message = ("This is a copy of %s's FlightLogg.in' logbook\nYou are set to receive these messages %s." %
-                            (profile.user.username, profile.get_backup_freq_display().lower()) )
+        message = ("This is a copy of your FlightLogg.in' logbook\nYou are set to receive these messages %s." %
+                            profile.get_backup_freq_display().lower() )
                             
         title = "%s's FlightLogg.in backup for %s" % (profile.real_name or profile.user.username, datetime.date.today(), )
         email = profile.backup_email or profile.user.email
@@ -82,7 +84,7 @@ def emailbackup(response, group):
         file_ = backup_zip(profile.user).getvalue()
         
         email = EmailMessage(title, message, to=(email,))
-        email.attach("backupppp.csv.zip", file_,)
+        email.attach("backup.csv.zip", file_,)
         emails.append(email)
         
     connection = SMTPConnection()
