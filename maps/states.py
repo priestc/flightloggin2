@@ -21,17 +21,16 @@ ABBV = {'Rhode Island': "RI", 'Delaware': "DE", 'Maryland': "MD", 'Hawaii': "HI"
 def state_map(request, username, type_):
     shared, display_user = is_shared(request, username)
     
-    if not type_:
+    if type_ == "colored":
         states = Region.objects.filter(airport__routebase__route__flight__user=display_user, country='US').values('name').distinct()
         
     elif type_ == "count":
-        states = Region.objects.filter(airport__routebase__route__flight__user=display_user, country='US').values('name').\
-                    distinct().annotate(c=Count('name'))
+        states = Region.objects.filter(airport__routebase__route__flight__user=display_user, country='US').values('name')\
+                    .distinct().annotate(c=Count('name'))
                     
     elif type_ == "count-unique":
-        states = Region.objects.filter(airport__in=Airport.objects.filter(routebase__route__flight__user=display_user, country="US").\
-                    distinct()).values('name').annotate(c=Count('airport__region'))
-                    
+        states = Region.objects.filter(airport__in=Airport.objects.filter(routebase__route__flight__user=display_user, country="US")\
+                    .distinct()).values('name').annotate(c=Count('airport__region'))
     else:
         assert False
                     

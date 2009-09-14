@@ -61,10 +61,30 @@
 </table>
 
 <h2>Images</h2>
-
-{% url state-map display_user as maps_url %}
-<img src="{{ maps_url }}"><br>
-{{ SITE_URL }}{{maps_url}}
+<table id="images_table">
+    <tr>
+        <td>
+            <h3>All states colored equally</h3>
+            {% url state-map display_user "colored" as colored_url %}
+            <img src="{{ colored_url }}"><br>
+            {{ SITE_URL }}{{ colored_url }}
+        </td>
+        <td>
+            <h3>States colored by total visits</h3>
+            {% url state-map display_user "count" as count_url %}
+            <img src="{{ count_url }}"><br>
+            {{ SITE_URL }}{{ count_url }}
+        </td>
+    </tr>
+    <tr>
+        <td colspan=2>
+            <h3>States colored by unique airports visited</h3>
+            {% url state-map display_user "count-unique" as unique_url %}
+            <img src="{{ unique_url }}"><br>
+            {{ SITE_URL }}{{ unique_url }}
+        </td>
+    </tr>
+</table>
 
 {% endblock %}
 

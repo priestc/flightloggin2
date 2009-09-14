@@ -28,7 +28,7 @@ urlpatterns += patterns('',
     
                                                                    "graphs.views.line_generator"),
                                                                    
-    url(r'^(?P<username>\w+)/states-?(?P<type_>[\-\w]+)?.png',      "maps.states.state_map", name="state-map"),
+    url(r'^(?P<username>\w+)/states-(?P<type_>[\-\w]+)?.png',      "maps.states.state_map", name="state-map"),
     
     ############################ maps
     
