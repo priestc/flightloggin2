@@ -12,12 +12,8 @@ from graphs.image_formats import plot_png2, plot_svg
 from is_shared import is_shared
 from airport.models import Region, Airport
 
-SMALL_STATES=['Rhode Island', 'Delaware', 'Maryland', 'Akaska',
-              'Connecticut', 'Hawaii',]
-              
-ABBV = {'Rhode Island': "RI", 'Delaware': "DE", 'Maryland': "MD", 'Hawaii': "HI",
-              'Connecticut': "CT", 'Alaska': "AK"}
 
+@plot_png2
 def state_map(request, username, type_):
     shared, display_user = is_shared(request, username)
     
@@ -34,14 +30,23 @@ def state_map(request, username, type_):
     else:
         assert False
                     
-    new_dict = {}                
+    states_to_plot = {}                
     for state in states:
-        new_dict.update({state.get('name'): state.get('c', 1)})
+        states_to_plot.update({state.get('name'): state.get('c', 1)})
 
-    return drawl_state_map(new_dict)
+    fig = drawl_state_map(states_to_plot)
 
+    if type_ == "count-unique":
+        count = sum(states_to_plot.values())
+        label = "Airports"
+    else:
+        count = len(states_to_plot)
+        label = "States"
+        
+    plt.figtext(.15, .18, "%s\nUnique\n%s" % (count, label), size="small")
+    
+    return fig
 
-@plot_png2
 def drawl_state_map(states_to_plot):
     import settings
     from mpl_toolkits.basemap import Basemap as Basemap
@@ -62,7 +67,11 @@ def drawl_state_map(states_to_plot):
     
     cmap = greencm
     min_ = 0
-    max_ = max(states_to_plot.values())
+    try:
+        max_ = max(states_to_plot.values())
+    except ValueError:
+        max_ = 0
+        
     for i,seg in enumerate(m.states):
         statename = m.states_info[i]['NAME']
         
@@ -90,14 +99,6 @@ def drawl_state_map(states_to_plot):
                 
             elif statename == "Hawaii":
                 plt.figtext(.83, .35, "HI", size="small", color=color)
-    
-    #abbreviate, remove duplicates and make into a single string (small states, e.g. DE, MA, MD)
-    #statetext= "\n".join([ABBV[s] for s in set(text)]) 
-    #plt.figtext(.83, .2, statetext, size="small", color=color)
-    
-    #The unique state count text
-    count = len(states_to_plot)
-    plt.figtext(.15, .18, "%s\nUnique\nStates" % count, size="small")
             
     return fig
     
