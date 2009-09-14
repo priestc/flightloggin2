@@ -29,7 +29,7 @@ urlpatterns += patterns('',
     
                                                                    "graphs.views.line_generator"),
                                                                    
-    (r'(?P<username>\w+)/states.png',         "maps.states.state_map", ),
+    (r'^(?P<username>\w+)/states.png',         "maps.states.state_map", ),
     
     ############################ maps
     
