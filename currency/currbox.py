@@ -4,22 +4,28 @@ from datetime import *
 import math
 
 class CurrBox(object):
-    pass
-
-class LandCurrBox(CurrBox):
     """takes the already calculated values of a currency state, and makes
        it into an HTML box, no database calls nor calculations are made here"""
+    
+    date_format = "Y-M-D"
+    
+    @classmethod
+    def date_format(cls, format):
+        cls.date_format = format
+        
+######################################
+######################################
+
+class LandCurrBox(CurrBox):
        
     cat_class = 0
    
     day = False
     night = False
     
+    def __init__(self, cat_class=0, tr=None, tail=False):
     
-    def __init__(self, cat_class=0, tr=None, date_format="", tail=False):
         self.cat_class = cat_class
-        self.method = method
-        self.date_format = date_format
         
         if cat_class:
             self.title = CATEGORY_CLASSES[self.cat_class][1]
@@ -66,15 +72,15 @@ class LandCurrBox(CurrBox):
 #################################################################
 #################################################################
 
-class MediCurrbox(CurrBox)
+class MediCurrBox(CurrBox):
 
     first = None
     second = None
     third = None
     
     medi_issued = None
-    
-    def _render_medical(self):
+
+    def render(self):
         lines = []
         lines.append("<div class='currbox'>")
         
@@ -120,10 +126,14 @@ class MediCurrbox(CurrBox)
 #################################################################
 #################################################################
 
-class CertCurrbox(CurrBox)
+class CertCurrBox(CurrBox):
 
     cfi = False
     bfr = False
+        
+    def __init__(self, cfi, bfr):
+        self.cfi = cfi
+        self.bfr = bfr
 
     def render(self):
         
@@ -165,9 +175,53 @@ class CertCurrbox(CurrBox)
 #################################################################
 #################################################################
 
-class InstCurrbox(CurrBox)
-
-
+class InstCurrBox(CurrBox):
+    
+    cat = None
+    status = None
+    start = None
+    end = None
+    
+    def __init__(self, cat, currency):
+        self.cat = cat
+        self.status = currency[0]
+        self.start_date = currency[1]
+        self.end_date = currency[2]
+    
+    
+    def render(self):
+        lines = []
+        lines.append("<div class='currbox'>")
+        
+        class_name = self.status.lower()
+        days_ago = abs((date.today() - self.end_date).days)
+        current = bool(self.status == "ALERT" or self.status == "CURRENT")        # true if current
+        
+        if current:
+            
+            lines.append("<div class='inner_currbox inst_curr %s'>" % class_name)
+            lines.append("<h3>%s Instrument</h3>" % cat )
+            lines.append("<p>Date of last qualifying event: <strong>%s</strong><br>" % self.start_date )
+            
+            if current:
+                lines.append("Last day of privileges: <strong>%s</strong> (%s Days remain)</p>" % (self.end_date, days_ago) )
+            else:
+                lines.append("Last day of privileges: <strong>%s</strong> (%s Days ago)</p>" % (self.end_date, days_ago) )
+            
+            lines.append("</div>")
+            
+        else:
+            lines.append("<div class='expired inner_currbox %s'>" % class_name)
+            lines.append("<h3>%s Instrument</h3>" % self.cat )
+            
+        if self.status == 'NEED_IPC':
+            lines.append("<p>Last day of currency: %s<br>(%s Days ago)<strong>You need an IPC</strong></p>" % (self.end_date, days_ago))
+            lines.append("</div>")
+        else:
+            lines.append("</div>")
+                
+        lines.append("</div>")         
+        return mark_safe(" ".join(lines))         
 
 
 

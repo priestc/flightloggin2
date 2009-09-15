@@ -295,7 +295,7 @@ class FAA_Currency(object):
         need_ipc_status, need_ipc_end_date = self._determine("need_ipc", inst_end_date)
         
         if need_ipc_status == 'EXPIRED':
-            return ('NEED_IPC', need_ipc_end_date)
+            return ('NEED_IPC', start_date, need_ipc_end_date)
               
     
     
