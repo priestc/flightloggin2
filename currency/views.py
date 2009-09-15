@@ -16,23 +16,22 @@ def currency(request, username):
 
     ############################################
     
-    medi_currbox = CurrBox(method="medical")
-    medi_currbox.first = currency.first_class()
-    medi_currbox.second = currency.second_class()
-    medi_currbox.third = currency.third_class()
-    medi_currbox.medi_issued = currency.medical_class
-    
-    if not currency.medical_class:
-        del medi_currbox                #if there are no medicals, then delete this box so it doesn't show up in the template
-        
-    ############################################
-    
     cert_currbox = CurrBox(method="cert")
     cert_currbox.cfi = currency.flight_instructor()
     cert_currbox.bfr = currency.flight_review()
     
     if not (currency.pilot or currency.cfi):
         del cert_currbox
+    
+    ############################################
+    inst_out = []
+    
+    if Flight.objects.pseudo_category("fixed_wing").app().count > 0:
+        inst_out.append(InstCurrbox())
+    
+    if Flight.objects.pseudo_category("helicopter").app().count > 0:
+    if Flight.objects.pseudo_category("glider").app().count > 0:
+    
     
     ############################################
         
@@ -70,6 +69,19 @@ def currency(request, username):
         currbox.night = currency.landing(night=True, tr=item)
         
         types_out.append(currbox)
+    
+    ##########################################
+        
+    medi_currbox = CurrBox(method="medical")
+    medi_currbox.first = currency.first_class()
+    medi_currbox.second = currency.second_class()
+    medi_currbox.third = currency.third_class()
+    medi_currbox.medi_issued = currency.medical_class
+    
+    if not currency.medical_class:
+        del medi_currbox                #if there are no medicals, then delete this box so it doesn't show up in the template
+        
+    ############################################
         
     return locals()
 

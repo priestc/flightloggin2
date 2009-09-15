@@ -28,86 +28,86 @@ class QuerySet(QuerySet):
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #turbine=property(turbine)
     
     def tailwheel(self, f=True):
         kwarg={'plane__tags__icontains': 'TAILWHEEL'}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #tailwheel=property(tailwheel)
     
     def hp(self, f=True):
         q = Q(plane__tags__icontains='HP') | Q(plane__tags__icontains='HIGH PERFORMANCE')
         if not f:
             return self.exclude(q)
         return self.filter(q)
-    #hp=property(hp)
     
     def complex(self, f=True):
         kwarg={'plane__tags__icontains': 'COMPLEX'}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #complex=property(complex)
     
     def jet(self, f=True):
         kwarg={'plane__tags__icontains': 'JET'}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #jet=property(jet)
     
     ## by cat_class
+    
+    def cat_class(self, cat_class):
+        return self.filter(plane__cat_class=cat_class)
+    
+    def pseudo_category(self, cat):
+        """used for instrument currency"""
+        if cat == "fixed_wing":
+            return self.fixed_wing()
+        elif cat == "glider":
+            return self.glider()
+        elif cat == "helicopter":
+            return self.helicopter()
         
     def multi(self, f=True):
         kwarg={"plane__cat_class__in": (2,4)}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #multi=property(multi)
     
     def single(self, f=True):
         kwarg={"plane__cat_class__in": (1,3)}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #single=property(single)
     
     def sea(self, f=True):
         kwarg={"plane__cat_class__in": (3,4)}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #sea=property(sea)
     
     def fixed_wing(self, f=True):
         kwarg={"plane__cat_class__lte": 4}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #fixed_wing=property(fixed_wing)
       
     def sim(self, f=True):
         kwarg={"plane__cat_class__gte": 15}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #sim=property(sim)
     
     def glider(self, f=True):
         kwarg={"plane__cat_class": 5}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #glider=property(glider)
     
     def helicopter(self, f=True):
         kwarg={"plane__cat_class": 6}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #helicopter=property(helicopter)
     
     ## by flight time
     
@@ -116,77 +116,66 @@ class QuerySet(QuerySet):
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #pic=property(pic)
     
     def sic(self, f=True):
         kwarg={"sic__gt": 0}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #sic=property(sic)
     
     def solo(self, f=True):
         kwarg={"solo__gt": 0}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #sic=property(sic)
     
     def dual_g(self, f=True):
         kwarg={"dual_g__gt": 0}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #dual_g=property(dual_g)
     
     def dual_r(self, f=True):
         kwarg={"dual_r__gt": 0}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #dual_r=property(dual_r)
     
     def act_inst(self, f=True):
         kwarg={"act_inst__gt": 0}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #act_inst=property(act_inst)
     
     def sim_inst(self, f=True):
         kwarg={"sim_inst__gt": 0}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #sim_inst=property(sim_inst)
     
     def inst(self, f=True):
         q = Q(act_inst__gt=0) | Q(sim_inst__gt=0)
         if not f:
             return self.exclude(q)
         return self.filter(q)
-    #inst=property(inst)
     
     def night(self, f=True):
         kwarg={"night__gt": 0}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #night=property(night)
     
     def all_night(self, f=True): ##FIXME
         kwarg={"night__gt": 0}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #night=property(night)
     
     def xc(self, f=True):
         kwarg={"xc__gt": 0}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #xc=property(xc)
     
     ## by route
     
@@ -195,21 +184,18 @@ class QuerySet(QuerySet):
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #night=property(night)
     
     def only_p2p(self, f=True):
         kwarg={"route__p2p": True, "xc": 0}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #only_p2p=property(only_p2p)
     
     def day_l(self, f=True):
         kwarg={"day_l__gt": 0}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #day_l=property(day_l)
     
     def night_l(self, f=True):
         kwarg={"night_l__gt": 0}

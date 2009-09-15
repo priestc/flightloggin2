@@ -62,6 +62,10 @@ class FAA_Currency(object):
                         "second_over":         ("12cm", "30d"),
                         "third_over":          ("48cm", "30d"),
                         
+                        "instrument":          ("6cm", "30d"),
+                        "ipc":                 ("6cm", "30d"),
+                        "need_ipc":            ("6cm", "30d"),          # time after instrument currency ends where an IPC is required
+                        
                         "first_under":         ("12cm", "30d"),         # the time elapsed from the original exam date for each downgrade in calendar months
                         "second_under":        ("12cm", "30d"),
                         "third_under":         ("60cm", "30d")
@@ -129,11 +133,10 @@ class FAA_Currency(object):
         elif cat_class < 15:  #forget simulators and FTD's (cat_classes above 15)
             if not night:
                 last_three = Flight.objects.user(self.user).\
-                    filter(plane__cat_class=cat_class).filter(Q(day_l__gte=1) | Q(night_l__gte=1)).order_by('-date').values('date', 'day_l', 'night_l')[:3]
+                    sim(False).filter(Q(day_l__gte=1) | Q(night_l__gte=1)).order_by('-date').values('date', 'day_l', 'night_l')[:3]
                 
             if night:
-                last_three = Flight.objects.user(self.user).\
-                    filter(plane__cat_class=cat_class, night_l__gte=1).order_by('-date').values('date', 'day_l', 'night_l')[:3]
+                last_three = Flight.objects.user(self.user).sim(False).night().order_by('-date').values('date', 'night_l')[:3]
         else:
             return
  
@@ -225,8 +228,94 @@ class FAA_Currency(object):
         ############
 
         status, end_date = self._determine("flight_review", start_date)
-
         return (status, start_date, end_date)
+    
+    ###############################################################################
+    
+    def ipc(self):
+        """Determine of the last IPC is still valid"""
+        try:
+            ipc_date = Flight.objects.user(self.user).filter(ipc=True).values_list("date", flat=True).reverse()[0]
+        except IndexError:
+            checkride_date = None
+        
+        if not ipc_date:                        # no ipc's in database, return "never"
+            return ("NEVER", None, None)
+        
+        status, end_date = self._determine("ipc", ipc_date)
+        return (status, ipc_date, end_date)
+        
+    def _date_of_last_six_app(self, cat):
+        last_six = Flight.objects.pseudo_category(cat).app().order_by('-date').values('date', 'app')[:6]
+        
+        app_date = None
+        total = 0
+        for flight in last_six:
+            total += flight['app']
+            if total >= 6:
+                app_date = flight['date']
+                break;
+            
+        return app_date
+    
+    def _date_of_last_ht(self, ht, cat):
+        kwarg = {ht: True}
+        try:
+            return Flight.objects.pseudo_category(cat).filter(**kwarg).order_by('-date').values_list('date', flat=True)[0]
+        except IndexError:
+            return None
+    
+    def instrument(self, cat):
+    
+        ipc_status, ipc_start, ipc_end = self.ipc()
+        
+        if ipc_status == 'CURRENT':
+            return (ipc_status, ipc_start, ipc_end)     # return if last IPC is still good, "ALERT" in this sense isn't necessairly
+                                                        # going to be correct because approaches can negate that
+        #####################
+
+        app_date = self._date_of_last_six_app(cat)  
+        h_date = self._date_of_last_ht("holding", cat)
+        t_date = self._date_of_last_ht("tracking", cat)
+        
+        fut = date(2500, 3, 3) # long in the future
+        start_date = min(app_date or fut, t_date or fut, h_date or fut, ipc_start or fut)  #earliest of the three dates, include ipc if its there (for accurate 'ALERT')
+        
+        ###################
+        
+        inst_status, inst_end_date = self._determine("instrument", start_date)      # status of straight instrument curency based on app's
+        
+        if not inst_status == 'EXPIRED':
+            return (inst_status, start_date, inst_end_date)
+        
+        ####################
+        # at this point, inst currency is lost, now determine if an ipc is required
+        ####################
+        
+        need_ipc_status, need_ipc_end_date = self._determine("need_ipc", inst_end_date)
+        
+        if need_ipc_status == 'EXPIRED':
+            return ('NEED_IPC', need_ipc_end_date)
+              
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
         
     
     def _get_medical_info(self):
