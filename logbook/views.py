@@ -19,12 +19,12 @@ from profile.models import Profile
 @render_to("logbook.html")
 def logbook(request, shared, display_user, page=0):
 
-    form = FlightForm(planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
+    form = FlightForm()
     
     if request.POST:
         if request.POST.get('submit', "") == "Submit New Flight":
             flight = Flight(user=display_user)
-            form = FlightForm(request.POST, instance=flight, planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
+            form = FlightForm(request.POST, instance=flight)
             
             if form.is_valid():
                 form.save()
@@ -36,7 +36,7 @@ def logbook(request, shared, display_user, page=0):
             flight_id = request.POST['id']
             flight = Flight(pk=flight_id, user=display_user)
             
-            form = FlightForm(request.POST, instance=flight, planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
+            form = FlightForm(request.POST, instance=flight)
             
             if form.is_valid():
                 form.save()
@@ -46,8 +46,8 @@ def logbook(request, shared, display_user, page=0):
                 
         elif request.POST.get('submit', "") == "Delete Flight":
             flight_id = request.POST['id']
-            Flight(pk=flight_id, user=display_user).delete()
             Route.objects.get(flight__pk=flight_id).delete()
+            Flight(pk=flight_id, user=display_user).delete()           
             ERROR = 'false'
                 
     ##############################################################

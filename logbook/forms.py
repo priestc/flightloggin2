@@ -90,7 +90,6 @@ class BlankIntField(BlankHourField):
 
 class FlightForm(ModelForm):
 
-    #user =     forms.ModelChoiceField(queryset=User.objects.all(), widget=HiddenInput, required=False)
     route =    RouteField(widget=forms.TextInput, required=False, queryset=Route.objects.get_empty_query_set())
     plane =    PlaneField(queryset=Plane.objects.get_empty_query_set(), required=True)
     
@@ -110,16 +109,12 @@ class FlightForm(ModelForm):
     app =      BlankIntField(label="Approaches")
     
     
-    def __init__(self, *args, **kwargs):
-        custom_queryset = False    
-        if kwargs.has_key('planes_queryset'):
-            custom_queryset = kwargs['planes_queryset']
-            del kwargs['planes_queryset']
-            
+    def __init__(self, *args, **kwargs):  
         super(FlightForm, self).__init__(*args, **kwargs)
+        
+        from mid.middleware import share
         self.fields['date'].widget = widgets.AdminDateWidget()
-        if custom_queryset:
-            self.fields['plane'].queryset = custom_queryset
+        self.fields['plane'].queryset = Plane.objects.user_common(share.get_display_user())
 
     class Meta:
         model = Flight

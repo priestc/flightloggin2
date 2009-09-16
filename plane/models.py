@@ -8,7 +8,18 @@ from tagging.models import Tag
 
 from constants import *
 
+class QuerySetManager(models.Manager):
+    def get_query_set(self):
+        return self.model.QuerySet(self.model)
+    
+    def __getattr__(self, name):
+        return getattr(self.get_query_set(), name)
+
 class Plane(models.Model):
+    
+    from utils import QuerySet          ## add custom filters to custom manager
+    
+    objects =  QuerySetManager()        ## add custom filterset manager
 
     tailnumber =     models.CharField(                          max_length=32, help_text="e.g. N12345")
     user =           models.ForeignKey(                         User, blank=True, null=True)

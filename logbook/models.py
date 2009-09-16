@@ -22,11 +22,11 @@ class Flight(models.Model):
     objects =  QuerySetManager()        ## add custom filterset manager
 
     date =     models.DateField()
-    user =     models.ForeignKey(User, blank=False)
+    user =     models.ForeignKey(User, blank=False, editable=False)
     remarks =  models.TextField(blank=True)
 
     plane =    models.ForeignKey(Plane, blank=False, null=False)
-    route =    models.ForeignKey(Route, blank=True, null=True)
+    route =    models.ForeignKey(Route, blank=True, null=True, related_name="flight")
 
     total =    models.FloatField(        "Total Time",            default="")
     pic =      models.FloatField(        "PIC",                   default=0)
@@ -51,13 +51,14 @@ class Flight(models.Model):
     ipc =               models.BooleanField(  "IPC",                          default=False)
 
     person =   models.CharField(                                        max_length=30, blank=True, null=True)
-    
-    @classmethod
-    def get_agg_by_column(column):      ## only to be used by the class
-        pass
             
     def __unicode__(self):
         return u"%s -- %s" % (self.date, self.remarks)
+    
+    def save(self):
+        from mid.middleware import share
+        self.user = share.get_display_user()
+        super(Flight,self).save()
 
     class Meta:
         ordering = ["date", "id"]

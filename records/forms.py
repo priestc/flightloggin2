@@ -8,6 +8,9 @@ from models import *
 
 class NonFlightForm(ModelForm):
     #user = forms.ModelChoiceField(queryset=User.objects.all(), widget=HiddenInput)
+    
+   # def save(self, args, kwargs)
+    
     class Meta:
         model = NonFlight
         exclude = ('user' )

@@ -4,7 +4,7 @@ from django.db import models
 from django.db.models import Q
 
 from annoying.functions import get_object_or_None
-from mid.middleware import threadlocals
+from mid.middleware import share
 
 #from logbook.models import Flight
 from airport.models import Airport, Custom, Navaid
@@ -193,7 +193,7 @@ def find_custom(ident, i):
     """Tries to find the custom point, if it can't find one, it adds it to the user's
        custom list
     """
-    user = threadlocals.get_current_user()
+    user = share.get_display_user()
     custom,created = Custom.objects.get_or_create(user=user, identifier=ident[1:])
 
    

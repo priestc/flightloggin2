@@ -20,9 +20,9 @@ def records(request, shared, display_user):
     
     ##################################################
     
-    records,c = Records.objects.get_or_create(user=request.user)
+    records,c = Records.objects.get_or_create(user=display_user)
     
-    nonflights = NonFlight.objects.filter(user=request.user)
+    nonflights = NonFlight.objects.filter(user=display_user).order_by('date')
     
     if request.POST:
         
@@ -37,10 +37,6 @@ def records(request, shared, display_user):
             if form.is_valid():
                 form.save()
                 
-        #records.text=request.POST.get('records')
-        #records.save()
-        #saved=True
-
     else:
         form = NonFlightForm()
     

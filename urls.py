@@ -8,6 +8,8 @@ urlpatterns = patterns('django.contrib.auth',
     url(r'^logout/$','views.logout', {"next_page": "/"}, name="logout"),
 )
 
+## all views get `shared` and `display_user` variables from `username` via ShareMiddleware
+
 urlpatterns += patterns('',
     (r'^site-media/(?P<path>.*)$','django.views.static.serve', {'document_root': '/home/chris/Websites/flightloggin/media', 'show_indexes': True}),
    #url(r'^auto-(?P<group>\w+)$',                                  "backup.views.emailbackup",   name="import"),
