@@ -272,14 +272,17 @@ class FAA_Currency(object):
         if ipc_status == 'CURRENT':
             return (ipc_status, ipc_start, ipc_end)     # return if last IPC is still good, "ALERT" in this sense isn't necessairly
                                                         # going to be correct because approaches can negate that
+                                                        
+        print "ipc: " + ipc_status
+        
         #####################
 
         app_date = self._date_of_last_six_app(cat)  
         h_date = self._date_of_last_ht("holding", cat)
         t_date = self._date_of_last_ht("tracking", cat)
         
-        fut = date(2500, 3, 3) # long in the future
-        start_date = min(app_date or fut, t_date or fut, h_date or fut, ipc_start or fut)  #earliest of the three dates, include ipc if its there (for accurate 'ALERT')
+        fut = date(1950, 3, 3) # long in the past
+        start_date = max(app_date or fut, t_date or fut, h_date or fut, ipc_start or fut)  #latest of the three dates, include ipc if its there (for accurate 'ALERT')
         
         ###################
         
@@ -287,6 +290,8 @@ class FAA_Currency(object):
         
         if not inst_status == 'EXPIRED':
             return (inst_status, start_date, inst_end_date)
+        
+        print "inst: " + inst_status
         
         ####################
         # at this point, inst currency is lost, now determine if an ipc is required

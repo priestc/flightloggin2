@@ -197,28 +197,23 @@ class InstCurrBox(CurrBox):
         days_ago = abs((date.today() - self.end_date).days)
         current = bool(self.status == "ALERT" or self.status == "CURRENT")        # true if current
         
-        if current:
-            
+        if current:  
             lines.append("<div class='inner_currbox inst_curr %s'>" % class_name)
-            lines.append("<h3>%s Instrument</h3>" % cat )
+            lines.append("<h3>%s Instrument</h3>" % self.cat )
             lines.append("<p>Date of last qualifying event: <strong>%s</strong><br>" % self.start_date )
-            
-            if current:
-                lines.append("Last day of privileges: <strong>%s</strong> (%s Days remain)</p>" % (self.end_date, days_ago) )
-            else:
-                lines.append("Last day of privileges: <strong>%s</strong> (%s Days ago)</p>" % (self.end_date, days_ago) )
-            
+            lines.append("Last day of privileges: <strong>%s</strong> (%s Days remain)</p>" % (self.end_date, days_ago) )
             lines.append("</div>")
             
         else:
             lines.append("<div class='expired inner_currbox %s'>" % class_name)
             lines.append("<h3>%s Instrument</h3>" % self.cat )
+            lines.append("Last day of privileges: <strong>%s</strong> (%s Days ago)</p>" % (self.end_date, days_ago) )
             
-        if self.status == 'NEED_IPC':
-            lines.append("<p>Last day of currency: %s<br>(%s Days ago)<strong>You need an IPC</strong></p>" % (self.end_date, days_ago))
-            lines.append("</div>")
-        else:
-            lines.append("</div>")
+            if self.status == 'NEED_IPC':
+                lines.append("<p><strong>You need an IPC</strong></p>")
+                lines.append("</div>")
+            else:
+                lines.append("</div>")
                 
         lines.append("</div>")         
         return mark_safe(" ".join(lines))         
