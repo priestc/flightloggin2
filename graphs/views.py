@@ -15,7 +15,6 @@ from django.utils.dateformat import format as dj_date_format
 from django.utils.safestring import mark_safe
 
 from annoying.decorators import render_to
-from is_shared import is_shared
 from datetime import date, timedelta
 from logbook.models import Flight
 from logbook.constants import *
@@ -32,16 +31,13 @@ def datetimeRange(from_date, to_date=None):
 
 
 @render_to('graphs.html')
-def graphs(request, username):
-    shared, display_user = is_shared(request, username)
-    
+def graphs(request, shared, display_user):    
     
     column_options = []
     for field in GRAPH_FIELDS:
         column_options.append("<option value=\"%s\">%s</option>" % (field, FIELD_TITLES[field] ) )
         
     column_options = mark_safe("\n".join(column_options))
-    #assert False
     return locals()
     
 ############################################################################################################################################
@@ -209,16 +205,15 @@ def progress_rate(display_user, columns, s, e):
 
 
 
-def line_generator(request, username, type, columns, s=None, e=None, ext=None):
-    shared, display_user = is_shared(request, username)
+def line_generator(request, shared, display_user, type_, columns, s=None, e=None, ext=None):
     
-    if type=="pr":
+    if type_ == "pr":
         func = progress_rate
         
-    elif type=="mp":
+    elif type_ == "mp":
         func = multiple_progress
         
-    elif type=="mp":
+    elif type_ == "mp":
         func = multiple_rate
     
     #######

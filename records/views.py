@@ -2,14 +2,12 @@ from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
 from models import Records
 from forms import *
-from is_shared import is_shared
 
 @render_to("records.html")
-def records(request, username):
-    shared, display_user = is_shared(request, username)
+def records(request, shared, display_user):
     
     ##################################################
-    
+
     try:
         profile = display_user.get_profile()
     except:
@@ -28,13 +26,13 @@ def records(request, username):
     
     if request.POST:
         
-        if request.POST.get("submit") == "Edit Event":
+        if request.POST.get("submit") == "Submit Changes":
             nf = NonFlight(pk=request.POST['id'])
             form=NonFlightForm(request.POST, instance=nf)
             if form.is_valid():
                 form.save()
                 
-        elif request.POST.get("submit") == "New Event":
+        elif request.POST.get("submit") == "Create New Event":
             form=NonFlightForm(request.POST)
             if form.is_valid():
                 form.save()

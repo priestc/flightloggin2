@@ -13,15 +13,12 @@ from forms import *
 from constants import *
 from totals import column_total_by_list
 from profile.models import Profile
-from is_shared import is_shared
 
 ######################################################################################################################################
 
 @render_to("logbook.html")
-def logbook(request, username, page=0):
-    
-    shared, display_user = is_shared(request, username)
-    
+def logbook(request, shared, display_user, page=0):
+
     form = FlightForm(planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
     
     if request.POST:
@@ -133,8 +130,7 @@ def logbook(request, username, page=0):
     
 @login_required()
 @render_to("mass_entry.html")     
-def mass_entry(request):
-    display_user = request.user
+def mass_entry(request, shared, display_user):
     
     try:
         profile = display_user.get_profile()
@@ -169,8 +165,7 @@ def mass_entry(request):
 
 @login_required()
 @render_to("mass_entry.html")     
-def mass_edit(request, page=0):
-    display_user = request.user
+def mass_edit(request, share, display_user, page=0):
     edit = True 
     flights = Flight.objects.filter(user=display_user)
     

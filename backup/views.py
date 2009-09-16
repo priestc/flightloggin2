@@ -7,12 +7,11 @@ from profile.models import Profile
 
 from logbook.constants import *
 from profile.models import Profile
-from is_shared import is_shared
 
 @login_required()   
-def backup(request, username):
+def backup(request, shared, display_user):
     from django.http import HttpResponse
-    shared, display_user = is_shared(request, username)
+    
     date = datetime.date.today()
     
     sio = backup_zip(display_user)

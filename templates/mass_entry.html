@@ -29,9 +29,9 @@
 {% include "pagination_table.html" %}
 
 {% if edit %}
-<form action="{% url mass-edit page %}" method="post">
+<form action="{% url mass-edit display_user.username page %}" method="post">
 {% else %}
-<form action="{% url mass-entry %}" method="post">
+<form action="{% url mass-entry display_user.username %}" method="post">
 {% endif %}
 <div>{{ formset.management_form }}</div>
 <table class="mass_table">

@@ -62,7 +62,7 @@
                     
 				<td colspan="6">
 				    {% if flights %}
-					<a href="{% url mass-edit page_of_flights.number %}">Mass Edit</a>
+					<a href="{% url mass-edit display_user.username page_of_flights.number %}">Mass Edit</a>
 					&nbsp; &nbsp;
 					{% endif %}
 					<a href="" id="toggle_columns">Show All Columns</a>

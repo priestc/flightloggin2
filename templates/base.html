@@ -74,7 +74,7 @@
                     
     			    {% if not shared %}
                     <td class="{% block profile-sel %}{% endblock%}" >
-                        <a href="{% url profile %}">Preferences</a>
+                        <a href="{% url profile display_user.username %}">Preferences</a>
                     </td>
                     {% endif %}
                     
@@ -100,11 +100,11 @@
                     
                     {% if not shared %}
                     <td class="{% block mass-sel %}{% endblock%}" >
-                        <a href="{% url mass-entry %}">Mass Entry</a>
+                        <a href="{% url mass-entry display_user.username %}">Mass Entry</a>
                     </td>
 
                     <td class="{% block import-sel %}{% endblock%}" >
-                        <a href="{% url import %}">Import/Export</a>
+                        <a href="{% url import display_user.username %}">Import/Export</a>
                     </td>
                     {% endif %}
                     

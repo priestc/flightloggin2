@@ -2,26 +2,21 @@ import zipfile, StringIO
 
 from logbook.models import Flight
 from route.models import RouteBase, Route
-from is_shared import is_shared
 
 from annoying.decorators import render_to
 from django.http import HttpResponse
 from django.template.loader import get_template
 from django.template import Context
 
-from is_shared import is_shared
-
 @render_to('maps.html')
-def maps(request, username):
-    shared, display_user = is_shared(request, username)
+def maps(request, shared, display_user):
     from settings import MEDIA_URL, SITE_URL
     return locals()
 
-def airports_kml(request, username, type):
+def airports_kml(request, shared, display_user, type):
     import settings
     from utils import AirportFolder 
     from airport.models import *
-    shared, display_user = is_shared(request, username)
     
     if type=="all":
         title = "All Airports"
@@ -49,11 +44,10 @@ def airports_kml(request, username, type):
     
     
     
-def routes_kml(request, username, type):
-    shared, display_user = is_shared(request, username)
+def routes_kml(request, shared, display_user, type_):
     from utils import RouteFolder 
         
-    if type=="all":
+    if type_== "all":
         title = "All Routes"
         all_r = Route.objects.filter(flight__user=display_user).values('kml_rendered', 'simple_rendered').order_by().distinct()
 
@@ -61,7 +55,7 @@ def routes_kml(request, username, type):
         if all_r:
             folders.append(RouteFolder(name="All Routes", qs=all_r))
         
-    elif type=="cat_class":
+    elif type_== "cat_class":
         title = "Routes by Multi/Single Engine"
         single = Route.objects.filter(flight__user=display_user, flight__plane__cat_class__in=[1,3]).values('kml_rendered', 'simple_rendered').order_by().distinct()
         multi = Route.objects.filter(flight__user=display_user, flight__plane__cat_class__in=[2,4]).values('kml_rendered', 'simple_rendered').order_by().distinct()
@@ -79,7 +73,7 @@ def routes_kml(request, username, type):
         if other:
             folders.append(RouteFolder(name="Other", qs=multi, style="#green_line"))
             
-    elif type=="flight_time":
+    elif type_ == "flight_time":
         title = "Routes by type of flight time"
         dual_g = Route.objects.filter(flight__user=display_user, flight__dual_g__gt=0).values('kml_rendered', 'simple_rendered').order_by().distinct()
         dual_r = Route.objects.filter(flight__user=display_user, flight__dual_r__gt=0).values('kml_rendered', 'simple_rendered').order_by().distinct()

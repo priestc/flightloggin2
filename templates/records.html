@@ -48,7 +48,7 @@
 <form action="{% url records display_user %}" method="post">
     <table id="nonflight_table">
        <tr>
-           <td>Date{{formset.management_form}}</td><td>Type</td><td>Remarks</td>
+           <td>Date</td><td>Type</td><td>Remarks</td>
        </tr>
     {% for nf in nonflights %}
        <tr id="row_{{nf.id}}">
@@ -89,7 +89,7 @@
 	</div>
 </form>
 
-<div id="popup" title="New Entry">
+<div id="popup" title="New Event">
 	<table id="dragbar">
 		<tr>
 			<td><span id="titlebar">New Event</span></td>
@@ -102,7 +102,7 @@
 			<tbody>
 				<tr>
 					<td>		
-						{# <input type="hidden" name="user" id="id_user" value="{{ user.id }}" /> #}
+					    <input type="hidden" name="user" id="id_user" value="{{ user.id }}" />
 						<input type="hidden" name="id" id="id_id" value="" />
 					</td>
 				</tr>

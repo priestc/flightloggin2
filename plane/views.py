@@ -6,11 +6,9 @@ from annoying.functions import get_object_or_None
 
 from models import Plane
 from forms import PlaneForm
-from is_shared import is_shared
 
 @render_to('planes.html')
-def planes(request, username):
-    shared, display_user = is_shared(request, username)
+def planes(request, shared, display_user):
     planes = Plane.objects.filter(user=request.user)
     form = PlaneForm()
     

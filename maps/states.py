@@ -8,12 +8,9 @@ from matplotlib.colors import rgb2hex
 from django.db.models import Count
 
 from graphs.image_formats import plot_png2, plot_svg2
-
-from is_shared import is_shared
 from airport.models import Region, Airport
 
-def state_map_generator(request, username, type_, ext):
-    shared, display_user = is_shared(request, username)
+def state_map_generator(request, shared, display_user, type_, ext):
     
     if ext == "png":
         func = plot_png2(state_map) #apply the correct decorator

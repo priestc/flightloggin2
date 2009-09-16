@@ -10,10 +10,10 @@ from logbook.models import Columns
 from logbook.constants import OPTION_FIELDS, FIELD_TITLES
 
 @render_to("preferences.html")
-def profile(request):
-    title="Preferences"
+def profile(request, shared, display_user):
     
-    display_user = request.user
+    title="Preferences"
+
     profile = Profile.objects.get_or_create(user=request.user)[0]
     column =  Columns.objects.get_or_create(user=request.user)[0]
     auto =    AutoButton.objects.get_or_create(user=request.user)[0]

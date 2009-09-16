@@ -1,5 +1,4 @@
 from annoying.decorators import render_to
-from is_shared import is_shared
 
 from django.db.models import Q
 
@@ -9,8 +8,7 @@ from currency.currbox import MediCurrBox, LandCurrBox, CertCurrBox, InstCurrBox
 from FAA import FAA_Currency
 
 @render_to('currency.html')
-def currency(request, username):
-    shared, display_user = is_shared(request, username)
+def currency(request, shared, display_user):
     currency = FAA_Currency(display_user)
 
     ############################################
