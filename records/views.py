@@ -3,23 +3,34 @@ from annoying.functions import get_object_or_None
 from airport.models import Custom
 from models import Records, NonFlight
 from forms import *
+from django.contrib.gis.geos import Point
 
 @render_to("places.html")
 def places(request, shared, display_user):
     customs = Custom.objects.filter(user=display_user)
     
-    if request.POST.get('submit', None) == 'New Place':
+    if request.POST.get('submit', None) == 'Create New Place':
         form=CustomForm(request.POST)
         if form.is_valid():
-            form.save()
+            coords = form.cleaned_data['coordinates']
+            x,y = coords.split(",")
+            custom = form.save()
+            custom.location = Point(float(y),float(x))
+            custom.save()
+            
         else:
+            assert False, form.errors
             ERROR = 'true'
             
     elif request.POST.get('submit', None) == 'Submit Changes':
         custom = Custom.objects.get(user=display_user, pk=request.POST.get('id', None) )
         form=CustomForm(request.POST, instance=custom)
         if form.is_valid():
-            form.save()
+            coords = form.cleaned_data['coordinates']
+            x,y = coords.split(",")
+            custom = form.save()
+            custom.location = Point(float(y),float(x))
+            custom.save()
         else:
             ERROR = 'true'
             
