@@ -64,9 +64,9 @@
 			</tr>
 			
 			<tr>
-				<td>{{ profile_form.email.label_tag }}</td>
-				<td colspan="2">{{ profile_form.email }}</td>
-				<td>{{ profile_form.email.errors }}</td>
+				<td>{{ user_form.email.label_tag }}</td>
+				<td colspan="2">{{ user_form.email }}</td>
+				<td>{{ user_form.email.errors }}</td>
 			</tr>
 			
 			<tr>
@@ -160,7 +160,7 @@
 			<tr>
 				<td>{{ profile_form.backup_email.label_tag }}</td>
 				<td colspan="2">{{ profile_form.backup_email }}</td>
-				<td>{{ profile_form.backup_email.errors }}</td>
+				<td>{{ profile_form.backup_email.errors }}{{ profile_form.backup_email.help_text }}</td>
 			</tr>
 			
 			<tr>
@@ -224,7 +224,6 @@
 		<input class="prefs_submit_button" type="submit" value="Submit Preferences" />
 	</div>
 </form>
-{{profile_form.errors}}
 {{auto_form.errors}}
 {{column_form.errors}}
 

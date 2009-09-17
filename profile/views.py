@@ -6,6 +6,7 @@ from plane.models import Plane
 from logbook.models import Flight
 from records.models import Records, NonFlight
 from logbook.models import Columns
+from airport.models import Custom
 
 from logbook.constants import OPTION_FIELDS, FIELD_TITLES
 
@@ -40,6 +41,7 @@ def profile(request, shared, display_user):
             NonFlight.objects.filter(user=display_user).delete()
             Flight.objects.filter(user=display_user).delete()
             Records.objects.filter(user=display_user).delete()
+            Custom.objects.filter(user=display_user).delete()
         
         else:
             if auto_form.is_valid():
