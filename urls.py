@@ -48,6 +48,7 @@ urlpatterns += patterns('',
     url(r'^(?P<username>\w+)/planes.html$',                        "plane.views.planes",      name="planes"),
     url(r'^(?P<username>\w+)/maps.html$',                          "maps.views.maps",         name="maps"),
     url(r'^(?P<username>\w+)/currency.html$',                      "currency.views.currency", name="currency"),
+    url(r'^(?P<username>\w+)/places.html$',                        "records.views.places",    name="places"),
     
     url(r'^(?P<username>\w+)/backup/$',                            "backup.views.backup",     name="backup"),
     url(r'^(?P<username>\w+)/massentry.html$',                     "logbook.views.mass_entry", name="mass-entry"),

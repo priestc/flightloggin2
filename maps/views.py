@@ -13,12 +13,12 @@ def maps(request, shared, display_user):
     from settings import MEDIA_URL, SITE_URL
     return locals()
 
-def airports_kml(request, shared, display_user, type):
+def airports_kml(request, shared, display_user, type_):
     import settings
     from utils import AirportFolder 
     from airport.models import *
     
-    if type=="all":
+    if type_=="all":
         title = "All Airports"
         points = Airport.objects.filter(routebase__route__flight__user=display_user).distinct()
         

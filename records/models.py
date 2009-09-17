@@ -12,10 +12,11 @@ class Records(models.Model):
     class Meta:
         verbose_name_plural = "Records"
         
-    def save(self):
+    def save(self, *args, **kwargs):
         from mid.middleware import share
-        self.user = share.get_display_user()
-        super(Records,self).save()
+        if not self.user:
+            self.user = share.get_display_user()
+        super(Records,self).save(*args, **kwargs)
         
 class NonFlight(models.Model):
 
@@ -27,7 +28,8 @@ class NonFlight(models.Model):
     def __unicode__(self):
         return u"%s -- %s" % (self.date, self.get_non_flying_display() )
     
-    def save(self):
+    def save(self, *args, **kwargs):
         from mid.middleware import share
-        self.user = share.get_display_user()
+        if not self.user:
+            self.user = share.get_display_user()
         super(NonFlight,self).save()

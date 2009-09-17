@@ -4,15 +4,19 @@ from django.forms.widgets import HiddenInput
 from django.contrib.auth.models import User
 
 from django import forms
-from models import *
+from django.db.models import get_model
 
 class NonFlightForm(ModelForm):
-    #user = forms.ModelChoiceField(queryset=User.objects.all(), widget=HiddenInput)
-    
-   # def save(self, args, kwargs)
-    
     class Meta:
-        model = NonFlight
+        model = get_model('records', 'NonFlight')
         exclude = ('user' )
         
-NonFlightFormset = modelformset_factory(NonFlight, form=NonFlightForm, extra=1, can_delete=True)
+##############################
+##############################
+        
+class CustomForm(ModelForm):
+    coordinates = forms.CharField(widget=forms.TextInput(), required=False)
+    
+    class Meta:
+        model = get_model('airport', 'Custom')
+        exclude = ('user' )

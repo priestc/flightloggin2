@@ -11,11 +11,12 @@
 			        yearRange: "-80:+1", 
 			        showOn: "button", 
 			        buttonImage: "{{ MEDIA_URL }}/images/calendar.gif", 
-			        buttonImageOnly: true 
+			        buttonImageOnly: true ,
+			        changeYear: true
 	        }).addClass("embed");
 	        
 	        
-	        $("#nonflight_table a").click(function() {
+	        $("a.nonflight_click").click(function() {
 	        
 	            prepare_edit_event(true);
 	            fill_in_event(this.id);
@@ -31,6 +32,22 @@
 	    
 	        });
 	        
+	        $("a.custom_click").click(function() {
+	        
+	            prepare_edit_event(true);
+	            fill_in_custom(this.id);
+	            fire_popup();
+	    
+	        });
+	        
+	        $("#new_custom").click(function() {
+	        
+	            prepare_new_custom(true);
+	            
+	            fire_popup("custom_popup");
+	    
+	        });
+	        
 	    });
     
 	</script>
@@ -41,24 +58,23 @@
 {% block title %}Records{% endblock %}
 
 {% block canvas %}
-	<div id="nonflights_instructions">
-		<input type="button" id="new_event" value="New Event">
-	</div>
-	
+
+<input type="button" id="new_event" value="New Event">
+
 <form action="{% url records display_user %}" method="post">
-    <table id="nonflight_table">
+    <table class="nonflight_table">
        <tr>
            <td>Date</td><td>Type</td><td>Remarks</td>
        </tr>
     {% for nf in nonflights %}
        <tr id="row_{{nf.id}}">
-           <td class="date" title="Date (click to edit)"><span class="unformatted_date">{{nf.date}}</span><a id="n{{nf.id}}" href="">{{ nf.date|date:date_format }}</a></td>
+           <td class="date" title="Date (click to edit)"><span class="unformatted_date">{{nf.date}}</span><a class="nonflight_click" id="n{{nf.id}}" href="">{{ nf.date|date:date_format }}</a></td>
            <td class="non_flying">{{ nf.get_non_flying_display }}</td>
            <td class="remarks">{{ nf.remarks }}</td>
        </tr>
     {% empty %}
     
-       <tr><td>Nothing to show here</td></tr>
+       <tr><td colspan="3">Nothing to show here</td></tr>
        
     {% endfor %}    
     </table>
@@ -68,8 +84,6 @@
 		Use this space to record any information you'd normally put in the back of a paper logbook.
 		Phone numbers and addresses of contacts; dates of endorsements; student signoffs and outcomes; notes, etc.
 	</div>
-	
-	<br>
 
 	<div>
 		<textarea style="width:80%;height:400px" cols="50" rows="10" name="records">{{ records.text }}</textarea>

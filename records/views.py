@@ -1,7 +1,37 @@
 from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
-from models import Records
+from airport.models import Custom
+from models import Records, NonFlight
 from forms import *
+
+@render_to("places.html")
+def places(request, shared, display_user):
+    customs = Custom.objects.filter(user=display_user)
+    
+    if request.POST.get('submit', None) == 'New Place':
+        form=CustomForm(request.POST)
+        if form.is_valid():
+            form.save()
+        else:
+            ERROR = 'true'
+            
+    elif request.POST.get('submit', None) == 'Submit Changes':
+        custom = Custom.objects.get(user=display_user, pk=request.POST.get('id', None) )
+        form=CustomForm(request.POST, instance=custom)
+        if form.is_valid():
+            form.save()
+        else:
+            ERROR = 'true'
+            
+    elif request.POST.get('submit', None) == 'Delete Place':
+        custom = Custom.objects.get(user=display_user, pk=request.POST.get('id', None) )
+        custom.delete()
+        form = CustomForm()
+        
+    else:
+        form = CustomForm()
+        
+    return locals()
 
 @render_to("records.html")
 def records(request, shared, display_user):

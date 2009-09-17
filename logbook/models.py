@@ -55,9 +55,10 @@ class Flight(models.Model):
     def __unicode__(self):
         return u"%s -- %s" % (self.date, self.remarks)
     
-    def save(self):
+    def save(self, *args, **kwargs):
         from mid.middleware import share
-        self.user = share.get_display_user()
+        if not self.user:
+            self.user = share.get_display_user()
         super(Flight,self).save()
 
     class Meta:

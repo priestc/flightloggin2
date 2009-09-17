@@ -10,7 +10,7 @@ class Location(models.Model):
     country         =       models.ForeignKey("Country", null=True, blank=True)
     region          =       models.ForeignKey("Region", null=True, blank=True)
 
-    elevation       =       models.IntegerField(null=True)
+    elevation       =       models.IntegerField(null=True, blank=True)
     location        =       models.PointField(null=True, blank=True)
     
     objects         =       models.GeoManager()
@@ -62,6 +62,15 @@ class Custom(Location):
         if self.name:
             return self.name
         return "Custom"
+    
+    def save(self, *args, **kwargs):
+        
+        try:
+            getattr(self, "user", None)
+        except:
+            from mid.middleware import share
+            self.user = share.get_display_user()
+        super(Custom,self).save()
         
 class Airport(Location):
     type = models.IntegerField(choices=AIRPORT_TYPE, null=True, blank=True)

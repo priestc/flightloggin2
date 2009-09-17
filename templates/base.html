@@ -63,6 +63,14 @@
 					
 				{% endif %}
 				
+				{% if user.is_authenticated %}
+				    <a href="{% url logout %}">Log Out</a>
+				{% else %}
+				    <a href="/openid/login">Sign-in/Register</a>
+                {% endif %}   
+				    
+				
+				
 				    &nbsp;  {# so the space doesnt collapse #}
             </div>
 			<table id="nav_bar" summary="Top navigation bar">
@@ -108,15 +116,9 @@
                     </td>
                     {% endif %}
                     
-                    {% if user.is_authenticated %}
-                    <td>
-                    <a href="{% url logout %}">Log Out</a>
+                    <td class="{% block places-sel %}{% endblock%}" >
+                        <a href="{% url places display_user.username %}">Places</a>
                     </td>
-                    {% else %}
-                    <td class="nav_bar_not {% block signin-sel %}{% endblock%}" >
-                        <a href="/openid/login">Sign-in/Register</a>
-                    </td>
-                    {% endif %}
                 {% else %}
                     <td class="nav_bar_not" >
                         <a href="/openid/login">Sign-in/Register</a>
