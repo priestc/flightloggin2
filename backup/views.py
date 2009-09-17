@@ -1,12 +1,13 @@
 import datetime
 
+from django.http import Http404
 from django.contrib.auth.decorators import login_required
 
+from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
-from profile.models import Profile
 
-from logbook.constants import *
 from profile.models import Profile
+from logbook.constants import *
 
 @login_required()   
 def backup(request, shared, display_user):
@@ -19,7 +20,7 @@ def backup(request, shared, display_user):
     ###########################
     
     response = HttpResponse(sio, mimetype='application/zip')
-    response['Content-Disposition'] = 'attachment; filename=logbook-backup-%s.csv.zip' % date
+    response['Content-Disposition'] = 'attachment; filename=logbook-backup-%s.tsv.zip' % date
 
     return response
     
@@ -59,37 +60,43 @@ def backup_zip(user):
     
     sio = StringIO.StringIO()
     z = zipfile.ZipFile(sio,'w', compression=zipfile.ZIP_DEFLATED)
-    z.writestr("logbook-backup-%s.csv" % date, output.getvalue())
+    z.writestr("logbook-backup-%s.tsv" % date, output.getvalue())
        
     return sio
 
-def emailbackup(response, group):
-    """Automatically send email backups to each user"""
+
+@login_required() 
+def emailbackup(request, shared, display_user):
+    """Send email backup to the user"""
+
+    if shared:
+        raise Http404
+    
+    profile = Profile.objects.get(user=display_user)
+    
+    email = make_email(profile)
+    sent=email.send()
+    
+    from django.http import HttpResponse
+    return HttpResponse("email sent to %s" % ",".join(email.to), mimetype='text-plain')
+    
+
+def make_email(profile):
     from django.core.mail import EmailMessage, SMTPConnection, send_mail
     import datetime
     
-    assert group > 0
+    message = ("This is a copy of your FlightLogg.in' logbook\nYou are set to receive these messages %s." %
+                        profile.get_backup_freq_display().lower() )
+                        
+    title = "%s's FlightLogg.in backup for %s" % (profile.real_name or profile.user.username, datetime.date.today(), )
+    email = profile.backup_email or profile.user.email
     
-    profiles = Profile.objects.filter(backup_freq__lte=group).exclude(backup_freq=0)
+    file_ = backup_zip(profile.user).getvalue()
     
-    emails = []
-    for profile in profiles:
-        message = ("This is a copy of your FlightLogg.in' logbook\nYou are set to receive these messages %s." %
-                            profile.get_backup_freq_display().lower() )
-                            
-        title = "%s's FlightLogg.in backup for %s" % (profile.real_name or profile.user.username, datetime.date.today(), )
-        email = profile.backup_email or profile.user.email
+    email = EmailMessage(title, message, to=(email,))
+    email.attach("backup.csv.zip", file_,)
         
-        file_ = backup_zip(profile.user).getvalue()
-        
-        email = EmailMessage(title, message, to=(email,))
-        email.attach("backup.csv.zip", file_,)
-        emails.append(email)
-        
-    connection = SMTPConnection()
-    connection.send_messages(emails)
-        
-    assert False
+    return email
 
 
 

@@ -83,7 +83,6 @@ def drawl_state_map(states_to_plot):
         if statename in states_to_plot:
             c = states_to_plot[statename]
             color = cmap(1.-np.sqrt((c-min_)/(max_-min_)))[:3]
-            print color, c
             poly = Polygon(seg,facecolor=color)
             ax.add_patch(poly)
             
