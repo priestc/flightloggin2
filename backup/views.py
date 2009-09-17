@@ -94,7 +94,7 @@ def make_email(profile):
     file_ = backup_zip(profile.user).getvalue()
     
     email = EmailMessage(title, message, to=(email,))
-    email.attach("backup.csv.zip", file_,)
+    email.attach("backup.tsv.zip", file_,)
         
     return email
 
