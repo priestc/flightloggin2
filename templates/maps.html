@@ -15,7 +15,7 @@
         <td>All Routes:</td>
         <td>{% url kml-route display_user "all" as all_routes_url %}
             <a href="{{ all_routes_url }}">Earth</a>&nbsp;&nbsp;
-            <a href="http://maps.google.com?q={{ SITE_URL }}{{ all_routes_url|urlencode }}">Maps</a>
+            <a href="http://maps.google.com?q={{ SITE_URL }}{{ all_routes_url|urlencode }}" target="_blank">Maps</a>
         </td>
         
     </tr>
@@ -26,7 +26,7 @@
         </td>
         <td>{% url kml-route display_user "cat_class" as cat_class_url %}
             <a href="{{cat_class_url }}">Earth</a>&nbsp;&nbsp;
-            <a href="http://maps.google.com?q={{ SITE_URL }}{{cat_class_url|urlencode}}">Maps</a>
+            <a href="http://maps.google.com?q={{ SITE_URL }}{{cat_class_url|urlencode}}" target="_blank">Maps</a>
         </td>
     </tr>
     
