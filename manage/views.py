@@ -4,7 +4,7 @@ import csv
 
 import settings
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 
 from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
@@ -19,6 +19,11 @@ from logbook.constants import FIELD_TITLES
 from constants import *
 from forms import ImportForm, ImportFlightForm
 
+def del_routes(request):
+    from route.models import Route
+    count=Route.objects.filter(flight__pk__isnull=True).count()
+    Route.objects.filter(flight__pk__isnull=True).delete()
+    return HttpResponse("%s routes deleted" % count)
 
 @login_required()
 @render_to('import.html')

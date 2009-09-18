@@ -41,7 +41,7 @@ class QuerySet(QuerySet):
             return self.exclude(q)
         return self.filter(q)
     
-    def complex(self, f=True):
+    def complex_(self, f=True):
         kwarg={'plane__tags__icontains': 'COMPLEX'}
         if not f:
             return self.exclude(**kwarg)
@@ -214,6 +214,10 @@ class QuerySet(QuerySet):
     #################@@##############
     
     def _db_agg(self, cn):
+        """cn always equals a database column such as total or pic or xc
+           returns the total for that field on the queryset after it has been
+           properly filtered down"""
+       
         return self.aggregate(Sum(cn)).values()[0] or 0
     
     def agg(self, cn):
@@ -222,15 +226,15 @@ class QuerySet(QuerySet):
             return self._db_agg(cn)
         
         elif cn in EXTRA_AGG:
-            if not '_' in cn:
-                return self.filter_by_column(cn)._db_agg('total')
+            if cn == "day":
+                night = self._db_agg('night')
+                total = self._db_agg('total')
+                return total - night
             
-            time = cn.split("_")[-1]    ## pic, sic, total, etc
-            if time in AGG_FIELDS:
-                return self.filter_by_column(cn)._db_agg(time)
-            else:
+            if not cn.endswith("pic"):
                 return self.filter_by_column(cn)._db_agg('total')
-        
+            else:
+                return self.filter_by_column(cn)._db_agg('pic')
         else:
             return "??"
     
@@ -245,7 +249,7 @@ class QuerySet(QuerySet):
             return self.sim()
             
         elif cn == 'complex':
-            return self.complex()
+            return self.complex_()
             
         elif cn == 'hp':
             return self.hp()
@@ -280,18 +284,3 @@ class QuerySet(QuerySet):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    

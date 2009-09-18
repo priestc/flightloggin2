@@ -1,8 +1,8 @@
 
 
-FIELDS = [               #all columns, needs to be in column display order
+FIELDS = [               #all columns, needs to be in column display order -- ORDER MATTERS
           "date", "plane", "reg", "f_route", "s_route", "r_route", "total_s", "total","sim",
-          "pic", "sic", "solo", "dual_r", "dual_g", "xc", "act_inst", "sim_inst", "night", "night_l", "day_l", "app",
+          "pic", "sic", "solo", "dual_r", "dual_g", "xc", "act_inst", "sim_inst", "day", "night", "night_l", "day_l", "app",
           "p2p", "multi", "m_pic", "sea", "sea_pic", "mes", "mes_pic", "turbine", "t_pic", "mt", "mt_pic", "complex",
           "hp", "tail", "jet", "jet_pic", "person", "remarks"
           ]
@@ -33,20 +33,16 @@ AGG_FIELDS = [          #fields that get their totals straight from the SUM(x) d
             ]
 
 EXTRA_AGG = [           #fields that do get totals calculated, but require some extra processing
-          'total', 'total_s', 'p2p', 'complex', 'hp', 'sim',
+          'total', 'total_s', 'p2p', 'complex', 'hp', 'sim', 'day',
           'multi', 'm_pic',
           'sea', 'sea_pic', 'mes', 'mes_pic',
           'turbine', 't_pic', 'mt', 'mt_pic',
           'complex', 'hp', 'sim', 'tail', 'jet', 'jet_pic',
           ]
           
-PIC_FIELDS = [         #columns that are represented by PIC in teh database
-          'mt_pic', 'mes_pic', 'm_pic', 'sea_pic',
-          ]
-          
 OPTION_FIELDS = [       #fields that are optionally turned on and off, used to create the bug list of checkboxes in the prefs page
           'plane', 'reg', 'f_route', 's_route', 'r_route', 'total', 'total_s', 'sim',
-          'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
+          'pic', 'sic', 'solo', 'day', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
           'p2p',
           'multi', 'm_pic',
           'sea', 'sea_pic', 'mes', 'mes_pic',
@@ -73,6 +69,7 @@ FIELD_TITLES = {
     "pic": "PIC",
     "sic": "SIC",
     "solo": "Solo",
+    "day": "Day",
     "night": "Night",
     "dual_r": "Dual Received",
     "dual_g": "Dual Given",
@@ -121,6 +118,7 @@ FIELD_ABBV = {
     "pic": "PIC",
     "sic": "SIC",
     "solo": "Solo",
+    "day": "Day",
     "night": "Night",
     "dual_r": "Dual R.",
     "dual_g": "Dual G.",

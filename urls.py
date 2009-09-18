@@ -31,6 +31,7 @@ urlpatterns += patterns('',
     ############################ maps
     
     url(r'^(?P<username>\w+)/email-backup.html$',                  "backup.views.emailbackup", name="import"),
+    url(r'^empty-routes.html$',                                    "manage.views.del_routes",  name="import"),
     
     url(r'^(?P<username>\w+)/routes-(?P<type_>\w+).kmz$',          "maps.views.routes_kml",    name="kml-route"),
     url(r'^(?P<username>\w+)/airports-(?P<type_>\w+).kmz$',        "maps.views.airports_kml",  name="kml-airport"),
