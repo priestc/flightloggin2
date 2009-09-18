@@ -40,12 +40,12 @@ def profile(request, shared, display_user):
             Plane.objects.filter(flight__isnull=True, user=display_user).delete()
             
         elif request.POST.get("submit") == "Completely Reset All Data":
-            Plane.objects.filter(user=display_user).delete()
             NonFlight.objects.filter(user=display_user).delete()
             Flight.objects.filter(user=display_user).delete()
             Records.objects.filter(user=display_user).delete()
             Custom.objects.filter(user=display_user).delete()
-        
+            Plane.objects.filter(user=display_user).delete()
+            
         else:
             if auto_form.is_valid():
                 auto_form.save()

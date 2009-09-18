@@ -56,7 +56,7 @@ class Flight(models.Model):
         return u"%s -- %s" % (self.date, self.remarks)
     
     def save(self, *args, **kwargs):
-        from mid.middleware import share
+        from share.middleware import share
         if not self.user:
             self.user = share.get_display_user()
         super(Flight,self).save(*args, **kwargs)

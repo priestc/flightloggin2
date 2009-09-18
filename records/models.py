@@ -13,7 +13,7 @@ class Records(models.Model):
         verbose_name_plural = "Records"
         
     def save(self, *args, **kwargs):
-        from mid.middleware import share
+        from share.middleware import share
         if not self.user:
             self.user = share.get_display_user()
         super(Records,self).save(*args, **kwargs)
@@ -29,7 +29,7 @@ class NonFlight(models.Model):
         return u"%s -- %s" % (self.date, self.get_non_flying_display() )
     
     def save(self, *args, **kwargs):
-        from mid.middleware import share
+        from share.middleware import share
         if not self.user:
             self.user = share.get_display_user()
         super(NonFlight,self).save()
