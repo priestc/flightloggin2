@@ -2,6 +2,7 @@ import datetime
 
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
+from share.decorator import no_share
 
 from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
@@ -64,13 +65,10 @@ def backup_zip(user):
        
     return sio
 
-
+@no_share
 @login_required() 
 def emailbackup(request, shared, display_user):
     """Send email backup to the user"""
-
-    if shared:
-        raise Http404
     
     profile = Profile.objects.get(user=display_user)
     

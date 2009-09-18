@@ -12,7 +12,7 @@ urlpatterns = patterns('django.contrib.auth',
 
 urlpatterns += patterns('',
     
-    url(r'^$',                                                     "main.views.news",         name="root"),
+    url(r'^$',                                                     "django.views.generic.simple.redirect_to", {'url': 'news.html'}, name="root"),
     url(r'^news.html$',                                            "main.views.news",         name="news"),
     url(r'^faq.html$',                                             "main.views.faq",          name="faq"),
     url(r'^help.html$',                                            "main.views.help",         name="help"),
@@ -52,7 +52,7 @@ urlpatterns += patterns('',
     (r'^admin/',                                                   include(admin.site.urls)),
     (r'^openid/',                                                  include('django_openid_auth.urls')),
     
-    (r'^site-media/(?P<path>.*)$','django.views.static.serve', {'document_root': '/home/chris/Websites/flightloggin/media', 'show_indexes': True}),
+    (r'^site-media/(?P<path>.*)$','django.views.static.serve',     {'document_root': '/home/chris/Websites/flightloggin/media', 'show_indexes': True}),
 
     (r'^\w+/$',                                                    "django.views.generic.simple.redirect_to", {'url': 'logbook.html'}   ), 
 )
