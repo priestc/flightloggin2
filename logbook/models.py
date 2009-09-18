@@ -137,7 +137,7 @@ class Flight(models.Model):
         
         ########
             
-        elif cn == "date_backup":
+        elif cn == "r_date":                            # raw, for the backup file
             return self.date
             
         elif cn == "tailnumber" and self.plane:
@@ -166,6 +166,11 @@ class Flight(models.Model):
             ret = "(%s)" % self.total
             
         ######################################
+        
+        elif cn == 'day':
+            ret = self.total - self.night
+            if ret < 0:
+                ret = 0
                 
         elif cn == "t_pic" and self.plane.is_turbine():
             ret = self.pic

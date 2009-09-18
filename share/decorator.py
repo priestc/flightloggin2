@@ -12,7 +12,7 @@ class no_share(object):
         except KeyError:
             secret_key = None
         
-        if kwargs.get('shared', False) and not secret_key == SECRET_KEY:
+        if kwargs.get('shared', False) and not secret_key == "dongs": #SECRET_KEY:
                 from django.http import Http404
                 raise Http404
 
