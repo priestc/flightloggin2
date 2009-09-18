@@ -7,6 +7,7 @@ from django.forms.formsets import formset_factory
 
 from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
+from share.decorator import no_share
 
 from models import Flight, Columns
 from forms import *
@@ -46,7 +47,6 @@ def logbook(request, shared, display_user, page=0):
                 
         elif request.POST.get('submit', "") == "Delete Flight":
             flight_id = request.POST['id']
-            Route.objects.get(flight__pk=flight_id).delete()
             Flight(pk=flight_id, user=display_user).delete()           
             ERROR = 'false'
                 
@@ -127,7 +127,8 @@ def logbook(request, shared, display_user, page=0):
     return locals()
 
 #######################################################################################################################################
-    
+
+@no_share   
 @login_required()
 @render_to("mass_entry.html")     
 def mass_entry(request, shared, display_user):
@@ -163,6 +164,7 @@ def mass_entry(request, shared, display_user):
 
     return locals()
 
+@no_share
 @login_required()
 @render_to("mass_entry.html")     
 def mass_edit(request, share, display_user, page=0):

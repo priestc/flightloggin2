@@ -55,6 +55,12 @@
         <td>{{place.region.name}}</td>
         <td id="p{{ place.id }}_country">{{place.country.name}}</td>
     </tr>
+    {% empty %}
+    
+    <tr>
+        <td colspan="7">Nothing to show.</td>
+    </tr>
+    
     {% endfor %}
 </table>
 

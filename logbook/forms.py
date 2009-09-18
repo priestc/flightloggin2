@@ -112,7 +112,7 @@ class FlightForm(ModelForm):
     def __init__(self, *args, **kwargs):  
         super(FlightForm, self).__init__(*args, **kwargs)
         
-        from mid.middleware import share
+        from share.middleware import share
         self.fields['date'].widget = widgets.AdminDateWidget()
         self.fields['plane'].queryset = Plane.objects.user_common(share.get_display_user())
 

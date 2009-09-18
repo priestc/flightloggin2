@@ -59,8 +59,13 @@ class Flight(models.Model):
         from mid.middleware import share
         if not self.user:
             self.user = share.get_display_user()
-        super(Flight,self).save()
-
+        super(Flight,self).save(*args, **kwargs)
+        
+    def delete(self, *args, **kwargs):
+        from route.models import Route
+        Route.objects.get(flight__pk=self.pk).delete()
+        super(Flight,self).delete(*args, **kwargs)
+        
     class Meta:
         ordering = ["date", "id"]
         

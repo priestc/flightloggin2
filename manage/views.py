@@ -9,6 +9,7 @@ from django.http import HttpResponseRedirect
 from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
 
+from share.decorator import no_share
 from records.forms import NonFlightForm
 from logbook.models import Flight
 from records.models import Records, NonFlight
@@ -18,8 +19,10 @@ from logbook.constants import FIELD_TITLES
 from constants import *
 from forms import ImportForm, ImportFlightForm
 
+
 @login_required()
 @render_to('import.html')
+@no_share
 def import_s(request, shared, display_user):
     results={}
     preview = False

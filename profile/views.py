@@ -1,6 +1,9 @@
-from annoying.decorators import render_to
 from forms import ProfileForm, ColumnsForm, AutoForm, UserForm
 from models import *
+
+from django.contrib.auth.decorators import login_required
+from share.decorator import no_share
+from annoying.decorators import render_to
 
 from plane.models import Plane
 from logbook.models import Flight
@@ -10,10 +13,10 @@ from airport.models import Custom
 
 from logbook.constants import OPTION_FIELDS, FIELD_TITLES
 
+@no_share
+@login_required
 @render_to("preferences.html")
 def profile(request, shared, display_user):
-    
-    title="Preferences"
 
     profile = Profile.objects.get_or_create(user=request.user)[0]
     column =  Columns.objects.get_or_create(user=request.user)[0]

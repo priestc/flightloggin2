@@ -4,7 +4,7 @@ from django.db import models
 from django.db.models import Q
 
 from annoying.functions import get_object_or_None
-from mid.middleware import share
+from share.middleware import share
 
 #from logbook.models import Flight
 from airport.models import Airport, Custom, Navaid
