@@ -3,7 +3,6 @@ from annoying.functions import get_object_or_None
 from airport.models import Custom
 from models import Records, NonFlight
 from forms import *
-from django.contrib.gis.geos import Point
 
 @render_to("places.html")
 def places(request, shared, display_user):
@@ -12,10 +11,9 @@ def places(request, shared, display_user):
     if request.POST.get('submit', None) == 'Create New Place':
         form=CustomForm(request.POST)
         if form.is_valid():
-            coords = form.cleaned_data['coordinates']
-            x,y = coords.split(",")
+            point = get_point(form.cleaned_data['coordinates'])
             custom = form.save()
-            custom.location = Point(float(y),float(x))
+            custom.location = point
             custom.save()
             
         else:
@@ -26,10 +24,9 @@ def places(request, shared, display_user):
         custom = Custom.objects.get(user=display_user, pk=request.POST.get('id', None) )
         form=CustomForm(request.POST, instance=custom)
         if form.is_valid():
-            coords = form.cleaned_data['coordinates']
-            x,y = coords.split(",")
+            point = get_point(form.cleaned_data['coordinates'])
             custom = form.save()
-            custom.location = Point(float(y),float(x))
+            custom.location = point
             custom.save()
         else:
             ERROR = 'true'
@@ -82,3 +79,21 @@ def records(request, shared, display_user):
         form = NonFlightForm()
     
     return locals()
+
+def get_point(val):
+    """Changes "124.1245521,128.212547" to a Point instance"""
+    
+    from django.contrib.gis.geos import Point
+    
+    if not val:
+        return None
+    
+    if not ',' in val:
+        return None
+    try:    
+        x,y = val.split(',')
+        point = Point(float(y),float(x))
+    except:
+        return None
+    
+    return point
