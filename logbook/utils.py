@@ -225,6 +225,9 @@ class QuerySet(QuerySet):
         """cn always equals a database column such as total or pic or xc
            returns the total for that field on the queryset after it has been
            properly filtered down"""
+           
+        if self == []:
+            return 0
        
         return self.aggregate(Sum(cn)).values()[0] or 0
     
@@ -242,12 +245,13 @@ class QuerySet(QuerySet):
             if cn == "pic_night":
                 return self.all_pic()._db_agg('night')
             
-            if not cn.endswith("pic"):
-                return self.filter_by_column(cn)._db_agg('total')
-            else:
-                return self.filter_by_column(cn)._db_agg('pic')
-        else:
-            return "??"
+            try:
+                if not cn.endswith("pic"):
+                    return self.filter_by_column(cn)._db_agg('total')
+                else:
+                    return self.filter_by_column(cn)._db_agg('pic')
+            except AttributeError:
+                return 0.0
     
     def filter_by_column(self, cn):
         """filters the queryset to only include flights

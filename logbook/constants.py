@@ -19,9 +19,9 @@ DB_FIELDS = [           #fields that have a database column all to themseves
           'person', 'remarks'
           ]
           
-GRAPH_FIELDS = [        #fields to be fair game for the graphing functions
+GRAPH_FIELDS = [        #fields to be fair game for the graphing functions and the sigs
           'total', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
-          'p2p', 'complex', 'hp', 'sim',
+          'p2p',
           'multi', 'm_pic',
           'sea', 'sea_pic', 'mes', 'mes_pic',
           'turbine', 't_pic', 'mt', 'mt_pic',
@@ -149,3 +149,41 @@ FIELD_ABBV = {
     "jet_pic": "Jet PIC",
     "tail": "Tail",
 }
+
+#########################################
+from django.utils.safestring import mark_safe
+from PyHtmlTable import PyHtmlTable
+
+def all_agg_select(prefix=""):
+    out = []
+    for field in GRAPH_FIELDS:
+        out.append("<option name=\"%s%s\">%s</option>" % (prefix, field, FIELD_TITLES[field]))
+        
+    return mark_safe("<select>" + "".join(out) + "</select>")
+
+def all_agg_checkbox(prefix=""):
+    out = []
+    for field in GRAPH_FIELDS:
+        out.append("<input type=\"checkbox\" id=\"%s\"><label for=\"%s\">%s</label>" % (field, field, FIELD_TITLES[field]))
+        
+    t = PyHtmlTable(0,5, {"class": "checktable"})
+    for i,item in enumerate(out[:5]):
+        t.setCellcontents(0,i,item)
+        
+    for i,item in enumerate(out[5:10]):
+        t.setCellcontents(1,i,item)
+        
+    for i,item in enumerate(out[10:15]):
+        t.setCellcontents(2,i,item)
+        
+    for i,item in enumerate(out[15:20]):
+        t.setCellcontents(3,i,item)
+    
+    for i,item in enumerate(out[20:25]):
+        t.setCellcontents(4,i,item)
+    
+    for i,item in enumerate(out[25:30]):
+        t.setCellcontents(5,i,item)
+    
+    return mark_safe(t.return_html())
+        

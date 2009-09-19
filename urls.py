@@ -30,6 +30,8 @@ urlpatterns += patterns('',
     url(r'^(?P<username>\w+)/states-(?P<type_>[\-\w]+)?.(?P<ext>(png|svg))$',
     
                                                                    "maps.states.state_map_generator", name="state-map"),
+                                                                   
+    (r'^(?P<username>\w+)/sigs/(?P<columns>[\w\-]+).png',          "sigs.views.make_sig", ),
     
     ############################ maps
     

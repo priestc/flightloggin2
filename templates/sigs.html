@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block sigs-sel %}nav_selected{% endblock%}
+
+{% block javascript %}
+<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/sigs.js"></script>
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/sigs.css">
+{% endblock %}
+
+{% block title %}Sigs{% endblock %}
+
+{% block canvas %}
+
+{{select}}
+<input type="button" value="Generate" id="generate_button">
+
+<br><br>
+
+<img src="" id="sig_image">
+<div id="sig_url"></div>
+{% endblock %}
+
