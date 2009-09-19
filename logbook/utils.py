@@ -252,6 +252,8 @@ class QuerySet(QuerySet):
                     return self.filter_by_column(cn)._db_agg('pic')
             except AttributeError:
                 return 0.0
+            
+        return "??"
     
     def filter_by_column(self, cn):
         """filters the queryset to only include flights
