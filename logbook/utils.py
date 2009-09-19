@@ -165,8 +165,16 @@ class QuerySet(QuerySet):
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
     
-    def all_night(self, f=True): ##FIXME
-        kwarg={"night__gt": 0}
+    def all_night(self, f=True):
+        from django.db.models import F
+        kwarg={"night": F('total')}
+        if not f:
+            return self.exclude(**kwarg)
+        return self.filter(**kwarg)
+    
+    def all_pic(self, f=True):
+        from django.db.models import F
+        kwarg={"pic": F('total')}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
@@ -230,6 +238,9 @@ class QuerySet(QuerySet):
                 night = self._db_agg('night')
                 total = self._db_agg('total')
                 return total - night
+            
+            if cn == "pic_night":
+                return self.all_pic()._db_agg('night')
             
             if not cn.endswith("pic"):
                 return self.filter_by_column(cn)._db_agg('total')

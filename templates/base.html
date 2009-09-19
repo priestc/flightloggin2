@@ -80,11 +80,17 @@
                         <a href="{% url logbook display_user.username %}">Flights</a>
                     </td>
                     
-    			    {% if not shared %}
-                    <td class="{% block profile-sel %}{% endblock%}" >
-                        <a href="{% url profile display_user.username %}">Preferences</a>
+                    <td class="{% block planes-sel %}{% endblock%}" >
+                        <a href="{% url planes display_user.username %}">Planes</a>
                     </td>
-                    {% endif %}
+                    
+                    <td class="{% block nonflights-sel %}{% endblock%}" >
+                        <a href="{% url nonflights display_user.username %}">Events</a>
+                    </td>
+                    
+                    <td class="{% block places-sel %}{% endblock%}" >
+                        <a href="{% url places display_user.username %}">Places</a>
+                    </td>
                     
                     <td class="{% block graphs-sel %}{% endblock%}" >
                         <a href="{% url graphs display_user.username %}">Graphs</a>
@@ -97,11 +103,11 @@
                     <td class="{% block records-sel %}{% endblock%}" >
                         <a href="{% url records display_user.username %}">Records</a>
                     </td>
-
-                    <td class="{% block planes-sel %}{% endblock%}" >
-                        <a href="{% url planes display_user.username %}">Planes</a>
-                    </td>
                     
+                    <td class="{% block sigs-sel %}{% endblock%}" >
+                        <a href="{% url sigs display_user.username %}">Sigs</a>
+                    </td>
+
                     <td class="{% block currency-sel %}{% endblock%}" >
                         <a href="{% url currency display_user.username %}">Currency</a>
                     </td>
@@ -116,9 +122,12 @@
                     </td>
                     {% endif %}
                     
-                    <td class="{% block places-sel %}{% endblock%}" >
-                        <a href="{% url places display_user.username %}">Places</a>
+                    {% if not shared %}
+                    <td class="{% block profile-sel %}{% endblock%}" >
+                        <a href="{% url profile display_user.username %}">Preferences</a>
                     </td>
+                    {% endif %}
+                    
                 {% else %}
                     <td class="nav_bar_not" >
                         <a href="/openid/login">Sign-in/Register</a>

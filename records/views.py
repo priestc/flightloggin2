@@ -5,6 +5,11 @@ from models import Records, NonFlight
 from forms import *
 
 @render_to("places.html")
+def nonflights(request, shared, display_user):
+    records,c = Records.objects.get_or_create(user=display_user)
+    return locals()
+
+@render_to("places.html")
 def places(request, shared, display_user):
     customs = Custom.objects.filter(user=display_user)
     
@@ -57,8 +62,6 @@ def records(request, shared, display_user):
         date_format = "Y-m-d"
     
     ##################################################
-    
-    records,c = Records.objects.get_or_create(user=display_user)
     
     nonflights = NonFlight.objects.filter(user=display_user).order_by('date')
     

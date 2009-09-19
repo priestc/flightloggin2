@@ -16,10 +16,13 @@ urlpatterns += patterns('',
     url(r'^news.html$',                                            "main.views.news",         name="news"),
     url(r'^faq.html$',                                             "main.views.faq",          name="faq"),
     url(r'^help.html$',                                            "main.views.help",         name="help"),
-
+    
+    (r'^admin/doc/',                                               include('django.contrib.admindocs.urls')),
+    (r'^admin/',                                                   include(admin.site.urls)),
+    (r'^openid/',                                                  include('django_openid_auth.urls')),
     ############################ graphs
 
-    (r'^(?P<username>\w+)/line/(?P<type_>\w+)/(?P<columns>[\w\-]+)/((?P<s>\d{4}.\d{1,2}.\d{1,2})-(?P<e>\d{4}.\d{1,2}.\d{1,2}))?(all)?.(?P<ext>(png|svg))$',
+    (r'^(?P<username>\w+)/line/(?P<type_>\w+)/((?P<columns>[\w\-]+)/((?P<s>\d{4}.\d{1,2}.\d{1,2})-(?P<e>\d{4}.\d{1,2}.\d{1,2}))|(all)).(?P<ext>(png|svg))$',
     # username/line/type/columns/(start_date-end_date) or (all).extension
     
                                                                    "graphs.views.line_generator"),
@@ -38,6 +41,7 @@ urlpatterns += patterns('',
     url(r'^(?P<username>\w+)/preferences.html$',                   "profile.views.profile",    name="profile"),
     url(r'^(?P<username>\w+)/import.html$',                        "manage.views.import_s",    name="import"),
     url(r'^(?P<username>\w+)/records.html$',                       "records.views.records",    name="records"),
+    url(r'^(?P<username>\w+)/nonflights.html$',                    "records.views.nonflights", name="nonflights"),
     url(r'^(?P<username>\w+)/graphs.html$',                        "graphs.views.graphs",      name="graphs"),
     url(r'^(?P<username>\w+)/planes.html$',                        "plane.views.planes",       name="planes"),
     url(r'^(?P<username>\w+)/maps.html$',                          "maps.views.maps",          name="maps"),
@@ -48,10 +52,7 @@ urlpatterns += patterns('',
     url(r'^(?P<username>\w+)/massedit-page-(?P<page>\d+).html$',   "logbook.views.mass_edit",  name="mass-edit"),
     url(r'^(?P<username>\w+)/logbook.html$',                       "logbook.views.logbook",    name="logbook"),
     url(r'^(?P<username>\w+)/logbook-page-(?P<page>\d+).html',     "logbook.views.logbook",    name="logbook-page"),
-    
-    (r'^admin/doc/',                                               include('django.contrib.admindocs.urls')),
-    (r'^admin/',                                                   include(admin.site.urls)),
-    (r'^openid/',                                                  include('django_openid_auth.urls')),
+    url(r'^(?P<username>\w+)/sigs.html$',                          "sigs.views.sigs",          name="sigs"),
     
     (r'^site-media/(?P<path>.*)$','django.views.static.serve',     {'document_root': '/home/chris/Websites/flightloggin/media', 'show_indexes': True}),
 
