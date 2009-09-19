@@ -24,12 +24,14 @@ def make_sig(request, shared, display_user, columns):
 class Sig(object):
     
     data = {}
-    font_width = 6
-    line_height = 16
+    font_width = 7
+    line_height = 18
     title_columns = []
     max_title_width = 0
+    font= "VeraMoBd.ttf"
     
     def __init__(self, user, columns):
+        import settings
         
         self.data = {}
         height = len(columns) * self.line_height
@@ -40,7 +42,7 @@ class Sig(object):
         
         self.user = user
         self.im = Image.new("RGBA", (width, height))
-        self.font = ImageFont.load_default()
+        self.font = ImageFont.truetype(settings.MEDIA_ROOT + "/fonts/" + self.font, 12) #ImageFont.load_default()
         self.draw = ImageDraw.Draw(self.im)
         
         for column in columns:
