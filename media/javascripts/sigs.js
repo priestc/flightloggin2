@@ -13,7 +13,7 @@ function generate_sig() {
 }
 
 function copy_url() {
-    $("#sig_url").text("http://flightlogg.in/" + url);
+    $("#sig_url").text(url);
 }
 
 function get_url() {
@@ -24,6 +24,9 @@ function get_url() {
         fields.push(this.id)
     });
     
-    url = "sigs/" + fields.join("-") + ".png"
-
+    var p = location.href.split("/");
+    p[p.length-1]="";
+    p=p.join("/");
+    
+    url = p + "sigs/" + fields.join("-") + ".png"
 }
