@@ -36,7 +36,8 @@ class QuerySet(QuerySet):
         return self.filter(**kwarg)
     
     def hp(self, f=True):
-        q = Q(plane__tags__icontains='HP') | Q(plane__tags__icontains='HIGH PERFORMANCE')
+        q = Q(plane__tags__icontains='HP') |\
+            Q(plane__tags__icontains='HIGH PERFORMANCE')
         if not f:
             return self.exclude(q)
         return self.filter(q)
@@ -210,14 +211,12 @@ class QuerySet(QuerySet):
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #night_l=property(night_l)
     
     def app(self, f=True):
         kwarg={"app__gt": 0}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-    #app=property(app)
     
     #################@@##############
     
@@ -238,8 +237,8 @@ class QuerySet(QuerySet):
         
         elif cn in EXTRA_AGG:
             if cn == "day":
-                night = self._db_agg('night')
-                total = self._db_agg('total')
+                night = self.sim(False)._db_agg('night')
+                total = self.sim(False)._db_agg('total')
                 return total - night
             
             if cn == "pic_night":

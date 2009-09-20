@@ -21,7 +21,7 @@ DB_FIELDS = [           #fields that have a database column all to themseves
           
 GRAPH_FIELDS = [        #fields to be fair game for the graphing functions and the sigs
           'total', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
-          'p2p',
+          'p2p', 'day',
           'multi', 'm_pic',
           'sea', 'sea_pic', 'mes', 'mes_pic',
           'turbine', 't_pic', 'mt', 'mt_pic',
@@ -184,6 +184,9 @@ def all_agg_checkbox(prefix=""):
     
     for i,item in enumerate(out[25:30]):
         t.setCellcontents(5,i,item)
+        
+    for i,item in enumerate(out[30:35]):
+        t.setCellcontents(6,i,item)
     
     return mark_safe(t.return_html())
         

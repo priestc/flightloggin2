@@ -19,6 +19,7 @@ def currency(request, shared, display_user):
         del cert_currbox
     
     ############################################
+    
     inst_out = []
     
     if Flight.objects.pseudo_category("fixed_wing").app().count() > 0:
@@ -36,7 +37,9 @@ def currency(request, shared, display_user):
     
     ############################################
         
-    cat_classes = Plane.objects.filter(user=display_user).values_list('cat_class', flat=True).order_by().distinct()
+    cat_classes = Plane.objects.filter(user=display_user)\
+                       .values_list('cat_class', flat=True)\
+                       .order_by().distinct()
     cat_classes_out = []
     for item in cat_classes:
         currbox = LandCurrBox(cat_class=item)
@@ -44,13 +47,14 @@ def currency(request, shared, display_user):
         currbox.day = currency.landing(night=False, cat_class=item)
         currbox.night = currency.landing(night=True, cat_class=item)
         
-        #currbox.render()
-        
         cat_classes_out.append(currbox)
     
     ############################################
     
-    tailwheels = Plane.objects.filter(user=display_user).filter( Q(tags__icontains="tailwheel")).values_list('cat_class', flat=True).order_by().distinct()
+    tailwheels = Plane.objects.filter(user=display_user)\
+                              .filter( Q(tags__icontains="tailwheel"))\
+                              .values_list('cat_class', flat=True)\
+                              .order_by().distinct()
     tailwheels_out = []   
     for item in tailwheels:
         currbox = LandCurrBox(cat_class=item, tail=True)
@@ -62,8 +66,11 @@ def currency(request, shared, display_user):
         
     ############################################
     
-    type_ratings = Plane.objects.filter(user=display_user).\
-        filter( Q(tags__icontains="type rating") | Q(tags__icontains="currency")).values_list('type', flat=True).order_by().distinct()
+    type_ratings = Plane.objects.filter(user=display_user)\
+                                .filter( Q(tags__icontains="type rating") |
+                                         Q(tags__icontains="currency"))\
+                                .values_list('type', flat=True)\
+                                .order_by().distinct()
     types_out = []
     for item in type_ratings:
         currbox = CurrBox(tr=item, method="landings")
@@ -85,9 +92,7 @@ def currency(request, shared, display_user):
         del medi_currbox                #if there are no medicals, then delete this box so it doesn't show up in the template
         
     ############################################
-    
-    
-        
+
     return locals()
 
 
