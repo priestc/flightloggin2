@@ -59,8 +59,6 @@
 
 {% block canvas %}
 
-<input type="button" id="new_event" value="New Event">
-
 <form action="{% url records display_user %}" method="post">
     <div id="records_instructions">
 		Use this space to record any information you'd normally put in the back of a paper logbook.
@@ -72,8 +70,10 @@
 
 		<br>
 		<br>
-
+		
+        {% if not shared %}
 		<input type="submit" value="Save" />
+		{% endif %}
 		
 		{% if saved %}
 		

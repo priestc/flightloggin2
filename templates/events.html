@@ -43,7 +43,9 @@
 
 {% block canvas %}
 
-<input type="button" id="new_event" value="New Event">
+{% if not shared %}
+    <input type="button" id="new_event" value="New Event">
+{% endif %}
 
     <table class="nonflight_table">
        <tr>
