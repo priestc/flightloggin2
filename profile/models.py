@@ -20,6 +20,10 @@ class Profile(models.Model):
 
     def __unicode__(self):
         return u"%s - %s" % (self.user, self.real_name)
+    
+    @models.permalink
+    def get_absolute_url(self):
+        return ('logbook', [self.user.username], )
 
     class Meta:
         pass
