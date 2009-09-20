@@ -317,7 +317,7 @@ class FAA_Currency(object):
         ###############
             
         try:
-            last_medical = NonFlight.objects.filter(non_flying__in=[1,2,3]).order_by('-date')[0]        ## 1,2,3 = FAA medical exam codes
+            last_medical = NonFlight.objects.filter(user=self.user, non_flying__in=[1,2,3]).order_by('-date')[0]        ## 1,2,3 = FAA medical exam codes
         except IndexError:
             return              #no medicals in logbook, return
             
