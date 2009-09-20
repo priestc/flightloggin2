@@ -4,4 +4,5 @@ NON_FLYING_CHOICES = (
     (3, "3rd Class Medical"),
     (4, "CFI Refresher"),
     (5, "Student Signoff"),
+    (6, "Wings Program Completed"),
 )

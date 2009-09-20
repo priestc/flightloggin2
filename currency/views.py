@@ -44,6 +44,8 @@ def currency(request, shared, display_user):
         currbox.day = currency.landing(night=False, cat_class=item)
         currbox.night = currency.landing(night=True, cat_class=item)
         
+        #currbox.render()
+        
         cat_classes_out.append(currbox)
     
     ############################################

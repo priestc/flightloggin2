@@ -160,75 +160,51 @@ class FAA_Currency(object):
     def flight_review(self):
 
         try:
-            checkride_date = Flight.objects.filter(user=self.user, pilot_checkride=True).values_list("date", flat=True).reverse()[0]
-            self.pilot = True
+            flight_date = Flight.objects.user(self.user).filter(Q(pilot_checkride=True) | Q(flight_review=True)).values_list("date", flat=True).reverse()[0]
+            self.pilot_flight = True
         except IndexError:
-            checkride_date = None
-
+            flight_date = date(1950, 2,4) # a generic old expired date
+            
         try:
-            fr_date = Flight.objects.filter(user=self.user, flight_review=True).values_list("date", flat=True).reverse()[0]
-            self.pilot = True
+            event_date = NonFlight.objects.filter(user=self.user, non_flying=6).values_list("date", flat=True).reverse()[0] # 6=wings
+            self.pilot_event = True
         except IndexError:
-            fr_date = None
+            event_date = date(1950, 2,4) # a generic old expired date
 
         ############
 
-        if not fr_date and not checkride_date:
+        if not event_date and not flight_date:
             return ("NEVER", None, None)
+        
+        else:
+            start_date = max(event_date, flight_date)
+            status, end_date = self._determine("flight_review", start_date)
+            return (status, start_date, end_date)
 
-        elif checkride_date and not fr_date:
-            start_date = checkride_date
-
-        elif fr_date and not checkride_date:
-            start_date = fr_date
-
-        elif checkride_date > fr_date:
-            start_date = checkride_date
-
-        elif checkride_date < fr_date:
-            start_date = fr_date
-
-        ################################################################################
-
-        status, end_date = self._determine("flight_review", start_date)
-
-        return (status, start_date, end_date)
-
-
+    ###############################################################################
+    
     def flight_instructor(self):
         try:
             checkride_date = Flight.objects.filter(user=self.user, cfi_checkride=True).values_list("date", flat=True).reverse()[0]
             self.cfi = True
         except IndexError:
-            checkride_date = None
+            checkride_date = date(1950, 2,4) # a generic old expired date
 
         try:
             refresher_date = NonFlight.objects.filter(user=self.user, non_flying=4).values_list("date", flat=True).reverse()[0]
             self.cfi = True
         except IndexError:
-            refresher_date = None
+            refresher_date = date(1950, 2,4) # a generic old expired date
 
         ############
 
         if not refresher_date and not checkride_date:           # no checkrides nor flight reviews in database, return "never"
             return ("NEVER", None, None)
 
-        elif checkride_date and not refresher_date:
-            start_date = checkride_date
-
-        elif refresher_date and not checkride_date:
-            start_date = refresher_date
-
-        elif checkride_date > refresher_date:
-            start_date = checkride_date
-
-        elif checkride_date < refresher_date:
-            start_date = refresher_date
-
-        ############
-
-        status, end_date = self._determine("flight_review", start_date)
-        return (status, start_date, end_date)
+        else:
+            start_date = max(refresher_date, checkride_date)
+            status, end_date = self._determine("flight_review", start_date)
+            return (status, start_date, end_date)
     
     ###############################################################################
     
@@ -237,7 +213,7 @@ class FAA_Currency(object):
         try:
             ipc_date = Flight.objects.user(self.user).filter(ipc=True).values_list("date", flat=True).reverse()[0]
         except IndexError:
-            checkride_date = None
+            ipc_date = None
         
         if not ipc_date:                        # no ipc's in database, return "never"
             return ("NEVER", None, None)
@@ -264,7 +240,9 @@ class FAA_Currency(object):
             return Flight.objects.pseudo_category(cat).filter(**kwarg).order_by('-date').values_list('date', flat=True)[0]
         except IndexError:
             return None
-    
+        
+    ###############################################################################
+        
     def instrument(self, cat):
     
         ipc_status, ipc_start, ipc_end = self.ipc()
