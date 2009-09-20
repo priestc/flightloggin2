@@ -28,7 +28,7 @@ class Sig(object):
     line_height = 18
     title_columns = []
     max_title_width = 0
-    font= "VeraMoBd.ttf"
+    font= "VeraMono.ttf"
     
     def __init__(self, user, columns):
         import settings
@@ -54,8 +54,8 @@ class Sig(object):
     
     def put_all_columns(self):
         i=0
-        for key in GRAPH_FIELDS:#self.number.keys()):
-            if key in self.data.keys(): # = str(self.number[key])
+        for key in GRAPH_FIELDS:
+            if key in self.data.keys():
                 self.draw.text((1, (i*self.line_height)+1),
                                ("%*s: %s") % (self.max_title_width+1, " " + FIELD_TITLES[key], self.data[key]),
                                font=self.font,
