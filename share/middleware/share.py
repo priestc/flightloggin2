@@ -23,6 +23,10 @@ def get_user():
 ###############################################################
 
 def is_shared(request, username):
+    
+    if request.user.is_staff:
+        return True, get_object_or_None(User, username=username)
+    
     if request.user.is_authenticated():
         if username == request.user.username:
             return False, request.user             #viewing own logbook (passed username is the authenticated user)
