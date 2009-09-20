@@ -9,7 +9,7 @@ from forms import PlaneForm
 
 @render_to('planes.html')
 def planes(request, shared, display_user):
-    planes = Plane.objects.filter(user=request.user)
+    planes = Plane.objects.filter(user=display_user)
     form = PlaneForm()
     
     if request.POST.get('submit') == "Create New Plane":
