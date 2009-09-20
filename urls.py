@@ -22,7 +22,7 @@ urlpatterns += patterns('',
     (r'^openid/',                                                  include('django_openid_auth.urls')),
     ############################ graphs
 
-    (r'^(?P<username>\w+)/line/(?P<type_>\w+)/((?P<columns>[\w\-]+)/((?P<s>\d{4}.\d{1,2}.\d{1,2})-(?P<e>\d{4}.\d{1,2}.\d{1,2}))|(all)).(?P<ext>(png|svg))$',
+    (r'^(?P<username>\w+)/line/(?P<type_>\w+)/(?P<columns>[\w\-]+)/((?P<s>\d{4}.\d{1,2}.\d{1,2})-(?P<e>\d{4}.\d{1,2}.\d{1,2}))?(all)?.(?P<ext>(png|svg))$',
     # username/line/type/columns/(start_date-end_date) or (all).extension
     
                                                                    "graphs.views.line_generator"),
