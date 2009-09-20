@@ -30,6 +30,9 @@ class NonFlight(models.Model):
     
     def save(self, *args, **kwargs):
         from share.middleware import share
-        if not self.user:
+        try:
+            self.user.pk
+        except:
             self.user = share.get_display_user()
+            
         super(NonFlight,self).save()

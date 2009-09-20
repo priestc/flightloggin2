@@ -4,8 +4,8 @@ from airport.models import Custom
 from models import Records, NonFlight
 from forms import *
 
-@render_to("places.html")
-def nonflights(request, shared, display_user):
+@render_to("records.html")
+def records(request, shared, display_user):
     records,c = Records.objects.get_or_create(user=display_user)
     return locals()
 
@@ -46,8 +46,8 @@ def places(request, shared, display_user):
         
     return locals()
 
-@render_to("records.html")
-def records(request, shared, display_user):
+@render_to("events.html")
+def events(request, shared, display_user):
     
     ##################################################
 
@@ -77,6 +77,11 @@ def records(request, shared, display_user):
             form=NonFlightForm(request.POST)
             if form.is_valid():
                 form.save()
+                
+        elif request.POST.get("submit") == "Delete Event":
+            nf = NonFlight(pk=request.POST.get('id'))
+            nf.delete()
+            form = NonFlightForm()
                 
     else:
         form = NonFlightForm()
