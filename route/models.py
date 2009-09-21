@@ -18,7 +18,7 @@ class Route(models.Model):
     p2p = models.BooleanField()
     
     @classmethod
-    def nder_custom(cls, user):
+    def render_custom(cls, user):
         qs = cls.objects.filter(flight__user=user).filter(routebase__custom__isnull=False)
         for r in qs:
             r.render()
