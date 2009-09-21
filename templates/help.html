@@ -1,16 +1,14 @@
-{% extends "base.html" %}
+{% extends "base-no-nav.html" %}
 
-{% block javascript %}
-	<script type="text/javascript" src="{{ MEDIA_URL }}javascripts/{{ title|lower }}.js"></script>
-    {% endblock %}
+{% block title %}Help{% endblock %}
 
-{% block css %}
-    #canvas     {color: green}
-{% endblock %}
-
-{% block title %}{{ title }}{% endblock %}
 {% block canvas %}
 
-HELP
+<h2>How do I do the route for my flights?</h2>
+
+You are supposed to put the identifier of each you flew to. All navaids should be prefixed with a '@' symbol. So if your flight was from La Guardia in New York to Boston via the
+Bradley VORTAC, you would log the flight as "LGA-@BDL-BOS". If you landed some place which isn't an airport with as assigned identifier, you should make up a identifier and prefix
+it with a '!'. For instance lets say you took off from Lubbock, Texas (KLBB), and landed in a field at your friend Bob's ranch. The ranch doesn't have an identifier, so you would
+log it as "LBB-!BOB". You then can go to the "Places" dection of the site and edit the "BOB" identifier to give it coordinates and a name.
 
 {% endblock %}

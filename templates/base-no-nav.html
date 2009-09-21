@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head profile="http://www.w3.org/2005/10/profile">
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta name="DESCRIPTION" content="An electronic logbook application for pilots.">
+		<meta name="KEYWORDS" content="Pilot Logbook, Online Logbook, Pilot Log, Flight Log, Flight Logbook, web application, Private Pilot">
+		<link rel="icon" type="image/png" href="/icons/favicon.png">
+		
+        <style type="text/css">
+            {% block css %}{% endblock %}
+        </style>
+        
+        
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/base.css">
+		<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/jquery/css/black-tie/jquery-ui-1.7.1.custom.css">
+		
+		<script type="text/javascript" src="{{ MEDIA_URL }}/jquery/jquery-1.3.2.min.js"></script>
+		<script type="text/javascript" src="{{ MEDIA_URL }}/jquery/jquery-ui-1.7.1.custom.min.js"></script>
+		<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/master.js"></script>
+				
+		{% block javascript %}{% endblock %}
+
+		<script type="text/javascript"><!--
+            google_ad_client = "pub-7210120729072266"; google_ad_slot = "7862372281"; google_ad_width = 468; google_ad_height = 60;
+            //-->
+        </script>
+        <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type="text/javascript">
+            try {
+                var pageTracker = _gat._getTracker("UA-501381-5");
+                pageTracker._trackPageview();
+            } catch(err) {}
+        </script>
+
+		
+		<title>{% block title %}{% endblock %} - Flightlogg.in - Electronic Pilot Logbook</title>
+	</head>
+	
+	<body>
+	<div id="holder">
+	
+		<div id="header">
+			<div id="logo_box">
+			    <a href="/"><img id="logo" src="{{ MEDIA_URL }}/logo/new-logo.png" alt="FlightLogg.in' Logo" /></a>
+			</div>
+			
+			<div id="advert_box">	
+			    <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+			</div>
+		</div>
+
+        <div id="main_content">
+            {% block no_canvas %}
+
+            <div id="canvas">
+                {% block canvas %}{% endblock %}
+            </div>
+            
+            {% endblock %}
+		</div>
+
+		<div id="footer">
+            <a href="{% url news %}">News</a> - <a href="{% url help %}">Help</a> - <a href="http://forums.flightlogg.in" target="_blank">Forums</a>
+            <br>&copy; 2009 FlightLogg.in'
+		</div>
+		
+	</div>
+	</body>
+</html>
