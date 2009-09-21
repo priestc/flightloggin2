@@ -17,13 +17,29 @@ class Route(models.Model):
     
     p2p = models.BooleanField()
     
-    def _rerender(self):
+    @classmethod
+    def render_custom(cls, user):
+        qs = cls.objects.filter(flight__user=user).filter(routebase__custom__isnull=False)
+        for r in qs:
+            r.rerender()
+        return qs.count()
+    
+    @classmethod
+    def rerender_all(cls):
+        qs = cls.objects.all()
+        for r in qs:
+            r.rerender()
+        return qs.count()
+    
+    def rerender(self):
         
         fancy = []
         simple = []
         kml = []
         
         for rb in self.routebase_set.all().order_by('sequence'):
+            
+            dest = rb.destination()
             
             if rb.airport:
                 class_ = "found_airport"
@@ -34,8 +50,10 @@ class Route(models.Model):
             else:
                 class_ = "not_found"
                 
-            kml.append("%s,%s" % (rb.destination().location.x, rb.destination().location.y), )
-            fancy.append("<span title=\"%s\" class=\"%s\">%s</span>" % (rb.destination().title_display(), class_, rb.destination().identifier ), )
+            if dest.location:
+                kml.append("%s,%s" % (dest.location.x, dest.location.y), )
+                
+            fancy.append("<span title=\"%s\" class=\"%s\">%s</span>" % (dest.title_display(), class_, dest.identifier ), )
             simple.append(rb.destination().identifier)
             
         print "-".join(fancy)

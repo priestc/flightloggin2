@@ -20,6 +20,8 @@ def places(request, shared, display_user):
             custom = form.save()
             custom.location = point
             custom.save()
+            from route.models import Route
+            Route.render_custom(display_user)   #re-render routes with custom places
             
         else:
             assert False, form.errors
@@ -33,6 +35,9 @@ def places(request, shared, display_user):
             custom = form.save()
             custom.location = point
             custom.save()
+            from route.models import Route
+            Route.render_custom(display_user)   #re-render routes with custom places
+            
         else:
             ERROR = 'true'
             
