@@ -17,3 +17,6 @@ td.date input                       {width: 100px}
 
 textarea                            {width: 250px; height: 100px}
 #popup td:nth-child(2)              {text-align: left}
+
+.help_text                          {color: gray; font-style: italic; font-size: x-small}
+

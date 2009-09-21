@@ -15,7 +15,7 @@ class NonFlightForm(ModelForm):
 ##############################
         
 class CustomForm(ModelForm):
-    coordinates = forms.CharField(widget=forms.TextInput(), required=False)
+    coordinates = forms.CharField(widget=forms.TextInput(), required=False, help_text="In decimal format (e.g.: 34.322631,-84.481517)")
     
     class Meta:
         model = get_model('airport', 'Custom')
