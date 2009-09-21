@@ -6,7 +6,6 @@ def css_path(request):
     except:
         style = 1
         
-    CSS_URL = settings.MEDIA_URL + "/css/style" + str(style)
-        
-        
+    CSS_URL = settings.MEDIA_URL + "/css/style-" + str(style)
+         
     return {"CSS_URL": CSS_URL}

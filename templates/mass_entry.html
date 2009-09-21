@@ -2,7 +2,6 @@
 {% block mass-sel %}nav_selected{% endblock%}
 
 {% block javascript %}
-	<script type="text/javascript" src="{{ MEDIA_URL }}javascripts/{{ title|lower }}.js"></script>
 	<script>
 	    $(document).ready(function() {
 	        $(".vDateField").datepicker({							// add the date pickers
@@ -15,7 +14,7 @@
 	        }).addClass("embed");
 	    });
 	</script>
-	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/mass_entry.css">
+	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/mass_entry.css">
 {% endblock %}
 
 
