@@ -6,19 +6,44 @@ from django.db.models import Q
 from annoying.functions import get_object_or_None
 from share.middleware import share
 
-#from logbook.models import Flight
 from airport.models import Airport, Custom, Navaid
 
 class Route(models.Model):
-    
-    #flight = models.OneToOneField(Flight, related_name="route")
 
     fancy_rendered =  models.TextField(blank=True, null=True)
     fallback_string = models.TextField(blank=True, null=True)
     simple_rendered = models.TextField(blank=True, null=True)
     kml_rendered =    models.TextField(blank=True, null=True)
     
-    p2p =             models.BooleanField()
+    p2p = models.BooleanField()
+    
+    def _rerender(self):
+        
+        fancy = []
+        simple = []
+        kml = []
+        
+        for rb in self.routebase_set.all().order_by('sequence'):
+            
+            if rb.airport:
+                class_ = "found_airport"
+            elif rb.navaid:
+                class_ = "found_navaid"
+            elif rb.custom:
+                class_ = "found_custom"
+            else:
+                class_ = "not_found"
+                
+            kml.append("%s,%s" % (rb.destination().location.x, rb.destination().location.y), )
+            fancy.append("<span title=\"%s\" class=\"%s\">%s</span>" % (rb.destination().title_display(), class_, rb.destination().identifier ), )
+            simple.append(rb.destination().identifier)
+            
+        print "-".join(fancy)
+        
+        self.kml_rendered = "\n".join(kml)
+        self.fancy_rendered = "-".join(fancy)
+        self.simple_rendered = "-".join(simple)
+        self.save()
     
     def __unicode__(self):
         return self.simple_rendered
