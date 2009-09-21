@@ -28,8 +28,9 @@ function fill_in_flight(dom_id) {
 	$("#id_dual_r").val(trim($("#tr" + id + " td.dual_r_col").text()));
 	$("#id_dual_g").val(trim($("#tr" + id + " td.dual_g_col").text()));
 	$("#id_xc").val(trim($("#tr" + id + " td.xc_col").text()));
-	$("#id_night").val(trim($("#tr" + id + " td.night_col").text()));	
-	$("#id_app").val(trim($("#tr" + id + " td.app_col").text()));
+	$("#id_night").val(trim($("#tr" + id + " td.night_col").text()));
+		
+	$("#id_app").val(trim($("#tr" + id + " td.app_col").text().replace(/[^0-9]/g, '')));
 	
 	if($("#tr" + id + " td.app_col:contains(T)").text())
 		$("#id_tracking").attr("checked", "checked");

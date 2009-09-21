@@ -190,6 +190,9 @@ def normalize(string):
     string = string.replace("LOCAL", " ")
     string = string.replace(" TO ", " ")
     return re.sub(r'[^A-Z0-9!@]+', ' ', string).strip()
+
+###########################################################
+########################################################### 
     
 def find_navaid(ident, i, last_rb=None):
     """Searches the database for the navaid object according to ident. if it finds a match,
