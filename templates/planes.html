@@ -145,12 +145,12 @@
 		<div id="new_plane_buttons">
 			<input type="submit" name="submit" value="Create New Plane" id="submit_new_flight" />
 		</div>
-
+        {% if not shared %}
 		<div id="edit_plane_buttons">
 			<input type="submit" name="submit" value="Submit Changes" id="submit_edit_flight" />
 			<input type="submit" name="submit" value="Delete Plane" id="submit_delete_flight" />
 		</div>
-
+        {% endif %}
 	</form>
 </div>
 

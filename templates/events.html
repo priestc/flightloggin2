@@ -103,12 +103,12 @@
     	<div id="new_buttons">
 			<input type="submit" name="submit" value="Create New Event" />
 		</div>
-
+        {% if not shared %}
 		<div id="edit_buttons">
 			<input type="submit" name="submit" value="Submit Changes" />
 			<input type="submit" name="submit" value="Delete Event" />
 		</div>
-
+        {% endif %}
 	</form>
 </div>
 

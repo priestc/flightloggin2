@@ -141,12 +141,13 @@
 				<div id="new_buttons">
 					<input type="submit" name="submit" value="Submit New Flight" id="submit_new_flight"/>
 			    </div>
-
+                {% if not shared %}
 				<div id="edit_buttons">
 					<input type="submit" name="submit" value="Edit Flight" id="submit_edit_flight"/>
 					<input type="submit" name="submit" value="Delete Flight" id="delete_flight" disabled="disabled"/>
 					<input type="checkbox"><input type="checkbox"><input type="checkbox">
 			    </div>
+			    {% endif %}
 			</div>
 	</form>
 </div>

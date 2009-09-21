@@ -114,12 +114,12 @@
     	<div id="new_buttons">
 			<input type="submit" name="submit" value="Create New Place" />
 		</div>
-
+        {% if not shared %}
 		<div id="edit_buttons">
 			<input type="submit" name="submit" value="Submit Changes" />
 			<input type="submit" name="submit" value="Delete Place" />
 		</div>
-
+        {% endif %}
 	</form>
 </div>
 
