@@ -18,20 +18,20 @@ class Route(models.Model):
     p2p = models.BooleanField()
     
     @classmethod
-    def render_custom(cls, user):
+    def nder_custom(cls, user):
         qs = cls.objects.filter(flight__user=user).filter(routebase__custom__isnull=False)
         for r in qs:
-            r.rerender()
+            r.render()
         return qs.count()
     
     @classmethod
-    def rerender_all(cls):
+    def render_all(cls):
         qs = cls.objects.all()
         for r in qs:
-            r.rerender()
+            r.render()
         return qs.count()
     
-    def rerender(self):
+    def render(self):
         
         fancy = []
         simple = []
@@ -50,7 +50,7 @@ class Route(models.Model):
             else:
                 class_ = "not_found"
                 
-            if dest.location:
+            if dest.location:       #dont write a kml if no coordinates are known
                 kml.append("%s,%s" % (dest.location.x, dest.location.y), )
                 
             fancy.append("<span title=\"%s\" class=\"%s\">%s</span>" % (dest.title_display(), class_, dest.identifier ), )
@@ -143,17 +143,17 @@ def create_route_from_string(ostring):
         
             first_rb = len(routebases) == 0  # is this the first routebase? if so don't try to guess which navaid is closest to the previous point
             if not first_rb and not routebases[i-1].unknown:
-                routebase, rendered = find_navaid(ident, i, last_rb=routebases[i-1])
+                routebase = find_navaid(ident, i, last_rb=routebases[i-1])
             else:
-                routebase, rendered = find_navaid(ident, i)
+                routebase = find_navaid(ident, i)
         
         elif ident[0] == "!":  #must be custom
         
-            routebase, rendered = find_custom(ident, i)
+            routebase = find_custom(ident, i)
             
         else:                  #must be an airport
             
-            routebase, rendered = find_airport(ident, i, p2p=p2p)
+            routebase = find_airport(ident, i, p2p=p2p)
             
         ########################################################################
        
@@ -161,32 +161,21 @@ def create_route_from_string(ostring):
             routebase = RouteBase(unknown=ident, sequence=i)
             
             if not ident[0] == "@":                                         # not a unidentified navaid, assume a landing
-                p2p.append(unknown)
-                
-            rendered['fancy'] = "<span class='not_found'>%s</span>" % ident
-            rendered['simple'] = ident
-            rendered['kml'] = ""            # unknown airports get ignored when mapping routes
-            
+                p2p.append(unknown)            
         
         routebases.append(routebase)
-        fancy_rendered.append(rendered["fancy"])
-        simple_rendered.append(rendered["simple"])
-        kml_rendered.append(rendered["kml"])
-    
-    fancy_rendered = "-".join(fancy_rendered)
-    simple_rendered = "-".join(simple_rendered)
-    kml_rendered = "\n".join(kml_rendered)
            
     is_p2p = len(set(p2p)) > 1
-    route = Route(fancy_rendered=fancy_rendered, kml_rendered=kml_rendered, simple_rendered=simple_rendered, fallback_string=ostring, p2p=is_p2p)
+    route = Route(fallback_string=ostring, p2p=is_p2p)
     route.save()
     
     print("made new route")
     
     for routebase in routebases:
         routebase.route = route
-        routebase.save()    
-    
+        routebase.save()
+        
+    route.render()
     return route
 
 ###########################################################
@@ -204,8 +193,7 @@ def normalize(string):
     
 def find_navaid(ident, i, last_rb=None):
     """Searches the database for the navaid object according to ident. if it finds a match,
-       it renders the 'kml', 'fancy', and 'simple' strings, and then creates and returns the
-       routebase object"""
+       returns the routebase object"""
            
     if last_rb:     #done just assume no
         navaid = Navaid.objects.filter(identifier=ident[1:])
@@ -219,16 +207,10 @@ def find_navaid(ident, i, last_rb=None):
     else:
         navaid = get_object_or_None(Navaid, identifier=ident[1:])       # no previous routebases, 
                                                                         # dont other with the extra queries trying to find the nearest based on the last
-        
     if navaid:
-        routebase = RouteBase(navaid=navaid, sequence=i)
-        fancy = "<span class='found_navaid' title='%s'>%s</span>" % (navaid.title_display(), navaid.line_display(), )
-        simple = "@" + navaid.identifier
-        kml = "%f,%f,0" % (navaid.location.x, navaid.location.y)
-    else:
-        routebase=None; fancy=None; simple=None; kml=None
-        
-    return routebase, {"fancy": fancy, "simple": simple, "kml": kml}
+        return RouteBase(navaid=navaid, sequence=i)
+    
+    return None
     
 ##############################################################################################
 
@@ -239,18 +221,9 @@ def find_custom(ident, i):
     user = share.get_display_user()
     custom,created = Custom.objects.get_or_create(user=user, identifier=ident[1:])
 
-   
     routebase = RouteBase(custom=custom, sequence=i)
-    fancy = "<span class='found_custom' title='%s'>%s</span>" % (custom.title_display(), custom.line_display(), )
-    simple = "!" + custom.identifier
-    
-    if custom.location:
-        kml = "%f,%f,0" % (custom.location.x, custom.location.y)
-    else:
-        kml = ""
 
-        
-    return routebase, {"fancy": fancy, "simple": simple, "kml": kml}
+    return routebase
 
 ##############################################################################################
 
@@ -261,14 +234,9 @@ def find_airport(ident, i, p2p):
         airport = get_object_or_None(Airport, identifier="K" + ident)
 
     if airport:
-        routebase = RouteBase(airport=airport, sequence=i)
         p2p.append(airport.pk)          # a landing airport, eligable for p2p testing
+        return RouteBase(airport=airport, sequence=i)
 
-        fancy = "<span class='found_airport' title='%s'>%s</span>" % (airport.title_display(), airport.line_display(), )
-        simple = airport.identifier
-        kml = "%f,%f,0" % (airport.location.x, airport.location.y)
-    else:
-        routebase=None; fancy=None; simple=None; kml=None
-        
-    return routebase, {"fancy": fancy, "simple": simple, "kml": kml}
+    return None
+    
 
