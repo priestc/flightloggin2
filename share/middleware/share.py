@@ -24,7 +24,7 @@ def get_user():
 
 def is_shared(request, username):
     
-    if request.user.is_staff:
+    if request.user.is_staff and not request.user.username == username:
         return True, get_object_or_None(User, username=username)
     
     if request.user.is_authenticated():
