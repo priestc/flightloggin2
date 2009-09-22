@@ -11,7 +11,14 @@ class LatestFlights(Feed):
     def get_object(self, bits):
         if len(bits) != 1:
             raise ObjectDoesNotExist
-        return User.objects.get(username=bits[0])
+        user=User.objects.get(username=bits[0])
+        try:
+            if not user.get_profile().share:
+                raise ObjectDoesNotExist 
+        except:
+            raise ObjectDoesNotExist
+        
+        return user
 
     def title(self, user):
         return "%s's FlightLogg.in' Logbook feed" % user.username
