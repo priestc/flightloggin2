@@ -50,11 +50,16 @@ class Route(models.Model):
             else:
                 class_ = "not_found"
                 
-            if dest.location:       #dont write a kml if no coordinates are known
+            if getattr(dest, "location", None):       #dont write a kml if no coordinates are known
                 kml.append("%s,%s" % (dest.location.x, dest.location.y), )
                 
-            fancy.append("<span title=\"%s\" class=\"%s\">%s</span>" % (dest.title_display(), class_, dest.identifier ), )
-            simple.append(rb.destination().identifier)
+            if not rb.unknown:   
+                fancy.append("<span title=\"%s\" class=\"%s\">%s</span>" % (dest.title_display(), class_, dest.identifier ), )
+                simple.append(rb.destination().identifier)
+            else:
+                fancy.append("<span title=\"%s\" class=\"%s\">%s</span>" % (dest, class_, dest ), )
+                simple.append(rb.destination())
+            
             
         print "-".join(fancy)
         
