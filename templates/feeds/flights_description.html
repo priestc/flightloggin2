@@ -1,6 +1,10 @@
 {% if obj.remarks %}<i>{{obj.remarks}}</i><br><br>{% endif %}
 
-{{obj.plane.tailnumber}}
+{% ifequal obj.plane.tailnumber "UNKNOWN" %}
+    Unknown aircraft
+{% else %}
+    {{obj.plane.tailnumber}}
+{% endifeqal %}
 {% if obj.plane.fancy_name %}
 ({{obj.plane.fancy_name}})
 {% endif %}<br><br>
