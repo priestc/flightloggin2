@@ -57,6 +57,7 @@ class Navaid(Location):
 class Custom(Location):
     user = models.ForeignKey(User)
     type = models.IntegerField(choices=AIRPORT_TYPE, null=True, blank=True)
+    description = models.TextField(blank=True)
     
     def location_summary(self):
         if self.name:

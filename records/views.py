@@ -59,6 +59,7 @@ def events(request, shared, display_user):
     try:
         profile = display_user.get_profile()
     except:
+        from profile.models import Profile
         profile = Profile()
         
     if profile.date_format:
