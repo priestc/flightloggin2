@@ -44,6 +44,19 @@ class Plane(models.Model):
             
         return u"%s%s" % (self.tailnumber, disp)
     
+    def fancy_name(self):
+        ret = []
+        if self.manufacturer:
+            ret.append(self.manufacturer)
+            
+        if self.model:
+            ret.append(self.model)
+            
+        elif self.type:
+            ret.append(self.type)
+            
+        return " ".join(ret)
+    
     def get_tags(self):
         return Tag.objects.get_for_object(self)
         
