@@ -6,7 +6,16 @@ from forms import *
 
 @render_to("records.html")
 def records(request, shared, display_user):
-    records,c = Records.objects.get_or_create(user=display_user)
+      
+    if request.POST:
+        text = request.POST.get('records', None)
+        records=Records(user=display_user, text=text)
+        records.save()
+        saved=True
+    
+    else:
+        records,c = Records.objects.get_or_create(user=display_user)
+            
     return locals()
 
 @render_to("places.html")
