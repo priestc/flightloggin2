@@ -84,7 +84,7 @@ class Route(models.Model):
                 p.lng = rb.destination().location.y
                 l.append(p)
             except AttributeError:
-                pass                # .location will fail if the point is unknown. Just skit this point if this happens
+                pass                # .location will fail if the point is unknown. Just skip this point if this happens
             
         return l
 
@@ -94,8 +94,8 @@ class RouteBase(models.Model):
     route =    models.ForeignKey(Route)
     
     airport =  models.ForeignKey(Airport, null=True, blank=True)
-    navaid  =  models.ForeignKey(Navaid, null=True, blank=True)
-    custom =   models.ForeignKey(Custom, null=True, blank=True, related_name="custom")
+    navaid =   models.ForeignKey(Navaid, null=True, blank=True)
+    custom =   models.ForeignKey(Custom, null=True, blank=True)
     
     unknown =  models.CharField(max_length=30, blank=True, null=True)
     

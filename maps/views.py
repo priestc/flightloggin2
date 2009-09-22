@@ -21,10 +21,13 @@ def airports_kml(request, shared, display_user, type_):
     if type_=="all":
         title = "All Airports"
         points = Airport.objects.filter(routebase__route__flight__user=display_user).distinct()
-        
+        custom = Custom.objects.filter(routebase__route__flight__user=display_user).distinct()
         folders = []
         if points:
             folders.append(AirportFolder(name="All Airports", qs=points))
+            
+        if custom:
+            folders.append(AirportFolder(name="All Places", qs=custom))
     
     kml = get_template('base.kml').render(Context({"point_folders": folders, "title": title} )).encode('utf-8')
     
