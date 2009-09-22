@@ -1,7 +1,9 @@
 {% extends "base-no-nav.html" %}
 
 {% block title %}Help{% endblock %}
-
+{% block javascript %}
+<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/help.css">
+{% endblock %}
 {% block canvas %}
 
 <h2>How do I do the route for my flights?</h2>
@@ -10,5 +12,25 @@ You are supposed to put the identifier of each you flew to. All navaids should b
 Bradley VORTAC, you would log the flight as "LGA-@BDL-BOS". If you landed some place which isn't an airport with as assigned identifier, you should make up a identifier and prefix
 it with a '!'. For instance lets say you took off from Lubbock, Texas (KLBB), and landed in a field at your friend Bob's ranch. The ranch doesn't have an identifier, so you would
 log it as "LBB-!BOB". You then can go to the "Places" section of the site and edit the "BOB" identifier to give it coordinates and a name.
+
+<h2>How do I get time to show up in the Complex and High Performance columns? I don't see any Complex or High Performance fields in the new flight popup window...</h2>
+
+You need to make sure the plane you logged the flight in is tagged as "Complex" and "High Performance". Since it's impossible to log Complex time in a plane that is not complex,
+and any time logged in a complex plane is complex time, it makes sense to control complex time based on the plane the flight is logged in. This is also how the site keeps track of 
+Seaplane, Multi-Engine, Jet, Turbine and the rest of the columns you see that don't have a corresponding entry field in the new flight window. Make sure you surround all two word
+tags with quitation marks (""), or else it will treat both words as seperate tags.
+
+<h2>What other plane tags do special things?</h2>
+
+The following are special tags: "Complex", "High Performance" (or just "HP"), "Turbine", "Jet", "Type Rating", and "Currency". The last two control which types are kept track of
+in the currency section. If you want to keep track of your Boeing 757 landings (as per the FAA regs), just tag one of your Boeing 757's as "Type Rating". Now all 757's (even the ones
+no specifically tagged) will be used to determine your 90 day landing currency for the Boeing 757. If you want to keep track of your C-172 landings, you can either tag a C-172 as
+"Type Rating" (which doesn't really make sense), or you can log it as "currency", which has the same effect. Also, none of the special tags are case sensitive.
+
+<h2>How is Point to Point time calculated?</h2>
+
+It analyzes the route to determines if it depicts a flight that lands at a point other than the origin airport. If it does, it takes the time in the total column, and uses it in the P2P
+column. All Navaids are ignored, and all custom identifiers are assumed to be depicting a landing. If you logged a flight as "KLGA-@BDL-KLGA" it will determine this flight to be a local
+flight, and therefore not eligable as P2P time. On the other hand, "KLGA-BDL-KLGA" will be considered a P2P flight, because it assumes a landing at BDL.
 
 {% endblock %}
