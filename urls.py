@@ -8,6 +8,12 @@ urlpatterns = patterns('django.contrib.auth',
     url(r'^logout/$','views.logout', {"next_page": "/"}, name="logout"),
 )
 
+from feeds.classes import LatestFlights
+feeds = {
+    'flights': LatestFlights,
+}
+
+
 ## all views get `shared` and `display_user` variables from `username` via ShareMiddleware
 
 urlpatterns += patterns('',
@@ -16,6 +22,8 @@ urlpatterns += patterns('',
     url(r'^news.html$',                                            "main.views.news",         name="news"),
     url(r'^faq.html$',                                             "main.views.faq",          name="faq"),
     url(r'^help.html$',                                            "main.views.help",         name="help"),
+    
+    (r'^feeds/(?P<url>.*)/$',                                      "django.contrib.syndication.views.feed", {'feed_dict': feeds}),
     
     (r'^admin/doc/',                                               include('django.contrib.admindocs.urls')),
     (r'^admin/',                                                   include(admin.site.urls)),
@@ -58,7 +66,10 @@ urlpatterns += patterns('',
     
     (r'^site-media/(?P<path>.*)$','django.views.static.serve',     {'document_root': '/home/chris/Websites/flightloggin/media', 'show_indexes': True}),
 
-    (r'^\w+/$',                                                    "django.views.generic.simple.redirect_to", {'url': 'logbook.html'}   ), 
+    (r'^\w+/$',                                                    "django.views.generic.simple.redirect_to", {'url': 'logbook.html'}   ),
+    
+    
+
 )
 
 

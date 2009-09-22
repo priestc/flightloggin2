@@ -55,6 +55,10 @@ class Flight(models.Model):
     def __unicode__(self):
         return u"%s -- %s" % (self.date, self.remarks)
     
+    @models.permalink
+    def get_absolute_url(self):
+        return ('logbook', [self.user.username])
+    
     def save(self, *args, **kwargs):
         from share.middleware import share
         if not self.user:
