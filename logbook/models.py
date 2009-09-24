@@ -240,6 +240,25 @@ class Flight(models.Model):
             return to_minutes(ret)
             
         return ret
+    
+    @classmethod
+    def make_pagination(cls, qs, profile, page):
+        from django.core.paginator import Paginator, InvalidPage, EmptyPage
+        
+        
+        paginator = Paginator(qs, per_page=profile.per_page)		#define how many flights will be on each page
+
+        try:
+            page_of_flights = paginator.page(page)
+
+        except (EmptyPage, InvalidPage):
+            page_of_flights = paginator.page(paginator.num_pages)		#if that page is invalid, use the last page
+            page = paginator.num_pages
+
+        b = range(1, page)[-5:]                        # before block
+        a = range(page, paginator.num_pages+1)[1:6]    # after block
+        
+        return b, a, page_of_flights
 
 ######################################################################################################
 
@@ -295,17 +314,26 @@ class Columns(models.Model):
     person =    models.BooleanField(FIELD_TITLES[FIELDS[38]], default=True)
     remarks =   models.BooleanField(FIELD_TITLES[FIELDS[39]], default=True)
 
-    def as_list(self):
+    def all_list(self):
         ret=[]
         for column in FIELDS:
             if getattr(self, column):
                 ret.append(column)
-
+        return ret
+    
+    def prefix_len(self):
+        return 3
+    
+    def agg_list(self):
+        ret=[]
+        for column in ALL_AGG_FIELDS:
+            if getattr(self, column):
+                ret.append(column)
         return ret
 
     def header_row(self):
         ret = []
-        for column in self.as_list():
+        for column in self.all_list():
             if FIELD_ABBV.get(column):
                 name = FIELD_ABBV[column]
             else:

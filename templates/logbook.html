@@ -9,7 +9,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        page_totals({{totals_columns|safe}})
+        page_totals({{agg_columns|safe}})  // pass in the names of each column that needs a page total
     });
     
     date_button = "{{MEDIA_URL}}/images/calendar.gif"
@@ -36,7 +36,7 @@
 	<table id="logbook_table" summary="logbook table">
 		<thead>
 			<tr>
-                    {{ columns.header_row|safe }}
+                    {{ header_row|safe }}
 			</tr>
 		</thead>
 		
@@ -45,7 +45,7 @@
 				<td colspan="3" id="page_total_title">Page Totals:
 				</td>
     
-                   {% for column in totals_columns %}
+                   {% for column in agg_columns %}
                         <td id="{{ column }}_pt" class="{{column}} pt"></td>
                     {% endfor %}
 

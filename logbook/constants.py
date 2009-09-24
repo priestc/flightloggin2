@@ -1,10 +1,17 @@
 
 
-FIELDS = [               #all columns, needs to be in column display order -- ORDER MATTERS
+FIELDS = [               #all columns, needs to be in column display order -- ORDER REALLY MATTERS
           "date", "plane", "reg", "f_route", "s_route", "r_route", "total_s", "total","sim",
           "pic", "sic", "solo", "dual_r", "dual_g", "xc", "act_inst", "sim_inst", "day", "night", "night_l", "day_l", "app",
           "p2p", "multi", "m_pic", "sea", "sea_pic", "mes", "mes_pic", "turbine", "t_pic", "mt", "mt_pic", "complex",
           "hp", "tail", "jet", "jet_pic", "person", "remarks"
+          ]
+          
+ALL_AGG_FIELDS = [      #all agg-able columns, needs to be in column display order -- ORDER REALLY MATTERS
+          "total_s", "total", "sim",
+          "pic", "sic", "solo", "dual_r", "dual_g", "xc", "act_inst", "sim_inst", "day", "night", "night_l", "day_l", "app",
+          "p2p", "multi", "m_pic", "sea", "sea_pic", "mes", "mes_pic", "turbine", "t_pic", "mt", "mt_pic", "complex",
+          "hp", "tail", "jet", "jet_pic",
           ]
           
 BACKUP_FIELDS = [       #fields included in the backup file

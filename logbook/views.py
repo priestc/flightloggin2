@@ -1,4 +1,3 @@
-from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
@@ -13,116 +12,105 @@ from models import Flight, Columns
 from forms import *
 from constants import *
 from totals import column_total_by_list
-from profile.models import Profile
+from profile.models import Profile, AutoButton
 
-######################################################################################################################################
+################################################################################
 
 @render_to("logbook.html")
 def logbook(request, shared, display_user, page=0):
 
     form = FlightForm()
     
-    if request.POST:
-        if request.POST.get('submit', "") == "Submit New Flight":
-            flight = Flight(user=display_user)
-            form = FlightForm(request.POST, instance=flight)
-            
-            if form.is_valid():
-                form.save()
-                return HttpResponseRedirect('/' + display_user.username + '/logbook.html')
-            else:
-                ERROR = "'new'"
-                
-        elif request.POST.get('submit', "") == "Edit Flight":
-            flight_id = request.POST['id']
-            flight = Flight(pk=flight_id, user=display_user)
-            
-            form = FlightForm(request.POST, instance=flight)
-            
-            if form.is_valid():
-                form.save()
-                return HttpResponseRedirect('/' + display_user.username + '/logbook.html')
-            else:
-                ERROR = "'edit'"
-                
-        elif request.POST.get('submit', "") == "Delete Flight":
-            flight_id = request.POST['id']
-            Flight(pk=flight_id, user=display_user).delete()           
-            ERROR = 'false'
-                
-    ##############################################################
-    try:
-        profile = display_user.get_profile()
-    except:
-        profile = Profile()
+    if request.POST.get('submit', "") == "Submit New Flight":
+        flight = Flight(user=display_user)
+        form = FlightForm(request.POST, instance=flight)
         
-    class LogbookRow(list):
-        date = ""
-        plane = ""
-        pk = 0
-
-    logbook = []
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/' + display_user.username +
+                '/logbook.html')
+        else:
+            ERROR = "'new'"
+            
+    elif request.POST.get('submit', "") == "Edit Flight":
+        flight_id = request.POST['id']
+        flight = Flight(pk=flight_id, user=display_user)
+        
+        form = FlightForm(request.POST, instance=flight)
+        
+        if form.is_valid():
+            form.save()
+            print request.path
+            return HttpResponseRedirect(request.path)
+        else:
+            ERROR = "'edit'"
+            
+    elif request.POST.get('submit', "") == "Delete Flight":
+        flight_id = request.POST['id']
+        Flight(pk=flight_id, user=display_user).delete()           
+        ERROR = 'false'
+        return HttpResponseRedirect(request.path)
+        
+    ##############################################################
     
-    if profile.minutes:
-        format = "minutes"
-    else:
-        format = "decimal"
-    
-    if profile.date_format:
-        date_format = profile.date_format
-    else:
-        date_format = "Y-m-d"
-    
-    from profile.models import AutoButton   
     auto_button,c = AutoButton.objects.get_or_create(user=display_user)
+    cols, c = Columns.objects.get_or_create(user=display_user)
+    
+    header_row = cols.header_row()
+    
+    columns = cols.all_list()                 # all activated column headers
+    prefix_len = cols.prefix_len()      # number of non-agg headers before total
+    agg_columns = cols.agg_list()             # all headers that get agg'd
+    
+    ##############################################################
     
     all_flights = Flight.objects.user(display_user)
-    flights = all_flights.select_related()
-    columns, created = Columns.objects.get_or_create(user=display_user)
-
-    if flights:
     
-        ###################
+    if request.GET.get('c', "") == "t":
+        flights = all_flights.custom_logbook_view(request.GET).select_related()
+    else:
+        flights = all_flights.select_related()
+                
+    ##############################################################
+    
+    profile = Profile.get_for_user(display_user)
+    num_format = profile.get_format()
+    date_format = profile.get_date_format()
+    
+    overall_totals = column_total_by_list(all_flights, agg_columns, format=num_format)
+    
+    if not flights:
+        return locals()
+    
+    before_block, after_block, page_of_flights = \
+                   Flight.make_pagination(flights, profile, int(page))
+
+    #####################
+    
+    from utils import LogbookRow
+    
+    logbook = []
+    for flight in page_of_flights.object_list:
+        row = LogbookRow()
         
-        page = int(page)
+        row.pk = flight.pk
+        row.plane = flight.plane
 
-        paginator = Paginator(flights, per_page=profile.per_page, orphans=5)		#define how many flights will be on each page
+        for column in columns:
+            if column == "date":
+                row.date = flight.column("date")
+                
+            elif column == "remarks":
+                row.remarks = flight.column("remarks")
+                row.events = flight.column("events")
+            else:
+                row.append( {"system": column, "disp": flight.column(column, num_format), "title": FIELD_TITLES[column]} )
 
-        try:
-            page_of_flights = paginator.page(page)				#get the pertinent page
+        logbook.append(row)
 
-        except (EmptyPage, InvalidPage):
-            page_of_flights = paginator.page(paginator.num_pages)		#if that page is invalid, use the last page
-            page = paginator.num_pages
-
-        do_pagination = paginator.num_pages > 1					#if there is only one pago, do not make the pagination table
-
-        before_block = range(1, page)[-5:]                       # a list from 1 to the page number, limited to the 5th from last to the end
-        after_block = range(page, paginator.num_pages+1)[1:6]    # a list from the current page to the last page, limited to the first 5 items
-	    
-	    #####################
-        
-        for flight in page_of_flights.object_list:
-            row = LogbookRow()
-            
-            row.pk = flight.pk
-            row.plane = flight.plane
-
-            for column in columns.as_list():
-                if column == "date":
-                    row.date = flight.column("date")
-                    
-                elif column == "remarks":
-                    row.remarks = flight.column("remarks")
-                    row.events = flight.column("events")
-                else:
-                    row.append( {"system": column, "disp": flight.column(column, format), "title": FIELD_TITLES[column]} )
-
-            logbook.append(row)
-
-        del flight, row, column
-        
-    overall_totals, totals_columns = column_total_by_list(all_flights, columns.as_list(), format=format)
+    del flight, row, column
+    
+    do_pagination = page_of_flights.paginator.num_pages > 1
     
     return locals()
 

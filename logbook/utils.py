@@ -4,6 +4,11 @@ from django.db.models import Sum
 
 from constants import *
 
+class LogbookRow(list):
+    date = ""
+    plane = ""
+    pk = 0
+
 def to_minutes(flt):
     value = str(flt + 0.0)
     h,d = value.split(".")
@@ -293,7 +298,9 @@ class QuerySet(QuerySet):
         
         elif cn in DB_FIELDS:
             return getattr(self, cn)()
-               
+       
+    def custom_logbook_view(self, get):
+        return self.pic()        
 
 
 

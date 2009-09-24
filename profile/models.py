@@ -27,6 +27,25 @@ class Profile(models.Model):
 
     class Meta:
         pass
+    
+    @classmethod
+    def get_for_user(cls, user):
+        try:
+            return cls.objects.get(user=user)
+        except:
+            return cls()
+        
+    def get_format(self):
+        if self.minutes:
+            return "minutes"
+        else:
+            return "decimal"
+        
+    def get_date_format(self):
+        if self.date_format:
+            return self.date_format
+        else:
+            return "Y-m-d"
 
 class Entries(models.Model):
     user =          models.ForeignKey(User, blank=False, primary_key=True)
