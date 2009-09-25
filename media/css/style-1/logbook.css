@@ -26,3 +26,13 @@ span.found_navaid                            {color: SeaGreen;        text-decor
 span.found_custom                            {color: Navy;            text-decoration: underline}
                                               
 span.not_found                               {color: gray}
+
+/* custom view box */
+
+#filter_box           {width: 100%; background: yellow; border: 1px solid black; }
+#filter_box td        {width: 33%; text-align: center; border: 1px solid black; padding: 3px}
+
+.date_align           {width: 4em; border: 1px solid red; float: left}
+.date_picker          {width: 7em; margin-top: 2px}
+.small_picker         {width: 2em}
+

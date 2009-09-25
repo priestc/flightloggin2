@@ -255,7 +255,7 @@ class QuerySet(QuerySet):
                 else:
                     return self.filter_by_column(cn)._db_agg('pic')
             except AttributeError:
-                return 0.0
+                return 0.0      # return 0 if queryset is empty
             
         return "??"
     
@@ -300,7 +300,7 @@ class QuerySet(QuerySet):
             return getattr(self, cn)()
        
     def custom_logbook_view(self, get):
-        return self.pic()        
+        return self      
 
 
 

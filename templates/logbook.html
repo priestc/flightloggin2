@@ -31,6 +31,39 @@
 	<input id="new_flight_button" type="button" value="New Flight" />
 	{% endif %}
 	
+	<table id="filter_box">
+	    <tr>
+	        <td>
+	            Start: <input type="text" name="start_date" class="date_picker"><br>
+	            End:   <input type="text" name="end_date" class="date_picker">
+	            
+	            <br><br>
+	            
+	            last <input type="text" name="last_flights" class="small_picker"> Flights
+	        </td>
+	        
+	        <td>
+	            Flights that contain the following:
+	            
+	        </td>
+	        
+	        <td>
+	            By Plane Tags<br>
+	            <input type="text" name="plane_tags">
+	            
+	            <br><br>
+	            
+	            By Plane Type<br>
+	            <select name="plane_type">{{type_options}}</select>
+	            
+	            <br><br>
+	            
+	            By Tailnumber<br>
+	            <input type="text" name="plane_tailnumber">
+	        </td>
+	    </tr>
+	</table>
+	
 	{% include "pagination_table.html" %}
 		
 	<table id="logbook_table" summary="logbook table">
