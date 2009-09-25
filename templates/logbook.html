@@ -31,38 +31,6 @@
 	<input id="new_flight_button" type="button" value="New Flight" />
 	{% endif %}
 	
-	<table id="filter_box">
-	    <tr>
-	        <td>
-	            Start: <input type="text" name="start_date" class="date_picker"><br>
-	            End:   <input type="text" name="end_date" class="date_picker">
-	            
-	            <br><br>
-	            
-	            last <input type="text" name="last_flights" class="small_picker"> Flights
-	        </td>
-	        
-	        <td>
-	            {{ constants.filter_fields }}
-	        </td>
-	        
-	        <td>
-	            By Plane Tags<br>
-	            <input type="text" name="plane_tags">
-	            
-	            <br><br>
-	            
-	            By Plane Type<br>
-	            <select name="plane_type">{{type_options}}</select>
-	            
-	            <br><br>
-	            
-	            By Tailnumber<br>
-	            <input type="text" name="plane_tailnumber">
-	        </td>
-	    </tr>
-	</table>
-	
 	{% include "pagination_table.html" %}
 		
 	<table id="logbook_table" summary="logbook table">
@@ -133,6 +101,47 @@
 	</table>
 	
 	{% include "pagination_table.html" %}
+	
+	<h2>Custom View:</h2>
+	
+	<table id="filter_box">
+	    <tr>
+	        <td>
+	            Start: {{ ff.start_date }}<br>
+	            End:   {{ ff.end_date }}
+	            
+	            <br><br>
+	            
+	            last <input type="text" name="last_flights" class="small_picker"> Flights
+	        </td>
+	        
+	        <td>
+	            {{ ff.render_table }}
+	        </td>
+	        
+	        <td>
+	            By Plane Tags<br>
+	            {{ ff.tags }}
+	            
+	            <br><br>
+	            
+	            By Plane Type<br>
+                {{ ff.type_ }}
+	            
+	            <br><br>
+	            
+	            By Tailnumber<br>
+	            {{ ff.tailnumber }}
+	            
+	            <br><br>
+	            
+	            By Category/Class<br>
+	            {{ ff.cat_class }}
+	            
+	        </td>
+	    </tr>
+	</table>
+	
 {% include "new_flight.html" %}
 {% endblock %}
 

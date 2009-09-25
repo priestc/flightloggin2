@@ -141,12 +141,12 @@ FIELD_ABBV = {
     "m_pic": "Multi PIC",
     "sea": "Sea",
     "sea_pic": "Sea PIC",
-    "mes": "Multi Sea",
-    "mes_pic": "Multi Sea PIC",
+    "mes": "ME Sea",
+    "mes_pic": "ME Sea PIC",
     "turbine": "Turbine",
     "t_pic": "Turbine PIC",
-    "mt": "Multi Turbine",
-    "mt_pic": "Multi Turbine PIC",
+    "mt": "ME Turbine",
+    "mt_pic": "ME Turbine PIC",
     "person": "Person",
     "remarks": "Remarks",
     "complex": "Complex",
@@ -181,24 +181,6 @@ def all_agg_checkbox(prefix=""):
     
     return mark_safe(t.return_html())
 
-def filter_fields():
-    out=[]
-    
-    def option(field):
-        return """<select class="op_select" name="op_f_%s"><option value="eq">=</option><option value="gt">&gt;</option><option value="lt">&lt;</option></select>""" % field
-    
-    for field in GRAPH_FIELDS:
-        out.append(
-            "<label for=\"f_num_%s\">%s</label>" % (field, FIELD_ABBV[field]) +
-            option(field) + 
-            "<input class=\"small_picker\" type=\"text\" id=\"f_num_%s\"><br>" % field )
-            
-            
-            
-    return mark_safe("\n".join(out))
-    
-    
-    
     
     
     

@@ -114,8 +114,16 @@ def logbook(request, shared, display_user, page=0):
     
     do_pagination = page_of_flights.paginator.num_pages > 1
     
-    import constants
-    filter_fields = constants.filter_fields()
+    #import constants
+    #filter_fields = constants.filter_fields()
+    
+    from custom_filter import make_filter_form
+    
+    FilterForm = make_filter_form()
+    
+    ff = FilterForm()
+    
+    ff.render_table()
     
     return locals()
 

@@ -29,13 +29,16 @@ span.not_found                               {color: gray}
 
 /* custom view box */
 
-#filter_box           {width: 100%; background: yellow; border: 1px solid black; }
-#filter_box td        {width: 33%; text-align: center; border: 1px solid black; padding: 3px}
-#filter_box td:nth-child(2) {text-align: right}
+#filter_box           {width: 100%; background: #CCFFCC; border: 1px solid black; }
+#filter_box td        {width: 20%; text-align: center; border: 0px solid black; padding: 3px}
+#filter_box td:nth-child(2) {width: 60%}
 
 .date_align           {width: 4em; border: 1px solid red; float: left}
-.date_picker          {width: 7em; margin-top: 2px}
+.date_picker          {width: 8em; margin-top: 2px}
 .small_picker         {width: 3em}
 
 .op_select            {width: 5em; margin: 3px}
+
+#filter_table         {margin: 0 auto 0 auto}
+#filter_table td      {width: 25% !important; text-align: right}
 
