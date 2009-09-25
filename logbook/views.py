@@ -58,9 +58,9 @@ def logbook(request, shared, display_user, page=0):
     
     header_row = cols.header_row()
     
-    columns = cols.all_list()                 # all activated column headers
-    prefix_len = cols.prefix_len()      # number of non-agg headers before total
-    agg_columns = cols.agg_list()             # all headers that get agg'd
+    columns = cols.all_list()          # all activated column headers
+    prefix_len = cols.prefix_len()     # number of non-agg headers before total
+    agg_columns = cols.agg_list()      # all headers that get agg'd
     
     ##############################################################
     
@@ -72,6 +72,8 @@ def logbook(request, shared, display_user, page=0):
         flights = all_flights.select_related()
                 
     ##############################################################
+    
+    from constants import FIELDS    #for the custom filter
     
     profile = Profile.get_for_user(display_user)
     num_format = profile.get_format()
@@ -111,6 +113,9 @@ def logbook(request, shared, display_user, page=0):
     del flight, row, column
     
     do_pagination = page_of_flights.paginator.num_pages > 1
+    
+    import constants
+    filter_fields = constants.filter_fields()
     
     return locals()
 

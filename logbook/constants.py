@@ -174,26 +174,44 @@ def all_agg_checkbox(prefix=""):
         out.append("<input type=\"checkbox\" id=\"%s\"><label for=\"%s\">%s</label>" % (field, field, FIELD_TITLES[field]))
         
     t = PyHtmlTable(0,5, {"class": "checktable"})
-    for i,item in enumerate(out[:5]):
-        t.setCellcontents(0,i,item)
-        
-    for i,item in enumerate(out[5:10]):
-        t.setCellcontents(1,i,item)
-        
-    for i,item in enumerate(out[10:15]):
-        t.setCellcontents(2,i,item)
-        
-    for i,item in enumerate(out[15:20]):
-        t.setCellcontents(3,i,item)
     
-    for i,item in enumerate(out[20:25]):
-        t.setCellcontents(4,i,item)
-    
-    for i,item in enumerate(out[25:30]):
-        t.setCellcontents(5,i,item)
-        
-    for i,item in enumerate(out[30:35]):
-        t.setCellcontents(6,i,item)
+    for row in range(0,6):
+        for i,item in enumerate(out[(row*5):(row*5)+5]):
+            t.setCellcontents(row,i,item)
     
     return mark_safe(t.return_html())
+
+def filter_fields():
+    out=[]
+    
+    def option(field):
+        return """<select class="op_select" name="op_f_%s"><option value="eq">=</option><option value="gt">&gt;</option><option value="lt">&lt;</option></select>""" % field
+    
+    for field in GRAPH_FIELDS:
+        out.append(
+            "<label for=\"f_num_%s\">%s</label>" % (field, FIELD_ABBV[field]) +
+            option(field) + 
+            "<input class=\"small_picker\" type=\"text\" id=\"f_num_%s\"><br>" % field )
+            
+            
+            
+    return mark_safe("\n".join(out))
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
         
