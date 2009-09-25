@@ -103,7 +103,7 @@
 	{% include "pagination_table.html" %}
 	
 	<h2>Custom View:</h2>
-	
+	<form method="get" action="{% url logbook display_user %}">
 	<table id="filter_box">
 	    <tr>
 	        <td>
@@ -140,8 +140,13 @@
 	            
 	        </td>
 	    </tr>
+	    <tr>
+	        <td><input type="submit"></td>
+	    </tr>
+	    
 	</table>
 	
+	</form>
 {% include "new_flight.html" %}
 {% endblock %}
 

@@ -119,7 +119,7 @@ def logbook(request, shared, display_user, page=0):
     
     from custom_filter import make_filter_form
     
-    FilterForm = make_filter_form()
+    FilterForm = make_filter_form(display_user)
     
     ff = FilterForm()
     

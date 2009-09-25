@@ -32,12 +32,20 @@ def render_table(self):
     return print_table(out, 4)
         
                 
-def make_filter_form():
+def make_filter_form(user):
+    from plane.models import Plane
+    
+    types = Plane.objects.filter(user=user).values_list('type', flat=True).distinct()
+    tt = [(i,t) for i,t in enumerate(types)]
+    
+    cat_classes = Plane.objects.filter(user=user).values_list('cat_class', flat=True).order_by().distinct()
+    cc = [(i,t) for i,t in enumerate(cat_classes)]
+    
     operators = ( (0, "="), (1, ">"), (2, "<") )
     fields = {'tags': forms.CharField(),
               'tailnumber': forms.CharField(),
-              'type_': forms.ChoiceField(choices=[(0,'C-152'),(1,'C-172')]),
-              'cat_class': forms.ChoiceField(choices=[(0,'SEL'),(1,'MEL')]),
+              'type_': forms.ChoiceField(choices=tt),
+              'cat_class': forms.ChoiceField(choices=cc),
               'start_date': forms.DateField(widget=forms.TextInput(attrs={"class": "date_picker"})),
               'end_date': forms.DateField(widget=forms.TextInput(attrs={"class": "date_picker"})),
              }
