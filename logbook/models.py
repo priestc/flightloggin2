@@ -155,6 +155,32 @@ class Flight(models.Model):
           
         elif cn == "app":
            return self.disp_app()
+       
+        ######################################
+        
+        elif cn == "fo":
+           if self.pic and not self.dual_r:
+               return self.person
+           else:
+               return ""
+               
+        elif cn == "captain":
+           if self.sic:
+               return self.person
+           else:
+               return ""
+           
+        elif cn == "student":
+           if self.dual_g:
+               return self.person
+           else:
+               return ""
+       
+        elif cn == "instructor":
+           if self.dual_r:
+               return self.person
+           else:
+               return ""
            
         ######################################
         
@@ -312,7 +338,13 @@ class Columns(models.Model):
     jet_pic =   models.BooleanField(FIELD_TITLES[FIELDS[37]], default=False)
     
     person =    models.BooleanField(FIELD_TITLES[FIELDS[38]], default=True)
-    remarks =   models.BooleanField(FIELD_TITLES[FIELDS[39]], default=True)
+    
+    instructor= models.BooleanField(FIELD_TITLES[FIELDS[39]], default=False)
+    student =   models.BooleanField(FIELD_TITLES[FIELDS[40]], default=False)
+    fo =        models.BooleanField(FIELD_TITLES[FIELDS[41]], default=False)
+    captain =   models.BooleanField(FIELD_TITLES[FIELDS[42]], default=False)   
+    
+    remarks =   models.BooleanField(FIELD_TITLES[FIELDS[43]], default=True)
 
     def all_list(self):
         ret=[]
