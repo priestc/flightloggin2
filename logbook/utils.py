@@ -299,8 +299,14 @@ class QuerySet(QuerySet):
         elif cn in DB_FIELDS:
             return getattr(self, cn)()
        
-    def custom_logbook_view(self, get):
-        return self      
+    def custom_logbook_view(self, GET):
+        
+        #from logbook.forms import 
+        
+        for f,v in GET.iteritems():
+            print f,v
+        
+        return self
 
 
 

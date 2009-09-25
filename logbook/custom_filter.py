@@ -46,8 +46,8 @@ def make_filter_form(user):
               'tailnumber': forms.CharField(),
               'type_': forms.ChoiceField(choices=tt),
               'cat_class': forms.ChoiceField(choices=cc),
-              'start_date': forms.DateField(widget=forms.TextInput(attrs={"class": "date_picker"})),
-              'end_date': forms.DateField(widget=forms.TextInput(attrs={"class": "date_picker"})),
+              'start_date': forms.DateField(label="Start", widget=forms.TextInput(attrs={"class": "date_picker"})),
+              'end_date': forms.DateField(label="End", widget=forms.TextInput(attrs={"class": "date_picker"})),
              }
              
     for field in GRAPH_FIELDS:
