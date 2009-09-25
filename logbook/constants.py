@@ -14,6 +14,10 @@ ALL_AGG_FIELDS = [      #all agg-able columns, needs to be in column display ord
           "hp", "tail", "jet", "jet_pic",
           ]
           
+PREFIX_FIELDS = [
+          "date", "plane", "reg", "f_route", "s_route", "r_route"
+          ]
+          
 BACKUP_FIELDS = [       #fields included in the backup file
           'r_date', 'reg', 'rr_route',
           'total', 'sim', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',

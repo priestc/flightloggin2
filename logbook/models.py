@@ -322,7 +322,13 @@ class Columns(models.Model):
         return ret
     
     def prefix_len(self):
-        return 3
+        """number of prefix fields that are turned on"""
+        cols = 0
+        for column in PREFIX_FIELDS:
+            if getattr(self, column):
+                cols += 1
+    
+        return cols
     
     def agg_list(self):
         ret=[]
