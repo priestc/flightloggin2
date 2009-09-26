@@ -64,10 +64,17 @@ def logbook(request, shared, display_user, page=0):
     
     ##############################################################
     
+    from custom_filter import make_filter_form
+    FilterForm = make_filter_form(display_user)
+    ff = FilterForm()
+    
+    ##############################################################
+    
     all_flights = Flight.objects.user(display_user)
     
     if request.GET.get('c', "") == "t":
-        flights = all_flights.custom_logbook_view(request.GET).select_related()
+        ff=FilterForm(request.GET)
+        flights = all_flights.custom_logbook_view(ff).select_related()
     else:
         flights = all_flights.select_related()
                 
@@ -113,17 +120,6 @@ def logbook(request, shared, display_user, page=0):
     del flight, row, column
     
     do_pagination = page_of_flights.paginator.num_pages > 1
-    
-    #import constants
-    #filter_fields = constants.filter_fields()
-    
-    from custom_filter import make_filter_form
-    
-    FilterForm = make_filter_form(display_user)
-    
-    ff = FilterForm()
-    
-    ff.render_table()
     
     return locals()
 

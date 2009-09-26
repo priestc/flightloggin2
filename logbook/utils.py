@@ -299,14 +299,10 @@ class QuerySet(QuerySet):
         elif cn in DB_FIELDS:
             return getattr(self, cn)()
        
-    def custom_logbook_view(self, GET):
-        
-        #from logbook.forms import 
-        
-        for f,v in GET.iteritems():
-            print f,v
-        
-        return self
+    def custom_logbook_view(self, ff):
+        assert ff.is_valid(), ff.errors
+        kwargs = ff.make_filter_kwargs()
+        return self.filter(**kwargs)
 
 
 
