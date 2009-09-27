@@ -1,7 +1,7 @@
 from django.utils.safestring import mark_safe
 from django import forms
 
-from constants import GRAPH_FIELDS, FIELD_ABBV
+from constants import FILTER_FIELDS, FIELD_ABBV
    
 def html_table(data, row_length):
     out = '<table id="filter_table">'
@@ -23,13 +23,13 @@ def html_table(data, row_length):
     
 def render_table(self):  #will be attached to the class in the function
     out=[]
-    for field in GRAPH_FIELDS:
+    for field in FILTER_FIELDS:
         num_field = str(self[field])
         op = str(self[field + "_op"])
         title = getattr(self, 'fields')[field].label
         out.append( title + op + num_field )
 
-    return html_table(out, 4)
+    return html_table(out, 3)
 
 
 
@@ -98,9 +98,12 @@ def make_filter_form(user):
               'plane__cat_class': forms.ChoiceField(choices=cc, required=False),
               'start_date': forms.DateField(label="Start", required=False, widget=forms.TextInput(attrs={"class": "date_picker"})),
               'end_date': forms.DateField(label="End", required=False, widget=forms.TextInput(attrs={"class": "date_picker"})),
+              'last_flights': forms.IntegerField(required=False, widget=forms.TextInput(attrs={"class": "small_picker"})),
+              'person': forms.CharField(required=False),
+              'remarks': forms.CharField(required=False),
              }
              
-    for field in GRAPH_FIELDS:
+    for field in FILTER_FIELDS:
         d = {field: forms.FloatField(label=FIELD_ABBV[field], required=False, widget=forms.TextInput(attrs={"class": "small_picker"})), 
              field + "_op": forms.ChoiceField(choices=operators, required=False, widget=forms.Select(attrs={"class": "op_select"})),
              }

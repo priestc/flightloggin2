@@ -104,57 +104,7 @@
 	</table>
 	
 	{% include "pagination_table.html" %}
-	
-	<form method="get" action="{% url logbook display_user %}">
-	<table id="filter_box">
-	    <tr>
-	        <td>
-	            <table>
-	                <tr><td>
-	                <input type="hidden" name="c" value="t">
-	                {{ ff.start_date.label_tag }}</td><td>{{ ff.start_date }}
-	                </td></r>
-	                
-	                <tr><td>
-	                {{ ff.end_date.label_tag }}</td><td>{{ ff.end_date }}
-	                </td></tr>
-	                
-	                <tr><td colspan="2">
-	                Last {{ ff.last_flights }} Flights
-	                </td></tr>
-	            </table>
-	        </td>
-	        
-	        <td>
-	            {{ ff.render_table }}
-	        </td>
-	        
-	        <td>
-	            By Plane Tags<br>
-	            {{ ff.plane__tags__icontains }}
-	            
-	            <br><br>
-	            
-	            By Plane Type<br>
-                {{ ff.plane__type }}
-	            
-	            <br><br>
-	            
-	            By Tailnumber<br>
-	            {{ ff.plane__tailnumber }}
-	            
-	            <br><br>
-	            
-	            By Category/Class<br>
-	            {{ ff.plane__cat_class }}
-	            
-	        </td>
-	    </tr>
-	    <tr>
-	        <td colspan="3"><input type="submit"></td>
-	    </tr>
-	    
-	</table>
+	{% include "filter_table.html" %}
 	
 	</form>
 {% include "new_flight.html" %}

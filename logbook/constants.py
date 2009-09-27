@@ -26,6 +26,11 @@ DB_FIELDS = [           #fields that have a database column all to themseves
           'person', 'remarks'
           ]
           
+FILTER_FIELDS = [   # for the logbook filter box, all fields that are numerical, but arent based on plane category
+          'total', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
+          'p2p',
+          ]
+          
 GRAPH_FIELDS = [        #fields to be fair game for the graphing functions and the sigs
           'total', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
           'p2p', 'day',

@@ -40,5 +40,7 @@ span.not_found                               {color: gray}
 .op_select            {width: 5em; margin: 3px}
 
 #filter_table         {margin: 0 auto 0 auto}
-#filter_table td      {width: 25% !important; text-align: right}
+#filter_table td      {width: 33% !important; text-align: right}
+
+.alignment_table      {margin: 0 auto 0 auto}
 
