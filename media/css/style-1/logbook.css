@@ -29,7 +29,7 @@ span.not_found                               {color: gray}
 
 /* custom view box */
 
-#filter_box           {width: 100%; background: #CCFFCC; border: 1px solid black; }
+#filter_box           {width: 100%; background: #CCFFCC; border: 1px solid black; margin-top: 10px}
 #filter_box td        {width: 20%; text-align: center; border: 0px solid black; padding: 3px}
 #filter_box td:nth-child(2) {width: 60%}
 

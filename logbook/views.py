@@ -75,6 +75,7 @@ def logbook(request, shared, display_user, page=0):
     if request.GET.get('c', "") == "t":
         ff=FilterForm(request.GET)
         flights = all_flights.custom_logbook_view(ff).select_related()
+        all_flights = flights
         get= "?" + request.get_full_path().split('?')[1]
         total_sign = "Filter"
     else:
