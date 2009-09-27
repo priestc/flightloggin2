@@ -117,122 +117,50 @@ class QuerySet(QuerySet):
     
     ## by flight time
     
-    def total(self, f=True, eq=False, lt=None, gt=None):
+    def by_flight_time(self, col, f=True, eq=False, lt=None, gt=None):
         if lt:
-            kwarg={"total__lt": lt}
+            kwarg={col + "__lt": lt}
         elif gt:
-            kwarg={"total__gt": gt}
+            kwarg={col + "__gt": gt}
         elif eq:
-            kwarg={"total": eq}
+            kwarg={col: eq}
         else:
-            kwarg={"total__gt": 0}
-            
+            kwarg={col + "__gt": 0}
+      
         if not f:
             return self.exclude(**kwarg)
-        return self.filter(**kwarg)
+        return self.filter(**kwarg)  
+        
     
-    def pic(self, f=True, eq=False, lt=None, gt=None):
-        if lt:
-            kwarg={"pic__lt": lt}
-        elif gt:
-            kwarg={"pic__gt": gt}
-        else:
-            kwarg={"pic__gt": 0}
-            
-        if not f:
-            return self.exclude(**kwarg)
-        return self.filter(**kwarg)
+    def total(self, *args, **kwargs):
+        return self.by_flight_time('total', *args, **kwargs)
     
-    def sic(self, f=True, eq=False, lt=None, gt=None):
-        if lt:
-            kwarg={"sic__lt": lt}
-        elif gt:
-            kwarg={"sic__gt": gt}
-        elif eq:
-            kwarg={"sic": eq}
-        else:
-            kwarg={"sic__gt": 0}
-            
-        if not f:
-            return self.exclude(**kwarg)
-        return self.filter(**kwarg)
+    def pic(self, *args, **kwargs):
+        return self.by_flight_time('pic', *args, **kwargs)
     
-    def solo(self, f=True, eq=False, lt=None, gt=None):
-        if lt:
-            kwarg={"solo__lt": lt}
-        elif gt:
-            kwarg={"solo__gt": gt}
-        else:
-            kwarg={"solo__gt": 0}
-        if not f:
-            return self.exclude(**kwarg)
-        return self.filter(**kwarg)
+    def sic(self, *args, **kwargs):
+        return self.by_flight_time('sic', *args, **kwargs)
     
-    def dual_g(self, f=True, eq=False, lt=None, gt=None):
-        if lt:
-            kwarg={"dual_g__lt": lt}
-        elif gt:
-            kwarg={"dual_g__gt": gt}
-        else:
-            kwarg={"dual_g__gt": 0}
-        if not f:
-            return self.exclude(**kwarg)
-        return self.filter(**kwarg)
+    def solo(self, *args, **kwargs):
+        return self.by_flight_time('solo', *args, **kwargs)
     
-    def dual_r(self, f=True, eq=False, lt=None, gt=None):
-        if lt:
-            kwarg={"dual_r__lt": lt}
-        elif gt:
-            kwarg={"dual_r__gt": gt}
-        else:
-            kwarg={"dual_r__gt": 0}
-        if not f:
-            return self.exclude(**kwarg)
-        return self.filter(**kwarg)
+    def dual_g(self, *args, **kwargs):
+        return self.by_flight_time('dual_g', *args, **kwargs)
     
-    def act_inst(self, f=True, eq=False, lt=None, gt=None):
-        if lt:
-            kwarg={"act_inst__lt": lt}
-        elif gt:
-            kwarg={"act_inst__gt": gt}
-        else:
-            kwarg={"act_inst__gt": 0}
-        if not f:
-            return self.exclude(**kwarg)
-        return self.filter(**kwarg)
+    def dual_r(self, *args, **kwargs):
+        return self.by_flight_time('dual_r', *args, **kwargs)
     
-    def sim_inst(self, f=True, eq=False, lt=None, gt=None):
-        if lt:
-            kwarg={"sim_inst__lt": lt}
-        elif gt:
-            kwarg={"sim_inst__gt": gt}
-        else:
-            kwarg={"sim_inst__gt": 0}
-        if not f:
-            return self.exclude(**kwarg)
-        return self.filter(**kwarg)
+    def act_inst(self, *args, **kwargs):
+        return self.by_flight_time('act_inst', *args, **kwargs)
     
-    def night(self, f=True, eq=False, lt=None, gt=None):
-        if lt:
-            kwarg={"night__lt": lt}
-        elif gt:
-            kwarg={"night__gt": gt}
-        else:
-            kwarg={"night__gt": 0}
-        if not f:
-            return self.exclude(**kwarg)
-        return self.filter(**kwarg)
+    def sim_inst(self, *args, **kwargs):
+        return self.by_flight_time('sim_inst', *args, **kwargs)
     
-    def xc(self, f=True, eq=False, lt=None, gt=None):
-        if lt:
-            kwarg={"xc__lt": lt}
-        elif gt:
-            kwarg={"xc__gt": gt}
-        else:
-            kwarg={"xc__gt": 0}
-        if not f:
-            return self.exclude(**kwarg)
-        return self.filter(**kwarg)
+    def night(self, *args, **kwargs):
+        return self.by_flight_time('night', *args, **kwargs)
+    
+    def xc(self, *args, **kwargs):
+        return self.by_flight_time('xc', *args, **kwargs)
     
     ####################################################
     
@@ -356,7 +284,7 @@ class QuerySet(QuerySet):
             return self.multi().pic(*args, **kwargs)
         
         elif cn == 'sea' or cn == 'sea_pic':
-            return self.sea().pic(*args, **kwargs)
+            return self.sea().by_flight_time('pic', *args, **kwargs)
         
         elif cn == 'mes' or cn == 'mes_pic':
             return self.multi().sea().pic(*args, **kwargs)
