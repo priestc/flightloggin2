@@ -31,39 +31,38 @@ def render_table(self):  #will be attached to the class in the function
 
     return html_table(out, 4)
 
-def make_filter_kwargs(self):
+
+
+
+
+
+
+
+
+
+
+def make_filter_kwargs(self, qs):
     """all field ops will be in the form "pic_op"
     """
-    
-    kwargs = {}
+
     for field,val in self.cleaned_data.iteritems():
 
         if not field.endswith("_op") and val:
             filter_ = val
             op = self.cleaned_data.get(field + "_op", "")
             
+            print field,val,op
+            
             if op == "0":
-                op = ""
+                qs = qs.filter_by_column(field, eq=val)
                 
             elif op == "1":
-                op= "__gt"
+                qs = qs.filter_by_column(field, gt=val)
                 
             elif op == "2":
-                op = "__lt"
-                
-            kwargs.update({field + op: val})
-        
-    
-    print kwargs
-    #kwargs = {"pic__gt": 2}
-    
-    return kwargs
-    
-    
-    
-    
-    
-    
+                qs = qs.filter_by_column(field, lt=val)
+
+    return qs
     
     
 def make_filter_form(user):

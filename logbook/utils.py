@@ -96,7 +96,7 @@ class QuerySet(QuerySet):
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
-      
+
     def sim(self, f=True):
         kwarg={"plane__cat_class__gte": 15}
         if not f:
@@ -117,44 +117,135 @@ class QuerySet(QuerySet):
     
     ## by flight time
     
-    def pic(self, f=True):
-        kwarg={"pic__gt": 0}
+    def total(self, f=True, eq=False, lt=None, gt=None):
+        if lt:
+            kwarg={"total__lt": lt}
+        elif gt:
+            kwarg={"total__gt": gt}
+        elif eq:
+            kwarg={"total": eq}
+        else:
+            kwarg={"total__gt": 0}
+            
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
     
-    def sic(self, f=True):
-        kwarg={"sic__gt": 0}
+    def pic(self, f=True, eq=False, lt=None, gt=None):
+        if lt:
+            kwarg={"pic__lt": lt}
+        elif gt:
+            kwarg={"pic__gt": gt}
+        else:
+            kwarg={"pic__gt": 0}
+            
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
     
-    def solo(self, f=True):
-        kwarg={"solo__gt": 0}
+    def sic(self, f=True, eq=False, lt=None, gt=None):
+        if lt:
+            kwarg={"sic__lt": lt}
+        elif gt:
+            kwarg={"sic__gt": gt}
+        elif eq:
+            kwarg={"sic": eq}
+        else:
+            kwarg={"sic__gt": 0}
+            
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
     
-    def dual_g(self, f=True):
-        kwarg={"dual_g__gt": 0}
+    def solo(self, f=True, eq=False, lt=None, gt=None):
+        if lt:
+            kwarg={"solo__lt": lt}
+        elif gt:
+            kwarg={"solo__gt": gt}
+        else:
+            kwarg={"solo__gt": 0}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
     
-    def dual_r(self, f=True):
-        kwarg={"dual_r__gt": 0}
+    def dual_g(self, f=True, eq=False, lt=None, gt=None):
+        if lt:
+            kwarg={"dual_g__lt": lt}
+        elif gt:
+            kwarg={"dual_g__gt": gt}
+        else:
+            kwarg={"dual_g__gt": 0}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
     
-    def act_inst(self, f=True):
-        kwarg={"act_inst__gt": 0}
+    def dual_r(self, f=True, eq=False, lt=None, gt=None):
+        if lt:
+            kwarg={"dual_r__lt": lt}
+        elif gt:
+            kwarg={"dual_r__gt": gt}
+        else:
+            kwarg={"dual_r__gt": 0}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
     
-    def sim_inst(self, f=True):
-        kwarg={"sim_inst__gt": 0}
+    def act_inst(self, f=True, eq=False, lt=None, gt=None):
+        if lt:
+            kwarg={"act_inst__lt": lt}
+        elif gt:
+            kwarg={"act_inst__gt": gt}
+        else:
+            kwarg={"act_inst__gt": 0}
+        if not f:
+            return self.exclude(**kwarg)
+        return self.filter(**kwarg)
+    
+    def sim_inst(self, f=True, eq=False, lt=None, gt=None):
+        if lt:
+            kwarg={"sim_inst__lt": lt}
+        elif gt:
+            kwarg={"sim_inst__gt": gt}
+        else:
+            kwarg={"sim_inst__gt": 0}
+        if not f:
+            return self.exclude(**kwarg)
+        return self.filter(**kwarg)
+    
+    def night(self, f=True, eq=False, lt=None, gt=None):
+        if lt:
+            kwarg={"night__lt": lt}
+        elif gt:
+            kwarg={"night__gt": gt}
+        else:
+            kwarg={"night__gt": 0}
+        if not f:
+            return self.exclude(**kwarg)
+        return self.filter(**kwarg)
+    
+    def xc(self, f=True, eq=False, lt=None, gt=None):
+        if lt:
+            kwarg={"xc__lt": lt}
+        elif gt:
+            kwarg={"xc__gt": gt}
+        else:
+            kwarg={"xc__gt": 0}
+        if not f:
+            return self.exclude(**kwarg)
+        return self.filter(**kwarg)
+    
+    ####################################################
+    
+    def all_night(self, f=True, lt=None, gt=None):
+        from django.db.models import F
+        kwarg={"night": F('total')}
+        if not f:
+            return self.exclude(**kwarg)
+        return self.filter(**kwarg)
+    
+    def all_pic(self, f=True, lt=None, gt=None):
+        from django.db.models import F
+        kwarg={"pic": F('total')}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
@@ -164,32 +255,6 @@ class QuerySet(QuerySet):
         if not f:
             return self.exclude(q)
         return self.filter(q)
-    
-    def night(self, f=True):
-        kwarg={"night__gt": 0}
-        if not f:
-            return self.exclude(**kwarg)
-        return self.filter(**kwarg)
-    
-    def all_night(self, f=True):
-        from django.db.models import F
-        kwarg={"night": F('total')}
-        if not f:
-            return self.exclude(**kwarg)
-        return self.filter(**kwarg)
-    
-    def all_pic(self, f=True):
-        from django.db.models import F
-        kwarg={"pic": F('total')}
-        if not f:
-            return self.exclude(**kwarg)
-        return self.filter(**kwarg)
-    
-    def xc(self, f=True):
-        kwarg={"xc__gt": 0}
-        if not f:
-            return self.exclude(**kwarg)
-        return self.filter(**kwarg)
     
     ## by route
     
@@ -259,50 +324,51 @@ class QuerySet(QuerySet):
             
         return "??"
     
-    def filter_by_column(self, cn):
+    def filter_by_column(self, cn, *args, **kwargs):
         """filters the queryset to only include flights
            where the conditions exist"""
            
         if cn == "total_s" or cn == "total":
-            return self.sim(False)
+            return self.sim(False).total(*args, **kwargs)
             
         elif cn == "sim":
-            return self.sim()
+            return self.sim().total(*args, **kwargs)
             
         elif cn == 'complex':
-            return self.complex_()
+            return self.complex_().total(*args, **kwargs)
             
         elif cn == 'hp':
-            return self.hp()
+            return self.hp().total(*args, **kwargs)
         
         elif cn == 'p2p':
-            return self.p2p()
+            return self.p2p().total(*args, **kwargs)
 
         elif cn == 'turbine' or cn == 't_pic':
-            return self.turbine()
+            return self.turbine().total(*args, **kwargs)
         
         elif cn == 'mt' or cn == 'mt_pic':
-            return self.multi().turbine()
+            return self.multi().turbine().pic(*args, **kwargs)
             
         elif cn == 'multi':
-            return self.multi()
+            return self.multi().total(*args, **kwargs)
         
         elif cn == 'm_pic':
-            return self.multi().pic()
+            return self.multi().pic(*args, **kwargs)
         
         elif cn == 'sea' or cn == 'sea_pic':
-            return self.sea()
+            return self.sea().pic(*args, **kwargs)
         
         elif cn == 'mes' or cn == 'mes_pic':
-            return self.multi().sea()
+            return self.multi().sea().pic(*args, **kwargs)
         
         elif cn in DB_FIELDS:
-            return getattr(self, cn)()
+            return getattr(self, cn)(*args, **kwargs)
        
     def custom_logbook_view(self, ff):
         assert ff.is_valid(), ff.errors
-        kwargs = ff.make_filter_kwargs()
-        return self.filter(**kwargs)
+        
+        self = ff.make_filter_kwargs(self)
+        return self
 
 
 
