@@ -105,7 +105,6 @@
 	
 	{% include "pagination_table.html" %}
 	
-	<h2>Custom View:</h2>
 	<form method="get" action="{% url logbook display_user %}">
 	<table id="filter_box">
 	    <tr>
@@ -132,7 +131,7 @@
 	        
 	        <td>
 	            By Plane Tags<br>
-	            {{ ff.plane__tags }}
+	            {{ ff.plane__tags__icontains }}
 	            
 	            <br><br>
 	            

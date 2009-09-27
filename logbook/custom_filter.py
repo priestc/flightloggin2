@@ -49,31 +49,33 @@ def make_filter_kwargs(self, qs):
                     self.cleaned_data.iteritems())
     
     for field,val in fields:
-
-        if field == "start_date" and val:                        # date filters
-            kwargs = {"date__gte": val}
-            qs = qs.filter(**kwargs)
         
-        elif field == "end_date" and val:
-            kwargs = {"date__lte": val}
-            qs = qs.filter(**kwargs)
-        
-        elif field.startswith("plane__") and val:       # all plane filters
-            kwargs = {field: val}
-            qs = qs.filter(**kwargs)
-        
-        elif val:                               # all time filters
-            filter_ = val
-            op = self.cleaned_data.get(field + "_op", "")
+        if val:
+            if field == "start_date":                        # date filters
+                kwargs = {"date__gte": val}
+                qs = qs.filter(**kwargs)
             
-            if op == "0":
-                qs = qs.filter_by_column(field, eq=val)
+            elif field == "end_date":
+                kwargs = {"date__lte": val}
+                qs = qs.filter(**kwargs)
+            
+            elif field.startswith("plane__"):       # all plane filters
+                kwargs = {field: val}
+                qs = qs.filter(**kwargs)
+            
+            elif val>=0:                               # all time filters
+                filter_ = val
+                print field,val
+                op = self.cleaned_data.get(field + "_op", "")
                 
-            elif op == "1":
-                qs = qs.filter_by_column(field, gt=val)
-                
-            elif op == "2":
-                qs = qs.filter_by_column(field, lt=val)
+                if op == "0":
+                    qs = qs.filter_by_column(field, eq=val)
+                    
+                elif op == "1":
+                    qs = qs.filter_by_column(field, gt=val)
+                    
+                elif op == "2":
+                    qs = qs.filter_by_column(field, lt=val)
 
     return qs
     
@@ -90,7 +92,7 @@ def make_filter_form(user):
     cc.insert(0, ("", "-------"))
     
     operators = ( (0, "="), (1, ">"), (2, "<") )
-    fields = {'plane__tags': forms.CharField(required=False),
+    fields = {'plane__tags__icontains': forms.CharField(required=False),
               'plane__tailnumber': forms.CharField(required=False),
               'plane__type': forms.ChoiceField(choices=tt, required=False),
               'plane__cat_class': forms.ChoiceField(choices=cc, required=False),
