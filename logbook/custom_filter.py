@@ -31,18 +31,8 @@ def render_table(self):  #will be attached to the class in the function
 
     return html_table(out, 3)
 
-
-
-
-
-
-
-
-
-
-
 def make_filter_kwargs(self, qs):
-    """all field ops will be in the form "pic_op"
+    """filter the queryset based on the form values
     """
     
     fields = filter(lambda x: not x[0].endswith("_op"),
@@ -51,7 +41,7 @@ def make_filter_kwargs(self, qs):
     for field,val in fields:
         
         if val:
-            if field == "start_date":                        # date filters
+            if field == "start_date":               # date filters
                 kwargs = {"date__gte": val}
                 qs = qs.filter(**kwargs)
             
@@ -63,7 +53,7 @@ def make_filter_kwargs(self, qs):
                 kwargs = {field: val}
                 qs = qs.filter(**kwargs)
             
-            elif val>=0:                               # all time filters
+            elif val>=0:                            # all time filters
                 filter_ = val
                 print field,val
                 op = self.cleaned_data.get(field + "_op", "")
@@ -87,8 +77,10 @@ def make_filter_form(user):
     tt = [(t,t) for i,t in enumerate(types)]
     tt.insert(0, ("", "-------"))
     
+    from plane.constants import CATEGORY_CLASSES
+    CATEGORY_CLASSES = dict(CATEGORY_CLASSES)
     cat_classes = Plane.objects.filter(user=user).values_list('cat_class', flat=True).order_by().distinct()
-    cc = [(t,t) for i,t in enumerate(cat_classes)]
+    cc = [(t,CATEGORY_CLASSES[t]) for i,t in enumerate(cat_classes)]
     cc.insert(0, ("", "-------"))
     
     operators = ( (0, "="), (1, ">"), (2, "<") )
