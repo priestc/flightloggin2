@@ -44,14 +44,27 @@ def render_table(self):  #will be attached to the class in the function
 def make_filter_kwargs(self, qs):
     """all field ops will be in the form "pic_op"
     """
+    
+    fields = filter(lambda x: not x[0].endswith("_op"),
+                    self.cleaned_data.iteritems())
+    
+    for field,val in fields:
 
-    for field,val in self.cleaned_data.iteritems():
-
-        if not field.endswith("_op") and val:
+        if field == "start_date" and val:                        # date filters
+            kwargs = {"date__gte": val}
+            qs = qs.filter(**kwargs)
+        
+        elif field == "end_date" and val:
+            kwargs = {"date__lte": val}
+            qs = qs.filter(**kwargs)
+        
+        elif field.startswith("plane__") and val:       # all plane filters
+            kwargs = {field: val}
+            qs = qs.filter(**kwargs)
+        
+        elif val:                               # all time filters
             filter_ = val
             op = self.cleaned_data.get(field + "_op", "")
-            
-            print field,val,op
             
             if op == "0":
                 qs = qs.filter_by_column(field, eq=val)

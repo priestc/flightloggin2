@@ -131,6 +131,7 @@ class QuerySet(QuerySet):
             return self.exclude(**kwarg)
         return self.filter(**kwarg)  
         
+    ## convienience functions below
     
     def total(self, *args, **kwargs):
         return self.by_flight_time('total', *args, **kwargs)
@@ -161,6 +162,15 @@ class QuerySet(QuerySet):
     
     def xc(self, *args, **kwargs):
         return self.by_flight_time('xc', *args, **kwargs)
+    
+    def day_l(self, *args, **kwargs):
+        return self.by_flight_time('day_l', *args, **kwargs)
+    
+    def night_l(self, *args, **kwargs):
+        return self.by_flight_time('night_l', *args, **kwargs)
+    
+    def app(self, *args, **kwargs):
+        return self.by_flight_time('app', *args, **kwargs)
     
     ####################################################
     
@@ -194,24 +204,6 @@ class QuerySet(QuerySet):
     
     def only_p2p(self, f=True):
         kwarg={"route__p2p": True, "xc": 0}
-        if not f:
-            return self.exclude(**kwarg)
-        return self.filter(**kwarg)
-    
-    def day_l(self, f=True):
-        kwarg={"day_l__gt": 0}
-        if not f:
-            return self.exclude(**kwarg)
-        return self.filter(**kwarg)
-    
-    def night_l(self, f=True):
-        kwarg={"night_l__gt": 0}
-        if not f:
-            return self.exclude(**kwarg)
-        return self.filter(**kwarg)
-    
-    def app(self, f=True):
-        kwarg={"app__gt": 0}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
