@@ -58,20 +58,33 @@ def logbook(request, shared, display_user, page=0):
     
     header_row = cols.header_row()
     
-    columns = cols.all_list()                 # all activated column headers
-    prefix_len = cols.prefix_len()      # number of non-agg headers before total
-    agg_columns = cols.agg_list()             # all headers that get agg'd
+    columns = cols.all_list()          # all activated column headers
+    prefix_len = cols.prefix_len()     # number of non-agg headers before total
+    agg_columns = cols.agg_list()      # all headers that get agg'd
+    
+    ##############################################################
+    
+    from custom_filter import make_filter_form
+    FilterForm = make_filter_form(display_user)
+    ff = FilterForm()
     
     ##############################################################
     
     all_flights = Flight.objects.user(display_user)
     
     if request.GET.get('c', "") == "t":
-        flights = all_flights.custom_logbook_view(request.GET).select_related()
+        ff=FilterForm(request.GET)
+        flights = all_flights.custom_logbook_view(ff).select_related()
+        all_flights = flights
+        get= "?" + request.get_full_path().split('?')[1]
+        total_sign = "Filter"
     else:
         flights = all_flights.select_related()
+        total_sign = "Overall"
                 
     ##############################################################
+    
+    from constants import FIELDS    #for the custom filter
     
     profile = Profile.get_for_user(display_user)
     num_format = profile.get_format()

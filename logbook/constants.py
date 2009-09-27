@@ -30,6 +30,11 @@ DB_FIELDS = [           #fields that have a database column all to themseves
           'person', 'remarks'
           ]
           
+FILTER_FIELDS = [   # for the logbook filter box, all fields that are numerical, but arent based on plane category
+          'total', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
+          'p2p',
+          ]
+          
 GRAPH_FIELDS = [        #fields to be fair game for the graphing functions and the sigs
           'total', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
           'p2p', 'day',
@@ -151,12 +156,12 @@ FIELD_ABBV = {
     "m_pic": "Multi PIC",
     "sea": "Sea",
     "sea_pic": "Sea PIC",
-    "mes": "Multi Sea",
-    "mes_pic": "Multi Sea PIC",
+    "mes": "ME Sea",
+    "mes_pic": "ME Sea PIC",
     "turbine": "Turbine",
     "t_pic": "Turbine PIC",
-    "mt": "Multi Turbine",
-    "mt_pic": "Multi Turbine PIC",
+    "mt": "ME Turbine",
+    "mt_pic": "ME Turbine PIC",
     "person": "Person",
     "remarks": "Remarks",
     "complex": "Complex",
@@ -189,26 +194,26 @@ def all_agg_checkbox(prefix=""):
         out.append("<input type=\"checkbox\" id=\"%s\"><label for=\"%s\">%s</label>" % (field, field, FIELD_TITLES[field]))
         
     t = PyHtmlTable(0,5, {"class": "checktable"})
-    for i,item in enumerate(out[:5]):
-        t.setCellcontents(0,i,item)
-        
-    for i,item in enumerate(out[5:10]):
-        t.setCellcontents(1,i,item)
-        
-    for i,item in enumerate(out[10:15]):
-        t.setCellcontents(2,i,item)
-        
-    for i,item in enumerate(out[15:20]):
-        t.setCellcontents(3,i,item)
     
-    for i,item in enumerate(out[20:25]):
-        t.setCellcontents(4,i,item)
-    
-    for i,item in enumerate(out[25:30]):
-        t.setCellcontents(5,i,item)
-        
-    for i,item in enumerate(out[30:35]):
-        t.setCellcontents(6,i,item)
+    for row in range(0,6):
+        for i,item in enumerate(out[(row*5):(row*5)+5]):
+            t.setCellcontents(row,i,item)
     
     return mark_safe(t.return_html())
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
         

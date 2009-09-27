@@ -10,6 +10,9 @@
 <script type="text/javascript">
     $(document).ready(function() {
         page_totals({{agg_columns|safe}})  // pass in the names of each column that needs a page total
+        
+        //$("#submit")
+        
     });
     
     date_button = "{{MEDIA_URL}}/images/calendar.gif"
@@ -19,7 +22,7 @@
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/logbook.css">
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/popup.css">
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/flight_popup.css">
-<link rel="alternate" title="{{display_user.username}}'s flights RSS" href="/feeds/flights/{{display_user.username}}" type="application/rss+xml">
+<link rel="alternate" title="{{display_user.username}}'s flights feed" href="/feeds/flights/{{display_user.username}}" type="application/rss+xml">
 
 {% endblock %}
 
@@ -53,7 +56,9 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan="{{ prefix_len }}" id="overall_total_title">Overall Totals:
+
+				<td colspan="{{ prefix_len }}" id="overall_total_title">{{total_sign}} Totals:
+
 				</td>
 
                     {% for column in overall_totals %}
@@ -101,6 +106,10 @@
 	</table>
 	
 	{% include "pagination_table.html" %}
+	{% include "filter_table.html" %}
+	
+	</form>
 {% include "new_flight.html" %}
+{{ff.errors}}
 {% endblock %}
 
