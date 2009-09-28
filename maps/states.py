@@ -76,7 +76,8 @@ def drawl_state_map(states_to_plot):
         max_ = max(states_to_plot.values())
     except ValueError:
         max_ = 0
-        
+    ak=False
+    hi=False    
     for i,seg in enumerate(m.states):
         statename = m.states_info[i]['NAME']
         
@@ -98,11 +99,12 @@ def drawl_state_map(states_to_plot):
             elif statename == "Maryland":
                 plt.figtext(.83, .35, "MD", size="small", color=color)
                 
-            elif statename == "Alaska":
+            elif statename == "Alaska" and not ak:
                 plt.figtext(.83, .30, "AK", size="small", color=color)
+                ak=True
                 
-            elif statename == "Hawaii":
+            elif statename == "Hawaii" and not hi:
                 plt.figtext(.83, .25, "HI", size="small", color=color)
-            
+                hi=True
     return fig
     
