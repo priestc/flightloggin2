@@ -25,7 +25,7 @@ urlpatterns += patterns('',
     (r'^admin/',                                                   include(admin.site.urls)),
     
     (r'^admin-manage.html$',                                       direct_to_template, {'template': 'manage.html'}),
-    
+    (r'^import_instructions.html$',                                direct_to_template, {'template': 'import_instructions.html'}),
     
     ############################ graphs
 

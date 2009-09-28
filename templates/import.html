@@ -10,7 +10,9 @@
 
 
 {% block canvas %}
-    <button onclick="window.location = '/{{ display_user }}/backup/'; return false;">Export</button>
+    Download zipped backup file: <button onclick="window.location = '/{{ display_user }}/backup/'; return false;">Export</button>
+    
+    <a href="/import_instructions.html">Click here for import instructions</a>
     
     <form action="{% url import display_user %}" method="post" enctype="multipart/form-data">
     <div>
