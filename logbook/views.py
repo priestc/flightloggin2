@@ -168,7 +168,7 @@ def mass_entry(request, shared, display_user):
 @no_share
 @login_required()
 @render_to("mass_entry.html")     
-def mass_edit(request, share, display_user, page=0):
+def mass_edit(request, shared, display_user, page=0):
     edit = True 
     flights = Flight.objects.filter(user=display_user)
     
