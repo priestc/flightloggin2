@@ -76,8 +76,9 @@ def drawl_state_map(states_to_plot):
         max_ = max(states_to_plot.values())
     except ValueError:
         max_ = 0
-    ak=False
-    hi=False    
+        
+    ak, hi, de, md, ri, ct = False, False, False, False, False, False
+    
     for i,seg in enumerate(m.states):
         statename = m.states_info[i]['NAME']
         
@@ -87,17 +88,21 @@ def drawl_state_map(states_to_plot):
             poly = Polygon(seg,facecolor=color)
             ax.add_patch(poly)
             
-            if statename == "Rhode Island":
+            if statename == "Rhode Island" and not ri:
                 plt.figtext(.83, .5, "RI", size="small", color=color)
+                ri=True
             
-            elif statename == "Connecticut":
+            elif statename == "Connecticut" and not ct:
                 plt.figtext(.83, .45, "CT", size="small", color=color)
+                ct=True
                 
-            elif statename == "Delaware":
+            elif statename == "Delaware" and not de:
                 plt.figtext(.83, .4, "DE", size="small", color=color)
+                de=True
                 
-            elif statename == "Maryland":
+            elif statename == "Maryland" and not md:
                 plt.figtext(.83, .35, "MD", size="small", color=color)
+                md=True
                 
             elif statename == "Alaska" and not ak:
                 plt.figtext(.83, .30, "AK", size="small", color=color)
