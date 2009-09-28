@@ -42,7 +42,7 @@ $(document).ready(function() {
 	    fire_popup("popup");
 	}
 	
-	$("#id_date, .date_picker").datepicker({	// add the date pickers
+	$("#id_new-date, .date_picker").datepicker({	// add the date pickers
 			dateFormat: "yy-mm-dd",
 			yearRange: "1999:2009", 
 			showOn: "button", 
