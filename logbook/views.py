@@ -19,11 +19,11 @@ from profile.models import Profile, AutoButton
 @render_to("logbook.html")
 def logbook(request, shared, display_user, page=0):
 
-    form = FlightForm()
+    form = FlightForm(prefix="new")
     
     if request.POST.get('submit', "") == "Submit New Flight":
         flight = Flight(user=display_user)
-        form = FlightForm(request.POST, instance=flight)
+        form = FlightForm(request.POST, instance=flight, prefix="new")
         
         if form.is_valid():
             form.save()
@@ -36,7 +36,7 @@ def logbook(request, shared, display_user, page=0):
         flight_id = request.POST['id']
         flight = Flight(pk=flight_id, user=display_user)
         
-        form = FlightForm(request.POST, instance=flight)
+        form = FlightForm(request.POST, instance=flight, prefix="new")
         
         if form.is_valid():
             form.save()
