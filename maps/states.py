@@ -99,10 +99,10 @@ def drawl_state_map(states_to_plot):
                 plt.figtext(.83, .35, "MD", size="small", color=color)
                 
             elif statename == "Alaska":
-                plt.figtext(.83, .35, "AK", size="small", color=color)
+                plt.figtext(.83, .30, "AK", size="small", color=color)
                 
             elif statename == "Hawaii":
-                plt.figtext(.83, .35, "HI", size="small", color=color)
+                plt.figtext(.83, .25, "HI", size="small", color=color)
             
     return fig
     
