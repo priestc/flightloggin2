@@ -25,4 +25,4 @@ class RouteWidget(TextInput):
        
 class RouteField(ModelChoiceField):
     def clean(self, value):
-        return create_route_from_string(value)
+        return Route.from_string(value)

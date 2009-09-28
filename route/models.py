@@ -17,6 +17,8 @@ class Route(models.Model):
     
     p2p = models.BooleanField()
     
+    ##################################
+    
     @classmethod
     def render_custom(cls, user):
         qs = cls.objects.filter(flight__user=user).filter(routebase__custom__isnull=False)
@@ -31,8 +33,13 @@ class Route(models.Model):
             r.render()
         return qs.count()
     
+    @classmethod
+    def from_string(cls, r):
+        return create_route_from_string(r)
+    
+    #################################
+    
     def render(self):
-        
         fancy = []
         simple = []
         kml = []
