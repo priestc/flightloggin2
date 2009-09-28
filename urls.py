@@ -19,15 +19,14 @@ feeds = {
 urlpatterns += patterns('',
     
     url(r'^$',                                                     "django.views.generic.simple.redirect_to", {'url': 'news.html'}, name="root"),
-    url(r'^news.html$',                                            "main.views.news",         name="news"),
-    url(r'^faq.html$',                                             "main.views.faq",          name="faq"),
-    url(r'^help.html$',                                            "main.views.help",         name="help"),
-    
-    (r'^feeds/(?P<url>.*)/$',                                      "django.contrib.syndication.views.feed", {'feed_dict': feeds}),
+   
     
     (r'^admin/doc/',                                               include('django.contrib.admindocs.urls')),
     (r'^admin/',                                                   include(admin.site.urls)),
-    (r'^openid/',                                                  include('django_openid_auth.urls')),
+    
+    (r'^admin-manage.html$',                                       direct_to_template, {'template': 'manage.html'}),
+    
+    
     ############################ graphs
 
     (r'^(?P<username>\w+)/line/(?P<type_>\w+)/(?P<columns>[\w\-]+)/((?P<s>\d{4}.\d{1,2}.\d{1,2})-(?P<e>\d{4}.\d{1,2}.\d{1,2}))?(all)?.(?P<ext>(png|svg))$',
@@ -41,11 +40,20 @@ urlpatterns += patterns('',
                                                                    
     (r'^(?P<username>\w+)/sigs/(?P<columns>[\w\-]+).png',          "sigs.views.make_sig", ),
     
-    ############################ maps
+    ############################ main site
+    
+    (r'^feeds/(?P<url>.*)/$',                                      "django.contrib.syndication.views.feed", {'feed_dict': feeds}),
+    
+    (r'^recalc-routes.py$',                                        "route.views.recalc_routes"),
+    (r'^del-routes.py$',                                           "route.views.del_routes"),
+    
+    url(r'^news.html$',                                            "main.views.news",         name="news"),
+    url(r'^faq.html$',                                             "main.views.faq",          name="faq"),
+    url(r'^help.html$',                                            "main.views.help",         name="help"),
+    
+    (r'^openid/',                                                  include('django_openid_auth.urls')),
     
     url(r'^(?P<username>\w+)/email-backup.html$',                  "backup.views.emailbackup", name="import"),
-    url(r'^empty-routes.html$',                                    "manage.views.del_routes",  name="import"),
-    
     url(r'^(?P<username>\w+)/routes-(?P<type_>\w+).kmz$',          "maps.views.routes_kml",    name="kml-route"),
     url(r'^(?P<username>\w+)/airports-(?P<type_>\w+).kmz$',        "maps.views.airports_kml",  name="kml-airport"),
     url(r'^(?P<username>\w+)/preferences.html$',                   "profile.views.profile",    name="profile"),

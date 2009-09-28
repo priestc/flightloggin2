@@ -60,9 +60,6 @@ class Route(models.Model):
                 fancy.append("<span title=\"%s\" class=\"%s\">%s</span>" % (dest, class_, dest ), )
                 simple.append(rb.destination())
             
-            
-        print "-".join(fancy)
-        
         self.kml_rendered = "\n".join(kml)
         self.fancy_rendered = "-".join(fancy)
         self.simple_rendered = "-".join(simple)
@@ -173,8 +170,6 @@ def create_route_from_string(ostring):
     is_p2p = len(set(p2p)) > 1
     route = Route(fallback_string=ostring, p2p=is_p2p)
     route.save()
-    
-    print("made new route")
     
     for routebase in routebases:
         routebase.route = route

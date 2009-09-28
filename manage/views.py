@@ -19,12 +19,6 @@ from logbook.constants import FIELD_TITLES
 from constants import *
 from forms import ImportForm, ImportFlightForm
 
-def del_routes(request):
-    from route.models import Route
-    count=Route.objects.filter(flight__pk__isnull=True).count()
-    Route.objects.filter(flight__pk__isnull=True).delete()
-    return HttpResponse("%s routes deleted" % count)
-
 @login_required()
 @render_to('import.html')
 @no_share
@@ -230,9 +224,7 @@ def make_commit_flight(line, user, out):
     line.update({"plane": plane.pk})
     form = ImportFlightForm(line, instance=flight)
     
-    
-    
-    #import pdb; pdb.set_trace()
+
     if form.is_valid():
         form.save()
         out.append("<tr><td>good</td><td>" + str(line.get('date')) + "</td><td>" + str(line.get('remarks')) + "</td></tr>")
