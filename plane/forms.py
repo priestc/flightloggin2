@@ -11,5 +11,6 @@ class PlaneForm(ModelForm):
         model = Plane
 
 class PlaneField(ModelChoiceField):
-    def label_from_instance(self, obj):
-        return unicode(obj)
+    pass
+    #def label_from_instance(self, obj):
+    #    return unicode(obj)

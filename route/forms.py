@@ -17,12 +17,14 @@ class RouteWidget(TextInput):
 
     def render(self, name, value, attrs=None):
         value = self._format_value_out(value)
-        return super(RouteWidget, self).render(name, value, attrs={"class": "route_line"})
+        attrs.update({"class": "route_field"})
+        return super(RouteWidget, self).render(name, value, attrs)
         
     def _has_changed(self, initial, data):
         return super(RouteWidget, self)._has_changed(self._format_value_out(initial), data)
         
        
 class RouteField(ModelChoiceField):
+    widget = RouteWidget
     def clean(self, value):
         return Route.from_string(value)

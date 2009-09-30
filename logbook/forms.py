@@ -89,9 +89,9 @@ class BlankIntField(BlankHourField):
 #####################################################################################################
 
 class FlightForm(ModelForm):
-
-    route =    RouteField(widget=forms.TextInput, required=False, queryset=Route.objects.get_empty_query_set())
-    plane =    PlaneField(queryset=Plane.objects.get_empty_query_set(), required=True)
+    
+    route =    RouteField(required=False, queryset=Route.objects.get_empty_query_set())
+    plane =    ModelChoiceField(required=True, queryset=Plane.objects.get_empty_query_set())
     
     total =    BlankDecimalField(label="Total Time")
     pic =      BlankDecimalField(label="PIC")
