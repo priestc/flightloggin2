@@ -30,7 +30,14 @@ class Route(models.Model):
     def easy_render_all(cls):
         qs = cls.objects.all()
         for r in qs:
-            r.render()
+            r.easy_render()
+        return qs.count()
+    
+    @classmethod
+    def hard_render_all(cls):
+        qs = cls.objects.all()
+        for r in qs:
+            r.hard_render()
         return qs.count()
     
     @classmethod

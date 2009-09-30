@@ -44,7 +44,8 @@ urlpatterns += patterns('',
     
     (r'^feeds/(?P<url>.*)/$',                                      "django.contrib.syndication.views.feed", {'feed_dict': feeds}),
     
-    (r'^recalc-routes.py$',                                        "route.views.recalc_routes"),
+    (r'^easy-recalc-routes.py$',                                   "route.views.easy_recalc_routes"),
+    (r'^hard-recalc-routes.py$',                                   "route.views.hard_recalc_routes"),
     (r'^del-routes.py$',                                           "route.views.del_routes"),
     
     url(r'^news.html$',                                            "main.views.news",         name="news"),
