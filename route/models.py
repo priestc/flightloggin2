@@ -77,16 +77,21 @@ class Route(models.Model):
         self.save()
         
     def hard_render(self):
-        
+
         flight = self.flight
         fbs = self.fallback_string
         
-        new_route = Route.from_string(fbs)
+        is_p2p, routebases = make_routebases_from_fallback_string(self)
         
-        self = new_route
+        self.p2p = is_p2p
         
+        #delete the current routebases, then add the new ones
+        self.routebase_set.all().delete()
+        for routebase in routebases:
+            routebase.route = self
+            routebase.save()
+            
         self.easy_render()
-        return
     
     def __unicode__(self):
         return self.simple_rendered

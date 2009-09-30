@@ -6,7 +6,7 @@ class AirportAdmin(admin.GeoModelAdmin):
     search_fields = ('identifier', 'name', 'municipality',)
 
 class CustomAdmin(admin.GeoModelAdmin):
-    list_display = ('identifier', 'name', 'country', 'region', 'municipality',)
+    list_display = ('identifier', 'name', 'country', 'region', 'municipality', 'user')
     search_fields = ('identifier', 'name', 'municipality',)
     
 class NavaidAdmin(admin.GeoModelAdmin):
