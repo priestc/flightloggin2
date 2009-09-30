@@ -23,11 +23,11 @@ class Route(models.Model):
     def render_custom(cls, user):
         qs = cls.objects.filter(flight__user=user).filter(routebase__custom__isnull=False)
         for r in qs:
-            r.render()
+            r.easy_render()
         return qs.count()
     
     @classmethod
-    def render_all(cls):
+    def easy_render_all(cls):
         qs = cls.objects.all()
         for r in qs:
             r.render()
@@ -39,7 +39,11 @@ class Route(models.Model):
     
     #################################
     
-    def render(self):
+    def easy_render(self):
+        """Rerenders the HTML for displaying the route. Takes info from the
+           already defines routebases. For rerendering after updating Airport
+           info, use hard_render()
+        """
         fancy = []
         simple = []
         kml = []
@@ -71,6 +75,18 @@ class Route(models.Model):
         self.fancy_rendered = "-".join(fancy)
         self.simple_rendered = "-".join(simple)
         self.save()
+        
+    def hard_render(self):
+        
+        flight = self.flight
+        fbs = self.fallback_string
+        
+        new_route = Route.from_string(fbs)
+        
+        self = new_route
+        
+        self.easy_render()
+        return
     
     def __unicode__(self):
         return self.simple_rendered
@@ -131,58 +147,23 @@ class RouteBase(models.Model):
     
 ######################################################################################################  
 
-def create_route_from_string(ostring):
-    string = ostring
-    
-    if not string:
+def create_route_from_string(fallback_string):
+   
+    if not fallback_string:
         return None
     
-    string = normalize(string)
-    points = string.split()
-    unknown = False
-    fancy_rendered = []
-    simple_rendered = []
-    kml_rendered = []
-    routebases = []
-    p2p = []
-    
-    for i, ident in enumerate(points):
-    
-        if ident[0] == "@":  #must be a navaid
-        
-            first_rb = len(routebases) == 0  # is this the first routebase? if so don't try to guess which navaid is closest to the previous point
-            if not first_rb and not routebases[i-1].unknown:
-                routebase = find_navaid(ident, i, last_rb=routebases[i-1])
-            else:
-                routebase = find_navaid(ident, i)
-        
-        elif ident[0] == "!":  #must be custom
-        
-            routebase = find_custom(ident, i)
-            
-        else:                  #must be an airport
-            
-            routebase = find_airport(ident, i, p2p=p2p)
-            
-        ########################################################################
-       
-        if not routebase:                                           ## no routebase? must unknown
-            routebase = RouteBase(unknown=ident, sequence=i)
-            
-            if not ident[0] == "@":                                         # not a unidentified navaid, assume a landing
-                p2p.append(unknown)            
-        
-        routebases.append(routebase)
-           
-    is_p2p = len(set(p2p)) > 1
-    route = Route(fallback_string=ostring, p2p=is_p2p)
+    route = Route(fallback_string=fallback_string, p2p=False)
     route.save()
+    
+    is_p2p, routebases = make_routebases_from_fallback_string(route)
+    
+    route.p2p = is_p2p
     
     for routebase in routebases:
         routebase.route = route
         routebase.save()
         
-    route.render()
+    route.easy_render()
     return route
 
 ###########################################################
@@ -248,5 +229,42 @@ def find_airport(ident, i, p2p):
         return RouteBase(airport=airport, sequence=i)
 
     return None
-    
 
+def make_routebases_from_fallback_string(route):
+    """returns a list of RouteBase objects according to the fallback_string"""
+    
+    fbs = normalize(route.fallback_string)
+    points = fbs.split()                        # MER-VGA -> ['MER', 'VGA']
+    unknown = False
+    p2p = []
+    routebases = []
+    
+    for i, ident in enumerate(points):
+    
+        if ident[0] == "@":  #must be a navaid
+        
+            first_rb = len(routebases) == 0  # is this the first routebase? if so don't try to guess which navaid is closest to the previous point
+            if not first_rb and not routebases[i-1].unknown:
+                routebase = find_navaid(ident, i, last_rb=routebases[i-1])
+            else:
+                routebase = find_navaid(ident, i)
+        
+        elif ident[0] == "!":  #must be custom
+        
+            routebase = find_custom(ident, i)
+            
+        else:                  #must be an airport
+            
+            routebase = find_airport(ident, i, p2p=p2p)
+            
+        ########################################################################
+       
+        if not routebase:                                           # no routebase? must be unknown
+            routebase = RouteBase(unknown=ident, sequence=i)
+            
+            if not ident[0] == "@":                                 # not a unidentified navaid, assume a landing
+                p2p.append(ident)
+        
+        routebases.append(routebase)
+
+    return len(set(p2p)) > 1, routebases
