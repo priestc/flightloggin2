@@ -69,7 +69,7 @@ class Custom(Location):
         try:
             getattr(self, "user", None)
         except:
-            from mid.middleware import share
+            from share.middleware import share
             self.user = share.get_display_user()
         super(Custom,self).save()
         
