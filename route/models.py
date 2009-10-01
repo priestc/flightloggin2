@@ -9,6 +9,34 @@ from share.middleware import share
 from airport.models import Airport, Custom, Navaid
 
 class Route(models.Model):
+    """Represents a route the user went on for the flight
+    
+    >>> r=Route.from_string("!custom -> @hyp  //vta -= mer")
+    >>> r
+    <Route: CUSTOM-HYP-KVTA-MER>
+    >>> r.fancy_rendered
+    u'<span title="Custom" class="found_custom">CUSTOM</span>-<span title="El Nido - VOR-DME" class="found_navaid">HYP</span>-<span title="Newark, Ohio" class="found_airport">KVTA</span>-<span title="MER" class="not_found">MER</span>'
+    >>> vta=Airport.objects.get(identifier="KVTA")
+    >>> vta.municipality = "CHANGED NAME"
+    >>> vta.save()
+    >>> r.easy_render()
+    >>> r.fancy_rendered
+    u'<span title="Custom" class="found_custom">CUSTOM</span>-<span title="El Nido - VOR-DME" class="found_navaid">HYP</span>-<span title="CHANGED NAME, Ohio" class="found_airport">KVTA</span>-<span title="MER" class="not_found">MER</span>'
+    >>>
+    >>> vta.delete()
+    >>> vta.pk = 1000
+    >>> vta.save()
+    >>>
+    >>> r.hard_render()
+    >>> r.fancy_rendered
+    u'<span title="Custom" class="found_custom">CUSTOM</span>-<span title="El Nido - VOR-DME" class="found_navaid">HYP</span>-<span title="CHANGED NAME, Ohio" class="found_airport">KVTA</span>-<span title="MER" class="not_found">MER</span>'
+    >>>
+    >>> vta = r.routebase_set.all()[2].airport
+    >>> vta
+    <Airport: KVTA>
+    >>> vta.id
+    1000
+    """
 
     fancy_rendered =  models.TextField(blank=True, null=True)
     fallback_string = models.TextField(blank=True, null=True)
@@ -221,7 +249,8 @@ def find_custom(ident, i):
     """Tries to find the custom point, if it can't find one, it adds it to the user's
        custom list
     """
-    user = share.get_display_user()
+    from django.contrib.auth.models import User
+    user = share.get_display_user() or User.objects.get(pk=1)
     custom,created = Custom.objects.get_or_create(user=user, identifier=ident[1:])
 
     routebase = RouteBase(custom=custom, sequence=i)
