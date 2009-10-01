@@ -16,6 +16,25 @@ class QuerySetManager(models.Manager):
 
 
 class Flight(models.Model):
+    """
+    >>> from django.contrib.auth.models import User
+    >>> me=User.objects.get(pk=1)
+    >>>
+    >>> from plane.models import Plane
+    >>> p = Plane(tailnumber="N800U", cat_class=2, tags='complex, hp')
+    >>> p.save()
+    >>>
+    >>> from route.models import Route
+    >>> r = Route.from_string("vta-uni-vta")
+    >>>
+    >>> f = Flight(user=me, total=1.0, pic=2.0, dual_g=3.0, plane=p, route=r)
+    >>> f.column('multi')
+    '1.0'
+    >>> f.column('p2p')
+    '1.0'
+    >>> f.column('hp')
+    '1.0'
+    """
 
     from utils import QuerySet          ## add custom filters to custom manager
     
