@@ -12,7 +12,10 @@ _thread_locals = local()
 ###############################################################
 
 def get_display_user():
-    return getattr(_thread_locals, "display_user", None)
+    user = getattr(_thread_locals, "display_user", None)
+    if not user:
+         user,c = User.objects.get_or_create(pk=999999, username="SHARE ERROR - UNKNOWN")
+    return user
 
 def get_shared():
     return getattr(_thread_locals, "shared", None)

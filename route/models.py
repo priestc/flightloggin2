@@ -249,8 +249,7 @@ def find_custom(ident, i):
     """Tries to find the custom point, if it can't find one, it adds it to the user's
        custom list
     """
-    from django.contrib.auth.models import User
-    user = share.get_display_user() or User.objects.get(pk=1)
+    user = share.get_display_user()
     custom,created = Custom.objects.get_or_create(user=user, identifier=ident[1:])
 
     routebase = RouteBase(custom=custom, sequence=i)
