@@ -101,6 +101,8 @@ def logbook(request, shared, display_user, page=0):
     
     from utils import LogbookRow
     
+    LogbookRow = LogbookRow.set_formats(df=date_format, nf=num_format)
+    
     logbook = []
     for flight in list(page_of_flights.object_list):
         row = LogbookRow(flight=flight, columns=columns)

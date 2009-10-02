@@ -1,4 +1,5 @@
 from django.utils.safestring import mark_safe
+from django.utils.dateformat import format as dj_date_format
 
 from django.db.models import Q
 from django.db.models.query import QuerySet
@@ -11,15 +12,21 @@ class LogbookRow(list):
     pk=0
     data = {}
     flight = []
+    num_format = "decimal"
+    date_format = "m-d-Y"
+    
+    @classmethod
+    def set_formats(cls, df, nf):
+        """Modifies the class so all instances have these date and number
+        format attributes
+        """
+        cls.date_format = df
+        cls.num_format = nf
+        return cls
     
     def __init__(self, flight, columns):
         self.flight = flight
         self.columns = columns
-        
-        from profile.models import Profile
-        p = Profile.get_for_user(flight.user)
-        self.num_format = p.get_format()
-        self.date_format = p.get_date_format()
         
         self.make_data()        
         self.make_proper_columns()
@@ -28,7 +35,8 @@ class LogbookRow(list):
         self.data = {}
         for field in DB_FIELDS:
             if field == 'date':
-                data = self.flight.column(field)
+                data = dj_date_format(self.flight.column(field),
+                                      self.date_format)
             else:
                 data = self.flight.column(field)
                 
@@ -39,7 +47,8 @@ class LogbookRow(list):
             
             if column == 'date':
                 spans = self.get_data_spans()
-                date = self.flight.column(column, self.num_format)
+                date = dj_date_format(self.flight.column('date'),
+                                      self.date_format)
                 title = "title=\"Date (click to edit)\""
                 disp = """<a %s href="" id="f%s">%s%s</a>""" % \
                             (title, self.flight.id, date, spans)
