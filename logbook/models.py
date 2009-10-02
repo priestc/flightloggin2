@@ -145,6 +145,9 @@ class Flight(models.Model):
         elif cn == "remarks":
             return self.disp_events() + self.remarks
         
+        elif cn == "r_remarks":
+            return self.remarks
+        
         elif cn == "plane":
             return str(self.plane)
         
@@ -213,6 +216,22 @@ class Flight(models.Model):
            else:
                return ""
            
+        elif cn == "flying":
+            ret = ""
+            if self.pilot_checkride:
+                ret += "P"
+            if self.cfi_checkride:
+                ret += "C"
+            if self.ipc:
+                ret += "I"
+            if self.flight_review:
+                ret += "B"
+            if self.holding:
+                ret += "H"
+            if self.tracking:
+                ret += "T"
+            return ret
+                     
         ######################################
         
         elif cn == "total" and not self.plane.is_sim():     #total
@@ -223,6 +242,7 @@ class Flight(models.Model):
             
         elif cn == "total_s" and not self.plane.is_sim():   #total (sim)
             ret = self.total
+            
         elif cn == "total_s" and self.plane.is_sim():
             ret = "(%s)" % self.total
             

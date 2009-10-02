@@ -15,7 +15,8 @@ DATE = datetime.date.today()
 @login_required()   
 def backup(request, shared, display_user):
     from django.http import HttpResponse
-   
+    
+    # get a zip file of the csv of the users data
     sio = backup_zip(display_user)
 
     ###########################

@@ -23,9 +23,9 @@ NUMERIC_FIELDS = [      # fields that are always just numbers and nothing else
           ]
           
 BACKUP_FIELDS = [       #fields included in the backup file
-          'r_date', 'reg', 'rr_route',
+          'date', 'reg', 'r_route',
           'total', 'sim', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
-          'person', 'remarks'
+          'person', 'r_remarks', 'flying',
           ]
           
 DB_FIELDS = [           #fields that have a database column all to themseves
@@ -114,6 +114,7 @@ FIELD_TITLES = {
     "mt_pic": "Multi-Engine Turbine PIC",
     "person": "Person",
     "remarks": "Remarks",
+    "r_remarks": "Remarks",
     "complex": "Complex",
     "hp": "High Performance",
     "sim": "Sim",
@@ -125,6 +126,9 @@ FIELD_TITLES = {
     'fo': "First Officer",
     'captain': "Captain",
     'student': "Student",
+    
+    "non_flying": "Non-flying",
+    "flying": "Flying",
 }
 
 FIELD_ABBV = {
@@ -168,6 +172,7 @@ FIELD_ABBV = {
     "mt_pic": "ME Turbine PIC",
     "person": "Person",
     "remarks": "Remarks",
+    "r_remarks": "Remarks",
     "complex": "Complex",
     "hp": "HP",
     "sim": "Sim",
@@ -179,6 +184,9 @@ FIELD_ABBV = {
     'fo': "First Officer",
     'captain': "Captain",
     'student': "Student",
+    
+    "non_flying": "Non-flying",
+    "flying": "Flying",
 }
 
 #########################################
