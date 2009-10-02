@@ -19,7 +19,7 @@ PREFIX_FIELDS = [
           ]
           
 NUMERIC_FIELDS = [      # fields that are always just numbers and nothing else
-          "pic", "sic", "solo", "dual_r", "dual_g", "xc", "act_inst", "sim_inst", "day", "night", "night_l", "day_l",
+          "pic", "sic", "solo", "dual_r", "dual_g", "xc", "act_inst", "sim_inst", "night", "night_l", "day_l",
           ]
           
 BACKUP_FIELDS = [       #fields included in the backup file
