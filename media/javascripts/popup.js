@@ -5,6 +5,19 @@ function wipe_clean() {
 
 function fire_popup() {
 
+    $('#popup').centerScreen()
+    
+    $('#popup').draggable({ 
+		zIndex: 20,
+		cursor: 'move',
+		opacity: 1.0,
+		handle: '#dragbar'
+	}).css("top", top).show();
+	
+}
+
+function fire_popup2() {
+
 	// Determine how much the visitor had scrolled
 
 	var scrolledX, scrolledY;
