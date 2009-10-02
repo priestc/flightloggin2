@@ -4,7 +4,6 @@ from models import NewsItem
 
 @render_to("news.html")
 def news(request):
-    title = "News"
     news = NewsItem.objects.all()[:15]
     
     if request.user.is_authenticated():

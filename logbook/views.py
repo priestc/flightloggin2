@@ -40,7 +40,6 @@ def logbook(request, shared, display_user, page=0):
         
         if form.is_valid():
             form.save()
-            print request.path
             return HttpResponseRedirect(request.path)
         else:
             ERROR = "'edit'"
@@ -62,7 +61,7 @@ def logbook(request, shared, display_user, page=0):
     prefix_len = cols.prefix_len()     # number of non-agg headers before total
     agg_columns = cols.agg_list()      # all headers that get agg'd
     
-    ##############################################################
+    ################## custom filter form ########################
     
     from custom_filter import make_filter_form
     FilterForm = make_filter_form(display_user)
@@ -82,15 +81,15 @@ def logbook(request, shared, display_user, page=0):
         flights = all_flights.select_related()
         total_sign = "Overall"
                 
-    ##############################################################
-    
-    from constants import FIELDS    #for the custom filter
+    ############## get user preferences ##########################
     
     profile = Profile.get_for_user(display_user)
     num_format = profile.get_format()
     date_format = profile.get_date_format()
     
-    overall_totals = column_total_by_list(all_flights, agg_columns, format=num_format)
+    overall_totals = column_total_by_list(all_flights,
+                                          agg_columns,
+                                          format=num_format)
     
     if not flights:
         return locals()
@@ -98,31 +97,16 @@ def logbook(request, shared, display_user, page=0):
     before_block, after_block, page_of_flights = \
                    Flight.make_pagination(flights, profile, int(page))
 
-    #####################
+    ##############################################################
     
     from utils import LogbookRow
     
     logbook = []
-    for flight in page_of_flights.object_list:
-        row = LogbookRow()
-        
-        row.pk = flight.pk
-        row.plane = flight.plane
-
-        for column in columns:
-            if column == "date":
-                row.date = flight.column("date")
-                
-            elif column == "remarks":
-                row.remarks = flight.column("remarks")
-                row.events = flight.column("events")
-            else:
-                row.append( {"system": column, "disp": flight.column(column, num_format), "title": FIELD_TITLES[column]} )
-
+    for flight in list(page_of_flights.object_list):
+        row = LogbookRow(flight=flight, columns=columns)
         logbook.append(row)
-
-    del flight, row, column
     
+    #only make the page table if there are more than one pages overall
     do_pagination = page_of_flights.paginator.num_pages > 1
     
     return locals()
@@ -139,17 +123,25 @@ def mass_entry(request, shared, display_user):
     except:
         profile = Profile()
         
-    NewFlightFormset = modelformset_factory(Flight, form=FormsetFlightForm, extra=profile.per_page, formset=FixedPlaneModelFormset)
+    NewFlightFormset = modelformset_factory(Flight,
+                                            form=FormsetFlightForm,
+                                            extra=profile.per_page,
+                                            formset=FixedPlaneModelFormset)
         
     if request.POST.get('submit'):
         post = request.POST.copy()
         for pk in range(0, profile.per_page):
-            if post["form-" + str(pk) + "-date"]:
-                post.update({"form-" + str(pk) + "-user": str(request.user.pk)})
+            # if this line has no date...
+            if post["form-%s-date" % pk]:
+                # add the user 
+                post.update({"form-%s-user" % pk: str(request.user.pk)})
             else:
-                post.update({"form-" + str(pk) + "-user": u''})
+                # blank the user
+                post.update({"form-%s-user" % pk: u''})
             
-        formset = NewFlightFormset(post, queryset=Flight.objects.get_empty_query_set(), planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
+        formset = NewFlightFormset(post,
+                                   queryset=Flight.objects.get_empty_query_set(),
+                                   planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
         
         if formset.is_valid():
             for form in formset.forms:
@@ -161,7 +153,8 @@ def mass_entry(request, shared, display_user):
             return HttpResponseRedirect('/' + display_user.username + '/logbook.html')
         
     else:
-        formset = NewFlightFormset(queryset=Flight.objects.get_empty_query_set(), planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
+        formset = NewFlightFormset(queryset=Flight.objects.get_empty_query_set(),
+                                   planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
 
     return locals()
 

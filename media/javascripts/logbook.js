@@ -1,64 +1,83 @@
 function fill_in_flight(dom_id) {
 	
-	id = dom_id.substr(1);
-	
+	var id = dom_id.substr(1);
 	$("#id_new-id").val(id);
-	$("#id_new-date").val(trim($("#tr" + id + " td.date_col span.unformatted_date").text()));
 	
-	$("#id_new-plane option:contains(" + trim($("#tr" + id + " span.unformatted_plane").text()) + ")").attr("selected", "selected");
+	var plane = $("#f" + id + " span.data_plane").text();
+	$("#id_new-plane option:contains(" + plane + ")").attr("selected", "selected");
 	
-	$("#id_new-route").val(trim($("#tr" + id + " span.unformatted_route").text()));
+	var date = $("#f" + id + " span.data_date").text();
+	$("#id_new-date").val(date);
 	
-	total_s = $("#tr" + id + " td.total_s_col").text()      //total (sim) column
-	total = $("#tr" + id + " td.total_col").text()        //total column
+	var route = $("#f" + id + " span.data_route").text();
+	$("#id_new-route").val(route);
+	
+	var total = $("#f" + id + " span.data_total").text();
+    $("#id_new-total").val(total);
 
-	if (!total && total_s){
-	    if(total_s[0] == "("){
-	        total = total_s.substring(1,total_s.length-1);                 //remove parentheses if present
-	    }
-	    else
-	        total = total_s                                             //no parentheses, use value as is
-	}
+    var pic = $("#f" + id + " span.data_pic").text();
+	$("#id_new-pic").val(pic);
 	
-	$("#id_new-total").val(trim(total));
+	var sic = $("#f" + id + " span.data_sic").text();
+	$("#id_new-sic").val(sic);
+	
+	var solo = $("#f" + id + " span.data_solo").text();
+	$("#id_new-solo").val(solo);
+	
+	var dual_r = $("#f" + id + " span.data_dual_r").text();
+	$("#id_new-dual_r").val(dual_r);
+	
+	var dual_g = $("#f" + id + " span.data_dual_g").text();
+	$("#id_new-dual_g").val(dual_g);
 
-	$("#id_new-pic").val(trim($("#tr" + id + " td.pic_col").text()));
-	$("#id_new-sic").val(trim($("#tr" + id + " td.sic_col").text()));
-	$("#id_new-solo").val(trim($("#tr" + id + " td.solo_col").text()));
-	$("#id_new-dual_r").val(trim($("#tr" + id + " td.dual_r_col").text()));
-	$("#id_new-dual_g").val(trim($("#tr" + id + " td.dual_g_col").text()));
-	$("#id_new-xc").val(trim($("#tr" + id + " td.xc_col").text()));
-	$("#id_new-night").val(trim($("#tr" + id + " td.night_col").text()));
-		
-	$("#id_new-app").val(trim($("#tr" + id + " td.app_col").text().replace(/[^0-9]/g, '')));
+	var act_inst = $("#f" + id + " span.data_act_inst").text();
+	$("#id_new-act_inst").val(act_inst);
 	
-	if($("#tr" + id + " td.app_col:contains(T)").text())
-		$("#id_new-tracking").attr("checked", "checked");
-		
-	if($("#tr" + id + " td.app_col:contains(H)").text())
-		$("#id_new-holding").attr("checked", "checked");
+	var sim_inst = $("#f" + id + " span.data_sim_inst").text();
+	$("#id_new-sim_inst").val(sim_inst);
 	
-	$("#id_new-night_l").val(trim($("#tr" + id + " td.night_l_col").text()));
-	$("#id_new-day_l").val(trim($("#tr" + id + " td.day_l_col").text()));
+	var night_l = $("#f" + id + " span.data_night_l").text();
+	$("#id_new-night_l").val(night_l);
 	
-	$("#id_new-remarks").val(trim($("#tr" + id + " td.remarks_col span.remarks").text()));
-	$("#id_new-person").val(trim($("#tr" + id + " td.hidden_person_col").text()));
+	var night = $("#f" + id + " span.data_night").text();
+	$("#id_new-night").val(night);
 	
-	//#############################################################################################
+	var day_l = $("#f" + id + " span.data_day_l").text();
+	$("#id_new-day_l").val(day_l);
+
+	var app = $("#f" + id + " span.data_app").text().replace(/[^0-9]/g, '');
+	$("#id_new-app").val(app);
 	
-	if($("#tr" + id + " td.remarks_col span.flying_event:contains([Pilot Checkride])").text())
+	var person = $("#f" + id + " span.data_person").text();
+	$("#id_new-person").val(person);
+	
+	//####################################################
+	
+	if($("#f" + id + " span.data_remarks span.flying_event:contains([Pilot Checkride])").text())
 		$("#id_new-pilot_checkride").attr("checked", "checked");
 		
-	if($("#tr" + id + " td.remarks_col span.flying_event:contains([Instructor Checkride])").text())
+	if($("#f" + id + " span.data_remarks span.flying_event:contains([Instructor Checkride])").text())
 		$("#id_new-cfi_checkride").attr("checked", "checked");
 		
-	if($("#tr" + id + " td.remarks_col span.flying_event:contains([IPC])").text())
+	if($("#f" + id + " span.data_remarks span.flying_event:contains([IPC])").text())
 		$("#id_new-ipc").attr("checked", "checked");
 		
-	if($("#tr" + id + " td.remarks_col span.flying_event:contains([Flight Review])").text())
+	if($("#f" + id + " span.data_remarks span.flying_event:contains([Flight Review])").text())
 		$("#id_new-flight_review").attr("checked", "checked");
 		
-    return
+	if($("#f" + id + " span.data_app:contains(T)").text())
+		$("#id_new-tracking").attr("checked", "checked");
+		
+	if($("#f" + id + " span.data_app:contains(H)").text())
+		$("#id_new-holding").attr("checked", "checked");
+	
+	// must be at the bottom because it removes the flying events from the dom	
+	var clone = $("#f" + id + " span.data_remarks");
+	$("span.flying_event", clone).remove();
+	var remarks = clone.text();
+	$("#id_new-remarks").val(trim(remarks));	
+		
+	return
 }
 
 

@@ -110,6 +110,9 @@ class Flight(models.Model):
         return app 
     
     def disp_events(self):
+        """Returns the special events with HTML formatting, if no events,
+        return nothing
+        """
         ret = ""
         
         if self.ipc:
@@ -124,43 +127,52 @@ class Flight(models.Model):
         if self.flight_review:
             ret += "[Flight Review]"
             
-        return ret   
+        if not ret:
+            return ""
+        else:    
+            return mark_safe("<span class=\"flying_event\">%s</span> " % ret)
 
     def column(self, cn, format="decimal", ret=0.0):
-        """Returns a string that represents the column being passed"""
+        """Returns a string that represents the column being passed
+        All output in strings except for date, which will be formatted later
+        """
     
-        if cn in DB_FIELDS and not cn == "app" and not cn == "total":       # any field in the databse, except for total, remarks, and app
+        if cn in NUMERIC_FIELDS: #all fields that are always 100% numeric
             ret = getattr(self, cn)
             
-        ####################################### # return these immediately because they are strings
-
+        #################### return these immediately because they are strings
+        
+        elif cn == "remarks":
+            return self.disp_events() + self.remarks
+        
+        elif cn == "plane":
+            return str(self.plane)
+        
+        elif cn == "reg":
+            return self.plane.tailnumber
+            
         elif cn == "f_route" and self.route:
             if self.route.fancy_rendered:
-                return mark_safe(self.route.fancy_rendered + "<span class='unformatted_route'>%s</span>" % self.route.fallback_string)
+                # mark_safe because theres HTML code within
+                return mark_safe(self.route.fancy_rendered)
             else:
                 return self.route.fallback_string
             
         elif cn == "s_route" and self.route:
             if self.route.fancy_rendered:
-                return mark_safe(self.route.simple_rendered + "<span class='unformatted_route'>%s</span>" % self.route.fallback_string)
+                return self.route.simple_rendered
             else:
                 return self.route.fallback_string
-        
+                
         elif cn == "r_route" and self.route:
-            return mark_safe(self.route.fallback_string + "<span class='unformatted_route'>%s</span>" % self.route.fallback_string)
+            return self.route.fallback_string
         
-        elif cn == "rr_route" and self.route:                   # for the backup file
-            return mark_safe(self.route.fallback_string)
-        
-        elif cn == "plane":
-            return self.plane
-        
-        elif cn == "reg":
-            return self.plane.tailnumber
+        elif cn == "route" and self.route:
+            return self.route.fallback_string
         
         ########
-            
-        elif cn == "r_date":                            # raw, for the backup file
+        
+        elif cn == "date":
             return self.date
             
         elif cn == "tailnumber" and self.plane:
@@ -168,14 +180,14 @@ class Flight(models.Model):
             
         elif cn == "plane_type" and self.plane:
             return self.plane.type
-                    
-        elif cn == "events":
-            return self.disp_events()
           
         elif cn == "app":
            return self.disp_app()
        
         ######################################
+        
+        elif cn == 'person':
+            return self.person
         
         elif cn == "fo":
            if self.pic and not self.dual_r:

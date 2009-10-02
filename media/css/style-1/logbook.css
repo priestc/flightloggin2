@@ -1,9 +1,7 @@
 #canvas                                      {width: 98%; max-width: none}
 .flying_event                                {color: darkred; font-weight: bold}
 
-span.unformatted_plane,
-span.unformatted_date,
-span.unformatted_route                       {display: none}
+.date_col span                               {display: none}
 
 #logbook_table                               {width:100%; border: 1px solid black; background: #cce4eb; font-size: x-small}
 #logbook_table td                            {border: 1px solid darkgray; white-space: nowrap;}

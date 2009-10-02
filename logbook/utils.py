@@ -1,3 +1,5 @@
+from django.utils.safestring import mark_safe
+
 from django.db.models import Q
 from django.db.models.query import QuerySet
 from django.db.models import Sum
@@ -5,9 +7,55 @@ from django.db.models import Sum
 from constants import *
 
 class LogbookRow(list):
-    date = ""
-    plane = ""
-    pk = 0
+    
+    pk=0
+    data = {}
+    flight = []
+    
+    def __init__(self, flight, columns):
+        self.flight = flight
+        self.columns = columns
+        
+        from profile.models import Profile
+        p = Profile.get_for_user(flight.user)
+        self.num_format = p.get_format()
+        self.date_format = p.get_date_format()
+        
+        self.make_data()        
+        self.make_proper_columns()
+        
+    def make_data(self):
+        self.data = {}
+        for field in DB_FIELDS:
+            if field == 'date':
+                data = self.flight.column(field)
+            else:
+                data = self.flight.column(field)
+                
+            self.data[field] = data
+        
+    def make_proper_columns(self):
+        for column in self.columns:
+            
+            if column == 'date':
+                spans = self.get_data_spans()
+                date = self.flight.column(column, self.num_format)
+                title = "title=\"Date (click to edit)\""
+                disp = """<a %s href="" id="f%s">%s%s</a>""" % \
+                            (title, self.flight.id, date, spans)
+            else:
+                disp = self.flight.column(column, self.num_format)
+                
+            self.append( {"system": column,
+                          "disp": mark_safe(disp),
+                          "title": FIELD_TITLES[column]} )
+
+    def get_data_spans(self):
+        out = []
+        for field in DB_FIELDS:
+            out.append('<span class="data_%s">%s</span>' % \
+                            (field, self.data[field]))
+        return "\n".join(out)
 
 def to_minutes(flt):
     """converts decimal to HH:MM
