@@ -34,12 +34,7 @@ class LogbookRow(list):
     def make_data(self):
         self.data = {}
         for field in DB_FIELDS:
-            if field == 'date':
-                data = dj_date_format(self.flight.column(field),
-                                      self.date_format)
-            else:
-                data = self.flight.column(field)
-                
+            data = self.flight.column(field)
             self.data[field] = data
         
     def make_proper_columns(self):
