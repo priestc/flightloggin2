@@ -64,12 +64,15 @@ def import_s(request, shared, display_user):
 ####################################################################################################
 
 def do_import(request, f, preview=True):
-
-    reader = csv.reader(f, delimiter='\t')
+    f.seek(0)
+    pre = f.read(2048)
+    f.seek(0)
+    dialect = csv.Sniffer().sniff(pre)
+    reader = csv.reader(f, dialect)
     titles = reader.next()
     titles = swap_out_flight_titles(titles)
     
-    dr = csv.DictReader(f, titles, delimiter='\t')
+    dr = csv.DictReader(f, titles)
     dr.next()
     
     non_out = []
@@ -127,10 +130,10 @@ def prepare_line(line):
     if line.get('non_flying'):
         return "NON-FLIGHT", line
         
-    if line.get('date')[:12] == "##RECORDS":
+    if line.get('date', [])[:12] == "##RECORDS":
         return "RECORDS", line
         
-    if line.get('date')[:11] == "##PLANES":
+    if line.get('date', [])[:11] == "##PLANES":
         return "PLANE", line
         
     instructor = line.get('instructor', "")
@@ -141,11 +144,11 @@ def prepare_line(line):
     if line.get("simulator") and not line.get("total"):
         line['total'] = line.get("simulator")
         
-    if line.get('route_to') and line.get('route_from') and not line.get('route_via'):
-        line.update({"route": line.get('route_from') + " " + line.get('route_to')})
+    if line.get('to') and line.get('from') and not line.get('via'):
+        line.update({"route": line.get('from') + " " + line.get('to')})
         
-    elif line.get('route_to') and line.get('route_from') and line.get('route_via'):
-        line.update({"route": line.get('route_from') + " " + line.get('route_via') + " " + line.get('route_to')})
+    elif line.get('to') and line.get('from') and line.get('via'):
+        line.update({"route": line.get('from') + " " + line.get('via') + " " + line.get('to')})
     
     person=""
     l = []
@@ -176,7 +179,7 @@ def prepare_line(line):
 ###############################################
 
 def make_preview_flight(line, out):
-    row = ["<td>" + line.get(field, "") + "</td>" for field in CSV_FIELDS]
+    row = ["<td>%s</td>" % line.get(field, "") for field in CSV_FIELDS]
     out.append("<tr>" + "".join(row) + "</tr>")
     return out
     
@@ -191,7 +194,7 @@ def make_preview_nonflight(line, out):
 def make_preview_plane(line, out):
     row = []
     for field in CSV_FIELDS[:7]:
-        row.append("<td>" + line.get(field, "") + "</td>")
+        row.append("<td>%s</td>" % line.get(field, ""))
         
     out.append("<tr>" + "".join(row) + "</tr>")
     return out
@@ -311,7 +314,7 @@ def swap_out_flight_titles(original):
         if title in COLUMN_NAMES.keys():
             new.append(COLUMN_NAMES[title])
         else:
-            new.append("??")
+            new.append(title)
             
     return new
     
