@@ -69,33 +69,32 @@ $(document).ready(function() {
 	$("input[type='button'].shortcut").click(function(){
 	    column = $(this).attr("class").split(" ")[0];
 	    
-	    prev_value = $("#id_" + column).val()
-	    total_value = $("#id_total").val()
+	    prev_value = $("#id_new-" + column).val()
+	    total_value = $("#id_new-total").val()
 	    
 	    if( total_value == prev_value)
-	        $("#id_" + column).val("");
+	        $("#id_new-" + column).val("");
     	else
-    	    $("#id_" + column).val( total_value );
+    	    $("#id_new-" + column).val( total_value );
 	    
 	});
 	
 	/////////////////////////////////////////
 	
-	$("#id_date").attr("autocomplete", "off");					// disable auto complete
-	$("#id_non-date").attr("autocomplete", "off");
-	$("#id_total").attr("autocomplete", "off");
-	$("#id_pic").attr("autocomplete", "off");
-	$("#id_solo").attr("autocomplete", "off");
-	$("#id_sic").attr("autocomplete", "off");
-	$("#id_dual_r").attr("autocomplete", "off");
-	$("#id_dual_g").attr("autocomplete", "off");
-	$("#id_act_inst").attr("autocomplete", "off");
-	$("#id_sim_inst").attr("autocomplete", "off");
-	$("#id_app").attr("autocomplete", "off");
-	$("#id_night").attr("autocomplete", "off");
-	$("#id_xc").attr("autocomplete", "off");
-	$("#id_day_l").attr("autocomplete", "off");
-	$("#id_night_l").attr("autocomplete", "off");
+	$("#id_new-date").attr("autocomplete", "off");					// disable auto complete
+	$("#id_new-total").attr("autocomplete", "off");
+	$("#id_new-pic").attr("autocomplete", "off");
+	$("#id_new-solo").attr("autocomplete", "off");
+	$("#id_new-sic").attr("autocomplete", "off");
+	$("#id_new-dual_r").attr("autocomplete", "off");
+	$("#id_new-dual_g").attr("autocomplete", "off");
+	$("#id_new-act_inst").attr("autocomplete", "off");
+	$("#id_new-sim_inst").attr("autocomplete", "off");
+	$("#id_new-app").attr("autocomplete", "off");
+	$("#id_new-night").attr("autocomplete", "off");
+	$("#id_new-xc").attr("autocomplete", "off");
+	$("#id_new-day_l").attr("autocomplete", "off");
+	$("#id_new-night_l").attr("autocomplete", "off");
 	
 	////////////////////////////////////////////////////////
 	
@@ -114,5 +113,5 @@ $(document).ready(function() {
 
 function do_auto_button() {
 	for(b=0;b<auto_button.length; b++)
-		$("#id_" + auto_button[b]).val( $("#id_total").val() );
+		$("#id_new-" + auto_button[b]).val( $("#id_new-total").val() );
 }
