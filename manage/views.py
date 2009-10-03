@@ -118,7 +118,7 @@ def do_import(request, f, preview=True):
                     plane_out = make_preview_plane(line, plane_out)
                 else:
                     plane_out = make_commit_plane(line, request.user, plane_out)
-        except StopIteration:                                                       #most likley an empty planes section, just do nothing
+        except StopIteration:   #most likley an empty planes section, just do nothing
             pass
 
             
@@ -149,6 +149,12 @@ def prepare_line(line):
         
     elif line.get('to') and line.get('from') and line.get('via'):
         line.update({"route": line.get('from') + " " + line.get('via') + " " + line.get('to')})
+        
+    if line.get('holding').upper() == "NO":
+        line['holding'] = False
+        
+    if line.get('tracking').upper() == "NO":
+        line['tracking'] = False
     
     person=""
     l = []
