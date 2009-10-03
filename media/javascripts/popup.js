@@ -12,7 +12,7 @@ function fire_popup() {
 		cursor: 'move',
 		opacity: 1.0,
 		handle: '#dragbar'
-	}).css("top", top).show();
+	}).show();
 	
 }
 
