@@ -3,7 +3,8 @@ COLUMN_NAMES = {
     "DATE OF FLIGHT": "date",
 
     "TIME IN FLIGHT": 'total',
-    "TOTAL": 'total',				
+    "TOTAL": 'total',	
+    "TOTALTIME": 'total',			
     "DURATION": 'total',
     "DURATION OF FLIGHT": 'total',
     "TOTAL DURATION OF FLIGHT": 'total',
@@ -15,24 +16,28 @@ COLUMN_NAMES = {
     "ROUTE OF FLIGHT": 'route',
     "ROUTE": 'route',
     "FROM": 'from',
-    "TO":'to',
-    "VIA":'via',
+    "TO": 'to',
+    "VIA": 'via',
+    "STOPS": 'via',
     "ROUTE OF FLIGHT FROM":'from',
     "ROUTE OF FLIGHT TO": 'to',
     "ROUTE OF FLIGHT VIA": 'via',
 
     "AIRCRAFT IDENT": 'tailnumber',
     "TAIL NUMBER": 'tailnumber',
+    "N-NUMBER": 'tailnumber",
     "PLANE": 'tailnumber',
     "AIRCRAFT REGISTRATION": 'tailnumber',
 
     "DAY LANDINGS": 'day_l',
+    "LANDINGS": 'day_l',
     "LANDINGS DAY": 'day_l',
     "DAY LAND": 'day_l',
 
     "NIGHT LANDINGS": 'night_l',
     "LANDINGS NIGHT": 'night_l',
     "NIGHT LAND": 'night_l',
+    "NIGHT L": 'night_l',
 
     "SIMULATOR": 'simulator',
     "FLIGHT SIMULATOR": 'simulator',
@@ -41,6 +46,7 @@ COLUMN_NAMES = {
 
     "APPROACHES": 'app',
     "APPROACHES & TYPE": 'app',
+    "INSTAPPR": 'app',
 
     "PILOT IN COMMAND": 'pic',
     "PIC": 'pic',
@@ -57,16 +63,20 @@ COLUMN_NAMES = {
     "AS INSTRUCTOR": 'dual_g',
     "AS FLIGHT INSTRUCTOR": 'dual_g',
     "DUAL GIVEN": 'dual_g',
+    "CFI": 'dual_g',
 
     "CROSS COUNTRY": 'xc',
     "XC": 'xc',
+    "XCOUNTRY": 'xc',
 
     "NIGHT": 'night',
 
     "INSTRUMENT": 'act_inst',
     "ACTUAL INSTRUMENT": 'act_inst',
+    "ACTUALINSTR": 'act_inst',
 				
     "SIMULATED INSTRUMENT": 'sim_inst',
+    'SIMINSTR': 'sim_inst',
 				
     "STUDENT": 'student',
     "INSTRUCTOR":'instructor',
@@ -74,9 +84,11 @@ COLUMN_NAMES = {
     "CAPTAIN": 'captain',
     "FLIGHT NUMBER": 'flight_number',
     "REMARKS": 'remarks',
+    
+    "HOLDS": 'holding',
+    "TRACKING": 'tracking',
 				
     "NON-FLYING": 'non_flying',
-				
     "FLYING": 'flying',
 }
 
