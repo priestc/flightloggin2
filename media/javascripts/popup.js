@@ -5,14 +5,36 @@ function wipe_clean() {
 
 function fire_popup() {
 
-    $('#popup').centerScreen()
-    
-    $('#popup').draggable({ 
+    var scrolledX, scrolledY;
+	
+	if( self.pageYOffset )
+	{
+		scrolledX = self.pageXOffset;
+		scrolledY = self.pageYOffset;
+	}
+	else if( document.documentElement && document.documentElement.scrollTop )
+	{
+		scrolledX = document.documentElement.scrollLeft;
+		scrolledY = document.documentElement.scrollTop;
+	}
+	else if( document.body )
+	{
+		scrolledX = document.body.scrollLeft;
+		scrolledY = document.body.scrollTop;
+	}
+
+    var p = $('#popup');
+    p.centerScreen();
+    p.draggable({ 
 		zIndex: 20,
 		cursor: 'move',
 		opacity: 1.0,
 		handle: '#dragbar'
-	}).show();
+	});
+	
+	var t = p.css("top");
+	p.css("top", scrolledY + parseInt(t));
+	p.show();
 	
 }
 
