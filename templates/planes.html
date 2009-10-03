@@ -89,12 +89,11 @@
 		</tr>
 	</table>
 	
-	<form id="new_plane_form" action="{% url planes user.username %}" method="post">
+	<form id="new_plane_form" action="{% url planes display_user.username %}" method="post">
 		<table>
 			<tbody>
 				<tr>
-					<td>		
-						{# <input type="hidden" name="user" id="id_user" value="{{ user.id }}" /> #}
+					<td>
 						<input type="hidden" name="id" id="id_id" value="" />
 					</td>
 				</tr>
