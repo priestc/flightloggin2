@@ -10,9 +10,71 @@
 
 
 {% block canvas %}
-    Download zipped backup file: <button onclick="window.location = '/{{ display_user }}/backup/'; return false;">Export</button>
-    
-    <a href="/import_instructions.html">Click here for import instructions</a>
+    {% if not flight_out %}
+    Download zipped backup file:<br>
+    <button onclick="window.location = '/{{ display_user }}/backup/'; return false;">Export</button>
+    <div style="max-width: 50em; text-align: left; margin: 30px auto 30px auto">
+        <hr>
+        Use this form to import logbook data from another digital logbook application. Any data in a valid CSV
+        format will work.
+        
+        <h3>Importing from LogShare:</h3>
+        Click on "Export your logbook"<br>
+        Select either format. (tab-seperated values recommended)
+        
+        <h3>Importing from ForPilots logbook:</h3>
+        Click file -> export -> CSV<br>
+        The resulting file should be called "export.csv"    
+        
+        <h3>Importing from LogbookPro logbook:</h3>
+        Since LogbookPro <span style="text-decoration: line-through;">is a bloated piece of garbage</span>, outputs data in an
+        invalid CSV format, you will have to first export your data as excel spreadsheet (File -> Export -> Export to Excel), then save that
+        into CSV format from within Excel.
+        
+        <h3>Importing from Excel (or any other spreadsheet application):</h3>
+        Click on File -> Save, then in the dialog box, at the bottom, select "CSV".<br>
+        In order for FlightLogg.in' to know what to do with each column, the headers must be named a certain way. The following are columns
+        that FlightLogg.in recognizes:
+        
+        <ul>
+            <li><strong>Date</strong></li>
+            <li><strong>Tailnumber</strong></li>
+            <li><strong>Route</strong></li>
+            <li><strong>Route To</strong> - the point of destination (if any of the following Route fields are present, they will be automatically catenated
+            together.</li>
+            <li><strong>Route From</strong> - the point of deparure</li>
+            <li><strong>Route Via</strong> - any points along the way</li>
+            <li><strong>Total</strong> - Total duration of the flight</li>
+            <li><strong>Simulator</strong> - Same as above, except for planes that are simulators/FTDs/PCATDs</li>
+            <li><strong>PIC</strong></li>
+            <li><strong>SIC</strong></li>
+            <li><strong>Solo</strong></li>
+            <li><strong>Dual Given</strong></li>
+            <li><strong>Dual Received</strong></li>
+            <li><strong>Actual Instrument</strong></li>
+            <li><strong>Simulated Instrument</strong></li>
+            <li><strong>Cross Country</strong></li>
+            <li><strong>Approaches</strong></li>
+            <li><strong>Tracking</strong> - Any value other than "No" will be counted as flight where tracking took place</li>
+            <li><strong>Holding</strong> - Same as above</li>
+            <li><strong>Night</strong></li>
+            <li><strong>Day Landings</strong></li>
+            <li><strong>Night Landings</strong></li>
+            
+            <li><strong>Person</strong> - Name of the person who rode along in the flight with the logbook owner</li>
+            <li><strong>Student</strong> - This column, along with the next three columsn will be stored as "Person".</li>
+            <li><strong>Instructor</strong> - containing the name of the person who acted as instructor for the flight, not to be confused with "Dual Given"</li>
+            <li><strong>Captain</strong></li>
+            <li><strong>First Officer</strong></li>
+        </ul>
+        
+        All column names are <strong>not</strong> case sensitive. Some variations in the naming of each columns are tolerated. For instance,
+        "Total", "total time", "total duration", and "duration", are all recognized as "total".
+        
+        <hr>
+    </div>
+    {% endif %}
+
     
     <form action="{% url import display_user %}" method="post" enctype="multipart/form-data">
     <div>
