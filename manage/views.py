@@ -150,10 +150,10 @@ def prepare_line(line):
     elif line.get('to') and line.get('from') and line.get('via'):
         line.update({"route": line.get('from') + " " + line.get('via') + " " + line.get('to')})
         
-    if line.get('holding').upper() == "NO":
+    if line.get('holding', "").upper() == "NO":
         line['holding'] = False
         
-    if line.get('tracking').upper() == "NO":
+    if line.get('tracking', "").upper() == "NO":
         line['tracking'] = False
     
     person=""
@@ -314,9 +314,9 @@ def make_commit_records(line, user, out):
 def swap_out_flight_titles(original):
     new = []
     for title in original:
-    
-        title = title.upper().strip().replace("\"", '').replace(".", "")
-    
+        # replace /n and /r because of logbook pro
+        title = title.upper().strip().replace("\"", '').replace(".", "").\
+                replace("\r\n", " ")
         if title in COLUMN_NAMES.keys():
             new.append(COLUMN_NAMES[title])
         else:
