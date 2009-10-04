@@ -23,7 +23,7 @@ NUMERIC_FIELDS = [      # fields that are always just numbers and nothing else
           ]
           
 BACKUP_FIELDS = [       #fields included in the backup file
-          'date', 'reg', 'rr_route',
+          'date', 'reg', 'route',
           'total', 'sim', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
           'person', 'r_remarks', 'flying',
           ]
@@ -76,7 +76,7 @@ FIELD_TITLES = {
     "s_route": "Route (Simple)",
     "f_route": "Route (Fancy)",
     "r_route": "Route (Raw)",
-    "rr_route": "Route",            #for the backup file
+    "route": "Route",            #for the backup file
      
     "total_s": "Total (with Sim)",
     "total": "Total",
@@ -135,6 +135,7 @@ FIELD_ABBV = {
     "s_route": "Route",
     "f_route": "Route",
     "r_route": "Route",
+    "route": "Route",
     
     "total_s": "Total",
     "total": "Total",
