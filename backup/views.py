@@ -35,7 +35,7 @@ def backup_csv(user):
     from logbook.models import Flight, Columns
 
     csv_sio = StringIO.StringIO()
-    writer = csv.writer(csv_sio, dialect='excel')
+    writer = csv.writer(csv_sio, delimiter="\t")
     
     ##########################
     

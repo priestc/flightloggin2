@@ -23,7 +23,7 @@ NUMERIC_FIELDS = [      # fields that are always just numbers and nothing else
           ]
           
 BACKUP_FIELDS = [       #fields included in the backup file
-          'date', 'reg', 'r_route',
+          'date', 'reg', 'rr_route',
           'total', 'sim', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
           'person', 'r_remarks', 'flying',
           ]
