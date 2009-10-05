@@ -52,7 +52,7 @@ def make_twin_plot(fig, display_user, column, s=None, e=None):
     if column in DB_FIELDS:
         db_column = column
         
-    elif column in PIC_FIELDS:
+    if column.endswith('pic'):
         db_column = 'pic'
     else:
         db_column = 'total'
