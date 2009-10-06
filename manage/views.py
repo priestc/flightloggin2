@@ -65,14 +65,15 @@ def import_s(request, shared, display_user):
 
 def do_import(request, f, preview=True):
     f.seek(0)
-    pre = f.read(2048)
+    pre = f.read(10000)
     f.seek(0)
     dialect = csv.Sniffer().sniff(pre)
     reader = csv.reader(f, dialect)
+
     titles = reader.next()
     titles = swap_out_flight_titles(titles)
     
-    dr = csv.DictReader(f, titles)
+    dr = csv.DictReader(f, titles, dialect=dialect)
     dr.next()
     
     non_out = []
@@ -85,7 +86,7 @@ def do_import(request, f, preview=True):
     for line in dr:
         
         line_type, dict_line = prepare_line(line)
-
+        
         if line_type == "FLIGHT":
             if preview:
                 flight_out = make_preview_flight(dict_line, flight_out)
@@ -215,19 +216,21 @@ def make_commit_flight(line, user, out):
     plane, created = Plane.objects.get_or_create(tailnumber=line.get("tailnumber"), type=line.get("type"), user=user)
     flight = Flight(user=user)
     
-    if "P" in line.get("flying", []):
+    import pdb; pdb.set_trace()
+    
+    if "P" in line.get("flying", ""):
         line.update({"pilot_checkride": True})
     
-    if "H" in line.get("flying", []):
+    if "H" in line.get("flying", ""):
         line.update({"holding": True})
         
-    if "T" in line.get("flying", []):
+    if "T" in line.get("flying", ""):
         line.update({"tracking": True})
         
-    if "C" in line.get("flying", []):
+    if "C" in line.get("flying", ""):
         line.update({"cfi_checkride": True})
         
-    if "I" in line.get("flying", []):
+    if "I" in line.get("flying", ""):
         line.update({"ipc": True})
           
     line.update({"plane": plane.pk})
