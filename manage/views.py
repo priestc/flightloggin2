@@ -69,7 +69,6 @@ def do_import(request, f, preview=True):
     f.seek(0)
     dialect = csv.Sniffer().sniff(pre)
     reader = csv.reader(f, dialect)
-
     titles = reader.next()
     titles = swap_out_flight_titles(titles)
     
@@ -215,8 +214,6 @@ def make_preview_records(line, out):
 def make_commit_flight(line, user, out):
     plane, created = Plane.objects.get_or_create(tailnumber=line.get("tailnumber"), type=line.get("type"), user=user)
     flight = Flight(user=user)
-    
-    import pdb; pdb.set_trace()
     
     if "P" in line.get("flying", ""):
         line.update({"pilot_checkride": True})
