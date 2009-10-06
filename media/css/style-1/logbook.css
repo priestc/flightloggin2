@@ -1,10 +1,14 @@
 #canvas                                      {width: 98%; max-width: none}
+
+/* the [Pilot Checkride] tag in the remarks section*/
 .flying_event                                {color: darkred; font-weight: bold}
 
+/* hidden data for the popup window */
 .date_col span                               {display: none}
 
-#logbook_table                               {width:100%; border: 1px solid black; background: #cce4eb; font-size: x-small}
-#logbook_table td                            {border: 1px solid darkgray; white-space: nowrap;}
+
+#logbook_table                               {width:100%; border: 0px solid black; background: #81D38F; font-size: x-small}
+#logbook_table td                            {border: 0px solid darkgray; }
 #logbook_table td:last-child:not([colspan])  {white-space: normal; text-align: left}
 
 #logbook_table thead td,
