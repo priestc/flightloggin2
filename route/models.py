@@ -247,20 +247,20 @@ def find_navaid(ident, i, last_rb=None):
     
     return None
     
-##############################################################################################
+###############################################################################
 
 def find_custom(ident, i):
-    """Tries to find the custom point, if it can't find one, it adds it to the user's
-       custom list
+    """Tries to find the custom point, if it can't find one, it adds it to the
+       user's custom list
     """
     user = share.get_display_user()
-    custom,created = Custom.objects.get_or_create(user=user, identifier=ident[1:])
+    custom,c = Custom.objects.get_or_create(user=user, identifier=ident[1:])
 
     routebase = RouteBase(custom=custom, sequence=i)
 
     return routebase
 
-##############################################################################################
+###############################################################################
 
 def find_airport(ident, i, p2p):
     airport = get_object_or_None(Airport, identifier=ident)

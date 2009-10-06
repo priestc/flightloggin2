@@ -34,6 +34,7 @@
 <input type="button" id="new_custom" value="New Place">
 {% endif %}
 
+
 <table id="custom_table">
     <tr>
         <td>Identifier</td><td>Name</td><td>Coordinates</td><td>Type</td><td>Municipality</td><td>Region</td><td>Country</td>
@@ -63,6 +64,10 @@
     
     {% endfor %}
 </table>
+
+<p>When using a custom identifier in your logbook, make sure to prefix the point
+with an exclamation point. For instance a flight from LGA to a custom point
+called "CUSTOM", should be logged "LGA - !CUSTOM"</p>
 
 <div id="popup" title="New Event">
 	<table id="dragbar">

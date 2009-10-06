@@ -53,9 +53,9 @@ def autofill(type_):
         elif "850" in type_: model="Citation Columbus";c=2
         
         if model is not None:
-            manufacturer = "Cessna"
-        
-        return (manufacturer, model, c)
+            return ("Cessna", model, c)
+        else:
+            return None
     
     elif type_.startswith("PA"):
         if "6" in type_: model="Sky Sedan";c=1
@@ -63,7 +63,7 @@ def autofill(type_):
         if "8" in type_: model="Skycycle";c=1
         if "9" in type_: model="";c=1
         elif "10" in type_: model="";c=1
-        elif "11" in type_: model="Cun Special";c=1
+        elif "11" in type_: model="Cub Special";c=1
         elif "12" in type_: model="Super Cruiser";c=1
         elif "14" in type_: model="Family Cruiser";c=1
         elif "15" in type_: model="Vagabond";c=1
@@ -109,16 +109,47 @@ def autofill(type_):
         elif "60" in type_: model="Aerostar";c=2
 
         if model is not None:
-            manufacturer = "Piper"
-        
-        return (manufacturer, model, c)
+            return ("Piper", model, c)
+        else:
+            return None
     
     elif type_.startswith("BE"):
-        pass
+        if "16" in type_: model="";c=1
+        elif "17" in type_: model="Staggerwing";c=1
+        elif "18" in type_: model="Twin Beech";c=2
+        elif "19" in type_: model="Sport";c=1
+        elif "23" in type_: model="Musketeer";c=1
+        elif "24" in type_: model="Sierra";c=1
+        elif "34" in type_: model="Twin-Quad";c=1
+        elif "33" in type_: model="Debonair";c=1
+        elif "35" in type_: model="Bonanza";c=1
+        elif "36" in type_: model="Bonanza";c=1
+        elif "40" in type_: model="";c=2
+        elif "50" in type_: model="";c=2
+        elif "55" in type_: model="Baron";c=2
+        elif "56" in type_: model="Baron";c=2
+        elif "58" in type_: model="Baron";c=2
+        elif "60" in type_: model="Duke";c=2
+        elif "65" in type_: model="Queen Air";c=2
+        elif "70" in type_: model="Queen Air";c=2
+        elif "80" in type_: model="Queen Air";c=2
+        elif "88" in type_: model="Queen Air";c=2
+        elif "76" in type_: model="Duchess";c=2
+        elif "77" in type_: model="Skipper";c=1
+        elif "90" in type_: model="King Air";c=2
+        elif "200" in type_: model="Super King Air";c=2
+        elif "300" in type_: model="Super King Air";c=2       
+        elif "100" in type_: model="King Air";c=2
+        elif "95" in type_: model="Travel Air";c=2
+        elif "99" in type_: model="Airliner";c=2
+        elif "390" in type_: model="Premier";c=2
+        elif "1900" in type_: model="Airliner";c=2
+        elif "2000" in type_: model="Starship";c=2
 
-
-
-
+        if model is not None:
+            return ("Beechcraft", model, c)
+        else:
+            return None
 
 
 
