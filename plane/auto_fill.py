@@ -62,11 +62,6 @@ def autofill(type_):
             return ret
     
     elif type_.startswith("PA"):
-        #if "6" in type_: model="Sky Sedan";c=1;t="w"
-        #if "7" in type_: model="Skycoupe";c=1;t="w"
-        #if "8" in type_: model="Skycycle";c=1;t="w"
-        #if "9" in type_: model="";c=1;t="w"
-        
         type_ = type_.replace('-', '')[2:]
         
         if   type_.startswith("10"): model="";c=1;t="w"
@@ -116,6 +111,12 @@ def autofill(type_):
         elif type_.startswith("47"): model="PiperJet";c=1;t="chjt"
         elif type_.startswith("48"): model="Enforcer";c=2
         elif type_.startswith("60"): model="Aerostar";c=2;t="hc"
+        
+        elif type_.startswith("6"): model="Sky Sedan";c=1;t="w"
+        elif type_.startswith("7"): model="Skycoupe";c=1;t="w"
+        elif type_.startswith("8"): model="Skycycle";c=1;t="w"
+        elif type_.startswith("9"): model="";c=1;t="w"
+        
 
         if model is not None:
             ret["manufacturer"] = "Piper"

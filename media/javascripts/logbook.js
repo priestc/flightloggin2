@@ -3,11 +3,12 @@ function fill_in_flight(dom_id) {
 	var id = dom_id.substr(1);
 	$("#id_new-id").val(id);
 	
-	var plane = $("#f" + id + " span.data_plane").text();
-	$("#id_new-plane option:contains(" + plane + ")").attr("selected", "selected");
-	
 	var date = $("#f" + id + " span.data_date").text();
 	$("#id_new-date").val(date);
+
+	var plane = $("#f" + id + " span.data_plane").text();
+	if(plane != '')
+    	$("#id_new-plane option:contains(" + plane + ")").attr("selected", "selected");
 	
 	var route = $("#f" + id + " span.data_route").text();
 	$("#id_new-route").val(route);
