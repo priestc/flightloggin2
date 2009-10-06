@@ -43,43 +43,42 @@
 
 
 {% block canvas %}
-<div class="central_div">
     {% if not shared %}
 	<input id="new_plane" type="button" value="New Plane">
     {% endif %}
-<table id="p_t">
-	<thead>
-		<tr>
-			<td>Tailnumber</td>
-			<td>Manufacturer</td>
-			<td>Model Name</td>
-			<td>Type</td>
-			<td>Category/Class</td>
-			<td>Tags</td>
-			<td>Description</td>
-		</tr>
-	</thead>
-	<tbody>
-	{% for plane in planes %}
-		<tr>
-			<td id="p{{ plane.id }}_tailnumber" title="Tailnumber (click to edit)"><a href="" id="p{{ plane.id }}">{{ plane.tailnumber }}</a></td>
-			<td id="p{{ plane.id }}_manufacturer">{{ plane.manufacturer }}</td>
-			<td id="p{{ plane.id }}_model">{{ plane.model }}</td>
-			<td id="p{{ plane.id }}_type">{{ plane.type }}</td>
-			<td id="p{{ plane.id }}_cat_class">{{ plane.get_cat_class_display }}</td>
-			<td id="p{{ plane.id }}_tags">{{ plane.get_tags_quote|join:", " }}</td>
-			<td id="p{{ plane.id }}_description">{{ plane.description }}</td>
-		</tr>		
-	{% empty %}
-	    <tr>
-	        <td class="empty_row" colspan="7">No planes to display</td>
-	    </tr>
-	{% endfor %}
+    <table id="p_t" class="minor_table">
+	    <thead>
+		    <tr>
+			    <th>Tailnumber</th>
+			    <th>Manufacturer</th>
+			    <th>Model Name</th>
+			    <th>Type</th>
+			    <th>Category/Class</th>
+			    <th>Tags</th>
+			    <th>Description</th>
+		    </tr>
+	    </thead>
+	    <tbody>
+	    {% for plane in planes %}
+		    <tr>
+			    <td id="p{{ plane.id }}_tailnumber" title="Tailnumber (click to edit)"><a href="" id="p{{ plane.id }}">{{ plane.tailnumber }}</a></td>
+			    <td id="p{{ plane.id }}_manufacturer">{{ plane.manufacturer }}</td>
+			    <td id="p{{ plane.id }}_model">{{ plane.model }}</td>
+			    <td id="p{{ plane.id }}_type">{{ plane.type }}</td>
+			    <td id="p{{ plane.id }}_cat_class">{{ plane.get_cat_class_display }}</td>
+			    <td id="p{{ plane.id }}_tags">{{ plane.get_tags_quote|join:", " }}</td>
+			    <td id="p{{ plane.id }}_description">{{ plane.description }}</td>
+		    </tr>		
+	    {% empty %}
+	        <tr>
+	            <td colspan="7">Nothing to show here, sorry</td>
+	        </tr>
+	    {% endfor %}
 	
 	
-	</tbody>
-</table>
-</div>
+	    </tbody>
+    </table>
+
 
 <div id="popup" title="New Entry">
 	<table id="dragbar">
@@ -99,21 +98,25 @@
 				</tr>
 				<tr>
 					<td>{{ form.tailnumber.label_tag }}<br>&nbsp;</td>
-					<td>{{ form.tailnumber }}<br><span class="help_text">{{form.tailnumber.help_text}}</span></td>
+					<td>{{ form.tailnumber }}<br>
+					<span class="help_text">{{form.tailnumber.help_text}}</span></td>
 				</tr>
 				<tr>
 					<td>{{ form.manufacturer.label_tag }}<br>&nbsp;</td>
-					<td>{{ form.manufacturer }}<br><span class="help_text">{{form.manufacturer.help_text}}</span></td>
+					<td>{{ form.manufacturer }}<br>
+					<span class="help_text">{{form.manufacturer.help_text}}</span></td>
 				</tr>
 			
 				<tr>
 					<td>{{ form.type.label_tag }}<br>&nbsp;</td>
-					<td>{{ form.type }}<br><span class="help_text">{{form.type.help_text}}</span></td>
+					<td>{{ form.type }}<br>
+					<span class="help_text">{{form.type.help_text}}</span></td>
 				</tr>
 				
 				<tr>
 					<td>{{ form.model.label_tag }}<br>&nbsp;</td>
-					<td>{{ form.model }}<br><span class="help_text">{{form.model.help_text}}</span></td>
+					<td>{{ form.model }}<br>
+					<span class="help_text">{{form.model.help_text}}</span></td>
 				</tr>
 				
 				<tr>
@@ -152,7 +155,6 @@
         {% endif %}
 	</form>
 </div>
-
 {{ form.errors }}
 
 {% endblock %}

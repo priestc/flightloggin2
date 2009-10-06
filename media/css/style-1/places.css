@@ -7,16 +7,11 @@ select, textarea	                {width: 200px; font-size: small !important}
 
 input[type="button"]                {margin: 10px}
 
-table#custom_table                  {background: #dfdfdf; width: 100%; border-collapse: collapse}
-table#custom_table tr:first-child   {background: #E0FFFF}
-table#custom_table td               {border: 1px solid black; padding: 2px}
-
 td.remarks textarea                 {height: 50px}
 td.date input                       {width: 100px}
-
 
 textarea                            {width: 250px; height: 100px}
 #popup td:nth-child(2)              {text-align: left}
 
+/* for the instructions for the coordinates on the popup */
 .help_text                          {color: gray; font-style: italic; font-size: x-small}
-

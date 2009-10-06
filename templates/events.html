@@ -47,9 +47,9 @@
     <input type="button" id="new_event" value="New Event">
 {% endif %}
 
-    <table class="nonflight_table">
+    <table class="minor_table">
        <tr>
-           <td>Date</td><td>Type</td><td>Remarks</td>
+           <th>Date</th><th>Type</th><th>Remarks</th>
        </tr>
     {% for nf in nonflights %}
        <tr id="row_{{nf.id}}">
@@ -62,7 +62,7 @@
        </tr>
     {% empty %}
     
-       <tr><td colspan="3">Nothing to show here</td></tr>
+       <tr><td colspan="3">Nothing to show here, sorry</td></tr>
        
     {% endfor %}    
     </table>

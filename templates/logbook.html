@@ -65,9 +65,7 @@
 				<td colspan="6">
 				    {% if flights %}
 					<a href="{% url mass-edit display_user.username page_of_flights.number %}">Mass Edit</a>
-					&nbsp; &nbsp;
 					{% endif %}
-					<a href="" id="toggle_columns">Show All Columns</a>
 				</td>
 			</tr>
 		</tfoot>
@@ -92,6 +90,7 @@
 	</table>
 	
 	{% include "pagination_table.html" %}
+	<hr>
 	{% include "filter_table.html" %}
 	
 	</form>

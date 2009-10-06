@@ -31,7 +31,7 @@ td.nav_bar_not          {width: 33%}
 /* the little calendar icon for the date picker*/                       
 .embed + img            {position: relative; left: -19px; top: 3px; cursor: pointer;}
 	 
-a                       {color: #11566d}
+a                       {color: #001147}
 h1                      {text-align: center; font-weight: bold; color: #665b1e; font-size: x-large;}
 h2                      {font-weight: bold; color: #11566d; font-size: large}
 
@@ -55,3 +55,23 @@ input[type=text]:disabled {background-color: #DDDDDD; color: #777777; border: 1p
 
 #footer                 {text-align:center; font-size: x-small; color: gray;
                          border: 0px solid black; width: 100%;}
+                         
+/*****table for events, planes, and places *********/
+
+table.minor_table                     {width: 100%; border-collapse: collapse}
+
+/* the header row */
+table.minor_table th                  {border: 1px solid #C3C3C3; background: #E0FFFF; font-weight: normal; padding: 2px}
+
+/* every other cell */
+table.minor_table td                  {border: 1px solid #C3C3C3; padding: 2px}
+
+/* striping */
+table.minor_table tr:nth-child(odd)   {background: #D5E9D5}
+table.minor_table tr:nth-child(even)  {background: #E7FFE7}
+
+/* the empty message */
+table.minor_table td[colspan]         {font-size: x-large;}
+
+
+

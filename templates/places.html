@@ -35,9 +35,9 @@
 {% endif %}
 
 
-<table id="custom_table">
+<table id="custom_table" class="minor_table">
     <tr>
-        <td>Identifier</td><td>Name</td><td>Coordinates</td><td>Type</td><td>Municipality</td><td>Region</td><td>Country</td>
+        <th>Identifier</th><th>Name</th><th>Coordinates</th><th>Type</th><th>Municipality</th><th>Region</th><th>Country</th>
     </tr>
     
     {% for place in customs %}
@@ -59,7 +59,7 @@
     {% empty %}
     
     <tr>
-        <td colspan="7">Nothing to show.</td>
+        <td colspan="7">Nothing to show here, sorry</td>
     </tr>
     
     {% endfor %}
