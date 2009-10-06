@@ -61,7 +61,12 @@
 	    <tbody>
 	    {% for plane in planes %}
 		    <tr>
-			    <td id="p{{ plane.id }}_tailnumber" title="Tailnumber (click to edit)"><a href="" id="p{{ plane.id }}">{{ plane.tailnumber }}</a></td>
+			    <td id="p{{ plane.id }}_tailnumber" title="Tailnumber (click to edit)"><a href="" id="p{{ plane.id }}">
+			    {%if not plane.tailnumber%}
+			    .
+			    {%else%}
+			    {{plane.tailnumber}}
+			    {%endif%}</a></td>
 			    <td id="p{{ plane.id }}_manufacturer">{{ plane.manufacturer }}</td>
 			    <td id="p{{ plane.id }}_model">{{ plane.model }}</td>
 			    <td id="p{{ plane.id }}_type">{{ plane.type }}</td>
