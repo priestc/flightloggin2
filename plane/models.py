@@ -32,6 +32,21 @@ class Plane(models.Model):
     description =    models.TextField(                          blank=True)
 
     tags =           TagField()
+    
+    def save(self, *args, **kwargs):
+        if not self.pk and not (self.manufacturer and self.model and self.cat_class) and self.type:
+            from auto_fill import autofill
+            d = autofill(self.type)
+            self.manufacturer = d['manufacturer'] or ""
+            self.model = d['model'] or ""
+            self.cat_class = d['cat_class'] or 1
+            self.tags = d['tags'] or ""
+            
+            if "frasca" in self.type.lower():
+                self.manufacturer="Frasca"
+                self.cat_class = 16
+            
+        super(Plane, self).save(*args, **kwargs)
 
     def __unicode__(self):
         if self.type:
