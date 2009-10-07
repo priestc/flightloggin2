@@ -72,6 +72,7 @@ urlpatterns += patterns('',
     url(r'^(?P<username>\w+)/logbook.html$',                       "logbook.views.logbook",    name="logbook"),
     url(r'^(?P<username>\w+)/logbook-page-(?P<page>\d+).html',     "logbook.views.logbook",    name="logbook-page"),
     url(r'^(?P<username>\w+)/sigs.html$',                          "sigs.views.sigs",          name="sigs"),
+    url(r'^(?P<username>\w+)/print.pdf$',                          "pdf.views.pdf",            name="pdf"),
     
     (r'^site-media/(?P<path>.*)$','django.views.static.serve',     {'document_root': '/home/chris/Websites/flightloggin/media', 'show_indexes': True}),
 

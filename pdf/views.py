@@ -1,0 +1,2 @@
+def pdf(request):
+    pass
