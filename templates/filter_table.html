@@ -1,8 +1,8 @@
 <form method="get" action="{% url logbook display_user %}">
 <table id="filter_box">
     <tr>
-        <td>
-            <table class="alignment_table">
+        <td id="date_filter_pane">
+            <table>
                 <tr><td>
                 <input type="hidden" name="c" value="t">
                 {{ ff.start_date.label_tag }}</td><td>{{ ff.start_date }}
@@ -19,24 +19,28 @@
         </td>
         
         <td>
+            {# produces a table with ID='center_filter_table' #}
             {{ ff.render_table }}
             
-            <br><br>
+            <br>
             
-            {#<table class="alignment_table">#}
-            {#    <tr>#}
-            {#        <td>{{ ff.person.label_tag }}</td><td>{{ ff.person }}</td>#}
-            {#    </tr>#}
-            {#    <tr>#}
-            {#        <td>{{ ff.remarks.label_tag }}</td><td>{{ ff.remarks }}</td>#}
-            {#    </tr>#}
-            {#</table>#}
+            <table id="text_filters">
+                <tr>
+                    <td>{{ ff.person.label_tag }}</td><td>{{ ff.person }}</td>
+                </tr>
+                <tr>
+                    <td>{{ ff.remarks.label_tag }}</td><td>{{ ff.remarks }}</td>
+                </tr>
+                <tr>
+                    <td>{{ ff.route__fancy_rendered.label_tag }}</td><td>{{ ff.route__fancy_rendered }}</td>
+                </tr>
+            </table>
             
         </td>
         
-        <td>
+        <td id="plane_filter_pane">
             By Plane Tags<br>
-            {{ ff.plane__tags__icontains }}
+            {{ ff.plane__tags }}
             
             <br><br>
             

@@ -4,7 +4,7 @@ from django import forms
 from constants import FILTER_FIELDS, FIELD_ABBV
    
 def html_table(data, row_length):
-    out = '<table id="filter_table">'
+    out = '<table id="center_filter_table">'
     counter = 0
     for element in data:
         if counter % row_length == 0:
@@ -32,28 +32,38 @@ def render_table(self):  #will be attached to the class in the function
     return html_table(out, 3)
 
 def make_filter_kwargs(self, qs):
-    """filter the queryset based on the form values
+    """filter the queryset based on the form values, the name of this function
+       should be renamed
     """
     
+    # all filter fields not ending with "_op"
     fields = filter(lambda x: not x[0].endswith("_op"),
                     self.cleaned_data.iteritems())
     
     for field,val in fields:
         
         if val:
-            if field == "start_date":               # date filters
+            if field == "start_date":        # date filters
                 kwargs = {"date__gte": val}
                 qs = qs.filter(**kwargs)
             
             elif field == "end_date":
                 kwargs = {"date__lte": val}
                 qs = qs.filter(**kwargs)
-            
-            elif field.startswith("plane__"):       # all plane filters
-                kwargs = {field: val}
+                
+            elif field == 'person':
+                kwargs = {"person__icontains": val}
+                qs = qs.filter(**kwargs)
+                
+            elif field == 'remarks':
+                kwargs = {"remarks__icontains": val}
                 qs = qs.filter(**kwargs)
             
-            elif val>=0:                            # all time filters
+            elif "__" in field:       # all "__" filters
+                kwargs = {"%s__icontains" % field: val}
+                qs = qs.filter(**kwargs)
+            
+            elif val>=0:                     # all time filters
                 filter_ = val
                 print field,val
                 op = self.cleaned_data.get(field + "_op", "")
@@ -73,31 +83,43 @@ def make_filter_kwargs(self, qs):
 def make_filter_form(user):
     from plane.models import Plane
     
-    types = Plane.objects.filter(user=user).values_list('type', flat=True).distinct()
+    types = Plane.objects.filter(user=user).values_list('type',
+                                            flat=True).distinct()
+                                            
     tt = [(t,t) for i,t in enumerate(types)]
     tt.insert(0, ("", "-------"))
     
     from plane.constants import CATEGORY_CLASSES
     CATEGORY_CLASSES = dict(CATEGORY_CLASSES)
-    cat_classes = Plane.objects.filter(user=user).values_list('cat_class', flat=True).order_by().distinct()
+    
+    cat_classes = Plane.objects.filter(user=user).values_list('cat_class',
+                                            flat=True).order_by().distinct()
+                                            
     cc = [(t,CATEGORY_CLASSES[t]) for i,t in enumerate(cat_classes)]
     cc.insert(0, ("", "-------"))
     
     operators = ( (0, "="), (1, ">"), (2, "<") )
-    fields = {'plane__tags__icontains': forms.CharField(required=False),
+    fields = {'plane__tags': forms.CharField(required=False),
               'plane__tailnumber': forms.CharField(required=False),
               'plane__type': forms.ChoiceField(choices=tt, required=False),
               'plane__cat_class': forms.ChoiceField(choices=cc, required=False),
-              'start_date': forms.DateField(label="Start", required=False, widget=forms.TextInput(attrs={"class": "date_picker"})),
-              'end_date': forms.DateField(label="End", required=False, widget=forms.TextInput(attrs={"class": "date_picker"})),
-              'last_flights': forms.IntegerField(required=False, widget=forms.TextInput(attrs={"class": "small_picker"})),
+              'start_date': forms.DateField(label="Start", required=False,
+                    widget=forms.TextInput(attrs={"class": "date_picker"})),
+              'end_date': forms.DateField(label="End", required=False,
+                    widget=forms.TextInput(attrs={"class": "date_picker"})),
+              'last_flights': forms.IntegerField(required=False,
+                    widget=forms.TextInput(attrs={"class": "small_picker"})),
               'person': forms.CharField(required=False),
               'remarks': forms.CharField(required=False),
+              'route__fancy_rendered': forms.CharField(required=False,
+                    label="Route"),
              }
              
     for field in FILTER_FIELDS:
-        d = {field: forms.FloatField(label=FIELD_ABBV[field], required=False, widget=forms.TextInput(attrs={"class": "small_picker"})), 
-             field + "_op": forms.ChoiceField(choices=operators, required=False, widget=forms.Select(attrs={"class": "op_select"})),
+        d = {field: forms.FloatField(label=FIELD_ABBV[field], required=False,
+                widget=forms.TextInput(attrs={"class": "small_picker"})), 
+             "%s_op" % field: forms.ChoiceField(choices=operators, required=False,
+                widget=forms.Select(attrs={"class": "op_select"})),
              }
         fields.update(d)
         
