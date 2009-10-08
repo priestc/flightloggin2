@@ -214,20 +214,26 @@ def make_preview_records(line, out):
 def make_commit_flight(line, user, out):
     plane, created = Plane.objects.get_or_create(tailnumber=line.get("tailnumber"), type=line.get("type"), user=user)
     flight = Flight(user=user)
+   
+    ## nust be [], instead of "" because it must be iterable, "" is not
+    ## iterable
     
-    if "P" in line.get("flying", ""):
+    
+    #import pdb; pdb.set_trace()
+    
+    if "P" in (line.get("flying") or "fff"):
         line.update({"pilot_checkride": True})
     
-    if "H" in line.get("flying", ""):
+    if "H" in (line.get("flying") or "fff"):
         line.update({"holding": True})
         
-    if "T" in line.get("flying", ""):
+    if "T" in (line.get("flying") or "fff"):
         line.update({"tracking": True})
         
-    if "C" in line.get("flying", ""):
+    if "C" in (line.get("flying") or "fff"):
         line.update({"cfi_checkride": True})
         
-    if "I" in line.get("flying", ""):
+    if "I" in (line.get("flying") or "fff"):
         line.update({"ipc": True})
           
     line.update({"plane": plane.pk})
@@ -236,7 +242,8 @@ def make_commit_flight(line, user, out):
 
     if form.is_valid():
         form.save()
-        out.append("<tr><td>good</td><td>" + str(line.get('date')) + "</td><td>" + str(line.get('remarks')) + "</td></tr>")
+        out.append("<tr><td>good</td><td>%s</td><td>%s</td></tr>" %
+                        (str(line.get('date')), str(line.get('remarks')))
     else:
         out.append("<tr class='bad'><td>")
         out.append("</td><td>".join([str(v) for v in line.values()]))

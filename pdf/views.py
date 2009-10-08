@@ -43,7 +43,7 @@ def pdf(request, display_user, shared):
                     'act_inst', 'sim_inst', 'act_inst','xc','night','day_l',
                     'night_l','person', 'r_remarks')
                     
-    flights = Flight.objects.all().select_related()
+    flights = Flight.objects.filter(user=display_user).select_related()
     rows = flights.count() + 1  #+1 because of the header
     header = [FIELD_ABBV[f] for f in print_fields]
     data = [header,]

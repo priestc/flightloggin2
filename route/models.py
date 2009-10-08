@@ -53,7 +53,8 @@ class Route(models.Model):
     
     @classmethod
     def render_custom(cls, user):
-        qs = cls.objects.filter(flight__user=user).filter(routebase__custom__isnull=False)
+        qs = cls.objects.filter(flight__user=user)\
+                    .filter(routebase__custom__isnull=False)
         for r in qs:
             r.easy_render()
         return qs.count()
@@ -104,7 +105,8 @@ class Route(models.Model):
                 kml.append("%s,%s" % (dest.location.x, dest.location.y), )
                 
             if not rb.unknown:   
-                fancy.append("<span title=\"%s\" class=\"%s\">%s</span>" % (dest.title_display(), class_, dest.identifier ), )
+                fancy.append("<span title=\"%s\" class=\"%s\">%s</span>" %
+                            (dest.title_display(), class_, dest.identifier ), )
                 simple.append(rb.destination().identifier)
             else:
                 fancy.append("<span title=\"%s\" class=\"%s\">%s</span>" % (dest, class_, dest ), )
@@ -240,8 +242,10 @@ def find_navaid(ident, i, last_rb=None):
         else:
             navaid = navaid[0]
     else:
-        navaid = get_object_or_None(Navaid, identifier=ident[1:])       # no previous routebases, 
-                                                                        # dont other with the extra queries trying to find the nearest based on the last
+        # no previous routebases,
+        # dont other with the extra queries trying to find the nearest 
+        # based on the last
+        navaid = get_object_or_None(Navaid, identifier=ident[1:])
     if navaid:
         return RouteBase(navaid=navaid, sequence=i)
     
@@ -286,8 +290,10 @@ def make_routebases_from_fallback_string(route):
     for i, ident in enumerate(points):
     
         if ident[0] == "@":  #must be a navaid
-        
-            first_rb = len(routebases) == 0  # is this the first routebase? if so don't try to guess which navaid is closest to the previous point
+            # is this the first routebase? if so don't try to guess which
+            # navaid is closest to the previous point
+            
+            first_rb = len(routebases) == 0  
             if not first_rb and not routebases[i-1].unknown:
                 routebase = find_navaid(ident, i, last_rb=routebases[i-1])
             else:
