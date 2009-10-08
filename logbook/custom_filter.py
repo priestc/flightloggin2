@@ -32,28 +32,38 @@ def render_table(self):  #will be attached to the class in the function
     return html_table(out, 3)
 
 def make_filter_kwargs(self, qs):
-    """filter the queryset based on the form values
+    """filter the queryset based on the form values, the name of this function
+       should be renamed
     """
     
+    # all filter fields not ending with "_op"
     fields = filter(lambda x: not x[0].endswith("_op"),
                     self.cleaned_data.iteritems())
     
     for field,val in fields:
         
         if val:
-            if field == "start_date":               # date filters
+            if field == "start_date":        # date filters
                 kwargs = {"date__gte": val}
                 qs = qs.filter(**kwargs)
             
             elif field == "end_date":
                 kwargs = {"date__lte": val}
                 qs = qs.filter(**kwargs)
-            
-            elif field.startswith("plane__"):       # all plane filters
-                kwargs = {field: val}
+                
+            elif field == 'person':
+                kwargs = {"person__icontains": val}
+                qs = qs.filter(**kwargs)
+                
+            elif field == 'remarks':
+                kwargs = {"remarks__icontains": val}
                 qs = qs.filter(**kwargs)
             
-            elif val>=0:                            # all time filters
+            elif "__" in field:       # all "__" filters
+                kwargs = {"%s__icontains" % field: val}
+                qs = qs.filter(**kwargs)
+            
+            elif val>=0:                     # all time filters
                 filter_ = val
                 print field,val
                 op = self.cleaned_data.get(field + "_op", "")
@@ -89,7 +99,7 @@ def make_filter_form(user):
     cc.insert(0, ("", "-------"))
     
     operators = ( (0, "="), (1, ">"), (2, "<") )
-    fields = {'plane__tags__icontains': forms.CharField(required=False),
+    fields = {'plane__tags': forms.CharField(required=False),
               'plane__tailnumber': forms.CharField(required=False),
               'plane__type': forms.ChoiceField(choices=tt, required=False),
               'plane__cat_class': forms.ChoiceField(choices=cc, required=False),
@@ -101,7 +111,8 @@ def make_filter_form(user):
                     widget=forms.TextInput(attrs={"class": "small_picker"})),
               'person': forms.CharField(required=False),
               'remarks': forms.CharField(required=False),
-              'route': forms.CharField(required=False),
+              'route__fancy_rendered': forms.CharField(required=False,
+                    label="Route"),
              }
              
     for field in FILTER_FIELDS:

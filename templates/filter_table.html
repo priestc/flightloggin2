@@ -24,7 +24,7 @@
             
             <br>
             
-            <table>
+            <table id="text_filters">
                 <tr>
                     <td>{{ ff.person.label_tag }}</td><td>{{ ff.person }}</td>
                 </tr>
@@ -32,7 +32,7 @@
                     <td>{{ ff.remarks.label_tag }}</td><td>{{ ff.remarks }}</td>
                 </tr>
                 <tr>
-                    <td>{{ ff.route.label_tag }}</td><td>{{ ff.route }}</td>
+                    <td>{{ ff.route__fancy_rendered.label_tag }}</td><td>{{ ff.route__fancy_rendered }}</td>
                 </tr>
             </table>
             
@@ -40,7 +40,7 @@
         
         <td id="plane_filter_pane">
             By Plane Tags<br>
-            {{ ff.plane__tags__icontains }}
+            {{ ff.plane__tags }}
             
             <br><br>
             
