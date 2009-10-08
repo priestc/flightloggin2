@@ -254,25 +254,22 @@ def make_commit_flight(line, user, out):
 
     flight = Flight(user=user)
    
-    ## must be [], instead of "" because it must be iterable, "" is not
+    ## must be "ff", instead of "" because it must be iterable, "" is not
     ## iterable
     
-    
-    #import pdb; pdb.set_trace()
-    
-    if "P" in line.get("flying", "fff"):
+    if "P" in (line.get("flying", "fff") or "ff"):
         line.update({"pilot_checkride": True})
     
-    if "H" in line.get("flying", "fff"):
+    if "H" in (line.get("flying", "fff") or "ff"):
         line.update({"holding": True})
         
-    if "T" in line.get("flying", "fff"):
+    if "T" in (line.get("flying", "fff") or "ff"):
         line.update({"tracking": True})
         
-    if "C" in line.get("flying", "fff"):
+    if "C" in (line.get("flying", "fff") or "ff"):
         line.update({"cfi_checkride": True})
         
-    if "I" in line.get("flying", "fff"):
+    if "I" in (line.get("flying", "fff") or "ff"):
         line.update({"ipc": True})
           
     line.update({"plane": plane.pk})
