@@ -225,19 +225,19 @@ def make_commit_flight(line, user, out):
     
     #import pdb; pdb.set_trace()
     
-    if "P" in (line.get("flying") or "fff"):
+    if "P" in line.get("flying", "fff"):
         line.update({"pilot_checkride": True})
     
-    if "H" in (line.get("flying") or "fff"):
+    if "H" in line.get("flying", "fff"):
         line.update({"holding": True})
         
-    if "T" in (line.get("flying") or "fff"):
+    if "T" in line.get("flying", "fff"):
         line.update({"tracking": True})
         
-    if "C" in (line.get("flying") or "fff"):
+    if "C" in line.get("flying", "fff"):
         line.update({"cfi_checkride": True})
         
-    if "I" in (line.get("flying") or "fff"):
+    if "I" in line.get("flying", "fff"):
         line.update({"ipc": True})
           
     line.update({"plane": plane.pk})
