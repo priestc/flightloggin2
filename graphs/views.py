@@ -99,8 +99,7 @@ def make_twin_plot(fig, display_user, column, s=None, e=None):
 
     if column in DB_FIELDS:
         db_column = column
-        
-    if column.endswith('pic'):
+    elif column.endswith('pic'):
         db_column = 'pic'
     else:
         db_column = 'total'
@@ -143,12 +142,16 @@ def make_twin_plot(fig, display_user, column, s=None, e=None):
         except IndexError:
             raise EmptyLogbookError
     else:
+        # add the start value to the begining of the dict, so the
+        # graph doesn't start at 0 when there is a date splice
+        # this is only needed when an 'e' and 's' are present
         flights.insert(0, {"date": s-datetime.timedelta(days=1), 
                            "value": prev_total})
     
     dates=[]
     values=[]
     di = {}
+    # take all dates and values and combine them into a single dict
     for day in flights:
         values.append(day['value'])
         dates.append(day['date'])
@@ -158,6 +161,8 @@ def make_twin_plot(fig, display_user, column, s=None, e=None):
        
     acc_values = np.cumsum(values)
     month_avg, padding_dates = make_rate(s,e,di)
+    
+    del values ##we dont need this anymore, remove to save memory
 
     ############ format graph variables
     
@@ -173,17 +178,17 @@ def make_twin_plot(fig, display_user, column, s=None, e=None):
         acc_unit = 'Flight Hours'
         rate_unit = 'Flight Hours per month'
         
-    plot1={"x": dates,
-           "y": acc_values,
-           "y_unit": acc_unit,
-           "color": plot_colors('main', column)}
+    acc_plot={"x": dates,
+              "y": acc_values,
+              "y_unit": acc_unit,
+              "color": plot_colors('main', column)}
            
-    plot2={"x": padding_dates,
-           "y": month_avg,
-           "y_unit": rate_unit,
-           "color": plot_colors('rate', column)}
+    rate_plot={"x": padding_dates,
+               "y": month_avg,
+               "y_unit": rate_unit,
+               "color": plot_colors('rate', column)}
     
-    return (title, subtitle, s, e, plot1, plot2)
+    return (title, subtitle, s, e, acc_plot, rate_plot)
     
 ###############################################################################
 ###############################################################################
@@ -193,7 +198,6 @@ def make_twin_graph(fig, s, e, plot1, plot2):
     
     #subtract both dates, convert timedelta to days, divide by 365 = X.XX years
     year_range = (e-s).days / 365.0
-    
    
     ax = fig.add_subplot(111)
     ax.plot(plot1['x'],
