@@ -36,7 +36,7 @@ class EmptyLogbookError(Exception):
 def datetimeRange(from_date, to_date=None):
     while to_date is None or from_date <= to_date:
         yield from_date
-        from_date = from_date + timedelta(days = 1)
+        from_date = from_date + timedelta(days=1)
 ###############################################################################
 ###############################################################################
 
@@ -148,16 +148,16 @@ def make_twin_plot(fig, display_user, column, s=None, e=None):
     
     dates=[]
     values=[]
-    dict = {}
+    di = {}
     for day in flights:
         values.append(day['value'])
         dates.append(day['date'])
-        dict.update({day['date']: day['value']})
+        di.update({day['date']: day['value']})
     
     ############## make accumulation and then make rate plot
        
     acc_values = np.cumsum(values)
-    month_avg, padding_dates = make_rate(s,e)
+    month_avg, padding_dates = make_rate(s,e,di)
 
     ############ format graph variables
     
@@ -252,9 +252,9 @@ def line_generator(request, shared, display_user,
     return img
 
 
-def make_rate(s, e, ):
+def make_rate(s, e, di):
     # pad with zeroes for days that have no flights logged
-    padded = [dict.get(day, 0) for day in datetimeRange(s, e)]
+    padded = [di.get(day, 0) for day in datetimeRange(s, e)]
 
     month_avg=[]
     padding_dates=[]
@@ -268,7 +268,6 @@ def make_rate(s, e, ):
         month_avg.append(  sum(padded[bottom:i])  )
         date += datetime.timedelta(days=1)
         padding_dates.append(date)
-    
     return month_avg, padding_dates
 
 
