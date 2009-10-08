@@ -159,3 +159,36 @@ def ic():   #import country
             print "error: " + code
 
     print "lines: " + str(count)
+    
+
+
+
+
+
+import os
+from django.contrib.gis.utils import LayerMapping
+from models import WorldBorders
+
+world_mapping = {
+    'fips' : 'FIPS',
+    'iso2' : 'ISO2',
+    'iso3' : 'ISO3',
+    'un' : 'UN',
+    'name' : 'NAME',
+    'area' : 'AREA',
+    'pop2005' : 'POP2005',
+    'region' : 'REGION',
+    'subregion' : 'SUBREGION',
+    'lon' : 'LON',
+    'lat' : 'LAT',
+    'mpoly' : 'MULTIPOLYGON',
+}
+
+world_shp = os.path.abspath(os.path.join(os.path.dirname(__file__), 'worlddata/TM_WORLD_BORDERS-0.3.shp'))
+
+def importworld(verbose=True):
+    lm = LayerMapping(WorldBorders, world_shp, world_mapping,
+                      transform=False, encoding='iso-8859-1')
+
+    lm.save(strict=True, verbose=verbose)
+
