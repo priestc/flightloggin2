@@ -285,7 +285,7 @@ def find_airport(ident, i, p2p):
         # a landing airport, eligable for p2p testing
         p2p.append(airport.pk)          
         return RouteBase(airport=airport, sequence=i)
-
+    
     return None
 
 def make_routebases_from_fallback_string(route):
@@ -316,8 +316,10 @@ def make_routebases_from_fallback_string(route):
         else:                  #must be an airport
             
             routebase = find_airport(ident, i, p2p=p2p)
+            if not routebase.airport:
+                routebase = find_custom(ident, i)
             
-        ########################################################################
+        #######################################################################
        
         # no routebase? must be unknown
         if not routebase:
