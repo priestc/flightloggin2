@@ -182,7 +182,7 @@ def prepare_line(line):
 
     return "FLIGHT", line
 
-###############################################
+##### each of these functions returns an html table row #######################
 
 def make_preview_flight(line, out):
     row = ["<td>%s</td>" % line.get(field, "") for field in CSV_FIELDS]
@@ -190,11 +190,11 @@ def make_preview_flight(line, out):
     return out
     
 def make_preview_nonflight(line, out):
-    row = ["<td>" + line.get('date', "") + "</td>",
-           "<td>" + NON_FLIGHT_TRANSLATE_TEXT[line.get('non_flying', "")] + "</td>",
-           "<td>" + line.get('remarks', "") + "</td>",
+    row = ["<td>%s</td>" % line.get('date'),
+           "<td>%s</td>" % NON_FLIGHT_TRANSLATE_TEXT[line.get('non_flying')],
+           "<td>%s</td>" % line.get('remarks'),
           ]
-    out.append("<tr><td>" + "".join(row) + "</td></tr>")
+    out.append("<tr>" + "".join(row) + "</tr>")
     return out
 
 def make_preview_plane(line, out):
@@ -212,10 +212,14 @@ def make_preview_records(line, out):
 ################################################
     
 def make_commit_flight(line, user, out):
-    plane, created = Plane.objects.get_or_create(tailnumber=line.get("tailnumber"), type=line.get("type"), user=user)
+    plane, created = Plane.objects.get_or_create(
+                    tailnumber=line.get("tailnumber"),
+                    type=line.get("type"),
+                    user=user)
+
     flight = Flight(user=user)
    
-    ## nust be [], instead of "" because it must be iterable, "" is not
+    ## must be [], instead of "" because it must be iterable, "" is not
     ## iterable
     
     
@@ -243,7 +247,7 @@ def make_commit_flight(line, user, out):
     if form.is_valid():
         form.save()
         out.append("<tr><td>good</td><td>%s</td><td>%s</td></tr>" %
-                        (str(line.get('date')), str(line.get('remarks')))
+                        (str(line.get('date')), str(line.get('remarks'))))
     else:
         out.append("<tr class='bad'><td>")
         out.append("</td><td>".join([str(v) for v in line.values()]))
@@ -263,11 +267,13 @@ def make_commit_nonflight(line, user, out):
 
     if form.is_valid():
         form.save()
-        out.append("<tr><td>good</td><td>" + line.get('date') + "</td><td>" + line.get('remarks') + "</td></tr>")
+        out.append("<tr><td>good</td><td>%s</td><td>%s</td></tr>" %
+                (line.get('date'), line.get('remarks')))
         
     else:
         out.append("<tr class='bad'><td>")
-        out.append("<tr class='bad'><td>bad:</td><td>" + line.get('date') + "</td><td>" + line.get('remarks') + "</td></tr>")
+        out.append("<tr class='bad'><td>bad:</td><td>%s</td><td>%s</td></tr>" %
+                (line.get('date'), line.get('remarks')))
         out.append("</td><tr class='bad'><td colspan=5>")
         out.append(form.errors)
         out.append("</td></tr>")
@@ -280,12 +286,12 @@ def make_commit_plane(line, user, out):
     tailnumber = line.get('date')
     manufacturer = line.get('tailnumber')
     model = line.get('type')
-    type = line.get('route')
+    type_ = line.get('route')
     cat_class = line.get('total')
     rt = line.get('pic')
     tags = line.get('solo')
     
-    p,c=Plane.objects.get_or_create(user=user, tailnumber=tailnumber, type=type)
+    p,c=Plane.objects.get_or_create(user=user, tailnumber=tailnumber, type=type_)
     p.manufacturer=manufacturer
     p.model=model
     p.cat_class=cat_class
@@ -316,7 +322,7 @@ def make_commit_records(line, user, out):
     
     return out
 
-#####################################################################################################
+###############################################################################
     
 def swap_out_flight_titles(original):
     new = []
@@ -331,7 +337,7 @@ def swap_out_flight_titles(original):
             
     return new
     
-#####################################################################################################
+###############################################################################
 
 def swap_out_plane_titles(original):
     new = []
