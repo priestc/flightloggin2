@@ -35,13 +35,14 @@ def graphs(request, shared, display_user):
     
     column_options = []
     for field in GRAPH_FIELDS:
-        column_options.append("<option value=\"%s\">%s</option>" % (field, FIELD_TITLES[field] ) )
+        column_options.append("<option value=\"%s\">%s</option>" %
+                                        (field, FIELD_TITLES[field] ) )
         
     column_options = mark_safe("\n".join(column_options))
     return locals()
     
-############################################################################################################################################
-############################################################################################################################################
+###############################################################################
+###############################################################################
     
 def make_twin_plot(fig, display_user, column, s=None, e=None):
     """give it a column and a date range and it will return a
@@ -56,22 +57,32 @@ def make_twin_plot(fig, display_user, column, s=None, e=None):
         db_column = 'pic'
     else:
         db_column = 'total'
-        
-    qs=Flight.objects.user(display_user)                ## starting queryset
+    
+    ## starting queryset
+    qs=Flight.objects.user(display_user)
     
     if s and e:
-        assert e > s        #start time is before end time or else code 500 error
+        #start time is before end time or else code 500 error
+        assert e > s
         pad=datetime.timedelta(days=1)
 
-        flights = qs.filter_by_column(column).filter(date__lt=e+pad, date__gt=s-pad).values('date').annotate(value=Sum(db_column)).order_by('date')
-        
-        before_graph = qs.filter(date__lt=s-pad)        ## all stuff before the graph begins
+        flights = qs.filter_by_column(column).
+                    filter(date__lt=e+pad,date__gt=s-pad).
+                    values('date').
+                    annotate(value=Sum(db_column)).
+                    order_by('date')
+                    
+        ## all stuff before the graph begins
+        before_graph = qs.filter(date__lt=s-pad)
         
         prev_total = before_graph.agg(column)
     else:
         prev_total = 0
              
-        flights = qs.filter_by_column(column).values('date').annotate(value=Sum(db_column)).order_by('date')
+        flights = qs.filter_by_column(column).
+                    values('date').
+                    annotate(value=Sum(db_column)).
+                    order_by('date')
     
     flights=list(flights)
 
@@ -79,7 +90,8 @@ def make_twin_plot(fig, display_user, column, s=None, e=None):
         e = flights[-1]['date']
         s = flights[0]['date']
     else:
-        flights.insert(0, {"date": s-datetime.timedelta(days=1), "value": prev_total})
+        flights.insert(0, {"date": s-datetime.timedelta(days=1), 
+                           "value": prev_total})
     
     dates=[]
     values=[]
@@ -95,7 +107,8 @@ def make_twin_plot(fig, display_user, column, s=None, e=None):
     
     ############## make rate plot
     
-    padded = [dict.get(day, 0) for day in datetimeRange(s, e)]   #with zeroes for days that have no flights logged
+    #with zeroes for days that have no flights logged
+    padded = [dict.get(day, 0) for day in datetimeRange(s, e)]
 
     month_avg=[]
     padding_dates=[]
@@ -103,7 +116,7 @@ def make_twin_plot(fig, display_user, column, s=None, e=None):
     r=30   #range, 30 days
     for i, day in enumerate(padded):
         bottom = i-r
-        if bottom < 0:      #don't allow negative indexes, this is not what we want
+        if bottom < 0: #don't allow negative indexes, this is not what we want
             bottom=0
             
         month_avg.append(  sum(padded[bottom:i])  )
@@ -136,17 +149,21 @@ def make_twin_plot(fig, display_user, column, s=None, e=None):
     
     return (title, subtitle, s, e, plot1, plot2)
     
-############################################################################################################################################
-############################################################################################################################################
+###############################################################################
+###############################################################################
 
 def make_twin_graph(fig, s, e, plot1, plot2):
     """give it a plot and it will return a graph image"""
     
-    year_range = (e-s).days / 365.0                      #subtract both dates, convert timedelta to days, divide by 365 = X.XX years
+    #subtract both dates, convert timedelta to days, divide by 365 = X.XX years
+    year_range = (e-s).days / 365.0
     
    
     ax = fig.add_subplot(111)
-    ax.plot(plot1['x'], plot1['y'], color=plot1['color'], drawstyle='steps-post', lw=2)
+    ax.plot(plot1['x'],
+            plot1['y'],
+            color=plot1['color'],
+            drawstyle='steps-post', lw=2)
     
     ax.set_xlim(s, e)
     
@@ -157,8 +174,9 @@ def make_twin_graph(fig, s, e, plot1, plot2):
     
     for tl in ax2.get_yticklabels():
         tl.set_color(d_color)
-
-    format_line_ticks(ax, plt, year_range)                      # format the ticks based on the range of the dates
+        
+    # format the ticks based on the range of the dates
+    format_line_ticks(ax, plt, year_range)
     
     ax.grid(True)
 
@@ -175,18 +193,24 @@ def progress_rate(display_user, columns, s, e):
     
     columns = columns.split("-")
     
-    if s and e:    
-        s = datetime.date(*[int(foo) for foo in s.split('.')])  #convert string dates from the URL to real dates
+    if s and e:
+        #convert string dates from the URL to real dates
+        s = datetime.date(*[int(foo) for foo in s.split('.')])
         e = datetime.date(*[int(foo) for foo in e.split('.')])
     
     fig = plt.figure()
     
     for column in columns:
         if s and e:
-            title, subtitle, s, e, plot1, plot2 = make_twin_plot(fig, display_user, column, s, e)
+            title, subtitle, s, e, plot1, plot2 = make_twin_plot(fig,
+                                                                display_user,
+                                                                column, s, e)
         else:
-            title, subtitle, s, e, plot1, plot2 = make_twin_plot(fig, display_user, column)     #this will return a new s and e depending on the database
-        
+            #this will return a new s and e depending on the database
+            title, subtitle, s, e, plot1, plot2 = make_twin_plot(fig,
+                                                                 display_user,
+                                                                 column)
+
         fig = make_twin_graph(fig, s, e, plot1, plot2)
         
     if len(columns) > 1:
@@ -198,14 +222,8 @@ def progress_rate(display_user, columns, s, e):
     
     return fig
 
-
-
-
-
-
-
-
-def line_generator(request, shared, display_user, type_, columns, s=None, e=None, ext=None):
+def line_generator(request, shared, display_user,
+                    type_, columns, s=None, e=None, ext=None):
     
     if type_ == "pr":
         func = progress_rate
@@ -215,11 +233,11 @@ def line_generator(request, shared, display_user, type_, columns, s=None, e=None
         
     elif type_ == "mp":
         func = multiple_rate
-    
-    #######
+
+    #decorate function to output to the appropriate format
     
     if ext == "png":
-        line2 = plot_png(func)     #decorate function to output to the appropriate format
+        line2 = plot_png(func)
         
     elif ext == "svg":
         line2 = plot_svg(func)
