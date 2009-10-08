@@ -66,6 +66,12 @@ class Custom(Location):
     
     def save(self, *args, **kwargs):
         
+        if self.location:
+            # automatically find which country the coordinates fall into
+            loc = self.location.wkt
+            country = WorldBorders.objects.get(mpoly__contains=loc).iso2
+            self.country = Country.objects.get(code=country)
+        
         try:
             getattr(self, "user", None)
         except:
