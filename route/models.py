@@ -261,16 +261,20 @@ def find_navaid(ident, i, last_rb=None):
     
 ###############################################################################
 
-def find_custom(ident, i):
-    """Tries to find the custom point, if it can't find one, it adds it to the
-       user's custom list
+def find_custom(ident, i, force=False):
+    """Tries to find the custom point, if it can't find one, and force = True,
+       it adds it to the user's custom list.
     """
     user = share.get_display_user()
-    custom,c = Custom.objects.get_or_create(user=user, identifier=ident[1:])
+    if force:
+        cu,c = Custom.objects.get_or_create(user=user, identifier=ident)
+    else:
+        cu = get_object_or_None(Custom, user=user, identifier=ident)
 
-    routebase = RouteBase(custom=custom, sequence=i)
-
-    return routebase
+    if cu:
+        return RouteBase(custom=cu, sequence=i)
+    else:
+        return None
 
 ###############################################################################
 
@@ -310,14 +314,16 @@ def make_routebases_from_fallback_string(route):
                 routebase = find_navaid(ident, i)
         
         elif ident[0] == "!":  #must be custom
-        
-            routebase = find_custom(ident, i)
+            # force=True means if it can't find the 'custom', then make it
+            routebase = find_custom(ident[1:], i, force=True)
             
         else:                  #must be an airport
             
             routebase = find_airport(ident, i, p2p=p2p)
-            if not routebase.airport:
-                routebase = find_custom(ident, i)
+            if not routebase:
+                # if the airport can't be found, see if theres a 'custom'
+                # bythe same identifier
+                routebase = find_custom(ident, i, force=False)
             
         #######################################################################
        
