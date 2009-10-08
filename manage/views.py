@@ -37,7 +37,10 @@ def import_s(request, shared, display_user):
         fileform = ImportForm(request.POST, request.FILES)
         
         if fileform.is_valid():
-            filename = "%s/uploads/%s%s_%s.txt" % (settings.PROJECT_PATH, request.user.id, preview_str, datetime.now())
+            filename = "%s/uploads/%s%s_%s.txt" % (settings.PROJECT_PATH,
+                                                   request.user.id,
+                                                   preview_str,
+                                                   datetime.now())
             f = request.FILES['file']
             destination = open( filename , 'wb+')
             
@@ -53,15 +56,38 @@ def import_s(request, shared, display_user):
     display_user=request.user
     
     if preview:
-        flight_header = "<tr>" + "".join(["<td>" + FIELD_TITLES.get(title, "") + "</td>" for title in CSV_FIELDS]) + "</tr>"
-        plane_header = "<tr>" + "".join(["<td>" + title + "</td>" for title in ['Tailnumber','Manufacturer','Type','Model','Category/Class','TR','Tags']]) + "</tr>"
-        nonflight_header = "<tr>" + "".join(["<td>" + title + "</td>" for title in ['Date','Type','Remarks']]) + "</tr>"
+        
+        flight_header = "".join(
+        ["<td>%s</td>" % FIELD_TITLES.get(title, "") for title in CSV_FIELDS]
+        )
+        
+        flight_header = "<tr>%s</tr>" % flight_header
+        
+        plane_header = "".join(
+                        ["<td>%s</td>" % title \
+                            for title in \
+                        ['Tailnumber',
+                         'Manufacturer',
+                         'Type',
+                         'Model',
+                         'Category/Class',
+                         'TR',
+                         'Tags']])
+                         
+        plane_header = "<tr>%s</tr>" % plane_header
+        
+        nonflight_header = "".join(
+                        ["<td>%s</td>" % title \
+                            for title in \
+                        ['Date','Type','Remarks']])
+                        
+        nonflight_header = "<tr>%s</tr>" % nonflight_header
         
     loc=locals()    
     loc.update(results)
     return loc
 
-####################################################################################################
+###############################################################################
 
 def do_import(request, f, preview=True):
     f.seek(0)
@@ -107,9 +133,11 @@ def do_import(request, f, preview=True):
         
         if not line['date'] == "##PLANES":
             if preview:
-                records_out = make_preview_records(line.get('date'), records_out)
+                records_out = make_preview_records(line.get('date'),
+                    records_out)
             else:
-                records_out = make_commit_records(line.get('date'), request.user, records_out)
+                records_out = make_commit_records(line.get('date'), 
+                    request.user, records_out)
         
         try:
             header = dr.next()
@@ -118,13 +146,17 @@ def do_import(request, f, preview=True):
                     plane_out = make_preview_plane(line, plane_out)
                 else:
                     plane_out = make_commit_plane(line, request.user, plane_out)
-        except StopIteration:   #most likley an empty planes section, just do nothing
+        except StopIteration:   
+            #most likley an empty planes section, just do nothing
             pass
 
             
-    return {"flight_out": flight_out, "plane_out": plane_out, "non_out": non_out, "records_out": records_out}
+    return {"flight_out": flight_out,
+            "plane_out": plane_out,
+            "non_out": non_out,
+            "records_out": records_out}
 
-#########################################################################################
+###############################################################################
 
 def prepare_line(line):
     if line.get('non_flying'):
@@ -145,10 +177,13 @@ def prepare_line(line):
         line['total'] = line.get("simulator")
         
     if line.get('to') and line.get('from') and not line.get('via'):
-        line.update({"route": line.get('from') + " " + line.get('to')})
+        line.update({"route": "%s %s" % (line.get('from'), line.get('to'))})
         
     elif line.get('to') and line.get('from') and line.get('via'):
-        line.update({"route": line.get('from') + " " + line.get('via') + " " + line.get('to')})
+        line.update({
+        "route": "%s %s %s" % (
+        line.get('from'), line.get('via'), line.get('to'))
+        })
         
     if line.get('holding', "").upper() == "NO":
         line['holding'] = False
