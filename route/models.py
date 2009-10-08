@@ -101,7 +101,8 @@ class Route(models.Model):
             else:
                 class_ = "not_found"
                 
-            if getattr(dest, "location", None):       #dont write a kml if no coordinates are known
+            #dont write a kml if no coordinates are known
+            if getattr(dest, "location", None):
                 kml.append("%s,%s" % (dest.location.x, dest.location.y), )
                 
             if not rb.unknown:   
@@ -109,7 +110,8 @@ class Route(models.Model):
                             (dest.title_display(), class_, dest.identifier ), )
                 simple.append(rb.destination().identifier)
             else:
-                fancy.append("<span title=\"%s\" class=\"%s\">%s</span>" % (dest, class_, dest ), )
+                fancy.append("<span title=\"%s\" class=\"%s\">%s</span>" %
+                            (dest, class_, dest ), )
                 simple.append(rb.destination())
             
         self.kml_rendered = "\n".join(kml)
@@ -155,11 +157,13 @@ class Route(models.Model):
                 p.lng = rb.destination().location.y
                 l.append(p)
             except AttributeError:
-                pass                # .location will fail if the point is unknown. Just skip this point if this happens
+                # .location will fail if the point is unknown.
+                # Just skip this point if this happens
+                pass
             
         return l
 
-#####################################################################################################
+###############################################################################
 
 class RouteBase(models.Model):
     route =    models.ForeignKey(Route)
@@ -191,7 +195,7 @@ class RouteBase(models.Model):
     def destination(self):
         return self.airport or self.navaid or self.custom or self.unknown
     
-######################################################################################################  
+###############################################################################  
 
 def create_route_from_string(fallback_string):
    
@@ -217,7 +221,8 @@ def create_route_from_string(fallback_string):
         
 def normalize(string):
     """removes all cruf away from the route string, returns only the
-       alpha numeric characters with clean seperators"""
+       alpha numeric characters with clean seperators
+    """
     
     import re
     string = string.upper()
@@ -229,13 +234,16 @@ def normalize(string):
 ########################################################### 
     
 def find_navaid(ident, i, last_rb=None):
-    """Searches the database for the navaid object according to ident. if it finds a match,
-       returns the routebase object"""
+    """Searches the database for the navaid object according to ident.
+       if it finds a match,returns the routebase object
+    """
            
-    if last_rb:     #done just assume no
+    if last_rb:
         navaid = Navaid.objects.filter(identifier=ident[1:])
-        if navaid.count() > 1:                                                          #if more than 1 navaids come up,
-            last_point = last_rb.airport or last_rb.navaid                              #run another query to find the nearest
+        #if more than 1 navaids come up,
+        if navaid.count() > 1:
+            #run another query to find the nearest
+            last_point = last_rb.airport or last_rb.navaid 
             navaid = navaid.distance(last_point.location).order_by('distance')[0]  
         elif navaid.count() == 0:
             navaid = None
@@ -269,11 +277,13 @@ def find_custom(ident, i):
 def find_airport(ident, i, p2p):
     airport = get_object_or_None(Airport, identifier=ident)
         
-    if not airport and len(ident) == 3:                         # if the ident is 3 letters and no hit, try again with an added 'K'
+    if not airport and len(ident) == 3:
+        # if the ident is 3 letters and no hit, try again with an added 'K'
         airport = get_object_or_None(Airport, identifier="K" + ident)
 
     if airport:
-        p2p.append(airport.pk)          # a landing airport, eligable for p2p testing
+        # a landing airport, eligable for p2p testing
+        p2p.append(airport.pk)          
         return RouteBase(airport=airport, sequence=i)
 
     return None
@@ -309,10 +319,12 @@ def make_routebases_from_fallback_string(route):
             
         ########################################################################
        
-        if not routebase:                                           # no routebase? must be unknown
+        # no routebase? must be unknown
+        if not routebase:
             routebase = RouteBase(unknown=ident, sequence=i)
             
-            if not ident[0] == "@":                                 # not a unidentified navaid, assume a landing
+            # not a unidentified navaid, assume a landing
+            if not ident[0] == "@":
                 p2p.append(ident)
         
         routebases.append(routebase)
