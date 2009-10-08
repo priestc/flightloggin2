@@ -4,7 +4,7 @@ from django import forms
 from constants import FILTER_FIELDS, FIELD_ABBV
    
 def html_table(data, row_length):
-    out = '<table id="filter_table">'
+    out = '<table id="center_filter_table">'
     counter = 0
     for element in data:
         if counter % row_length == 0:
@@ -73,13 +73,18 @@ def make_filter_kwargs(self, qs):
 def make_filter_form(user):
     from plane.models import Plane
     
-    types = Plane.objects.filter(user=user).values_list('type', flat=True).distinct()
+    types = Plane.objects.filter(user=user).values_list('type',
+                                            flat=True).distinct()
+                                            
     tt = [(t,t) for i,t in enumerate(types)]
     tt.insert(0, ("", "-------"))
     
     from plane.constants import CATEGORY_CLASSES
     CATEGORY_CLASSES = dict(CATEGORY_CLASSES)
-    cat_classes = Plane.objects.filter(user=user).values_list('cat_class', flat=True).order_by().distinct()
+    
+    cat_classes = Plane.objects.filter(user=user).values_list('cat_class',
+                                            flat=True).order_by().distinct()
+                                            
     cc = [(t,CATEGORY_CLASSES[t]) for i,t in enumerate(cat_classes)]
     cc.insert(0, ("", "-------"))
     
@@ -88,16 +93,22 @@ def make_filter_form(user):
               'plane__tailnumber': forms.CharField(required=False),
               'plane__type': forms.ChoiceField(choices=tt, required=False),
               'plane__cat_class': forms.ChoiceField(choices=cc, required=False),
-              'start_date': forms.DateField(label="Start", required=False, widget=forms.TextInput(attrs={"class": "date_picker"})),
-              'end_date': forms.DateField(label="End", required=False, widget=forms.TextInput(attrs={"class": "date_picker"})),
-              'last_flights': forms.IntegerField(required=False, widget=forms.TextInput(attrs={"class": "small_picker"})),
+              'start_date': forms.DateField(label="Start", required=False,
+                    widget=forms.TextInput(attrs={"class": "date_picker"})),
+              'end_date': forms.DateField(label="End", required=False,
+                    widget=forms.TextInput(attrs={"class": "date_picker"})),
+              'last_flights': forms.IntegerField(required=False,
+                    widget=forms.TextInput(attrs={"class": "small_picker"})),
               'person': forms.CharField(required=False),
               'remarks': forms.CharField(required=False),
+              'route': forms.CharField(required=False),
              }
              
     for field in FILTER_FIELDS:
-        d = {field: forms.FloatField(label=FIELD_ABBV[field], required=False, widget=forms.TextInput(attrs={"class": "small_picker"})), 
-             field + "_op": forms.ChoiceField(choices=operators, required=False, widget=forms.Select(attrs={"class": "op_select"})),
+        d = {field: forms.FloatField(label=FIELD_ABBV[field], required=False,
+                widget=forms.TextInput(attrs={"class": "small_picker"})), 
+             "%s_op" % field: forms.ChoiceField(choices=operators, required=False,
+                widget=forms.Select(attrs={"class": "op_select"})),
              }
         fields.update(d)
         

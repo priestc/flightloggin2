@@ -35,8 +35,6 @@ a                       {color: #001147}
 h1                      {text-align: center; font-weight: bold; color: #665b1e; font-size: x-large;}
 h2                      {font-weight: bold; color: #11566d; font-size: large}
 
-
-
 textarea                {border: 1px solid black; font-family: inherit; font-size: inherit; background: white}
 select                  {border: 1px solid black; background: #EEEEEE; font-size: smaller; font-family: inherit}
 
@@ -71,7 +69,7 @@ table.minor_table tr:nth-child(odd)   {background: #D5E9D5}
 table.minor_table tr:nth-child(even)  {background: #E7FFE7}
 
 /* the empty message */
-table.minor_table td[colspan]         {font-size: x-large;}
+table.minor_table td[colspan]         {font-size: x-large; padding: 10px}
 
 
 
