@@ -48,9 +48,11 @@
 {% endif %}
 
     <table class="minor_table">
+        <thead>
        <tr>
            <th>Date</th><th>Type</th><th>Remarks</th>
        </tr>
+       </thead>
     {% for nf in nonflights %}
        <tr id="row_{{nf.id}}">
            <td class="date" title="Date (click to edit)">

@@ -36,10 +36,11 @@
 
 
 <table id="custom_table" class="minor_table">
+    <thead>
     <tr>
         <th>Identifier</th><th>Name</th><th>Coordinates</th><th>Type</th><th>Municipality</th><th>Region</th><th>Country</th>
     </tr>
-    
+    </thead>
     {% for place in customs %}
     <tr>
         <td id="p{{ place.id }}_identifier"><a href="" class="custom_click" id="p{{place.id}}">{{place.identifier}}</a></td>
