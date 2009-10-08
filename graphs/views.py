@@ -9,6 +9,7 @@ import matplotlib.ticker as ticker
 import matplotlib.mlab as mlab
 from matplotlib.figure import Figure
 from matplotlib.dates import DateFormatter
+import numpy as np
 
 from django.db.models import Max, Min, Sum
 from django.utils.dateformat import format as dj_date_format
@@ -24,14 +25,24 @@ from format_ticks import format_line_ticks
 
 from logbook.constants import AGG_FIELDS, EXTRA_AGG, FIELD_TITLES
 
+
+def plot_colors(mode, column):
+    return 'b'
+
+
+class EmptyLogbookError(Exception):
+    pass
+
 def datetimeRange(from_date, to_date=None):
     while to_date is None or from_date <= to_date:
         yield from_date
         from_date = from_date + timedelta(days = 1)
-
+###############################################################################
+###############################################################################
 
 @render_to('graphs.html')
-def graphs(request, shared, display_user):    
+def graphs(request, shared, display_user):
+    """the view function that renders the graph builder interface"""   
     
     column_options = []
     for field in GRAPH_FIELDS:
@@ -43,12 +54,48 @@ def graphs(request, shared, display_user):
     
 ###############################################################################
 ###############################################################################
+
+def progress_rate(display_user, columns, s, e):
+    """build the graph, and then add the titles and text"""
+    
+    columns = columns.split("-")
+    
+    if s and e:
+        #convert string dates from the URL to real dates
+        s = datetime.date(*[int(foo) for foo in s.split('.')])
+        e = datetime.date(*[int(foo) for foo in e.split('.')])
+    
+    fig = plt.figure()
+    
+    for column in columns:
+        if s and e:
+            title, subtitle, s, e, plot1, plot2 = make_twin_plot(fig,
+                                                                display_user,
+                                                                column, s, e)
+        else:
+            #this will return a new s and e depending on the database
+            title, subtitle, s, e, plot1, plot2 = make_twin_plot(fig,
+                                                                 display_user,
+                                                                 column)
+
+        fig = make_twin_graph(fig, s, e, plot1, plot2)
+        
+    if len(columns) > 1:
+        plt.figtext(.5,.94,"Flight Time Progression", fontsize=18, ha='center')
+        plt.figtext(.5,.91,subtitle,fontsize=10,ha='center')
+    else:
+        plt.figtext(.5,.94,title, fontsize=18, ha='center')
+        plt.figtext(.5,.91,subtitle,fontsize=10,ha='center')
+    
+    return fig
+
+###############################################################################
+###############################################################################
     
 def make_twin_plot(fig, display_user, column, s=None, e=None):
     """give it a column and a date range and it will return a
-       twin plot of that column"""
-       
-    import numpy as np
+       twin plot of that column
+    """
 
     if column in DB_FIELDS:
         db_column = column
@@ -66,10 +113,10 @@ def make_twin_plot(fig, display_user, column, s=None, e=None):
         assert e > s
         pad=datetime.timedelta(days=1)
 
-        flights = qs.filter_by_column(column).
-                    filter(date__lt=e+pad,date__gt=s-pad).
-                    values('date').
-                    annotate(value=Sum(db_column)).
+        flights = qs.filter_by_column(column).\
+                    filter(date__lt=e+pad,date__gt=s-pad).\
+                    values('date').\
+                    annotate(value=Sum(db_column)).\
                     order_by('date')
                     
         ## all stuff before the graph begins
@@ -79,16 +126,22 @@ def make_twin_plot(fig, display_user, column, s=None, e=None):
     else:
         prev_total = 0
              
-        flights = qs.filter_by_column(column).
-                    values('date').
-                    annotate(value=Sum(db_column)).
+        flights = qs.filter_by_column(column).\
+                    values('date').\
+                    annotate(value=Sum(db_column)).\
                     order_by('date')
     
     flights=list(flights)
 
     if not (s and e):
-        e = flights[-1]['date']
-        s = flights[0]['date']
+        try:
+            # try to get the start and end dates of the user's logbook
+            # automatically, if this fails, the user has no flights
+            # in his/her logbook
+            e = flights[-1]['date']
+            s = flights[0]['date']
+        except IndexError:
+            raise EmptyLogbookError
     else:
         flights.insert(0, {"date": s-datetime.timedelta(days=1), 
                            "value": prev_total})
@@ -101,27 +154,10 @@ def make_twin_plot(fig, display_user, column, s=None, e=None):
         dates.append(day['date'])
         dict.update({day['date']: day['value']})
     
-    ############## make accumulation plot
+    ############## make accumulation and then make rate plot
        
     acc_values = np.cumsum(values)
-    
-    ############## make rate plot
-    
-    #with zeroes for days that have no flights logged
-    padded = [dict.get(day, 0) for day in datetimeRange(s, e)]
-
-    month_avg=[]
-    padding_dates=[]
-    date=s
-    r=30   #range, 30 days
-    for i, day in enumerate(padded):
-        bottom = i-r
-        if bottom < 0: #don't allow negative indexes, this is not what we want
-            bottom=0
-            
-        month_avg.append(  sum(padded[bottom:i])  )
-        date += datetime.timedelta(days=1)
-        padding_dates.append(date)
+    month_avg, padding_dates = make_rate(s,e)
 
     ############ format graph variables
     
@@ -140,12 +176,12 @@ def make_twin_plot(fig, display_user, column, s=None, e=None):
     plot1={"x": dates,
            "y": acc_values,
            "y_unit": acc_unit,
-           "color": "b"}
+           "color": plot_colors('main', column)}
            
     plot2={"x": padding_dates,
            "y": month_avg,
            "y_unit": rate_unit,
-           "color": '#c14242'}
+           "color": plot_colors('rate', column)}
     
     return (title, subtitle, s, e, plot1, plot2)
     
@@ -153,7 +189,7 @@ def make_twin_plot(fig, display_user, column, s=None, e=None):
 ###############################################################################
 
 def make_twin_graph(fig, s, e, plot1, plot2):
-    """give it a plot and it will return a graph image"""
+    """give it a plot dict and it will return a graph image"""
     
     #subtract both dates, convert timedelta to days, divide by 365 = X.XX years
     year_range = (e-s).days / 365.0
@@ -187,40 +223,6 @@ def make_twin_graph(fig, s, e, plot1, plot2):
     #################################################
     
     return fig
-    
-   
-def progress_rate(display_user, columns, s, e):
-    
-    columns = columns.split("-")
-    
-    if s and e:
-        #convert string dates from the URL to real dates
-        s = datetime.date(*[int(foo) for foo in s.split('.')])
-        e = datetime.date(*[int(foo) for foo in e.split('.')])
-    
-    fig = plt.figure()
-    
-    for column in columns:
-        if s and e:
-            title, subtitle, s, e, plot1, plot2 = make_twin_plot(fig,
-                                                                display_user,
-                                                                column, s, e)
-        else:
-            #this will return a new s and e depending on the database
-            title, subtitle, s, e, plot1, plot2 = make_twin_plot(fig,
-                                                                 display_user,
-                                                                 column)
-
-        fig = make_twin_graph(fig, s, e, plot1, plot2)
-        
-    if len(columns) > 1:
-        plt.figtext(.5,.94,"Flight Time Progression", fontsize=18, ha='center')
-        plt.figtext(.5,.91,subtitle,fontsize=10,ha='center')
-    else:
-        plt.figtext(.5,.94,title, fontsize=18, ha='center')
-        plt.figtext(.5,.91,subtitle,fontsize=10,ha='center')
-    
-    return fig
 
 def line_generator(request, shared, display_user,
                     type_, columns, s=None, e=None, ext=None):
@@ -242,10 +244,32 @@ def line_generator(request, shared, display_user,
     elif ext == "svg":
         line2 = plot_svg(func)
         
-    return line2(display_user, columns, s, e)
+    try:
+        img = line2(display_user, columns, s, e)
+    except EmptyLogbookError:
+        pass #img = 
+    
+    return img
 
 
+def make_rate(s, e, ):
+    # pad with zeroes for days that have no flights logged
+    padded = [dict.get(day, 0) for day in datetimeRange(s, e)]
 
+    month_avg=[]
+    padding_dates=[]
+    date=s
+    r=30   #range, 30 days
+    for i, day in enumerate(padded):
+        bottom = i-r
+        if bottom < 0: #don't allow negative indexes, this is not what we want
+            bottom=0
+            
+        month_avg.append(  sum(padded[bottom:i])  )
+        date += datetime.timedelta(days=1)
+        padding_dates.append(date)
+    
+    return month_avg, padding_dates
 
 
 
