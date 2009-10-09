@@ -73,7 +73,7 @@ class Custom(Location):
             
             if country=='US':
                 # in the US, now find the state
-                state = USStates.objects.get(geom__contains=loc).state
+                state = USStates.objects.get(mpoly__contains=loc).state
                 region = "US-%s" % state.upper()
                 self.region = Region.objects.get(code=region)
         
