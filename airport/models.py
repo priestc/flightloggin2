@@ -43,16 +43,15 @@ class Location(models.Model):
         "What gets put in the tooltip on the route column"
         return self.location_summary()
         
-
-#####################################################################
-#####################################################################
-
+##############################################################################
 
 class Navaid(Location):
     type = models.IntegerField(choices=NAVAID_TYPE, null=True, blank=True)
     
     def location_summary(self):
         return u"%s - %s" % (self.name, self.get_type_display() )
+    
+##############################################################################
         
 class Custom(Location):
     user = models.ForeignKey(User)
@@ -84,6 +83,8 @@ class Custom(Location):
             from share.middleware import share
             self.user = share.get_display_user()
         super(Custom,self).save()
+
+##############################################################################
         
 class Airport(Location):
     type = models.IntegerField(choices=AIRPORT_TYPE, null=True, blank=True)
@@ -109,6 +110,8 @@ class Region(models.Model):
     
     def __unicode__(self):
         return self.name
+
+##############################################################################
 
 class Country(models.Model):
     name = models.CharField(max_length=48)
@@ -147,13 +150,14 @@ class WorldBorders(models.Model):
     def __unicode__(self):
         return self.name
 
+##############################################################################
+
 class USStates(models.Model):
     state = models.CharField(max_length=2)
     name = models.CharField(max_length=24)
-    fips = models.CharField(max_length=2)
     lon = models.FloatField()
     lat = models.FloatField()
-    geom = models.MultiPolygonField(srid=4326)
+    mpoly = models.MultiPolygonField(srid=4269)
     objects = models.GeoManager()
     
     class Meta:

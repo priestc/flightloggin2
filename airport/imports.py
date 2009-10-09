@@ -203,10 +203,9 @@ def importstates(verbose=True):
     states_mapping = {
         'state' : 'STATE',
         'name' : 'NAME',
-        'fips' : 'FIPS',
         'lon' : 'LON',
         'lat' : 'LAT',
-        'geom' : 'MULTIPOLYGON',
+        'mpoly' : 'MULTIPOLYGON',
     }
 
     lm = LayerMapping(USStates, states_shp, states_mapping,

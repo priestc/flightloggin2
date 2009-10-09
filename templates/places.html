@@ -48,6 +48,7 @@
         {% if place.location.y and place.location.x %}
         <td id="p{{ place.id }}_coordinates">
             <a href="http://maps.google.com/?q={{place.location.y}},{{place.location.x}}" target="_blank">{{place.location.y}}, {{place.location.x}}</a>
+            {# "http://runwayfinder.com/?x={{place.location.x}}&y={{place.location.y}}&z=11" #}
         </td>
         {% else %}
         <td>None</td>
