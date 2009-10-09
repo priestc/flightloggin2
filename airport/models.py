@@ -70,7 +70,13 @@ class Custom(Location):
             # automatically find which country the coordinates fall into
             loc = self.location.wkt
             country = WorldBorders.objects.get(mpoly__contains=loc).iso2
-            self.country = Country.objects.get(code=country)
+            self.country = Country(code=country)
+            
+            if country=='US':
+                # in the US, now find the state
+                state = USStates.objects.get(geom__contains=loc).state
+                region = "US-%s" % state.upper()
+                self.region = Region.objects.get(code=region)
         
         try:
             getattr(self, "user", None)
@@ -135,11 +141,23 @@ class WorldBorders(models.Model):
     mpoly = models.MultiPolygonField()
     objects = models.GeoManager()
 
-    # So the model is pluralized correctly in the admin.
     class Meta:
         verbose_name_plural = "World Borders"
 
-    # Returns the string representation of the model.
     def __unicode__(self):
         return self.name
 
+class USStates(models.Model):
+    state = models.CharField(max_length=2)
+    name = models.CharField(max_length=24)
+    fips = models.CharField(max_length=2)
+    lon = models.FloatField()
+    lat = models.FloatField()
+    geom = models.MultiPolygonField(srid=4326)
+    objects = models.GeoManager()
+    
+    class Meta:
+        verbose_name_plural = "US States"
+    
+    def __unicode__(self):
+        return self.name
