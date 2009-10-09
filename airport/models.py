@@ -71,7 +71,7 @@ class Custom(Location):
             country = WorldBorders.objects.get(mpoly__contains=loc).iso2
             self.country = Country(code=country)
             
-            if country=='US':
+            if country=='US' or country=='UM':
                 # in the US, now find the state
                 state = USStates.objects.get(mpoly__contains=loc).state
                 region = "US-%s" % state.upper()
@@ -83,6 +83,9 @@ class Custom(Location):
             from share.middleware import share
             self.user = share.get_display_user()
         super(Custom,self).save()
+        
+    class Meta:
+        ordering = ('name', )
 
 ##############################################################################
         
@@ -101,6 +104,9 @@ class Airport(Location):
 
         return ", ".join(ret)
     
+    class Meta:
+        ordering = ('name', )
+    
 ###############################################################################
     
 class Region(models.Model):
@@ -110,6 +116,9 @@ class Region(models.Model):
     
     def __unicode__(self):
         return self.name
+    
+    class Meta:
+        ordering = ('name', )
 
 ##############################################################################
 
@@ -121,12 +130,14 @@ class Country(models.Model):
     def __unicode__(self):
         return self.name
     
+    class Meta:
+        verbose_name_plural = "Countries"
+        ordering = ('name', )
+    
 ##############################################################################    
     
     
 class WorldBorders(models.Model):
-    # Regular Django fields corresponding to the attributes in the
-    # world borders shapefile.
     name = models.CharField(max_length=50)
     area = models.IntegerField()
     pop2005 = models.IntegerField('Population 2005')
@@ -139,13 +150,12 @@ class WorldBorders(models.Model):
     lon = models.FloatField()
     lat = models.FloatField()
 
-    # GeoDjango-specific: a geometry field (MultiPolygonField), and
-    # overriding the default manager with a GeoManager instance.
     mpoly = models.MultiPolygonField()
     objects = models.GeoManager()
 
     class Meta:
         verbose_name_plural = "World Borders"
+        ordering = ('name', )
 
     def __unicode__(self):
         return self.name
@@ -162,6 +172,7 @@ class USStates(models.Model):
     
     class Meta:
         verbose_name_plural = "US States"
+        ordering = ('name', )
     
     def __unicode__(self):
         return self.name

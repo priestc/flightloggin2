@@ -1,5 +1,5 @@
 from django.contrib.gis import admin
-from models import Airport, Custom, Navaid, WorldBorders, USStates
+from models import *
 
 class AirportAdmin(admin.OSMGeoAdmin):
     list_display = ('identifier', 'name', 'country', 'region', 'municipality',)
@@ -14,14 +14,17 @@ class NavaidAdmin(admin.OSMGeoAdmin):
     search_fields = ('identifier', 'name',)
 
 class WorldBordersAdmin(admin.OSMGeoAdmin):
-    search_fields = ('name',)
+    search_fields = ('name','iso2')
+    list_display = ('name', 'iso2',)
 
 class USStatesAdmin(admin.OSMGeoAdmin):
-    search_fields = ('name',)
+    search_fields = ('name','state',)
+    list_display = ('name', 'state',)
 
 admin.site.register(Navaid, NavaidAdmin)
 admin.site.register(Custom, CustomAdmin)
 admin.site.register(Airport, AirportAdmin)
 admin.site.register(WorldBorders, WorldBordersAdmin)
 admin.site.register(USStates, USStatesAdmin)
-
+admin.site.register(Country)
+admin.site.register(Region)
