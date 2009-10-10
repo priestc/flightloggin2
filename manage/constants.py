@@ -27,6 +27,7 @@ COLUMN_NAMES = {
     "TAIL NUMBER": 'tailnumber',
     "N-NUMBER": 'tailnumber',
     "PLANE": 'tailnumber',
+    "REGISTRATION": 'tailnumber',
     "AIRCRAFT REGISTRATION": 'tailnumber',
 
     "DAY LANDINGS": 'day_l',

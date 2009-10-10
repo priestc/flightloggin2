@@ -57,7 +57,7 @@ def backup_csv(user):
     
     planes = Plane.objects.filter(user=user)    
     for p in planes:
-        writer.writerow([p.tailnumber, p.manufacturer, p.model, p.cat_class, " ".join(p.get_tags_quote())])
+        writer.writerow([p.tailnumber, p.manufacturer, p.model, p.cat_class, ", ".join(p.get_tags_quote())])
    
     return csv_sio
 
