@@ -47,9 +47,9 @@ class Route(models.Model):
     simple_rendered = models.TextField(blank=True, null=True)
     kml_rendered =    models.TextField(blank=True, null=True)
     
-    overall_dist = models.FloatField(null=True)
-    start_dist = models.FloatField(null=True)
-    line_dist = models.FloatField(null=True)
+    overall_dist = models.FloatField(null=True, default=0)
+    start_dist = models.FloatField(null=True, default=0)
+    line_dist = models.FloatField(null=True, default=0)
     
     p2p = models.BooleanField()
     
