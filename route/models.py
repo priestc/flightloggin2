@@ -47,7 +47,14 @@ class Route(models.Model):
     simple_rendered = models.TextField(blank=True, null=True)
     kml_rendered =    models.TextField(blank=True, null=True)
     
+    overall_dist = models.FloatField(null=True)
+    start_dist = models.FloatField(null=True)
+    line_dist = models.FloatField(null=True)
+    
     p2p = models.BooleanField()
+    
+    # a queryset of all airports, internal only
+    a = None
     
     ##################################
     
@@ -78,6 +85,71 @@ class Route(models.Model):
         return create_route_from_string(r)
     
     #################################
+    
+    def render_distances(self):
+        a = self._get_Points()
+        
+        if not a:
+            return 0.0
+        
+        self.start_dist = self.calc_start_dist(a)
+    
+    def _get_Points(self):
+        if not self.a:
+            self.a = Airport.objects.filter(routebase__route=self).distinct()
+        return self.a
+    
+    def calc_overall_dist(self, a):
+        """returns the max distance between any two points in the
+           route
+        """
+        a = self._get_Points()
+        mp = a.collect()
+        ct = mp.envelope.centroid
+
+        na = a.distance(ct)
+        
+        dist = []
+        for p in na:
+            dist.append(p.distance)
+        
+        #since we're measuring from the center, multiply by 2    
+        diameter = max(dist) * 2
+        
+        return diameter.nm
+    
+    ################################
+    
+    def calc_start_dist(self, a):
+        """Returns the max distance between any point in the route and the
+           starting point. Used for ATP XC distance.
+           
+           >>> r=Route.from_string('kvta kuni')
+           >>> r.start_distance()
+           50.003471947098973
+           >>> r=Route.from_string('kmer kvta')
+           >>> r.start_distance()
+           0.0
+           >>> r=Route.from_string('kvta')
+           >>> r.start_distance()
+           0.0
+           
+        """
+        
+        mp = a.collect()
+        start = a[0].location
+
+        na = a.distance(start)
+        
+        dist = []
+        for p in na:
+            dist.append(p.distance)
+            
+        diameter = max(dist)
+        
+        return diameter.nm
+    
+    ################################
     
     def easy_render(self):
         """Rerenders the HTML for displaying the route. Takes info from the
@@ -117,9 +189,15 @@ class Route(models.Model):
         self.kml_rendered = "\n".join(kml)
         self.fancy_rendered = "-".join(fancy)
         self.simple_rendered = "-".join(simple)
+        
+        #self.render_distances()
+        
         self.save()
         
     def hard_render(self):
+        """Recreate a new routebase set from the fallback_string, then
+           re-render the variables
+        """
 
         flight = self.flight
         fbs = self.fallback_string

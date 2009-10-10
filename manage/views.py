@@ -106,6 +106,8 @@ def do_import(request, f, preview=True):
     plane_out = []
     records_out = []
     
+    del pre
+    
     records=False
     
     for line in dr:
@@ -251,10 +253,11 @@ def make_preview_records(line, out):
 ################################################
     
 def make_commit_flight(line, user, out):
-    plane, created = Plane.objects.get_or_create(
-                    tailnumber=line.get("tailnumber"),
-                    type=line.get("type"),
-                    user=user)
+    kwargs = {"tailnumber":line.get("tailnumber"), "user": user}
+    if line.get("type"):
+        kwargs.update({"type": line.get("type")})
+        
+    plane, created = Plane.objects.get_or_create(**kwargs)
 
     flight = Flight(user=user)
    
@@ -334,12 +337,13 @@ def make_commit_plane(line, user, out):
     p.cat_class=cat_class
     
     the_tags = []
-    for tag in tags.split(","):
-        tag = tag.strip()
-        if tag.find(" ") > 0:
-            tag = "\"" + tag + "\""
-            
-        the_tags.append(tag)
+    if tags:
+        for tag in tags.split(","):
+            tag = tag.strip()
+            if tag.find(" ") > 0:
+                tag = "\"" + tag + "\""
+                
+            the_tags.append(tag)
     
     p.tags = " ".join(the_tags)
     p.save()

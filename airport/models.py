@@ -68,15 +68,22 @@ class Custom(Location):
         if self.location:
             # automatically find which country the coordinates fall into
             loc = self.location.wkt
-            country = WorldBorders.objects.get(mpoly__contains=loc).iso2
+            
+            country = getattr(
+                WorldBorders.objects.get(mpoly__contains=loc), 'iso2','')
+                
             self.country = Country(code=country)
             
-            if country=='US' or country=='UM':
+            if country=='US':
                 # in the US, now find the state
-                state = USStates.objects.get(mpoly__contains=loc).state
-                region = "US-%s" % state.upper()
-                self.region = Region.objects.get(code=region)
-        
+                try:
+                    state = getattr(
+                        USStates.objects.get(mpoly__contains=loc), 'state','')
+                        
+                    region = "US-%s" % state.upper()
+                    self.region = Region.objects.get(code=region)
+                except:
+                    pass
         try:
             getattr(self, "user", None)
         except:
