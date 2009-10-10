@@ -23,7 +23,7 @@ NUMERIC_FIELDS = [      # fields that are always just numbers and nothing else
           ]
           
 BACKUP_FIELDS = [       #fields included in the backup file
-          'date', 'reg', 'route',
+          'date', 'reg', 'type', 'route',
           'total', 'sim', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
           'person', 'r_remarks', 'flying',
           ]
@@ -86,6 +86,7 @@ FIELD_TITLES = {
     
     "plane": "Plane",
     "reg": "Registration",
+    'type': "Plane Type",    # for the backup file
 
     "pic": "PIC",
     "sic": "SIC",

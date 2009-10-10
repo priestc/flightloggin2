@@ -154,6 +154,9 @@ class Flight(models.Model):
         
         elif cn == "reg":
             return self.plane.tailnumber
+        
+        elif cn == "type":
+            return self.plane.type
             
         elif cn == "f_route" and self.route:
             if self.route.fancy_rendered:
