@@ -159,6 +159,10 @@ def do_import(request, f, preview=True):
 ###############################################################################
 
 def prepare_line(line):
+    
+    if line.get('remarks', None):   
+        line['remarks'] = line['remarks'].replace('\\r', '\n')
+    
     if line.get('non_flying'):
         return "NON-FLIGHT", line
         
@@ -213,7 +217,7 @@ def prepare_line(line):
             break
     
     if person:
-       line.update({"person": person}) 
+       line.update({"person": person})
 
     return "FLIGHT", line
 
@@ -292,6 +296,7 @@ def make_commit_flight(line, user, out):
 #########################
        
 def make_commit_nonflight(line, user, out):
+    
     nf = NonFlight(user=user)
     new_nf = NON_FLIGHT_TRANSLATE_NUM[line.get('non_flying', "")]
     line.update({'non_flying': new_nf})
