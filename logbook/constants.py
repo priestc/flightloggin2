@@ -86,7 +86,7 @@ FIELD_TITLES = {
     
     "plane": "Plane",
     "reg": "Registration",
-    'type': "Plane Type",    # for the backup file
+    'type': "Type",    # for the backup file
 
     "pic": "PIC",
     "sic": "SIC",
