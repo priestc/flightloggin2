@@ -123,7 +123,7 @@ def autofill(type_):
             ret["model"] = model
             ret["cat_class"] = c
         else:
-            return empty
+            return ret
     
     elif type_.startswith("BE"):
         if "16" in type_: model="";c=1
@@ -163,7 +163,7 @@ def autofill(type_):
             ret["model"] = model
             ret["cat_class"] = c
         else:
-            return empty
+            return ret
         
     if not ret['manufacturer']:
         return ret     #plane not found, return None
