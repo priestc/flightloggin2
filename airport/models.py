@@ -1,8 +1,22 @@
 from django.contrib.gis.db import models
+
+from annoying.functions import get_object_or_None
+
 from constants import LOCATION_TYPE, LOCATION_CLASS
 from django.contrib.auth.models import User
 
+
 class Location(models.Model):
+    """
+    >>> from django.contrib.auth.models import User
+    >>> u = User(pk=1)
+    >>> c = Location(name="test", user=u, loc_type=3, location='POINT (-84.481517 34.322631)')
+    >>> c.save()
+    >>> c.region.name
+    u'Georgia'    
+    
+    """
+    
     loc_class = models.IntegerField(choices=LOCATION_CLASS,
                                          default=0, blank=True, null=True)
                                          
@@ -70,7 +84,8 @@ class Location(models.Model):
             loc = self.location.wkt
             
             country = getattr(
-                WorldBorders.objects.get(mpoly__contains=loc), 'iso2','')
+              get_object_or_None(WorldBorders, mpoly__contains=loc), 'iso2',''
+            )
                 
             self.country = Country(code=country) # code = pk
             
@@ -83,7 +98,7 @@ class Location(models.Model):
                     region = "US-%s" % state.upper()
                     self.region = Region.objects.get(code=region)
         try:
-            getattr(self, "user", None)
+            getattr(self, "user", None).username
         except:
             #user is not set, we now must get the current logged in user
             from share.middleware import share

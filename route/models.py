@@ -61,7 +61,7 @@ class Route(models.Model):
     @classmethod
     def render_custom(cls, user):
         qs = cls.objects.filter(flight__user=user)\
-                    .filter(routebase__custom__isnull=False)
+                    .filter(routebase__location__loc_class=3)
         for r in qs:
             r.easy_render()
         return qs.count()
