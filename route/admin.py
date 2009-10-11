@@ -4,7 +4,7 @@ from models import *
 class RouteBaseInline(admin.TabularInline):
     model = RouteBase
     extra = 3
-    raw_id_fields = ('airport','navaid')
+    raw_id_fields = ('location')
 
 class RouteAdmin(admin.ModelAdmin):
     inlines = (RouteBaseInline,)

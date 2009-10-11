@@ -1,12 +1,12 @@
 import re
 
-from django.db import models
+from django.contrib.gis.db import models
 from django.db.models import Q
 
 from annoying.functions import get_object_or_None
 from share.middleware import share
 
-from airport.models import Airport, Custom, Navaid
+from airport.models import Location
 
 class Route(models.Model):
     """Represents a route the user went on for the flight
@@ -90,20 +90,21 @@ class Route(models.Model):
         a = self._get_Points()
         
         if not a:
-            return 0.0
+            return ## nothing to measure from, keep the defaults
         
         self.start_dist = self.calc_start_dist(a)
     
     def _get_Points(self):
         if not self.a:
-            self.a = Airport.objects.filter(routebase__route=self).distinct()
+            self.a = Location.objects.filter(location__isnull=False,
+                                             routebase__route=self).distinct()
         return self.a
     
     def calc_overall_dist(self, a):
         """returns the max distance between any two points in the
-           route
+           route.a
         """
-        a = self._get_Points()
+        
         mp = a.collect()
         ct = mp.envelope.centroid
 
@@ -163,12 +164,13 @@ class Route(models.Model):
         for rb in self.routebase_set.all().order_by('sequence'):
             
             dest = rb.destination()
+            loc_class = rb.get_loc_class()
             
-            if rb.airport:
+            if loc_class == 1:
                 class_ = "found_airport"
-            elif rb.navaid:
+            elif loc_class == 2:
                 class_ = "found_navaid"
-            elif rb.custom:
+            elif loc_class == 3:
                 class_ = "found_custom"
             else:
                 class_ = "not_found"
@@ -190,7 +192,7 @@ class Route(models.Model):
         self.fancy_rendered = "-".join(fancy)
         self.simple_rendered = "-".join(simple)
         
-        #self.render_distances()
+        self.render_distances()
         
         self.save()
         
@@ -217,7 +219,7 @@ class Route(models.Model):
     def __unicode__(self):
         return self.simple_rendered
         
-    def as_list(self):
+    def as_listDEP(self):
         """Returns a list of custom point objects that have
         consistent lat/lng properties no matter if it's a
         airport, navaid or an unknown point"""
@@ -244,34 +246,34 @@ class Route(models.Model):
 ###############################################################################
 
 class RouteBase(models.Model):
+    
     route =    models.ForeignKey(Route)
     
-    airport =  models.ForeignKey(Airport, null=True, blank=True)
-    navaid =   models.ForeignKey(Navaid, null=True, blank=True)
-    custom =   models.ForeignKey(Custom, null=True, blank=True)
-    
+    location =  models.ForeignKey(Location, null=True, blank=True)
     unknown =  models.CharField(max_length=30, blank=True, null=True)
-    
     sequence = models.PositiveIntegerField()
     
     def __unicode__(self):
-        if self.airport:
-            return "airport: " + self.airport.identifier
         
-        elif self.navaid:
-            return "navaid: " + self.navaid.identifier
+        loc_class = self.get_loc_class()
+        
+        if loc_class == 0:
+            return "unknown: " + self.unknown
+        
+        elif loc_class == 1:
+            return "airport: " + self.location.identifier
+        
+        elif loc_class == 2:
+            return "navaid: " + self.location.identifier
             
-        elif self.unknown:
-            return "other: " + self.unknown
-            
-        elif self.custom:
-            return "custom: " + self.custom.identifier
-            
-        else:
-            return "????"
+        elif loc_class == 3:
+            return "custom: " + self.location.identifier
             
     def destination(self):
-        return self.airport or self.navaid or self.custom or self.unknown
+        return self.location or self.unknown
+    
+    def get_loc_class(self):
+        return getattr(self.destination(), "loc_class", 0)
     
 ###############################################################################  
 
@@ -317,7 +319,7 @@ def find_navaid(ident, i, last_rb=None):
     """
            
     if last_rb:
-        navaid = Navaid.objects.filter(identifier=ident[1:])
+        navaid = Location.objects.filter(loc_class=2, identifier=ident[1:])
         #if more than 1 navaids come up,
         if navaid.count() > 1:
             #run another query to find the nearest
@@ -331,9 +333,10 @@ def find_navaid(ident, i, last_rb=None):
         # no previous routebases,
         # dont other with the extra queries trying to find the nearest 
         # based on the last
-        navaid = get_object_or_None(Navaid, identifier=ident[1:])
+        navaid = get_object_or_None(Location, loc_class=2,
+                                              identifier=ident[1:])
     if navaid:
-        return RouteBase(navaid=navaid, sequence=i)
+        return RouteBase(location=navaid, sequence=i)
     
     return None
     
@@ -345,33 +348,40 @@ def find_custom(ident, i, force=False):
     """
     user = share.get_display_user()
     if force:
-        cu,c = Custom.objects.get_or_create(user=user, identifier=ident)
+        cu,c = Location.objects.get_or_create(user=user,
+                                              loc_type=3,
+                                              identifier=ident)
     else:
-        cu = get_object_or_None(Custom, user=user, identifier=ident)
+        cu = get_object_or_None(Location, loc_type=3,
+                                          user=user,
+                                          identifier=ident)
 
     if cu:
-        return RouteBase(custom=cu, sequence=i)
+        return RouteBase(location=cu, sequence=i)
     else:
         return None
 
 ###############################################################################
 
 def find_airport(ident, i, p2p):
-    airport = get_object_or_None(Airport, identifier=ident)
+    airport = get_object_or_None(Location, loc_class=1, identifier=ident)
         
     if not airport and len(ident) == 3:
         # if the ident is 3 letters and no hit, try again with an added 'K'
-        airport = get_object_or_None(Airport, identifier="K" + ident)
+        airport = get_object_or_None(Location, loc_class=1,
+                                               identifier="K%s" % ident)
 
     if airport:
         # a landing airport, eligable for p2p testing
         p2p.append(airport.pk)          
-        return RouteBase(airport=airport, sequence=i)
+        return RouteBase(location=airport, sequence=i)
     
     return None
 
 def make_routebases_from_fallback_string(route):
-    """returns a list of RouteBase objects according to the fallback_string"""
+    """returns a list of RouteBase objects according to the fallback_string,
+    basically hard_render()
+    """
     
     fbs = normalize(route.fallback_string)
     points = fbs.split()                        # MER-VGA -> ['MER', 'VGA']

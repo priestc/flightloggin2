@@ -1,6 +1,6 @@
 import csv, re
 from django.contrib.gis.geos import Point
-from models import Airport, Region, Country
+from models import Location, Region, Country
 from psycopg2 import IntegrityError
 
 import os, sys
@@ -20,7 +20,9 @@ def do_import():
 
 def ia():   #import airport
     """
-id	 ident	type	name	latitude_deg	longitude_deg	elevation_ft	continent	iso_country	iso_region	municipality	scheduled_service	gps_code	iata_code	local_code	home_link	wikipedia_link	keywords
+    id	 ident	type	name	latitude_deg	longitude_deg	elevation_ft
+	continent	iso_country	iso_region	municipality	scheduled_service
+	gps_code	iata_code	local_code	home_link	wikipedia_link	keywords
     """
     path = os.path.join(THIS_PATH, 'fixtures/airports.csv')
     f = open(path, 'rb')
@@ -84,7 +86,17 @@ id	 ident	type	name	latitude_deg	longitude_deg	elevation_ft	continent	iso_countr
         if not throw_out:
 
             try:
-                Airport.objects.get_or_create(identifier=ident, name=name, region=Region.objects.get(code=region, country=country), municipality=city, country=Country.objects.get(code=country), elevation=elev, location=Point(float(lng), float(lat)), type=types[type])
+                Location.objects.get_or_create(
+                    identifier=ident,
+                    loc_class=1, #code for "this is an Airport"
+                    name=name,
+                    region=Region.objects.get(code=region, country=country),
+                    municipality=city,
+                    country=Country.objects.get(code=country),
+                    elevation=elev,
+                    location=Point(float(lng), float(lat)),
+                    loc_type=types[type]
+                )
                 count2 += 1
 
             except ValueError:
