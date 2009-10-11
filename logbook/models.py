@@ -62,14 +62,14 @@ class Flight(models.Model):
     day_l =    models.PositiveIntegerField(   "Day Landings",   default=0, null=False)
     app =      models.PositiveIntegerField(   "Approaches",     default=0, null=False)
 
-    holding =           models.BooleanField(                                  default=False)
-    tracking =          models.BooleanField(  "Intercepting & Tracking",      default=False)
-    pilot_checkride =   models.BooleanField(  "Pilot Checkride",              default=False)
-    cfi_checkride =     models.BooleanField(  "CFI Checkride",                default=False)
-    flight_review =     models.BooleanField(  "Flight Review",                default=False)
-    ipc =               models.BooleanField(  "IPC",                          default=False)
+    holding =           models.BooleanField(                           default=False)
+    tracking =          models.BooleanField("Intercepting & Tracking", default=False)
+    pilot_checkride =   models.BooleanField("Pilot Checkride",         default=False)
+    cfi_checkride =     models.BooleanField("CFI Checkride",           default=False)
+    flight_review =     models.BooleanField("Flight Review",           default=False)
+    ipc =               models.BooleanField("IPC",                     default=False)
 
-    person =   models.CharField(                                        max_length=30, blank=True, null=True)
+    person =   models.CharField( max_length=60, blank=True, null=True)
             
     def __unicode__(self):
         return u"%s -- %s" % (self.date, self.remarks)
