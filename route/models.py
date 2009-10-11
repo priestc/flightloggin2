@@ -346,13 +346,14 @@ def find_custom(ident, i, force=False):
     """Tries to find the custom point, if it can't find one, and force = True,
        it adds it to the user's custom list.
     """
+    
     user = share.get_display_user()
     if force:
-        cu,c = Location.objects.get_or_create(user=user,
-                                              loc_type=3,
+        cu,cr = Location.objects.get_or_create(user=user,
+                                              loc_class=3,
                                               identifier=ident)
     else:
-        cu = get_object_or_None(Location, loc_type=3,
+        cu = get_object_or_None(Location, loc_class=3,
                                           user=user,
                                           identifier=ident)
 
