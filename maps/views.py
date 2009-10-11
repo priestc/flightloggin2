@@ -16,12 +16,15 @@ def maps(request, shared, display_user):
 def airports_kml(request, shared, display_user, type_):
     import settings
     from utils import AirportFolder 
-    from airport.models import *
+    from airport.models import Location
     
     if type_=="all":
         title = "All Airports"
-        points = Airport.objects.filter(routebase__route__flight__user=display_user).distinct()
-        custom = Custom.objects.filter(routebase__route__flight__user=display_user).distinct()
+        points = Location.objects.filter(loc_class=1,
+                    routebase__route__flight__user=display_user).distinct()
+        custom = Location.objects.filter(loc_class=3,
+                    routebase__route__flight__user=display_user).distinct()
+                    
         folders = []
         if points:
             folders.append(AirportFolder(name="All Airports", qs=points))

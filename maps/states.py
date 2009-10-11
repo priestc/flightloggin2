@@ -8,7 +8,7 @@ from matplotlib.colors import rgb2hex
 from django.db.models import Count
 
 from graphs.image_formats import plot_png2, plot_svg2
-from airport.models import Region, Airport
+from airport.models import Region, Location
 
 def state_map_generator(request, shared, display_user, type_, ext):
     
@@ -23,15 +23,23 @@ def state_map_generator(request, shared, display_user, type_, ext):
 def state_map(request, user, type_, ext):
     
     if type_ == "colored":
-        states = Region.objects.filter(airport__routebase__route__flight__user=user, country='US').values('name').distinct()
+        states = Region.objects.filter(
+                    location__routebase__route__flight__user=user,
+                    country='US').values('name').distinct()
         
     elif type_ == "count":
-        states = Region.objects.filter(airport__routebase__route__flight__user=user, country='US').values('name')\
+        states = Region.objects.filter(
+                    location__routebase__route__flight__user=user,
+                    country='US').values('name')\
                     .distinct().annotate(c=Count('name'))
                     
     elif type_ == "count-unique":
-        states = Region.objects.filter(airport__in=Airport.objects.filter(routebase__route__flight__user=user, country="US")\
-                    .distinct()).values('name').annotate(c=Count('airport__region'))
+        states = Region.objects.filter(
+                    location__in=Location.objects.filter(
+                        routebase__route__flight__user=user,
+                        country="US")\
+                    .distinct()).values('name').annotate(c=Count('airport__region')
+                 )
     else:
         assert False
                     

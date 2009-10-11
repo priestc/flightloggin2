@@ -1,6 +1,6 @@
 from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
-from airport.models import Custom
+from airport.models import Location
 from models import Records, NonFlight
 from forms import *
 
@@ -20,7 +20,7 @@ def records(request, shared, display_user):
 
 @render_to("places.html")
 def places(request, shared, display_user):
-    customs = Custom.objects.filter(user=display_user)
+    customs = Location.objects.filter(loc_class=3, user=display_user)
     
     if request.POST.get('submit', None) == 'Create New Place':
         form=CustomForm(request.POST)
@@ -38,7 +38,9 @@ def places(request, shared, display_user):
             ERROR = 'true'
             
     elif request.POST.get('submit', None) == 'Submit Changes':
-        custom = Custom.objects.get(user=display_user, pk=request.POST.get('id', None) )
+        custom = Location.objects.get(loc_class=3,
+                                      user=display_user,
+                                      pk=request.POST.get('id', None) )
         form=CustomForm(request.POST, instance=custom)
         if form.is_valid():
             point = get_point(form.cleaned_data['coordinates'])
@@ -54,7 +56,8 @@ def places(request, shared, display_user):
             ERROR = 'true'
             
     elif request.POST.get('submit', None) == 'Delete Place':
-        custom = Custom.objects.get(user=display_user, pk=request.POST.get('id', None) )
+        custom = Location.objects.get(loc_class=3,
+                        user=display_user, pk=request.POST.get('id', None) )
         custom.delete()
         form = CustomForm()
         
