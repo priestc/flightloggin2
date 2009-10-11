@@ -76,7 +76,7 @@ class Location(models.Model):
         or state the custom location falls into"""
         
         ## just save if it's not a custom point
-        if self.loc_class < 3:
+        if self.loc_class == 1:
             return super(Location,self).save()
         
         if self.location:

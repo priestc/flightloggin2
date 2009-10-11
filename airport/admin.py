@@ -4,6 +4,8 @@ from models import *
 class LocationAdmin(admin.OSMGeoAdmin):
     list_display = ('identifier', 'name', 'country', 'region', 'municipality',)
     search_fields = ('identifier', 'name', 'municipality',)
+    list_filter = ('loc_class','loc_type')
+    raw_id_fields = ('user', )
 
 class WorldBordersAdmin(admin.OSMGeoAdmin):
     search_fields = ('name','iso2')
