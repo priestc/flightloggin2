@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class Location(models.Model):
     loc_class = models.IntegerField(choices=LOCATION_CLASS,
-                                         default=0)
+                                         default=0, blank=True, null=True)
                                          
     user = models.ForeignKey(User, null=True)
     identifier = models.CharField(max_length=8)
@@ -15,7 +15,7 @@ class Location(models.Model):
 
     name = models.CharField(max_length=96, blank=True)
     municipality = models.CharField(max_length=60, blank=True)
-    elevation = models.IntegerField(null=True)
+    elevation = models.IntegerField(null=True, blank=True)
     
     location = models.PointField(null=True, blank=True)
     objects = models.GeoManager()

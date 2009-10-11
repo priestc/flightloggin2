@@ -27,8 +27,10 @@ def places(request, shared, display_user):
         if form.is_valid():
             point = get_point(form.cleaned_data['coordinates'])
             form.cleaned_data['identifier'] = form.cleaned_data['identifier'].upper()
-            custom = form.save()
+            custom = form.save(commit=False)
+            custom.loc_class = 3
             custom.location = point
+            
             custom.save()
             from route.models import Route
             Route.render_custom(display_user)   #re-render routes with custom places
@@ -45,8 +47,9 @@ def places(request, shared, display_user):
         if form.is_valid():
             point = get_point(form.cleaned_data['coordinates'])
             form.cleaned_data['identifier'] = form.cleaned_data['identifier'].upper()
-            custom = form.save()
+            custom = form.save(commit=False)
             custom.location = point
+            custom.loc_class = 3
             
             custom.save()
             from route.models import Route

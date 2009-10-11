@@ -38,7 +38,7 @@ def state_map(request, user, type_, ext):
                     location__in=Location.objects.filter(
                         routebase__route__flight__user=user,
                         country="US")\
-                    .distinct()).values('name').annotate(c=Count('airport__region')
+                    .distinct()).values('name').annotate(c=Count('location__region')
                  )
     else:
         assert False
