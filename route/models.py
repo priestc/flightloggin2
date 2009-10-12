@@ -74,7 +74,10 @@ class Route(models.Model):
         return qs.count()
     
     @classmethod
-    def hard_render_user(cls, user):        
+    def hard_render_user(cls, user, username=""):
+        if username:
+            user=User.objects.get(username=username)
+            
         qs = cls.objects.filter(user=user)
         for r in qs:
             r.hard_render()
