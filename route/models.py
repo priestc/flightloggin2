@@ -74,8 +74,8 @@ class Route(models.Model):
         return qs.count()
     
     @classmethod
-    def hard_render_all(cls):
-        qs = cls.objects.all()
+    def hard_render_user(cls, user):        
+        qs = cls.objects.filter(user=user)
         for r in qs:
             r.hard_render()
         return qs.count()
