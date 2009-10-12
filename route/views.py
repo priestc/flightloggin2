@@ -12,6 +12,8 @@ def easy_recalc_routes(request):
     return HttpResponse("%s routes 'easy' recalculated" % count)
 
 def hard_recalc_routes(request):
-    count = Route.hard_render_all('incrimental')
+    from django.contrib.auth.models import User
+    for u in User.objects.all():
+        count += Route.hard_render_all(user=u)
         
     return HttpResponse("%s routes 'hard' recalculated" % count)
