@@ -74,11 +74,12 @@ class Route(models.Model):
         return qs.count()
     
     @classmethod
-    def hard_render_user(cls, user, username=""):
+    def hard_render_user(cls, user=None, username=None):
         if username:
+            from django.contrib.auth.models import User
             user=User.objects.get(username=username)
             
-        qs = cls.objects.filter(user=user)
+        qs = cls.objects.filter(flight__user=user)
         for r in qs:
             r.hard_render()
         return qs.count()
