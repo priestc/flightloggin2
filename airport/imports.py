@@ -196,8 +196,10 @@ def countries():   #import country
 ######################################################################################
 def navaids():
     """
-    id	filename	ident	name	type	frequency_khz	latitude_deg	longitude_deg	elevation_ft	iso_country	dme_frequency_khz
-    dme_channel	dme_latitude_deg	dme_longitude_deg	dme_elevation_ft	slaved_variation_deg	magnetic_variation_deg	usageType	power
+    id	filename	ident	name	type	frequency_khz	latitude_deg	
+    longitude_deg	elevation_ft	iso_country	dme_frequency_khz   dme_channel
+    dme_latitude_deg	dme_longitude_deg	dme_elevation_ft
+    slaved_variation_deg	magnetic_variation_deg	usageType	power
     associated_airport
     """
     THIS_PATH = "/home/chris/Websites/flightloggin/airport/fixtures/"
@@ -230,26 +232,31 @@ def navaids():
         type = line["type"]
         name = line["name"]
         
+        kwargs = {"loc_class":     2,
+                  "identifier":    ident,
+                  "name":          name,
+                  "location":      'POINT (%s %s)' % (lng, lat),
+                  "loc_type":      nav_types[type],
+                 }
+        
         try:
-            p, created = Location.objects.get_or_create(
-                loc_class=     2,
-                identifier=    ident,
-                name=          name,
-                location=      Point(float(lng), float(lat)),
-                loc_type=      nav_types[type]
-            )
+            navaid, created = Location.objects.get_or_create(**kwargs)
             
             if not created:
-                print "already - " + ident
+                print "already - %s" % ident
 
         except ValueError:
-            print "value - " + ident
+            print "value - %s" % ident
 
         except IntegrityError:
-            print "integrity - " + ident
+            print "integrity - %s" % ident
         
         except TypeError:
-            print "type - " + ident
+            print "type - %s" % ident
+            
+        except:
+            import pdb; pdb.set_trace()
+            print "total fail - %s" % ident
         
         
 ######################################################################################

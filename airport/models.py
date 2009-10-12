@@ -90,10 +90,15 @@ class Location(models.Model):
             self.country = Country(code=country) # code = pk
             
             if country=='US':
+                state = None
                 # in the US, now find the state
-                state = getattr(
-                    USStates.objects.get(mpoly__contains=loc), 'state',''
-                )
+                try:
+                    state = getattr(
+                        USStates.objects.get(mpoly__contains=loc), 'state',''
+                    )
+                except USStates.DoesNotExist:
+                    print "NO STATE: %s" % self.identifier
+                    
                 if state:   
                     region = "US-%s" % state.upper()
                     self.region = Region.objects.get(code=region)
