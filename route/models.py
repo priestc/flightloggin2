@@ -8,6 +8,40 @@ from share.middleware import share
 
 from airport.models import Location
 
+###############################################################################
+
+class RouteBase(models.Model):
+    
+    route =    models.ForeignKey("Route")
+    
+    location =  models.ForeignKey(Location, null=True, blank=True)
+    unknown =  models.CharField(max_length=30, blank=True, null=True)
+    sequence = models.PositiveIntegerField()
+    
+    def __unicode__(self):
+        
+        loc_class = self.get_loc_class()
+        
+        if loc_class == 0:
+            return "unknown: " + self.unknown
+        
+        elif loc_class == 1:
+            return "airport: " + self.location.identifier
+        
+        elif loc_class == 2:
+            return "navaid: " + self.location.identifier
+            
+        elif loc_class == 3:
+            return "custom: " + self.location.identifier
+            
+    def destination(self):
+        return self.location or self.unknown
+    
+    def get_loc_class(self):
+        return getattr(self.destination(), "loc_class", 0)
+    
+###############################################################################
+
 class Route(models.Model):
     """Represents a route the user went on for the flight
     
@@ -56,8 +90,8 @@ class Route(models.Model):
     # a queryset of all airports, internal only
     a = None
     
-    #the user who owns the route
-    user = None
+    def __unicode__(self):
+        return self.simple_rendered or "err"
     
     ##################################
     
@@ -71,6 +105,10 @@ class Route(models.Model):
     
     @classmethod
     def easy_render_all(cls):
+        """Re-renders ALL instances of Routes in the database. Easy render
+           is not an expensive operation (relatively), so this isn't
+           needing to be done in patches like hard_render.
+        """
         qs = cls.objects.all()
         for r in qs:
             r.easy_render()
@@ -82,9 +120,10 @@ class Route(models.Model):
             from django.contrib.auth.models import User
             user=User.objects.get(username=username)
             
-        qs = cls.objects.filter(flight__user=user)
+        from django.db.models import Max
+        qs = cls.objects.filter(flight__user=user).annotate(fid=Max('flight__id'))
         for r in qs:
-            r.hard_render(user=user)
+            r.hard_render(user=user, flight_id=r.fid)
             
         return qs.count()
     
@@ -209,87 +248,33 @@ class Route(models.Model):
         
         self.save()
         
-    def hard_render(self, user):
-        """Recreate a new routebase set from the fallback_string, then
-           re-render the variables
+    def hard_render(self, user=None, username=None, flight_id=None):
+        """Spawns a new Route object from itself, and connects it to
+           the flight that the old route was connected to. And then returns the
+           newly created Route instance
         """
-        # set the owner of the route, so we can create custom places
-        # without explicitly being logged in
-        self.user=user
-        
-        flight = self.flight
-        fbs = self.fallback_string
-        
-        is_p2p, routebases = make_routebases_from_fallback_string(self)
-        
-        self.p2p = is_p2p
-        
-        #delete the current routebases, then add the new ones
-        self.routebase_set.all().delete()
-        for routebase in routebases:
-            routebase.route = self
-            routebase.save()
-            
-        self.easy_render()
-    
-    def __unicode__(self):
-        return self.simple_rendered
-        
-    def as_listDEP(self):
-        """Returns a list of custom point objects that have
-        consistent lat/lng properties no matter if it's a
-        airport, navaid or an unknown point"""
-        
-        l = []
-        
-        class point(object):
-            lat = 0
-            lng = 0
-        
-        for rb in self.routebase_set.all():
-            p = point()
+        if not flight_id:
             try:
-                p.lat = rb.destination().location.x
-                p.lng = rb.destination().location.y
-                l.append(p)
-            except AttributeError:
-                # .location will fail if the point is unknown.
-                # Just skip this point if this happens
+                flight_id = self.flight.all()[0].id
+            except IndexError:  #no flight associated with this route
                 pass
             
-        return l
-
-###############################################################################
-
-class RouteBase(models.Model):
-    
-    route =    models.ForeignKey(Route)
-    
-    location =  models.ForeignKey(Location, null=True, blank=True)
-    unknown =  models.CharField(max_length=30, blank=True, null=True)
-    sequence = models.PositiveIntegerField()
-    
-    def __unicode__(self):
-        
-        loc_class = self.get_loc_class()
-        
-        if loc_class == 0:
-            return "unknown: " + self.unknown
-        
-        elif loc_class == 1:
-            return "airport: " + self.location.identifier
-        
-        elif loc_class == 2:
-            return "navaid: " + self.location.identifier
+        if (not user) and username:
+            from django.contrib.auth.models import User
+            user = User.objects.get(username=username)
             
-        elif loc_class == 3:
-            return "custom: " + self.location.identifier
-            
-    def destination(self):
-        return self.location or self.unknown
-    
-    def get_loc_class(self):
-        return getattr(self.destination(), "loc_class", 0)
+        if not user and not username:
+            user = share.get_display_user()
+        
+        new_route = MakeRoute(self.fallback_string, user).get_route()
+        
+        if flight_id:
+            from logbook.models import Flight
+            flight = Flight.objects.get(pk=flight_id)
+            flight.route = new_route
+            flight.save()
+        
+        return new_route
     
 ###############################################################################
   
@@ -297,7 +282,6 @@ class MakeRoute(object):
     
     def __init__(self, fallback_string, user):
         self.user=user
-        self.route=None
        
         if not fallback_string:
             self.route = None

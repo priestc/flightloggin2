@@ -80,8 +80,13 @@ class Flight(models.Model):
     
     def save(self, *args, **kwargs):
         from share.middleware import share
-        if not self.user:
+        try:
+            getattr(self, "user", None).username
+        except:
+            #user is not set, we now must get the current logged in user
+            from share.middleware import share
             self.user = share.get_display_user()
+        
         super(Flight,self).save(*args, **kwargs)
         
     def delete(self, *args, **kwargs):
