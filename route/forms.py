@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import widgets
 from django.forms import ModelChoiceField, CharField
-from models import create_route_from_string, Route
+from models import Route
 from django.utils.safestring import mark_safe
 
 from django.forms.widgets import TextInput
