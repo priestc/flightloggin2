@@ -56,6 +56,9 @@ class Route(models.Model):
     # a queryset of all airports, internal only
     a = None
     
+    #the user who owns the route
+    user = None
+    
     ##################################
     
     @classmethod
@@ -81,12 +84,18 @@ class Route(models.Model):
             
         qs = cls.objects.filter(flight__user=user)
         for r in qs:
-            r.hard_render()
+            r.hard_render(user=user)
+            
         return qs.count()
     
     @classmethod
-    def from_string(cls, r):
-        return create_route_from_string(r)
+    def from_string(cls, r, user=None):
+        # so we know which user to make the custom points from
+        # if no user explicitly given, try t get the currently logged in user
+        if not user:
+            user = share.get_display_user()
+            
+        return MakeRoute(r, user=user).get_route()
     
     #################################
     
@@ -200,11 +209,14 @@ class Route(models.Model):
         
         self.save()
         
-    def hard_render(self):
+    def hard_render(self, user):
         """Recreate a new routebase set from the fallback_string, then
            re-render the variables
         """
-
+        # set the owner of the route, so we can create custom places
+        # without explicitly being logged in
+        self.user=user
+        
         flight = self.flight
         fbs = self.fallback_string
         
@@ -279,155 +291,164 @@ class RouteBase(models.Model):
     def get_loc_class(self):
         return getattr(self.destination(), "loc_class", 0)
     
-###############################################################################  
-
-def create_route_from_string(fallback_string):
-   
-    if not fallback_string:
-        return None
-    
-    route = Route(fallback_string=fallback_string, p2p=False)
-    route.save()
-    
-    is_p2p, routebases = make_routebases_from_fallback_string(route)
-    
-    route.p2p = is_p2p
-    
-    for routebase in routebases:
-        routebase.route = route
-        routebase.save()
-        
-    route.easy_render()
-    return route
-
-###########################################################
-###########################################################    
-        
-def normalize(string):
-    """removes all cruf away from the route string, returns only the
-       alpha numeric characters with clean seperators
-    """
-    
-    import re
-    string = string.upper()
-    string = string.replace("LOCAL", " ")
-    string = string.replace(" TO ", " ")
-    return re.sub(r'[^A-Z0-9!@]+', ' ', string).strip()
-
-###########################################################
-########################################################### 
-    
-def find_navaid(ident, i, last_rb=None):
-    """Searches the database for the navaid object according to ident.
-       if it finds a match,returns the routebase object
-    """
-           
-    if last_rb:
-        navaid = Location.objects.filter(loc_class=2, identifier=ident[1:])
-        #if more than 1 navaids come up,
-        if navaid.count() > 1:
-            #run another query to find the nearest
-            last_point = last_rb.airport or last_rb.navaid 
-            navaid = navaid.distance(last_point.location).order_by('distance')[0]  
-        elif navaid.count() == 0:
-            navaid = None
-        else:
-            navaid = navaid[0]
-    else:
-        # no previous routebases,
-        # dont other with the extra queries trying to find the nearest 
-        # based on the last
-        navaid = get_object_or_None(Location, loc_class=2,
-                                              identifier=ident[1:])
-    if navaid:
-        return RouteBase(location=navaid, sequence=i)
-    
-    return None
-    
 ###############################################################################
-
-def find_custom(ident, i, force=False):
-    """Tries to find the custom point, if it can't find one, and force = True,
-       it adds it to the user's custom list.
-    """
+  
+class MakeRoute(object):
     
-    user = share.get_display_user()
-    if force:
-        cu,cr = Location.objects.get_or_create(user=user,
-                                              loc_class=3,
-                                              identifier=ident)
-    else:
-        cu = get_object_or_None(Location, loc_class=3,
-                                          user=user,
-                                          identifier=ident)
-
-    if cu:
-        return RouteBase(location=cu, sequence=i)
-    else:
-        return None
-
-###############################################################################
-
-def find_airport(ident, i, p2p):
-    airport = get_object_or_None(Location, loc_class=1, identifier=ident)
-        
-    if not airport and len(ident) == 3:
-        # if the ident is 3 letters and no hit, try again with an added 'K'
-        airport = get_object_or_None(Location, loc_class=1,
-                                               identifier="K%s" % ident)
-
-    if airport:
-        # a landing airport, eligable for p2p testing
-        p2p.append(airport.pk)          
-        return RouteBase(location=airport, sequence=i)
-    
-    return None
-
-def make_routebases_from_fallback_string(route):
-    """returns a list of RouteBase objects according to the fallback_string,
-    basically hard_render()
-    """
-    
-    fbs = normalize(route.fallback_string)
-    points = fbs.split()                        # MER-VGA -> ['MER', 'VGA']
-    unknown = False
-    p2p = []
-    routebases = []
-    
-    for i, ident in enumerate(points):
-    
-        if ident[0] == "@":  #must be a navaid
-            # is this the first routebase? if so don't try to guess which
-            # navaid is closest to the previous point
-            
-            first_rb = len(routebases) == 0  
-            if not first_rb and not routebases[i-1].unknown:
-                routebase = find_navaid(ident, i, last_rb=routebases[i-1])
-            else:
-                routebase = find_navaid(ident, i)
-        
-        elif ident[0] == "!":  #must be custom
-            # force=True means if it can't find the 'custom', then make it
-            routebase = find_custom(ident[1:], i, force=True)
-            
-        else:                  #must be an airport
-            
-            routebase = find_airport(ident, i, p2p=p2p)
-            if not routebase:
-                # if the airport can't be found, see if theres a 'custom'
-                # bythe same identifier
-                routebase = find_custom(ident, i, force=False)
-            
-        #######################################################################
+    def __init__(self, fallback_string, user):
+        self.user=user
+        self.route=None
        
-        # no routebase? must be unknown
-        if not routebase:
-            routebase = RouteBase(unknown=ident, sequence=i)
-            
-            # not a unidentified navaid, assume a landing
-            if not ident[0] == "@":
-                p2p.append(ident)
+        if not fallback_string:
+            self.route = None
+            return None
         
-        routebases.append(routebase)
+        route = Route(fallback_string=fallback_string, p2p=False)
+        route.save()
+        
+        is_p2p, routebases = self.make_routebases_from_fallback_string(route)
+        
+        route.p2p = is_p2p
+        
+        for routebase in routebases:
+            routebase.route = route
+            routebase.save()
+            
+        route.easy_render()
+        
+        self.route = route
+    
+    def get_route(self):
+        return self.route
+    
+    ###########################################################
+    ###########################################################
+   
+            
+    def normalize(self, string):
+        """removes all cruf away from the route string, returns only the
+           alpha numeric characters with clean seperators
+        """
+        
+        import re
+        string = string.upper()
+        string = string.replace("LOCAL", " ")
+        string = string.replace(" TO ", " ")
+        return re.sub(r'[^A-Z0-9!@]+', ' ', string).strip()
 
-    return len(set(p2p)) > 1, routebases
+    ###########################################################
+    ########################################################### 
+        
+    def find_navaid(self, ident, i, last_rb=None):
+        """Searches the database for the navaid object according to ident.
+           if it finds a match,returns the routebase object
+        """
+               
+        if last_rb:
+            navaid = Location.objects.filter(loc_class=2, identifier=ident[1:])
+            #if more than 1 navaids come up,
+            if navaid.count() > 1:
+                #run another query to find the nearest
+                last_point = last_rb.airport or last_rb.navaid 
+                navaid = navaid.distance(last_point.location).order_by('distance')[0]  
+            elif navaid.count() == 0:
+                navaid = None
+            else:
+                navaid = navaid[0]
+        else:
+            # no previous routebases,
+            # dont other with the extra queries trying to find the nearest 
+            # based on the last
+            navaid = get_object_or_None(Location, loc_class=2,
+                                                  identifier=ident[1:])
+        if navaid:
+            return RouteBase(location=navaid, sequence=i)
+        
+        return None
+        
+    ###############################################################################
+
+    def find_custom(self, ident, i, force=False):
+        """Tries to find the custom point, if it can't find one, and force = True,
+           it adds it to the user's custom list.
+        """
+        
+        if force:
+            cu,cr = Location.objects.get_or_create(user=self.user,
+                                                  loc_class=3,
+                                                  identifier=ident)
+        else:
+            cu = get_object_or_None(Location, loc_class=3,
+                                              user=self.user,
+                                              identifier=ident)
+
+        if cu:
+            return RouteBase(location=cu, sequence=i)
+        else:
+            return None
+
+    ###############################################################################
+
+    def find_airport(self, ident, i, p2p):
+        airport = get_object_or_None(Location, loc_class=1, identifier=ident)
+            
+        if not airport and len(ident) == 3:
+            # if the ident is 3 letters and no hit, try again with an added 'K'
+            airport = get_object_or_None(Location, loc_class=1,
+                                                   identifier="K%s" % ident)
+
+        if airport:
+            # a landing airport, eligable for p2p testing
+            p2p.append(airport.pk)          
+            return RouteBase(location=airport, sequence=i)
+        
+        return None
+
+    def make_routebases_from_fallback_string(self, route):
+        """returns a list of RouteBase objects according to the fallback_string,
+        basically hard_render()
+        """
+        
+        fbs = self.normalize(route.fallback_string)
+        points = fbs.split()                        # MER-VGA -> ['MER', 'VGA']
+        unknown = False
+        p2p = []
+        routebases = []
+        
+        for i, ident in enumerate(points):
+        
+            if ident[0] == "@":  #must be a navaid
+                # is this the first routebase? if so don't try to guess which
+                # navaid is closest to the previous point
+                
+                first_rb = len(routebases) == 0  
+                if not first_rb and not routebases[i-1].unknown:
+                    routebase = self.find_navaid(ident, i, last_rb=routebases[i-1])
+                else:
+                    routebase = self.find_navaid(ident, i)
+            
+            elif ident[0] == "!":  #must be custom
+                # force=True means if it can't find the 'custom', then make it
+                routebase = self.find_custom(ident[1:], i, force=True)
+                
+            else:                  #must be an airport
+                
+                routebase = self.find_airport(ident, i, p2p=p2p)
+                if not routebase:
+                    # if the airport can't be found, see if theres a 'custom'
+                    # bythe same identifier
+                    routebase = self.find_custom(ident, i, force=False)
+                
+            #######################################################################
+           
+            # no routebase? must be unknown
+            if not routebase:
+                routebase = RouteBase(unknown=ident, sequence=i)
+                
+                # not a unidentified navaid, assume a landing
+                if not ident[0] == "@":
+                    p2p.append(ident)
+            
+            routebases.append(routebase)
+
+        return len(set(p2p)) > 1, routebases
