@@ -25,17 +25,22 @@ class RouteBase(models.Model):
         loc_class = self.get_loc_class()
         
         if loc_class == 0:
-            return "unknown: " + self.unknown
+            ret = "unknown: %s" % self.unknown
         
         elif loc_class == 1:
-            return "airport: " + self.location.identifier
+            ret = "airport: %s" % self.location.identifier
         
         elif loc_class == 2:
-            return "navaid: " + self.location.identifier
+            ret = "navaid: %s" % self.location.identifier
             
         elif loc_class == 3:
-            return "custom: " + self.location.identifier
+            ret = "custom: %s" % self.location.identifier
+        
+        if not self.land:
+            ret = ret + " (NO LAND)"
             
+        return ret
+        
     def destination(self):
         return self.location or self.unknown
     
@@ -367,7 +372,7 @@ class MakeRoute(object):
             # dont other with the extra queries trying to find the nearest 
             # based on the last
             navaid = get_object_or_None(Location, loc_class=2,
-                                                  identifier=ident[1:])
+                                                  identifier=ident)
         if navaid:
             return RouteBase(location=navaid, sequence=i)
         
