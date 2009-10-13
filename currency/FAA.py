@@ -87,19 +87,23 @@ class FAA_Currency(object):
         """determine if the current date is before, after,
         or in the expire timeframe, or the alert timeframe."""
         
-        expire_time   =   self.CURRENCY_DATA[method][0]     #get the alert and expire times based on the master dict
+        #get the alert and expire times based on the master dict
+        expire_time   =   self.CURRENCY_DATA[method][0]
         alert_time    =   self.CURRENCY_DATA[method][1]
         
         expire_date = get_date(expire_time, start_date)
         alert_date = minus_alert(alert_time, expire_date)
 
-        if self.TODAY > expire_date:                                 #today is later than expire date, EXPIRED
+        #today is later than expire date, EXPIRED
+        if self.TODAY > expire_date:
             return ("EXPIRED", expire_date)
-
-        elif self.TODAY < expire_date and self.TODAY > alert_date:   #today is later than alert, but not past expired date, ALERT
+        
+        #today is later than alert, but not past expired date, ALERT
+        elif self.TODAY < expire_date and self.TODAY > alert_date:
             return ("ALERT", expire_date)
-
-        elif self.TODAY < expire_date and self.TODAY < alert_date:   #today is before expire date, and before alert date, CURRENT
+        
+        #today is before expire date, and before alert date, CURRENT
+        elif self.TODAY < expire_date and self.TODAY < alert_date:
             return ("CURRENT", expire_date)
         
         else:
@@ -110,41 +114,60 @@ class FAA_Currency(object):
         """Returns the date of the third to last day or night landing,
         and whether or not it qualifies the user to be current"""
         
-        if tr:
+        if tr:                  # filter by type only
             if not night:
-                last_three = Flight.objects.user(self.user).filter(plane__type=tr).\
-                    filter(Q(day_l__gte=1) | Q(night_l__gte=1)).order_by('-date').values('date', 'day_l', 'night_l')[:3]
+                last_three = Flight.objects.user(self.user)\
+                    .filter(plane__type=tr)\
+                    .filter(Q(day_l__gte=1) | Q(night_l__gte=1))\
+                    .order_by('-date')\
+                    .values('date', 'day_l', 'night_l')[:3]
             
             if night:
-                last_three = Flight.objects.user(self.user).\
-                    filter(plane__type=tr, night_l__gte=1).order_by('-date').values('date', 'night_l')[:3]
+                last_three = Flight.objects.user(self.user)\
+                    .filter(plane__type=tr, night_l__gte=1)\
+                    .order_by('-date')\
+                    .values('date', 'night_l')[:3]
             
-        elif tail and cat_class > 0:  #cat_class above 0 is just a bug check
-            plane = Plane.objects.filter(user=self.user, cat_class=cat_class, tags__icontains="TAILWHEEL")
+        elif tail and cat_class > 0:  # filter by tailwheel and cat_class
+            plane = Plane.objects.filter(user=self.user,
+                                         cat_class=cat_class,
+                                         tags__icontains="TAILWHEEL")
             
             if not night:
-                last_three = Flight.objects.user(self.user).\
-                    filter(plane__in=plane).filter(Q(day_l__gte=1) | Q(night_l__gte=1)).order_by('-date').values('date', 'day_l', 'night_l')[:3]
+                last_three = Flight.objects.user(self.user)\
+                    .filter(plane__in=plane)\
+                    .filter(Q(day_l__gte=1) | Q(night_l__gte=1))\
+                    .order_by('-date')\
+                    .values('date', 'day_l', 'night_l')[:3]
                 
             if night:
-                last_three = Flight.objects.user(self.user).\
-                    filter(plane__in=plane, night_l__gte=1).order_by('-date').values('date', 'night_l')[:3]
+                last_three = Flight.objects.user(self.user)\
+                    .filter(plane__in=plane, night_l__gte=1)\
+                    .order_by('-date')\
+                    .values('date', 'night_l')[:3]
             
-        elif cat_class < 15:  #forget simulators and FTD's (cat_classes above 15)
+        elif cat_class < 15:  #filter by just cat_class
             if not night:
-                last_three = Flight.objects.user(self.user).\
-                    sim(False).filter(Q(day_l__gte=1) | Q(night_l__gte=1)).order_by('-date').values('date', 'day_l', 'night_l')[:3]
+                last_three = Flight.objects.user(self.user)\
+                    .filter(plane__cat_class=cat_class)\
+                    .filter(Q(day_l__gte=1) | Q(night_l__gte=1))\
+                    .order_by('-date')\
+                    .values('date', 'day_l', 'night_l')[:3]
                 
             if night:
-                last_three = Flight.objects.user(self.user).sim(False).night().order_by('-date').values('date', 'night_l')[:3]
+                last_three = Flight.objects.user(self.user)\
+                    .filter(plane__cat_class=cat_class)\
+                    .filter(night_l__gte=1)\
+                    .order_by('-date')\
+                    .values('date', 'night_l')[:3]
         else:
-            return
+            return "ERROR"
+        
+        print cat_class, night, last_three
  
         total = 0
         for flight in last_three:
-            total += flight['night_l']
-            if not night:
-                 total += flight['day_l']
+            total += flight.get('night_l',0) + flight.get('day_l',0)
             if total >= 3:
                 start_date = flight['date']
                 break;
@@ -279,25 +302,6 @@ class FAA_Currency(object):
         
         if need_ipc_status == 'EXPIRED':
             return ('NEED_IPC', start_date, need_ipc_end_date)
-              
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
         
     
