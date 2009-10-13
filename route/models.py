@@ -176,13 +176,16 @@ class Route(models.Model):
             
         return self.all_points
     
-    def calc_overall_dist(self, a):
+    def calc_overall_dist(self, a=None):
         """returns the max distance between any two points in the
-           route.a
+           given queryset (a). Somewhat broken: measures distance via
+           straightline, not taking into effect the curvature of the earth.
         """
         
-        mp = a.collect()
-        ct = mp.envelope.centroid
+        if not a:
+            a = self._get_AllPoints()
+            
+        ct = a.centroid()
 
         na = a.distance(ct)
         
@@ -197,7 +200,7 @@ class Route(models.Model):
     
     ################################
     
-    def calc_start_dist(self, a):
+    def calc_start_dist(self, a=None):
         """Returns the max distance between any point in the route and the
            starting point. Used for ATP XC distance.
            
@@ -212,6 +215,8 @@ class Route(models.Model):
            0.0
            
         """
+        if not a:
+            a = self._get_AllPoints()
         
         mp = a.collect()
         start = a[0].location
@@ -268,7 +273,7 @@ class Route(models.Model):
         self.fancy_rendered = "-".join(fancy)
         self.simple_rendered = "-".join(simple)
         
-        #self.render_distances()
+        self.render_distances()
         
         self.save()
         
