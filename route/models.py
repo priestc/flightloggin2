@@ -18,6 +18,8 @@ class RouteBase(models.Model):
     unknown =  models.CharField(max_length=30, blank=True, null=True)
     sequence = models.PositiveIntegerField()
     
+    land = models.BooleanField()
+    
     def __unicode__(self):
         
         loc_class = self.get_loc_class()
@@ -69,9 +71,9 @@ class Route(models.Model):
     >>> r.fancy_rendered
     u'<span title="Custom" class="found_custom">CUSTOM</span>-<span title="El Nido - VOR-DME" class="found_navaid">HYP</span>-<span title="CHANGED NAME, Ohio" class="found_airport">KVTA</span>-<span title="MER" class="not_found">MER</span>'
     >>>
-    >>> vta = r.routebase_set.all()[2].airport
+    >>> vta = r.routebase_set.all()[2].location
     >>> vta
-    <Airport: KVTA>
+    <Location: KVTA>
     >>> vta.id
     1000
     """
@@ -87,8 +89,9 @@ class Route(models.Model):
     
     p2p = models.BooleanField()
     
-    # a queryset of all airports, internal only
-    a = None
+    # a queryset of all landing points and all points, internal only
+    land_points = None
+    all_points = None
     
     def __unicode__(self):
         return self.simple_rendered or "err"
@@ -139,18 +142,34 @@ class Route(models.Model):
     #################################
     
     def render_distances(self):
-        a = self._get_Points()
+        land_points = self._get_LandingPoints()
+        all_points = self._get_AllPoints()
         
-        if not a:
+        if not all_points:
             return ## nothing to measure from, keep the defaults
         
-        self.start_dist = self.calc_start_dist(a)
+        self.start_dist = self.calc_start_dist(all_points)
+        
+    #################################
     
-    def _get_Points(self):
-        if not self.a:
-            self.a = Location.objects.filter(location__isnull=False,
-                                             routebase__route=self).distinct()
-        return self.a
+    def _get_LandingPoints(self):
+        if not self.land_points:
+            self.land_points = Location.objects.filter(
+                    location__isnull=False,    # has valid coordinates
+                    routebase__route=self,     # is connected to this route
+                    routebase__land=True,      # depicts a landing
+            ).distinct()
+            
+        return self.land_points
+    
+    def _get_AllPoints(self):
+        if not self.all_points:
+            self.all_points = Location.objects.filter(
+                    location__isnull=False,
+                    routebase__route=self,
+            ).distinct()
+            
+        return self.all_points
     
     def calc_overall_dist(self, a):
         """returns the max distance between any two points in the
@@ -244,7 +263,7 @@ class Route(models.Model):
         self.fancy_rendered = "-".join(fancy)
         self.simple_rendered = "-".join(simple)
         
-        self.render_distances()
+        #self.render_distances()
         
         self.save()
         
@@ -279,6 +298,10 @@ class Route(models.Model):
 ###############################################################################
   
 class MakeRoute(object):
+    """creates a route object from a string. The constructor takes a user
+       instance because it needs to know which "namespace" to use for
+       looking up custom places.
+    """
     
     def __init__(self, fallback_string, user):
         self.user=user
@@ -329,11 +352,11 @@ class MakeRoute(object):
         """
                
         if last_rb:
-            navaid = Location.objects.filter(loc_class=2, identifier=ident[1:])
+            navaid = Location.objects.filter(loc_class=2, identifier=ident)
             #if more than 1 navaids come up,
             if navaid.count() > 1:
                 #run another query to find the nearest
-                last_point = last_rb.airport or last_rb.navaid 
+                last_point = last_rb.location 
                 navaid = navaid.distance(last_point.location).order_by('distance')[0]  
             elif navaid.count() == 0:
                 navaid = None
@@ -401,7 +424,20 @@ class MakeRoute(object):
         
         for i, ident in enumerate(points):
         
-            if ident[0] == "@":  #must be a navaid
+            if "@" in ident:        # "@" means we didn't land
+                land = False
+            else:
+                land = True
+                
+            if "!" in ident:        # "!" means it's a custom place
+                custom = True
+            else:
+                custom = False
+                
+            #replace all the control characters now that we know their purpose
+            ident = ident.replace('!','').replace('@','')
+                
+            if not land and not custom:     # must be a navaid
                 # is this the first routebase? if so don't try to guess which
                 # navaid is closest to the previous point
                 
@@ -411,12 +447,11 @@ class MakeRoute(object):
                 else:
                     routebase = self.find_navaid(ident, i)
             
-            elif ident[0] == "!":  #must be custom
+            elif custom:
                 # force=True means if it can't find the 'custom', then make it
-                routebase = self.find_custom(ident[1:], i, force=True)
+                routebase = self.find_custom(ident, i, force=True)
                 
-            else:                  #must be an airport
-                
+            else:                  #must be an airport  
                 routebase = self.find_airport(ident, i, p2p=p2p)
                 if not routebase:
                     # if the airport can't be found, see if theres a 'custom'
@@ -433,6 +468,7 @@ class MakeRoute(object):
                 if not ident[0] == "@":
                     p2p.append(ident)
             
+            routebase.land = land
             routebases.append(routebase)
 
         return len(set(p2p)) > 1, routebases
