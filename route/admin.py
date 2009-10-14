@@ -12,8 +12,10 @@ class RouteAdmin(admin.ModelAdmin):
     list_display = ('simple_rendered', 'max_width_all', 'total_line_all',
                     'p2p')
 
+class RouteBaseAdmin(admin.ModelAdmin):
+    list_display = ('location', 'unknown', 'land')
 
 ####################################################
 
 admin.site.register(Route, RouteAdmin)
-admin.site.register(RouteBase)
+admin.site.register(RouteBase, RouteBaseAdmin)
