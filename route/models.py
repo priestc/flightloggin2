@@ -516,7 +516,7 @@ class MakeRoute(object):
                 routebase = RouteBase(unknown=ident, sequence=i)
                 
                 # not a unidentified navaid, assume a landing
-                if landing:
+                if land:
                     p2p.append(ident)
             
             routebase.land = land
