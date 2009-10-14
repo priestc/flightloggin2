@@ -154,8 +154,10 @@ class Route(models.Model):
     def render_distances(self):
         all_points = self._get_AllPoints()
         
-        if not all_points:
+        if not all_points or all_points.count() == 1:
             return ## nothing to measure, keep the defaults
+        
+        import pdb; pdb.set_trace()
         
         land_points = self._get_LandingPoints()
         
@@ -195,7 +197,7 @@ class Route(models.Model):
                     routebase__route=self,
             ).distinct()
             
-            self.line_kml = self.all_points.make_line().kml
+            #self.line_kml = self.all_points.make_line().kml
             
         return self.all_points
     
