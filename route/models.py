@@ -45,6 +45,8 @@ class RouteBase(models.Model):
         return self.location or self.unknown
     
     def get_loc_class(self):
+        """return the type of location, zero if it has no location"""
+        
         return getattr(self.destination(), "loc_class", 0)
     
 ###############################################################################
@@ -294,18 +296,18 @@ class Route(models.Model):
                 class_ = "found_navaid"
             elif loc_class == 3:
                 class_ = "found_custom"
-            else:
+            elif loc_class == 0:
                 class_ = "not_found"
                 
-            #dont write a kml if no coordinates are known
+            # only write a kml if coordinates are known
             if getattr(dest, "location", None):
                 kml.append("%s,%s" % (dest.location.x, dest.location.y), )
                 
-            if not rb.unknown:   
+            if loc_class > 0:   
                 fancy.append("<span title=\"%s\" class=\"%s\">%s</span>" %
                             (dest.title_display(), class_, dest.identifier ), )
                 simple.append(rb.destination().identifier)
-            else:
+            elif loc_class == 0:
                 fancy.append("<span title=\"%s\" class=\"%s\">%s</span>" %
                             (dest, class_, dest ), )
                 simple.append(rb.destination())
@@ -445,7 +447,7 @@ class MakeRoute(object):
         else:
             return None
 
-    ###############################################################################
+    ###########################################################################
 
     def find_airport(self, ident, i, p2p):
         airport = get_object_or_None(Location, loc_class=1, identifier=ident)
