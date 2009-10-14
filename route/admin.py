@@ -9,6 +9,8 @@ class RouteBaseInline(admin.TabularInline):
 class RouteAdmin(admin.ModelAdmin):
     inlines = (RouteBaseInline,)
     search_fields = ('simple_rendered',)
+    list_display = ('simple_rendered', 'max_width_all', 'total_line_all',
+                    'p2p')
 
 
 ####################################################
