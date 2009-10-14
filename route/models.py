@@ -134,7 +134,9 @@ class Route(models.Model):
             user=User.objects.get(username=username)
             
         from django.db.models import Max
-        qs = cls.objects.filter(flight__user=user).annotate(fid=Max('flight__id'))
+        qs = cls.objects.filter(flight__user=user, routebase__land__isnull=True)\
+                        .distinct()\
+                        .annotate(fid=Max('flight__id'))
         for r in qs:
             r.hard_render(user=user, flight_id=r.fid)
             
