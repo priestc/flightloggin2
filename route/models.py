@@ -159,14 +159,14 @@ class Route(models.Model):
         
         land_points = self._get_LandingPoints()
         
-        self.all_start_dist = self.calc_start_dist(all_points)
-        self.start_dist = self.calc_start_dist(land_points)
+        self.max_start_all = self.calc_max_start(all_points)
+        self.max_start_land = self.calc_max_start(land_points)
         
-        self.all_overall_dist = self.calc_overall_dist(all_points)
-        self.overall_dist = self.calc_overall_dist(land_points)
+        self.max_width_all = self.calc_max_width(all_points)
+        self.max_width_land = self.calc_max_width(land_points)
         
-        self.all_line_dist = self.calc_line_dist(all_points)
-        self.line_dist = self.calc_line_dist(land_points)
+        self.total_line_all = self.calc_total_line(all_points)
+        self.total_line_land = self.calc_total_line(land_points)
         
     #################################
     
@@ -199,7 +199,7 @@ class Route(models.Model):
             
         return self.all_points
     
-    def calc_overall_dist(self, a=None):
+    def calc_max_width(self, a=None):
         """returns the max distance between any two points in the
            route.a
         """
@@ -222,7 +222,7 @@ class Route(models.Model):
     
     ################################
     
-    def calc_start_dist(self, a=None):
+    def calc_max_start(self, a=None):
         """Returns the max distance between any point in the route and the
            starting point. Used for ATP XC distance.
            
@@ -251,7 +251,7 @@ class Route(models.Model):
          
         return max(dist)
     
-    def calc_line_dist(self, a=None):
+    def calc_total_line(self, a=None):
         """returns the distance between each point in the route"""
         if not a:
             a = self._get_AllPoints()
