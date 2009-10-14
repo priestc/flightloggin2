@@ -88,9 +88,14 @@ class Route(models.Model):
     simple_rendered = models.TextField(blank=True, null=True)
     kml_rendered =    models.TextField(blank=True, null=True)
     
-    overall_dist = models.FloatField(null=True, default=0)
-    start_dist = models.FloatField(null=True, default=0)
-    line_dist = models.FloatField(null=True, default=0)
+    max_width_all = models.FloatField(null=True, default=0)
+    max_width_land = models.FloatField(null=True, default=0)
+    
+    max_start_all = models.FloatField(null=True, default=0)
+    max_start_land = models.FloatField(null=True, default=0)
+    
+    max_line_all = models.FloatField(null=True, default=0)
+    max_line_land = models.FloatField(null=True, default=0)
     
     p2p = models.BooleanField()
     
@@ -147,17 +152,29 @@ class Route(models.Model):
     #################################
     
     def render_distances(self):
-        land_points = self._get_LandingPoints()
         all_points = self._get_AllPoints()
         
         if not all_points:
-            return ## nothing to measure from, keep the defaults
+            return ## nothing to measure, keep the defaults
         
-        self.start_dist = self.calc_start_dist(all_points)
+        land_points = self._get_LandingPoints()
+        
+        self.all_start_dist = self.calc_start_dist(all_points)
+        self.start_dist = self.calc_start_dist(land_points)
+        
+        self.all_overall_dist = self.calc_overall_dist(all_points)
+        self.overall_dist = self.calc_overall_dist(land_points)
+        
+        self.all_line_dist = self.calc_line_dist(all_points)
+        self.line_dist = self.calc_line_dist(land_points)
         
     #################################
     
     def _get_LandingPoints(self):
+        """return a queryset containing all points where a landing took
+           place.
+        """
+        
         if not self.land_points:
             self.land_points = Location.objects.filter(
                     location__isnull=False,    # has valid coordinates
@@ -168,36 +185,44 @@ class Route(models.Model):
         return self.land_points
     
     def _get_AllPoints(self):
+        """return a queryset of all points, regardless whether a landing
+           was done there or not
+        """
+        
         if not self.all_points:
             self.all_points = Location.objects.filter(
                     location__isnull=False,
                     routebase__route=self,
             ).distinct()
             
+            self.line_kml = self.all_points.make_line().kml
+            
         return self.all_points
     
-    def calc_overall_dist(self, a):
+    def calc_overall_dist(self, a=None):
         """returns the max distance between any two points in the
            route.a
         """
         
+        if not a:
+            a = self._get_AllPoints()
+        
         mp = a.collect()
         ct = mp.envelope.centroid
-
-        na = a.distance(ct)
         
         dist = []
-        for p in na:
-            dist.append(p.distance)
+        from utils import coord_dist
+        for i,po in enumerate(mp): 
+            dist.append(coord_dist(po, ct))
         
         #since we're measuring from the center, multiply by 2    
         diameter = max(dist) * 2
         
-        return diameter.nm
+        return diameter
     
     ################################
     
-    def calc_start_dist(self, a):
+    def calc_start_dist(self, a=None):
         """Returns the max distance between any point in the route and the
            starting point. Used for ATP XC distance.
            
@@ -213,19 +238,38 @@ class Route(models.Model):
            
         """
         
+        if not a:
+            a = self._get_AllPoints()
+        
         mp = a.collect()
         start = a[0].location
-
-        na = a.distance(start)
         
         dist = []
-        for p in na:
-            dist.append(p.distance)
-            
-        diameter = max(dist)
-        
-        return diameter.nm
+        from utils import coord_dist
+        for i,po in enumerate(mp):
+            dist.append(coord_dist(po, start))
+         
+        return max(dist)
     
+    def calc_line_dist(self, a=None):
+        """returns the distance between each point in the route"""
+        if not a:
+            a = self._get_AllPoints()
+            
+        ls = a.make_line()
+        
+        dist = []
+        from utils import coord_dist
+        for i,po in enumerate(ls):
+            try:
+                next = ls[1+i]
+            except:
+                pass
+            else:
+                from django.contrib.gis.geos import Point
+                dist.append(coord_dist(Point(po), Point(next)))
+         
+        return sum(dist)
     ################################
     
     def easy_render(self):
@@ -268,7 +312,7 @@ class Route(models.Model):
         self.fancy_rendered = "-".join(fancy)
         self.simple_rendered = "-".join(simple)
         
-        #self.render_distances()
+        self.render_distances()
         
         self.save()
         
