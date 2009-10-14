@@ -22,7 +22,7 @@ class RouteBase(models.Model):
     
     def __unicode__(self):
         
-        loc_class = self.get_loc_class()
+        loc_class = self.loc_class
         
         if loc_class == 0:
             ret = "unknown: %s" % self.unknown
@@ -44,10 +44,23 @@ class RouteBase(models.Model):
     def destination(self):
         return self.location or self.unknown
     
-    def get_loc_class(self):
+    @property
+    def loc_class(self):
         """return the type of location, zero if it has no location"""
         
         return getattr(self.destination(), "loc_class", 0)
+    
+    def admin_loc_class(self):
+        try:
+            return getattr(self.destination(), "get_loc_class_display")() 
+        except:
+            return "Unknown"
+    
+    def owner(self):
+        try:
+            return self.route.flight.all()[0].user.username
+        except IndexError:
+            return "??"
     
 ###############################################################################
 
@@ -288,7 +301,7 @@ class Route(models.Model):
         for rb in self.routebase_set.all().order_by('sequence'):
             
             dest = rb.destination()
-            loc_class = rb.get_loc_class()
+            loc_class = rb.loc_class
             
             if loc_class == 1:
                 class_ = "found_airport"
