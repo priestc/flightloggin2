@@ -57,6 +57,7 @@ class RouteBase(models.Model):
             return "Unknown"
     
     def owner(self):
+        """Return the owner of the routebase. Only used in the admin"""
         try:
             return self.route.flight.all()[0].user.username
         except IndexError:
@@ -120,6 +121,13 @@ class Route(models.Model):
     
     def __unicode__(self):
         return self.simple_rendered or "err"
+    
+    def owner(self):
+        """Return the owner of the route. Only used in the admin"""
+        try:
+            return self.flight.all()[0].user.username
+        except IndexError:
+            return "??"
     
     ##################################
     
