@@ -284,6 +284,17 @@ class QuerySet(QuerySet):
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
     
+    def atp_xc(self, f=True):
+        kwarg={"route__max_width_all__gt": 49}
+        if not f:
+            return self.exclude(**kwarg)
+        return self.filter(**kwarg)
+    
+    def line_dist(self, f=True):
+        kwarg={"route__total_line_all__gt": 0}
+        if not f:
+            return self.exclude(**kwarg)
+        return self.filter(**kwarg)
     #################@@##############
     
     def _db_agg(self, cn):
@@ -293,6 +304,9 @@ class QuerySet(QuerySet):
            
         if self == []:
             return 0
+        
+        if cn == 'line_dist':
+            return self.aggregate(Sum('route__total_line_all')).values()[0] or 0
        
         return self.aggregate(Sum(cn)).values()[0] or 0
     
@@ -303,12 +317,16 @@ class QuerySet(QuerySet):
         
         elif cn in EXTRA_AGG:
             if cn == "day":
+                #day is special, so it gets done here instead of 'filter_by_column'
                 night = self.sim(False)._db_agg('night')
                 total = self.sim(False)._db_agg('total')
                 return total - night
             
             if cn == "pic_night":
                 return self.all_pic()._db_agg('night')
+            
+            if cn == "line_dist":
+                return self._db_agg('line_dist')
             
             try:
                 if not cn.endswith("pic"):
@@ -356,6 +374,13 @@ class QuerySet(QuerySet):
         
         elif cn == 'mes' or cn == 'mes_pic':
             return self.multi().sea().pic(*args, **kwargs)
+        
+        elif cn == 'atp_xc':
+            return self.sim(False).atp_xc().total(*args, **kwargs)
+        
+        elif cn == 'line_dist':
+            return self.sim(False).line_dist().total(*args, **kwargs)
+            
         
         elif cn in DB_FIELDS:
             return getattr(self, cn)(*args, **kwargs)

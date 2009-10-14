@@ -1,73 +1,87 @@
 
-
-FIELDS = [               #all columns, needs to be in column display order -- ORDER REALLY MATTERS
-          "date", "plane", "reg", "f_route", "s_route", "r_route", "total_s", "total","sim",
-          "pic", "sic", "solo", "dual_r", "dual_g", "xc", "act_inst", "sim_inst", "day", "night", "night_l", "day_l", "app",
-          "p2p", "multi", "m_pic", "sea", "sea_pic", "mes", "mes_pic", "turbine", "t_pic", "mt", "mt_pic", "complex",
-          "hp", "tail", "jet", "jet_pic", "person", 'instructor', 'student','fo','captain', "remarks"
+#all columns, needs to be in column display order -- ORDER REALLY MATTERS
+FIELDS = [
+          "date", "plane", "reg", "f_route", "s_route", "r_route", "total_s",
+          "total","sim", "pic", "sic", "solo", "dual_r", "dual_g", "xc",
+          "act_inst", "sim_inst", "day", "night", "night_l", "day_l", "app",
+          "p2p", "multi", "m_pic", "sea", "sea_pic", "mes", "mes_pic",
+          "turbine", "t_pic", "mt", "mt_pic", "complex", "hp", "tail", "jet",
+          "jet_pic", "atp_xc", "line_dist",
+          
+          "max_width", "person", 'instructor', 'student', 'fo', 'captain',
+          "remarks",
           ]
           
-ALL_AGG_FIELDS = [      #all agg-able columns, needs to be in column display order -- ORDER REALLY MATTERS
-          "total_s", "total", "sim",
-          "pic", "sic", "solo", "dual_r", "dual_g", "xc", "act_inst", "sim_inst", "day", "night", "night_l", "day_l", "app",
-          "p2p", "multi", "m_pic", "sea", "sea_pic", "mes", "mes_pic", "turbine", "t_pic", "mt", "mt_pic", "complex",
-          "hp", "tail", "jet", "jet_pic",
+#all agg-able columns, needs to be in column display order -- ORDER REALLY MATTERS          
+ALL_AGG_FIELDS = [      
+          "total_s", "total", "sim", "pic", "sic", "solo", "dual_r", "dual_g",
+          "xc", "act_inst", "sim_inst", "day", "night", "night_l", "day_l",
+          "app", "p2p", "multi", "m_pic", "sea", "sea_pic", "mes", "mes_pic",
+          "turbine", "t_pic", "mt", "mt_pic", "complex", "hp", "tail", "jet",
+          "jet_pic","atp_xc","line_dist",
           ]
           
 PREFIX_FIELDS = [
           "date", "plane", "reg", "f_route", "s_route", "r_route"
           ]
-          
-NUMERIC_FIELDS = [      # fields that are always just numbers and nothing else
-          "pic", "sic", "solo", "dual_r", "dual_g", "xc", "act_inst", "sim_inst", "night", "night_l", "day_l",
-          ]
-          
-BACKUP_FIELDS = [       #fields included in the backup file
-          'date', 'reg', 'type', 'route',
-          'total', 'sim', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
-          'person', 'r_remarks', 'flying',
-          ]
-          
-DB_FIELDS = [           #fields that have a database column all to themseves
-          'date', 'plane', 'route',
-          'total', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
-          'person', 'remarks'
-          ]
-          
-FILTER_FIELDS = [   # for the logbook filter box, all fields that are numerical, but arent based on plane category
-          'total', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
-          'p2p',
-          ]
-          
-GRAPH_FIELDS = [        #fields to be fair game for the graphing functions and the sigs
-          'total', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
-          'p2p', 'day',
-          'multi', 'm_pic',
-          'sea', 'sea_pic', 'mes', 'mes_pic',
-          'turbine', 't_pic', 'mt', 'mt_pic',
-          'complex', 'hp', 'sim', 'tail', 'jet', 'jet_pic',
+
+# db fields that are always just numbers and nothing else
+NUMERIC_FIELDS = [
+          "pic", "sic", "solo", "dual_r", "dual_g", "xc", "act_inst",
+          "sim_inst", "night", "night_l", "day_l",
           ]
 
-AGG_FIELDS = [          #fields that get their totals straight from the SUM(x) database command, must be in DB_FIELDS
-          'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
-            ]
+#fields included in the backup file
+BACKUP_FIELDS = [
+          'date', 'reg', 'type', 'route', 'total', 'sim', 'pic', 'sic', 'solo',
+          'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l',
+          'day_l', 'app', 'person', 'r_remarks', 'flying',
+          ]
 
-EXTRA_AGG = [           #fields that do get totals calculated, but require some extra processing
-          'total', 'total_s', 'p2p', 'complex', 'hp', 'sim', 'day',
-          'multi', 'm_pic',
-          'sea', 'sea_pic', 'mes', 'mes_pic',
-          'turbine', 't_pic', 'mt', 'mt_pic',
-          'complex', 'hp', 'sim', 'tail', 'jet', 'jet_pic',
+#fields that have a database column all to themseves
+DB_FIELDS = [
+          'date', 'plane', 'route','total', 'pic', 'sic', 'solo', 'night',
+          'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l',
+          'app', 'person', 'remarks'
           ]
           
-OPTION_FIELDS = [       #fields that are optionally turned on and off, used to create the bug list of checkboxes in the prefs page
-          'plane', 'reg', 'f_route', 's_route', 'r_route', 'total', 'total_s', 'sim',
-          'pic', 'sic', 'solo', 'day', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
-          'p2p',
-          'multi', 'm_pic',
-          'sea', 'sea_pic', 'mes', 'mes_pic',
-          'turbine', 't_pic', 'mt', 'mt_pic',
-          'complex', 'hp',
+# for the logbook filter box, all fields that are numerical, but arent based on plane category
+FILTER_FIELDS = [
+          'total', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc',
+          'act_inst', 'sim_inst', 'night_l','day_l', 'app', 'p2p',
+          ]
+
+#fields to be fair game for the graphing functions and the sigs
+GRAPH_FIELDS = [
+          'total', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc',
+          'act_inst', 'sim_inst', 'night_l','day_l', 'app','p2p', 'day',
+          'multi', 'm_pic', 'sea', 'sea_pic', 'mes', 'mes_pic', 'turbine',
+          't_pic', 'mt', 'mt_pic', 'complex', 'hp', 'sim', 'tail', 'jet',
+          'jet_pic',
+          ]
+
+#flight fields that get their totals straight from the SUM(x) database command, must be in DB_FIELDS
+AGG_FIELDS = [
+          'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst',
+          'sim_inst', 'night_l','day_l', 'app',
+          ]
+
+#fields that do get totals calculated, but require some extra processing
+EXTRA_AGG = [
+          'total', 'total_s', 'p2p', 'complex', 'hp', 'sim', 'day', 'multi',
+          'm_pic', 'sea', 'sea_pic', 'mes', 'mes_pic', 'turbine', 't_pic',
+          'mt', 'mt_pic', 'complex', 'hp', 'sim', 'tail', 'jet', 'jet_pic',
+          "atp_xc", "line_dist",
+          ]
+
+#fields that are optionally turned on and off, used to create the big list of checkboxes in the prefs page
+OPTION_FIELDS = [
+          'plane', 'reg', 'f_route', 's_route', 'r_route', 'total', 'total_s',
+          'sim', 'pic', 'sic', 'solo', 'day', 'night', 'dual_r','dual_g', 'xc',
+          'act_inst', 'sim_inst', 'night_l','day_l', 'app', 'p2p', 'multi',
+          'm_pic', 'sea', 'sea_pic', 'mes', 'mes_pic', 'turbine', 't_pic', 'mt',
+          'mt_pic', 'complex', 'hp', "line_dist", 'atp_xc', 'max_width',
+          
           'instructor', 'student','fo','captain',
           'person', 'remarks',
           ]
@@ -130,6 +144,10 @@ FIELD_TITLES = {
     
     "non_flying": "Non-flying",
     "flying": "Flying",
+    
+    'max_width': "Max Width",
+    'line_dist': "Distance",
+    'atp_xc': "ATP XC",
 }
 
 FIELD_ABBV = {
@@ -189,6 +207,10 @@ FIELD_ABBV = {
     
     "non_flying": "Non-flying",
     "flying": "Flying",
+    
+    'max_width': "Max W.",
+    'line_dist': "Dist",
+    'atp_xc': "ATP XC",
 }
 
 #########################################

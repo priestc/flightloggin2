@@ -241,6 +241,25 @@ class Flight(models.Model):
                 ret += "T"
             return ret
                      
+        ###################################### return these immediately because
+        # they are distances, no hh:mm formatting
+        
+        elif cn == 'line_dist' and self.route:
+            ret = "%.1f" % self.route.total_line_all
+            if ret == "0.0":
+                return ""
+            return ret
+        
+        elif cn == 'max_width' and self.route:
+            ret = "%.1f" % self.route.max_width_all
+            if ret == "0.0":
+                return ""
+            return ret
+        
+        
+        elif cn == 'atp_xc'  and self.route and self.route.max_width_all > 49:
+            ret = self.total
+
         ######################################
         
         elif cn == "total" and not self.plane.is_sim():     #total
@@ -405,6 +424,11 @@ class Columns(models.Model):
     captain =   models.BooleanField(FIELD_TITLES[FIELDS[42]], default=False)   
     
     remarks =   models.BooleanField(FIELD_TITLES[FIELDS[43]], default=True)
+    
+    line_dist = models.BooleanField(FIELD_TITLES[FIELDS[44]], default=True)
+    max_width = models.BooleanField(FIELD_TITLES[FIELDS[45]], default=True)
+    atp_xc =    models.BooleanField(FIELD_TITLES[FIELDS[46]], default=True)
+
 
     def all_list(self):
         ret=[]
