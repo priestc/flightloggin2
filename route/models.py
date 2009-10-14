@@ -157,8 +157,6 @@ class Route(models.Model):
         if not all_points or all_points.count() == 1:
             return ## nothing to measure, keep the defaults
         
-        import pdb; pdb.set_trace()
-        
         land_points = self._get_LandingPoints()
         
         self.max_start_all = self.calc_max_start(all_points)
