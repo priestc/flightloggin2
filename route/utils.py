@@ -39,7 +39,10 @@ def coord_dist(p1, p2):
     
     cos = (math.sin(phi1)*math.sin(phi2)*math.cos(theta1 - theta2) + 
            math.cos(phi1)*math.cos(phi2))
-    arc = math.acos( cos )
+    try:
+        arc = math.acos( cos )
+    except ValueError:
+        return None
 
     # Remember to multiply arc by the radius of the earth 
     # in your favorite set of units to get length.

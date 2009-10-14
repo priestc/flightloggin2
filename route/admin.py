@@ -13,7 +13,9 @@ class RouteAdmin(admin.ModelAdmin):
                     'p2p')
 
 class RouteBaseAdmin(admin.ModelAdmin):
+    search_fields = ('id',)
     list_display = ('location', 'unknown', 'land')
+    raw_id_fields = ('location', )
 
 ####################################################
 
