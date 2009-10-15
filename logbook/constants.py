@@ -18,7 +18,7 @@ ALL_AGG_FIELDS = [
           "xc", "act_inst", "sim_inst", "day", "night", "night_l", "day_l",
           "app", "p2p", "multi", "m_pic", "sea", "sea_pic", "mes", "mes_pic",
           "turbine", "t_pic", "mt", "mt_pic", "complex", "hp", "tail", "jet",
-          "jet_pic","atp_xc","line_dist",
+          "jet_pic","line_dist","atp_xc",
           ]
           
 PREFIX_FIELDS = [
@@ -71,7 +71,7 @@ EXTRA_AGG = [
           'total', 'total_s', 'p2p', 'complex', 'hp', 'sim', 'day', 'multi',
           'm_pic', 'sea', 'sea_pic', 'mes', 'mes_pic', 'turbine', 't_pic',
           'mt', 'mt_pic', 'complex', 'hp', 'sim', 'tail', 'jet', 'jet_pic',
-          "atp_xc", "line_dist",
+          "line_dist", "atp_xc"
           ]
 
 #fields that are optionally turned on and off, used to create the big list of checkboxes in the prefs page

@@ -100,7 +100,7 @@ class Location(models.Model):
                     print "NO STATE: %s" % self.identifier
                     
                 if state:   
-                    region = "US-%s" % state.upper()
+                    region = "US-%s" % state.upper() #FIXME
                     self.region = Region.objects.get(code=region)
         try:
             getattr(self, "user", None).username
