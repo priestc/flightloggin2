@@ -79,7 +79,7 @@
     <tr>
         <td colspan=2>
             <h3>States colored by unique airports visited</h3>
-            {% url state-map display_user "count-unique" "png" as unique_url %}
+            {% url state-map display_user "unique" "png" as unique_url %}
             <img src="{{ unique_url }}"><br>
             {{ SITE_URL }}{{ unique_url }}
         </td>

@@ -32,11 +32,11 @@ urlpatterns += patterns('',
     (r'^(?P<username>\w+)/line/(?P<type_>\w+)/(?P<columns>[\w\-]+)/((?P<s>\d{4}.\d{1,2}.\d{1,2})-(?P<e>\d{4}.\d{1,2}.\d{1,2}))?(all)?.(?P<ext>(png|svg))$',
     # username/line/type/columns/(start_date-end_date) or (all).extension
     
-                                                                   "graphs.views.line_generator"),
+                        "graphs.views.line_generator"),
                                                                    
     url(r'^(?P<username>\w+)/states-(?P<type_>[\-\w]+)?.(?P<ext>(png|svg))$',
     
-                                                                   "maps.states.state_map_generator", name="state-map"),
+                        "maps.states.view", name="state-map"),
                                                                    
     (r'^(?P<username>\w+)/sigs/(?P<columns>[\w\-]+).png',          "sigs.views.make_sig", ),
     
