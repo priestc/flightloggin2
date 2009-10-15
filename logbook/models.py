@@ -462,35 +462,38 @@ class Columns(models.Model):
     jet_pic =   models.BooleanField(FIELD_TITLES[FIELDS[37]], default=False,
                     help_text='PIC time if the plane is tagged as \'Jet\'')
                     
-    
-    person =    models.BooleanField(FIELD_TITLES[FIELDS[38]], default=True)
-    
-    
-    instructor= models.BooleanField(FIELD_TITLES[FIELDS[39]], default=False,
-                    help_text='\'Person\' if Dual Received is logged')
-                    
-    student =   models.BooleanField(FIELD_TITLES[FIELDS[40]], default=False,
-                    help_text='\'Person\' if Dual Given is logged')
-                    
-    fo =        models.BooleanField(FIELD_TITLES[FIELDS[41]], default=False,
-                    help_text='\'Person\' if PIC time is logged')
-                    
-    captain =   models.BooleanField(FIELD_TITLES[FIELDS[42]], default=False,
-                    help_text='\'Person\' if there is SIC time logged')
-                    
-    remarks =   models.BooleanField(FIELD_TITLES[FIELDS[43]], default=True) 
-    
-    line_dist = models.BooleanField(FIELD_TITLES[FIELDS[44]], default=True,
+    line_dist = models.BooleanField(FIELD_TITLES[FIELDS[38]], default=True,
                     help_text='Total distance of the route in Nautical Miles')
                     
-    max_width = models.BooleanField(FIELD_TITLES[FIELDS[45]], default=True,
+    max_width = models.BooleanField(FIELD_TITLES[FIELDS[39]], default=True,
                     help_text='Maximum distance between any two points in the route')
                     
-    atp_xc =    models.BooleanField(FIELD_TITLES[FIELDS[46]], default=True,
+    atp_xc =    models.BooleanField(FIELD_TITLES[FIELDS[40]], default=True,
                     help_text="Total time when the route's max width > 50 NM")
 
-    speed =     models.BooleanField(FIELD_TITLES[FIELDS[47]], default=True,
+    speed =     models.BooleanField(FIELD_TITLES[FIELDS[41]], default=True,
                     help_text="Distance / Total, in Nautical Miles per hour (Knots)")
+                    
+    
+    person =    models.BooleanField(FIELD_TITLES[FIELDS[42]], default=True)
+    
+    
+    instructor= models.BooleanField(FIELD_TITLES[FIELDS[43]], default=False,
+                    help_text='\'Person\' if Dual Received is logged')
+                    
+    student =   models.BooleanField(FIELD_TITLES[FIELDS[44]], default=False,
+                    help_text='\'Person\' if Dual Given is logged')
+                    
+    fo =        models.BooleanField(FIELD_TITLES[FIELDS[45]], default=False,
+                    help_text='\'Person\' if PIC time is logged')
+                    
+    captain =   models.BooleanField(FIELD_TITLES[FIELDS[46]], default=False,
+                    help_text='\'Person\' if there is SIC time logged')
+                    
+    remarks =   models.BooleanField(FIELD_TITLES[FIELDS[47]], default=True) 
+                    
+    class Meta:
+        verbose_name_plural = 'Columns'
 
     def all_list(self):
         ret=[]
