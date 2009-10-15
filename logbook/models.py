@@ -465,14 +465,14 @@ class Columns(models.Model):
     line_dist = models.BooleanField(FIELD_TITLES[FIELDS[38]], default=True,
                     help_text='Total distance of the route in Nautical Miles')
                     
-    max_width = models.BooleanField(FIELD_TITLES[FIELDS[39]], default=True,
-                    help_text='Maximum distance between any two points in the route')
-                    
-    atp_xc =    models.BooleanField(FIELD_TITLES[FIELDS[40]], default=True,
+    atp_xc =    models.BooleanField(FIELD_TITLES[FIELDS[39]], default=True,
                     help_text="Total time when the route's max width > 50 NM")
 
-    speed =     models.BooleanField(FIELD_TITLES[FIELDS[41]], default=True,
+    speed =     models.BooleanField(FIELD_TITLES[FIELDS[40]], default=True,
                     help_text="Distance / Total, in Nautical Miles per hour (Knots)")
+                    
+    max_width = models.BooleanField(FIELD_TITLES[FIELDS[41]], default=True,
+                    help_text='Maximum distance between any two points in the route')
                     
     
     person =    models.BooleanField(FIELD_TITLES[FIELDS[42]], default=True)

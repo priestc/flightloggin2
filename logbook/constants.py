@@ -6,7 +6,7 @@ FIELDS = [
           "act_inst", "sim_inst", "day", "night", "night_l", "day_l", "app",
           "p2p", "multi", "m_pic", "sea", "sea_pic", "mes", "mes_pic",
           "turbine", "t_pic", "mt", "mt_pic", "complex", "hp", "tail", "jet",
-          "jet_pic", "atp_xc", "line_dist", "speed",
+          "jet_pic", "line_dist", "atp_xc", "speed",
           
           "max_width", "person", 'instructor', 'student', 'fo', 'captain',
           "remarks",

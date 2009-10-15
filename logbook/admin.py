@@ -8,7 +8,7 @@ class FlightAdmin(admin.ModelAdmin):
     #filter_horizontal = ('user', )
     
 class ColumnAdmin(admin.ModelAdmin):
-    list_display = ('user', 'f_route', 'line_dist','max_width','speed',
+    list_display = ('user', 'f_route','atp_xc','line_dist','max_width','speed',
                     'student','fo','captain','instructor')
 
 admin.site.register(Flight, FlightAdmin)
