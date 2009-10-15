@@ -57,6 +57,11 @@ def profile(request, shared, display_user):
                 column_form.save()
              
             if user_form.is_valid():
+                import re
+                ## remove illegal characters
+                user_form.cleaned_data['username'] = \
+                    re.sub(r'\W', '', user_form.cleaned_data['username'])
+                
                 user_form.save()        
     
     else:
