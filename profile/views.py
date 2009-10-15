@@ -79,8 +79,48 @@ def profile(request, shared, display_user):
         if column_form.fields.get(field):
             row.append("<td>" + str(column_form[field]) + "</td>\n")
         
-        row.append("<td>" + FIELD_TITLES[field] + "</td>\n")   
+        row.append("<td>%s</td><td>%s</td>\n" % (FIELD_TITLES[field], column_form[field].help_text))
         row.append("</tr>\n")
         bool_fields.append("".join(row))
 
     return locals()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
