@@ -18,9 +18,9 @@ from logbook.constants import OPTION_FIELDS, FIELD_TITLES
 @render_to("preferences.html")
 def profile(request, shared, display_user):
 
-    profile = Profile.objects.get_or_create(user=request.user)[0]
-    column =  Columns.objects.get_or_create(user=request.user)[0]
-    auto =    AutoButton.objects.get_or_create(user=request.user)[0]
+    profile = Profile.objects.get_or_create(user=display_user)[0]
+    column =  Columns.objects.get_or_create(user=display_user)[0]
+    auto =    AutoButton.objects.get_or_create(user=display_user)[0]
     
     #assert False
     
