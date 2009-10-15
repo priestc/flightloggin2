@@ -256,6 +256,12 @@ class Flight(models.Model):
                 return ""
             return ret
         
+        elif cn == 'speed' and self.route:
+            ret = "%.1f" % (self.route.max_width_all / self.total)
+            if ret == "0.0":
+                return ""
+            return ret
+        
         
         elif cn == 'atp_xc'  and self.route and self.route.max_width_all > 49:
             ret = self.total
@@ -482,6 +488,9 @@ class Columns(models.Model):
                     
     atp_xc =    models.BooleanField(FIELD_TITLES[FIELDS[46]], default=True,
                     help_text="Total time when the route's max width > 50 NM")
+
+    speed =     models.BooleanField(FIELD_TITLES[FIELDS[47]], default=True,
+                    help_text="Distance / Total, in Nautical Miles per hour (Knots)")
 
     def all_list(self):
         ret=[]

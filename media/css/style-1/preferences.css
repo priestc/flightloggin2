@@ -25,23 +25,22 @@ td[colspan='4']                       {padding-bottom: 10px; text-align: center}
 
 /* the titles column */
 #columns_table td                     {font-size: small; text-align: left;
-                                        padding: 0px !important; width: 20em}
+                                        padding: 0 3px 0 3px !important; width: 20em}
 
 /* the first two columns where the checkboxes are*/
 #columns_table td:nth-child(2),
 #columns_table td:first-child         {text-align: center; width: 2em}
 
 /* header row */
-#columns_table tr:first-child > td    {padding: 3px !important;
-                                        width: 2em !important;
+#columns_table tr:first-child > td    {width: 2em !important;
                                         background: white !important}
 
 /* striping */
-#columns_table tr:nth-child(even) td   {background: #C1DECD}
-#columns_table tr:nth-child(odd) td    {background: #91E6B4}
+#columns_table tr:nth-child(even) td  {background: #C1DECD}
+#columns_table tr:nth-child(odd) td   {background: #91E6B4}
 
 /* help text row */
 #columns_table td:last-child          {width: 40em; font-size: xx-small;
-                                        font-style: italics; padding: 3px !important;}
+                                        font-style: italics}
 
 .delete_box                           {text-align: center }

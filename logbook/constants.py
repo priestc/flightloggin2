@@ -6,7 +6,7 @@ FIELDS = [
           "act_inst", "sim_inst", "day", "night", "night_l", "day_l", "app",
           "p2p", "multi", "m_pic", "sea", "sea_pic", "mes", "mes_pic",
           "turbine", "t_pic", "mt", "mt_pic", "complex", "hp", "tail", "jet",
-          "jet_pic", "atp_xc", "line_dist",
+          "jet_pic", "atp_xc", "line_dist", "speed",
           
           "max_width", "person", 'instructor', 'student', 'fo', 'captain',
           "remarks",
@@ -80,7 +80,7 @@ OPTION_FIELDS = [
           'sim', 'pic', 'sic', 'solo', 'day', 'night', 'dual_r','dual_g', 'xc',
           'act_inst', 'sim_inst', 'night_l','day_l', 'app', 'p2p', 'multi',
           'm_pic', 'sea', 'sea_pic', 'mes', 'mes_pic', 'turbine', 't_pic', 'mt',
-          'mt_pic', 'complex', 'hp', "line_dist", 'atp_xc', 'max_width',
+          'mt_pic', 'complex', 'hp', "line_dist", 'atp_xc', 'max_width','speed',
           
           'instructor', 'student','fo','captain',
           'person', 'remarks',
@@ -148,6 +148,7 @@ FIELD_TITLES = {
     'max_width': "Max Width",
     'line_dist': "Distance",
     'atp_xc': "ATP XC",
+    'speed': 'Speed',
 }
 
 FIELD_ABBV = {
@@ -211,6 +212,7 @@ FIELD_ABBV = {
     'max_width': "Max W.",
     'line_dist': "Dist",
     'atp_xc': "ATP XC",
+    'speed': "Speed",
 }
 
 #########################################
