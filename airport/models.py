@@ -166,7 +166,7 @@ class WorldBorders(models.Model):
 ##############################################################################
 
 class USStates(models.Model):
-    state = models.CharField(max_length=2)
+    state = models.CharField(max_length=5)
     name = models.CharField(max_length=24)
     lon = models.FloatField()
     lat = models.FloatField()
@@ -174,8 +174,40 @@ class USStates(models.Model):
     objects = models.GeoManager()
     
     class Meta:
-        verbose_name_plural = "US States"
+        verbose_name_plural = "US State Borders"
         ordering = ('name', )
     
     def __unicode__(self):
         return self.name
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

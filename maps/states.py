@@ -3,7 +3,7 @@ matplotlib.use('Agg')
 
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.basemap import Basemap
+from mpl_toolkits.basemap import Basemap, cm
 from matplotlib.colors import rgb2hex, LinearSegmentedColormap
 
 from django.db.models import Count
@@ -21,9 +21,13 @@ def view(request, shared, display_user, type_, ext):
 
     return im.output
 
+###############################################################################
+###############################################################################
+###############################################################################
+
 class StateMap(object):
     
-    # the map
+    # the map, centered to the continental US
     m = Basemap(llcrnrlon=-119,llcrnrlat=22,urcrnrlon=-64,urcrnrlat=49,
                 projection='lcc',lat_1=33,lat_2=45,lon_0=-95)
     
@@ -45,7 +49,8 @@ class StateMap(object):
 
     def plot(self):     
         states_to_plot = {}   
-        qs = self.get_qs()
+        qs = self.get_data()
+        
         for state in qs:
             states_to_plot.update({state.get('name'): state.get('c', 1)})
 
@@ -61,30 +66,39 @@ class StateMap(object):
         return fig
 
     def drawl_state_map(self, states_to_plot):
-        import settings
         from matplotlib.patches import Polygon
+        from airport.models import USStates
+        import settings
         
         fig = plt.figure(figsize=(3.5, 2.5),)
-                
-        self.m.readshapefile(settings.PROJECT_PATH + '/maps/st99_d00','states',drawbounds=True)
         
-        text = []
-        ax = plt.gca() # get current axes instance
+        #states = USStates.objects.filter(state__in=states_to_plot.keys())
+        
+        self.m.readshapefile(settings.PROJECT_PATH + '/maps/st99_d00','states',drawbounds=True)
 
-        min_ = 0
+        text = []
+        ax = plt.gca()
+
+        # get the min and max values for coloration
         try:
+            min_ = 0
             max_ = max(states_to_plot.values())
         except ValueError:
+            # queryset returned zero results for some reason
+            min_ = 0
             max_ = 0
             
         ak, hi, de, md, ri, ct = False, False, False, False, False, False
         
+        y=False
         for i,seg in enumerate(self.m.states):
             statename = self.m.states_info[i]['NAME']
             
             if statename in states_to_plot:
-                c = states_to_plot[statename]
-                color = self.cmap(1.-np.sqrt((c-min_)/(max_-min_)))[:3]
+                c = float(states_to_plot[statename])
+                val = np.sqrt((c-min_)/(max_-min_))
+                print min_, max_, c, val
+                color = self.cmap(val)[:3]
                 poly = Polygon(seg,facecolor=color)
                 ax.add_patch(poly)
                 
@@ -99,6 +113,7 @@ class StateMap(object):
                 elif statename == "Delaware" and not de:
                     plt.figtext(.83, .4, "DE", size="small", color=color)
                     de=True
+                    #print seg
                     
                 elif statename == "Maryland" and not md:
                     plt.figtext(.83, .35, "MD", size="small", color=color)
@@ -118,18 +133,20 @@ class StateMap(object):
 class UniqueStateMap(StateMap):
     label = "Airports"
     
-    def get_qs(self):
-        return Region.objects\
-            .filter(location__in=Location.objects\
+    def get_data(self):
+        
+        # all points in the USA
+        all_points = Location.objects\
               .filter(routebase__route__flight__user=self.user,country="US")\
-              .distinct())\
+              .distinct()
+        
+        return Region.objects\
+            .filter(location__in=all_points)\
             .values('name')\
             .annotate(c=Count('location__region'))
     
     def get_cmap(self):
-        # the color map used to colorize the states
-        c=['#00FF00','#0000FF', '#FF0000']
-        self.cmap = LinearSegmentedColormap.from_list('mycm',c)
+        self.cmap = cm.GMT_seis_r
     
     def get_disp_count(self, stp):
         return sum(stp.values())
@@ -138,7 +155,7 @@ class UniqueStateMap(StateMap):
 class FlatStateMap(StateMap):
     label = "States"
     
-    def get_qs(self):
+    def get_data(self):
         return Region.objects\
             .filter(location__routebase__route__flight__user=self.user,
                 country='US')\
@@ -146,7 +163,7 @@ class FlatStateMap(StateMap):
             .distinct()
             
     def get_cmap(self):
-        c=['#FF00FF','#436377']
+        c=['#FF00FF','#15AC1C']
         self.cmap = LinearSegmentedColormap.from_list('mycm',c)
         
     def get_disp_count(self, stp):
@@ -156,16 +173,15 @@ class FlatStateMap(StateMap):
 class CountStateMap(StateMap):
     label = "States"
     
-    def get_qs(self):
+    def get_data(self):
         return Region.objects\
             .filter(location__routebase__route__flight__user=self.user,
                 country='US')\
             .values('name')\
-            .distinct().annotate(c=Count('name'))  
+            .distinct().annotate(c=Count('code'))  
 
     def get_cmap(self):
-        c=['#FF00FF','#436377']
-        self.cmap = LinearSegmentedColormap.from_list('mycm',c)
+        self.cmap = cm.GMT_seis_r
 
     def get_disp_count(self, stp):
         return len(stp)
