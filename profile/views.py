@@ -58,9 +58,10 @@ def profile(request, shared, display_user):
              
             if user_form.is_valid():
                 import re
-                ## remove illegal characters
+                ## remove illegal characters and spaces
                 user_form.cleaned_data['username'] = \
-                    re.sub(r'\W', '', user_form.cleaned_data['username'])
+                    re.sub(r'\W', '', user_form.cleaned_data['username'])\
+                    .replace(" ",'')
                 
                 user_form.save()        
     
