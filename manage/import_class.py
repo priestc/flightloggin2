@@ -16,8 +16,6 @@ class BaseImport(object):
         self.records_out = []
         self.non_out = []
         
-        self.get_dict_reader()
-        
     def do_pre(self):
         """get the first 10,000 characters of the file for preview purposes"""
         self.f.seek(0)
@@ -56,26 +54,28 @@ class BaseImport(object):
         """Go through each line, determine which type it is, then hand off that
            line to the proper function.
         """
+
         from prepare_line import PrepareLine
+        
+        self.get_dict_reader()
         
         for line in self.dr:
             line_type, dic = PrepareLine(line).output()
             
             if line_type == "flight":
-                self.handle_flight(dic)
+                self.flight_out.append( self.handle_flight(dic) )
 
             elif line_type == "nonflight":
-                self.handle_nonflight(dic)
+                self.non_out.append( self.handle_nonflight(dic) )
                 
             elif line_type == "records":
-                self.handle_records(dic)
+                self.records_out.append( self.handle_records(dic) )
                 
             elif line_type == "plane":
-                self.handle_plane(dic)
+                self.plane_out.append( self.handle_plane(dic) )
         
-        #these variables get populated by the "handle_" methods
-        return self.flight_out
-    
+        self.make_headers()
+        
     def swap_out_flight_titles(self, original):
         """transform the headers of the user's CSV file to normalized headers
            which can be processed.
@@ -92,7 +92,26 @@ class BaseImport(object):
                 new.append(title)
                 
         return new
+    
+    def make_headers(self):
+        from logbook.constants import FIELD_ABBV
+        from constants import PREVIEW_FIELDS
         
+        fh = ["<td>%s</td>" % FIELD_ABBV[f] for f in PREVIEW_FIELDS]
+        self.flight_header = "<tr class=\"header\">" + "".join(fh) + "</tr>"
+        
+        ##########
+        
+        ph = ["<td>%s</td>" % f for f in ('Registration', 'Type', 'Manufacturer',
+                                          'Model', 'Category/Class', 'Tags')]
+                                          
+        self.plane_header = "<tr class=\"header\">" + "".join(ph) + "</tr>"
+        
+        ##########
+        
+        nh = ["<td>%s</td>" % f for f in ('Date', 'Type', 'Remarks',)]
+                                          
+        self.non_flight_header = "<tr class=\"header\">" + "".join(nh) + "</tr>"
         
 
 ###############################################################################
@@ -116,7 +135,7 @@ class PreviewImport(BaseImport):
         out.append("</tr>")
         
         # add the output of this line to the output list
-        self.flight_out.append("".join(out))
+        return "".join(out)
 
     def handle_nonflight(self, line, submit=None):
         
@@ -126,22 +145,24 @@ class PreviewImport(BaseImport):
             
         out = "<tr>" + date + name + remarks + "</tr>"
         
-        self.non_out.append(out)
+        return out
         
     def handle_records(self, line, submit=None):
         records = "<td>%s</td>" % line['records']
         out = "<tr>" + records + "</tr>"
-        self.records_out.append(out)
+        return out
 
     def handle_plane(self, line, submit=None):
         out = ["<tr>"]
         
-        for field in ('tailnumber', 'type', 'manufacturer', 'model', 'tags'):
+        for field in ('tailnumber', 'type', 'manufacturer',
+                      'model', 'cat_class', 'tags'):
+                          
             out.append("<td class='%s'>%s</td>" % (field, line[field]))
             
         out.append("</tr>")
         
-        self.plane_out.append("".join(out))
+        return "".join(out)
         
 
 ###############################################################################
@@ -173,10 +194,13 @@ class DatabaseImport(PreviewImport):
         
         if form.is_valid():
             form.save()
-            super(DatabaseImport, self).handle_flight(line)
+            message = 'good'
         else:
-            import pdb; pdb.set_trace()
-            raise TypeError
+            message = form.errors
+            
+        return status_decorator(
+            super(DatabaseImport, self).handle_flight, line, message
+        )
         
     def handle_nonflight(self, line):
         from records.forms import NonFlightForm
@@ -187,17 +211,20 @@ class DatabaseImport(PreviewImport):
        
         if form.is_valid():
             form.save()
-            super(DatabaseImport, self).handle_nonflight(line)
+            message = 'good'
         else:
-            import pdb; pdb.set_trace()
-            raise TypeError
-        
+            message = form.errors
+            
+        return status_decorator(
+            super(DatabaseImport, self).handle_nonflight, line, message
+        )
+            
     def handle_records(self, line):
         
         r, c = Records.objects.get_or_create(user=self.user,
                                              text=line['records'])
                                           
-        super(DatabaseImport, self).handle_records(line)
+        return super(DatabaseImport, self).handle_records(line)
         
     def handle_plane(self, line):
         
@@ -221,10 +248,26 @@ class DatabaseImport(PreviewImport):
                 the_tags.append(tag)
         
         p.tags = " ".join(the_tags)
-        p.save()
         
-        super(DatabaseImport, self).handle_plane(line)
+        try:
+            p.save()
+            message = "good"
+        except:
+            message = "Error"
+            
+        return status_decorator(
+            super(DatabaseImport, self).handle_plane, line, message
+        )
 
+def status_decorator(func, line, message):
+    
+    result = func(line)
+    
+    if not message == 'good':
+        result += """<tr class='bad'><td colspan='20'>The above line did not
+        get entered because it had an error:<br>%s</td></tr>""" % message
+    
+    return result
 
 
 

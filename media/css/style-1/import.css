@@ -3,3 +3,4 @@
 .preview                        {border-collapse: collapse; border: 1px solid gray; margin: 10px auto auto auto}
 .preview td                     {font-size: x-small; border: 1px solid gray}
 tr.bad td                       {background: pink}
+tr.header td                    {background: #59B13F}

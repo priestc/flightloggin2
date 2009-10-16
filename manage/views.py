@@ -24,11 +24,24 @@ def import_v(request, shared, display_user):
         elif request.POST['submit'] == 'Preview':
             im = PreviewImport(display_user, f)
             
-        im.action()
+        #try:    
+        im.action()  #do the import
+            
+        #except Exception, message:   # most likley an invalid CSV file
+        
+        #    error = message
+            
+        #else:    
         flight_out = im.flight_out
         non_out = im.non_out
         records_out = im.records_out
         plane_out = im.plane_out
+        
+        flight_header = im.flight_header
+        non_flight_header = im.non_flight_header
+        plane_header = im.plane_header
+        
+        del im
         
     else:
         fileform = ImportForm()

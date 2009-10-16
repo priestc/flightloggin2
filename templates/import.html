@@ -10,6 +10,7 @@
 
 
 {% block canvas %}
+
     {% if not flight_out %}
     Download zipped backup file:<br>
     <button onclick="window.location = '/{{ display_user }}/backup/'; return false;">Export</button>
@@ -77,7 +78,9 @@
     </div>
     {% endif %}
 
-    
+    {% if error %}
+        <big style="color: red">Error: Not a valid CSV file</big>
+    {% endif %}
     <form action="{% url import display_user %}" method="post" enctype="multipart/form-data">
     <div>
         <ul>
@@ -100,7 +103,7 @@
     {% if non_out %}
         <h2>Non Flying Events:</h2>
         <table class="preview">
-        {{nonflight_header|safe}}
+        {{non_flight_header|safe}}
         {% for l in non_out %}
         {{l|safe}}
         {% endfor %}

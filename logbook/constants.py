@@ -163,6 +163,8 @@ FIELD_ABBV = {
     "date": "Date",
     "r_date": "Date",
     
+    "tailnumber": "Plane",
+    "type": "Type",
     "plane": "Plane",
     "reg": "Reg.",
     
