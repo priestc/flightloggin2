@@ -107,6 +107,13 @@
         </table>
     {% endif %}
     
+    {% if non_out %}
+        <h2>Records:</h2>
+        <table class="preview">
+        {{records_out.0|safe|linebreaks}}
+        </table>
+    {% endif %}
+    
     {% if plane_out %}
         <h2>Planes:</h2>
         <table class="preview">

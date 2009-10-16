@@ -15,16 +15,17 @@ COLUMN_NAMES = {
 
     "ROUTE OF FLIGHT": 'route',
     "ROUTE": 'route',
-    "FROM": 'from',
+    "FROM": 'from_',
     "TO": 'to',
     "VIA": 'via',
     "STOPS": 'via',
-    "ROUTE OF FLIGHT FROM":'from',
+    "ROUTE OF FLIGHT FROM":'from_',
     "ROUTE OF FLIGHT TO": 'to',
     "ROUTE OF FLIGHT VIA": 'via',
 
     "AIRCRAFT IDENT": 'tailnumber',
     "TAIL NUMBER": 'tailnumber',
+    "TAILNUMBER": 'tailnumber',
     "N-NUMBER": 'tailnumber',
     "PLANE": 'tailnumber',
     "REGISTRATION": 'tailnumber',
@@ -40,10 +41,12 @@ COLUMN_NAMES = {
     "NIGHT LAND": 'night_l',
     "NIGHT L": 'night_l',
 
-    "SIMULATOR": 'simulator',
-    "FLIGHT SIMULATOR": 'simulator',
-    "FLIGHT SIM": 'simulator',
-    "SIM": 'simulator',
+    "SIMULATOR": 'sim',
+    "SIM": 'sim',
+    "FLIGHT SIMULATOR": 'sim',
+    "FLIGHT SIM": 'sim',
+    "FTD": 'sim',
+    "PCATD": 'sim',
 
     "APPROACHES": 'app',
     "APPROACHES & TYPE": 'app',
@@ -115,12 +118,36 @@ PLANE_COLUMN_NAMES = {
     
 }
 
-CSV_FIELDS = [
-          'date', 'tailnumber', 'type', 'route',
-          'total', 'pic', 'solo', 'sic', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
-          'person', 'remarks'
-          ]
+# all fields that the import feature will do anything with
+CSV_FIELDS = (
+          'date', 'tailnumber', 'type', 'route', 'via', 'from_', 'to',
+          'total', 'sim', 'pic', 'solo', 'sic', 'night', 'dual_r','dual_g',
+          'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
+          'person', 'remarks', 'holding', 'tracking', 'instructor', 'student',
+          'fo', 'captain', 'flying', 'non_flying','pilot_checkride', 'ipc',
+          'cfi_checkride',
+          )
 
+# fields that are displayed in the import preview page
+PREVIEW_FIELDS = [
+        'date', 'tailnumber', 'type', 'route',
+        'total', 'sim', 'pic', 'solo', 'sic', 'night', 'dual_r','dual_g',
+        'xc','act_inst', 'sim_inst', 'night_l', 'day_l', 'app',
+        'person', 'remarks',
+        ]
+
+PLANE_HEADERS = (
+        'SKIP', 'tailnumber', 'manufacturer', 'model', 'type', 'cat_class',
+        'RT', 'tags'
+        )
+        
+PLANE_MAP = {
+        'SKIP': 'date', 'tailnumber': 'tailnumber', 'manufacturer': 'type',
+        'model': 'route', 'type': 'total', 'cat_class': 'pic',
+        'RT': 'solo', 'tags': 'sic',
+        }
+
+###### flightlogg.in 1.0 uses these names when it makes backup files ######
 
 NON_FLIGHT_TRANSLATE_NUM = {
         "1": 1,
