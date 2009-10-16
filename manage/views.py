@@ -38,7 +38,7 @@ def import_s(request, shared, display_user):
         
         if fileform.is_valid():
             filename = "%s/uploads/%s%s_%s.txt" % (settings.PROJECT_PATH,
-                                                   request.user.id,
+                                                   request.user.username,
                                                    preview_str,
                                                    datetime.now())
             f = request.FILES['file']
