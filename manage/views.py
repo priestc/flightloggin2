@@ -32,15 +32,15 @@ def import_s(request, shared, display_user):
             preview_str=""
         elif request.POST['submit'] == 'Preview':
             preview = True
-            preview_str="p"
+            preview_str="-p"
             
         fileform = ImportForm(request.POST, request.FILES)
         
         if fileform.is_valid():
             filename = "%s/uploads/%s%s_%s.txt" % (settings.PROJECT_PATH,
+                                                   datetime.now(),
                                                    request.user.username,
-                                                   preview_str,
-                                                   datetime.now())
+                                                   preview_str)
             f = request.FILES['file']
             destination = open( filename , 'wb+')
             
