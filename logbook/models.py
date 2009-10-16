@@ -256,7 +256,7 @@ class Flight(models.Model):
                 return ""
             return ret
         
-        elif cn == 'speed' and self.route:
+        elif cn == 'speed' and self.route and self.total > 0:
             ret = "%.1f" % (self.route.max_width_all / self.total)
             if ret == "0.0":
                 return ""
