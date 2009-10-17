@@ -205,7 +205,21 @@ class QuerySet(QuerySet):
       
         if not f:
             return self.exclude(**kwarg)
-        return self.filter(**kwarg)  
+        return self.filter(**kwarg)
+    
+    def by_route_val(self, col, f=True, eq=False, lt=None, gt=None):
+        if lt:
+            kwarg={"route__%s__lt" % col: lt}
+        elif gt:
+            kwarg={"route__%s__gt" % col: gt}
+        elif eq:
+            kwarg={"route__%s" % col: eq}
+        else:
+            kwarg={"route__%s__gt" % col: 0}
+      
+        if not f:
+            return self.exclude(**kwarg)
+        return self.filter(**kwarg)
         
     ## convienience functions below
     
@@ -379,8 +393,10 @@ class QuerySet(QuerySet):
             return self.sim(False).atp_xc().total(*args, **kwargs)
         
         elif cn == 'line_dist':
-            return self.sim(False).line_dist().total(*args, **kwargs)
-            
+            return self.sim(False).by_route_val('total_line_all', *args, **kwargs)
+        
+        elif cn == 'max_width':
+            return self.sim(False).by_route_val('max_width_all', *args, **kwargs)
         
         elif cn in DB_FIELDS:
             return getattr(self, cn)(*args, **kwargs)

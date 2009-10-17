@@ -65,7 +65,7 @@ def make_filter_kwargs(self, qs):
             
             elif val>=0:                     # all time filters
                 filter_ = val
-                print field,val
+                # opeator, '<', '>', or '='
                 op = self.cleaned_data.get(field + "_op", "")
                 
                 if op == "0":
@@ -73,6 +73,7 @@ def make_filter_kwargs(self, qs):
                     
                 elif op == "1":
                     qs = qs.filter_by_column(field, gt=val)
+                    print qs, field
                     
                 elif op == "2":
                     qs = qs.filter_by_column(field, lt=val)

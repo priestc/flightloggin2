@@ -49,6 +49,7 @@ DB_FIELDS = [
 FILTER_FIELDS = [
           'total', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc',
           'act_inst', 'sim_inst', 'night_l','day_l', 'app', 'p2p',
+          'line_dist','max_width',
           ]
 
 #fields to be fair game for the graphing functions and the sigs
