@@ -70,9 +70,10 @@ class Share(object):
     @property
     def can_share(self):
         """Is the display user allowing others to see his/her account?"""
-        try:
-            return display_user.get_profile().share
-        except:
+        from profile.models import Profile
+        try: 
+            return self.display_user.get_profile().share
+        except Profile.DoesNotExist:
             # if no profile, then just allow it
             return True  
 
@@ -91,10 +92,12 @@ class Share(object):
         
         if self.own_account:
             # requester is owner, let them in
+            print "oa"
             return self.full_access
         
         if self.can_share:
             # the owner allows sharing, so grant restricted access
+            print "share"
             return self.shared_access
         
         # user does not want others to see his/her logbook, raise 404
