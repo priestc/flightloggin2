@@ -48,8 +48,8 @@ class Profile(models.Model):
             return "Y-m-d"
         
     def adminlink(self):
-        return "<a href='http://beta.flightlogg.in%s'>Link</a>" %\
-                    self.get_absolute_url()
+        return "<a target='_blank' href='http://beta.flightlogg.in%s'>Link</a>"\
+                    % self.get_absolute_url()
     adminlink.allow_tags = True
 
 
