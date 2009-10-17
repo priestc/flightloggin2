@@ -114,8 +114,12 @@ function page_totals(columns){
                     str=count.toString();
                     list=str.split(".");
                     hour=list[0];
-                    dec="." + list[1];
-                    mins = dec * 60
+                    if(list[1]){
+                        dec="." + list[1];
+                        mins = dec * 60;
+                    } else
+                        mins = 0;
+                        
                     result = sprintf("%s:%02.0f", hour, mins);
                 }
             }
