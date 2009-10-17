@@ -211,10 +211,10 @@ FIELD_ABBV = {
     "non_flying": "Non-flying",
     "flying": "Flying",
     
-    'max_width': "Max W.",
-    'line_dist': "Dist",
+    'max_width': "Max W. (NM)",
+    'line_dist': "Dist (NM)",
     'atp_xc': "ATP XC",
-    'speed': "Speed",
+    'speed': "Speed (kts)",
 }
 
 #########################################

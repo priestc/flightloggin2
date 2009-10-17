@@ -35,7 +35,7 @@
 		
 	<table id="logbook_table" summary="logbook table">
 		<thead>
-			<tr>
+			<tr class='header'>
                     {{ header_row|safe }}
 			</tr>
 		</thead>
@@ -86,6 +86,11 @@
 		</tr>
 			
 		{% endfor %}
+		
+		<tr class='header'>
+		        {{ header_row|safe }}
+		</tr>
+		
 		</tbody>
 	</table>
 	

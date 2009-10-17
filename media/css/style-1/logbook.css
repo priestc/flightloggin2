@@ -10,23 +10,25 @@
 #logbook_table                               {width:100%; border: 0px solid #C3C3C3; background: white;
                                               font-size: x-small; border-collapse: collapse}
 
+/* odd rows */
+#logbook_table tbody tr:nth-child(even) td   {background: #D3F0D8}
+
+/* even rows */
+#logbook_table tbody tr:nth-child(odd) td    {background: #FFFFFF}
+
+
+
 /* all table cells */
 #logbook_table td                            {border: 1px solid #C3C3C3; padding: 1px}
 
 /* the remarks column */
 #logbook_table td:last-child:not([colspan])  {white-space: normal; text-align: left}
 
-/* logbook header and footer row */
-#logbook_table thead td,
-#logbook_table tfoot td:not([colspan])       {background: #A7F4A6; border: 1px solid #C3C3C3}
+/* both header rows at the top and bottom */
+#logbook_table tr.header td                  {background: #A7F4A6 !important}
 
+/* mass edit link */
 #logbook_table tfoot td[colspan]             {border: none; text-align:right}
-
-/* odd rows */
-#logbook_table tbody tr:nth-child(even) td   {background: #D3F0D8}
-
-/* even rows */
-#logbook_table tbody tr:nth-child(odd) td    {background: #FFFFFF}
 
 td.empty_logbook                             {font-size: x-large; padding: 10px !important}
 
