@@ -10,6 +10,9 @@ from django.db.models import Count
 from airport.models import Region, Location
 
 def view(request, shared, display_user, type_, ext):
+    if display_user.id == 1:
+        display_user = None # unset user so it uses all users
+
     if type_ == 'unique':
         im = UniqueStateMap(display_user, ext)
 
@@ -46,6 +49,9 @@ class StateMap(object):
         
         if self.ext == 'svg':
             return plot_svg2(self.plot)()
+        
+    def get_data(self):
+        raise NotImplementedError
 
     def plot(self):     
         states_to_plot = {}   
@@ -97,7 +103,6 @@ class StateMap(object):
             if statename in states_to_plot:
                 c = float(states_to_plot[statename])
                 val = np.sqrt((c-min_)/(max_-min_))
-                print min_, max_, c, val
                 color = self.cmap(val)[:3]
                 poly = Polygon(seg,facecolor=color)
                 ax.add_patch(poly)
@@ -135,10 +140,17 @@ class UniqueStateMap(StateMap):
     
     def get_data(self):
         
-        # all points in the USA
-        all_points = Location.objects\
+        if self.user:
+            # all points in the USA connected to the user
+            all_points = Location.objects\
               .filter(routebase__route__flight__user=self.user,country="US")\
               .distinct()
+        else:
+            #all points in the us connected to all users
+            all_points = Location.objects\
+              .filter(routebase__isnull=False, country="US")\
+              .distinct()
+            print all_points.query.as_sql()
         
         return Region.objects\
             .filter(location__in=all_points)\
@@ -149,6 +161,7 @@ class UniqueStateMap(StateMap):
         self.cmap = cm.GMT_seis_r
     
     def get_disp_count(self, stp):
+        """stp = states to plot, a dict of all states and their values"""
         return sum(stp.values())
         
 
@@ -156,11 +169,18 @@ class FlatStateMap(StateMap):
     label = "States"
     
     def get_data(self):
-        return Region.objects\
-            .filter(location__routebase__route__flight__user=self.user,
-                country='US')\
-            .values('name')\
-            .distinct()
+        if self.user:
+            return Region.objects\
+                .filter(location__routebase__route__flight__user=self.user,
+                    country='US')\
+                .values('name')\
+                .distinct()
+        else:
+            return Region.objects\
+                .filter(location__routebase__isnull=False,
+                    country='US')\
+                .values('name')\
+                .distinct()
             
     def get_cmap(self):
         c=['#FF00FF','#15AC1C']
@@ -174,11 +194,18 @@ class CountStateMap(StateMap):
     label = "States"
     
     def get_data(self):
-        return Region.objects\
-            .filter(location__routebase__route__flight__user=self.user,
-                country='US')\
-            .values('name')\
-            .distinct().annotate(c=Count('code'))  
+        if self.user: 
+            return Region.objects\
+                .filter(location__routebase__route__flight__user=self.user,
+                    country='US')\
+                .values('name')\
+                .distinct().annotate(c=Count('code')) 
+        else:
+             return Region.objects\
+                .filter(location__routebase__isnull=False,
+                    country='US')\
+                .values('name')\
+                .distinct().annotate(c=Count('code')) 
 
     def get_cmap(self):
         self.cmap = cm.GMT_seis_r
