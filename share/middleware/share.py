@@ -35,7 +35,7 @@ class Share(object):
         
         if not self.display_user:
             # not a valid username, raise 404
-            raise Http404
+            raise Http404("Username doesn't exist")
         
         self.request = request
         self.useragent = request.META['HTTP_USER_AGENT']
@@ -71,7 +71,7 @@ class Share(object):
     def can_share(self):
         """Is the display user allowing others to see his/her account?"""
         try:
-            return request.user.get_profile().share
+            return display_user.get_profile().share
         except:
             # if no profile, then just allow it
             return True  
