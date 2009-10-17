@@ -1,0 +1,14 @@
+=== modified file 'django_openid_auth/auth.py'
+--- django_openid_auth/auth.py	2009-04-07 10:26:04 +0000
++++ django_openid_auth/auth.py	2009-10-17 04:35:15 +0000
+@@ -96,6 +96,9 @@
+         sreg_response = sreg.SRegResponse.fromSuccessResponse(openid_response)
+         if sreg_response:
+             nickname = sreg_response.get('nickname', 'openiduser')
++            import re
++            #remove any character that isn't allowed by django
++            nickname = re.sub(r'\W', '', nickname).replace(' ','')
+             email = sreg_response.get('email', '')
+         else:
+             nickname = 'openiduser'
+
