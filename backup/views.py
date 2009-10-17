@@ -44,20 +44,17 @@ def backup_csv(user):
     flights = Flight.objects.filter(user=user)
     for flight in flights:
         writer.writerow([flight.column(field) for field in BACKUP_FIELDS])
-        
-    writer.writerow(["##RECORDS"])
     
     records = get_object_or_None(Records, user=user)
     if records:
-        writer.writerow([records.text.replace("\n","\\n")])
+        writer.writerow(["##RECORDS", records.text.replace("\n","\\n")])
     else:
         writer.writerow([])
-        
-    writer.writerow(["##PLANES"])
     
     planes = Plane.objects.filter(user=user)    
     for p in planes:
-        writer.writerow([p.tailnumber, p.manufacturer, p.model, p.type, p.cat_class, ", ".join(p.get_tags_quote())])
+        writer.writerow(["##PLANES", p.tailnumber, p.manufacturer, p.model,
+                    p.type, p.cat_class, ", ".join(p.get_tags())])
    
     return csv_sio
 

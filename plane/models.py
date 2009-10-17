@@ -74,10 +74,15 @@ class Plane(models.Model):
         return " ".join(ret)
     
     def get_tags(self):
-        return Tag.objects.get_for_object(self)
+        tags = Tag.objects.get_for_object(self)
+        ret = []
+        for tag in tags:
+            ret.append(tag.name)
+        
+        return ret
         
     def get_tags_quote(self):
-        tags =  Tag.objects.get_for_object(self)
+        tags = Tag.objects.get_for_object(self)
         ret = []
         
         for tag in tags:

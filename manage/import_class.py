@@ -263,7 +263,10 @@ def status_decorator(func, line, message):
     
     result = func(line)
     
-    if not message == 'good':
+    if message == 'good':
+        result += """<tr class='good'><td colspan='20'>Line entered successfully
+        </td></tr>"""
+    else:
         result += """<tr class='bad'><td colspan='20'>The above line did not
         get entered because it had an error:<br>%s</td></tr>""" % message
     
