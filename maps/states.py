@@ -80,7 +80,8 @@ class StateMap(object):
         
         #states = USStates.objects.filter(state__in=states_to_plot.keys())
         
-        self.m.readshapefile(settings.PROJECT_PATH + '/maps/st99_d00','states',drawbounds=True)
+        self.m.readshapefile(settings.PROJECT_PATH + '/maps/st99_d00',
+                                'states',drawbounds=True)
 
         text = []
         ax = plt.gca()
@@ -94,7 +95,7 @@ class StateMap(object):
             min_ = 0
             max_ = 0
             
-        ak, hi, de, md, ri, ct = False, False, False, False, False, False
+        ak, hi, de, md, ri, ct, dc = (False, ) * 7
         
         y=False
         for i,seg in enumerate(self.m.states):
@@ -118,19 +119,22 @@ class StateMap(object):
                 elif statename == "Delaware" and not de:
                     plt.figtext(.83, .4, "DE", size="small", color=color)
                     de=True
-                    #print seg
                     
                 elif statename == "Maryland" and not md:
                     plt.figtext(.83, .35, "MD", size="small", color=color)
                     md=True
                     
                 elif statename == "Alaska" and not ak:
-                    plt.figtext(.83, .30, "AK", size="small", color=color)
+                    plt.figtext(.83, .3, "AK", size="small", color=color)
                     ak=True
                     
                 elif statename == "Hawaii" and not hi:
                     plt.figtext(.83, .25, "HI", size="small", color=color)
                     hi=True
+                    
+                elif statename == "District of Columbia" and not dc:
+                    plt.figtext(.83, .2, "DC", size="small", color=color)
+                    dc=True
         return fig
     
 ###############################################################################
@@ -150,7 +154,6 @@ class UniqueStateMap(StateMap):
             all_points = Location.objects\
               .filter(routebase__isnull=False, country="US")\
               .distinct()
-            print all_points.query.as_sql()
         
         return Region.objects\
             .filter(location__in=all_points)\
