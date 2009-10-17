@@ -46,6 +46,12 @@ class Profile(models.Model):
             return self.date_format
         else:
             return "Y-m-d"
+        
+    def adminlink(self):
+        return "<a href='http://beta.flightlogg.in%s'>Link</a>" %\
+                    self.get_absolute_url()
+    adminlink.allow_tags = True
+
 
 class Entries(models.Model):
     user =          models.ForeignKey(User, blank=False, primary_key=True)

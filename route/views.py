@@ -1,8 +1,5 @@
-
 from django.http import HttpResponse
 from models import Route
-
-
 
 def del_routes(request):
     if not request.user.is_staff:
