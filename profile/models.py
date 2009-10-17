@@ -26,7 +26,7 @@ class Profile(models.Model):
         return ('logbook', [self.user.username], )
 
     class Meta:
-        pass
+        ordering = ('-user__date_joined', )
     
     @classmethod
     def get_for_user(cls, user):
@@ -51,6 +51,11 @@ class Profile(models.Model):
         return "<a target='_blank' href='http://beta.flightlogg.in%s'>Link</a>"\
                     % self.get_absolute_url()
     adminlink.allow_tags = True
+    
+    def date_registered(self):
+        from django.utils.dateformat import format
+        return format(self.user.date_joined, "M jS, Y")
+    date_registered.admin_order_field = 'user__date_joined'
 
 
 class Entries(models.Model):
