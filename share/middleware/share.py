@@ -71,9 +71,10 @@ class Share(object):
     def can_share(self):
         """Is the display user allowing others to see his/her account?"""
         try:
-            ok_to_share = request.user.get_profile().share
+            return request.user.get_profile().share
         except:
-            ok_to_share = True    
+            # if no profile, then just allow it
+            return True  
 
     #########################
 
@@ -104,10 +105,9 @@ class Share(object):
 ##############################################################
 
 def cant_share_view(message):
-    
-    
-    
     return HttpResponseForbidden(message)
+
+##############################################################
 
 class ShareMiddleware(object):
     """Middleware that determines if the user
