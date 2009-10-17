@@ -8,9 +8,22 @@ class Records(models.Model):
 
     def __unicode__(self):
         return str(self.user)
+    
+    @models.permalink
+    def get_absolute_url(self):
+        return ('records', [self.user.username])
 
     class Meta:
         verbose_name_plural = "Records"
+        
+    def adminlink(self):
+        return "<a target='_blank' href='http://beta.flightlogg.in%s'>Link</a>"\
+                    % self.get_absolute_url()
+    adminlink.allow_tags = True
+    
+    def has_something(self):
+        return bool(self.text) is True
+    has_something.boolean = True
         
     def save(self, *args, **kwargs):
         from share.middleware import share
