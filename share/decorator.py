@@ -4,16 +4,28 @@ class no_share(object):
     def __init__(self, view):
         self.view = view
     
-    def __call__(self, *args, **kwargs):
-        try:
-            secret_key = args[0].GET.get('secret_key')                 #args[0] == request
-        except IndexError:
-            secret_key = kwargs['request'].GET.get('secret_key')
-        except KeyError:
-            secret_key = None
+    def __call__(self, request, *args, **kwargs):
+        """Don't let them in if it's shared"""
         
-        if kwargs.get('shared', False) and not secret_key == "dongs": #SECRET_KEY:
-                from django.http import Http404
-                raise Http404
+        if kwargs.get('shared', True):
+            from django.http import Http404
+            raise Http404('not availiable for sharing')
 
-        return self.view(*args, **kwargs)
+        return self.view(request, *args, **kwargs)
+    
+class secret_key(object):
+    def __init__(self, view):
+        self.view = view
+    
+    def __call__(self, request, *args, **kwargs):
+        """Don't let them in unless they have the secret key"""
+        
+        secret_key = request.GET.get('sk', '')
+      
+        if not secret_key == SECRET_KEY:
+            from django.http import Http404
+            raise Http404
+
+        return self.view(request, *args, **kwargs)
+    
+

@@ -3,14 +3,19 @@ import StringIO
 import zipfile
 import datetime
 
+from django.http import Http404
+
 from logbook.constants import *
+
+MESSAGE = """This is a copy of your FlightLogg.in' logbook\n
+You are set to receive these messages %s."""
 
 class Backup(object):
 
     def __init__(self, user):
         self.user=user
         
-    def make_csv(self):
+    def output_csv(self):
         """returns a StringIO representing a csv backup file for the user"""
         
         from records.models import Records
@@ -42,7 +47,8 @@ class Backup(object):
 
     def output_zip(self):
         """Outputs a zipfile containing the CSV file"""
-        self.make_csv()
+        
+        self.output_csv()
         
         DATE = datetime.date.today()
             
@@ -51,3 +57,41 @@ class Backup(object):
         z.writestr("logbook-backup-%s.tsv" % DATE, self.csv.getvalue())
 
         return zip_sio
+    
+class EmailBackup(object):
+    
+    def __init__(self, user):
+        self.user = user
+        from profile.models import Profile
+        self.profile = Profile.get_for_user(user)
+        
+        self.addr = self.profile.backup_email or self.profile.user.email
+        
+        if not self.addr:
+            raise Http404("No Email address to send to")
+    
+    def make_email(self):
+        from django.core.mail import EmailMessage
+        import datetime
+        
+        message = MESSAGE % self.profile.get_backup_freq_display().lower()
+                            
+        title = "%s's FlightLogg.in backup for %s" % (
+                      self.profile.real_name or self.profile.user.username,
+                      datetime.date.today()
+        )
+        
+        file_ = Backup(self.user).output_zip().getvalue()
+        
+        email = EmailMessage(title, message, to=(self.addr,))
+        email.attach("backup.tsv.zip", file_,)
+            
+        return email
+    
+    def send(self):
+        """makes the email object, sends it, then, if successful, 
+           returns the address it sent it to
+        """
+        sent = self.make_email().send()
+        if sent:
+            return self.addr
