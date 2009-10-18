@@ -3,6 +3,15 @@
 
 {% block javascript %}
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/import.css">
+<script>
+$(document).ready(function() {
+    $("form").submit(function() {
+    
+        $('#progress').show()
+    
+    });
+});
+</script>
 {% endblock %}
 
 
@@ -81,7 +90,7 @@
     {% if error %}
         <big style="color: red">Error: Not a valid CSV file</big>
     {% endif %}
-    <form action="{% url import display_user %}" method="post" enctype="multipart/form-data">
+    <form id="upform" action="{% url import display_user %}" method="post" enctype="multipart/form-data">
     <div>
         <ul>
         {{fileform.as_ul}}
@@ -127,7 +136,10 @@
         </table>
     {% endif %}
     
-    {{count}}
+    <div id="progress" style="display: none">
+        Please wait, flights are being processed<br>
+        <img src="{{MEDIA_URL }}/icons/gray-indicator.gif" />
+    </div>
 	
 {% endblock %}
 

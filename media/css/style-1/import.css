@@ -5,3 +5,7 @@
 tr.bad td                       {background: pink}
 tr.good td                      {background: #A2E4A7}
 tr.header td                    {background: #C7A16E}
+
+div#progress                    {font-size: large; margin: 10px;
+                                 background: #EEEEEE;
+                                 border: 1px solid gray}
