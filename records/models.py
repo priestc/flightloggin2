@@ -3,6 +3,13 @@ from django.contrib.auth.models import User
 from constants import *
 
 class Records(models.Model):
+    
+    @classmethod
+    def goon(cls, *args, **kwargs):
+        """get object or None"""
+        from annoying.functions import get_object_or_None
+        return get_object_or_None(cls,  *args, **kwargs)
+    
     user = models.ForeignKey(User, unique=True, primary_key=True, editable=False)
     text = models.TextField(blank=True)
 

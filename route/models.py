@@ -3,7 +3,6 @@ import re
 from django.contrib.gis.db import models
 from django.db.models import Q
 
-from annoying.functions import get_object_or_None
 from share.middleware import share
 
 from airport.models import Location
@@ -440,8 +439,8 @@ class MakeRoute(object):
             # no previous routebases,
             # dont other with the extra queries trying to find the nearest 
             # based on the last
-            navaid = get_object_or_None(Location, loc_class=2,
-                                                  identifier=ident)
+            navaid = Location.goon(loc_class=2,
+                                   identifier=ident)
         if navaid:
             return RouteBase(location=navaid, sequence=i)
         
@@ -459,9 +458,9 @@ class MakeRoute(object):
                                                   loc_class=3,
                                                   identifier=ident)
         else:
-            cu = get_object_or_None(Location, loc_class=3,
-                                              user=self.user,
-                                              identifier=ident)
+            cu = Location.goon(loc_class=3,
+                               user=self.user,
+                               identifier=ident)
 
         if cu:
             return RouteBase(location=cu, sequence=i)
@@ -471,12 +470,12 @@ class MakeRoute(object):
     ###########################################################################
 
     def find_airport(self, ident, i, p2p):
-        airport = get_object_or_None(Location, loc_class=1, identifier=ident)
+        airport = Location.goon(loc_class=1, identifier=ident)
             
         if not airport and len(ident) == 3:
             # if the ident is 3 letters and no hit, try again with an added 'K'
-            airport = get_object_or_None(Location, loc_class=1,
-                                                   identifier="K%s" % ident)
+            airport = Location.goon(loc_class=1,
+                                    identifier="K%s" % ident)
 
         if airport:
             # a landing airport, eligable for p2p testing

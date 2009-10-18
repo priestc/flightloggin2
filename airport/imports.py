@@ -4,7 +4,6 @@ import csv, re
 from psycopg2 import IntegrityError
 from airport.models import Location, Region, Country
 from django.contrib.gis.geos import Point
-from annoying.functions import get_object_or_None
 
 project_name = sys.argv[1]
 
@@ -102,7 +101,7 @@ def airports():   #import airport
                     loc_class=     1,
                     identifier=    ident,
                     name=          name,
-                    region=        get_object_or_None(Region, code=region, country=country),
+                    region=        Region.goon(code=region, country=country),
                     municipality=  city,
                     country=       Country.objects.get(code=country),
                     elevation=     elev,

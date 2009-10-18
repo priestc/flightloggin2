@@ -1,23 +1,22 @@
-import datetime
-
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
 from share.decorator import no_share
 
 from annoying.decorators import render_to
-from annoying.functions import get_object_or_None
 
 from profile.models import Profile
 from logbook.constants import *
 
+import datetime
 DATE = datetime.date.today()
 
 @login_required()   
 def backup(request, shared, display_user):
     from django.http import HttpResponse
+    from classes import Backup
     
     # get a zip file of the csv of the users data
-    sio = backup_zip(display_user)
+    sio = Backup(display_user).output_zip()
 
     ###########################
     
@@ -25,49 +24,6 @@ def backup(request, shared, display_user):
     response['Content-Disposition'] = 'attachment; filename=logbook-backup-%s.tsv.zip' % DATE
 
     return response
-    
-def backup_csv(user):
-    """returns a StringIO representing a csv backup file for the passed user instance"""
-    
-    import csv, StringIO
-    from records.models import Records
-    from plane.models import Plane
-    from logbook.models import Flight, Columns
-
-    csv_sio = StringIO.StringIO()
-    writer = csv.writer(csv_sio, delimiter="\t")
-    
-    ##########################
-    
-    writer.writerow([FIELD_TITLES[field] for field in BACKUP_FIELDS])
-    
-    flights = Flight.objects.filter(user=user)
-    for flight in flights:
-        writer.writerow([flight.column(field) for field in BACKUP_FIELDS])
-    
-    records = get_object_or_None(Records, user=user)
-    if records:
-        writer.writerow(["##RECORDS", records.text.replace("\n","\\n")])
-    else:
-        writer.writerow([])
-    
-    planes = Plane.objects.filter(user=user)    
-    for p in planes:
-        writer.writerow(["##PLANES", p.tailnumber, p.manufacturer, p.model,
-                    p.type, p.cat_class, ", ".join(p.get_tags())])
-   
-    return csv_sio
-
-def backup_zip(user):
-    import zipfile, StringIO
-    
-    csv_sio = backup_csv(user)
-        
-    zip_sio = StringIO.StringIO()
-    z = zipfile.ZipFile(zip_sio,'w', compression=zipfile.ZIP_DEFLATED)
-    z.writestr("logbook-backup-%s.tsv" % DATE, csv_sio.getvalue())
-
-    return zip_sio
 
 #################################
 #################################

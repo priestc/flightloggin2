@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Q
 
-from annoying.functions import get_object_or_None
 from tagging.fields import TagField
 import tagging
 from tagging.models import Tag
@@ -65,6 +64,12 @@ class Plane(models.Model):
             
         return u"%s%s" % (self.tailnumber, disp)
     
+    @classmethod
+    def goon(cls, *args, **kwargs):
+        """get object or None"""
+        from annoying.functions import get_object_or_None
+        return get_object_or_None(cls,  *args, **kwargs)
+    
     def fancy_name(self):
         ret = []
         if self.manufacturer:
@@ -100,22 +105,22 @@ class Plane(models.Model):
         ordering = ["manufacturer", 'id']
 
     def is_turbine(self):
-        return get_object_or_None(Plane, pk=self.pk, tags__icontains="turbine") == self
+        return Plane.goon(pk=self.pk, tags__icontains="turbine") == self
 
     def is_hp(self):
-        return get_object_or_None(Plane, Q(pk=self.pk) & (Q(tags__icontains="high performance") | Q(tags__icontains="hp"))) == self
+        return Plane.goon(Q(pk=self.pk) & (Q(tags__icontains="high performance") | Q(tags__icontains="hp"))) == self
  
     def is_type_rating(self):
-        return get_object_or_None(Plane, pk=self.pk, tags__icontains="type rating") == self
+        return Plane.goon(pk=self.pk, tags__icontains="type rating") == self
         
     def is_complex(self):
-        return get_object_or_None(Plane, pk=self.pk, tags__icontains="complex") == self
+        return Plane.goon(pk=self.pk, tags__icontains="complex") == self
     
     def is_jet(self):
-        return get_object_or_None(Plane, pk=self.pk, tags__icontains="jet") == self
+        return Plane.goon(pk=self.pk, tags__icontains="jet") == self
     
     def is_tail(self):
-        return get_object_or_None(Plane, pk=self.pk, tags__icontains="tailwheel") == self
+        return Plane.goon(pk=self.pk, tags__icontains="tailwheel") == self
 
     #############################
 

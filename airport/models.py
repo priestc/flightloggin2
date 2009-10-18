@@ -1,7 +1,5 @@
 from django.contrib.gis.db import models
 
-from annoying.functions import get_object_or_None
-
 from constants import LOCATION_TYPE, LOCATION_CLASS
 from django.contrib.auth.models import User
 
@@ -36,6 +34,11 @@ class Location(models.Model):
 
     def __unicode__(self):
         return u"%s" % self.identifier
+    
+    @classmethod
+    def goon(cls, *args, **kwargs):
+        from annoying.functions import get_object_or_None
+        return get_object_or_None(cls,  *args, **kwargs)
         
     def region_name(self):
         if self.region:
@@ -84,7 +87,7 @@ class Location(models.Model):
             loc = self.location.wkt
             
             country = getattr(
-              get_object_or_None(WorldBorders, mpoly__contains=loc), 'iso2',''
+              WorldBorders.goon(mpoly__contains=loc), 'iso2',''
             )
                 
             self.country = Country(code=country) # code = pk
@@ -122,6 +125,11 @@ class Region(models.Model):
     
     class Meta:
         ordering = ('name', )
+        
+    @classmethod
+    def goon(cls, *args, **kwargs):
+        from annoying.functions import get_object_or_None
+        return get_object_or_None(cls,  *args, **kwargs) 
 
 ##############################################################################
 
@@ -162,6 +170,11 @@ class WorldBorders(models.Model):
 
     def __unicode__(self):
         return self.name
+    
+    @classmethod
+    def goon(cls, *args, **kwargs):
+        from annoying.functions import get_object_or_None
+        return get_object_or_None(cls,  *args, **kwargs)
 
 ##############################################################################
 

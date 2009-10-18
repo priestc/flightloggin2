@@ -1,8 +1,5 @@
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
-from django.contrib.auth.decorators import login_required
-
 from annoying.decorators import render_to
-from annoying.functions import get_object_or_None
 
 from models import Plane
 from forms import PlaneForm
@@ -14,9 +11,7 @@ def planes(request, shared, display_user):
     
     if request.POST.get('submit') == "Create New Plane":
         plane = Plane(user=request.user)
-        form = PlaneForm(request.POST, instance=plane)
-        
-        
+        form = PlaneForm(request.POST, instance=plane)      
         
         if form.is_valid():
             plane=form.save(commit=False)

@@ -5,7 +5,6 @@ from django.forms.models import modelformset_factory
 from django.forms.formsets import formset_factory
 
 from annoying.decorators import render_to
-from annoying.functions import get_object_or_None
 from share.decorator import no_share
 
 from models import Flight, Columns
@@ -190,14 +189,6 @@ def mass_edit(request, shared, display_user, page=0):
                     planes_queryset=Plane.objects.user_comon(display_user.id))
     
     return locals()
-
-
-
-
-
-
-
-
 
 
 

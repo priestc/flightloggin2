@@ -78,6 +78,11 @@ class Flight(models.Model):
     def get_absolute_url(self):
         return ('logbook', [self.user.username])
     
+    @classmethod
+    def goon(cls, *args, **kwargs):
+        from annoying.functions import get_object_or_None
+        return get_object_or_None(cls,  *args, **kwargs)
+    
     def save(self, *args, **kwargs):
         from share.middleware import share
         try:
