@@ -44,7 +44,7 @@ class Flight(models.Model):
     user =     models.ForeignKey(User, blank=False, editable=False)
     remarks =  models.TextField(blank=True)
 
-    plane =    models.ForeignKey(Plane, blank=False, null=False)
+    plane =    models.ForeignKey(Plane, default=1) # 1 = 'unknown' plane
     route =    models.ForeignKey(Route, blank=True, null=True, related_name="flight")
 
     total =    models.FloatField(        "Total Time",            default="")

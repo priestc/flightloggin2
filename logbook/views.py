@@ -14,7 +14,7 @@ from constants import *
 from totals import column_total_by_list
 from profile.models import Profile, AutoButton
 
-################################################################################
+###############################################################################
 
 @render_to("logbook.html")
 def logbook(request, shared, display_user, page=0):
@@ -113,7 +113,7 @@ def logbook(request, shared, display_user, page=0):
     
     return locals()
 
-#######################################################################################################################################
+###############################################################################
 
 @no_share   
 @login_required()
@@ -142,8 +142,8 @@ def mass_entry(request, shared, display_user):
                 post.update({"form-%s-user" % pk: u''})
             
         formset = NewFlightFormset(post,
-                                   queryset=Flight.objects.get_empty_query_set(),
-                                   planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
+                    queryset=Flight.objects.get_empty_query_set(),
+                    planes_queryset=Plane.objects.user_common(display_user))
         
         if formset.is_valid():
             for form in formset.forms:
@@ -152,11 +152,11 @@ def mass_entry(request, shared, display_user):
                 if instance.date:
                     instance.save()
             
-            return HttpResponseRedirect('/' + display_user.username + '/logbook.html')
+            return HttpResponseRedirect('/%s/logbook.html' % display_user)
         
     else:
         formset = NewFlightFormset(queryset=Flight.objects.get_empty_query_set(),
-                                   planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
+                    planes_queryset=Plane.objects.user_common(display_user))
 
     return locals()
 
@@ -175,16 +175,19 @@ def mass_edit(request, shared, display_user, page=0):
     start = (int(page)-1) * int(profile.per_page)
     duration = int(profile.per_page)
     qs = Flight.objects.filter(user=display_user)[start:start+duration]
-    NewFlightFormset = modelformset_factory(Flight, form=FormsetFlightForm, formset=FixedPlaneModelFormset, extra=0, can_delete=True)
+    NewFlightFormset = modelformset_factory(Flight, form=FormsetFlightForm,
+            formset=FixedPlaneModelFormset, extra=0, can_delete=True)
         
     if request.POST.get('submit'):
-        formset = NewFlightFormset(request.POST, queryset=qs, planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
+        formset = NewFlightFormset(request.POST, queryset=qs,
+        planes_queryset=Plane.objects.user_common(display_user.id))
         
         if formset.is_valid():
             formset.save()
-            return HttpResponseRedirect('/' + display_user.username + '/logbook.html')
+            return HttpResponseRedirect('/%s/logbook.html' % display_user)
     else:
-        formset = NewFlightFormset(queryset=qs, planes_queryset=Plane.objects.filter(user__pk__in=[2147483647,display_user.id]))
+        formset = NewFlightFormset(queryset=qs,
+                    planes_queryset=Plane.objects.user_comon(display_user.id))
     
     return locals()
 

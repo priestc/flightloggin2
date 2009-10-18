@@ -8,8 +8,4 @@ class QuerySet(QuerySet):
         return self.filter(user=u)
     
     def user_common(self, u):
-        return self.filter(user__in=(2147483647, u) ) #getattr(u, "id", 0)) )
-    
-    ### by aircraft tags
-    
-    
+        return self.filter(user__in=(1, u) )

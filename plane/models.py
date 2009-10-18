@@ -34,6 +34,9 @@ class Plane(models.Model):
     tags =           TagField()
     
     def save(self, *args, **kwargs):
+        """Automatically fill in make/models if they are not already supplied
+           and then save the object to the database
+        """
         if not self.pk and not (self.manufacturer and self.model and self.cat_class) and self.type:
             from auto_fill import autofill
             d = autofill(self.type)
@@ -92,7 +95,7 @@ class Plane(models.Model):
         return ret
 
     class Meta:
-        ordering = ["manufacturer"]
+        ordering = ["manufacturer", 'id']
 
     def is_turbine(self):
         return get_object_or_None(Plane, pk=self.pk, tags__icontains="turbine") == self

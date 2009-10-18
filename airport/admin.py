@@ -2,7 +2,8 @@ from django.contrib.gis import admin
 from models import *
 
 class LocationAdmin(admin.OSMGeoAdmin):
-    list_display = ('identifier', 'name', 'country', 'region', 'municipality',)
+    list_display = ('identifier', 'name', 'country', 'region', 'municipality',
+                    'user')
     search_fields = ('identifier', 'name', 'municipality',)
     list_filter = ('loc_class','loc_type')
     raw_id_fields = ('user', )

@@ -28,11 +28,12 @@ class BlankHourWidget(TextInput):
         return super(BlankHourWidget, self).render(name, value, attrs)
 
     def _has_changed(self, initial, data):
-        return super(BlankHourWidget, self)._has_changed(self._format_value_out(initial), data)
+        return super(BlankHourWidget, self).\
+                    _has_changed(self._format_value_out(initial), data)
         
 class BlankDecimalWidget(BlankHourWidget):
     def _format_value_out(self, value):
-        """Prepare value for outout in the mass entry form
+        """Prepare value for output in the mass entry form
            In: decimal number
            Out: a string of that decimal number
            a zero value outputs an empty string"""
@@ -54,7 +55,7 @@ class BlankIntWidget(BlankHourWidget):
         else:
             return str(value)
 
-########################################################################################
+###############################################################################
 
 class BlankHourField(forms.Field):
     widget = BlankHourWidget
@@ -86,12 +87,19 @@ class BlankDecimalField(BlankHourField):
 class BlankIntField(BlankHourField):
     widget = BlankIntWidget
     
-#####################################################################################################
+###############################################################################
 
 class FlightForm(ModelForm):
     
-    route =    RouteField(required=False, queryset=Route.objects.get_empty_query_set())
-    plane =    ModelChoiceField(required=True, queryset=Plane.objects.get_empty_query_set())
+    route =    RouteField(
+                   required=False,
+                   queryset=Route.objects.get_empty_query_set()
+               )
+    
+    plane =    ModelChoiceField(
+                   required=True,
+                   queryset=Plane.objects.get_empty_query_set()
+               )
     
     total =    BlankDecimalField(label="Total Time")
     pic =      BlankDecimalField(label="PIC")
@@ -114,34 +122,39 @@ class FlightForm(ModelForm):
         
         from share.middleware import share
         self.fields['date'].widget = widgets.AdminDateWidget()
-        self.fields['plane'].queryset = Plane.objects.user_common(share.get_display_user())
+        self.fields['plane'].queryset = \
+                    Plane.objects.user_common(share.get_display_user())
+        self.fields['plane'].default=1
+        self.fields['plane'].blank=False
+        self.fields['plane'].null=False
 
     class Meta:
         model = Flight
         exclude = ('user', )
 
-#############################################################################################################
+###############################################################################
 
 class FormsetFlightForm(FlightForm):
-    remarks = forms.CharField(widget=forms.TextInput(attrs={"class": "remarks_line"}), required=False)
-    person = forms.CharField(widget=forms.TextInput(attrs={"class": "person_line"}), required=False)
-    route = RouteField(queryset=Route.objects.get_empty_query_set(), widget=RouteWidget)
+    """Form used for the mass entry section. It's the same as the normal flight
+       form except that it renders the route field as a string, and the
+       remarks are in a big textbox
+    """
+    
+    remarks = forms.CharField(
+                widget=forms.TextInput(attrs={"class": "remarks_line"}),
+                required=False)
+                
+    person = forms.CharField(
+                widget=forms.TextInput(attrs={"class": "person_line"}),
+                required=False)
+                
+    route = RouteField(
+                queryset=Route.objects.get_empty_query_set(),
+                widget=RouteWidget)
     
     class Meta:
         model = Flight
         exclude = ('user', )
-
-from django.forms.formsets import BaseFormSet
-class FixedPlaneFormset(BaseFormSet):
-    def __init__(self, *args, **kwargs): 
-        if kwargs.has_key('planes_queryset'):
-            self.custom_queryset = kwargs['planes_queryset']
-            del kwargs['planes_queryset']         
-        super(FixedPlaneFormset, self).__init__(*args, **kwargs)
-
-    def add_fields(self, form, index):
-        super(FixedPlaneFormset, self).add_fields(form, index)
-        form.fields["plane"] = PlaneField(queryset=self.custom_queryset, required=True)
         
         
 from django.forms.models import BaseModelFormSet
@@ -154,7 +167,8 @@ class FixedPlaneModelFormset(BaseModelFormSet):
 
     def add_fields(self, form, index):
         super(FixedPlaneModelFormset, self).add_fields(form, index)
-        form.fields["plane"] = PlaneField(queryset=Plane.objects.get_empty_query_set(), required=True)
+        form.fields["plane"] = PlaneField(
+                queryset=Plane.objects.get_empty_query_set(), required=True)
         form.fields['plane'].queryset = self.custom_queryset
 
 
