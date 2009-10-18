@@ -221,8 +221,11 @@ class DatabaseImport(PreviewImport):
             
     def handle_records(self, line):
         
-        r, c = Records.objects.get_or_create(user=self.user,
-                                             text=line['records'])
+        r, c = Records.objects.get_or_create(user=self.user)
+        
+        r.text = line['records']
+        
+        r.save()
                                           
         return super(DatabaseImport, self).handle_records(line)
         

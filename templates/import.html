@@ -99,6 +99,11 @@ $(document).ready(function() {
     </div>
     </form>
     {{fileform.errors}}
+    
+    <div id="progress" style="display: none">
+        Please wait, flights are being processed<br>
+        <img src="{{MEDIA_URL }}/icons/gray-indicator.gif" />
+    </div>
 
     {% if flight_out %}
         <table class="preview">
@@ -135,11 +140,6 @@ $(document).ready(function() {
         {% endfor %}
         </table>
     {% endif %}
-    
-    <div id="progress" style="display: none">
-        Please wait, flights are being processed<br>
-        <img src="{{MEDIA_URL }}/icons/gray-indicator.gif" />
-    </div>
 	
 {% endblock %}
 
