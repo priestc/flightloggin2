@@ -29,7 +29,7 @@ class Backup(object):
             writer.writerow([flight.column(field) for field in BACKUP_FIELDS])
         
         records = Records.goon(user=self.user)
-        if records:
+        if records and records.text:
             writer.writerow(["##RECORDS", records.text.replace("\n","\\n")])
         
         planes = Plane.objects.filter(user=self.user)    
