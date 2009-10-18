@@ -90,7 +90,7 @@
 			<tr>
 				<td>{{ profile_form.share.label_tag }}</td>
 				<td colspan="2">{{ profile_form.share }}</td>
-				<td></td>
+				<td>{{ profile_form.share.help_text }}</td>
 			</tr>
 			
 			<tr>
@@ -180,7 +180,7 @@
 	
 	<fieldset>
 	    <legend>Clear Data</legend>
-	    <div style="text-align: left">Check each checkbox on either side to enable each button.</div>
+	    <div id="instructions">Check each checkbox on either side to enable button.</div>
 	    <div class="delete_box">
             <input type="checkbox" class="verify_flights">
             <input type="checkbox" class="verify_flights">

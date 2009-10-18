@@ -6,17 +6,56 @@ from plane.constants import CATEGORY_CLASSES, FAKE_CLASSES
 class Profile(models.Model):
     user =           models.ForeignKey(User, primary_key=True)
 
-    dob =            models.DateField(             "Date of Birth",             blank=True, default="1900-01-01")
-    style =          models.IntegerField(                                       choices=STYLES, default=1)
-    date_format =    models.CharField(                                          blank=True, max_length=32, default="Y-m-d")
+    dob =            models.DateField(
+                         "Date of Birth",
+                         blank=True,
+                         default="1900-01-01",
+                     )
+                     
+    style =          models.IntegerField(
+                         choices=STYLES,
+                         default=1,
+                     )
+                         
+    date_format =    models.CharField(
+                         blank=True,
+                         max_length=32,
+                         default="Y-m-d",
+                     )
 
-    real_name =      models.CharField(             "Real Name",                 blank=True, max_length=32)
-    per_page =       models.PositiveIntegerField(  "Logbook Entries Per Page",  default=50)
-    backup_email =   models.EmailField(            "Backup Email",              blank=True, help_text="Leave blank to use the email listed above")
-    backup_freq =    models.IntegerField(          "Backup Frequency",          choices=BACKUP_FREQUENCY, default=0)
-    type_str =       models.CharField(                                          blank=True, max_length=128)
-    minutes =        models.BooleanField(  "Display times as HH:MM",            default=False)
-    share =          models.BooleanField(  "Allow others to see your logbook?", default=True)
+    real_name =      models.CharField(
+                         "Real Name",
+                         blank=True,
+                         max_length=32,
+                     )
+                         
+    per_page =       models.PositiveIntegerField(
+                         "Logbook Entries Per Page",
+                         default=50,
+                     )
+                     
+    backup_email =   models.EmailField(
+                         "Backup Email",
+                         blank=True,
+                         help_text="Leave blank to use the email listed above",
+                     )
+                     
+    backup_freq =    models.IntegerField(
+                         "Backup Frequency",
+                         choices=BACKUP_FREQUENCY,
+                         default=0,
+                     )
+                     
+    minutes =        models.BooleanField(
+                         "Display times as HH:MM",
+                         default=False,
+                     )
+                     
+    share =          models.BooleanField(
+                         "Allow Sharing?",
+                         default=True,
+                         help_text='Allows people to view your logbook',
+                     )
 
     def __unicode__(self):
         return u"%s - %s" % (self.user, self.real_name)
@@ -48,11 +87,15 @@ class Profile(models.Model):
             return "Y-m-d"
         
     def adminlink(self):
+        """Puts a link in the admin page for the user's logbook"""
+        
         return "<a target='_blank' href='http://beta.flightlogg.in%s'>Link</a>"\
                     % self.get_absolute_url()
     adminlink.allow_tags = True
     
     def date_registered(self):
+        """Used in the admin interface to see when a user registered"""
+        
         from django.utils.dateformat import format
         return format(self.user.date_joined, "M jS, Y")
     date_registered.admin_order_field = 'user__date_joined'
@@ -105,8 +148,13 @@ class AutoButton(models.Model):
         return "%s" % (self.user, )
     
     def as_jslist(self):
+        """Prints out all columns the uer has selected into a javascript
+           list
+        """
+        fields = ('pic','sic','solo','dual_g','dual_r',
+                  'xc', 'night','sim_inst', 'act_inst')
         ret = []
-        for field in ['pic','sic','solo','dual_g','dual_r','xc','night','sim_inst', 'act_inst']:
+        for field in fields:
             if getattr(self, field):
                 ret.append(field)
         return ret
