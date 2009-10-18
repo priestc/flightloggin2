@@ -37,7 +37,9 @@ class Plane(models.Model):
         """Automatically fill in make/models if they are not already supplied
            and then save the object to the database
         """
-        if not self.pk and not (self.manufacturer and self.model and self.cat_class) and self.type:
+        if not self.pk and not (self.manufacturer and
+                                self.model and
+                                self.cat_class) and self.type:
             from auto_fill import autofill
             d = autofill(self.type)
             self.manufacturer = d['manufacturer'] or ""
