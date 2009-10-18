@@ -27,7 +27,7 @@ def backup(request, shared, display_user):
 from share.decorator import no_share, secret_key
 
 @no_share
-@login_required() 
+@login_required
 def emailbackup(request, shared, display_user):
     """Send email backup to the user"""
     
@@ -37,6 +37,15 @@ def emailbackup(request, shared, display_user):
     return HttpResponse("email sent to %s" % sent, mimetype='text-plain')
 
 @secret_key
-@login_required()
-def email_schedule(request):
-    return HttpResponse('omg')
+@login_required
+def schedule(request, schedule):
+    from django.contrib.auth.models import User
+    
+    ret = ""
+    users = User.objects.filter(profile__backup_freq=schedule)
+    for user in users:
+        #EmailBackup(user).send()
+        ret += user.username + " "
+    
+    
+    return HttpResponse(ret)

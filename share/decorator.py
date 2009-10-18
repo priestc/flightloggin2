@@ -22,9 +22,9 @@ class secret_key(object):
         
         secret_key = request.GET.get('sk', '')
       
-        if not secret_key == SECRET_KEY:
+        if not secret_key == "dong": #SECRET_KEY:
             from django.http import Http404
-            raise Http404
+            raise Http404('Need secret key')
 
         return self.view(request, *args, **kwargs)
     

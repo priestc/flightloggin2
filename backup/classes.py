@@ -46,7 +46,7 @@ class Backup(object):
         return csv_sio
 
     def output_zip(self):
-        """Outputs a zipfile containing the CSV file"""
+        """Outputs a StringIO representing a zipfile containing the CSV file"""
         
         self.output_csv()
         
