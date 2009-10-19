@@ -2,17 +2,8 @@ from logbook.constants import *
 from classes import ProgressGraph
 from annoying.decorators import render_to
 
-def graph_image(request, shared, display_user,
-                    type_, columns, s=None, e=None, ext='png'):
-    if (s and e):                   
-        dates = "%s-%s" % (s,e)
-    else:
-        dates = None
-                        
-    try:
-        ProgressGraph(display_user, columns, dates).as_png()
-    except ValueError, message:
-        return "hh"
+def graph_image(request, shared, display_user, columns, dates=None, ext='png'):
+    return ProgressGraph(display_user, columns, dates).as_png()
 
 
 @render_to('graphs.html')

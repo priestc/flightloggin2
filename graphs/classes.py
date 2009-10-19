@@ -20,6 +20,9 @@ class ProgressGraph(object):
     
     # fields that are their own unit
     INT_TITLES = ('day_l', 'night_l', 'app')
+    
+    class EmptyLogbook(Exception):
+        pass
 
     def __init__(self, user, columns, dates=None):
         self.user = user
@@ -46,11 +49,21 @@ class ProgressGraph(object):
         
         #add each column plot onto the graph
         for column in self.columns:
-            title, subtitle, main_plot, rate_plot = self.make_twin_plot(column)
+            try:
+                title, subtitle, main_plot, rate_plot = \
+                self.make_twin_plot(column)
                 
-            self.add_twin_graph(main_plot, rate_plot)
+            except self.EmptyLogbook:
+                title, subtitle, main_plot, rate_plot = \
+                "Nothing to show", None, None, None
             
-        if len(self.columns) > 1:
+            else:    
+                self.add_twin_graph(main_plot, rate_plot)
+                
+        if not subtitle:
+            plt.figtext(.5,.5,"Nothing to Show",fontsize=18,ha='center')
+            
+        elif len(self.columns) > 1:
             plt.figtext(.5,.94,"Flight Time Progression", fontsize=18, ha='center')
             plt.figtext(.5,.91,subtitle,fontsize=10,ha='center')
         else:
@@ -217,10 +230,15 @@ class ProgressGraph(object):
         else:
             # drawl graph from the start
             prev_total = 0
-            flights = self.start_qs.filter_by_column(column).\
+            try:
+                flights = self.start_qs.filter_by_column(column).\
                         values('date').\
                         annotate(value=Sum(db_column)).\
                         order_by('date')
+            except AttributeError:
+                # filter_by_column() will return None of there aren't any
+                # flights in the user's logbook to satist that condition
+                raise self.EmptyLogbook
         
         flights=list(flights)
 
@@ -232,7 +250,9 @@ class ProgressGraph(object):
                 self.end = flights[-1]['date']
                 self.start = flights[0]['date']
             except IndexError:
-                raise ValueError('Empty Logbook')
+                # If the `flights` dict is empty, the splice indexes won't
+                # work.
+                raise self.EmptyLogbook
         else:
             # add the start value to the begining of the dict, so the
             # graph doesn't start at 0 when there is a date splice
@@ -249,7 +269,7 @@ class ProgressGraph(object):
 
     def plot_colors(self, method, column):
         if method == "rate":
-            return 'r'
+            return '#c14242'
         else:
             return 'b'
 
