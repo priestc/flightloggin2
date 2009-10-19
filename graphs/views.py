@@ -9,7 +9,10 @@ def graph_image(request, shared, display_user,
     else:
         dates = None
                         
-    return ProgressGraph(display_user, columns, dates).as_png()
+    try:
+        ProgressGraph(display_user, columns, dates).as_png()
+    except ValueError, message:
+        return "hh"
 
 
 @render_to('graphs.html')
