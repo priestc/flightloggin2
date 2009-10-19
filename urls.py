@@ -30,9 +30,9 @@ urlpatterns += patterns('',
     ############################ graphs
 
     (r'^(?P<username>\w+)/line/(?P<type_>\w+)/(?P<columns>[\w\-]+)/((?P<s>\d{4}.\d{1,2}.\d{1,2})-(?P<e>\d{4}.\d{1,2}.\d{1,2}))?(all)?.(?P<ext>(png|svg))$',
-    # username/line/type/columns/(start_date-end_date) or (all).extension
+    # username/line/(type)/(columns)/(start_date-end_date) or (all).extension
     
-                        "graphs.views.line_generator"),
+                        "graphs.views.graph_image"),
                                                                    
     url(r'^(?P<username>\w+)/states-(?P<type_>[\-\w]+)?.(?P<ext>(png|svg))$',
     
@@ -41,6 +41,7 @@ urlpatterns += patterns('',
     (r'^(?P<username>\w+)/sigs/(?P<columns>[\w\-]+).png',          "sigs.views.make_sig", ),
     
     ############################ main site
+    
     
     (r'^feeds/(?P<url>.*)/$',                                      "django.contrib.syndication.views.feed", {'feed_dict': feeds}),
     
