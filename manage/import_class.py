@@ -120,9 +120,9 @@ class PreviewImport(BaseImport):
         
     def make_filename(self):
         import settings
-        filename = "%s/uploads/%s%s-p.txt" %\
+        filename = "%s/uploads/%s-%s-p.txt" %\
                 (settings.PROJECT_PATH,
-                 datetime.now(),
+                 datetime.datetime.now().microsecond,
                  self.user.username)
 
     def handle_flight(self, line, submit=None):
@@ -175,7 +175,7 @@ class DatabaseImport(PreviewImport):
         import settings
         filename = "%s/uploads/%s%s.txt" %\
                 (settings.PROJECT_PATH,
-                 datetime.now(),
+                 datetime.datetime.now().microsecond,
                  self.user.username)
                  
     def handle_flight(self, line):
