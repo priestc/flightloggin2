@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 import csv
 
 from records.forms import NonFlightForm
@@ -16,6 +16,8 @@ class BaseImport(object):
         self.records_out = []
         self.non_out = []
         
+        self.save_file()
+        
     def do_pre(self):
         """get the first 10,000 characters of the file for preview purposes"""
         self.f.seek(0)
@@ -24,6 +26,7 @@ class BaseImport(object):
         
     def save_file(self):
         filename = self.make_filename()
+        print filename
         dest = open(filename, 'wb+')
         
         for chunk in self.f.chunks():
@@ -120,7 +123,7 @@ class PreviewImport(BaseImport):
         
     def make_filename(self):
         import settings
-        filename = "%s/uploads/%s-%s-p.txt" %\
+        return "%s/uploads/%s-%s-p.txt" %\
                 (settings.PROJECT_PATH,
                  datetime.datetime.now().microsecond,
                  self.user.username)
@@ -173,7 +176,7 @@ class DatabaseImport(PreviewImport):
     def make_filename(self):
         """rename the file"""
         import settings
-        filename = "%s/uploads/%s%s.txt" %\
+        return "%s/uploads/%s%s.txt" %\
                 (settings.PROJECT_PATH,
                  datetime.datetime.now().microsecond,
                  self.user.username)
