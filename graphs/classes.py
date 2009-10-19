@@ -45,7 +45,7 @@ class ProgressGraph(object):
         self.start_qs = Flight.objects.user(user)
         
     def output(self):
-        """output the finished graph based on the format passed to __init__"""
+        """get the plots, and make the titles"""
         
         #add each column plot onto the graph
         for column in self.columns:
@@ -55,7 +55,7 @@ class ProgressGraph(object):
                 
             except self.EmptyLogbook:
                 title, subtitle, main_plot, rate_plot = \
-                "Nothing to show", None, None, None
+                None, None, None, None
             
             else:    
                 self.add_twin_graph(main_plot, rate_plot)
@@ -116,21 +116,29 @@ class ProgressGraph(object):
         return (title, subtitle, acc_plot, rate_plot)
     
     
-    def add_twin_graph(self, plot1, plot2):
+    def add_twin_graph(self, acc_plot, rate_plot):
         """give it a plot dict and it will return a graph image"""
        
         ax = self.fig.add_subplot(111)
-        ax.plot(plot1['x'],
-                plot1['y'],
-                color=plot1['color'],
+        ax.plot(acc_plot['x'],
+                acc_plot['y'],
+                color=acc_plot['color'],
                 drawstyle='steps-post', lw=2)
+                
+        ax.set_ylabel(acc_plot['y_unit'],
+                      color=acc_plot['color'], )
         
         ax.set_xlim(self.start, self.end)
         
         ax2 = ax.twinx()
         d_color='#c14242'
-        ax2.plot(plot2['x'], plot2['y'], color=plot2['color'], drawstyle='default')
-        ax2.set_ylabel( plot2['y_unit'], color=plot2['color'], )
+        ax2.plot(rate_plot['x'],
+                 rate_plot['y'],
+                 color=rate_plot['color'],
+                 drawstyle='default')
+                 
+        ax2.set_ylabel(rate_plot['y_unit'],
+                       color=rate_plot['color'], )
         
         for tl in ax2.get_yticklabels():
             tl.set_color(d_color)
