@@ -47,7 +47,7 @@ urlpatterns += patterns('',
     (
         r'^(?P<username>\w+)/linegraph/' +
         r'(?P<columns>[\w\-]+)/' +
-        r'((?P<date>\d{4}.\d{1,2}.\d{1,2}-\d{4}.\d{1,2}.\d{1,2})?' +
+        r'(?P<date>\d{4}.\d{1,2}.\d{1,2}-\d{4}.\d{1,2}.\d{1,2})?' +
         r'(all)?.(?P<ext>(png|svg))$',
         # username/linegraph/(columns)/(start_date-end_date) or (all).extension
         "graphs.views.graph_image",
@@ -233,13 +233,13 @@ urlpatterns += patterns('',
     (
         r'^site-media/(?P<path>.*)$','django.views.static.serve',
         {'document_root': '/home/chris/Websites/flightloggin/media',
-            'show_indexes': True}
+            'show_indexes': True},
     ),
 
     (
         r'^\w+/$',
         "django.views.generic.simple.redirect_to",
-        {'url': 'logbook.html'}
+        {'url': 'logbook.html'},
     ),
     
     (
