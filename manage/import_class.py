@@ -26,7 +26,7 @@ class BaseImport(object):
         filename = self.make_filename()
         dest = open(filename, 'wb+')
         
-        for chunk in f.chunks():
+        for chunk in self.f.chunks():
             dest.write(chunk)
         dest.close()
         
