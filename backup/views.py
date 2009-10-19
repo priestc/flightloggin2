@@ -39,13 +39,31 @@ def emailbackup(request, shared, display_user):
 @secret_key
 @login_required
 def schedule(request, schedule):
-    from django.contrib.auth.models import User
+    """Only send out the emails to the people who's schedule is exactly the
+       one being passed as 'schedule'
+    """
     
-    ret = ""
-    users = User.objects.filter(profile__backup_freq=schedule)
+    from django.contrib.auth.models import User
+    if schedule == 'weekly':
+        users = User.objects.filter(profile__backup_freq=1)
+    
+    elif schedule == 'bi-weekly':
+        users = User.objects.filter(profile__backup_freq=2)
+    
+    elif schedule == 'monthly':
+        users = User.objects.filter(profile__backup_freq=3)
+
+    ret = ""    
     for user in users:
         #EmailBackup(user).send()
         ret += user.username + " "
     
     
-    return HttpResponse(ret)
+    return HttpResponse(ret, mimetype="text/plain")
+
+##
+## crontab:
+##
+## 30 5 1         * * wget http://beta.flightlogg.in/schedule-monthly.py
+## 30 4 1,7,14,21 * * wget http://beta.flightlogg.in/schedule-weekly.py
+## 30 3 1,14      * * wget http://beta.flightlogg.in/schedule-biweekly.py
