@@ -27,6 +27,7 @@ class ProgressGraph(object):
     def __init__(self, user, columns, dates=None):
         self.user = user
         if dates:
+            dates = dates.split('-')
             s = dates[0]
             e = dates[1]
             # turn "2007.5.14" to "datetime.date(2007, 5, 14)"
