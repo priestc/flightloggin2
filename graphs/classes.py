@@ -7,7 +7,7 @@ import datetime
 
 from django.utils.dateformat import format as dj_date_format
 
-from image_formats import plot_png, plot_svg
+from image_formats import plot_png, plot_svg, plot_png2, plot_svg2
 from logbook.constants import FIELD_TITLES, DB_FIELDS
 
 class ProgressGraph(object):
@@ -154,16 +154,6 @@ class ProgressGraph(object):
         # axes up to make room for them
         #fig.autofmt_xdate()
     
-    
-    
-    ###########################################################################
-        
-    def as_png(self):
-        return plot_png(self.output)()
-    
-    def as_svg(self):
-        return plot_svg(self.output)()
-    
     ###########################################################################
     
     def process_data(self, flights):
@@ -227,11 +217,14 @@ class ProgressGraph(object):
             pad = datetime.timedelta(days=1)
             s = self.start
             e = self.end
-            flights = self.start_qs.filter_by_column(column).\
+            try:
+                flights = self.start_qs.filter_by_column(column).\
                         filter(date__lt=e+pad,date__gt=s-pad).\
                         values('date').\
                         annotate(value=Sum(db_column)).\
                         order_by('date')
+            except AttributeError:
+                raise self.EmptyLogbook
                         
             ## all stuff before the graph begins
             before_graph = self.start_qs.filter(date__lt=s-pad)
@@ -250,6 +243,8 @@ class ProgressGraph(object):
                 raise self.EmptyLogbook
         
         flights=list(flights)
+        if len(flights) < 1:
+            raise self.EmptyLogbook
 
         if not (self.start and self.end):
             try:
@@ -284,7 +279,11 @@ class ProgressGraph(object):
 
 
 
-
+    def as_png(self):
+        return plot_png(self.output)()
+    
+    def as_svg(self):
+        return plot_svg(self.output)()
 
 
 
