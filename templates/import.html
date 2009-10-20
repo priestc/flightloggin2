@@ -22,7 +22,7 @@ $(document).ready(function() {
 
     {% if not flight_out %}
     Download zipped backup file:<br>
-    <button onclick="window.location = '/{{ display_user }}/backup/'; return false;">Export</button>
+    <button onclick="window.location = '{% url backup display_user %}'; return false;">Export</button>
     <div style="max-width: 50em; text-align: left; margin: 30px auto 30px auto">
         <hr>
         Use this form to import logbook data from another digital logbook application. Any data in a valid CSV
@@ -90,15 +90,19 @@ $(document).ready(function() {
     {% if error %}
         <big style="color: red">Error: Not a valid CSV file</big>
     {% endif %}
+    
+    {% if empty %}
+        <big style="color: red">You must select a file to upload</big>
+    {% endif %}
+    
     <form id="upform" action="{% url import display_user %}" method="post" enctype="multipart/form-data">
     <div>
         <ul>
-        {{fileform.as_ul}}
+        {{fileform.file}}
         </ul>
         <input type="submit" value="Preview" name="submit">  <input type="submit" value="Import" name="submit">
     </div>
     </form>
-    {{fileform.errors}}
     
     <div id="progress" style="display: none">
         Please wait, flights are being processed<br>

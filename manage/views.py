@@ -17,21 +17,18 @@ def import_v(request, shared, display_user):
         
         if fileform.is_valid():
             f = request.FILES['file']
+        else:
+            empty=True
+            return locals()
         
         if request.POST['submit'] == 'Import':
             im = DatabaseImport(display_user, f)
 
         elif request.POST['submit'] == 'Preview':
             im = PreviewImport(display_user, f)
-            
-        #try:    
-        im.action()  #do the import
-            
-        #except Exception, message:   # most likley an invalid CSV file
-        
-        #    error = message
-            
-        #else:    
+             
+        im.action()
+  
         flight_out = im.flight_out
         non_out = im.non_out
         records_out = im.records_out
