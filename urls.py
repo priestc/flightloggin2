@@ -80,7 +80,7 @@ urlpatterns += patterns('',
     
     (
         r'^hard-recalc-routes.py$',
-        "route.views.hard_recalc_routes"
+        "route.views.hard_recalc_routes",
     ),
     
     (
@@ -91,7 +91,7 @@ urlpatterns += patterns('',
     url(
         r'^news.html$',
         "main.views.news",
-        name="news"
+        name="news",
     ),
     
     url(
@@ -103,7 +103,7 @@ urlpatterns += patterns('',
     url(
         r'^help.html$',
         "main.views.help",
-        name="help"
+        name="help",
     ),
     
     (
@@ -114,37 +114,43 @@ urlpatterns += patterns('',
     url(
         r'^(?P<username>\w+)/email-backup.html$',
         "backup.views.emailbackup",
-        name="import"
+        name="import",
     ),
     
     url(
         r'^(?P<username>\w+)/routes-(?P<type_>\w+).kmz$',
         "maps.views.routes_kml",
-        name="kml-route"
+        name="kml-route",
     ),
     
     url(
         r'^(?P<username>\w+)/airports-(?P<type_>\w+).kmz$',
         "maps.views.airports_kml",
-        name="kml-airport"
+        name="kml-airport",
+    ),
+    
+    url(
+        r'^(?P<username>\w+)/8710.html$',
+        "auto8710.views.auto8710",
+        name="8710",
     ),
     
     url(
         r'^(?P<username>\w+)/preferences.html$',
         "profile.views.profile",
-        name="profile"
+        name="profile",
     ),
     
     url(
         r'^(?P<username>\w+)/import.html$',
         "manage.views.import_v",
-        name="import"
+        name="import",
     ),
     
     url(
         r'^(?P<username>\w+)/records.html$',
         "records.views.records",
-        name="records"
+        name="records",
     ),
     
     url(

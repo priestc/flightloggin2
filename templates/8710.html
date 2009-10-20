@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+{% block canvas %}
+
+<style>
+    table#est td.greyed      {background: #CCCCCC}
+    table#est                {border: 1px solid black; font-size: x-small}
+    table#est td             {border: 1px solid gray}
+</style>
+{% autoescape off %}
+<table summary="8710 Data" id="est">
+	<thead>
+		<tr>
+
+			<td>&nbsp;</td>
+			<td>Total</td>
+			<td>Instruction Received</td>
+			<td>Solo</td>
+			<td>Pilot in Command (PIC)</td>
+			<td>Cross Country Instruction Recieved</td>
+			<td>Cross Country Solo</td>
+			<td>Cross Country PIC</td>
+			<td>Instrument</td>
+			<td>Night Instruction Received</td>
+			<td>Night Take-off/<br />Landings</td>
+			<td>Night PIC</td>
+			<td>Night Take-off/<br />Landings PIC</td>
+			<td>Number of Flights</td>
+			<td>Number of Aero-Tows</td>
+			<td>Number of Ground Launches</td>
+			<td>Number of Powered Launches</td>
+		</tr>
+
+	</thead>
+
+	<tbody>                                             {# AIRPLANE ROW #}
+		<tr>
+			<td rowspan="2">Airplanes</td>
+			<td rowspan="2">{{ airplane.total }}</td>
+			<td rowspan="2">{{ airplane.dual_r }}</td>
+			<td rowspan="2">{{ airplane.solo }}</td>
+			<td rowspan="1">{{ airplane.pic }}</td>
+			<td rowspan="2">{{ airplane.xc_dual_r }}</td>
+			<td rowspan="2">{{ airplane.xc_solo }}</td>
+			<td rowspan="1">{{ airplane.xc_pic }}</td>
+			<td rowspan="2">{{ airplane.instrument }}</td>
+			<td rowspan="2">{{ airplane.night_dual_r }}</td>
+			<td rowspan="2">{{ airplane.night_l }}</td>
+			<td rowspan="1">{{ airplane.night_pic }}</td>
+			<td rowspan="1">{{ airplane.night_l_pic }}</td>
+			<td rowspan="2" class="greyed">&nbsp;</td>
+			<td rowspan="2" class="greyed">&nbsp;</td>
+			<td rowspan="2" class="greyed">&nbsp;</td>
+			<td rowspan="2" class="greyed">&nbsp;</td>
+		</tr>
+		<tr>
+			<td>{{ airplane.sic }}</td>
+			<td>{{ airplane.sic_xc }}</td>
+			<td>{{ airplane.sic_night }}</td>
+			<td>{{ airplane.sic_night_l }}</td>
+		</tr>
+
+                                                        {# ROTORCRAFT ROW #}
+
+		<tr>
+			<td rowspan="2">Rotor-<br />craft</td>
+			<td rowspan="2">{{ rotorcraft.total }}</td>
+			<td rowspan="2">{{ rotorcraft.dual_r }}</td>
+			<td rowspan="2">{{ rotorcraft.solo }}</td>
+			<td rowspan="1">{{ rotorcraft.pic }}</td>
+			<td rowspan="2">{{ rotorcraft.xc_dual_r }}</td>
+			<td rowspan="2">{{ rotorcraft.xc_solo }}</td>
+			<td rowspan="1">{{ rotorcraft.xc_pic }}</td>
+			<td rowspan="2">{{ rotorcraft.instrument }}</td>
+			<td rowspan="2">{{ rotorcraft.night_dual_r }}</td>
+			<td rowspan="2">{{ rotorcraft.night_l }}</td>
+			<td rowspan="1">{{ rotorcraft.night_pic }}</td>
+			<td rowspan="1">{{ rotorcraft.night_l_pic }}</td>
+			<td rowspan="2" class="greyed">&nbsp;</td>
+			<td rowspan="2" class="greyed">&nbsp;</td>
+			<td rowspan="2" class="greyed">&nbsp;</td>
+			<td rowspan="2" class="greyed">&nbsp;</td>
+		</tr>
+		<tr>
+			<td>{{ rotorcraft.sic }}</td>
+			<td>{{ rotorcraft.sic_xc }}</td>
+			<td>{{ rotorcraft.sic_night }}</td>
+			<td>{{ rotorcraft.sic_night_l }}</td>
+		</tr>
+		
+		                                                {# POWERED LIFT ROW #}
+		
+		<tr>
+			<td rowspan="2">Powered<br />Lift</td>
+			<td rowspan="2">{{ pl.total }}</td>
+			<td rowspan="2">{{ pl.dual_r }}</td>
+			<td rowspan="2">{{ pl.solo }}</td>
+			<td rowspan="1">{{ pl.pic }}</td>
+			<td rowspan="2">{{ pl.xc_dual_r}}</td>
+			<td rowspan="2">{{ pl.xc_solo }}</td>
+			<td rowspan="1">{{ pl.xc_pic }}</td>
+			<td rowspan="2">{{ pl.instrument }}</td>
+			<td rowspan="2">{{ pl.night_dual_r }}</td>
+			<td rowspan="2">{{ pl.night_l }}</td>
+			<td rowspan="1">{{ pl.night_pic }}</td>
+			<td rowspan="1">{{ pl.night_l_pic }}</td>
+			<td rowspan="2" class="greyed">&nbsp;</td>
+			<td rowspan="2" class="greyed">&nbsp;</td>
+			<td rowspan="2" class="greyed">&nbsp;</td>
+			<td rowspan="2" class="greyed">&nbsp;</td>
+		</tr>
+		<tr>
+			<td>{{ pl.sic }}</td>
+			<td>{{ pl.sic_xc }}</td>
+			<td>{{ pl.sic_night }}</td>
+			<td>{{ pl.sic_night_l }}</td>
+		</tr>
+		                                                {# GLIDER ROW #}
+
+		<tr>
+			<td rowspan="2">Gliders</td>
+			<td rowspan="2">{{ glider.total }}</td>
+			<td rowspan="2">{{ glider.dual_r }}</td>
+			<td rowspan="2">{{ glider.solo }}</td>
+			<td rowspan="1">{{ glider.pic }}</td>
+			<td rowspan="2">{{ glider.xc_dual_r}}</td>
+			<td rowspan="2">{{ glider.xc_solo }}</td>
+			<td rowspan="1">{{ glider.xc_pic }}</td>
+			<td rowspan="2" class="greyed">&nbsp;</td>
+			<td rowspan="2" class="greyed">&nbsp;</td>
+			<td rowspan="2" class="greyed">&nbsp;</td>
+			<td rowspan="2" class="greyed">&nbsp;</td>
+			<td rowspan="2" class="greyed">&nbsp;</td>
+			<td rowspan="2">&nbsp;</td>
+			<td rowspan="2">&nbsp;</td>
+			<td rowspan="2">&nbsp;</td>
+			<td rowspan="2">&nbsp;</td>
+		</tr>
+		<tr>
+		    <td style="display:none"></td>
+		</tr>
+		
+		                                             {# LIGHTER THAN AIR ROW #}
+		
+		<tr>
+			<td rowspan="2">Lighter Than Air</td>
+			<td rowspan="2">{{ lta.total }}</td>
+			<td rowspan="2">{{ lta.dual_r }}</td>
+			<td rowspan="2">{{ lta.solo }}</td>
+			<td rowspan="1">{{ lta.pic }}</td>
+			<td rowspan="2">{{ lta.xc_dual_r}}</td>
+			<td rowspan="2">{{ lta.xc_solo }}</td>
+			<td rowspan="1">{{ lta.xc_pic }}</td>
+			<td rowspan="2">{{ lta.instrument }}</td>
+			<td rowspan="2">{{ lta.night_dual_r }}</td>
+			<td rowspan="2">{{ lta.night_l }}</td>
+			<td rowspan="2" class="greyed">&nbsp;</td>
+			<td rowspan="2" class="greyed">&nbsp;</td>
+			<td rowspan="2">&nbsp;&nbsp;</td>
+			<td rowspan="2" class="greyed">&nbsp;</td>
+			<td rowspan="2" class="greyed">&nbsp;</td>
+			<td rowspan="2" class="greyed">&nbsp;</td>
+		</tr>
+		<tr>
+		    <td style="display:none"></td>
+		</tr>
+
+		                                                {# SIMULATOR ROW #}
+
+		<tr>
+			<td rowspan="1">Simulator</td>
+			<td rowspan="3" class="greyed">&nbsp;</td>
+			<td rowspan="1">{{ sim.dual_r }}</td>
+			<td rowspan="3" class="greyed">&nbsp;</td>
+			<td rowspan="3" class="greyed">&nbsp;</td>
+			<td rowspan="3" class="greyed">&nbsp;</td>
+			<td rowspan="3" class="greyed">&nbsp;</td>
+			<td rowspan="3" class="greyed">&nbsp;</td>
+			<td rowspan="1">{{ sim.inst }}</td>
+			<td rowspan="3" class="greyed">&nbsp;</td>
+			<td rowspan="3" class="greyed">&nbsp;</td>
+			<td rowspan="3" class="greyed">&nbsp;</td>
+			<td rowspan="3" class="greyed">&nbsp;</td>
+			<td rowspan="3" class="greyed">&nbsp;</td>
+			<td rowspan="3" class="greyed">&nbsp;</td>
+			<td rowspan="3" class="greyed">&nbsp;</td>
+			<td rowspan="3" class="greyed">&nbsp;</td>
+		</tr>
+		<tr>
+			<td rowspan="1">FTD</td>
+			<td rowspan="1">{{ ftd.dual_r }}</td>
+			<td rowspan="1">{{ ftd.inst }}</td>
+		</tr>
+		<tr>
+			<td rowspan="1">PCATD</td>
+			<td rowspan="1">{{ pcatd.dual_r }}</td>
+			<td rowspan="1">{{ pcatd.inst }}</td>
+
+		</tr>
+	</tbody>
+
+
+</table>
+{% endautoescape %}
+{% endblock %}
