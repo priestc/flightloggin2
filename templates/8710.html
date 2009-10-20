@@ -42,7 +42,7 @@
 			<td rowspan="2">{{ airplane.xc_dual_r }}</td>
 			<td rowspan="2">{{ airplane.xc_solo }}</td>
 			<td rowspan="1">{{ airplane.xc_pic }}</td>
-			<td rowspan="2">{{ airplane.instrument }}</td>
+			<td rowspan="2">{{ airplane.inst }}</td>
 			<td rowspan="2">{{ airplane.night_dual_r }}</td>
 			<td rowspan="2">{{ airplane.night_l }}</td>
 			<td rowspan="1">{{ airplane.night_pic }}</td>
@@ -70,7 +70,7 @@
 			<td rowspan="2">{{ rotorcraft.xc_dual_r }}</td>
 			<td rowspan="2">{{ rotorcraft.xc_solo }}</td>
 			<td rowspan="1">{{ rotorcraft.xc_pic }}</td>
-			<td rowspan="2">{{ rotorcraft.instrument }}</td>
+			<td rowspan="2">{{ rotorcraft.inst }}</td>
 			<td rowspan="2">{{ rotorcraft.night_dual_r }}</td>
 			<td rowspan="2">{{ rotorcraft.night_l }}</td>
 			<td rowspan="1">{{ rotorcraft.night_pic }}</td>
@@ -98,7 +98,7 @@
 			<td rowspan="2">{{ pl.xc_dual_r}}</td>
 			<td rowspan="2">{{ pl.xc_solo }}</td>
 			<td rowspan="1">{{ pl.xc_pic }}</td>
-			<td rowspan="2">{{ pl.instrument }}</td>
+			<td rowspan="2">{{ pl.inst }}</td>
 			<td rowspan="2">{{ pl.night_dual_r }}</td>
 			<td rowspan="2">{{ pl.night_l }}</td>
 			<td rowspan="1">{{ pl.night_pic }}</td>
@@ -121,10 +121,10 @@
 			<td rowspan="2">{{ glider.total }}</td>
 			<td rowspan="2">{{ glider.dual_r }}</td>
 			<td rowspan="2">{{ glider.solo }}</td>
-			<td rowspan="1">{{ glider.pic }}</td>
+			<td rowspan="2">{{ glider.pic }}</td>
 			<td rowspan="2">{{ glider.xc_dual_r}}</td>
 			<td rowspan="2">{{ glider.xc_solo }}</td>
-			<td rowspan="1">{{ glider.xc_pic }}</td>
+			<td rowspan="2">{{ glider.xc_pic }}</td>
 			<td rowspan="2" class="greyed">&nbsp;</td>
 			<td rowspan="2" class="greyed">&nbsp;</td>
 			<td rowspan="2" class="greyed">&nbsp;</td>
@@ -146,16 +146,16 @@
 			<td rowspan="2">{{ lta.total }}</td>
 			<td rowspan="2">{{ lta.dual_r }}</td>
 			<td rowspan="2">{{ lta.solo }}</td>
-			<td rowspan="1">{{ lta.pic }}</td>
+			<td rowspan="2">{{ lta.pic }}</td>
 			<td rowspan="2">{{ lta.xc_dual_r}}</td>
 			<td rowspan="2">{{ lta.xc_solo }}</td>
-			<td rowspan="1">{{ lta.xc_pic }}</td>
-			<td rowspan="2">{{ lta.instrument }}</td>
+			<td rowspan="2">{{ lta.xc_pic }}</td>
+			<td rowspan="2">{{ lta.inst }}</td>
 			<td rowspan="2">{{ lta.night_dual_r }}</td>
 			<td rowspan="2">{{ lta.night_l }}</td>
 			<td rowspan="2" class="greyed">&nbsp;</td>
 			<td rowspan="2" class="greyed">&nbsp;</td>
-			<td rowspan="2">&nbsp;&nbsp;</td>
+			<td rowspan="2">{{ lta.num_of_flights }}</td>
 			<td rowspan="2" class="greyed">&nbsp;</td>
 			<td rowspan="2" class="greyed">&nbsp;</td>
 			<td rowspan="2" class="greyed">&nbsp;</td>
@@ -164,7 +164,7 @@
 		    <td style="display:none"></td>
 		</tr>
 
-		                                                {# SIMULATOR ROW #}
+		                                                {# SIMULATOR TRI-ROW #}
 
 		<tr>
 			<td rowspan="1">Simulator</td>
