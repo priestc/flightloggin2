@@ -8,6 +8,8 @@
     table#est td.greyed      {background: #CCCCCC}
     table#est                {border: 1px solid black; font-size: x-small}
     table#est td             {border: 1px solid gray}
+    div#instruction ul       {text-align: left}
+    div#instruction li       {margin: 8px}
 </style>
 {% autoescape off %}
 <table summary="8710 Data" id="est">
@@ -203,5 +205,34 @@
 
 
 </table>
+<div id='instruction'>
+    <h2>How each field is calculated</h2>
+
+    <ul>
+        <li>All values in the 'Airplane' row is a calculated from time logged in
+        planes marked as either "Airplane/SEL", "Airplane/MEL", "Airplane/SES", or
+        "Airplane/MES". Any other flights are ignored, including Airplane/Simulator
+        and planes with an unknown category/class. The rest of the rows are
+        calculated in the same manner.</li>
+            
+        <li>"Total", "Instruction Received", "Solo", "Pilot in Command (PIC)", and
+        "Night Take-off/Landings" are calculated exactly as they are entered.
+        
+        <li>"Cross Country Instruction Recieved", and "Night Instruction Received"
+        are calculated by first removing all flights where Dual Received is not
+        logged. From the flights remaining, it calculates the total Cross
+        Country and Night for these flights. The same method is used for
+        "Cross Country Solo", "Cross Country PIC", "Night Take-off/Landings
+        PIC", "Night PIC", and all the SIC fields. This assumes, for insatnce,
+        that <em>all</em> Cross Country time logged in a flight where PIC time
+        is also logged is what the FAA defines as "Cross Country PIC".</li>
+        
+        <li>"Instrument" time is calculated by adding "Simulated Instrument" with 
+        "Actual Instrument".</li>
+        
+    </ul>
+</div>
+    
+    
 {% endautoescape %}
 {% endblock %}
