@@ -179,14 +179,16 @@ def mass_edit(request, shared, display_user, page=0):
         
     if request.POST.get('submit'):
         formset = NewFlightFormset(request.POST, queryset=qs,
-        planes_queryset=Plane.objects.user_common(display_user.id))
+                    planes_queryset=Plane.objects.user_common(display_user)
+                  )
         
         if formset.is_valid():
             formset.save()
             return HttpResponseRedirect('/%s/logbook.html' % display_user)
     else:
         formset = NewFlightFormset(queryset=qs,
-                    planes_queryset=Plane.objects.user_comon(display_user.id))
+                    planes_queryset=Plane.objects.user_common(display_user),
+                  )
     
     return locals()
 

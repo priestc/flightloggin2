@@ -8,4 +8,4 @@ class QuerySet(QuerySet):
         return self.filter(user=u)
     
     def user_common(self, u):
-        return self.filter(user__in=(1, u) )
+        return self.filter(user__in=(1, u.id) )

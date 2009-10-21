@@ -2,11 +2,6 @@ from annoying.decorators import render_to
 from django.db.models import Sum
 from logbook.models import Flight
 
-class SimLine(object):
-    pass
-
-
-
 class FormLine(object):
 
     cats = None
