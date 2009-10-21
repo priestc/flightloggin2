@@ -10,64 +10,6 @@ class PrepareLine(object):
         self.get_values()
         
         self.line_type = self.determine_type()
-        
-    def output(self):
-        """Returns the dict based on the line type, and the line type as well
-        """
-        # call the proper outout method depending on the line type
-        return self.line_type, getattr(self, "dict_%s" % self.line_type)()
-    
-    def dict_nonflight(self):
-        """Create the dict as if it were a nonflight
-        """
-        output = {}
-        for field in ('date', 'remarks', 'non_flying'):
-            dic = self.clean_field(field)
-            output.update(dic)
-            
-        return output
-    
-    def dict_records(self):
-        """Create the dict as if it were a records
-        """
-        
-        return {'records': self.tailnumber.replace('\\r', '\n')}
-    
-    def dict_plane(self):
-        """Create the dict as if it were a plane
-        """
-        from constants import PLANE_HEADERS, PLANE_MAP
-        output = {}
-        for field in PLANE_HEADERS:
-            dic = {field: getattr(self, PLANE_MAP[field])}
-            output.update(dic)
-        
-        ## translate the 'RT' column (flightloggin 1.0) to the proper tags
-        if "R" in output['RT'] and "TYPE RATING" not in output['tags'].upper():
-            output['tags'] += ', Type Rating'
-            
-        if "T" in output['RT'] and "TAILWHEEL" not in output['tags'].upper():
-            output['tags'] += ', Tailwheel'
-            
-        del output['RT']
-            
-        return output
-        
-    def dict_flight(self):
-        """Create the dict as if it were a flight
-        """
-        
-        output = {}
-        for field in CSV_FIELDS:
-            dic = self.clean_field(field)
-            output.update(dic)
-        
-        # we dont need these anymore, get rid of them
-        del output['via']
-        del output['to']
-        del output['from_']
-               
-        return output
     
     def clean_field(self, field):
         func = getattr(self, "figure_%s" % field, "")
@@ -167,7 +109,8 @@ class PrepareLine(object):
             return {'holding': True}
         
     #-----------------------------
-        
+    
+    @property    
     def is_sim(self):
         """if there is only a sim column, but not a total column, then
            its a sim flight """
@@ -197,6 +140,8 @@ class PrepareLine(object):
         else:
             return {'route': ''}
 
+    #-----------------------------
+
     def figure_flying(self):
         """Set the proper flying column variables
         """
@@ -217,6 +162,8 @@ class PrepareLine(object):
             self.ipc = True
     
         return {} # must return a dict of some sort
+
+    #-----------------------------
     
     def figure_non_flying(self):
         """Translates old non_flying codes to the new system
@@ -229,14 +176,14 @@ class PrepareLine(object):
         
         new_number = NON_FLIGHT_TRANSLATE_NUM[self.non_flying]
         return {'non_flying': new_number}
-            
-    
-    
-    
-    
-    
     
     #-----------------------------
+    
+    def figure_total(self):
+        if self.is_sim:
+            return {'total': self.sim}
+        else:
+            return {'total': self.total}
         
     def determine_type(self):
         """Determines what kind of entry this line is based on the special
@@ -256,9 +203,67 @@ class PrepareLine(object):
         
         else:
             return "flight"
+    
+    ###########################################################################
+    ###########################################################################
         
+    def output(self):
+        """Returns the dict based on the line type, and the line type as well
+        """
+        # call the proper outout method depending on the line type
+        return self.line_type, getattr(self, "dict_%s" % self.line_type)()
+    
+    def dict_nonflight(self):
+        """Create the dict as if it were a nonflight
+        """
+        output = {}
+        for field in ('date', 'remarks', 'non_flying'):
+            dic = self.clean_field(field)
+            output.update(dic)
+            
+        return output
+    
+    def dict_records(self):
+        """Create the dict as if it were a records
+        """
         
-
+        return {'records': self.tailnumber.replace('\\r', '\n')}
+    
+    def dict_plane(self):
+        """Create the dict as if it were a plane
+        """
+        from constants import PLANE_HEADERS, PLANE_MAP
+        output = {}
+        for field in PLANE_HEADERS:
+            dic = {field: getattr(self, PLANE_MAP[field])}
+            output.update(dic)
+        
+        ## translate the 'RT' column (flightloggin 1.0) to the proper tags
+        if "R" in output['RT'] and "TYPE RATING" not in output['tags'].upper():
+            output['tags'] += ', Type Rating'
+            
+        if "T" in output['RT'] and "TAILWHEEL" not in output['tags'].upper():
+            output['tags'] += ', Tailwheel'
+            
+        del output['RT']
+            
+        return output
+        
+    def dict_flight(self):
+        """Create the dict as if it were a flight
+        """
+        
+        output = {}
+        for field in CSV_FIELDS:
+            dic = self.clean_field(field)
+            output.update(dic)
+        
+        # we dont need these anymore, get rid of them
+        del output['via']
+        del output['to']
+        del output['from_']
+               
+        return output
 
 
 
