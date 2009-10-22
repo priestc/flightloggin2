@@ -37,8 +37,9 @@ class BaseImport(object):
         self.non_out = []
         
     def make_filename(self):
-        return "%s/%s-%s.txt" %\
+        return "%s/%s-%s-%s.txt" %\
                 (UPLOADS_DIR,
+                 self.user.id,
                  datetime.datetime.now().microsecond,
                  self.user.username)
         
@@ -150,9 +151,12 @@ class BaseImport(object):
         # find all files in teh directory that have the user's username in the
         # filename
         hits=[]
+        st = "%s-" % self.user.id
         for filename in filenames:
-            if self.user.username in filename:
+            if filename.startswith(st):
                 hits.append(filename)
+        
+        print hits
         
         # no file found
         if len(hits) == 0:
@@ -170,11 +174,11 @@ class BaseImport(object):
             full_fn = UPLOADS_DIR + "/" + filename
             new_modified = os.path.getmtime(full_fn)
             if new_modified > modified:
-                new_modified = modified
+                modified = new_modified
                 our_file = full_fn
                 
-            
-        return open(full_fn)
+        #print full_fn   
+        return open(our_file)
         
         
 
