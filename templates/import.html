@@ -87,15 +87,15 @@ $(document).ready(function() {
     </div>
     {% endif %}
 
-    {% if error %}
-        <big style="color: red">Error: Not a valid CSV file</big>
+    Select a file to upload, or leave blank to use the last file you uploaded.<br />
+
+    {% if InvalidError %}
+        <br /><big style="color: red">Error: Not a valid CSV file</big>
     {% endif %}
     
-    {% if empty %}
-        <big style="color: red">You must select a file to upload</big>
+    {% if NoFile %}
+        <br /><big style="color: red">Could not find file.</big>
     {% endif %}
-    
-    Select a file to upload, or leave blank to use the last file you uploaded.
     
     <form id="upform" action="{% url import display_user %}" method="post" enctype="multipart/form-data">
     <div>

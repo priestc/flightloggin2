@@ -10,6 +10,13 @@ from django.conf import settings
 UPLOADS_DIR = settings.PROJECT_PATH + "/uploads"
 
 class BaseImport(object):
+    
+    class NoFileError(Exception):
+        pass
+    
+    class InvalidCSVError(Exception):
+        pass
+    
     def __init__(self, user, f=None):
         
         self.user = user
@@ -22,7 +29,7 @@ class BaseImport(object):
             self.save_file()
             
         if not self.f:
-            raise RuntimeError
+            raise self.NoFileError
         
         self.flight_out = []
         self.plane_out = []
@@ -51,7 +58,11 @@ class BaseImport(object):
         
     def get_dialect(self):
         self.do_pre()
-        return csv.Sniffer().sniff(self.pre)
+        try:
+            return csv.Sniffer().sniff(self.pre)
+        except:
+            raise self.InvalidCSVError
+        
         
     def get_dict_reader(self):
         """makes a dictreader that is seek'd to the first valid line of data"""
@@ -149,7 +160,7 @@ class BaseImport(object):
         
         # one file found, open that filename, and return it
         if len(hits) == 1:
-            return open()
+            return open(UPLOADS_DIR + "/" + hits[0])
         
         
         # more than one file found, return the last modified one
