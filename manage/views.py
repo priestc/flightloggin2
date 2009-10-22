@@ -18,8 +18,7 @@ def import_v(request, shared, display_user):
         if fileform.is_valid():
             f = request.FILES['file']
         else:
-            empty=True
-            return locals()
+            f = None
         
         if request.POST['submit'] == 'Import':
             im = DatabaseImport(display_user, f)

@@ -14,7 +14,7 @@ def maps(request, shared, display_user):
     return locals()
 
 def airports_kml(request, shared, display_user, type_):
-    import settings
+    from django.conf import settings
     from utils import AirportFolder 
     from airport.models import Location
     

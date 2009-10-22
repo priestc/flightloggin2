@@ -6,17 +6,34 @@ from logbook.models import Flight
 from records.models import Records, NonFlight
 from plane.models import Plane
 
+from django.conf import settings
+UPLOADS_DIR = settings.PROJECT_PATH + "/uploads"
+
 class BaseImport(object):
-    def __init__(self, user, f):
-        self.f = f
+    def __init__(self, user, f=None):
+        
         self.user = user
+        
+        if not f:
+            self.f = self.find_already_uploaded_file()
+            print self.f
+        else:
+            self.f = f
+            self.save_file()
+            
+        if not self.f:
+            raise RuntimeError
         
         self.flight_out = []
         self.plane_out = []
         self.records_out = []
         self.non_out = []
         
-        self.save_file()
+    def make_filename(self):
+        return "%s/%s-%s.txt" %\
+                (UPLOADS_DIR,
+                 datetime.datetime.now().microsecond,
+                 self.user.username)
         
     def do_pre(self):
         """get the first 10,000 characters of the file for preview purposes"""
@@ -26,7 +43,6 @@ class BaseImport(object):
         
     def save_file(self):
         filename = self.make_filename()
-        print filename
         dest = open(filename, 'wb+')
         
         for chunk in self.f.chunks():
@@ -116,17 +132,44 @@ class BaseImport(object):
                                           
         self.non_flight_header = "<tr class=\"header\">" + "".join(nh) + "</tr>"
         
+    def find_already_uploaded_file(self):
+        import os
+        filenames = os.listdir(UPLOADS_DIR)
+        
+        # find all files in teh directory that have the user's username in the
+        # filename
+        hits=[]
+        for filename in filenames:
+            if self.user.username in filename:
+                hits.append(filename)
+        
+        # no file found
+        if len(hits) == 0:
+            return None
+        
+        # one file found, open that filename, and return it
+        if len(hits) == 1:
+            return open()
+        
+        
+        # more than one file found, return the last modified one
+        modified = 0
+        our_file = None
+        for filename in hits:
+            full_fn = UPLOADS_DIR + "/" + filename
+            new_modified = os.path.getmtime(full_fn)
+            if new_modified > modified:
+                new_modified = modified
+                our_file = full_fn
+                
+            
+        return open(full_fn)
+        
+        
 
 ###############################################################################
 
 class PreviewImport(BaseImport):
-        
-    def make_filename(self):
-        import settings
-        return "%s/uploads/%s-%s-p.txt" %\
-                (settings.PROJECT_PATH,
-                 datetime.datetime.now().microsecond,
-                 self.user.username)
 
     def handle_flight(self, line, submit=None):
         
@@ -172,14 +215,6 @@ class PreviewImport(BaseImport):
 
 
 class DatabaseImport(PreviewImport):
-    
-    def make_filename(self):
-        """rename the file"""
-        import settings
-        return "%s/uploads/%s%s.txt" %\
-                (settings.PROJECT_PATH,
-                 datetime.datetime.now().microsecond,
-                 self.user.username)
                  
     def handle_flight(self, line):
         from forms import ImportFlightForm

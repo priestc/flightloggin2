@@ -1,4 +1,4 @@
-import settings
+from django.conf import settings
 
 def css_path(request):
     try:
