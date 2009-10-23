@@ -9,14 +9,19 @@ body                    {background: #C0FFBB; margin: 15px; margin-top:0px; padd
 #advert_box             {float: right; height:60px}
 #logged_in_as           {float: right; text-align: right; font-weight: 700; color: #001147; width: 100%; border: 0}
 
-#nav_bar                {background: #001147; border: 0px; width: 100%; float: left}
-#nav_bar td             {width: 8.3%; text-align: center}
+
+#nav_bar                {background: #001147; border: 0px; width: 100%; float: left;
+                         color: white; padding: 0 5px 0 5px; border: 1px solid #001147}
+
 
 /* navbar for users who are not logged in */
-td.nav_bar_not          {width: 33%}
 
-#nav_bar a              {color: white; font-weight: normal; text-decoration: none}
+#nav_bar a              {color: white; font-weight: normal;
+                         text-decoration: none; margin-left: 5px; margin-right: 5px}
+                         
 #nav_bar a:hover        {color: #7DFF72; font-weight: normal; text-decoration: underline}
+
+#nav_bar .big           {font-size: large}
 
 .nav_selected           {background: #81d38f}
 .nav_selected a         {color: black !important}

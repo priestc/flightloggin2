@@ -62,73 +62,75 @@
 				
 				
 				    &nbsp;  {# so the space doesnt collapse #}
+				    
+		    
             </div>
-			<table id="nav_bar" summary="Top navigation bar">
-				<tr>
-                {% if display_user %}
-                    <td class="{% block logbook-sel %}{% endblock%}" >
-                        <a href="{% url logbook display_user.username %}">Flights</a>
-                    </td>
-                    
-                    <td class="{% block planes-sel %}{% endblock%}" >
-                        <a href="{% url planes display_user.username %}">Planes</a>
-                    </td>
-                    
-                    <td class="{% block events-sel %}{% endblock%}" >
-                        <a href="{% url events display_user.username %}">Events</a>
-                    </td>
-                    
-                    <td class="{% block places-sel %}{% endblock%}" >
-                        <a href="{% url places display_user.username %}">Places</a>
-                    </td>
-                    
-                    <td class="{% block graphs-sel %}{% endblock%}" >
-                        <a href="{% url graphs display_user.username %}">Graphs</a>
-                    </td>
-                    
-                    <td class="{% block maps-sel %}{% endblock%}" >
-                        <a href="{% url maps display_user.username %}">Maps</a>
-                    </td>
+            
+            {% if display_user %}
+			<div id="nav_bar" summary="Top navigation bar">
+            
+                <span class="big {% block logbook-sel %}{% endblock%}" >
+                <a href="{% url logbook display_user.username %}">Flights</a></span>
+                
+                &#8226;
+                
+                <span class="big {% block planes-sel %}{% endblock%}" >
+                <a href="{% url planes display_user.username %}">Planes</a></span>
+                
+                &#8226;
+                
+                <span class="big {% block events-sel %}{% endblock%}" >
+                <a href="{% url events display_user.username %}">Events</a></span>
+                
+                &#8226;
+                
+                <span class="big {% block places-sel %}{% endblock%}" >
+                <a href="{% url places display_user.username %}">Locations</a></span>
+                
+                &#8226;
+                 
+                <span class="big {% block records-sel %}{% endblock%}" >
+                <a href="{% url records display_user.username %}">Records</a></span>
+                
+                <br>
+                
+                <span class="{% block graphs-sel %}{% endblock%}" >
+                <a href="{% url graphs display_user.username %}">Graphs</a></span>
+                
+                <span class="{% block maps-sel %}{% endblock%}" >
+                <a href="{% url maps display_user.username %}">Maps</a></span>
+                
+                <span class="{% block est-sel %}{% endblock%}" >
+                <a href="{% url est display_user.username %}">8710</a></span>
+                
+                <span class="{% block sigs-sel %}{% endblock%}" >
+                <a href="{% url sigs display_user.username %}">Sigs</a></span>
 
-                    <td class="{% block records-sel %}{% endblock%}" >
-                        <a href="{% url records display_user.username %}">Records</a>
-                    </td>
-                    
-                    <td class="{% block sigs-sel %}{% endblock%}" >
-                        <a href="{% url sigs display_user.username %}">Sigs</a>
-                    </td>
+                <span class="{% block currency-sel %}{% endblock%}" >
+                <a href="{% url currency display_user.username %}">Currency</a></span>
+                
+                {% if not shared %}
+                <span class="{% block mass-sel %}{% endblock%}" >
+                <a href="{% url mass-entry display_user.username %}">Mass Entry</a></span>
 
-                    <td class="{% block currency-sel %}{% endblock%}" >
-                        <a href="{% url currency display_user.username %}">Currency</a>
-                    </td>
-                    
-                    {% if not shared %}
-                    <td class="{% block mass-sel %}{% endblock%}" >
-                        <a href="{% url mass-entry display_user.username %}">Mass Entry</a>
-                    </td>
-
-                    <td class="{% block import-sel %}{% endblock%}" >
-                        <a href="{% url import display_user.username %}">Import/Export</a>
-                    </td>
-                    {% endif %}
-                    
-                    {% if not shared %}
-                    <td class="{% block profile-sel %}{% endblock%}" >
-                        <a href="{% url profile display_user.username %}">Preferences</a>
-                    </td>
-                    {% endif %}
-                    
-                {% else %}
-                    <td class="nav_bar_not" >
-                        <a href="/openid/login">Sign-in/Register</a>
-                    </td>
+                <span class="{% block import-sel %}{% endblock%}" >
+                <a href="{% url import display_user.username %}">Import/Export</a></span>
                 {% endif %}
                 
+                {% if not shared %}
+                <span class="{% block profile-sel %}{% endblock%}" >
+                <a href="{% url profile display_user.username %}">Preferences</a></span>
+                {% endif %}
                 
-				</tr>
-			</table>
+            
+			</div>
+			{% endif %}
+			
+			
 		</div>
-
+        
+        
+        
         <div id="main_content">
             {% block no_canvas %}
 

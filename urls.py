@@ -132,7 +132,7 @@ urlpatterns += patterns('',
     url(
         r'^(?P<username>\w+)/8710.html$',
         "auto8710.views.auto8710",
-        name="8710",
+        name="est",
     ),
     
     url(
