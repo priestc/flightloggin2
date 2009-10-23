@@ -453,6 +453,8 @@ class MakeRoute(object):
            it adds it to the user's custom list.
         """
         
+        ident = ident[:8]
+        
         if force:
             cu,cr = Location.objects.get_or_create(user=self.user,
                                                   loc_class=3,
