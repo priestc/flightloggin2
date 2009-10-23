@@ -11,7 +11,7 @@ body                    {background: #C0FFBB; margin: 15px; margin-top:0px; padd
 
 
 #nav_bar                {background: #001147; border: 0px; width: 100%; float: left;
-                         color: white; padding: 0 5px 0 5px; border: 1px solid #001147}
+                         color: white; padding: 0; border: 1px solid #001147}
 
 
 /* navbar for users who are not logged in */
@@ -59,7 +59,7 @@ input[type=text]:disabled {background-color: #DDDDDD; color: #777777; border: 1p
 #footer                 {text-align:center; font-size: x-small; color: gray;
                          border: 0px solid black; width: 100%;}
                          
-/*****table for events, planes, and places *********/
+/***** table for events, planes, and places *********/
 
 table.minor_table                     {width: 100%; border-collapse: collapse}
 
