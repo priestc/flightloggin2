@@ -146,6 +146,9 @@ class PrepareLine(object):
         """Set the proper flying column variables
         """
         
+        if not self.flying:
+            return {}
+        
         if "P" in self.flying:
             self.pilot_checkride = True
     
