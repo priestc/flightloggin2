@@ -3,8 +3,13 @@ from classes import ProgressGraph
 from annoying.decorators import render_to
 
 def graph_image(request, shared, display_user, columns, dates=None, ext='png'):
-    return ProgressGraph(display_user, columns, dates).as_png()
-
+    
+    pg = ProgressGraph(display_user, columns, dates)
+    
+    if ext == 'png':
+        return pg.as_png()
+    else:
+        return pg.as_svg()
 
 @render_to('graphs.html')
 def graphs(request, shared, display_user):
