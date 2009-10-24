@@ -3,27 +3,26 @@ import os, sys
 import csv, re
 from psycopg2 import IntegrityError
 from airport.models import Location, Region, Country
-from django.contrib.gis.geos import Point
 
-project_name = sys.argv[1]
+THIS_PATH = "/home/chris/Websites/flightloggin/airport/fixtures/"
 
-THIS_PATH = "/home/chris/Websites/" + project_name + "/airport/fixtures/"
-
+from django.contrib.auth.models import User
+ALL_USER = User(pk=1)
+    
 #######################################################################
 
 def main():
     print "Importing Countries..."
-    countries()
+    #countries()
 
     print "Importing Regions..."
-    regions()
+    #regions()
     
     print "Importing Airports..."
-    airports()
+    #airports()
     
-    if project_name == "flightloggin": 
-        print "Importing Navaids..."
-        navaids()
+    print "Importing Navaids..."
+    navaids()
     
 #######################################################################
 
@@ -43,14 +42,15 @@ def airports():   #import airport
     count2=0
     count_to = 0
 
-    types = {       '': 0,
-                    'balloonport': 7,
-                    'closed': 4,
-                    'heliport': 5,
-                    'large_airport': 3,
-                    'medium_airport': 2,
-                    'seaplane_base': 6,
-                    'small_airport': 1,
+    types = {
+               '': 0,
+               'balloonport': 7,
+               'closed': 4,
+               'heliport': 5,
+               'large_airport': 3,
+               'medium_airport': 2,
+               'seaplane_base': 6,
+               'small_airport': 1,
             }
 
     for line in reader:
@@ -73,31 +73,38 @@ def airports():   #import airport
         country= line["iso_country"].upper()
         city =   line["municipality"]
         region = line["iso_region"].upper()
+        idd =    line['id']
         
         if elev == "":
             elev=None
 
         ##########################
 
-        if ident[:2].upper() == "X-":           ## throw out all closed airports with "X" identifiers
+        ## throw out all closed airports with "X" identifiers
+        if ident[:2].upper() == "X-":
             throw_out = True
 
-        if country == "US":                                     ## US AIRPORTS
-            if ident[0] == "K":                             ## STARTS WITH K
-                if re.search("[0-9]", ident):           ## HAS NUMBER
-                    ident = ident[1:]               ## get rid of the K
+                                           
+            if (country == "US"                   ## US AIRPORTS
+               and ident.startswith("K")          ## STARTS WITH K
+               and len(ident) == 4                ## IS 4 LETTERS LONG
+               and re.search("[0-9]", ident)      ## HAS NUMBER
+               ):
+                    ident = ident[1:]    ## get rid of the K
 
         if ident[:3] == "US-":
             if local:
                 ident = local
             else:
-                ident = ident[3:]                       ## get rid of the "US-" part
+                ident = ident[3:]                ## get rid of the "US-" part
 
 
         if not throw_out:
 
             try:
                 p, created = Location.objects.get_or_create(
+                    pk=            idd,
+                    user=          ALL_USER,
                     loc_class=     1,
                     identifier=    ident,
                     name=          name,
@@ -105,8 +112,8 @@ def airports():   #import airport
                     municipality=  city,
                     country=       Country.objects.get(code=country),
                     elevation=     elev,
-                    location=      Point(float(lng), float(lat)),
-                    loc_type=      types[type_]
+                    location=      "POINT (%s %s)" % (float(lng), float(lat)),
+                    loc_type=      types[type_],
                 )
                 
                 count2 += 1
@@ -174,7 +181,6 @@ def countries():   #import country
     reader = csv.DictReader(f, titles)
 
     count=0
-
     for line in reader:
 
         count += 1
@@ -230,12 +236,15 @@ def navaids():
         lng = line["longitude_deg"]
         type = line["type"]
         name = line["name"]
+        idd =  line['id']
         
         kwargs = {"loc_class":     2,
                   "identifier":    ident,
                   "name":          name,
                   "location":      'POINT (%s %s)' % (lng, lat),
                   "loc_type":      nav_types[type],
+                  "id":            idd,
+                  "user":          ALL_USER,
                  }
         
         try:
@@ -252,10 +261,6 @@ def navaids():
         
         except TypeError:
             print "type - %s" % ident
-            
-        except:
-            import pdb; pdb.set_trace()
-            print "total fail - %s" % ident
         
         
 ######################################################################################

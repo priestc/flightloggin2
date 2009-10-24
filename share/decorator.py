@@ -1,4 +1,5 @@
 from settings import SECRET_KEY
+from django.http import Http404
 
 class no_share(object):
     def __init__(self, view):
@@ -22,9 +23,11 @@ class secret_key(object):
         
         secret_key = request.GET.get('sk', '')
       
-        if not secret_key == "dong": #SECRET_KEY:
-            from django.http import Http404
+        if not secret_key:
             raise Http404('Need secret key')
+        
+        elif not secret_key == SECRET_KEY:
+            raise Http404('Secret key incorrect')
 
         return self.view(request, *args, **kwargs)
     

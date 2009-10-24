@@ -42,6 +42,11 @@ urlpatterns += patterns('',
         {'template': 'manage.html'},
     ),
     
+    (   
+        r'^clearlocations.py$',
+        'airport.views.clear',
+    ),
+    
     ############################ graphs
 
     (

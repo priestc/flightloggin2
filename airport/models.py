@@ -78,7 +78,7 @@ class Location(models.Model):
         """ if it's a custom, automatically look up to see which country and
         or state the custom location falls into"""
         
-        ## just save if it's not a custom point
+        ## just save if it's an airport
         if self.loc_class == 1:
             return super(Location,self).save()
         
@@ -95,23 +95,20 @@ class Location(models.Model):
             if country=='US':
                 state = None
                 # in the US, now find the state
-                try:
-                    state = getattr(
-                        USStates.objects.get(mpoly__contains=loc), 'state',''
-                    )
-                except USStates.DoesNotExist:
+                state = getattr(
+                  USStates.goon(mpoly__contains=loc), 'state',''
+                )
+                if not state:
                     print "NO STATE: %s" % self.identifier
                     
                 if state:   
-                    region = "US-%s" % state.upper() #FIXME
-                    self.region = Region.objects.get(code=region)
-        try:
-            getattr(self, "user", None).username
-        except:
-            #user is not set, we now must get the current logged in user
-            from share.middleware import share
-            self.user = share.get_display_user()
-        super(Location,self).save()
+                    region = state.upper()
+                else:
+                    region = "US-U-A"
+                    
+                self.region = Region.objects.get(code=region)
+            
+        return super(Location,self).save()
     
 ###############################################################################
     
@@ -192,6 +189,11 @@ class USStates(models.Model):
     
     def __unicode__(self):
         return self.name
+    
+    @classmethod
+    def goon(cls, *args, **kwargs):
+        from annoying.functions import get_object_or_None
+        return get_object_or_None(cls,  *args, **kwargs)
 
 
 

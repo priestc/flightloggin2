@@ -1,18 +1,18 @@
 from django.contrib.auth.decorators import login_required
-from annoying.decorators import render_to
-from django.shortcuts import get_object_or_404
+from share.decorator import secret_key
+from django.http import Http404, HttpResponse
 
-from models import *
-from main.models import Company, Operation
+from models import Location
 
 ################################
 
-@render_to('view_airport.html')
-def airport(request, pk):
+@secret_key
+def clear(request):
 
-    airport = get_object_or_404(Airport, pk=pk)
+    #select all locations that are owned by the common user (pk=1)
+    airports = Location.objects.filter(user__id=1)
 
-    company_base =  Company.objects.filter(operation__opbase__base=airport).distinct()         #ops where this airport is a base
-    ops_fly =       Operation.objects.filter(opbase__route__bases=airport).distinct()          #ops where this airport is part of a route
-
-    return locals()
+    airports.delete()
+    
+    return HttpResponse("%s locations deleted" % airports.count(),
+                        mimetype='text/plain')

@@ -229,8 +229,10 @@ class PrepareLine(object):
     def dict_records(self):
         """Create the dict as if it were a records
         """
-        
-        return {'records': self.tailnumber.replace('\\r', '\n')}
+        if self.tailnumber:
+            return {'records': self.tailnumber.replace('\\r', '\n')}
+        else:
+            return {'records': ''}
     
     def dict_plane(self):
         """Create the dict as if it were a plane

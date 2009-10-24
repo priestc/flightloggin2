@@ -7,7 +7,8 @@ def del_routes(request):
         
     count=Route.objects.filter(flight__pk__isnull=True).count()
     Route.objects.filter(flight__pk__isnull=True).delete()
-    return HttpResponse("%s routes deleted" % count)
+    return HttpResponse("%s routes deleted" % count,
+                        mimetype='text/plain')
 
 
 def easy_recalc_routes(request):
@@ -15,7 +16,8 @@ def easy_recalc_routes(request):
         assert False
         
     count = Route.easy_render_all()
-    return HttpResponse("%s routes 'easy' recalculated" % count)
+    return HttpResponse("%s routes 'easy' recalculated" % count,
+                        mimetype='text/plain')
 
 
 def hard_recalc_routes(request):
@@ -24,4 +26,5 @@ def hard_recalc_routes(request):
     from django.contrib.auth.models import User
     for u in User.objects.all():
         count += Route.hard_render_all(user=u)
-    return HttpResponse("%s routes 'hard' recalculated" % count)
+    return HttpResponse("%s routes 'hard' recalculated" % count,
+                        mimetype='text/plain')
