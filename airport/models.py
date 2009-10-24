@@ -107,7 +107,7 @@ class Location(models.Model):
                     region = "US-U-A"
                     
                 self.region = Region.objects.get(code=region)
-            
+           
         return super(Location,self).save()
     
 ###############################################################################

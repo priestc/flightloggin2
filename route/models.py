@@ -150,13 +150,13 @@ class Route(models.Model):
         return qs.count()
     
     @classmethod
-    def hard_render_user(cls, user=None, username=None):
+    def hard_render_user(cls, username=None, user=None):
         if username:
             from django.contrib.auth.models import User
             user=User.objects.get(username=username)
             
         from django.db.models import Max
-        qs = cls.objects.filter(flight__user=user, routebase__land__isnull=True)\
+        qs = cls.objects.filter(flight__user=user)\
                         .distinct()\
                         .annotate(fid=Max('flight__id'))
         for r in qs:

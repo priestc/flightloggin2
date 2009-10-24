@@ -25,7 +25,7 @@ fi
 
 echo ">>>>>>>>>>>> Clearing previous locations <<<<<<<<<<";
 
-wget -q -O - http://localhost:8000/clearlocations.py?sk=dongs;
+#wget -q -O - http://localhost:8000/clearlocations.py?sk=dongs;
 echo
 
 echo ">>>>>>>>>> Running Import script... <<<<<<<<<<<";

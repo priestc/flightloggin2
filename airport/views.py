@@ -11,8 +11,9 @@ def clear(request):
 
     #select all locations that are owned by the common user (pk=1)
     airports = Location.objects.filter(user__id=1)
-
+    c = airports.count()
+    
     airports.delete()
     
-    return HttpResponse("%s locations deleted" % airports.count(),
+    return HttpResponse("%s locations deleted" % c,
                         mimetype='text/plain')

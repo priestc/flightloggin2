@@ -13,13 +13,13 @@ ALL_USER = User(pk=1)
 
 def main():
     print "Importing Countries..."
-    countries()
+    #countries()
 
     print "Importing Regions..."
-    regions()
+    #regions()
     
     print "Importing Airports..."
-    airports()
+    #airports()
     
     print "Importing Navaids..."
     navaids()
@@ -102,25 +102,23 @@ def airports():   #import airport
 
         if not throw_out:
 
+
+            l = Location(
+                pk=            idd,
+                user=          ALL_USER,
+                loc_class=     1,
+                identifier=    ident,
+                name=          name,
+                region=        Region.goon(code=region, country=country),
+                municipality=  city,
+                country=       Country.objects.get(code=country),
+                elevation=     elev,
+                location=      "POINT (%s %s)" % (float(lng), float(lat)),
+                loc_type=      types[type_],
+            )
+                
             try:
-                p, created = Location.objects.get_or_create(
-                    pk=            idd,
-                    user=          ALL_USER,
-                    loc_class=     1,
-                    identifier=    ident,
-                    name=          name,
-                    region=        Region.goon(code=region, country=country),
-                    municipality=  city,
-                    country=       Country.objects.get(code=country),
-                    elevation=     elev,
-                    location=      "POINT (%s %s)" % (float(lng), float(lat)),
-                    loc_type=      types[type_],
-                )
-                
-                count2 += 1
-                
-                if not created:
-                    print "already - " + ident
+                l.save()
 
             except ValueError:
                 print "value - " + ident
@@ -131,7 +129,7 @@ def airports():   #import airport
             except TypeError:
                 print "type - " + ident
                 
-            
+            #print "already - " + ident
 
         else:
             count_to += 1
@@ -179,9 +177,10 @@ def navaids():
         lng = line["longitude_deg"]
         type = line["type"]
         name = line["name"]
-        idd =  line['id']
+        idd =  int(line['id']) + 100000   #to avoid collisions with airport pk's
         
-        kwargs = {"loc_class":     2,
+        kwargs = {
+                  "loc_class":     2,
                   "identifier":    ident,
                   "name":          name,
                   "location":      'POINT (%s %s)' % (lng, lat),
@@ -190,11 +189,10 @@ def navaids():
                   "user":          ALL_USER,
                  }
         
+        loc = Location(**kwargs)
+        
         try:
-            navaid, created = Location.objects.get_or_create(**kwargs)
-            
-            if not created:
-                print "already - %s" % ident
+            loc.save()
 
         except ValueError:
             print "value - %s" % ident
@@ -209,7 +207,8 @@ def navaids():
 
 def regions():   #import region
     """
-    id	code	local_code	name	continent	iso_country	wikipedia_link	keywords
+    id	code	local_code	name	continent	iso_country	wikipedia_link
+    keywords
     """
 
     path = os.path.join(THIS_PATH, 'regions.csv')
@@ -227,7 +226,9 @@ def regions():   #import region
         country = line["iso_country"].upper()
 
         try:
-            Region.objects.get_or_create(name=name, code=code, country=country, )
+            Region.objects.get_or_create(name=name,
+                                         code=code,
+                                         country=country)
         except:
             print code
 
@@ -258,7 +259,9 @@ def countries():   #import country
         continent = line["continent"].upper()
 
         try:
-            Country.objects.get_or_create(name=name, code=code, continent=continent)
+            Country.objects.get_or_create(name=name,
+                                          code=code,
+                                          continent=continent)
         except:
             print "error: " + code
 
