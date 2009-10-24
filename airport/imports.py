@@ -13,13 +13,13 @@ ALL_USER = User(pk=1)
 
 def main():
     print "Importing Countries..."
-    #countries()
+    countries()
 
     print "Importing Regions..."
-    #regions()
+    regions()
     
     print "Importing Airports..."
-    #airports()
+    airports()
     
     print "Importing Navaids..."
     navaids()
@@ -85,14 +85,15 @@ def airports():   #import airport
             throw_out = True
 
                                            
-            if (country == "US"                   ## US AIRPORTS
-               and ident.startswith("K")          ## STARTS WITH K
-               and len(ident) == 4                ## IS 4 LETTERS LONG
-               and re.search("[0-9]", ident)      ## HAS NUMBER
+        if country == "US":
+            if (ident.startswith("K")              ## STARTS WITH K
+                and len(ident) == 4                ## IS 4 LETTERS LONG
+                and re.search("[0-9]", ident)      ## HAS NUMBER
                ):
-                    ident = ident[1:]    ## get rid of the K
+                   
+                ident = ident[1:]    ## get rid of the K
 
-        if ident[:3] == "US-":
+        if ident.startswith("US-"):
             if local:
                 ident = local
             else:
@@ -139,66 +140,8 @@ def airports():   #import airport
     print "success:    " + str(count2)
     print "thrown out: " + str(count_to)
 
-######################################################################################
+###############################################################################
 
-def regions():   #import region
-    """
-    id	code	local_code	name	continent	iso_country	wikipedia_link	keywords
-    """
-
-    path = os.path.join(THIS_PATH, 'regions.csv')
-    f = open(path, 'rb')
-    reader = csv.reader(f, "excel")
-    titles = reader.next()
-    reader = csv.DictReader(f, titles)
-    count=0
-
-    for line in reader:
-        count += 1
-
-        code = line["code"].upper()
-        name = line["name"]
-        country = line["iso_country"].upper()
-
-        try:
-            Region.objects.get_or_create(name=name, code=code, country=country, )
-        except:
-            print code
-
-    print "total lines: " + str(count)
-
-######################################################################################
-
-def countries():   #import country
-    """
-    id	code	name	continent	wikipedia_link	keywords
-    """
-
-    path = os.path.join(THIS_PATH, 'countries.csv')
-    f = open(path, 'rb')
-    reader = csv.reader(f, "excel")
-    titles = reader.next()
-    reader = csv.DictReader(f, titles)
-
-    count=0
-    for line in reader:
-
-        count += 1
-
-        ##########################
-
-        code = line["code"].upper()
-        name = line["name"]
-        continent = line["continent"].upper()
-
-        try:
-            Country.objects.get_or_create(name=name, code=code, continent=continent)
-        except:
-            print "error: " + code
-
-    print "lines: " + str(count)
-    
-######################################################################################
 def navaids():
     """
     id	filename	ident	name	type	frequency_khz	latitude_deg	
@@ -261,10 +204,67 @@ def navaids():
         
         except TypeError:
             print "type - %s" % ident
-        
-        
-######################################################################################
-######################################################################################
+
+###############################################################################
+
+def regions():   #import region
+    """
+    id	code	local_code	name	continent	iso_country	wikipedia_link	keywords
+    """
+
+    path = os.path.join(THIS_PATH, 'regions.csv')
+    f = open(path, 'rb')
+    reader = csv.reader(f, "excel")
+    titles = reader.next()
+    reader = csv.DictReader(f, titles)
+    count=0
+
+    for line in reader:
+        count += 1
+
+        code = line["code"].upper()
+        name = line["name"]
+        country = line["iso_country"].upper()
+
+        try:
+            Region.objects.get_or_create(name=name, code=code, country=country, )
+        except:
+            print code
+
+    print "total lines: " + str(count)
+
+###############################################################################
+
+def countries():   #import country
+    """
+    id	code	name	continent	wikipedia_link	keywords
+    """
+
+    path = os.path.join(THIS_PATH, 'countries.csv')
+    f = open(path, 'rb')
+    reader = csv.reader(f, "excel")
+    titles = reader.next()
+    reader = csv.DictReader(f, titles)
+
+    count=0
+    for line in reader:
+
+        count += 1
+
+        ##########################
+
+        code = line["code"].upper()
+        name = line["name"]
+        continent = line["continent"].upper()
+
+        try:
+            Country.objects.get_or_create(name=name, code=code, continent=continent)
+        except:
+            print "error: " + code
+
+    print "lines: " + str(count)
+    
+###############################################################################
 
 if __name__ == "__main__":
     main()
