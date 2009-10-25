@@ -13,13 +13,13 @@ ALL_USER = User(pk=1)
 
 def main():
     print "Importing Countries..."
-    #countries()
+    countries()
 
     print "Importing Regions..."
-    #regions()
+    regions()
     
     print "Importing Airports..."
-    #airports()
+    airports()
     
     print "Importing Navaids..."
     navaids()
@@ -58,9 +58,6 @@ def airports():   #import airport
         throw_out = False
         count += 1
         
-        #if count > 30:
-        #    break
-        
         ##########################
 
         lat =    line["latitude_deg"]
@@ -74,6 +71,7 @@ def airports():   #import airport
         city =   line["municipality"]
         region = line["iso_region"].upper()
         idd =    line['id']
+        gps =    line['gps_code']
         
         if elev == "":
             elev=None
@@ -86,13 +84,27 @@ def airports():   #import airport
 
                                            
         if country == "US":
-            if (ident.startswith("K")              ## STARTS WITH K
-                and len(ident) == 4                ## IS 4 LETTERS LONG
-                and re.search("[0-9]", ident)      ## HAS NUMBER
+            if (ident.startswith("K")
+                and len(ident) == 4
+                and re.search("[0-9]", ident)
                ):
                    
-                ident = ident[1:]    ## get rid of the K
-
+                # ourairports has a problem where non-icao identifiers in the
+                # US are prefixed with a 'K' when they shouldn't be.
+                
+                ident = ident[1:]
+                
+            if (not ident.startswith("K")
+                and len(ident) == 3
+                and not re.search("[0-9]", ident)
+                and not region == 'US-AK'):
+                
+                # there also is a problem where airports that should have
+                # the 'K' do not
+                   
+                ident = "K" + ident
+                
+                
         if ident.startswith("US-"):
             if local:
                 ident = local
@@ -101,8 +113,6 @@ def airports():   #import airport
 
 
         if not throw_out:
-
-
             l = Location(
                 pk=            idd,
                 user=          ALL_USER,

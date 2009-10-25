@@ -150,13 +150,23 @@ class Route(models.Model):
         return qs.count()
     
     @classmethod
-    def hard_render_user(cls, username=None, user=None):
+    def hard_render_user(cls, username=None, user=None, no_dupe=True):
+        """Hard re-render all routes for the given username
+        """
         if username:
             from django.contrib.auth.models import User
             user=User.objects.get(username=username)
+        
+        kwargs = {'flight__user': user}
+        
+        if no_dupe:
+            # only apply to routes that have zero routebases. Routes with no
+            # routebases occur after all locations are deleted (which often
+            # happens when the locations database is updated)
+            kwargs.update({'routebase__isnull': True})
             
         from django.db.models import Max
-        qs = cls.objects.filter(flight__user=user)\
+        qs = cls.objects.filter(**kwargs)\
                         .distinct()\
                         .annotate(fid=Max('flight__id'))
         for r in qs:
@@ -165,13 +175,22 @@ class Route(models.Model):
         return qs.count()
     
     @classmethod
-    def from_string(cls, r, user=None):
+    def hard_render_unknowns(cls):
+        routes = cls.objects.filter(routebase__unknown__isnull=False)
+        
+        for r in routes:
+            r.hard_render()
+    
+    @classmethod
+    def from_string(cls, raw_route_string, user=None):
+        """Create a route object from a waw string
+        """
         # so we know which user to make the custom points from
-        # if no user explicitly given, try t get the currently logged in user
+        # if no user explicitly given, try to get the currently logged in user
         if not user:
             user = share.get_display_user()
             
-        return MakeRoute(r, user=user).get_route()
+        return MakeRoute(raw_route_string, user=user).get_route()
     
     #################################
     
@@ -341,22 +360,34 @@ class Route(models.Model):
         self.save()
         
     def hard_render(self, user=None, username=None, flight_id=None):
-        """Spawns a new Route object from itself, and connects it to
-           the flight that the old route was connected to. And then returns the
-           newly created Route instance
+        """Spawns a new Route object based on it's own fallback_string,
+           connects it to the flight that the old route was connected to.
+           Then returns the newly created Route instance. This is used to
+           redo all the routebases after the navaid/airport database has been
+           updated and all the primary keys are changed.
         """
+        
         if not flight_id:
             try:
-                flight_id = self.flight.all()[0].id
-            except IndexError:  #no flight associated with this route
+                f = self.flight.all()[0]
+                
+            except IndexError:  
+                # no flight associated with this route
                 pass
+            
+            else:
+                flight_id = f.id
+                user = f.user
+                print "got userid from flight join"
             
         if (not user) and username:
             from django.contrib.auth.models import User
             user = User.objects.get(username=username)
+            print "got user from seperate query"
             
         if not user and not username:
             user = share.get_display_user()
+            print "got user from share thingy"
         
         new_route = MakeRoute(self.fallback_string, user).get_route()
         
@@ -449,8 +480,8 @@ class MakeRoute(object):
     ###############################################################################
 
     def find_custom(self, ident, i, force=False):
-        """Tries to find the custom point, if it can't find one, and force = True,
-           it adds it to the user's custom list.
+        """Tries to find the custom point, if it can't find one, and
+           force = True, it adds it to the user's custom list.
         """
         
         ident = ident[:8]
