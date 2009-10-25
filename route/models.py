@@ -324,7 +324,16 @@ class Route(models.Model):
         simple = []
         kml = []
         
-        for rb in self.routebase_set.all().order_by('sequence'):
+        rbs = self.routebase_set.all().order_by('sequence')
+        print rbs
+        
+        if not rbs:
+            # a route was made, but no routebases were attached, must
+            # be a local flight
+            simple = ["Local"]
+            fancy = ["<span title='Local Flight' class='local'>Local</span>"]
+        
+        for rb in rbs:
             
             dest = rb.destination()
             loc_class = rb.loc_class
@@ -337,6 +346,11 @@ class Route(models.Model):
                 class_ = "found_custom"
             elif loc_class == 0:
                 class_ = "not_found"
+                
+            if not rb.land:
+                class_ += " noland"
+            else:
+                class_ += " land"
                 
             # only write a kml if coordinates are known
             if getattr(dest, "location", None):
@@ -387,7 +401,7 @@ class Route(models.Model):
             
         if not user and not username:
             user = share.get_display_user()
-            print "got user from share thingy"
+            print user, "got user from share thingy"
         
         new_route = MakeRoute(self.fallback_string, user).get_route()
         
@@ -452,7 +466,7 @@ class MakeRoute(object):
         
     def find_navaid(self, ident, i, last_rb=None):
         """Searches the database for the navaid object according to ident.
-           if it finds a match,returns the routebase object
+           if it finds a match, creates and returns a routebase object
         """
                
         if last_rb:
@@ -461,7 +475,9 @@ class MakeRoute(object):
             if navaid.count() > 1:
                 #run another query to find the nearest
                 last_point = last_rb.location 
-                navaid = navaid.distance(last_point.location).order_by('distance')[0]  
+                navaid = navaid.distance(last_point.location)\
+                               .order_by('distance')[0]
+                               
             elif navaid.count() == 0:
                 navaid = None
             else:
@@ -474,10 +490,13 @@ class MakeRoute(object):
                                    identifier=ident)
         if navaid:
             return RouteBase(location=navaid, sequence=i)
+        else:
+            # wasn't a navaid, maybe it was an airport that they flew over?
+            return self.find_airport(ident, i)
         
         return None
         
-    ###############################################################################
+    ###########################################################################
 
     def find_custom(self, ident, i, force=False):
         """Tries to find the custom point, if it can't find one, and
@@ -502,7 +521,7 @@ class MakeRoute(object):
 
     ###########################################################################
 
-    def find_airport(self, ident, i, p2p):
+    def find_airport(self, ident, i):
         airport = Location.goon(loc_class=1, identifier=ident)
             
         if not airport and len(ident) == 3:
@@ -511,8 +530,6 @@ class MakeRoute(object):
                                     identifier="K%s" % ident)
 
         if airport:
-            # a landing airport, eligable for p2p testing
-            p2p.append(airport.pk)          
             return RouteBase(location=airport, sequence=i)
         
         return None
@@ -558,10 +575,10 @@ class MakeRoute(object):
                 routebase = self.find_custom(ident, i, force=True)
                 
             else:                  #must be an airport  
-                routebase = self.find_airport(ident, i, p2p=p2p)
+                routebase = self.find_airport(ident, i)
                 if not routebase:
                     # if the airport can't be found, see if theres a 'custom'
-                    # bythe same identifier
+                    # by the same identifier
                     routebase = self.find_custom(ident, i, force=False)
                 
             #######################################################################
@@ -569,12 +586,13 @@ class MakeRoute(object):
             # no routebase? must be unknown
             if not routebase:
                 routebase = RouteBase(unknown=ident, sequence=i)
-                
-                # not a unidentified navaid, assume a landing
-                if land:
-                    p2p.append(ident)
             
             routebase.land = land
             routebases.append(routebase)
+            
+            if land:
+                loc = routebase.location or ident
+                p2p.append(loc)
 
+        print p2p
         return len(set(p2p)) > 1, routebases

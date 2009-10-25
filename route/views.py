@@ -21,10 +21,14 @@ def easy_recalc_routes(request):
 
 
 def hard_recalc_routes(request):
+    
     if not request.user.is_staff:
         assert False
+        
     from django.contrib.auth.models import User
+    count = 0
     for u in User.objects.all():
-        count += Route.hard_render_all(user=u)
+        count += 1
+        Route.hard_render_user(user=u)
     return HttpResponse("%s routes 'hard' recalculated" % count,
                         mimetype='text/plain')

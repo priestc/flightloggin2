@@ -34,10 +34,14 @@ td.empty_logbook                             {font-size: x-large; padding: 10px 
 
 #new_flight_button                           {margin: 10px }
 
-span.found_airport                           {color: MediumSlateBlue; text-decoration: underline}
-span.found_navaid                            {color: SeaGreen;        text-decoration: underline}
-span.found_custom                            {color: Navy;            text-decoration: underline}                                             
+span.land                                    {text-decoration: underline}
+span.noland                                  {text-decoration: none}
+
+span.found_airport                           {color: MediumSlateBlue}
+span.found_navaid                            {color: SeaGreen}
+span.found_custom                            {color: Navy}                                             
 span.not_found                               {color: gray}
+span.local                                   {color: gray}
 
 /**************** custom view box ****************/
 
