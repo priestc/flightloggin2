@@ -29,6 +29,7 @@ def hard_recalc_routes(request):
     count = 0
     for u in User.objects.all():
         count += 1
-        Route.hard_render_user(user=u)
+        Route.hard_render_user(user=u, no_dupe=True)
+        
     return HttpResponse("%s routes 'hard' recalculated" % count,
                         mimetype='text/plain')

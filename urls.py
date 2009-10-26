@@ -14,6 +14,8 @@ feeds = {
 }
 
 
+handler404 = 'main.views.not_found'
+
 ## all views get `shared` and `display_user`
 ## variables from `username` via ShareMiddleware
 
