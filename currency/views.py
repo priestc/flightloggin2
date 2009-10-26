@@ -73,7 +73,7 @@ def currency(request, shared, display_user):
                                 .order_by().distinct()
     types_out = []
     for item in type_ratings:
-        currbox = CurrBox(tr=item, method="landings")
+        currbox = LandCurrBox(tr=item)
         
         currbox.day = currency.landing(night=False, tr=item)
         currbox.night = currency.landing(night=True, tr=item)
