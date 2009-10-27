@@ -207,7 +207,7 @@ class Flight(models.Model):
             return self.person
         
         elif cn == "fo":
-           if self.pic and not self.dual_r:
+           if self.pic and self.dual_g < 0:
                return self.person
            else:
                return ""

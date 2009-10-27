@@ -72,7 +72,12 @@ class Location(models.Model):
             if item and item != "United States" and item != "(unassigned)":
                 ret.append(item)
 
-        return ", ".join(ret)
+        text = ", ".join(ret)
+        
+        if self.loc_class == 2:
+            return "%s %s, %s" % (self.name, self.get_loc_type_display(), text)
+        
+        return text
     
     def save(self, *args, **kwargs):
         """ if it's a custom, automatically look up to see which country and
