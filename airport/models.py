@@ -64,7 +64,7 @@ class Location(models.Model):
     
     def location_summary(self):
         """A friendly named location
-           EX: 'Newark, Ohio', 'Lilongwe, Malawi'. 
+           EX: 'Newark, Ohio', 'Lilongwe, Malawi'.
         """
           
         ret = []
@@ -75,6 +75,8 @@ class Location(models.Model):
         text = ", ".join(ret)
         
         if self.loc_class == 2:
+            ## if it's a navaid, add the name of the navaid as well as the
+            ## navaid type
             return "%s %s, %s" % (self.name, self.get_loc_type_display(), text)
         
         return text

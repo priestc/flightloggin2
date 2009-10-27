@@ -24,8 +24,9 @@ class ProgressGraph(object):
     class EmptyLogbook(Exception):
         pass
 
-    def __init__(self, user, columns, dates=None):
+    def __init__(self, user, columns, dates=None, rate=True):
         self.user = user
+        self.rate = rate
         if dates:
             dates = dates.split('-')
             s = dates[0]
@@ -131,18 +132,19 @@ class ProgressGraph(object):
         
         ax.set_xlim(self.start, self.end)
         
-        ax2 = ax.twinx()
-        d_color='#c14242'
-        ax2.plot(rate_plot['x'],
-                 rate_plot['y'],
-                 color=rate_plot['color'],
-                 drawstyle='default')
-                 
-        ax2.set_ylabel(rate_plot['y_unit'],
-                       color=rate_plot['color'], )
-        
-        for tl in ax2.get_yticklabels():
-            tl.set_color(d_color)
+        if self.rate:
+            ax2 = ax.twinx()
+            d_color='#c14242'
+            ax2.plot(rate_plot['x'],
+                     rate_plot['y'],
+                     color=rate_plot['color'],
+                     drawstyle='default')
+                     
+            ax2.set_ylabel(rate_plot['y_unit'],
+                           color=rate_plot['color'], )
+            
+            for tl in ax2.get_yticklabels():
+                tl.set_color(d_color)
             
         # format the ticks based on the range of the dates
         from format_ticks import format_line_ticks

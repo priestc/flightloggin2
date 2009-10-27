@@ -54,8 +54,9 @@ urlpatterns += patterns('',
     (
         r'^(?P<username>\w+)/linegraph/' +
         r'(?P<columns>[\w\-]+)/' +
-        r'(?P<dates>\d{4}.\d{1,2}.\d{1,2}-\d{4}.\d{1,2}.\d{1,2})?' +
-        r'(all)?.(?P<ext>(png|svg))$',
+        r'((?P<dates>\d{4}.\d{1,2}.\d{1,2}-\d{4}.\d{1,2}.\d{1,2})/)?' +
+        r'(?P<rate>(rate|norate)?)' +
+        r'.(?P<ext>(png|svg))$',
         # username/linegraph/(columns)/(dates) or (all).extension
         "graphs.views.graph_image",
     ),
@@ -63,7 +64,7 @@ urlpatterns += patterns('',
     url(
         r'^(?P<username>\w+)/states-(?P<type_>[\-\w]+)?.(?P<ext>(png|svg))$',
         "maps.states.view",
-        name="state-map",
+                                                            name="state-map",
     ),
                                                                    
     (

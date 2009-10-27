@@ -6,53 +6,13 @@
         .date       {width: 8em}
         select      {font-size: small}
     </style>
+    
+    <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/sprintf.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/graphs.js"></script>
+    
     <script type="text/javascript">
-    date_button = "{{MEDIA_URL}}/images/calendar.gif"
-    year_range = "1990:2009"
-
-    function render_line_graph(ext) {
-
-        column = $("#line_column").val();
-        
-        start = $("#line_start").val().replace(/-/g,'.');         //change all dashes to dots
-        end = $("#line_end").val().replace(/-/g,'.');
-        
-        if(start && end)
-            url = "linegraph/"+ column +"/" + start + "-" + end + "." + ext;
-        else
-            url = "linegraph/"+ column + "/all." + ext;
-            
-        if(ext=="png")
-      	    $("#image").attr("src", url).css("display", "block")
-      	else if(ext=="svg")
-      	    window.open(url) //$("#svg_link").attr("href", url)
-
-    }
-
-    $(document).ready(function() {
-        
-        $(".render_button").click(function() {
-        
-            ext=$(this).attr('class').split(' ').slice(-1);
-        
-            if(this.id == "line_graph")
-                render_line_graph(ext);
-            
-            if(this.id == "bar_graph")
-                render_bar_graph(ext);
-        
-        });
-        
-        $(".date").datepicker({			// add the date pickers
-	            dateFormat: "yy-mm-dd",
-	            yearRange: year_range, 
-	            showOn: "button", 
-	            buttonImage: date_button,
-	            buttonImageOnly: true,
-	            changeYear: true
-        }).addClass("embed");
-
-    });
+    date_button = "{{MEDIA_URL}}/images/calendar.gif";
+    year_range = "1990:2009";
 	
 	</script>
 {% endblock %}
@@ -61,12 +21,14 @@
 
 
 {% block canvas %}
-    <h2>Progression with Rate:</h2>
+    <h2>Flight Time Progression:</h2>
         <select id="line_column">
         {{ column_options }}
         </select>
         <div style="padding: 10px">
         Start: <input type="date" class="date" id="line_start">   End: <input type="date" class="date" id="line_end">
+        <br>
+        Include rate? <input type="checkbox" id="do_rate">
         </div>
         <input id="line_graph" class="render_button png" name="line_render" value="PNG" type="submit">
         <a href="" target="_blank" id="svg_link"><input id="line_graph" class="render_button svg" value="SVG" type="button"></a>        
