@@ -56,3 +56,8 @@ def import_v(request, shared, display_user):
 
     transaction.commit()
     return locals()
+
+
+@render_to('export.html')
+def export(request, shared, display_user):
+    return locals()

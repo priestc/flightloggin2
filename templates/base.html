@@ -114,10 +114,11 @@
                 <a href="{% url mass-entry display_user.username %}">Mass Entry</a></span>
 
                 <span class="{% block import-sel %}{% endblock%}" >
-                <a href="{% url import display_user.username %}">Import/Export</a></span>
-                {% endif %}
+                <a href="{% url import display_user.username %}">Import</a></span>
                 
-                {% if not shared %}
+                <span class="{% block export-sel %}{% endblock%}" >
+                <a href="{% url export display_user.username %}">Export</a></span>
+
                 <span class="{% block profile-sel %}{% endblock%}" >
                 <a href="{% url profile display_user.username %}">Preferences</a></span>
                 {% endif %}

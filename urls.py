@@ -121,103 +121,109 @@ urlpatterns += patterns('',
     url(
         r'^(?P<username>\w+)/email-backup.html$',
         "backup.views.emailbackup",
-        name="import",
+                                                          name="email-backup",
     ),
     
     url(
         r'^(?P<username>\w+)/routes-(?P<type_>\w+).kmz$',
         "maps.views.routes_kml",
-        name="kml-route",
+                                                            name="kml-route",
     ),
     
     url(
         r'^(?P<username>\w+)/airports-(?P<type_>\w+).kmz$',
         "maps.views.airports_kml",
-        name="kml-airport",
+                                                            name="kml-airport",
     ),
     
     url(
         r'^(?P<username>\w+)/8710.html$',
         "auto8710.views.auto8710",
-        name="est",
+                                                                name="est",
     ),
     
     url(
         r'^(?P<username>\w+)/preferences.html$',
         "profile.views.profile",
-        name="profile",
+                                                                name="profile",
     ),
     
     url(
         r'^(?P<username>\w+)/import.html$',
         "manage.views.import_v",
-        name="import",
+                                                                name="import",
+    ),
+    
+    url(
+        r'^(?P<username>\w+)/export.html$',
+        "manage.views.export",
+                                                                name="export",
     ),
     
     url(
         r'^(?P<username>\w+)/records.html$',
         "records.views.records",
-        name="records",
+                                                                name="records",
     ),
     
     url(
         r'^(?P<username>\w+)/events.html$',
         "records.views.events",
-        name="events",
+                                                                name="events",
     ),
     
     url(
         r'^(?P<username>\w+)/graphs.html$',
         "graphs.views.graphs",
-        name="graphs",
+                                                                name="graphs",
     ),
     
     url(
         r'^(?P<username>\w+)/planes.html$',
         "plane.views.planes",
-        name="planes",
+                                                                name="planes",
     ),
     
     url(
         r'^(?P<username>\w+)/maps.html$',
         "maps.views.maps",
-        name="maps",
+                                                                name="maps",
     ),
     
     url(
         r'^(?P<username>\w+)/currency.html$',
         "currency.views.currency",
-        name="currency",
+                                                                name="currency",
     ),
     
     url(
         r'^(?P<username>\w+)/places.html$',
         "records.views.places",
-        name="places",
+                                                                name="places",
     ),
     
     url(
         r'^(?P<username>\w+)/backup/$',
         "backup.views.backup",
-        name="backup",
+                                                                name="backup",
     ),
     
     url(
         r'^(?P<username>\w+)/massentry.html$',
         "logbook.views.mass_entry",
-        name="mass-entry",
+                                                            name="mass-entry",
     ),
     
     url(
         r'^(?P<username>\w+)/massedit-page-(?P<page>\d+).html$',
         "logbook.views.mass_edit",
-        name="mass-edit",
+                                                            name="mass-edit",
     ),
     
     url(
         r'^(?P<username>\w+)/logbook.html$',
         "logbook.views.logbook",
-        name="logbook",
+                                                                name="logbook",
     ),
     
     url(
@@ -228,19 +234,19 @@ urlpatterns += patterns('',
         
     url(
         r'^(?P<username>\w+)/sigs.html$',"sigs.views.sigs",
-        name="sigs",
+                                                                name="sigs",
     ),
     
     url(
         r'^(?P<username>\w+)/print.pdf$',
         "pdf.views.pdf",
-        name="pdf",
+                                                                name="pdf",
     ),
     
     url(
         r'^schedule-(?P<schedule>\d).py$',
         "backup.views.schedule",
-        name="schedule",
+                                                            name="schedule",
     ),
     
     (

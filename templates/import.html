@@ -15,14 +15,38 @@ $(document).ready(function() {
 {% endblock %}
 
 
-{% block title %}Import/Export{% endblock %}
+{% block title %}Import{% endblock %}
 
 
 {% block canvas %}
 
+    Select a file to upload, or leave blank to use the last file you uploaded.<br />
+
+    {% if InvalidError %}
+        <br /><big style="color: red">Error: Not a valid CSV file</big>
+    {% endif %}
+    
+    {% if NoFile %}
+        <br /><big style="color: red">Could not find file.</big>
+    {% endif %}
+    
+    <form id="upform" action="{% url import display_user %}" method="post" enctype="multipart/form-data">
+    <div>
+        <ul>
+        {{fileform.file}}
+        </ul>
+        <input type="submit" value="Preview" name="submit">  <input type="submit" value="Import" name="submit">
+    </div>
+    </form>
+    
+    <div id="progress" style="display: none">
+        Please wait, flights are being processed<br>
+        <img src="{{MEDIA_URL }}/icons/gray-indicator.gif" />
+    </div>
+    
+    {#########################################################################}
+
     {% if not flight_out %}
-    Download zipped backup file:<br>
-    <button onclick="window.location = '{% url backup display_user %}'; return false;">Export</button>
     <div style="max-width: 50em; text-align: left; margin: 30px auto 30px auto">
         <hr>
         Use this form to import logbook data from another digital logbook application. Any data in a valid CSV
@@ -86,30 +110,8 @@ $(document).ready(function() {
         <hr>
     </div>
     {% endif %}
-
-    Select a file to upload, or leave blank to use the last file you uploaded.<br />
-
-    {% if InvalidError %}
-        <br /><big style="color: red">Error: Not a valid CSV file</big>
-    {% endif %}
     
-    {% if NoFile %}
-        <br /><big style="color: red">Could not find file.</big>
-    {% endif %}
-    
-    <form id="upform" action="{% url import display_user %}" method="post" enctype="multipart/form-data">
-    <div>
-        <ul>
-        {{fileform.file}}
-        </ul>
-        <input type="submit" value="Preview" name="submit">  <input type="submit" value="Import" name="submit">
-    </div>
-    </form>
-    
-    <div id="progress" style="display: none">
-        Please wait, flights are being processed<br>
-        <img src="{{MEDIA_URL }}/icons/gray-indicator.gif" />
-    </div>
+    {#########################################################################}
 
     {% if flight_out %}
         <table class="preview">
