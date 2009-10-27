@@ -55,7 +55,7 @@ def schedule(request, schedule):
 
     ret = ""    
     for user in users:
-        #EmailBackup(user).send()
+        EmailBackup(user).send()
         ret += user.username + " "
     
     
@@ -64,6 +64,6 @@ def schedule(request, schedule):
 ##
 ## crontab:
 ##
-## 30 5 1         * * wget http://beta.flightlogg.in/schedule-monthly.py
-## 30 4 1,7,14,21 * * wget http://beta.flightlogg.in/schedule-weekly.py
-## 30 3 1,14      * * wget http://beta.flightlogg.in/schedule-biweekly.py
+30 5 1         * * wget http://beta.flightlogg.in/schedule-monthly.py
+30 4 1,7,14,21 * * wget http://beta.flightlogg.in/schedule-weekly.py
+30 3 1,14      * * wget http://beta.flightlogg.in/schedule-biweekly.py
