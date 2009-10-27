@@ -85,8 +85,8 @@ def make_filter_form(user):
     from plane.models import Plane
     
     types = Plane.objects.filter(user=user).values_list('type',
-                                            flat=True).distinct()
-                                            
+                                            flat=True).order_by().distinct()
+                                          
     tt = [(t,t) for i,t in enumerate(types)]
     tt.insert(0, ("", "-------"))
     
