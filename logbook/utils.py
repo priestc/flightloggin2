@@ -371,10 +371,16 @@ class QuerySet(QuerySet):
         elif cn == 'p2p':
             return self.p2p().total(*args, **kwargs)
 
-        elif cn == 'turbine' or cn == 't_pic':
+        elif cn == 'turbine':
             return self.turbine().total(*args, **kwargs)
         
-        elif cn == 'mt' or cn == 'mt_pic':
+        elif cn == 't_pic':
+            return self.turbine().pic(*args, **kwargs)
+        
+        elif cn == 'mt':
+            return self.multi().turbine().total(*args, **kwargs)
+            
+        elif cn == 'mt_pic':
             return self.multi().turbine().pic(*args, **kwargs)
             
         elif cn == 'multi':
@@ -383,10 +389,16 @@ class QuerySet(QuerySet):
         elif cn == 'm_pic':
             return self.multi().pic(*args, **kwargs)
         
-        elif cn == 'sea' or cn == 'sea_pic':
-            return self.sea().by_flight_time('pic', *args, **kwargs)
+        elif cn == 'sea':
+            return self.sea().total(*args, **kwargs)
+            
+        elif cn == 'sea_pic':
+            return self.sea().pic(*args, **kwargs)
         
-        elif cn == 'mes' or cn == 'mes_pic':
+        elif cn == 'mes':
+            return self.multi().sea().total(*args, **kwargs)
+        
+        elif cn == 'mes_pic':
             return self.multi().sea().pic(*args, **kwargs)
         
         elif cn == 'atp_xc':

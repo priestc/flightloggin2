@@ -31,7 +31,7 @@ class Sig(object):
     font= "VeraMono.ttf"
     
     def __init__(self, user, columns):
-        import settings
+        from django.conf import settings
         
         self.data = {}
         height = len(columns) * self.line_height
@@ -42,7 +42,8 @@ class Sig(object):
         
         self.user = user
         self.im = Image.new("RGBA", (width, height))
-        self.font = ImageFont.truetype(settings.MEDIA_ROOT + "/fonts/" + self.font, 12) #ImageFont.load_default()
+        fontdir = settings.MEDIA_ROOT + "/fonts/" + self.font
+        self.font = ImageFont.truetype(fontdir, 12) #ImageFont.load_default()
         self.draw = ImageDraw.Draw(self.im)
         
         for column in columns:
@@ -57,7 +58,9 @@ class Sig(object):
         for key in GRAPH_FIELDS:
             if key in self.data.keys():
                 self.draw.text((1, (i*self.line_height)+1),
-                               ("%*s: %s") % (self.max_title_width+1, " " + FIELD_TITLES[key], self.data[key]),
+                               ("%*s: %s") % (self.max_title_width+1,
+                                              " " + FIELD_TITLES[key],
+                                              self.data[key]),
                                font=self.font,
                                fill='black')
                 i += 1 #move the next line down one line width
