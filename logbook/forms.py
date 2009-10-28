@@ -121,9 +121,12 @@ class FlightForm(ModelForm):
         super(FlightForm, self).__init__(*args, **kwargs)
         
         from share.middleware import share
+        from django.db.models import Max
         self.fields['date'].widget = widgets.AdminDateWidget()
         self.fields['plane'].queryset = \
-                    Plane.objects.user_common(share.get_display_user())
+                    Plane.objects\
+                    .user_common(share.get_display_user())\
+                    .annotate(fd=Max('flight__date')).order_by('-fd')
         self.fields['plane'].default=1
         self.fields['plane'].blank=False
         self.fields['plane'].null=False
