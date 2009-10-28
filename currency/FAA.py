@@ -170,8 +170,6 @@ class FAA_Landing(Currency):
                     .values('date', 'night_l')[:3]
         else:
             return "ERROR"
-        
-        print cat_class, night, last_three
  
         total = 0
         for flight in last_three:

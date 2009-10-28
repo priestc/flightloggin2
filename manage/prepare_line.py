@@ -199,11 +199,17 @@ class PrepareLine(object):
             return "nonflight"
         
         #if line starts with this tag, then it's a records line   
-        if self.date == "##RECORDS":
+        elif self.date == "##RECORDS":
             return "records"
            
-        if self.date == "##PLANE":
+        elif self.date == "##PLANE":
             return "plane"
+        
+        elif self.date == "##EVENT":
+            return "event"
+        
+        elif self.date == "##LOC":
+            return "location"
         
         else:
             return "flight"
@@ -275,6 +281,20 @@ class PrepareLine(object):
         del output['from_']
                
         return output
+    
+    def dict_event(self):
+        output = {}
+        
+        output['date'] = self.tailnumber
+        output['non_flying'] = self.type
+        output['remarks'] = self.route
+    
+    def dict_location(self):
+        output = {}
+        
+        output['date'] = self.date
+        output['non_flying'] = self.tailnumber
+        output['remarks'] = self.type
 
 
 

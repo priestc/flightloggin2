@@ -18,7 +18,7 @@ class Backup(object):
     def output_csv(self):
         """returns a StringIO representing a csv backup file for the user"""
         
-        from records.models import Records
+        from records.models import Records, NonFlight
         from plane.models import Plane
         from logbook.models import Flight, Columns
         from airport.models import Location
@@ -42,6 +42,10 @@ class Backup(object):
         for p in planes:
             writer.writerow(["##PLANE", p.tailnumber, p.manufacturer, p.model,
                         p.type, p.cat_class, "X", ", ".join(p.get_tags())])
+                        
+        events = NonFlight.objects.filter(user=self.user)    
+        for e in events:
+            writer.writerow(["##EVENT", e.date, e.non_flying, e.remarks])
         
         locations = Location.objects.filter(user=self.user)
         for l in locations:
