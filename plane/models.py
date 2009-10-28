@@ -102,7 +102,7 @@ class Plane(models.Model):
         return ret
 
     class Meta:
-        ordering = ["manufacturer", 'type', 'id']
+        ordering = ["manufacturer", 'type', 'tailnumber']
 
     def is_turbine(self):
         return Plane.goon(pk=self.pk, tags__icontains="turbine") == self
