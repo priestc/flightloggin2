@@ -9,6 +9,7 @@ function fill_in_plane(dom_id) {
 	$("#id_type").val(trim($("#p" + id + "_type").text()));
 	$("#id_cat_class").val(trim($("#p" + id + "_cat_class").text()));
 	$("#id_tags").val(trim($("#p" + id + "_tags").text()));
+	$("#id_description").val(trim($("#p" + id + "_description").text()));
 }
 
 
