@@ -325,7 +325,6 @@ class Route(models.Model):
         kml = []
         
         rbs = self.routebase_set.all().order_by('sequence')
-        print rbs
         
         if not rbs:
             # a route was made, but no routebases were attached, must
@@ -594,5 +593,4 @@ class MakeRoute(object):
                 loc = routebase.location or ident
                 p2p.append(loc)
 
-        print p2p
         return len(set(p2p)) > 1, routebases

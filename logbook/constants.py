@@ -33,9 +33,9 @@ NUMERIC_FIELDS = [
 
 #fields included in the backup file
 BACKUP_FIELDS = [
-          'date', 'reg', 'type', 'route', 'total', 'sim', 'pic', 'sic', 'solo',
+          'date', 'reg', 'type', 'route', 'total', 'pic', 'solo', 'sic',
           'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l',
-          'day_l', 'app_num_only', 'person', 'r_remarks', 'flying',
+          'day_l', 'sim', 'app_num_only', 'person', 'r_remarks', 'flying',
           ]
 
 #fields that have a database column all to themseves

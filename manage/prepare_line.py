@@ -242,12 +242,15 @@ class PrepareLine(object):
         for field in PLANE_HEADERS:
             dic = {field: getattr(self, PLANE_MAP[field])}
             output.update(dic)
+            
+        tags = output.get('tags') or "ff"
+        tags = tags.upper()
         
         ## translate the 'RT' column (flightloggin 1.0) to the proper tags
-        if "R" in output['RT'] and "TYPE RATING" not in output['tags'].upper():
+        if "R" in (output.get('RT') or "ff") and "TYPE RATING" not in tags:
             output['tags'] += ', Type Rating'
             
-        if "T" in output['RT'] and "TAILWHEEL" not in output['tags'].upper():
+        if "T" in (output.get('RT') or "ff") and "TAILWHEEL" not in tags:
             output['tags'] += ', Tailwheel'
             
         del output['RT']

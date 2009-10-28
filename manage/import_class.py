@@ -23,7 +23,6 @@ class BaseImport(object):
         
         if not f:
             self.f = self.find_already_uploaded_file()
-            print self.f
         else:
             self.f = f
             self.save_file()
@@ -155,8 +154,6 @@ class BaseImport(object):
         for filename in filenames:
             if filename.startswith(st):
                 hits.append(filename)
-        
-        print hits
         
         # no file found
         if len(hits) == 0:
@@ -290,6 +287,7 @@ class DatabaseImport(PreviewImport):
         
         p.manufacturer = line['manufacturer']
         p.model = line['model']
+        print line['cat_class']
         p.cat_class = line['cat_class']
         
         tags = line['tags']
@@ -305,11 +303,13 @@ class DatabaseImport(PreviewImport):
         
         p.tags = " ".join(the_tags)
         
+        
+        
         try:
             p.save()
             message = "good"
-        except:
-            message = "Error"
+        except Exception, msg:
+            message = msg
             
         return status_decorator(
             super(DatabaseImport, self).handle_plane, line, message
