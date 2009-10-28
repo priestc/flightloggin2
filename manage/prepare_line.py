@@ -145,26 +145,27 @@ class PrepareLine(object):
     def figure_flying(self):
         """Set the proper flying column variables
         """
+        dic = {}
         
         if not self.flying:
-            return {}
+            return dic
         
         if "P" in self.flying:
-            self.pilot_checkride = True
+            dic.update({"pilot_checkride": True})
     
         if "H" in self.flying:
-            self.holding = True
+            dic.update({"holding": True})
             
         if "T" in self.flying:
-            self.tracking = True
+            dic.update({"tracking": True})
             
         if "C" in self.flying:
-            self.cfi_checkride = True
+            dic.update({"cfi_checkride": True})
             
         if "I" in self.flying:
-            self.ipc = True
+            dic.update({"ipc": True})
     
-        return {} # must return a dict of some sort
+        return dic
 
     #-----------------------------
     
@@ -270,6 +271,9 @@ class PrepareLine(object):
         del output['via']
         del output['to']
         del output['from_']
+        
+#        print output
+#        print
                
         return output
 

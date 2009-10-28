@@ -287,7 +287,6 @@ class DatabaseImport(PreviewImport):
         
         p.manufacturer = line['manufacturer']
         p.model = line['model']
-        print line['cat_class']
         p.cat_class = line['cat_class']
         
         tags = line['tags']
