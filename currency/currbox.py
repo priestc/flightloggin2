@@ -190,7 +190,6 @@ class InstCurrBox(CurrBox):
         
         if not self.six_status == "NEVER":
             six_days_ago = str(abs(date.today() - self.six_end_date).days)
-            self.six_end_date = date(3000, 4, 4)
             ed = DateFormat(self.six_end_date)\
                                         .format(self.date_format)
                                         
@@ -209,6 +208,7 @@ class InstCurrBox(CurrBox):
             self.six_message = "Never"
             self.six_disp_date = ""
             self.six_class = "expired"
+            self.six_end_date = date(3000, 4, 4)
         
         ###############################################
     
@@ -218,7 +218,6 @@ class InstCurrBox(CurrBox):
         
         if not self.ipc_status == "NEVER":
             ipc_days_ago = str(abs(date.today() - self.ipc_end_date).days)
-            self.ipc_end_date = date(3000, 4, 4)
             ed = DateFormat(self.ipc_end_date)\
                                         .format(self.date_format)
                                         
@@ -237,6 +236,7 @@ class InstCurrBox(CurrBox):
             self.ipc_message = "Never"
             self.ipc_disp_date = ""
             self.ipc_class = "expired"
+            self.ipc_end_date = date(3000, 4, 4)
                                         
         ###############################################
         
@@ -246,7 +246,6 @@ class InstCurrBox(CurrBox):
         
         if not self.h_status == "NEVER":
             h_days_ago = str(abs(date.today() - self.h_end_date).days)
-            self.h_end_date = date(3000, 4, 4)
             ed = DateFormat(self.h_end_date)\
                                         .format(self.date_format)
                                         
@@ -265,6 +264,7 @@ class InstCurrBox(CurrBox):
             self.h_message = "Never"
             self.h_disp_date = ""
             self.h_class = "expired"
+            self.h_end_date = date(3000, 4, 4)
             
         ###############################################
     
@@ -274,7 +274,6 @@ class InstCurrBox(CurrBox):
         
         if not self.t_status == "NEVER":
             t_days_ago = str(abs(date.today() - self.t_end_date).days)
-            self.t_end_date = date(3000, 4, 4)
             ed = DateFormat(self.t_end_date)\
                                         .format(self.date_format)
         if self.t_status == "EXPIRED":
@@ -292,7 +291,8 @@ class InstCurrBox(CurrBox):
             self.t_message = "Never"
             self.t_disp_date = ""
             self.t_class = "expired"        
-        
+            self.t_end_date = date(3000, 4, 4)
+            
         ###############################################
         
 #        first_end_date = min(self.h_end_date,
