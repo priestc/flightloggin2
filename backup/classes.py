@@ -41,7 +41,7 @@ class Backup(object):
         planes = Plane.objects.filter(user=self.user)    
         for p in planes:
             writer.writerow(["##PLANE", p.tailnumber, p.manufacturer, p.model,
-                        p.type, p.cat_class, ", ".join(p.get_tags())])
+                        p.type, p.cat_class, "X", ", ".join(p.get_tags())])
         
         locations = Location.objects.filter(user=self.user)
         for l in locations:

@@ -144,7 +144,7 @@ PLANE_HEADERS = (
 PLANE_MAP = {
         'SKIP': 'date', 'tailnumber': 'tailnumber', 'manufacturer': 'type',
         'model': 'route', 'type': 'total', 'cat_class': 'pic',
-        'RT': 'solo', 'tags': 'sic',
+        'tags': 'sic', 'RT': 'solo',
         }
 
 ###### flightlogg.in 1.0 uses these names when it makes backup files ######

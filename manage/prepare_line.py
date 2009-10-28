@@ -244,16 +244,20 @@ class PrepareLine(object):
             dic = {field: getattr(self, PLANE_MAP[field])}
             output.update(dic)
             
-        tags = output.get('tags') or "ff"
-        tags = tags.upper()
+        tags = output.get('tags') or ""
+        print output
+        tagsu = tags.upper()
         
         ## translate the 'RT' column (flightloggin 1.0) to the proper tags
-        if "R" in (output.get('RT') or "ff") and "TYPE RATING" not in tags:
-            output['tags'] += ', Type Rating'
+        if "R" in (output.get('RT') or "ff") and "TYPE RATING" not in tagsu:
+            tags += ', Type Rating'
             
-        if "T" in (output.get('RT') or "ff") and "TAILWHEEL" not in tags:
-            output['tags'] += ', Tailwheel'
-            
+        if "T" in (output.get('RT') or "ff") and "TAILWHEEL" not in tagsu:
+            tags += ', Tailwheel'
+        
+#        print tags
+        output.update({"tags": tags}) 
+        
         del output['RT']
             
         return output
