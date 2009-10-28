@@ -202,6 +202,7 @@ class FAA_Landing(Currency):
         try:
             event_date = NonFlight.objects\
                                   .filter(user=self.user, non_flying=6)\
+                                  .order_by('date')\
                                   .values_list("date", flat=True)\
                                   .reverse()[0] # 6=wings
                                   
@@ -235,6 +236,7 @@ class FAA_Landing(Currency):
         try:
             refresher_date = NonFlight.objects\
                     .filter(user=self.user, non_flying=4)\
+                    .order_by('date')\
                     .values_list("date", flat=True)\
                     .reverse()[0]
                     
