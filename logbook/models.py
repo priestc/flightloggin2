@@ -201,6 +201,9 @@ class Flight(models.Model):
         elif cn == "app":
            return self.disp_app()
        
+        elif cn == "app_num_only":   #for the backup file, no 'H', or 'T'
+            return self.app
+       
         ######################################
         
         elif cn == 'person':

@@ -35,7 +35,7 @@ NUMERIC_FIELDS = [
 BACKUP_FIELDS = [
           'date', 'reg', 'type', 'route', 'total', 'sim', 'pic', 'sic', 'solo',
           'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l',
-          'day_l', 'app', 'person', 'r_remarks', 'flying',
+          'day_l', 'app_num_only', 'person', 'r_remarks', 'flying',
           ]
 
 #fields that have a database column all to themseves
@@ -116,6 +116,7 @@ FIELD_TITLES = {
     "night_l": "Night Landings",
     "day_l": "Day Landings",
     "app": "Approaches",
+    "app_num_only": "Approaches",
     
     "p2p": "Point to Point Cross Country",
     "multi": "Multi-Engine",
@@ -182,6 +183,7 @@ FIELD_ABBV = {
     "night_l": "Night L.",
     "day_l": "Day L.",
     "app": "App's",
+    "app_num_only": "App.",
     
     "p2p": "P2P",
     "multi": "Multi",
