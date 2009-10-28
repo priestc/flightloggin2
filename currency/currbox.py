@@ -190,6 +190,7 @@ class InstCurrBox(CurrBox):
         
         if not self.six_status == "NEVER":
             six_days_ago = str(abs(date.today() - self.six_end_date).days)
+            self.six_end_date = date(3000, 4, 4)
             ed = DateFormat(self.six_end_date)\
                                         .format(self.date_format)
                                         
@@ -217,6 +218,7 @@ class InstCurrBox(CurrBox):
         
         if not self.ipc_status == "NEVER":
             ipc_days_ago = str(abs(date.today() - self.ipc_end_date).days)
+            self.ipc_end_date = date(3000, 4, 4)
             ed = DateFormat(self.ipc_end_date)\
                                         .format(self.date_format)
                                         
@@ -244,6 +246,7 @@ class InstCurrBox(CurrBox):
         
         if not self.h_status == "NEVER":
             h_days_ago = str(abs(date.today() - self.h_end_date).days)
+            self.h_end_date = date(3000, 4, 4)
             ed = DateFormat(self.h_end_date)\
                                         .format(self.date_format)
                                         
@@ -271,6 +274,7 @@ class InstCurrBox(CurrBox):
         
         if not self.t_status == "NEVER":
             t_days_ago = str(abs(date.today() - self.t_end_date).days)
+            self.t_end_date = date(3000, 4, 4)
             ed = DateFormat(self.t_end_date)\
                                         .format(self.date_format)
         if self.t_status == "EXPIRED":
@@ -291,10 +295,10 @@ class InstCurrBox(CurrBox):
         
         ###############################################
         
-        first_end_date = min(self.h_end_date,
-                                    self.t_end_date, self.six_end_date,)
-        
-        self.days_ago = abs(date.today() - first_end_date).days
+#        first_end_date = min(self.h_end_date,
+#                                    self.t_end_date, self.six_end_date,)
+#        
+#        self.days_ago = abs(date.today() - first_end_date).days
         
     def render(self):
         lines = []
