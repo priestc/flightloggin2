@@ -6,6 +6,11 @@ h3                  {font-size: large; color: black; margin-bottom: 3px}
 
 div.inner_currbox   {border: 1px solid black; width: 49%; height: 100px}
 div.medical_third   {border: 1px solid black; width: 32%; height: 100px; float: left; margin: 5px}
+div.inst_four       {border: 1px solid black; width: 23.5%; height: 50px;
+                     float: left; margin: 5px; font-size: xx-small;
+                     padding-top: 3px}
+                     
+.inst_bar            {width: 99% !important; height: 30px !important}
 
 div.day             {float: left}
 div.night           {float: right}

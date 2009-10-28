@@ -10,7 +10,6 @@ from FAA import FAA_Landing, FAA_Medical, FAA_Instrument
 @render_to('currency.html')
 def currency(request, shared, display_user):
     curr_land = FAA_Landing(display_user)
-    curr_inst = FAA_Instrument(display_user)
     curr_med = FAA_Medical(display_user)
 
     ############################################
@@ -20,24 +19,31 @@ def currency(request, shared, display_user):
     if not (curr_land.pilot or curr_land.cfi):
         del cert_currbox
     
-    ############################################
+    ############################################ instrument below
     
     inst_out = []
     
+    
     if Flight.objects.pseudo_category("fixed_wing").app().count() > 0:
-        cb = InstCurrBox(cat="Fixed Wing", currency=curr_inst.instrument("fixed_wing"))
+        curr_inst = FAA_Instrument(display_user)
+        curr_inst.fake_class = "fixed_wing"
+        cb = InstCurrBox(curr_inst, "Fixed Wing")
         inst_out.append(cb)
         cb.render()
         
     if Flight.objects.pseudo_category("helicopter").app().count() > 0:
-        cb = InstCurrBox(cat="Helicopter", currency=curr_inst.instrument("helicopter"))
+        curr_inst = FAA_Instrument(display_user)
+        curr_inst.fake_class = "helicopter"
+        cb = InstCurrBox(curr_inst, "Helicopter")
         inst_out.append(cb)
     
     if Flight.objects.pseudo_category("glider").app().count() > 0:
-        cb = InstCurrBox(cat="Glider", currency=curr_inst.instrument("glider"))
+        curr_inst = FAA_Instrument(display_user)
+        curr_inst.fake_class = "glider"
+        cb = InstCurrBox(curr_inst, "Glider")
         inst_out.append(cb)
     
-    ############################################
+    ############################################ landing below
         
     cat_classes = Plane.objects.filter(user=display_user)\
                        .values_list('cat_class', flat=True)\
@@ -51,7 +57,7 @@ def currency(request, shared, display_user):
         
         cat_classes_out.append(currbox)
     
-    ############################################
+    ############################################ tailwheel below
     
     tailwheels = Plane.objects.filter(user=display_user)\
                               .filter( Q(tags__icontains="tailwheel"))\
@@ -66,7 +72,7 @@ def currency(request, shared, display_user):
         
         tailwheels_out.append(currbox)
         
-    ############################################
+    ############################################ type ratings below
     
     type_ratings = Plane.objects.filter(user=display_user)\
                                 .filter( Q(tags__icontains="type rating") |
@@ -82,7 +88,7 @@ def currency(request, shared, display_user):
         
         types_out.append(currbox)
     
-    ##########################################
+    ########################################## medical below
         
     medi_currbox = MediCurrBox()
     medi_currbox.first = curr_med.first_class()

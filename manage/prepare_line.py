@@ -245,7 +245,6 @@ class PrepareLine(object):
             output.update(dic)
             
         tags = output.get('tags') or ""
-        print output
         tagsu = tags.upper()
         
         ## translate the 'RT' column (flightloggin 1.0) to the proper tags
@@ -255,7 +254,6 @@ class PrepareLine(object):
         if "T" in (output.get('RT') or "ff") and "TAILWHEEL" not in tagsu:
             tags += ', Tailwheel'
         
-#        print tags
         output.update({"tags": tags}) 
         
         del output['RT']
@@ -275,9 +273,6 @@ class PrepareLine(object):
         del output['via']
         del output['to']
         del output['from_']
-        
-#        print output
-#        print
                
         return output
 

@@ -85,6 +85,9 @@ class Currency(object):
         """determine if the current date is before, after,
         or in the expire timeframe, or the alert timeframe."""
         
+        if not start_date:
+            return ("NEVER", None)
+        
         #get the alert and expire times based on the master dict
         expire_time   =   self.CURRENCY_DATA[method][0]
         alert_time    =   self.CURRENCY_DATA[method][1]
@@ -256,6 +259,8 @@ class FAA_Landing(Currency):
 
 class FAA_Instrument(Currency):
     
+    fake_class = "fixed_wing"
+    
     def ipc(self):
         """Determine of the last IPC is still valid"""
         
@@ -274,10 +279,10 @@ class FAA_Instrument(Currency):
         status, end_date = self._determine("ipc", ipc_date)
         return (status, ipc_date, end_date)
         
-    def _date_of_last_six_app(self, cat):
+    def six(self):
         last_six = Flight.objects\
                     .user(self.user)\
-                    .pseudo_category(cat)\
+                    .pseudo_category(self.fake_class)\
                     .app()\
                     .order_by('-date')\
                     .values('date', 'app')[:6]
@@ -290,67 +295,54 @@ class FAA_Instrument(Currency):
                 app_date = flight['date']
                 break;
             
-        return app_date
+        status, end = self._determine("instrument", app_date)
+        return status, app_date, end
     
-    def _date_of_last_ht(self, ht, cat):
+    def ht(self, ht):
         kwarg = {ht: True}
         
         date = Flight.objects\
                      .user(self.user)\
-                     .pseudo_category(cat)\
+                     .pseudo_category(self.fake_class)\
                      .filter(**kwarg)\
                      .order_by('-date')\
                      .values_list('date', flat=True)
         
         try:
-            return date[0]
+            ht_date = date[0]
         except IndexError:
-            return None
+            ht_date = None
         
-    ###########################################################################
+        status, end = self._determine("instrument", ht_date)
+        return status, ht_date, end
         
-    def instrument(self, cat):
-    
-        ipc_status, ipc_start, ipc_end = self.ipc()
+    def determine_overall_status(self):
+        self.ipc_status, self.ipc_start, self.ipc_end = self.ipc()
+        self.six_status, self.six_start, self.six_end = self.six()
+        self.h_status, self.h_start, self.h_end = self.ht('holding')
+        self.t_status, self.t_start, self.t_end = self.ht('tracking')
         
-        if ipc_status == 'CURRENT':
-            return (ipc_status, ipc_start, ipc_end)     # return if last IPC is still good, "ALERT" in this sense isn't necessairly
-                                                        # going to be correct because approaches can negate that
-                                                        
-        print "ipc: " + ipc_status
-        
-        #####################
-
-        app_date = self._date_of_last_six_app(cat)  
-        h_date = self._date_of_last_ht("holding", cat)
-        t_date = self._date_of_last_ht("tracking", cat)
-        
-        fut = date(1950, 3, 3) # long in the past
-        
-        #latest, include ipc if its there (for accurate 'ALERT')
-        start_date = max(app_date or fut, t_date
-                         or fut, h_date or fut, ipc_start or fut)
-        
-        ###################
-        
-        # status of straight instrument curency based on app's
-        inst_status, inst_end_date = self._determine("instrument", start_date)
-        
-        if not inst_status == 'EXPIRED':
-            return (inst_status, start_date, inst_end_date)
-        
-        print "inst: " + inst_status
-        
-        ####################
-        # at this point, inst currency is lost, now determine if an ipc is
-        # required
-        ####################
-        
-        need_ipc_status, need_ipc_end_date =\
-                            self._determine("need_ipc", inst_end_date)
-        
-        if need_ipc_status == 'EXPIRED':
-            return ('NEED_IPC', start_date, need_ipc_end_date)
+        alert = False; expired = False
+        for item in ("six", "h", "t"):
+            if getattr(self, "%s_status" % item) == "ALERT":
+                alert = True
+            if getattr(self, "%s_status" % item) == 'EXPIRED':
+                expired = True
+               
+        if alert and not expired:
+            self.overall_status = "ALERT"
+        elif not expired:
+            self.overall_status = "CURRENT"
+        else:
+            self.overall_status = "EXPIRED"
+            
+        if self.ipc_status == "CURRENT":
+            self.overall_status = "CURRENT"
+            
+        if self.ipc_status == "ALERT":
+            self.overall_status = "ALERT"
+            
+        return self.overall_status
     
         
 class FAA_Medical(Currency):
