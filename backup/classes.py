@@ -21,6 +21,7 @@ class Backup(object):
         from records.models import Records
         from plane.models import Plane
         from logbook.models import Flight, Columns
+        from airport.models import Location
 
         csv_sio = StringIO.StringIO()
         writer = csv.writer(csv_sio, delimiter="\t")
@@ -39,8 +40,20 @@ class Backup(object):
         
         planes = Plane.objects.filter(user=self.user)    
         for p in planes:
-            writer.writerow(["##PLANES", p.tailnumber, p.manufacturer, p.model,
+            writer.writerow(["##PLANE", p.tailnumber, p.manufacturer, p.model,
                         p.type, p.cat_class, ", ".join(p.get_tags())])
+        
+        locations = Location.objects.filter(user=self.user)
+        for l in locations:
+            
+            try:
+                x = l.location.x
+                y = l.location.y
+            except AttributeError:
+                x, y = "", ""
+            
+            writer.writerow(["##LOC", l.identifier, l.name, x, y,
+                    l.municipality, l.get_loc_type_display()])
        
         self.csv = csv_sio
         return csv_sio

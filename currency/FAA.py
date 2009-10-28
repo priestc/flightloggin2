@@ -50,9 +50,7 @@ def get_date(expire_time, start):
 ########################################
 ########################################
 
-class FAA_Currency(object):
-    
-    # (name: duration, alert time) (24 calendar months, 30 days)
+class Currency(object):
     
     CURRENCY_DATA = {
                         "40":                  ("40y", "30d"),
@@ -76,19 +74,13 @@ class FAA_Currency(object):
                         "second_under":        ("12cm", "30d"),
                         "third_under":         ("60cm", "30d")
                     }
-                    
-    medical_date = None
-    medical_class = None
-    over_40 = False
-    pilot = False
-    cfi = False
-                    
+    
     def __init__(self, user, today=None):
         self.user=user
         
         if not today:
             self.TODAY = date.today()
-                    
+    
     def _determine(self, method, start_date):
         """determine if the current date is before, after,
         or in the expire timeframe, or the alert timeframe."""
@@ -115,6 +107,13 @@ class FAA_Currency(object):
         else:
             assert False
 
+class FAA_Landing(Currency):
+    
+    # (name: duration, alert time) (24 calendar months, 30 days)
+
+    over_40 = False
+    pilot = False
+    cfi = False
 
     def landing(self, cat_class=0, tr=None, tail=False, night=False):
         """Returns the date of the third to last day or night landing,
@@ -254,6 +253,8 @@ class FAA_Currency(object):
             return (status, start_date, end_date)
     
     ###########################################################################
+
+class FAA_Instrument(Currency):
     
     def ipc(self):
         """Determine of the last IPC is still valid"""
@@ -352,6 +353,10 @@ class FAA_Currency(object):
             return ('NEED_IPC', start_date, need_ipc_end_date)
     
         
+class FAA_Medical(Currency):
+    
+    medical_date = None
+    medical_class = None
     
     def _get_medical_info(self):
         """Finds out whether the user is over 40 based on their profile,

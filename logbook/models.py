@@ -246,7 +246,7 @@ class Flight(models.Model):
                 ret += "T"
             return ret
                      
-        ###################################### return these immediately because
+        ################################### return these immediately because
         # they are distances, no hh:mm formatting
         
         elif cn == 'line_dist' and self.route:
