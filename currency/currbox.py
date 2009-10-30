@@ -83,7 +83,7 @@ class MediCurrBox(CurrBox):
 
     def render(self):
         lines = []
-        lines.append("<div class='currbox'>")
+        lines.append("<table class='currbox'>")
         
         word={1: "first", 2: "second", 3: "third"}
         
@@ -97,11 +97,11 @@ class MediCurrBox(CurrBox):
                 current = bool(getattr(self, ordinal)[0] == "ALERT" or getattr(self, ordinal)[0] == "CURRENT")
                 days_ago = abs((date.today() - getattr(self, ordinal)[2]).days)
                 
-                lines.append("<div class='medical_third %s'>" % class_name)
-                lines.append("<h3>%s Class</h3>" % ordinal.capitalize() )
+                lines.append("<td class='%s'>" % class_name)
+                lines.append("<strong>%s Class</strong><br>" % ordinal.capitalize() )
                 
                 if clas == self.medi_issued:
-                    lines.append("<p>Date of exam: <strong>%s</strong><br>" % start_date)
+                    lines.append("Date of exam: %s<br>" % start_date)
                 else:
                     lines.append("<br>")
                 
@@ -109,18 +109,18 @@ class MediCurrBox(CurrBox):
                 if current:
                     verbiage = "Remain"
                     
-                lines.append("Last day of privileges: <strong>%s</strong><br>" % end_date)
-                lines.append("(%s Days %s)</p>" % (days_ago, verbiage) )
-                lines.append("</div>")
+                lines.append("Last day of privileges: %s<br>" % end_date)
+                lines.append("(%s Days %s)<br>" % (days_ago, verbiage) )
+                lines.append("</td>")
                 
             else:
             
-                lines.append("<div class='medical_third expired'>")
-                lines.append("<h3>%s Class</h3>" % ordinal.capitalize() )
-                #lines.append("<p>N/A</p>")
-                lines.append("</div>")
+                lines.append("<td class='expired'>")
+                lines.append("<strong>%s Class</strong><br>" % ordinal.capitalize() )
+                lines.append("<br><br><br>")
+                lines.append("</td>")
         
-        lines.append("</div>")
+        lines.append("</table>")
         return mark_safe(" ".join(lines))
 
 #################################################################
@@ -302,37 +302,43 @@ class InstCurrBox(CurrBox):
         
     def render(self):
         lines = []
-        lines.append("<div class='currbox'>")
+        lines.append("<table class='currbox'>")
         
-        lines.append("<div class='%s inner_currbox inst_bar'>" % self.status.lower())
-        lines.append("<strong>%s %s</strong><br>" % (self.cat, "Instrument"))
-        lines.append("</div>")
+        lines.append("<tr class='full_bar %s'>" % self.status.lower())
+        lines.append("<td colspan='4'><strong>%s Instrument</strong></td>" % self.cat)
+        lines.append("</td>")
+        lines.append("</tr>")
         
-        lines.append("<div class='inst_four %s'>" % self.six_status.lower())
-        lines.append("<strong>%s</strong><br>" % "Sixth to last Approach:")
+        lines.append("<tr>")
+        
+        lines.append("<td class='%s'>" % self.six_class)
+        lines.append("<strong>Sixth to last Approach:</strong><br>")
         lines.append(self.six_disp_date + "<br>")
         lines.append(self.six_message)
-        lines.append("</div>")
+        lines.append("</td>")
         
-        lines.append("<div class='inst_four %s'>" % self.h_class)
-        lines.append("<strong>%s</strong><br>" % "Last Hold:")
+        lines.append("<td class='%s'>" % self.h_class)
+        lines.append("<strong>Last Hold:</strong><br>")
         lines.append(self.h_disp_date + "<br>")
         lines.append(self.h_message)
-        lines.append("</div>")
+        lines.append("</td>")
         
-        lines.append("<div class='inst_four %s'>" % self.t_class)
-        lines.append("<strong>%s</strong><br>" % "Last Tracking:")
+        lines.append("<td class='%s'>" % self.t_class)
+        lines.append("<strong>Last Tracking:</strong><br>")
         lines.append(self.t_disp_date + "<br>")
         lines.append(self.t_message)
-        lines.append("</div>")
+        lines.append("</td>")
         
-        lines.append("<div class='inst_four %s'>" % self.ipc_class)
-        lines.append("<strong>%s</strong><br>" % "IPC")
+        lines.append("<td class='%s'>" % self.ipc_class)
+        lines.append("<strong>Last IPC:</strong><br>")
         lines.append(self.ipc_disp_date + "<br>")
         lines.append(self.ipc_message)
-        lines.append("</div>")
         
-        lines.append("</div>")
+        lines.append("</tr>")
+        
+        
+        
+        lines.append("</table>")
         
         return mark_safe(" ".join(lines))         
 

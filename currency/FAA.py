@@ -324,23 +324,32 @@ class FAA_Instrument(Currency):
         
         alert = False; expired = False
         for item in ("six", "h", "t"):
-            if getattr(self, "%s_status" % item) == "ALERT":
+            st = getattr(self, "%s_status" % item)
+            if st == "ALERT":
                 alert = True
-            if getattr(self, "%s_status" % item) == 'EXPIRED':
+            if st == 'EXPIRED' or st == 'NEVER':
                 expired = True
                
         if alert and not expired:
+            #if any are alert and none are expired
             self.overall_status = "ALERT"
+            
         elif not expired:
+            # if any none are expired
             self.overall_status = "CURRENT"
         else:
+            # if at least one is expired
             self.overall_status = "EXPIRED"
             
+        #ipc trumps all    
         if self.ipc_status == "CURRENT":
             self.overall_status = "CURRENT"
             
-        if self.ipc_status == "ALERT":
+        if self.ipc_status == "ALERT" and expired:
             self.overall_status = "ALERT"
+            
+        if self.ipc_status == "ALERT" and not expired:
+            self.overall_status = "CURRENT"
             
         return self.overall_status
     
