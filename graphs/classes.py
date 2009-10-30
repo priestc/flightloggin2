@@ -133,6 +133,7 @@ class ProgressGraph(object):
         ax.set_xlim(self.start, self.end)
         
         if self.rate:
+            #only add if the user wants the rate shown
             ax2 = ax.twinx()
             d_color='#c14242'
             ax2.plot(rate_plot['x'],
@@ -287,6 +288,87 @@ class ProgressGraph(object):
     def as_svg(self):
         return plot_svg(self.output)()
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+from django.db.models import Sum
+
+
+class BarGraph(object):
+    
+    def __init__(self, user, time):
+        self.user = user
+        self.time = time
+        self.qs = Flight.objects.filter(user=user)
+        
+        self.fig = plt.figure()
+        
+
+    def render(self):
+        qs = self.get_qs()
+        
+        vert=[] # the 'aggregate by' titles down the vertical axis
+        vals=[] #the values that will be plotted
+        for item, val in qs.iteritems():
+            vert.append(item)
+            val.append(val)
+        
+        ax = self.fig.add_subplot(111)
+        ax.barh(vert,vals, align='center')
+        
+        return self.fig
+
+    def as_png(self):
+        return plot_png(self.output)()
+    
+    def as_svg(self):
+        return plot_svg(self.output)()
+
+###############################################################################
+
+class PersonBarGraph(BarGraph):
+    
+    def get_qs(self):
+        return self.qs.values('person')\
+                      .distinct()\
+                      .order_by()\
+                      .annotate(val=Sum(self.time))
+
+class CatClassBarGraph(BarGraph):
+    
+    def get_qs(self):
+        return self.qs.values('plane__cat_class')\
+                      .distinct()\
+                      .order_by()\
+                      .annotate(val=Sum(self.time))        
+        
+class PlaneTypeBarGraph(BarGraph):
+    
+    def get_qs(self):
+        return self.qs.values('plane__type')\
+                      .distinct()\
+                      .order_by()\
+                      .annotate(val=Sum(self.time))        
+        
+        
+        
+        
+        
+        
+        
 
 
 
