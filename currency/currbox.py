@@ -83,7 +83,7 @@ class MediCurrBox(CurrBox):
 
     def render(self):
         lines = []
-        lines.append("<table class='currbox'>")
+        lines.append("<table class='currbox medical'>")
         
         word={1: "first", 2: "second", 3: "third"}
         
@@ -205,7 +205,7 @@ class InstCurrBox(CurrBox):
             self.six_disp_date = DateFormat(self.six_start_date)\
                                         .format(self.date_format)
         else:
-            self.six_message = "Never"
+            self.six_message = "Never<br><br>"
             self.six_disp_date = ""
             self.six_class = "expired"
             self.six_end_date = date(3000, 4, 4)
@@ -233,7 +233,7 @@ class InstCurrBox(CurrBox):
             self.ipc_disp_date = DateFormat(self.ipc_start_date)\
                                         .format(self.date_format)
         else:
-            self.ipc_message = "Never"
+            self.ipc_message = "Never<br><br>"
             self.ipc_disp_date = ""
             self.ipc_class = "expired"
             self.ipc_end_date = date(3000, 4, 4)
@@ -261,7 +261,7 @@ class InstCurrBox(CurrBox):
             self.h_disp_date = DateFormat(self.h_start_date)\
                                         .format(self.date_format)
         else:
-            self.h_message = "Never"
+            self.h_message = "Never<br><br>"
             self.h_disp_date = ""
             self.h_class = "expired"
             self.h_end_date = date(3000, 4, 4)
@@ -288,7 +288,7 @@ class InstCurrBox(CurrBox):
             self.t_disp_date = DateFormat(self.t_start_date)\
                                         .format(self.date_format)
         else:
-            self.t_message = "Never"
+            self.t_message = "Never<br><br>"
             self.t_disp_date = ""
             self.t_class = "expired"        
             self.t_end_date = date(3000, 4, 4)
@@ -302,7 +302,7 @@ class InstCurrBox(CurrBox):
         
     def render(self):
         lines = []
-        lines.append("<table class='currbox'>")
+        lines.append("<table class='currbox instrument'>")
         
         lines.append("<tr class='full_bar %s'>" % self.status.lower())
         lines.append("<td colspan='4'><strong>%s Instrument</strong></td>" % self.cat)

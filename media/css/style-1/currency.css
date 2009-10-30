@@ -31,5 +31,8 @@ table.currbox                 {width: 100%; border: 1px solid black;
                                height: 100px; border-collapse: collapse;}
                                
 table.currbox strong          {font-size: small}
-table.currbox td              {width: 25%; border: 1px solid black}
+table.currbox td              {border: 1px solid black}
 tr.full_bar td                {text-align: center}
+
+table.instrument td           {width: 25%}
+table.medical td              {width: 33%}
