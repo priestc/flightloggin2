@@ -100,11 +100,11 @@ class Currency(object):
             return ("EXPIRED", expire_date)
         
         #today is later than alert, but not past expired date, ALERT
-        elif self.TODAY < expire_date and self.TODAY > alert_date:
+        elif self.TODAY <= expire_date and self.TODAY > alert_date:
             return ("ALERT", expire_date)
         
         #today is before expire date, and before alert date, CURRENT
-        elif self.TODAY < expire_date and self.TODAY < alert_date:
+        elif self.TODAY <= expire_date and self.TODAY < alert_date:
             return ("CURRENT", expire_date)
         
         else:
