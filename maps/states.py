@@ -76,15 +76,13 @@ class StateMap(object):
         from airport.models import USStates
         import settings
         
-        fig = plt.figure(figsize=(3.5, 2.5),)
-        
-        #states = USStates.objects.filter(state__in=states_to_plot.keys())
+        fig = plt.figure(frameon=False, figsize=(3.5, 2.5),)
         
         self.m.readshapefile(settings.PROJECT_PATH + '/maps/st99_d00',
                                 'states',drawbounds=True)
 
         text = []
-        ax = plt.gca()
+        ax = plt.gca() #fig.add_subplot(111, frameon=False, xticks=[], yticks=[])
 
         # get the min and max values for coloration
         try:

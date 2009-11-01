@@ -148,6 +148,8 @@ FIELD_TITLES = {
     "flying": "Flying",
     
     'max_width': "Max Width",
+    'route__max_width_all': "Max Width",
+    'route__total_line_all': "Distance",
     'line_dist': "Distance",
     'atp_xc': "ATP XC",
     'speed': 'Speed',

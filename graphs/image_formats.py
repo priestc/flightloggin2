@@ -13,7 +13,9 @@ class plot_png(object):
         return response
         
 class plot_svg(object):
-    def __init__(self, view):
+    def __init__(self, view, height=None):
+        if height:
+            self.height = height
         self.view = view
     
     def __call__(self, *args, **kwargs):
@@ -33,7 +35,7 @@ class plot_svg(object):
 
 
 class plot_format(object):
-    
+    """Used for the states map"""
     extension = 'xxx'
     mime = 'xxx/xxx'    
     
@@ -46,8 +48,7 @@ class plot_format(object):
         fig.savefig(response,
                     format=self.extension,
                     bbox_inches="tight",
-                    pad_inches=.05,
-                    edgecolor="white")
+                    pad_inches=(-0.03),)
         return response
     
 class plot_svg2(plot_format):
