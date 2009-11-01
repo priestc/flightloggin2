@@ -9,3 +9,10 @@ tr.header td                    {background: #C7A16E}
 div#progress                    {font-size: large; margin: 10px;
                                  background: #EEEEEE;
                                  border: 1px solid gray}
+                                 
+table#import_form               {margin: 10px auto 10px auto; background: #EDEDED;
+                                 border: 1px solid black}
+                                 
+table#import_form td            {padding: 10px; border: 1px ridge gray}
+
+table#import_form input         {border: default; background: default}

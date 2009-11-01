@@ -20,28 +20,61 @@ $(document).ready(function() {
 
 {% block canvas %}
 
-    Select a file to upload, or leave blank to use the last file you uploaded.<br />
-
     {% if InvalidError %}
         <br /><big style="color: red">Error: Not a valid CSV file</big>
     {% endif %}
-    
-    {% if NoFile %}
-        <br /><big style="color: red">Could not find file.</big>
-    {% endif %}
-    
-    <form id="upform" action="{% url import display_user %}" method="post" enctype="multipart/form-data">
-    <div>
-        <ul>
-        {{fileform.file}}
-        </ul>
-        <input type="submit" value="Preview" name="submit">  <input type="submit" value="Import" name="submit">
-    </div>
-    </form>
+
+    <form id="upform" action="{% url import display_user %}" method="post" enctype="multipart/form-data">   
+    <table id="import_form">
+        <tbody>
+        <tr>
+            <td>New File:</td>
+            <td>
+                {% if NoFile %}
+                <big style="color: red">Could not find file.</big><br />
+                {% endif %}
+                
+                {{fileform.file}}<br>{{fileform.file.errors}}</td>
+            <td>
+                <input type="submit" value="Preview" name="preview_f">
+                <input type="submit" value="Import" name="import_f">
+            </td>
+        </tr>
+
+        <tr>
+            <td>Old Flightlogg.in'<br>Share URL:</td>
+            <td>
+                {{fileform.url}}<br>
+                <small>ex: http://flightlogg.in/logbook.php?share=968&token=3df2173f1a</small>
+                <br>{{fileform.url.errors}}
+            </td>
+            <td>
+                <input type="submit" value="Preview" name="preview_u">
+                <input type="submit" value="Import" name="import_u">
+            </td>
+        </tr>
+        
+        <tr>
+            <td>
+                Use previous upload:
+            </td>
+            <td>
+                {{ previous.size|safe }}
+                {{ previous.age|safe }}
+            </td>
+            <td>
+                <input type="submit" value="Preview" name="preview_p">
+                <input type="submit" value="Import" name="import_p">
+                </form>
+            </td>
+        </tr>
+        </form>
+    </table>
+    </form>    
     
     <div id="progress" style="display: none">
         Please wait, flights are being processed<br>
-        <img src="{{MEDIA_URL }}/icons/gray-indicator.gif" />
+        <img src="{{ MEDIA_URL }}/icons/gray-indicator.gif" />
     </div>
     
     {#########################################################################}

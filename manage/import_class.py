@@ -6,9 +6,6 @@ from logbook.models import Flight
 from records.models import Records, NonFlight
 from plane.models import Plane
 
-from django.conf import settings
-UPLOADS_DIR = settings.PROJECT_PATH + "/uploads"
-
 class BaseImport(object):
     
     class NoFileError(Exception):
@@ -17,15 +14,10 @@ class BaseImport(object):
     class InvalidCSVError(Exception):
         pass
     
-    def __init__(self, user, f=None):
+    def __init__(self, user, f):
         
         self.user = user
-        
-        if not f:
-            self.f = self.find_already_uploaded_file()
-        else:
-            self.f = f
-            self.save_file()
+        self.f = f
             
         if not self.f:
             raise self.NoFileError
@@ -35,26 +27,11 @@ class BaseImport(object):
         self.records_out = []
         self.non_out = []
         
-    def make_filename(self):
-        return "%s/%s-%s-%s.txt" %\
-                (UPLOADS_DIR,
-                 self.user.id,
-                 datetime.datetime.now().microsecond,
-                 self.user.username)
-        
     def do_pre(self):
         """get the first 10,000 characters of the file for preview purposes"""
         self.f.seek(0)
         self.pre = self.f.read(10000)
         self.f.seek(0)
-        
-    def save_file(self):
-        filename = self.make_filename()
-        dest = open(filename, 'wb+')
-        
-        for chunk in self.f.chunks():
-            dest.write(chunk)
-        dest.close()
         
     def get_dialect(self):
         self.do_pre()
@@ -142,42 +119,6 @@ class BaseImport(object):
         nh = ["<td>%s</td>" % f for f in ('Date', 'Type', 'Remarks',)]
                                           
         self.non_flight_header = "<tr class=\"header\">" + "".join(nh) + "</tr>"
-        
-    def find_already_uploaded_file(self):
-        import os
-        filenames = os.listdir(UPLOADS_DIR)
-        
-        # find all files in teh directory that have the user's username in the
-        # filename
-        hits=[]
-        st = "%s-" % self.user.id
-        for filename in filenames:
-            if filename.startswith(st):
-                hits.append(filename)
-        
-        # no file found
-        if len(hits) == 0:
-            return None
-        
-        # one file found, open that filename, and return it
-        if len(hits) == 1:
-            return open(UPLOADS_DIR + "/" + hits[0])
-        
-        
-        # more than one file found, return the last modified one
-        modified = 0
-        our_file = None
-        for filename in hits:
-            full_fn = UPLOADS_DIR + "/" + filename
-            new_modified = os.path.getmtime(full_fn)
-            if new_modified > modified:
-                modified = new_modified
-                our_file = full_fn
-                
-        #print full_fn   
-        return open(our_file)
-        
-        
 
 ###############################################################################
 

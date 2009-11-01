@@ -1,6 +1,6 @@
 
 
-class GetPHPBackup(object):
+class PHPBackup(object):
 
     class InvalidToken(Exception):
         pass
@@ -8,29 +8,34 @@ class GetPHPBackup(object):
     class InvalidURL(Exception):
         pass
         
-    def __init__(self, user, url):
-        self.user = user
-        self.token, self.uid = self.extract_token_and_uid(url)
+    def __init__(self, url):
+        self.url = url
+        
+    def validate(self):
+        self.uid = self._get_uid(self.url)
     
     def get_file(self):
-        import urllib
+        import urllib2
+        self.validate()
         url = "http://old.flightlogg.in/backup.php?sec=%s" % self.uid
-        f=urllib.urlopen(url)
-        print f.read()
+        f = urllib2.urlopen(url)
         return f
         
-    def verify_pair(self, token, uid):
+    def _verify_pair(self, token, uid):
+        """Actually does the verifying to make sure the token is correct
+        """
         import hashlib;
         m = hashlib.sha256()
-        m.update(uid) # poop = the salt used on the PHP site
+        m.update(uid)
         calc_token = m.hexdigest()[:10]
         
         if not token == calc_token:
             raise self.InvalidToken
         
-    def extract_token_and_uid(self, url):
+    def _get_uid(self, url):
         """
-        ex: http://flightlogg.in/logbook.php?share=1&token=6b86b273ff
+        returns the UID as long as it validates against the token
+        url ex: http://flightlogg.in/logbook.php?share=1&token=6b86b273ff
         """
         
         if not "flightlogg.in" in url:
@@ -44,6 +49,6 @@ class GetPHPBackup(object):
         uid = u[6:][:-1]
         
         #will raise error if not valid
-        self.verify_pair(token, uid)
+        self._verify_pair(token, uid)
         
-        return token, uid
+        return uid
