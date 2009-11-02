@@ -2,9 +2,10 @@ from django.conf import settings
 import datetime
 UPLOADS_DIR = settings.PROJECT_PATH + "/uploads"
 
-def find_already_uploaded_file(uid):
+def get_last(uid):
     """Goes through the uploads directory and returns the latest file (based
        on modified date/time in metadata) that starts with the user's ID.
+       returns the file, and then a dict with some metadata
     """
     import os
     filenames = os.listdir(UPLOADS_DIR)
@@ -16,10 +17,10 @@ def find_already_uploaded_file(uid):
     for filename in filenames:
         if filename.startswith(st):
             hits.append(filename)
-    
+
     # no file found
     if len(hits) == 0:
-        return None, None, None
+        return None, None
         
     else:
         # at least one file found, return the last modified one
@@ -35,9 +36,18 @@ def find_already_uploaded_file(uid):
         f = open(our_file)
             
     size = "%.2f" % (os.path.getsize(our_file) / 1024.0)
-    ago = str(datetime.datetime.now() - datetime.datetime.fromtimestamp(modified))
+    ago = str(datetime.datetime.now() -\
+                        datetime.datetime.fromtimestamp(modified))
+    previous = {}
     
-    return (f, ago[:-10], size)
+    if f:
+        previous['age'] = "Uploaded %s Ago" % ago[:-10]
+        previous['size'] = "%s KB<br>" % size
+    else:
+        previous['age'] = "<i>You have not uploaded anything yet</i>"
+        previous['size'] = ""
+        
+    return f, previous
 
 def make_filename(user):
     return "%s/%s-%s-%s.txt" %\
@@ -57,7 +67,7 @@ def save_upload(f, user):
     dest.close()
     
 def save_php(f, user):
-    """Saves a addinfourl file object to the uploads directory
+    """Saves an addinfourl file object to the uploads directory
     """
     filename = make_filename(user)
     dest = open(filename, 'wb+')

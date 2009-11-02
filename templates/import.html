@@ -20,8 +20,8 @@ $(document).ready(function() {
 
 {% block canvas %}
 
-    {% if InvalidError %}
-        <br /><big style="color: red">Error: Not a valid CSV file</big>
+    {% if Error %}
+        <br /><big style="color: red">{{ Error }}</big>
     {% endif %}
 
     <form id="upform" action="{% url import display_user %}" method="post" enctype="multipart/form-data">   
@@ -29,11 +29,7 @@ $(document).ready(function() {
         <tbody>
         <tr>
             <td>New File:</td>
-            <td>
-                {% if NoFile %}
-                <big style="color: red">Could not find file.</big><br />
-                {% endif %}
-                
+            <td>                
                 {{fileform.file}}<br>{{fileform.file.errors}}</td>
             <td>
                 <input type="submit" value="Preview" name="preview_f">
@@ -43,7 +39,7 @@ $(document).ready(function() {
 
         <tr>
             <td>Old Flightlogg.in'<br>Share URL:</td>
-            <td>
+            <td>                
                 {{fileform.url}}<br>
                 <small>ex: http://flightlogg.in/logbook.php?share=968&token=3df2173f1a</small>
                 <br>{{fileform.url.errors}}

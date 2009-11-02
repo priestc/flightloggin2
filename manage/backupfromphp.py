@@ -1,12 +1,11 @@
 
+class InvalidToken(Exception):
+    pass
+
+class InvalidURL(Exception):
+    pass
 
 class PHPBackup(object):
-
-    class InvalidToken(Exception):
-        pass
-
-    class InvalidURL(Exception):
-        pass
         
     def __init__(self, url):
         self.url = url
@@ -30,7 +29,7 @@ class PHPBackup(object):
         calc_token = m.hexdigest()[:10]
         
         if not token == calc_token:
-            raise self.InvalidToken
+            raise InvalidToken
         
     def _get_uid(self, url):
         """
@@ -39,7 +38,7 @@ class PHPBackup(object):
         """
         
         if not "flightlogg.in" in url:
-            raise self.InvalidURL
+            raise InvalidURL
         
         import re
         t = m=re.search('token=[A-za-z0-9]+', url).group()
