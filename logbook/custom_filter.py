@@ -3,8 +3,8 @@ from django import forms
 
 from constants import FILTER_FIELDS, FIELD_ABBV
    
-def html_table(data, row_length):
-    out = '<table id="center_filter_table">'
+def html_table(data, row_length, html_id='center_filter_table'):
+    out = '<table id="%id">' % html_id
     counter = 0
     for element in data:
         if counter % row_length == 0:

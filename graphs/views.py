@@ -2,6 +2,8 @@ from logbook.constants import *
 from classes import ProgressGraph
 from annoying.decorators import render_to
 
+from django.utils.safestring import mark_safe
+
 def graph_image(request, shared, display_user,
                     columns, dates=None, ext='png', rate=True):
     
