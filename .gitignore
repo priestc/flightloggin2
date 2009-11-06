@@ -1,4 +1,4 @@
-settings.py
+settings_local.py
 manage.py
 *.bak
 *.pyc
