@@ -29,6 +29,7 @@ def places(request, shared, display_user):
             custom = form.save(commit=False)
             custom.loc_class = 3
             custom.location = point
+            custom.user = display_user
             
             custom.save()
             from route.models import Route
