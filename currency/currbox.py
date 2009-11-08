@@ -54,9 +54,9 @@ class LandCurrBox(CurrBox):
                 lines.append("<h3>%s %s</h3>" % (time.capitalize(), self.title) )
                 lines.append("<p>Date of third-to-last landing: <strong>%s</strong><br>" % start_date )
                 if current:
-                    lines.append("Last day of currency: <strong>%s</strong> (%s Days remain)</p>" % (end_date, days_ago) )
+                    lines.append("Last day of currency: <strong>%s</strong><br>(%s Days remain)</p>" % (end_date, days_ago) )
                 else:
-                    lines.append("Last day of currency: <strong>%s</strong> (%s Days ago)</p>" % (end_date, days_ago) )
+                    lines.append("Last day of currency: <strong>%s</strong><br>(%s Days ago)</p>" % (end_date, days_ago) )
                 
                 lines.append("</div>")
             else:
@@ -157,9 +157,9 @@ class CertCurrBox(CurrBox):
                 lines.append("<p>Date of last %s: <strong>%s</strong><br>" % (eq[time], start_date) )
                 
                 if current:
-                    lines.append("Last day of privileges: <strong>%s</strong> (%s Days remain)</p>" % (end_date, days_ago) )
+                    lines.append("Last day of privileges: <strong>%s</strong><br>(%s Days remain)</p>" % (end_date, days_ago) )
                 else:
-                    lines.append("Last day of privileges: <strong>%s</strong> (%s Days ago)</p>" % (end_date, days_ago) )
+                    lines.append("Last day of privileges: <strong>%s</strong><br>(%s Days ago)</p>" % (end_date, days_ago) )
                 
                 lines.append("</div>")
             else:
@@ -194,13 +194,13 @@ class InstCurrBox(CurrBox):
                                         .format(self.date_format)
                                         
         if self.six_status == "EXPIRED":
-            self.six_message = "Expired %s<br>%s Days Ago" % (ed, six_days_ago)
+            self.six_message = "Expired %s<br>(%s Days Ago)" % (ed, six_days_ago)
             self.six_class = self.six_status.lower()
             self.six_disp_date = DateFormat(self.six_start_date)\
                                         .format(self.date_format)
                                         
         elif self.six_status == "CURRENT" or self.six_status == "ALERT":
-            self.six_message = "Last day of currency: %s<br>%s Days Remain" % (ed, six_days_ago)
+            self.six_message = "Last day of currency: %s<br>(%s Days Remain)" % (ed, six_days_ago)
             self.six_class = self.six_status.lower()
             self.six_disp_date = DateFormat(self.six_start_date)\
                                         .format(self.date_format)
@@ -222,13 +222,13 @@ class InstCurrBox(CurrBox):
                                         .format(self.date_format)
                                         
         if self.ipc_status == "EXPIRED":
-            self.ipc_message = "Expired %s<br>%s Days Ago" % (ed, ipc_days_ago)
+            self.ipc_message = "Expired %s<br>(%s Days Ago)" % (ed, ipc_days_ago)
             self.ipc_class = self.ipc_status.lower()
             self.ipc_disp_date = DateFormat(self.ipc_start_date)\
                                         .format(self.date_format)
                                         
         elif self.ipc_status == "CURRENT" or self.ipc_status == "ALERT":
-            self.ipc_message = "Last day of currency: %s<br>%s Days Remain" % (ed, ipc_days_ago)   
+            self.ipc_message = "Last day of currency: %s<br>(%s Days Remain)" % (ed, ipc_days_ago)   
             self.ipc_class = self.ipc_status.lower()
             self.ipc_disp_date = DateFormat(self.ipc_start_date)\
                                         .format(self.date_format)
@@ -250,13 +250,13 @@ class InstCurrBox(CurrBox):
                                         .format(self.date_format)
                                         
         if self.h_status == "EXPIRED":
-            self.h_message = "Expired %s<br>%s Days Ago" % (ed, h_days_ago)
+            self.h_message = "Expired %s<br>(%s Days Ago)" % (ed, h_days_ago)
             self.h_class = self.h_status.lower()
             self.h_disp_date = DateFormat(self.h_start_date)\
                                         .format(self.date_format)
                                         
         elif self.h_status == "CURRENT" or self.h_status == "ALERT":
-            self.h_message = "Last day of currency: %s<br>%s Days Remain" % (ed, h_days_ago)    
+            self.h_message = "Last day of currency: %s<br>(%s Days Remain)" % (ed, h_days_ago)    
             self.h_class = self.h_status.lower()
             self.h_disp_date = DateFormat(self.h_start_date)\
                                         .format(self.date_format)
@@ -277,13 +277,13 @@ class InstCurrBox(CurrBox):
             ed = DateFormat(self.t_end_date)\
                                         .format(self.date_format)
         if self.t_status == "EXPIRED":
-            self.t_message = "Expired %s<br>%s Days Ago" % (ed, t_days_ago)
+            self.t_message = "Expired %s<br>(%s Days Ago)" % (ed, t_days_ago)
             self.t_class = self.t_status.lower()
             self.t_disp_date = DateFormat(self.t_start_date)\
                                         .format(self.date_format)
                                         
         elif self.t_status == "CURRENT" or self.t_status == "ALERT":
-            self.t_message = "Last day of currency: %s<br>%s Days Remain" % (ed, t_days_ago)
+            self.t_message = "Last day of currency: %s<br>(%s Days Remain)" % (ed, t_days_ago)
             self.t_class = self.t_status.lower()
             self.t_disp_date = DateFormat(self.t_start_date)\
                                         .format(self.date_format)

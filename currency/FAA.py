@@ -8,6 +8,14 @@ from plane.models import Plane
 from logbook.models import Flight
 from records.models import NonFlight
 
+def latest(*args):
+    """return the latest date"""
+    dates = []
+    for arg in args:
+        if arg: dates.append(arg)
+        
+    return max(*dates)
+
 def minus_alert(alert_time, expire):
     try:
         number, unit = re.match("^(\d+)([a-z]+)$", alert_time).groups()
@@ -197,7 +205,7 @@ class FAA_Landing(Currency):
             self.pilot_flight = True
             
         except IndexError:
-            flight_date = date(1950, 2,4) # a generic old expired date
+            flight_date = None
             
         try:
             event_date = NonFlight.objects\
@@ -208,17 +216,17 @@ class FAA_Landing(Currency):
                                   
             self.pilot_event = True
         except IndexError:
-            event_date = date(1950, 2,4) # a generic old expired date
+            event_date = None
 
         ############
 
         if not event_date and not flight_date:
             return ("NEVER", None, None)
         
-        else:
-            start_date = max(event_date, flight_date)
-            status, end_date = self._determine("flight_review", start_date)
-            return (status, start_date, end_date)
+        start_date = latest(event_date, flight_date)
+        
+        status, end_date = self._determine("flight_review", start_date)
+        return (status, start_date, end_date)
 
     ###########################################################################
     
@@ -250,10 +258,9 @@ class FAA_Landing(Currency):
             # no checkrides nor flight reviews in database, return "never"
             return ("NEVER", None, None)
 
-        else:
-            start_date = max(refresher_date, checkride_date)
-            status, end_date = self._determine("flight_review", start_date)
-            return (status, start_date, end_date)
+        start_date = latest(refresher_date, checkride_date)
+        status, end_date = self._determine("flight_review", start_date)
+        return (status, start_date, end_date)
     
     ###########################################################################
 
