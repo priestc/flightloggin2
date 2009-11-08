@@ -1,11 +1,18 @@
-var url = "sigs/pic.png"
+
+// the domain name of the page
+var p = location.href.split("/");
+p[p.length-1]="";
+p=p.join("/");
+
+
+// the default to show
+var url = p + "sigs/pic.png"
 
 $(document).ready(function() {
-	$("#generate_button").click(function(event) {
-	    get_url()
-		generate_sig();
-		copy_url();
-	});
+
+    generate()
+
+	$("#generate_button").click(generate);
 });
 
 function generate_sig() {
@@ -24,9 +31,11 @@ function get_url() {
         fields.push(this.id)
     });
     
-    var p = location.href.split("/");
-    p[p.length-1]="";
-    p=p.join("/");
-    
     url = p + "sigs/" + fields.join("-") + ".png"
+}
+
+function generate(event) {
+    get_url()
+	generate_sig();
+	copy_url();
 }

@@ -9,13 +9,17 @@
 {% block title %}Sigs{% endblock %}
 
 {% block canvas %}
+<p class="instructions">
+Create a small image that always displays the totals of various times in your
+logbook. Select the columns you want shown, then click the generate button.
+</p>
+{{checkbox_table}}
 
-{{select}}
 <input type="button" value="Generate" id="generate_button">
-
-<br><br>
-
-<img src="" id="sig_image">
+<hr>
+<div id="image_div">
+    <img src="sigs/pic.png" id="sig_image">
+</div>
 <div id="sig_url"></div>
 {% endblock %}
 

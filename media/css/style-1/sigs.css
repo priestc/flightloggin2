@@ -1,3 +1,10 @@
-
 #checktable                {margin-left: auto; margin-right: auto}
 #checktable td             {text-align: left}
+
+#sig_url                   {width: 50%; padding: 20px;
+                            font-size: large; background: pink;
+                            text-align: center; margin: 0 auto 0 auto}
+                             
+#image_div                 {padding: 20px; background: clear; min-width: 10%}
+
+.instructions              {background: #DDDDDD; padding: 20px}

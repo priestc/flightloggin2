@@ -5,7 +5,7 @@ from logbook.constants import FIELD_TITLES, GRAPH_FIELDS
 @render_to('sigs.html')
 def sigs(request, shared, display_user):
     from logbook.constants import all_agg_checkbox
-    select = all_agg_checkbox()
+    checkbox_table = all_agg_checkbox()
     return locals()
 
 
