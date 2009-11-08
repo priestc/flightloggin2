@@ -13,8 +13,11 @@ def latest(*args):
     dates = []
     for arg in args:
         if arg: dates.append(arg)
-        
-    return max(*dates)
+    
+    if len(dates) == 1:     #if theres only one date, return it
+        return dates[0]
+    
+    return max(*dates)      #there are more than one date, return the highest
 
 def minus_alert(alert_time, expire):
     try:
