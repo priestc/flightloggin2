@@ -2,7 +2,7 @@
 div.currbox         {width: 100%; overflow: hidden; margin-bottom: 10px; text-align: center}
 div.currbox p       {margin-top: 3px}
 h2                  {margin-left: auto; margin-right: auto}                  
-h3                  {font-size: large; color: black; margin: 15px 0 5px 0}
+h3                  {font-size: large; color: black; margin: 11px 0 5px 0}
 
 div.inner_currbox   {border: 1px solid black; width: 49%; height: 100px}
 div.medical_third   {border: 1px solid black; width: 32%; height: 100px; float: left; margin: 5px}
@@ -32,6 +32,7 @@ table.currbox                 {width: 100%; border: 1px solid black;
                                
 table.currbox strong          {font-size: small}
 table.currbox td              {border: 1px solid black; padding: 0px}
+table.currbox td h3           {margin-top: 0px}
 tr.full_bar td                {text-align: center}
 
 table.instrument td           {width: 25%}
