@@ -76,5 +76,5 @@ table.minor_table tr:nth-child(even)  {background: #E7FFE7}
 /* the empty message */
 table.minor_table td[colspan]         {font-size: x-large; padding: 10px}
 
-
-
+/* instructions boxes in a few of the pages */
+.instructions              {background: #DDDDDD; padding: 20px}

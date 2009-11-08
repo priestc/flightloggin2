@@ -2,7 +2,7 @@
 
 {% block title %}Sign in using OpenID{% endblock %}
 
-{#######################################################################################}
+{#############################################################################}
 
 {% block javascript %}
 <script type="text/javascript" src="{{ MEDIA_URL }}/openid-realselector/js/jquery.openid.min.js"></script>	
@@ -15,20 +15,29 @@
       });
 	});
 </script>
-
-
 {% endblock %}
 
-{% block edit %}{%endblock %}
+{#############################################################################}
 
 {% block canvas %}
-
+<div class="instructions">
+    To create a Flightlogg.in' account, you must have an OpenID account. Don't worry, 
+    you probably already have an OpenID account. If you have an account set up with an
+    OpenID provider (such as Google, Yahoo, AOL, LiveJournal and a bunch others), then
+    you already have an OpenID account.
+    <br><br>
+    To make a new account, click the button below that corresponds to the OpenID
+    provider you wish to use. From there just follow the directions. A new FlightLogg.in'
+    account will be made for you that is tied to your OpenID provider account.
+    <br><br>
+    To log in, select the OpenID provider you used wen you created your account. You
+    will then be automatically logged in.
+    <br><br>
+    <a href="http://openidexplained.com/" target="_blank">Click here for more Information about OpenID</a>
+</div>
+<br>
 <form method="post" action="." id="openid">
-		<div><input type="hidden" name="action" value="verify" /></div>
+    <div><input type="hidden" name="action" value="verify" /></div>
 </form>
-
-<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/Vq0R1Y1A2rE&hl=en&fs=1&"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/Vq0R1Y1A2rE&hl=en&fs=1&" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"></embed></object>
-<br><br>
-<a href="http://openidexplained.com/" target="_blank">Click here for more Information about OpenID</a>
 
 {% endblock %}
