@@ -142,7 +142,7 @@ class CertCurrBox(CurrBox):
         lines.append("<div class='currbox'>")
         
         title = {'cfi': "Flight Instructor", 'bfr': "Flight Review"}
-        eq = {'cfi': "Flight Instructor Renewall", 'bfr': "Flight Review qualifying event"}
+        eq = {'cfi': "Flight Instructor Renewal", 'bfr': "Flight Review qualifying event"}
             
         for time in ["cfi", "bfr"]:
             if not getattr(self, time)[0] == "NEVER":
