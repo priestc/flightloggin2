@@ -1,27 +1,9 @@
-from django.utils.safestring import mark_safe
 from django import forms
 
 from constants import FILTER_FIELDS, FIELD_ABBV
-   
-def html_table(data, row_length, html_id='center_filter_table'):
-    out = '<table id="%id">' % html_id
-    counter = 0
-    for element in data:
-        if counter % row_length == 0:
-            out += '<tr>'
-        out += '<td>%s</td>' % element
-        counter += 1
-        if counter % row_length == 0:
-            out += '</tr>'
-    if counter % row_length != 0:
-        for i in range(0, row_length - counter % row_length):
-            out += '<td> </td>'
-        out += '</tr>'
-    out += '</table>'
-    
-    return mark_safe(out)
     
 def render_table(self):  #will be attached to the class in the function
+    from main.table import html_table
     out=[]
     for field in FILTER_FIELDS:
         num_field = str(self[field])

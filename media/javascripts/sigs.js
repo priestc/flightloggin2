@@ -20,7 +20,7 @@ function get_url() {
     
     fields = []
 
-    $(".checktable input:checked").each(function() {
+    $("#checktable input:checked").each(function() {
         fields.push(this.id)
     });
     

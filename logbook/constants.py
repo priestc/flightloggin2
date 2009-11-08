@@ -221,8 +221,8 @@ FIELD_ABBV = {
 }
 
 #########################################
-#from django.utils.safestring import mark_safe
-#from PyHtmlTable import PyHtmlTable
+
+from main.table import html_table
 
 #def all_agg_select(prefix=""):
 #    out = []
@@ -231,18 +231,15 @@ FIELD_ABBV = {
 #        
 #    return mark_safe("<select>" + "".join(out) + "</select>")
 
-#def all_agg_checkbox(prefix=""):
-#    out = []
-#    for field in GRAPH_FIELDS:
-#        out.append("<input type=\"checkbox\" id=\"%s\"><label for=\"%s\">%s</label>" % (field, field, FIELD_TITLES[field]))
-#        
-#    t = PyHtmlTable(0,5, {"class": "checktable"})
-#    
-#    for row in range(0,6):
-#        for i,item in enumerate(out[(row*5):(row*5)+5]):
-#            t.setCellcontents(row,i,item)
-#    
-#    return mark_safe(t.return_html())
+def all_agg_checkbox(prefix=""):
+    out = []
+    for field in GRAPH_FIELDS:
+        out.append(
+        """<input type="checkbox" id="%s"><label for="%s">%s</label>""" % \
+                      (field, field, FIELD_TITLES[field])
+        )
+    
+    return html_table(out, 5, "checktable")
 
     
     
