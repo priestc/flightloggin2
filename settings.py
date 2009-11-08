@@ -9,11 +9,6 @@ DEBUG_TOOLBAR = False
 AUTH_PROFILE_MODULE = 'profile.profile'
 
 
-EMAIL_HOST = "localhost"
-EMAIL_PORT = 1025
-DEFAULT_FROM_EMAIL = "from@me.com"
-
-
 ## postgis setting for testing
 TEST_RUNNER='django.contrib.gis.tests.run_tests'
 #OPENID_SSO_SERVER_URL = 'https://login.launchpad.net/'
