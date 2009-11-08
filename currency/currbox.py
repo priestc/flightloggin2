@@ -98,7 +98,7 @@ class MediCurrBox(CurrBox):
                 days_ago = abs((date.today() - getattr(self, ordinal)[2]).days)
                 
                 lines.append("<td class='%s'>" % class_name)
-                lines.append("<strong>%s Class</strong><br>" % ordinal.capitalize() )
+                lines.append("<h3>%s Class</h3>" % ordinal.capitalize() )
                 
                 if clas == self.medi_issued:
                     lines.append("Date of exam: %s<br>" % start_date)
@@ -116,7 +116,7 @@ class MediCurrBox(CurrBox):
             else:
             
                 lines.append("<td class='expired'>")
-                lines.append("<strong>%s Class</strong><br>" % ordinal.capitalize() )
+                lines.append("<h3>%s Class</h3>" % ordinal.capitalize() )
                 lines.append("<br><br><br>")
                 lines.append("</td>")
         
