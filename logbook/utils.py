@@ -398,6 +398,12 @@ class QuerySet(QuerySet):
         elif cn == 'mes':
             return self.multi().sea().total(*args, **kwargs)
         
+        elif cn == 'jet':
+            return self.jet().total(*args, **kwargs)
+        
+        elif cn == 'jet_pic':
+            return self.jet().pic(*args, **kwargs)
+        
         elif cn == 'mes_pic':
             return self.multi().sea().pic(*args, **kwargs)
         
