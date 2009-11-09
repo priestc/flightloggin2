@@ -279,7 +279,7 @@ class PrepareLine(object):
         del output['via']
         del output['to']
         del output['from_']
-               
+        
         return output
     
     def dict_event(self):

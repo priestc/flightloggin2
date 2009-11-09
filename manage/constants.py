@@ -124,8 +124,8 @@ CSV_FIELDS = (
           'total', 'sim', 'pic', 'solo', 'sic', 'night', 'dual_r','dual_g',
           'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
           'person', 'remarks', 'holding', 'tracking', 'instructor', 'student',
-          'fo', 'captain', 'flying', 'non_flying','pilot_checkride', 'ipc',
-          'cfi_checkride',
+          'fo', 'captain', 'non_flying','pilot_checkride', 'ipc',
+          'cfi_checkride','flying',
           )
 
 # fields that are displayed in the import preview page
