@@ -55,6 +55,8 @@ class LogbookRow(list):
                           "title": FIELD_TITLES[column]} )
 
     def get_data_spans(self):
+        """Returns the <span>'s that hold the
+        """
         out = []
         for field in DB_FIELDS:
             out.append('<span class="data_%s">%s</span>' % \
@@ -100,7 +102,12 @@ def from_minutes(value):
 class QuerySet(QuerySet):
     
     def user(self, u):
-        return self.filter(user=u,)
+        from django.contrib.auth.models import User
+        if isinstance(u, User):
+            return self.filter(user=u,)
+        else:
+            return self.filter(user=User.objects.get(username=u))
+        
     
     ### by aircraft tags
     
@@ -385,6 +392,9 @@ class QuerySet(QuerySet):
             
         elif cn == 'multi':
             return self.multi().total(*args, **kwargs)
+        
+        elif cn == 'single':
+            return self.single().total(*args, **kwargs)
         
         elif cn == 'm_pic':
             return self.multi().pic(*args, **kwargs)
