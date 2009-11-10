@@ -82,7 +82,7 @@ def logbook(request, shared, display_user, page=0):
                 
     ############## get user preferences ##########################
     
-    profile = Profile.get_for_user(display_user)
+    profile,c = Profile.objects.get_or_create(user=display_user)
     num_format = profile.get_format()
     date_format = profile.get_date_format()
     
