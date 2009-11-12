@@ -1,8 +1,11 @@
 Django==1.1.1
 django-annoying==0.7.4
+django-extensions==0.4.1
 -e bzr+http://bazaar.launchpad.net/~django-openid-auth/django-openid-auth/trunk/@56#egg=django_openid_auth-0.1-py2.6-dev_r56
 django-tagging==0.3
+ipython==0.10
 numpy==1.3.0
+psycopg2==2.0.13
 python-openid==2.2.4
 wsgiref==0.1.2
 yolk==0.4.1
