@@ -2,7 +2,6 @@ import os, sys
 from settings_local import *
 
 PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
-DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 DEBUG_TOOLBAR = False
 
@@ -11,8 +10,6 @@ AUTH_PROFILE_MODULE = 'profile.profile'
 
 ## postgis setting for testing
 TEST_RUNNER='django.contrib.gis.tests.run_tests'
-#OPENID_SSO_SERVER_URL = 'https://login.launchpad.net/'
-
 
 
 # debug bar settings#############################

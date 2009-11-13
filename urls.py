@@ -252,7 +252,7 @@ urlpatterns += patterns('',
     
     (
         r'^site-media/(?P<path>.*)$','django.views.static.serve',
-        {'document_root': '/home/chris/Websites/flightloggin/media',
+        {'document_root': '/srv/flightloggin/media',
             'show_indexes': True},
     ),
 
