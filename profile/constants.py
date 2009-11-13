@@ -4,7 +4,7 @@ STYLES = (
 
 BACKUP_FREQUENCY = (
     (0, "Never"),
-    (1, "Weekly"),
-    (2, "Biweekly"),
-    (3, "Monthly"),
+    (1, "Weekly (sent on the 1st, 7th, and 21st of each month)"),
+    (2, "Biweekly (sent on the 1st, and 14th of each month)"),
+    (3, "Monthly (sent on the 1st of each month)"),
 )
