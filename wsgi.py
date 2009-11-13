@@ -6,7 +6,8 @@ import sys
 sys.path = ['/srv/', '/srv/flightloggin/'] + sys.path
 
 import site
-site.addsitedir('/srv/flightloggin/env/lib/python2.6/site-packages')
+from django.conf.settings import ENV_DIR
+site.addsitedir(ENV_DIR)
 
 from django.core.handlers.wsgi import WSGIHandler
 application = WSGIHandler()
