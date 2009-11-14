@@ -245,7 +245,7 @@ urlpatterns += patterns('',
     ),
     
     url(
-        r'^schedule-(?P<schedule>\d).py$',
+        r'^schedule-(?P<schedule>\w+).py$',
         "backup.views.schedule",
                                                             name="schedule",
     ),

@@ -47,7 +47,7 @@ def schedule(request, schedule):
     if schedule == 'weekly':
         users = User.objects.filter(profile__backup_freq=1)
     
-    elif schedule == 'bi-weekly':
+    elif schedule == 'biweekly':
         users = User.objects.filter(profile__backup_freq=2)
     
     elif schedule == 'monthly':
