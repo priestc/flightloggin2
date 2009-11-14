@@ -77,7 +77,10 @@ class Backup(object):
     
 class EmailBackup(object):
     
-    def __init__(self, user):
+    def __init__(self, user, auto=False):
+        if auto:
+            self.auto = True
+
         self.user = user
         from profile.models import Profile
         self.profile = Profile.get_for_user(user)
@@ -90,18 +93,25 @@ class EmailBackup(object):
     def make_email(self):
         from django.core.mail import EmailMessage
         import datetime
+
+        today = datetime.date.today()
         
         message = MESSAGE % self.profile.get_backup_freq_display().lower()
                             
         title = "%s's FlightLogg.in backup for %s" % (
                       self.profile.real_name or self.profile.user.username,
-                      datetime.date.today()
+                      today
         )
         
         file_ = Backup(self.user).output_zip().getvalue()
         
-        email = EmailMessage(title, message, to=(self.addr,))
-        email.attach("backup.tsv.zip", file_,)
+        if auto:
+            f = "FlightLogg.in' Auto Backup Mailer <info@flightlogg.in"
+        else:
+            f = "FlightLogg.in' Manual Backup Mailer <info@flightlogg.in"
+
+        email = EmailMessage(title, message, to=(self.addr,), from_email=f)
+        email.attach("backup-%s.tsv.zip" % today, file_,)
             
         return email
     

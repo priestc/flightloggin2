@@ -55,7 +55,7 @@ def schedule(request, schedule):
 
     ret = ""    
     for user in users:
-        EmailBackup(user).send()
+        EmailBackup(user, "auto").send()
         ret += user.username + " "
     
     
