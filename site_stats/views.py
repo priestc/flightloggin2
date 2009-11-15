@@ -21,28 +21,37 @@ def site_stats(request):
     unique_airports = RouteBase.objects.values('location').distinct().count()
     unique_countries = RouteBase.objects.values('location__country').distinct().count()
     
-    most_common_tailnumber = Plane.objects\
-                            .exclude(flight=None)\
-                            .exclude(tailnumber='')\
-                            .values('tailnumber')\
-                            .distinct()\
-                            .annotate(c=Count('id'))\
-                            .order_by('-c')[0]['tailnumber']
+    p = Plane.objects\
+            .exclude(flight=None)\
+            .exclude(tailnumber='')\
+            .values('tailnumber')\
+            .distinct()\
+            .annotate(c=Count('id'))\
+            .order_by('-c')[0]
+            
+    most_common_tailnumber = p['tailnumber']
+    most_common_tailnumber_count = p['c']
                                   
-    most_common_type = Plane.objects\
-                            .exclude(flight=None)\
-                            .exclude(type='')\
-                            .values('type')\
-                            .distinct()\
-                            .annotate(c=Count('id'))\
-                            .order_by('-c')[0]['type']
-                                  
-    most_common_manufacturer = Plane.objects\
-                            .exclude(flight=None)\
-                            .exclude(manufacturer='')\
-                            .values('manufacturer')\
-                            .distinct()\
-                            .annotate(c=Count('id'))\
-                            .order_by('-c')[0]['manufacturer']
+    p = Plane.objects\
+            .exclude(flight=None)\
+            .exclude(type='')\
+            .values('type')\
+            .distinct()\
+            .annotate(c=Count('id'))\
+            .order_by('-c')[0]
+                            
+    most_common_type = p['type']
+    most_common_type_count = p['c']     
+                             
+    p = Plane.objects\
+            .exclude(flight=None)\
+            .exclude(manufacturer='')\
+            .values('manufacturer')\
+            .distinct()\
+            .annotate(c=Count('id'))\
+            .order_by('-c')[0]
+                            
+    most_common_manu = p['manufacturer']
+    most_common_manu_count = p['c']
     
     return locals()
