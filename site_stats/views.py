@@ -55,5 +55,6 @@ def site_stats(request):
     most_common_manu_count = p['c']
     
     total_dist = Route.objects.aggregate(s=Sum('total_line_all'))['s']
+    total_dist_earth = total_dist / 21620.6641
     
     return locals()
