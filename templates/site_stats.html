@@ -63,6 +63,33 @@
         <td>Most common manufacturer</td>
         <td>{{ most_common_manu}} ({{most_common_manu_count}})</td>
     </tr>
-    
 </table>
+<hr>
+<table id="openid"> 
+    <tr>  
+        <th colspan="2">Openid Providers:</th>
+    </tr>
+    
+    <tr>
+        <td>Google</td>
+        <td>{{ google }} &nbsp; {{ g_p|floatformat:1 }}%</td>
+    </tr>
+    <tr>
+        <td>Yahoo</td>
+        <td>{{yahoo}} &nbsp; {{ y_p|floatformat:1 }}%</td>
+    </tr>
+    <tr>    
+        <td>AOL</td>
+        <td>{{aol}} &nbsp; {{ a_p|floatformat:1 }}%</td>
+    </tr>
+    <tr>
+         <td>MyOpenID</td>
+         <td>{{my}} &nbsp; {{ m_p|floatformat:1 }}%</td>
+    </tr>
+    <tr>
+         <td>Others</td>
+         <td>{{others}} &nbsp; {{ o_p|floatformat:1 }}%</td>
+    </tr>
+</table>    
+
 {% endblock %}

@@ -3,3 +3,8 @@
                                   
 #site_stats td:last-child       {text-align: right; font-weight: bold;
                                  padding-left: 10px}
+                                 
+#openid td, #openid th          {border: 1px dotted gray; text-align: center}
+#openid                         {margin: 0 auto 0 auto;}
+#openid td                      {text-align: left; padding: 0 10px 0 10px}
+#openid td:first-child          {text-align: right}
