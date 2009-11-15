@@ -140,7 +140,10 @@ class Stat(object):
         
         self.time_7_days = fsd.aggregate(s=Sum('total'))['s']     
         self.num_7_days = fsd.count()      
-        self.user_7_days = User.objects.filter(flight__date__gte=sda).count()
+        self.user_7_days = User.objects\
+                               .filter(flight__date__gte=sda)\
+                               .distinct()\
+                               .count()
         
         # calculate everyone's totals,
         # also exclude users with less than 100 flights
