@@ -8,6 +8,8 @@
 {% block title %}Site Stats{% endblock %}
 {% block canvas %}
 
+<div>Updated Hourly<br>Last updated: {{cs.dt}}</div>
+<hr>
 <table id="site_stats">
     <tr>
         <td>Total users</td>
@@ -33,6 +35,32 @@
         <td>Average total hours per active user</td>
         <td>{{ cs.avg_per_active|floatformat:1|intcomma }}</td>
     </tr>
+    
+    <tr>
+        <td>The user with the most hours logged has X hours:</td>
+        <td>{{ cs.pwm_hours|floatformat:1|intcomma }}</td>
+    </tr>
+    
+    <tr>
+        <td>The user with the most flights logged has X entries:</td>
+        <td>{{ cs.pwm_count|intcomma }}</td>
+    </tr>
+    
+    <tr>
+        <td>Number of flights logged in the past 7 days:</td>
+        <td>{{ cs.num_7_days|intcomma }}</td>
+    </tr>
+    
+    <tr>
+        <td>Number of users who have logged a flight in the past 7 days:</td>
+        <td>{{ cs.user_7_days|intcomma }}</td>
+    </tr>
+    
+    <tr>
+        <td>Total flight hours logged in the past 7 days:</td>
+        <td>{{ cs.time_7_days|floatformat:1|intcomma }}</td>
+    </tr>
+    
     <tr>
         <td>Total unique airports visited by all users</td>
         <td>{{ cs.unique_airports|intcomma }}</td>

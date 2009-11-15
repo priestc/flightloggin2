@@ -1,7 +1,9 @@
+import datetime
+
 from django.db import models
 
 from django.contrib.auth.models import User
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, Avg
 from logbook.models import Flight
 from route.models import RouteBase, Route
 from plane.models import Plane
@@ -33,13 +35,19 @@ class StatDB(models.Model):
     most_common_manu = models.CharField(max_length=10)
     most_common_manuc= models.PositiveIntegerField(default=0, null=False)
     
+    user_7_days =      models.PositiveIntegerField(default=0, null=False)
+    num_7_days =       models.PositiveIntegerField(default=0, null=False)
+    time_7_days =      models.FloatField(default=0, null=False)
+    
+    pwm_count =        models.PositiveIntegerField(default=0, null=False)
+    pwm_hours =        models.FloatField(default=0, null=False)
+    
     class Meta:
         get_latest_by = 'dt'
 
 class Stat(object):    
     
     def save_to_db(self):
-        import datetime
         self.get_data()
         
         kwargs = {"dt": datetime.datetime.now()}
@@ -47,7 +55,9 @@ class Stat(object):
                   "avg_per_active", "avg_duration", "unique_airports",
                   "unique_countries", "route_earths", "total_dist",
                   "most_common_tn", "most_common_tnc", "most_common_ty",
-                  "most_common_tyc", "most_common_manu", "most_common_manuc"):
+                  "most_common_tyc", "most_common_manu", "most_common_manuc",
+                  "time_7_days", "num_7_days", "user_7_days", "pwm_hours",
+                  "pwm_count"):
             kwargs.update({i: getattr(self, i)})
         
         sdb = StatDB(**kwargs)
@@ -121,6 +131,29 @@ class Stat(object):
                                 
         self.most_common_manu = p['manufacturer']
         self.most_common_manuc = p['c']
+        
+        #seven days ago
+        sda = datetime.date.today() - datetime.timedelta(days=7)
+        
+        #all flights in the past 7 days
+        fsd = Flight.objects.filter(date__gte=sda)
+        
+        self.time_7_days = fsd.aggregate(s=Sum('total'))['s']     
+        self.num_7_days = fsd.count()      
+        self.user_7_days = User.objects.filter(flight__date__gte=sda).count()
+        
+        # calculate everyone's totals,
+        # also exclude users with less than 100 flights
+        pwm = User.objects.exclude(flight=None)\
+                  .annotate(s=Sum('flight__total'))\
+                  .annotate(c=Count('flight__id'))\
+                  .annotate(a=Avg('flight__total'))\
+                  .exclude(a__gte=30)
+        
+        self.pwm_count = pwm.order_by('-c').values('c')[:1][0]['c']
+        self.pwm_hours = pwm.order_by('-s').values('s')[:1][0]['s']
+
+
         
     def openid(self):
         from django_openid_auth.models import UserOpenID

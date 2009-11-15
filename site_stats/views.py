@@ -10,7 +10,7 @@ def site_stats(request):
     
     from models import StatDB
     cs = StatDB.objects.latest()
-    
+
     return locals()
 
 @secret_key
