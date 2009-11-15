@@ -256,6 +256,12 @@ urlpatterns += patterns('',
                                                             name="schedule",
     ),
     
+    url(
+        r'^stats_save.py$',
+        "site_stats.views.save_to_db",
+                                                            name="save_stats",
+    ),
+    
     (
         r'^site-media/(?P<path>.*)$','django.views.static.serve',
         {'document_root': '/srv/flightloggin/media',
