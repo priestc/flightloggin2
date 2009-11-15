@@ -1,0 +1,5 @@
+#site_stats                     {font-size: large; margin: 0 auto 0 auto;
+                                 text-align: right}
+                                  
+#site_stats td:last-child       {text-align: right; font-weight: bold;
+                                 padding-left: 10px}
