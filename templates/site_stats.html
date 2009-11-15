@@ -26,15 +26,35 @@
         <td>{{ total_num_flights|intcomma }}</td>
     </tr>
     <tr>
-        <td>Average hours per active user</td>
+        <td>Average length of each flight</td>
+        <td>{{ avg_per_flight|floatformat:1|intcomma }}</td>
+    </tr>
+    <tr>
+        <td>Average total hours per active user</td>
         <td>{{ avg_per_active|floatformat:1|intcomma }}</td>
     </tr>
     <tr>
         <td>Total unique airports visited by all users</td>
         <td>{{ unique_airports|intcomma }}</td>
     </tr>
+    <tr>
+        <td>Total unique countries visited by all users</td>
+        <td>{{ unique_countries|intcomma }}</td>
+    </tr>
+    <tr>
+        <td>Tailnumber flown by the most number of users</td>
+        <td>{{ most_common_tailnumber }}</td>
+    </tr>
     
+    <tr>
+        <td>Most common type</td>
+        <td>{{ most_common_type }}</td>
+    </tr>
     
+    <tr>
+        <td>Most common manufacturer</td>
+        <td>{{ most_common_manufacturer }}</td>
+    </tr>
     
 </table>
 {% endblock %}
