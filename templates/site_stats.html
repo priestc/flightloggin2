@@ -19,11 +19,11 @@
     </tr>
     <tr>
         <td>Total flight hours from all users</td>
-        <td>{{ ss.total_flight_hours|intcomma }}</td>
+        <td>{{ ss.total_hours|intcomma }}</td>
     </tr>
     <tr>
         <td>Total number of flights logged</td>
-        <td>{{ ss.total_num_flights|intcomma }}</td>
+        <td>{{ ss.total_logged|intcomma }}</td>
     </tr>
     <tr>
         <td>Average duration of each flight</td>
@@ -47,7 +47,7 @@
     </tr>
     <tr>
         <td>Total distance of all routes in Earth Circumferences</td>
-        <td>{{ ss.total_dist_earth|floatformat:1|intcomma }} Earths</td>
+        <td>{{ ss.total_earth|floatformat:1|intcomma }} Earths</td>
     </tr>
     <tr>
         <td>Tailnumber flown by the most number of users</td>
@@ -72,23 +72,23 @@
     
     <tr>
         <td>Google</td>
-        <td>{{ google }} &nbsp; {{ g_p|floatformat:1 }}%</td>
+        <td>{{ ss.google }} &nbsp; {{ ss.g_p|floatformat:1 }}%</td>
     </tr>
     <tr>
         <td>Yahoo</td>
-        <td>{{yahoo}} &nbsp; {{ y_p|floatformat:1 }}%</td>
+        <td>{{ ss.yahoo }} &nbsp; {{ ss.y_p|floatformat:1 }}%</td>
     </tr>
     <tr>    
         <td>AOL</td>
-        <td>{{aol}} &nbsp; {{ a_p|floatformat:1 }}%</td>
+        <td>{{ ss.aol }} &nbsp; {{ ss.a_p|floatformat:1 }}%</td>
     </tr>
     <tr>
          <td>MyOpenID</td>
-         <td>{{my}} &nbsp; {{ m_p|floatformat:1 }}%</td>
+         <td>{{ ss.my }} &nbsp; {{ ss.m_p|floatformat:1 }}%</td>
     </tr>
     <tr>
          <td>Others</td>
-         <td>{{others}} &nbsp; {{ o_p|floatformat:1 }}%</td>
+         <td>{{ ss.others }} &nbsp; {{ ss.o_p|floatformat:1 }}%</td>
     </tr>
 </table>    
 
