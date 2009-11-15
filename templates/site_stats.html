@@ -8,11 +8,11 @@
 {% block title %}Site Stats{% endblock %}
 {% block canvas %}
 
-<div>Updated Hourly<br>Last updated: {{cs.dt}}</div>
+<div>Updated every 3 Hours<br>Last updated: {{cs.dt}} EST</div>
 <hr>
 <table id="site_stats">
     <tr>
-        <td>Total users</td>
+        <td>Total user accounts</td>
         <td>{{ cs.users }}</td>
     </tr>
     <tr>
@@ -28,11 +28,11 @@
         <td>{{ cs.total_logged|intcomma }}</td>
     </tr>
     <tr>
-        <td>Average duration of each flight</td>
+        <td>Average duration of all logged flight</td>
         <td>{{ cs.avg_duration|floatformat:1|intcomma }}</td>
     </tr>
     <tr>
-        <td>Average total hours per active user</td>
+        <td>Average total hours logged per non-empty-logbook user</td>
         <td>{{ cs.avg_per_active|floatformat:1|intcomma }}</td>
     </tr>
     
@@ -47,12 +47,12 @@
     </tr>
     
     <tr>
-        <td>Number of flights logged in the past 7 days:</td>
+        <td>Total number of flights logged in the past 7 days:</td>
         <td>{{ cs.num_7_days|intcomma }}</td>
     </tr>
     
     <tr>
-        <td>Number of users who have logged a flight in the past 7 days:</td>
+        <td>Number of unique users who have logged a flight in the past 7 days:</td>
         <td>{{ cs.user_7_days|intcomma }}</td>
     </tr>
     

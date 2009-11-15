@@ -176,3 +176,7 @@ class Stat(object):
         self.others = self.users - (self.aol + self.my + self.yahoo + self.google)
         self.o_p = self.others / float(self.users) * 100
         
+#
+# install this crontab to get automatically updated stats
+#
+# 22 */3 * * * wget http://beta.flightlogg.in/stats_save.py?sk=
