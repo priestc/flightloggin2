@@ -1,4 +1,5 @@
 {% extends "base-no-nav.html" %}
+{% load humanize %}
 
 {% block javascript %}
     <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/site_stats.css"> 
@@ -18,19 +19,19 @@
     </tr>
     <tr>
         <td>Total flight hours from all users</td>
-        <td>{{ total_flight_hours }}</td>
+        <td>{{ total_flight_hours|intcomma }}</td>
     </tr>
     <tr>
         <td>Total number of flights logged</td>
-        <td>{{ total_num_flights }}</td>
+        <td>{{ total_num_flights|intcomma }}</td>
     </tr>
     <tr>
         <td>Average hours per active user</td>
-        <td>{{ avg_per_active }}</td>
+        <td>{{ avg_per_active|floatformat:1|intcomma }}</td>
     </tr>
     <tr>
         <td>Total unique airports visited by all users</td>
-        <td>{{ unique_airports }}</td>
+        <td>{{ unique_airports|intcomma }}</td>
     </tr>
     
     
