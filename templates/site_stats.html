@@ -11,57 +11,57 @@
 <table id="site_stats">
     <tr>
         <td>Total users</td>
-        <td>{{ total_users }}</td>
+        <td>{{ ss.users }}</td>
     </tr>
     <tr>
         <td>Number of users with a non-empty logbook</td>
-        <td>{{ non_empty_users }}</td>
+        <td>{{ ss.non_empty_users }}</td>
     </tr>
     <tr>
         <td>Total flight hours from all users</td>
-        <td>{{ total_flight_hours|intcomma }}</td>
+        <td>{{ ss.total_flight_hours|intcomma }}</td>
     </tr>
     <tr>
         <td>Total number of flights logged</td>
-        <td>{{ total_num_flights|intcomma }}</td>
+        <td>{{ ss.total_num_flights|intcomma }}</td>
     </tr>
     <tr>
-        <td>Average length of each flight</td>
-        <td>{{ avg_per_flight|floatformat:1|intcomma }}</td>
+        <td>Average duration of each flight</td>
+        <td>{{ ss.avg_duration|floatformat:1|intcomma }}</td>
     </tr>
     <tr>
         <td>Average total hours per active user</td>
-        <td>{{ avg_per_active|floatformat:1|intcomma }}</td>
+        <td>{{ ss.avg_per_active|floatformat:1|intcomma }}</td>
     </tr>
     <tr>
         <td>Total unique airports visited by all users</td>
-        <td>{{ unique_airports|intcomma }}</td>
+        <td>{{ ss.unique_airports|intcomma }}</td>
     </tr>
     <tr>
         <td>Total unique countries visited by all users</td>
-        <td>{{ unique_countries|intcomma }}</td>
+        <td>{{ ss.unique_countries|intcomma }}</td>
     </tr>
     <tr>
         <td>Total distance of all routes</td>
-        <td>{{ total_dist|floatformat:1|intcomma }} NM</td>
+        <td>{{ ss.total_dist|floatformat:1|intcomma }} NM</td>
     </tr>
     <tr>
         <td>Total distance of all routes in Earth Circumferences</td>
-        <td>{{ total_dist_earth|floatformat:1|intcomma }} Earths</td>
+        <td>{{ ss.total_dist_earth|floatformat:1|intcomma }} Earths</td>
     </tr>
     <tr>
         <td>Tailnumber flown by the most number of users</td>
-        <td>{{ most_common_tailnumber }} ({{most_common_tailnumber_count}})</td>
+        <td>{{ ss.most_common_tailnumber }} ({{ss.most_common_tailnumber_count}})</td>
     </tr>
     
     <tr>
         <td>Most common type</td>
-        <td>{{ most_common_type }} ({{most_common_type_count}})</td>
+        <td>{{ ss.most_common_type }} ({{ ss.most_common_type_count }})</td>
     </tr>
     
     <tr>
         <td>Most common manufacturer</td>
-        <td>{{ most_common_manu}} ({{most_common_manu_count}})</td>
+        <td>{{ ss.most_common_manu}} ({{ ss.most_common_manu_count }})</td>
     </tr>
 </table>
 <hr>
