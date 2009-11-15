@@ -2,7 +2,7 @@ from annoying.decorators import render_to
 from django.contrib.auth.models import User
 from django.db.models import Avg, Max, Min, Count, Sum
 from logbook.models import Flight
-from route.models import RouteBase
+from route.models import RouteBase, Route
 from plane.models import Plane
 
 @render_to('site_stats.html')
@@ -53,5 +53,7 @@ def site_stats(request):
                             
     most_common_manu = p['manufacturer']
     most_common_manu_count = p['c']
+    
+    total_dist = Route.objects.aggregate(s=Sum('total_line_all'))['s']
     
     return locals()

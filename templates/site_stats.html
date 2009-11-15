@@ -42,6 +42,10 @@
         <td>{{ unique_countries|intcomma }}</td>
     </tr>
     <tr>
+        <td>Total distance of all routes</td>
+        <td>{{ total_dist|floatformat:1|intcomma }}</td>
+    </tr>
+    <tr>
         <td>Tailnumber flown by the most number of users</td>
         <td>{{ most_common_tailnumber }} ({{most_common_tailnumber_count}})</td>
     </tr>
