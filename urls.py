@@ -103,6 +103,12 @@ urlpatterns += patterns('',
     ),
     
     url(
+        r'^site_stats.html$',
+        "site_stats.views.site_stats",
+        name="site_stats",
+    ),
+    
+    url(
         r'^faq.html$',
         "main.views.faq",
         name="faq",

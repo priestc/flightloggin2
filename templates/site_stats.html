@@ -1,0 +1,28 @@
+{% extends "base-no-nav.html" %}
+
+{% block javascript %}
+    <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/site_stats.css"> 
+{% endblock %}
+
+{% block title %}Site Stats{% endblock %}
+{% block canvas %}
+
+<table id="site_stats">
+    <tr>
+        <td>Total users</td>
+        <td>{{ total_users }}</td>
+    </tr>
+    <tr>
+        <td>Number of users with a non-empty logbook</td>
+        <td>{{ non_empty_users }}</td>
+    </tr>
+    <tr>
+        <td>Total flight hours from all users</td>
+        <td>{{ total_flight_hours }}</td>
+    </tr>
+    <tr>
+        <td>Total number of flights logged</td>
+        <td>{{ total_num_flights }}</td>
+    </tr>
+</table>
+{% endblock %}

@@ -83,7 +83,7 @@ class EmailBackup(object):
 
         self.user = user
         from profile.models import Profile
-        self.profile = Profile.get_for_user(user)
+        self.profile,c = Profile.objects.get_ot_create(user=user)
         
         self.addr = self.profile.backup_email or self.profile.user.email
         
