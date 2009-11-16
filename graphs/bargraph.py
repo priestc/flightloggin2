@@ -76,6 +76,16 @@ class BarGraph(object):
         """
         return val
     
+    def format_annotation(self, value):
+        """ Format the way the annotation on each bar is formatted
+        """
+        
+        if self.time in ('app', 'day_l', 'night_l'):
+            return "%s" % value
+        
+        else:
+            return "%.1d" % value
+    
     def draw_bars(self):
         i=0
         dict_key = self._field_title()
@@ -97,6 +107,7 @@ class BarGraph(object):
             
             draw_y = self.top_m + i * (self.bar_h + self.bar_pad)
             draw_x = self.side_m + self.t_max_width - text_width
+            val = self.format_annotation(item['val'])
             
             #### draw the title for each bar
             self.draw.text(
@@ -119,7 +130,7 @@ class BarGraph(object):
             #### annotate each bar with the total
             self.draw.text(
                 (bar_start + length + self.annotate_padding, draw_y),
-                "%s" % item['val'],
+                val,
                 font=self.font,
                 fill='black',
             )
@@ -152,9 +163,9 @@ class BarGraph(object):
             # run the y tick through this function so fields like cat_class
             # show "Single Engine" instead of "1"
             text = self.make_ytick(item[dk])
-            val = item['val']
+            val = self.format_annotation(item['val'])
             text_widths.append(self.font.getsize(text))
-            val_widths.append(self.font.getsize("%.1d" % val))
+            val_widths.append(self.font.getsize(val))
             vals.append(item['val'])
         
         self.max = max(vals)
