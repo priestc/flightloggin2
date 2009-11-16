@@ -1,6 +1,6 @@
 from django.conf import settings
+UPLOADS_DIR = settings.UPLOADS_DIR
 import datetime
-UPLOADS_DIR = settings.PROJECT_PATH + "/uploads"
 
 def get_last(uid):
     """Goes through the uploads directory and returns the latest file (based
