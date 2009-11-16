@@ -21,7 +21,7 @@ def linegraph_image(request, shared, display_user,
     else:
         return pg.as_svg()
 
-def bargraph_image(request, shared, display_user, column, agg, ext='png'):
+def bargraph_image(request, shared, display_user, column, agg):
     
     from bargraph import *
     
