@@ -9,11 +9,9 @@ from django.template import Context
 from logbook.models import Flight
 from logbook.constants import FIELD_ABBV
 
-
-#@render_to('pdf.html')
 def pdf(request, display_user, shared):
     from reportlab.lib.styles import getSampleStyleSheet
-    from reportlab.platypus import *
+    from reportlab.platypus import Table, TableStyle, Paragraph, SimpleDocTemplate
     from reportlab.lib.units import inch
     from reportlab.lib import colors
     from reportlab.lib.pagesizes import landscape, letter
