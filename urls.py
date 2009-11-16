@@ -96,6 +96,11 @@ urlpatterns += patterns('',
         "route.views.del_routes",
     ),
     
+    (
+        r'^cookietest.py$',
+        "manage.views.cookietest",
+    ),
+    
     url(
         r'^news.html$',
         "main.views.news",

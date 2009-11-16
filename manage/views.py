@@ -96,3 +96,10 @@ def do_import(preview, user):
     del im
     
     return locals()
+
+def cookietest(request):
+    
+    cookie = request.COOKIES
+    
+    from django.http import *
+    return HttpResponse(cookie, mimetype='text/plain')
