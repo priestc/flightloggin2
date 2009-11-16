@@ -42,7 +42,7 @@ class BarGraph(object):
         self.bottom_m = 30  # bottom margin
         self.side_m = 5     # side margin
         self.bar_pad = 5    # space between each bar
-        self.bar_h = 20     # height of each bar
+        self.bar_h = 13     # height of each bar
         
         width = 800
         
@@ -60,7 +60,6 @@ class BarGraph(object):
         # bar titles need to be rendered first because they determine where to
         # start drawing the bar graphs
         self.draw_bar_titles()
-        self.draw_bars()
         
         return self.im
     
@@ -83,18 +82,18 @@ class BarGraph(object):
     def draw_bar_titles(self):
         i=0
         dict_key = self._field_title()
-        
-        max_width = self.find_max_bar_label_width(dict_key)
-        
+        title_max_width, val_max_width = self.find_max_label_widths(dict_key)
+        bar_start = title_max_width + 10
         #####
         
-        for item in self.qs:
+        for item in self.qs.order_by('-val'):
             text = item[dict_key]
             text_width = self.font.getsize(text)[0]
             
             draw_y = self.top_m + i * (self.bar_h + self.bar_pad)
-            draw_x = self.side_m + max_width - text_width
+            draw_x = self.side_m + title_max_width - text_width
             
+            #### draw the title for each bar
             self.draw.text(
                 (draw_x, draw_y),
                 "%s" % text,
@@ -102,27 +101,49 @@ class BarGraph(object):
                 fill='black',
             )
             
+            #### draw the bar
+            yend = self.bar_h + draw_y
+            length = (item['val'] / self.max) * 500
+            self.draw.rectangle(
+                [(bar_start, draw_y),
+                 (length + bar_start, yend)],
+                fill='green',
+            )
+            
+            #### draw the total for each bar
+            self.draw.text(
+                (title_max_width + length, draw_y),
+                "%s" % item['val'],
+                font=self.font,
+                fill='black',
+            )
+            
             i += 1
         
-    def find_max_bar_label_width(self, dk):
+    def find_max_label_widths(self, dk):
         text_widths = []
+        val_widths = []
+        vals = []
         for item in self.qs:
             text = item[dk]
+            val = item['val']
             text_widths.append(self.font.getsize(text))
-            
-        return max(text_widths)[0]
+            val_widths.append(self.font.getsize("%.1d" % val))
+            vals.append(item['val'])
+        
+        self.max = max(vals)
+           
+        return max(text_widths)[0], max(val_widths)[0]
 
 ###############################################################################
 
 class PersonBarGraph(BarGraph):
     
     def get_data(self):
-        qs = self.qs.values('person')\
+        self.qs = self.qs.values('person')\
                     .order_by('val')\
                     .distinct()\
                     .annotate(val=Sum(self.time))
-                    
-        return self.split(qs, 'person')
     
     def title(self):
         return "By Person"
@@ -133,12 +154,10 @@ class PersonBarGraph(BarGraph):
 class FOBarGraph(BarGraph):
     
     def get_data(self):
-        qs = self.qs.dual_r(False).dual_g(False).pic().values('person')\
+        self.qs = self.qs.dual_r(False).dual_g(False).pic().values('person')\
                     .order_by('val')\
                     .distinct()\
                     .annotate(val=Sum(self.time))
-                    
-        return self.split(qs, 'person')
     
     def title(self):
         return "By First Officer"
@@ -149,12 +168,10 @@ class FOBarGraph(BarGraph):
 class CaptainBarGraph(BarGraph):
     
     def get_data(self):
-        qs = self.qs.dual_r(False).sic().values('person')\
+        self.qs = self.qs.dual_r(False).sic().values('person')\
                     .order_by('val')\
                     .distinct()\
                     .annotate(val=Sum(self.time))
-                    
-        return self.split(qs, 'person')
     
     def title(self):
         return "By Captain"
@@ -166,12 +183,10 @@ class CaptainBarGraph(BarGraph):
 class StudentBarGraph(BarGraph):
     
     def get_data(self):
-        qs = self.qs.dual_g().person().values('person')\
+        self.qs = self.qs.dual_g().person().values('person')\
                     .order_by('val')\
                     .distinct()\
                     .annotate(val=Sum(self.time))
-                    
-        return self.split(qs, 'person')
     
     def title(self):
         return "By Student"
@@ -182,12 +197,10 @@ class StudentBarGraph(BarGraph):
 class InstructorBarGraph(BarGraph):
     
     def get_data(self):
-        qs = self.qs.dual_r().person().values('person')\
+        self.qs = self.qs.dual_r().person().values('person')\
                     .order_by('val')\
                     .distinct()\
                     .annotate(val=Sum(self.time))
-                    
-        return self.split(qs, 'person')
     
     def title(self):
         return "By Instructor"
@@ -198,12 +211,10 @@ class InstructorBarGraph(BarGraph):
 class CatClassBarGraph(BarGraph):
     
     def get_data(self):
-        qs = self.qs.values('plane__cat_class')\
+        self.qs = self.qs.values('plane__cat_class')\
                     .order_by('val')\
                     .distinct()\
                     .annotate(val=Sum(self.time))
-                    
-        return self.split(qs, 'plane__cat_class')
     
     def make_ytick(self, val):
         from plane.constants import CATEGORY_CLASSES
@@ -232,12 +243,10 @@ class PlaneTypeBarGraph(BarGraph):
 class TailnumberBarGraph(BarGraph):
     
     def get_data(self):
-        qs = self.qs.values('plane__tailnumber')\
+        self.qs = self.qs.values('plane__tailnumber')\
                     .distinct()\
                     .order_by('val')\
-                    .annotate(val=Sum(self.time))        
-
-        return self.split(qs, 'plane__tailnumber')
+                    .annotate(val=Sum(self.time))
     
     def title(self):
         return "By Tailnumber"
