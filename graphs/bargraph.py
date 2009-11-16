@@ -7,6 +7,14 @@ class BarGraph(object):
     regular_font = ("VeraSe.ttf", 12)
     title_font =   ("VeraSeBd.ttf", 22)
     
+    top_m = 50              # top margin
+    bottom_m = 30           # bottom margin
+    side_m = 5              # side margin
+    bar_pad = 5             # space between each bar
+    bar_h = 13              # height of each bar
+    annotate_padding = 5    # the padding between the bar and the annotation
+    width = 800
+    
     def __init__(self, user, time):
         self.user = user
         self.time = time
@@ -21,19 +29,9 @@ class BarGraph(object):
         
         from logbook.models import Flight
         self.qs = Flight.objects.filter(user=user)
-
-    def output(self):
         self.get_data()
         
-        self.top_m = 50           # top margin
-        self.bottom_m = 30        # bottom margin
-        self.side_m = 5           # side margin
-        self.bar_pad = 5          # space between each bar
-        self.bar_h = 13           # height of each bar
-        self.annotate_padding = 5 # the padding between the bar and the annotation
-        
-        self.width = 800
-        
+    def output(self):        
         self.num_bars = len(self.qs)  #the total number of bars to plot
         
         height = self.top_m +\
@@ -70,14 +68,14 @@ class BarGraph(object):
     def draw_bars(self):
         i=0
         dict_key = self._field_title()
-        title_max_width, val_max_width = self.find_max_label_widths(dict_key)
-        bar_start = title_max_width + 10
+        self.t_max_width, v_max_width = self.find_max_label_widths(dict_key)
+        bar_start = self.t_max_width + 10
         
-        total_draw_space = self.width - (val_max_width +
-                                         title_max_width +
-                                         self.side_m*2 +
-                                         self.annotate_padding*2 +
-                                         10)
+        self.total_draw_space = self.width - (v_max_width +
+                                              self.t_max_width +
+                                              self.side_m*2 +
+                                              self.annotate_padding*2 +
+                                              10)
         
         #####
         
@@ -86,7 +84,7 @@ class BarGraph(object):
             text_width = self.font.getsize(text)[0]
             
             draw_y = self.top_m + i * (self.bar_h + self.bar_pad)
-            draw_x = self.side_m + title_max_width - text_width
+            draw_x = self.side_m + self.t_max_width - text_width
             
             #### draw the title for each bar
             self.draw.text(
@@ -98,7 +96,7 @@ class BarGraph(object):
             
             #### draw the bar
             yend = self.bar_h + draw_y
-            length = (item['val'] / self.max) * total_draw_space
+            length = (item['val'] / self.max) * self.total_draw_space
             self.draw.rectangle(
                 [(bar_start, draw_y),
                  (length + bar_start, yend)],
@@ -112,7 +110,6 @@ class BarGraph(object):
                 "%s" % item['val'],
                 font=self.font,
                 fill='black',
-                
             )
             
             i += 1
@@ -126,10 +123,10 @@ class BarGraph(object):
         
         width = self.titlefont.getsize(title)[0]
         
-        draw_x = self.width/2 - width/2
+        draw_x = self.total_draw_space/2 - width/2 + self.t_max_width
         
         self.draw.text(
-                (draw_x,5),
+                (draw_x,7),
                 title,
                 font=self.titlefont,
                 fill='black',
