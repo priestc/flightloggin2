@@ -21,18 +21,20 @@
 
 
 {% block canvas %}
-    <h2>Flight Time Progression:</h2>
-        <select id="line_column">
-        {{ column_options }}
-        </select>
-        <div style="padding: 10px">
-        Start: <input type="date" class="date" id="line_start">   End: <input type="date" class="date" id="line_end">
-        <br>
-        Include rate? <input type="checkbox" id="do_rate">
-        </div>
-        <input id="line_graph" class="render_button png" name="line_render" value="PNG" type="submit">
-        <a href="" target="_blank" id="svg_link"><input id="line_graph" class="render_button svg" value="SVG" type="button"></a>        
-        
+
+    <select id="line_column">
+    {{ column_options }}
+    </select>
+    
+    <div style="padding: 10px">
+    Start: <input type="date" class="date" id="line_start">
+    End: <input type="date" class="date" id="line_end">
+    <br>
+    Include rate? <input type="checkbox" id="do_rate">
+    </div>
+    <input id="line_graph" class="render_button png" name="line_render" value="PNG" type="submit">
+    <a href="" target="_blank" id="svg_link"><input id="line_graph" class="render_button svg" value="SVG" type="button"></a>        
+    
     {#################################}
     
     <br>

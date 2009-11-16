@@ -1,4 +1,4 @@
-from logbook.constants import *
+from logbook.constants import * #FIXME
 from annoying.decorators import render_to
 
 from django.utils.safestring import mark_safe
@@ -28,26 +28,35 @@ def bargraph_image(request, shared, display_user, column, agg, ext='png'):
     if agg == 'cat_class':
         bg = CatClassBarGraph(display_user, column)
         
-    if agg == 'person':
+    elif agg == 'person':
         bg = PersonBarGraph(display_user, column)
         
-    if agg == 'student':
+    elif agg == 'student':
         bg = StudentBarGraph(display_user, column)
     
-    if agg == 'captain':
+    elif agg == 'captain':
         bg = CaptainBarGraph(display_user, column)
         
-    if agg == 'fo':
+    elif agg == 'first_officer':
         bg = FOBarGraph(display_user, column)
         
-    if agg == 'instructor':
+    elif agg == 'instructor':
         bg = InstructorBarGraph(display_user, column)
     
-    if agg == 'type':
+    elif agg == 'type':
         bg = PlaneTypeBarGraph(display_user, column)
         
-    if agg == 'tailnumber':
+    elif agg == 'tailnumber':
         bg = TailnumberBarGraph(display_user, column)
+        
+    elif agg == 'manufacturer':
+        bg = ManufacturerBarGraph(display_user, column)
+    
+    elif agg == 'category_class':
+        bg = CatClassBarGraph(display_user, column)
+        
+    else:
+        assert False
     
     return bg.as_png()
 
@@ -55,7 +64,7 @@ def bargraph_image(request, shared, display_user, column, agg, ext='png'):
 
 @render_to('linegraphs.html')
 def linegraphs(request, shared, display_user):
-    """the view function that renders the graph builder interface"""   
+    """the view function that renders the graph builder interface"""
     
     column_options = []
     for field in GRAPH_FIELDS:
@@ -72,10 +81,20 @@ def bargraphs(request, shared, display_user):
     """the view function that renders the graph builder interface"""   
     
     column_options = []
-    for field in GRAPH_FIELDS:
+    for field in ['total'] + AGG_FIELDS:
         column_options.append("<option value=\"%s\">%s</option>" %
                                         (field, FIELD_TITLES[field] ) )
+    
+    agg_options = []
+    from constants import BAR_AGG_FIELDS
+    for field in BAR_AGG_FIELDS:
+        sys = field.split('By ')[1].lower().replace(" ",'_').replace('/','_')
+        agg_options.append("<option value=\"%s\">%s</option>" %
+                                (sys, field ) )
         
     column_options = mark_safe("\n".join(column_options))
+    agg_options = mark_safe("\n".join(agg_options))
     return locals()
-###############################################################################
+
+
+

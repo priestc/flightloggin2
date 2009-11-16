@@ -89,6 +89,7 @@ class BarGraph(object):
         
         for item in self.qs.order_by('-val'):
             text = item[dict_key]
+            text = self.make_ytick(text)
             text_width = self.font.getsize(text)[0]
             
             draw_y = self.top_m + i * (self.bar_h + self.bar_pad)
@@ -104,7 +105,7 @@ class BarGraph(object):
             
             #### draw the bar
             yend = self.bar_h + draw_y
-            length = (item['val'] / self.max) * self.total_draw_space
+            length = (item['val'] / float(self.max)) * self.total_draw_space
             self.draw.rectangle(
                 [(bar_start, draw_y),
                  (length + bar_start, yend)],
@@ -112,7 +113,7 @@ class BarGraph(object):
                 outline='black',
             )
             
-            #### draw the total for each bar
+            #### annotate each bar with the total
             self.draw.text(
                 (bar_start + length + self.annotate_padding, draw_y),
                 "%s" % item['val'],
@@ -131,7 +132,7 @@ class BarGraph(object):
         
         width = self.titlefont.getsize(title)[0]
         
-        draw_x = self.total_draw_space/2 - width/2 + self.t_max_width
+        draw_x = self.total_draw_space/2.0 - width/2.0 + self.t_max_width
         
         self.draw.text(
                 (draw_x,7),
@@ -145,7 +146,9 @@ class BarGraph(object):
         val_widths = []
         vals = []
         for item in self.qs:
-            text = item[dk]
+            # run the y tick through this function so fields like cat_class
+            # show "Single Engine" instead of "1"
+            text = self.make_ytick(item[dk])
             val = item['val']
             text_widths.append(self.font.getsize(text))
             val_widths.append(self.font.getsize("%.1d" % val))
@@ -293,3 +296,17 @@ class TailnumberBarGraph(BarGraph):
     
     def _field_title(self):
         return "plane__tailnumber"
+
+class ManufacturerBarGraph(BarGraph):
+    
+    def get_data(self):
+        self.qs = self.qs.values('plane__manufacturer')\
+                    .distinct()\
+                    .order_by('val')\
+                    .annotate(val=Sum(self.time))
+    
+    def title(self):
+        return "By Manufacturer"
+    
+    def _field_title(self):
+        return "plane__manufacturer"

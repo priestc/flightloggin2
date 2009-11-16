@@ -8,7 +8,7 @@
     </style>
     
     <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/sprintf.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/graphs.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/bargraphs.js"></script>
     
     <script type="text/javascript">
     date_button = "{{MEDIA_URL}}/images/calendar.gif";
@@ -21,23 +21,19 @@
 
 
 {% block canvas %}
-    <h2>Aggregate per:</h2>
-        <select id="line_column">
-        {{ column_options }}
-        </select>
-        <div style="padding: 10px">
-        Start: <input type="date" class="date" id="line_start">
-        End: <input type="date" class="date" id="line_end">
+    <select id="bar_column">
+    {{ column_options }}
+    </select>
+    
+    <select id="agg">
+    {{ agg_options }}
+    </select>
 
-        </div>
-        <input id="line_graph" class="render_button png" name="line_render" value="PNG" type="submit">
-        <a href="" target="_blank" id="svg_link"><input id="line_graph" class="render_button svg" value="SVG" type="button"></a>        
-        
+    <input id="bar_graph" class="render_button png" name="line_render" value="Render" type="submit">
+ 
     {#################################}
     
-    <br>
-    <img src="" id="image" style="display:none; margin-right: auto; margin-left: auto"> {# id="object" height="480" width="640">#}
-    </object>
-
+    <br> <br> <br>
+    <img src="" id="image" style="display:none; margin-right: auto; margin-left: auto">
 
 {% endblock %}
