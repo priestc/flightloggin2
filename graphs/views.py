@@ -1,5 +1,5 @@
 from logbook.constants import *
-from classes import ProgressGraph
+from linegraph import ProgressGraph
 from annoying.decorators import render_to
 
 from django.utils.safestring import mark_safe
