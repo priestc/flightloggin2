@@ -84,7 +84,7 @@ class BarGraph(object):
             return "%s" % value
         
         else:
-            return "%.1d" % value
+            return "%.1f" % value
     
     def draw_bars(self):
         i=0
