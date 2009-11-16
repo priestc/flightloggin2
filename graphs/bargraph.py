@@ -38,35 +38,29 @@ class BarGraph(object):
     def output(self):
         self.get_data()
         
-        top_m = 15     # top margin
-        bottom_m = 15  # bottom margin
-        side_m = 5     # side margin
-        bar_pad = 3    # space between each bar
-        bar_h = 15      # height of each bar
+        self.top_m = 50     # top margin
+        self.bottom_m = 30  # bottom margin
+        self.side_m = 5     # side margin
+        self.bar_pad = 5    # space between each bar
+        self.bar_h = 20     # height of each bar
         
         width = 800
         
-        num_bars = len(self.qs)  #the total number of bars to plot
+        self.num_bars = len(self.qs)  #the total number of bars to plot
         
-        height = top_m + bottom_m + (bar_h + bar_pad) * num_bars
+        height = self.top_m +\
+                 self.bottom_m +\
+                 (self.bar_h * self.num_bars) +\
+                 (self.bar_pad * (self.num_bars - 1))
         
         import Image, ImageDraw
         self.im = Image.new("RGBA", (width, height))
         self.draw = ImageDraw.Draw(self.im)
         
-        i=0
-        drawpoint = top_m
-        for item in self.qs:
-            self.draw.text(
-                (1, (i*bar_h)+bar_pad),
-                "%s" % item,
-                font=self.font,
-                fill='black',
-            )
-            
-            i += 1
-        
-        
+        # bar titles need to be rendered first because they determine where to
+        # start drawing the bar graphs
+        self.draw_bar_titles()
+        self.draw_bars()
         
         return self.im
     
@@ -75,18 +69,6 @@ class BarGraph(object):
         response = HttpResponse(mimetype="image/png")
         self.output().save(response, "png")
         return response
-    
-    def split(self, qs, title):
-        vals=[]
-        vert=[]
-        for item in qs:
-            vert.append(item[title])            
-            vals.append(item['val'])
-        
-        self.max = max(vals)    #find the maximum value for later
-        self.len = len(vals)
-            
-        return vert, vals
     
     def get_column_title(self):
         from logbook.constants import FIELD_TITLES
@@ -97,6 +79,38 @@ class BarGraph(object):
            this
         """
         return val
+    
+    def draw_bar_titles(self):
+        i=0
+        dict_key = self._field_title()
+        
+        max_width = self.find_max_bar_label_width(dict_key)
+        
+        #####
+        
+        for item in self.qs:
+            text = item[dict_key]
+            text_width = self.font.getsize(text)[0]
+            
+            draw_y = self.top_m + i * (self.bar_h + self.bar_pad)
+            draw_x = self.side_m + max_width - text_width
+            
+            self.draw.text(
+                (draw_x, draw_y),
+                "%s" % text,
+                font=self.font,
+                fill='black',
+            )
+            
+            i += 1
+        
+    def find_max_bar_label_width(self, dk):
+        text_widths = []
+        for item in self.qs:
+            text = item[dk]
+            text_widths.append(self.font.getsize(text))
+            
+        return max(text_widths)[0]
 
 ###############################################################################
 
@@ -113,6 +127,9 @@ class PersonBarGraph(BarGraph):
     def title(self):
         return "By Person"
     
+    def _field_title(self):
+        return "person"
+    
 class FOBarGraph(BarGraph):
     
     def get_data(self):
@@ -126,6 +143,9 @@ class FOBarGraph(BarGraph):
     def title(self):
         return "By First Officer"
     
+    def _field_title(self):
+        return "person"
+    
 class CaptainBarGraph(BarGraph):
     
     def get_data(self):
@@ -138,6 +158,9 @@ class CaptainBarGraph(BarGraph):
     
     def title(self):
         return "By Captain"
+    
+    def _field_title(self):
+        return "person"
 
    
 class StudentBarGraph(BarGraph):
@@ -152,7 +175,10 @@ class StudentBarGraph(BarGraph):
     
     def title(self):
         return "By Student"
-    
+
+    def _field_title(self):
+        return "person"
+        
 class InstructorBarGraph(BarGraph):
     
     def get_data(self):
@@ -165,7 +191,10 @@ class InstructorBarGraph(BarGraph):
     
     def title(self):
         return "By Instructor"
-    
+
+    def _field_title(self):
+        return "person"
+        
 class CatClassBarGraph(BarGraph):
     
     def get_data(self):
@@ -182,7 +211,10 @@ class CatClassBarGraph(BarGraph):
     
     def title(self):
         return "By Category/Class"
-        
+
+    def _field_title(self):
+        return "plane__cat_class"
+
 class PlaneTypeBarGraph(BarGraph):
     
     def get_data(self):
@@ -192,7 +224,10 @@ class PlaneTypeBarGraph(BarGraph):
                     .annotate(val=Sum(self.time))
     
     def title(self):
-        return "By Plane Type"    
+        return "By Plane Type"
+
+    def _field_title(self):
+        return "plane__type"
         
 class TailnumberBarGraph(BarGraph):
     
@@ -205,4 +240,7 @@ class TailnumberBarGraph(BarGraph):
         return self.split(qs, 'plane__tailnumber')
     
     def title(self):
-        return "By Tailnumber"    
+        return "By Tailnumber"
+    
+    def _field_title(self):
+        return "plane__tailnumber"
