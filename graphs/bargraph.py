@@ -224,7 +224,7 @@ class CaptainBarGraph(BarGraph):
 class StudentBarGraph(BarGraph):
     
     def get_data(self):
-        self.qs = self.qs.dual_g().person().values('person')\
+        self.qs = self.qs.dual_g().values('person')\
                     .exclude(person='')\
                     .order_by('val')\
                     .distinct()\
@@ -239,7 +239,7 @@ class StudentBarGraph(BarGraph):
 class InstructorBarGraph(BarGraph):
     
     def get_data(self):
-        self.qs = self.qs.dual_r().person().values('person')\
+        self.qs = self.qs.dual_r().values('person')\
                     .exclude(person='')\
                     .order_by('val')\
                     .distinct()\
