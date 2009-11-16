@@ -147,6 +147,7 @@ FIELD_TITLES = {
     "non_flying": "Non-flying",
     "flying": "Flying",
     
+    'route__total_line_all': "Route Distance",
     'max_width': "Max Width",
     'line_dist': "Distance",
     'atp_xc': "ATP XC",

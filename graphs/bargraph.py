@@ -32,11 +32,10 @@ class BarGraph(object):
         
         from logbook.models import Flight
         self.qs = Flight.objects.filter(user=user)
-            
-        self.get_data()
         
     def output(self):
-        
+        self.get_data()
+
         if not self.qs.extra(select={'a': 1}).values('a').order_by():
             return self.empty()
         
@@ -51,7 +50,11 @@ class BarGraph(object):
         self.im = Image.new("RGBA", (self.width, height))
         self.draw = ImageDraw.Draw(self.im)
         
-        self.draw_bars()
+        try:
+            self.draw_bars()
+        except self.EmptyLogbook:
+            return self.empty()
+       
         self.draw_main_title()
         
         
@@ -155,6 +158,8 @@ class BarGraph(object):
             vals.append(item['val'])
         
         self.max = max(vals)
+        if self.max == 0:
+            raise self.EmptyLogbook
            
         return max(text_widths)[0], max(val_widths)[0]
     
@@ -310,3 +315,17 @@ class ManufacturerBarGraph(BarGraph):
     
     def _field_title(self):
         return "plane__manufacturer"
+    
+class YearBarGraph(BarGraph):
+    
+    def get_data(self):
+        self.qs = self.qs.values('date__year')\
+                    .distinct()\
+                    .order_by('val')\
+                    .annotate(val=Sum(self.time))
+    
+    def title(self):
+        return "By Year"
+    
+    def _field_title(self):
+        return "date__year"

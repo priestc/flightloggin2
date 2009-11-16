@@ -5,5 +5,6 @@ BAR_AGG_FIELDS = ('By Person',
                   'By Tailnumber',
                   'By Type',
                   'By Manufacturer',
-                  'By Category/Class'
+                  'By Category/Class',
+                  'By Distance',
                  )

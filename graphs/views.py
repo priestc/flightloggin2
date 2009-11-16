@@ -55,6 +55,9 @@ def bargraph_image(request, shared, display_user, column, agg):
     elif agg == 'category_class':
         bg = CatClassBarGraph(display_user, column)
         
+    elif agg == 'year':
+        bg = YearBarGraph(display_user, column)
+        
     else:
         assert False
     
@@ -81,16 +84,18 @@ def bargraphs(request, shared, display_user):
     """the view function that renders the graph builder interface"""   
     
     column_options = []
-    for field in ['total'] + AGG_FIELDS:
+    for field in ['total', 'route__total_line_all'] + AGG_FIELDS:
         column_options.append("<option value=\"%s\">%s</option>" %
-                                        (field, FIELD_TITLES[field] ) )
+                                        (field, FIELD_TITLES[field])
+        )
     
     agg_options = []
     from constants import BAR_AGG_FIELDS
     for field in BAR_AGG_FIELDS:
         sys = field.split('By ')[1].lower().replace(" ",'_').replace('/','_')
         agg_options.append("<option value=\"%s\">%s</option>" %
-                                (sys, field ) )
+                                (sys, field)
+        )
         
     column_options = mark_safe("\n".join(column_options))
     agg_options = mark_safe("\n".join(agg_options))
