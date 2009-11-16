@@ -411,6 +411,9 @@ class QuerySet(QuerySet):
         elif cn == 'jet':
             return self.jet().total(*args, **kwargs)
         
+        elif cn == 'tail':
+            return self.tailwheel().total(*args, **kwargs)
+        
         elif cn == 'jet_pic':
             return self.jet().pic(*args, **kwargs)
         

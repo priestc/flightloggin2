@@ -1,19 +1,22 @@
 from django.db.models import Sum
-
+from django.conf import settings
 
 class BarGraph(object):
     
     bar_color = 'y'
+    font= "VeraSe.ttf"
     
     def __init__(self, user, time):
         self.user = user
         self.time = time
         
+        import ImageFont
+        #FIXME:make cross platform compatable
+        font = settings.MEDIA_ROOT + "/fonts/" + self.font
+        self.font = ImageFont.truetype(font, 12)
+        
         from logbook.models import Flight
         self.qs = Flight.objects.filter(user=user)
-        
-        self.fig = plt.figure(figsize=(10,10), dpi=1)
-        self.ax = self.fig.add_subplot(111, frameon=True)
         
     def annotate_bars(self, rects):
         """attach the text labels"""
@@ -33,26 +36,45 @@ class BarGraph(object):
                          va='center')
 
     def output(self):
-        titles, vals = self.get_data()
+        self.get_data()
         
         top_m = 15     # top margin
         bottom_m = 15  # bottom margin
         side_m = 5     # side margin
         bar_pad = 3    # space between each bar
-        bar_h = 7      # height of each bar
+        bar_h = 15      # height of each bar
         
-        width = 700
+        width = 800
         
-        num_bars = len(title)  #the total number of bars to plot
+        num_bars = len(self.qs)  #the total number of bars to plot
         
         height = top_m + bottom_m + (bar_h + bar_pad) * num_bars
         
-        import Image
-        
+        import Image, ImageDraw
         self.im = Image.new("RGBA", (width, height))
+        self.draw = ImageDraw.Draw(self.im)
+        
+        i=0
+        drawpoint = top_m
+        for item in self.qs:
+            self.draw.text(
+                (1, (i*bar_h)+bar_pad),
+                "%s" % item,
+                font=self.font,
+                fill='black',
+            )
+            
+            i += 1
+        
         
         
         return self.im
+    
+    def as_png(self):
+        from django.http import HttpResponse
+        response = HttpResponse(mimetype="image/png")
+        self.output().save(response, "png")
+        return response
     
     def split(self, qs, title):
         vals=[]
@@ -164,12 +186,10 @@ class CatClassBarGraph(BarGraph):
 class PlaneTypeBarGraph(BarGraph):
     
     def get_data(self):
-        qs = self.qs.values('plane__type')\
+        self.qs = self.qs.values('plane__type')\
                     .distinct()\
                     .order_by('val')\
-                    .annotate(val=Sum(self.time))        
-
-        return self.split(qs, 'plane__type')
+                    .annotate(val=Sum(self.time))
     
     def title(self):
         return "By Plane Type"    

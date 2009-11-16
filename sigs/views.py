@@ -43,7 +43,7 @@ class Sig(object):
         self.user = user
         self.im = Image.new("RGBA", (width, height))
         fontdir = settings.MEDIA_ROOT + "/fonts/" + self.font
-        self.font = ImageFont.truetype(fontdir, 12) #ImageFont.load_default()
+        self.font = ImageFont.truetype(fontdir, 12)
         self.draw = ImageDraw.Draw(self.im)
         
         for column in columns:

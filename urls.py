@@ -58,7 +58,15 @@ urlpatterns += patterns('',
         r'(?P<rate>(rate|norate)?)' +
         r'.(?P<ext>(png|svg))$',
         # username/linegraph/(columns)/(dates) or (all).extension
-        "graphs.views.graph_image",
+        "graphs.views.linegraph_image",
+    ),
+    
+    (
+        r'^(?P<username>\w+)/bargraph/' + 
+        r'(?P<column>[\w]+)/' +
+        r'by-(?P<agg>[\w]+)' +
+        r'.(?P<ext>(png|svg))$',
+        'graphs.views.bargraph_image',
     ),
                                 
     url(
