@@ -15,6 +15,9 @@ class BarGraph(object):
     annotate_padding = 5    # the padding between the bar and the annotation
     width = 800
     
+    class EmptyLogbook(Exception):
+        pass
+    
     def __init__(self, user, time):
         self.user = user
         self.time = time
@@ -29,9 +32,14 @@ class BarGraph(object):
         
         from logbook.models import Flight
         self.qs = Flight.objects.filter(user=user)
+            
         self.get_data()
         
-    def output(self):        
+    def output(self):
+        
+        if not self.qs.extra(select={'a': 1}).values('a').order_by():
+            return self.empty()
+        
         self.num_bars = len(self.qs)  #the total number of bars to plot
         
         height = self.top_m +\
@@ -146,13 +154,29 @@ class BarGraph(object):
         self.max = max(vals)
            
         return max(text_widths)[0], max(val_widths)[0]
-
+    
+    def empty(self):
+        """ Returns a empty image for when there's nothing to show
+        """
+        
+        import Image, ImageDraw
+        self.im = Image.new("RGBA", (500, 200))
+        self.draw = ImageDraw.Draw(self.im)
+        
+        self.draw.text((120,90),
+                       'Nothing to show here',
+                       font=self.titlefont,
+                       fill='black')
+        
+        return self.im
+        
 ###############################################################################
 
 class PersonBarGraph(BarGraph):
     
     def get_data(self):
         self.qs = self.qs.values('person')\
+                    .exclude(person='')\
                     .order_by('val')\
                     .distinct()\
                     .annotate(val=Sum(self.time))
@@ -167,6 +191,7 @@ class FOBarGraph(BarGraph):
     
     def get_data(self):
         self.qs = self.qs.dual_r(False).dual_g(False).pic().values('person')\
+                    .exclude(person='')\
                     .order_by('val')\
                     .distinct()\
                     .annotate(val=Sum(self.time))
@@ -181,6 +206,7 @@ class CaptainBarGraph(BarGraph):
     
     def get_data(self):
         self.qs = self.qs.dual_r(False).sic().values('person')\
+                    .exclude(person='')\
                     .order_by('val')\
                     .distinct()\
                     .annotate(val=Sum(self.time))
@@ -196,6 +222,7 @@ class StudentBarGraph(BarGraph):
     
     def get_data(self):
         self.qs = self.qs.dual_g().person().values('person')\
+                    .exclude(person='')\
                     .order_by('val')\
                     .distinct()\
                     .annotate(val=Sum(self.time))
@@ -210,6 +237,7 @@ class InstructorBarGraph(BarGraph):
     
     def get_data(self):
         self.qs = self.qs.dual_r().person().values('person')\
+                    .exclude(person='')\
                     .order_by('val')\
                     .distinct()\
                     .annotate(val=Sum(self.time))

@@ -53,8 +53,8 @@ def bargraph_image(request, shared, display_user, column, agg, ext='png'):
 
 ###############################################################################
 
-@render_to('graphs.html')
-def graphs(request, shared, display_user):
+@render_to('linegraphs.html')
+def linegraphs(request, shared, display_user):
     """the view function that renders the graph builder interface"""   
     
     column_options = []
@@ -66,4 +66,16 @@ def graphs(request, shared, display_user):
     return locals()
     
 ###############################################################################
+
+@render_to('bargraphs.html')
+def bargraphs(request, shared, display_user):
+    """the view function that renders the graph builder interface"""   
+    
+    column_options = []
+    for field in GRAPH_FIELDS:
+        column_options.append("<option value=\"%s\">%s</option>" %
+                                        (field, FIELD_TITLES[field] ) )
+        
+    column_options = mark_safe("\n".join(column_options))
+    return locals()
 ###############################################################################

@@ -30,8 +30,11 @@
         
         <br>
         
-        <span class="{% block graphs-sel %}{% endblock%}" >
-        <a href="{% url graphs display_user.username %}">Graphs</a></span>
+        <span class="{% block linegraphs-sel %}{% endblock%}" >
+        <a href="{% url linegraphs display_user.username %}">Line Graphs</a></span>
+        
+        <span class="{% block bargraphs-sel %}{% endblock%}" >
+        <a href="{% url bargraphs display_user.username %}">Bar Graphs</a></span>
         
         <span class="{% block maps-sel %}{% endblock%}" >
         <a href="{% url maps display_user.username %}">Maps</a></span>

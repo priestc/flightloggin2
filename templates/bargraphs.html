@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block linegraphs-sel %}nav_selected{% endblock%}
+
+{% block javascript %}
+    <style>
+        .date       {width: 8em}
+        select      {font-size: small}
+    </style>
+    
+    <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/sprintf.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/graphs.js"></script>
+    
+    <script type="text/javascript">
+    date_button = "{{MEDIA_URL}}/images/calendar.gif";
+    year_range = "1990:2009";
+	
+	</script>
+{% endblock %}
+
+{% block title %}Line Graphs{% endblock %}
+
+
+{% block canvas %}
+    <h2>Aggregate per:</h2>
+        <select id="line_column">
+        {{ column_options }}
+        </select>
+        <div style="padding: 10px">
+        Start: <input type="date" class="date" id="line_start">
+        End: <input type="date" class="date" id="line_end">
+
+        </div>
+        <input id="line_graph" class="render_button png" name="line_render" value="PNG" type="submit">
+        <a href="" target="_blank" id="svg_link"><input id="line_graph" class="render_button svg" value="SVG" type="button"></a>        
+        
+    {#################################}
+    
+    <br>
+    <img src="" id="image" style="display:none; margin-right: auto; margin-left: auto"> {# id="object" height="480" width="640">#}
+    </object>
+
+
+{% endblock %}

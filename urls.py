@@ -193,9 +193,15 @@ urlpatterns += patterns('',
     ),
     
     url(
-        r'^(?P<username>\w+)/graphs.html$',
-        "graphs.views.graphs",
-                                                                name="graphs",
+        r'^(?P<username>\w+)/linegraphs.html$',
+        "graphs.views.linegraphs",
+                                                                name="linegraphs",
+    ),
+    
+    url(
+        r'^(?P<username>\w+)/bargraphs.html$',
+        "graphs.views.bargraphs",
+                                                                name="bargraphs",
     ),
     
     url(
