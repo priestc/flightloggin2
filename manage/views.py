@@ -101,5 +101,5 @@ def cookietest(request):
     
     cookie = "-".join(request.COOKIES)
     
-    from django.http import *
+    from django.http import HttpResponse
     return HttpResponse(cookie, mimetype='text/plain')
