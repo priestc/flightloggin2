@@ -9,3 +9,5 @@ psycopg2==2.0.13
 python-openid==2.2.4
 wsgiref==0.1.2
 yolk==0.4.1
+httplib2==0.4.0
+DateUtils==0.4.1

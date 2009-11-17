@@ -443,14 +443,62 @@ class QuerySet(QuerySet):
             if arg == 'day':
                 return self.extra(select={'day': "total - night"})
             
-            if arg == 'distance':
-                return self.annotate(distance=Sum('route__total_line_all'))
+            elif arg == 'distance':
+                return self.extra(select={"distance":'route__total_line_all'})
             
-#            extra(select={'distance': 
-#                                            "\"route_route\".\"total_line_all\""},
-#                                  tables=['route_route', 'logbook_flight'])
-
-
-
-
-
+            elif arg == 'speed':
+                pass
+                       
+            elif arg == 'multi':
+                return self.extra(select={'multi':
+                    """CASE WHEN plane_plane.cat_class in (2,4)
+                       THEN total
+                       ELSE 0
+                       END
+                    """
+                })
+                
+            elif arg == 'm_pic':
+                return self.extra(select={'m_pic':
+                    """CASE WHEN plane_plane.cat_class in (2,4)
+                       THEN pic
+                       ELSE 0
+                       END
+                    """
+                })
+                
+            elif arg == 'single':
+                return self.extra(select={'single':
+                    """CASE WHEN plane_plane.cat_class in (1,3)
+                       THEN total
+                       ELSE 0
+                       END
+                    """
+                })
+            
+            elif arg == 'sea':
+                return self.extra(select={'sea':
+                    """CASE WHEN plane_plane.cat_class in (3,4)
+                       THEN total
+                       ELSE 0
+                       END
+                    """
+                })
+                
+            elif arg == 'sea_pic':
+                return self.extra(select={'sea_pic':
+                    """CASE WHEN plane_plane.cat_class in (3,4)
+                       THEN pic
+                       ELSE 0
+                       END
+                    """
+                })
+                
+            elif arg == 'p2p':
+                return self.extra(select={'p2p':
+                    """CASE WHEN route_route.p2p
+                       THEN total
+                       ELSE 0
+                       END
+                    """
+                })
