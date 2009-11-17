@@ -438,6 +438,17 @@ class QuerySet(QuerySet):
         self = ff.make_filter_kwargs(self)
         return self
 
+    def add_column(self, *args):
+        for arg in args:
+            if arg == 'day':
+                return self.extra(select={'day': "total - night"})
+            
+            if arg == 'distance':
+                return self.annotate(distance=Sum('route__total_line_all'))
+            
+#            extra(select={'distance': 
+#                                            "\"route_route\".\"total_line_all\""},
+#                                  tables=['route_route', 'logbook_flight'])
 
 
 

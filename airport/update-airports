@@ -6,28 +6,29 @@ export DJANGO_SETTINGS_MODULE=settings
 
 get='get'
 
+cd /srv/flightloggin/airport;
+
 if [ $1 = $get ]; then
 
     echo ">>>>>>>> Getting remote airport files...<<<<<<<";
 
-    wget -O - http://www.ourairports.com/data/regions.csv > ~/Websites/flightloggin/airport/fixtures/regions.csv;
-    wget -O - http://www.ourairports.com/data/countries.csv > ~/Websites/flightloggin/airport/fixtures/countries.csv;
-    wget -O - http://www.ourairports.com/data/airports.csv > ~/Websites/flightloggin/airport/fixtures/airports.csv;
-    wget -O - http://www.ourairports.com/data/navaids.csv > ~/Websites/flightloggin/airport/fixtures/navaids.csv;
+    wget -O - http://www.ourairports.com/data/regions.csv > fixtures/regions.csv;
+    wget -O - http://www.ourairports.com/data/countries.csv > fixtures/countries.csv;
+    wget -O - http://www.ourairports.com/data/airports.csv > fixtures/airports.csv;
+    wget -O - http://www.ourairports.com/data/navaids.csv > fixtures/navaids.csv;
 
     echo ">>>>>>>>>>>>>>>>>> Diff Below <<<<<<<<<<<<<<<<<";
 
-    cd ~/Websites/flightloggin/;
-    git diff /home/chris/Websites/flightloggin/airport/fixtures/airports.csv;
-    git diff /home/chris/Websites/flightloggin/airport/fixtures/navaids.csv;
+    git diff $PWD/fixtures/airports.csv;
+    git diff $PWD/fixtures/navaids.csv;
     cd -;
 fi
 
-echo ">>>>>>>>>>>> Clearing previous locations <<<<<<<<<<";
+echo "$PWD >>>>>>>>>>>> Clearing previous locations <<<<<<<<<<";
 
 wget -q -O - http://localhost:8000/clearlocations.py?sk=dongs;
 echo
 
 echo ">>>>>>>>>> Running Import script... <<<<<<<<<<<";
 
-python ~/Websites/flightloggin/airport/imports.py
+python $PWD/imports.py

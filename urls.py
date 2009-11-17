@@ -44,11 +44,6 @@ urlpatterns += patterns('',
         {'template': 'manage.html'},
     ),
     
-    (   
-        r'^clearlocations.py$',
-        'airport.views.clear',
-    ),
-    
     ############################ graphs
 
     (
@@ -108,6 +103,18 @@ urlpatterns += patterns('',
     (
         r'^cookietest.py$',
         "manage.views.cookietest",
+    ),
+    
+    url(
+        r'^update-airports.py$',
+        "airport.views.update_airports",
+                                                        name="del-airports",
+    ),
+    
+    url(   
+        r'^clear_locations.py$',
+        'airport.views.clear_locations',
+                                                        name="clear-locations",
     ),
     
     url(
@@ -196,13 +203,13 @@ urlpatterns += patterns('',
     url(
         r'^(?P<username>\w+)/linegraphs.html$',
         "graphs.views.linegraphs",
-                                                                name="linegraphs",
+                                                             name="linegraphs",
     ),
     
     url(
         r'^(?P<username>\w+)/bargraphs.html$',
         "graphs.views.bargraphs",
-                                                                name="bargraphs",
+                                                              name="bargraphs",
     ),
     
     url(
@@ -256,7 +263,7 @@ urlpatterns += patterns('',
     url(
         r'^(?P<username>\w+)/logbook-page-(?P<page>\d+).html',
         "logbook.views.logbook",
-        name="logbook-page",
+                                                           name="logbook-page",
     ),
         
     url(

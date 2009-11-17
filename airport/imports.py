@@ -3,28 +3,11 @@ import os, sys
 import csv, re
 from psycopg2 import IntegrityError
 from airport.models import Location, Region, Country
-
-THIS_PATH = "/home/chris/Websites/flightloggin/airport/fixtures/"
+from django.conf import settings
+PROJECT_PATH = settings.PROJECT_PATH
 
 from django.contrib.auth.models import User
 ALL_USER = User(pk=1)
-    
-#######################################################################
-
-def main():
-    print "Importing Countries..."
-    countries()
-
-    print "Importing Regions..."
-    regions()
-    
-    print "Importing Airports..."
-    airports()
-    
-    print "Importing Navaids..."
-    navaids()
-    
-#######################################################################
 
 def airports():   #import airport
     """
@@ -32,7 +15,7 @@ def airports():   #import airport
     continent	iso_country	iso_region	municipality	scheduled_service
     gps_code	iata_code	local_code	home_link	wikipedia_link	keywords
     """
-    path = os.path.join(THIS_PATH, 'airports.csv')
+    path = os.path.join(PROJECT_PATH, 'airport', 'fixtures', 'airports.csv')
     f = open(path, 'rb')
     reader = csv.reader(f, "excel")
     titles = reader.next()
@@ -158,9 +141,10 @@ def navaids():
     slaved_variation_deg	magnetic_variation_deg	usageType	power
     associated_airport
     """
-    THIS_PATH = "/home/chris/Websites/flightloggin/airport/fixtures/"
-    path = os.path.join(THIS_PATH, 'navaids.csv')
+    
+    path = os.path.join(PROJECT_PATH, 'airport', 'fixtures', 'navaids.csv')
     f = open(path, 'rb')
+    
     reader = csv.reader(f, "excel")
     titles = reader.next()
     reader = csv.DictReader(f, titles)
@@ -221,8 +205,9 @@ def regions():   #import region
     keywords
     """
 
-    path = os.path.join(THIS_PATH, 'regions.csv')
+    path = os.path.join(PROJECT_PATH, 'airport', 'fixtures', 'regions.csv')
     f = open(path, 'rb')
+    
     reader = csv.reader(f, "excel")
     titles = reader.next()
     reader = csv.DictReader(f, titles)
@@ -251,8 +236,9 @@ def countries():   #import country
     id	code	name	continent	wikipedia_link	keywords
     """
 
-    path = os.path.join(THIS_PATH, 'countries.csv')
+    path = os.path.join(PROJECT_PATH, 'airport', 'fixtures', 'countries.csv')
     f = open(path, 'rb')
+    
     reader = csv.reader(f, "excel")
     titles = reader.next()
     reader = csv.DictReader(f, titles)
@@ -276,9 +262,3 @@ def countries():   #import country
             print "error: " + code
 
     print "lines: " + str(count)
-    
-###############################################################################
-
-if __name__ == "__main__":
-    main()
-
