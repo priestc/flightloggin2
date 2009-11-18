@@ -198,7 +198,7 @@ class PersonBarGraph(BarGraph):
     def get_data(self):
         self.qs = self.qs.values('person')\
                     .exclude(person='')\
-                    .order_by('val')\
+                    .order_by('-val')\
                     .distinct()\
                     .annotate(val=Sum(self.time))
     
@@ -213,7 +213,7 @@ class FOBarGraph(BarGraph):
     def get_data(self):
         self.qs = self.qs.dual_r(False).dual_g(False).pic().values('person')\
                     .exclude(person='')\
-                    .order_by('val')\
+                    .order_by('-val')\
                     .distinct()\
                     .annotate(val=Sum(self.time))
     
@@ -228,7 +228,7 @@ class CaptainBarGraph(BarGraph):
     def get_data(self):
         self.qs = self.qs.dual_r(False).sic().values('person')\
                     .exclude(person='')\
-                    .order_by('val')\
+                    .order_by('-val')\
                     .distinct()\
                     .annotate(val=Sum(self.time))
     
@@ -244,7 +244,7 @@ class StudentBarGraph(BarGraph):
     def get_data(self):
         self.qs = self.qs.dual_g().values('person')\
                     .exclude(person='')\
-                    .order_by('val')\
+                    .order_by('-val')\
                     .distinct()\
                     .annotate(val=Sum(self.time))
     
@@ -259,7 +259,7 @@ class InstructorBarGraph(BarGraph):
     def get_data(self):
         self.qs = self.qs.dual_r().values('person')\
                     .exclude(person='')\
-                    .order_by('val')\
+                    .order_by('-val')\
                     .distinct()\
                     .annotate(val=Sum(self.time))
     
