@@ -119,7 +119,7 @@ class Route(models.Model):
     all_points = None
     
     def __unicode__(self):
-        return self.simple_rendered or "err"
+        return self.simple_rendered or "Empty"
     
     def owner(self):
         """Return the owner of the route. Only used in the admin"""
@@ -423,8 +423,9 @@ class MakeRoute(object):
     def __init__(self, fallback_string, user):
         self.user=user
        
-        if not fallback_string:
-            self.route = None
+        if not fallback_string:     #return empty route
+            self.route = Route()
+            self.route.save()
             return None
         
         route = Route(fallback_string=fallback_string, p2p=False)
