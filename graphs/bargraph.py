@@ -370,3 +370,25 @@ class MonthBarGraph(BarGraph):
     
     def _field_title(self):
         return "month"
+    
+class DOWBarGraph(BarGraph):
+    
+    def get_data(self):
+        self.qs = self.qs.extra(select={'dow':'EXTRACT (DOW FROM date)' })\
+                         .values('dow')\
+                         .distinct()\
+                         .order_by()\
+                         .annotate(val=Sum(self.time))\
+                         .order_by('-val')
+    
+    def make_ytick(self, val):
+        #convert number to month name
+        DOW = ('Sunday', 'Monday', 'Tuesday', 'Wendsday', 'Thursday',
+                  'Friday', 'Saturday')
+        return DOW[int(val)]
+    
+    def title(self):
+        return "By Day of Week"
+    
+    def _field_title(self):
+        return "dow"
