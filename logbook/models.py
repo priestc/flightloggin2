@@ -168,24 +168,24 @@ class Flight(models.Model):
         elif cn == "type":
             return self.plane.type
             
-        elif cn == "f_route" and self.route:
+        elif cn == "f_route":
             if self.route.fancy_rendered:
                 # mark_safe because theres HTML code within
                 return mark_safe(self.route.fancy_rendered)
             else:
-                return self.route.fallback_string
+                return self.route.fallback_string or ""
             
-        elif cn == "s_route" and self.route:
+        elif cn == "s_route":
             if self.route.fancy_rendered:
-                return self.route.simple_rendered
+                return self.route.simple_rendered or ""
             else:
-                return self.route.fallback_string
+                return self.route.fallback_string or ""
                 
-        elif cn == "r_route" and self.route:
-            return self.route.fallback_string
+        elif cn == "r_route":
+            return self.route.fallback_string or ""
         
-        elif cn == "route" and self.route:
-            return self.route.fallback_string
+        elif cn == "route":
+            return self.route.fallback_string or ""
         
         ########
         
