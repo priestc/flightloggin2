@@ -7,4 +7,5 @@ BAR_AGG_FIELDS = ('By Person',
                   'By Manufacturer',
                   'By Category/Class',
                   'By Year',
+                  'By Month',
                  )
