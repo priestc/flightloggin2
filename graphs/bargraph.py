@@ -392,3 +392,19 @@ class DOWBarGraph(BarGraph):
     
     def _field_title(self):
         return "dow"
+    
+class MonthYearBarGraph(BarGraph):
+    
+    def get_data(self):
+        self.qs = self.qs.extra(select={'my':"to_char(date, 'FMMonth YYYY')"})\
+                         .values('my')\
+                         .distinct()\
+                         .order_by()\
+                         .annotate(val=Sum(self.time))\
+                         .order_by('-val')
+    
+    def title(self):
+        return "By Month/Year"
+    
+    def _field_title(self):
+        return "my"

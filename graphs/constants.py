@@ -9,4 +9,5 @@ BAR_AGG_FIELDS = ('By Person',
                   'By Year',
                   'By Month',
                   'By Day of the Week',
+                  'By Month/Year',
                  )

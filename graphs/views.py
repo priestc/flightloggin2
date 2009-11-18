@@ -62,7 +62,12 @@ def bargraph_image(request, shared, display_user, column, agg):
         bg = MonthBarGraph(display_user, column)
     
     elif agg == 'day_of_the_week':
-        bg = DOWBarGraph(display_user, column)    
+        bg = DOWBarGraph(display_user, column)
+    
+    elif agg == 'month_year':
+        bg = MonthYearBarGraph(display_user, column) 
+    
+    
     else:
         assert False, "Agg not added to generator view"
     
