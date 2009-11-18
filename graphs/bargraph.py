@@ -388,7 +388,7 @@ class DOWBarGraph(BarGraph):
         return DOW[int(val)]
     
     def title(self):
-        return "By Day of Week"
+        return "By Day of the Week"
     
     def _field_title(self):
         return "dow"
