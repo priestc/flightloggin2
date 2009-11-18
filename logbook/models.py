@@ -176,7 +176,7 @@ class Flight(models.Model):
                 return self.route.fallback_string or ""
             
         elif cn == "s_route":
-            if self.route.fancy_rendered:
+            if self.route.simple_rendered:
                 return self.route.simple_rendered or ""
             else:
                 return self.route.fallback_string or ""

@@ -23,11 +23,13 @@ class BarGraph(object):
         self.time = time
         
         import ImageFont
-        #FIXME:make cross platform compatable
-        font = settings.MEDIA_ROOT + "/fonts/" + self.regular_font[0]
+        import os
+        root = settings.MEDIA_ROOT
+        
+        font = os.path.join(root, "fonts", self.regular_font[0])
         self.font = ImageFont.truetype(font, self.regular_font[1])
         
-        titlefont = settings.MEDIA_ROOT + "/fonts/" + self.title_font[0]
+        titlefont = os.path.join(root, "fonts", self.title_font[0])
         self.titlefont = ImageFont.truetype(font, self.title_font[1])
         
         from logbook.models import Flight
@@ -100,7 +102,7 @@ class BarGraph(object):
         
         #####
         
-        for item in self.qs.order_by('-val'):
+        for item in self.qs:
             text = item[dict_key]
             text = self.make_ytick(text)
             text_width = self.font.getsize(text)[0]
@@ -271,7 +273,7 @@ class CatClassBarGraph(BarGraph):
     
     def get_data(self):
         self.qs = self.qs.values('plane__cat_class')\
-                    .order_by('val')\
+                    .order_by('-val')\
                     .distinct()\
                     .annotate(val=Sum(self.time))
     
@@ -290,7 +292,7 @@ class PlaneTypeBarGraph(BarGraph):
     def get_data(self):
         self.qs = self.qs.values('plane__type')\
                     .distinct()\
-                    .order_by('val')\
+                    .order_by('-val')\
                     .annotate(val=Sum(self.time))
     
     def title(self):
@@ -304,7 +306,7 @@ class TailnumberBarGraph(BarGraph):
     def get_data(self):
         self.qs = self.qs.values('plane__tailnumber')\
                     .distinct()\
-                    .order_by('val')\
+                    .order_by('-val')\
                     .annotate(val=Sum(self.time))
     
     def title(self):
@@ -318,8 +320,8 @@ class ManufacturerBarGraph(BarGraph):
     def get_data(self):
         self.qs = self.qs.values('plane__manufacturer')\
                     .distinct()\
-                    .order_by('val')\
-                    .annotate(val=Sum(self.time))
+                    .annotate(val=Sum(self.time))\
+                    .order_by('-val')\
     
     def title(self):
         return "By Manufacturer"
@@ -330,13 +332,19 @@ class ManufacturerBarGraph(BarGraph):
 class YearBarGraph(BarGraph):
     
     def get_data(self):
-        self.qs = self.qs.values('date__year')\
-                    .distinct()\
-                    .order_by('val')\
-                    .annotate(val=Sum(self.time))
+        self.qs = self.qs.extra(select={'year':'EXTRACT (YEAR FROM date)' })\
+                         .values('year')\
+                         .distinct()\
+                         .order_by()\
+                         .annotate(val=Sum(self.time))\
+                         .order_by('-val')
+    
+    def make_ytick(self, val):
+        #convert to int to get rid of ".0", then to string for printing
+        return "%s" % int(val)
     
     def title(self):
         return "By Year"
     
     def _field_title(self):
-        return "date__year"
+        return "year"
