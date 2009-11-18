@@ -348,3 +348,25 @@ class YearBarGraph(BarGraph):
     
     def _field_title(self):
         return "year"
+    
+class MonthBarGraph(BarGraph):
+    
+    def get_data(self):
+        self.qs = self.qs.extra(select={'month':'EXTRACT (MONTH FROM date)' })\
+                         .values('month')\
+                         .distinct()\
+                         .order_by()\
+                         .annotate(val=Sum(self.time))\
+                         .order_by('-val')
+    
+    def make_ytick(self, val):
+        #convert number to month name
+        MONTHS = ('dummy', 'January', 'February', 'March', 'April', 'May', 'June',
+                  'July', 'August', 'September', 'October', 'November', 'December')
+        return MONTHS[int(val)]
+    
+    def title(self):
+        return "By Month"
+    
+    def _field_title(self):
+        return "month"

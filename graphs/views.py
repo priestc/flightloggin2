@@ -58,8 +58,11 @@ def bargraph_image(request, shared, display_user, column, agg):
     elif agg == 'year':
         bg = YearBarGraph(display_user, column)
         
+    elif agg == 'month':
+        bg = MonthBarGraph(display_user, column)
+        
     else:
-        assert False
+        assert False, "Agg not added to generator view"
     
     return bg.as_png()
 
