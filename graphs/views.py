@@ -25,7 +25,7 @@ def bargraph_image(request, shared, display_user, column, func, agg):
     
     import bargraph as g
         
-    elif agg == 'person':
+    if agg == 'person':
         Graph = g.PersonBarGraph
         
     elif agg == 'student':
