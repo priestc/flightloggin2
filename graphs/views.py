@@ -24,9 +24,6 @@ def linegraph_image(request, shared, display_user,
 def bargraph_image(request, shared, display_user, column, func, agg):
     
     import bargraph as g
-    
-    if agg == 'cat_class':
-        Graph = g.CatClassBarGraph
         
     elif agg == 'person':
         Graph = g.PersonBarGraph
@@ -53,7 +50,7 @@ def bargraph_image(request, shared, display_user, column, func, agg):
         Graph = g.ManufacturerBarGraph
     
     elif agg == 'category_class':
-        Graph = g.CatGraphBarGraph
+        Graph = g.CatClassBarGraph
         
     elif agg == 'year':
         Graph = g.YearBarGraph

@@ -94,12 +94,6 @@ class Flight(models.Model):
         
         super(Flight,self).save(*args, **kwargs)
         
-#    def delete(self, *args, **kwargs):
-#        if self.route:
-#            from route.models import Route
-#            Route.objects.get(flight__pk=self.pk).delete()
-#        super(Flight,self).delete(*args, **kwargs)
-        
     class Meta:
         ordering = ["date", "id"]
         
