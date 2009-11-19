@@ -1,4 +1,3 @@
-from django.db.models import Sum
 from django.conf import settings
 
 class BarGraph(object):
@@ -18,9 +17,14 @@ class BarGraph(object):
     class EmptyLogbook(Exception):
         pass
     
-    def __init__(self, user, time):
+    def agg(self, *args, **kwargs):
+        from django.db.models import Avg, Sum, Min, Max, StdDev
+        return locals()[self.agg_type]( *args, **kwargs)
+        
+    def __init__(self, user, time, agg, func="Sum"):
         self.user = user
         self.time = time
+        self.agg_type = func
         
         import ImageFont
         import os
@@ -43,10 +47,12 @@ class BarGraph(object):
         
         self.num_bars = len(self.qs)  #the total number of bars to plot
         
-        height = self.top_m +\
-                 self.bottom_m +\
-                 (self.bar_h * self.num_bars) +\
-                 (self.bar_pad * (self.num_bars - 1))
+        height = (
+                    self.top_m +
+                    self.bottom_m +
+                    (self.bar_h * self.num_bars) +
+                    (self.bar_pad * (self.num_bars - 1))
+                )
         
         import Image, ImageDraw
         self.im = Image.new("RGBA", (self.width, height))
@@ -144,7 +150,7 @@ class BarGraph(object):
         time_title = FIELD_TITLES[self.time]
         agg_title = self.title()
         
-        title = "%s %s" % (time_title, agg_title)
+        title = "%s %s %s" % (self.agg_type, time_title, agg_title)
         
         width = self.titlefont.getsize(title)[0]
         
@@ -200,7 +206,7 @@ class PersonBarGraph(BarGraph):
                     .exclude(person='')\
                     .order_by('-val')\
                     .distinct()\
-                    .annotate(val=Sum(self.time))
+                    .annotate(val=self.agg(self.time))
     
     def title(self):
         return "By Person"
@@ -215,7 +221,7 @@ class FOBarGraph(BarGraph):
                     .exclude(person='')\
                     .order_by('-val')\
                     .distinct()\
-                    .annotate(val=Sum(self.time))
+                    .annotate(val=self.agg(self.time))
     
     def title(self):
         return "By First Officer"
@@ -230,7 +236,7 @@ class CaptainBarGraph(BarGraph):
                     .exclude(person='')\
                     .order_by('-val')\
                     .distinct()\
-                    .annotate(val=Sum(self.time))
+                    .annotate(val=self.agg(self.time))
     
     def title(self):
         return "By Captain"
@@ -242,11 +248,11 @@ class CaptainBarGraph(BarGraph):
 class StudentBarGraph(BarGraph):
     
     def get_data(self):
-        self.qs = self.qs.dual_g().values('person')\
-                    .exclude(person='')\
-                    .order_by('-val')\
-                    .distinct()\
-                    .annotate(val=Sum(self.time))
+        self.qs = (self.qs.dual_g().values('person')
+                    .exclude(person='')
+                    .order_by('-val')
+                    .distinct()
+                    .annotate(val=self.agg(self.time)))
     
     def title(self):
         return "By Student"
@@ -257,11 +263,11 @@ class StudentBarGraph(BarGraph):
 class InstructorBarGraph(BarGraph):
     
     def get_data(self):
-        self.qs = self.qs.dual_r().values('person')\
-                    .exclude(person='')\
-                    .order_by('-val')\
-                    .distinct()\
-                    .annotate(val=Sum(self.time))
+        self.qs = (self.qs.dual_r().values('person')
+                    .exclude(person='')
+                    .order_by('-val')
+                    .distinct()
+                    .annotate(val=self.agg(self.time)))
     
     def title(self):
         return "By Instructor"
@@ -272,10 +278,10 @@ class InstructorBarGraph(BarGraph):
 class CatClassBarGraph(BarGraph):
     
     def get_data(self):
-        self.qs = self.qs.values('plane__cat_class')\
-                    .order_by('-val')\
-                    .distinct()\
-                    .annotate(val=Sum(self.time))
+        self.qs = (self.qs.values('plane__cat_class')
+                    .order_by('-val')
+                    .distinct()
+                    .annotate(val=self.agg(self.time)))
     
     def make_ytick(self, val):
         from plane.constants import CATEGORY_CLASSES
@@ -290,10 +296,15 @@ class CatClassBarGraph(BarGraph):
 class PlaneTypeBarGraph(BarGraph):
     
     def get_data(self):
-        self.qs = self.qs.values('plane__type')\
-                    .distinct()\
-                    .order_by('-val')\
-                    .annotate(val=Sum(self.time))
+        
+        time = self.time
+        
+        self.qs = (self.qs.add_column(self.time)
+                    .values('plane__type')
+                    .distinct()
+                    .order_by('-val')
+                    .select_related()
+                    .annotate(val=self.agg(self.time)))
     
     def title(self):
         return "By Plane Type"
@@ -304,10 +315,10 @@ class PlaneTypeBarGraph(BarGraph):
 class TailnumberBarGraph(BarGraph):
     
     def get_data(self):
-        self.qs = self.qs.values('plane__tailnumber')\
-                    .distinct()\
-                    .order_by('-val')\
-                    .annotate(val=Sum(self.time))
+        self.qs = (self.qs.values('plane__tailnumber')
+                    .distinct()
+                    .order_by('-val')
+                    .annotate(val=self.agg(self.time)))
     
     def title(self):
         return "By Tailnumber"
@@ -318,10 +329,10 @@ class TailnumberBarGraph(BarGraph):
 class ManufacturerBarGraph(BarGraph):
     
     def get_data(self):
-        self.qs = self.qs.values('plane__manufacturer')\
-                    .distinct()\
-                    .annotate(val=Sum(self.time))\
-                    .order_by('-val')\
+        self.qs = (self.qs.values('plane__manufacturer')
+                    .distinct()
+                    .annotate(val=self.agg(self.time))
+                    .order_by('-val'))
     
     def title(self):
         return "By Manufacturer"
@@ -332,12 +343,12 @@ class ManufacturerBarGraph(BarGraph):
 class YearBarGraph(BarGraph):
     
     def get_data(self):
-        self.qs = self.qs.extra(select={'year':'EXTRACT (YEAR FROM date)' })\
-                         .values('year')\
-                         .distinct()\
-                         .order_by()\
-                         .annotate(val=Sum(self.time))\
-                         .order_by('-val')
+        self.qs = (self.qs.extra(select={'year':'EXTRACT (YEAR FROM date)' })
+                         .values('year')
+                         .distinct()
+                         .order_by()
+                         .annotate(val=self.agg(self.time))
+                         .order_by('-val'))
     
     def make_ytick(self, val):
         #convert to int to get rid of ".0", then to string for printing
@@ -352,12 +363,12 @@ class YearBarGraph(BarGraph):
 class MonthBarGraph(BarGraph):
     
     def get_data(self):
-        self.qs = self.qs.extra(select={'month':'EXTRACT (MONTH FROM date)' })\
-                         .values('month')\
-                         .distinct()\
-                         .order_by()\
-                         .annotate(val=Sum(self.time))\
-                         .order_by('-val')
+        self.qs = (self.qs.extra(select={'month':'EXTRACT (MONTH FROM date)' })
+                         .values('month')
+                         .distinct()
+                         .order_by()
+                         .annotate(val=self.agg(self.time))
+                         .order_by('-val'))
     
     def make_ytick(self, val):
         #convert number to month name
@@ -374,12 +385,12 @@ class MonthBarGraph(BarGraph):
 class DOWBarGraph(BarGraph):
     
     def get_data(self):
-        self.qs = self.qs.extra(select={'dow':'EXTRACT (DOW FROM date)' })\
-                         .values('dow')\
-                         .distinct()\
-                         .order_by()\
-                         .annotate(val=Sum(self.time))\
-                         .order_by('-val')
+        self.qs = (self.qs.extra(select={'dow':'EXTRACT (DOW FROM date)' })
+                         .values('dow')
+                         .distinct()
+                         .order_by()
+                         .annotate(val=self.agg(self.time))
+                         .order_by('-val'))
     
     def make_ytick(self, val):
         #convert number to month name
@@ -396,12 +407,12 @@ class DOWBarGraph(BarGraph):
 class MonthYearBarGraph(BarGraph):
     
     def get_data(self):
-        self.qs = self.qs.extra(select={'my':"to_char(date, 'FMMonth YYYY')"})\
-                         .values('my')\
-                         .distinct()\
-                         .order_by()\
-                         .annotate(val=Sum(self.time))\
-                         .order_by('-val')
+        self.qs = (self.qs.extra(select={'my':"to_char(date, 'FMMonth YYYY')"})
+                         .values('my')
+                         .distinct()
+                         .order_by()
+                         .annotate(val=self.agg(self.time))
+                         .order_by('-val'))
     
     def title(self):
         return "By Month/Year"

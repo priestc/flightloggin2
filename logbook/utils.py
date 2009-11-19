@@ -444,13 +444,14 @@ class QuerySet(QuerySet):
                 return self.extra(select={'day': "total - night"})
             
             elif arg == 'distance':
-                return self.extra(select={"distance":'route__total_line_all'})
+                self = self.extra(select={"distance":'route_route.total_line_all'})
             
             elif arg == 'speed':
-                pass
+                self = self.extra(select={"speed":
+                    """route_route.total_line_all / total"""})
                        
             elif arg == 'multi':
-                return self.extra(select={'multi':
+                self = self.extra(select={'multi':
                     """CASE WHEN plane_plane.cat_class in (2,4)
                        THEN total
                        ELSE 0
@@ -459,7 +460,7 @@ class QuerySet(QuerySet):
                 })
                 
             elif arg == 'm_pic':
-                return self.extra(select={'m_pic':
+                self = self.extra(select={'m_pic':
                     """CASE WHEN plane_plane.cat_class in (2,4)
                        THEN pic
                        ELSE 0
@@ -468,7 +469,7 @@ class QuerySet(QuerySet):
                 })
                 
             elif arg == 'single':
-                return self.extra(select={'single':
+                self = self.extra(select={'single':
                     """CASE WHEN plane_plane.cat_class in (1,3)
                        THEN total
                        ELSE 0
@@ -477,7 +478,7 @@ class QuerySet(QuerySet):
                 })
             
             elif arg == 'sea':
-                return self.extra(select={'sea':
+                self = self.extra(select={'sea':
                     """CASE WHEN plane_plane.cat_class in (3,4)
                        THEN total
                        ELSE 0
@@ -486,7 +487,7 @@ class QuerySet(QuerySet):
                 })
                 
             elif arg == 'sea_pic':
-                return self.extra(select={'sea_pic':
+                self = self.extra(select={'sea_pic':
                     """CASE WHEN plane_plane.cat_class in (3,4)
                        THEN pic
                        ELSE 0
@@ -495,10 +496,12 @@ class QuerySet(QuerySet):
                 })
                 
             elif arg == 'p2p':
-                return self.extra(select={'p2p':
+                self = self.extra(select={'p2p':
                     """CASE WHEN route_route.p2p
                        THEN total
                        ELSE 0
                        END
                     """
                 })
+            
+        return self

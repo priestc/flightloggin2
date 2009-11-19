@@ -21,6 +21,14 @@
 
 
 {% block canvas %}
+    <select id="func">
+        <option value="Sum">Sum</option>
+        <option value="Avg">Average</option>
+        <option value="Max">Maximum</option>
+        <option value="Min">Minimum</option>
+        <option value="StdDev">Standard Deviation</option>
+    </select>
+
     <select id="bar_column">
     {{ column_options }}
     </select>

@@ -21,57 +21,56 @@ def linegraph_image(request, shared, display_user,
     else:
         return pg.as_svg()
 
-def bargraph_image(request, shared, display_user, column, agg):
+def bargraph_image(request, shared, display_user, column, func, agg):
     
-    from bargraph import *
+    import bargraph as g
     
     if agg == 'cat_class':
-        bg = CatClassBarGraph(display_user, column)
+        Graph = g.CatClassBarGraph
         
     elif agg == 'person':
-        bg = PersonBarGraph(display_user, column)
+        Graph = g.PersonBarGraph
         
     elif agg == 'student':
-        bg = StudentBarGraph(display_user, column)
+        Graph = g.StudentBarGraph
     
     elif agg == 'captain':
-        bg = CaptainBarGraph(display_user, column)
+        Graph = g.CaptainBarGraph
         
     elif agg == 'first_officer':
-        bg = FOBarGraph(display_user, column)
+        Graph = g.FOBarGraph
         
     elif agg == 'instructor':
-        bg = InstructorBarGraph(display_user, column)
+        Graph = g.InstructorBarGraph
     
     elif agg == 'type':
-        bg = PlaneTypeBarGraph(display_user, column)
+        Graph = g.PlaneTypeBarGraph
         
     elif agg == 'tailnumber':
-        bg = TailnumberBarGraph(display_user, column)
+        Graph = g.TailnumberBarGraph
         
     elif agg == 'manufacturer':
-        bg = ManufacturerBarGraph(display_user, column)
+        Graph = g.ManufacturerBarGraph
     
     elif agg == 'category_class':
-        bg = CatClassBarGraph(display_user, column)
+        Graph = g.CatGraphBarGraph
         
     elif agg == 'year':
-        bg = YearBarGraph(display_user, column)
+        Graph = g.YearBarGraph
         
     elif agg == 'month':
-        bg = MonthBarGraph(display_user, column)
+        Graph = g.MonthBarGraph
     
     elif agg == 'day_of_the_week':
-        bg = DOWBarGraph(display_user, column)
+        Graph = g.DOWBarGraph
     
     elif agg == 'month_year':
-        bg = MonthYearBarGraph(display_user, column) 
-    
-    
+        Graph = g.MonthYearBarGraph
+        
     else:
         assert False, "Agg not added to generator view"
     
-    return bg.as_png()
+    return Graph(display_user, column, agg, func).as_png()
 
 ###############################################################################
 
