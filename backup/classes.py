@@ -78,8 +78,8 @@ class Backup(object):
 class EmailBackup(object):
     
     def __init__(self, user, auto=False):
-        if auto:
-            self.auto = True
+        
+        self.auto = auto
 
         self.user = user
         from profile.models import Profile
@@ -105,7 +105,7 @@ class EmailBackup(object):
         
         file_ = Backup(self.user).output_zip().getvalue()
         
-        if auto:
+        if self.auto:
             f = "FlightLogg.in' Auto Backup Mailer <info@flightlogg.in"
         else:
             f = "FlightLogg.in' Manual Backup Mailer <info@flightlogg.in"
