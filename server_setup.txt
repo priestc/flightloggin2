@@ -1,0 +1,24 @@
+mysql -u root -p logbook < mysqldump
+sudo apt-get install libpq-dev libgeos-dev proj postgresql-server-dev-8.4
+
+
+
+------------------------------------------
+
+
+
+------------------------------------------------
+
+
+
+
+
+$hostName = "localhost";
+$userName = "flphp";
+$password = "D1E3T%4Y5^N7";
+$dbName = "logbook";
+$hostName = "localhost";
+$userName = "flphp";
+$password = "D1E3T%4Y5^N7";
+$dbName = "logbook";
+

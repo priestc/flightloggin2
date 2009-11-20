@@ -3,6 +3,8 @@ from django.contrib.gis.db import models
 from constants import LOCATION_TYPE, LOCATION_CLASS
 from django.contrib.auth.models import User
 
+from django.contrib.gis.utils import LayerMapping
+import os
 
 class Location(models.Model):
     """
@@ -180,6 +182,33 @@ class WorldBorders(models.Model):
         from annoying.functions import get_object_or_None
         return get_object_or_None(cls,  *args, **kwargs)
 
+worldborders_mapping = {
+    'fips' : 'FIPS',
+    'iso2' : 'ISO2',
+    'iso3' : 'ISO3',
+    'un' : 'UN',
+    'name' : 'NAME',
+    'area' : 'AREA',
+    'pop2005' : 'POP2005',
+    'region' : 'REGION',
+    'subregion' : 'SUBREGION',
+    'lon' : 'LON',
+    'lat' : 'LAT',
+    'mpoly' : 'MULTIPOLYGON',
+}
+
+def import_world(verbose=True):
+    
+    world_shp = os.path.abspath(
+                                os.path.join(os.path.dirname(__file__),
+                                'data/world/TM_WORLD_BORDERS-0.3.shp')
+                            )
+                            
+    lm = LayerMapping(WorldBorders, world_shp, worldborders_mapping,
+                      transform=False, encoding='iso-8859-1')
+
+    lm.save(strict=True, verbose=verbose)
+
 ##############################################################################
 
 class USStates(models.Model):
@@ -202,6 +231,24 @@ class USStates(models.Model):
         from annoying.functions import get_object_or_None
         return get_object_or_None(cls,  *args, **kwargs)
 
+usstates_mapping = {
+    'state' : 'STATE',
+    'name' : 'NAME',
+    'lon' : 'LON',
+    'lat' : 'LAT',
+    'mpoly' : 'MULTIPOLYGON',
+}
+
+def import_state(verbose=True):
+    us_shp = os.path.abspath(
+                                os.path.join(os.path.dirname(__file__),
+                                'data/states/s_01au07.shp')
+                            )
+                            
+    lm = LayerMapping(USStates, us_shp, usstates_mapping,
+                      transform=False, encoding='iso-8859-1')
+
+    lm.save(strict=True, verbose=verbose)
 
 
 
