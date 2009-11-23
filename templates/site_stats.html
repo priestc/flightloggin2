@@ -8,7 +8,7 @@
 {% block title %}Site Stats{% endblock %}
 {% block canvas %}
 
-<div>Updated every 3 Hours<br>Last updated: {{cs.dt}} EST</div>
+<div>Updated every 3 Hours<br>Last updated: {{cs.dt|date:"D, F, jS, Y -- g:00 A"}} EST</div>
 <hr>
 <table id="site_stats">
     <tr>
