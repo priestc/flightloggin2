@@ -30,25 +30,6 @@
 
 {% block canvas %}
 
-<div class="instructions">
-Below is a list of custom locations that you have
-defined. A custom location is a place you have flown to or flown over that
-does not have an official FAA/ICAO/IATA identifier. If you are trying to log a
-flight to an airport which is not in the FlightLogg.in database,  better solution
-is to go to OurAirports and enter the airport into want to use an
-identifier th
-<br><br>
-To use a custom location in a flight, just use the identifier you have defined
-below. To force the use of a custom location, prefix the identifier with a "!".
-For instance, a flight from "DEN - !DEN - DEN" would be from Denver, to
-a custom identifier you have defined as "DEN", then back to Denver.
-<br><br>
-To use a custom location as a flyover point, prefix it with a "@". So a flight
-from Denver, then flying over a custom point called "CUS", then landing back at
-Denver would be "DEN - !@CUS - DEN". It is important to log fly-over points
-accurately to differentiate between flights that quality for Point to Point XC.
-</div>
-
 {% if user.is_authenticated and not shared %}
 <input type="button" id="new_custom" value="New Place">
 {% endif %}
@@ -85,6 +66,25 @@ accurately to differentiate between flights that quality for Point to Point XC.
     
     {% endfor %}
 </table>
+
+<div class="instructions">
+Below is a list of custom locations that you have
+defined. A custom location is a place you have flown to or flown over that
+does not have an official FAA/ICAO/IATA identifier. If you are trying to log a
+flight to an airport which is not in the FlightLogg.in database,  better solution
+is to go to OurAirports and enter the airport into want to use an
+identifier th
+<br><br>
+To use a custom location in a flight, just use the identifier you have defined
+below. To force the use of a custom location, prefix the identifier with a "!".
+For instance, a flight from "DEN - !DEN - DEN" would be from Denver, to
+a custom identifier you have defined as "DEN", then back to Denver.
+<br><br>
+To use a custom location as a flyover point, prefix it with a "@". So a flight
+from Denver, then flying over a custom point called "CUS", then landing back at
+Denver would be "DEN - !@CUS - DEN". It is important to log fly-over points
+accurately to differentiate between flights that quality for Point to Point XC.
+</div>
 
 <div id="popup" title="New Event">
 	<table id="dragbar">
