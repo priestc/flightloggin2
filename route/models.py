@@ -41,6 +41,9 @@ class RouteBase(models.Model):
         return ret
         
     def destination(self):
+        """ Returns the location object, or a string that represents the
+            identifier if unknown
+        """
         return self.location or self.unknown
     
     @property
@@ -60,7 +63,7 @@ class RouteBase(models.Model):
         try:
             return self.route.flight.all()[0].user.username
         except IndexError:
-            return "??"
+            return "not connected to any flights"
     
 ###############################################################################
 
@@ -359,6 +362,7 @@ class Route(models.Model):
                 fancy.append("<span title=\"%s\" class=\"%s\">%s</span>" %
                             (dest.title_display(), class_, dest.identifier ), )
                 simple.append(rb.destination().identifier)
+                
             elif loc_class == 0:
                 fancy.append("<span title=\"%s\" class=\"%s\">%s</span>" %
                             (dest, class_, dest ), )

@@ -81,6 +81,9 @@ class Location(models.Model):
             ## navaid type
             return "%s %s, %s" % (self.name, self.get_loc_type_display(), text)
         
+        if text == '':
+            return "Custom identifier (coordinates unknown)"
+        
         return text
     
     def save(self, *args, **kwargs):
