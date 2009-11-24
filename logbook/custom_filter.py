@@ -24,7 +24,8 @@ def make_filter_kwargs(self, qs):
     
     for field,val in fields:
         
-        if val:
+        if val >= 0 and val is not None:
+            
             if field == "start_date":        # date filters
                 kwargs = {"date__gte": val}
                 qs = qs.filter(**kwargs)
@@ -47,7 +48,7 @@ def make_filter_kwargs(self, qs):
             
             elif val>=0:                     # all time filters
                 filter_ = val
-                # opeator, '<', '>', or '='
+                # operator, '<', '>', or '='
                 op = self.cleaned_data.get(field + "_op", "")
                 
                 if op == "0":
@@ -100,9 +101,9 @@ def make_filter_form(user):
              
     for field in FILTER_FIELDS:
         d = {field: forms.FloatField(label=FIELD_ABBV[field], required=False,
-                widget=forms.TextInput(attrs={"class": "small_picker"})), 
+             widget=forms.TextInput(attrs={"class": "small_picker"})), 
              "%s_op" % field: forms.ChoiceField(choices=operators, required=False,
-                widget=forms.Select(attrs={"class": "op_select"})),
+             widget=forms.Select(attrs={"class": "op_select"})),
              }
         fields.update(d)
         
