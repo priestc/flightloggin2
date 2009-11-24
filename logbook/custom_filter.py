@@ -24,7 +24,7 @@ def make_filter_kwargs(self, qs):
     
     for field,val in fields:
         
-        if val >= 0 and val is not None:
+        if (type(0) is type(val) and val >= 0) and val is not None:
             
             if field == "start_date":        # date filters
                 kwargs = {"date__gte": val}
