@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block milestones-sel %}nav_selected{% endblock %}
+
+{% block title %}Milestones{% endblock %}
+
+{% block canvas %}
+
+<h2>Part 135 IFR minimums</h2>
+<table class="milestone_table">
+    <tr>
+        <td>{{ part135.icon_total }}</td>
+        <td>Total Time</td>
+        <td>{{ part135.total }} / {{ part135.goal_total }}</td>
+        <td><img src="{% url smallbar part135.total part135.goal_total %}"></td>
+    </tr>
+    
+    <tr>
+        <td>{{ part135.icon_night }}</td>
+        <td>Night</td>
+        <td>{{ part135.night }} / {{ part135.goal_night }}</td>
+        <td><img src="{% url smallbar part135.night part135.goal_night %}"></td>
+    </tr>
+    
+    <tr>
+        <td>{{ part135.icon_p2p }}</td>
+        <td>Point to Point</td>
+        <td>{{ part135.p2p }} / {{ part135.goal_p2p }}</td>
+        <td><img src="{% url smallbar part135.p2p part135.goal_p2p %}"></td>
+    </tr>
+
+    <tr>
+        <td>{{ part135.icon_inst }}</td>
+        <td>Instrument</td>
+        <td>{{ part135.inst }} / {{ part135.goal_inst }}</td>
+        <td><img src="{% url smallbar part135.inst part135.goal_inst %}"></td>
+    </tr>
+</table>
+
+{% endblock %}

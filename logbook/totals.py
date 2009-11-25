@@ -3,8 +3,8 @@ from constants import AGG_FIELDS, EXTRA_AGG
 from utils import to_minutes
 
 def column_total_by_list(queryset, columns, format='decimal'):
-    """takes a list of columns, returns a list of totals for those columns, as
-    well as a list of all eligable aggregatable columns"""
+    """takes a list of columns, returns a list of totals for those columns
+    """
     
     ret = []
     for cn in columns:

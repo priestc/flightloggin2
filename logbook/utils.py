@@ -441,7 +441,10 @@ class QuerySet(QuerySet):
     def add_column(self, *args):
         for arg in args:
             if arg == 'day':
-                return self.extra(select={'day': "total - night"})
+                self = self.extra(select={'day': "total - night"})
+            
+            if arg == 'instrument':
+                self = self.extra(select={'day': "act_inst + sim_inst"})
             
             elif arg == 'distance':
                 self = self.extra(select={"distance":'route_route.total_line_all'})

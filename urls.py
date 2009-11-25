@@ -226,9 +226,21 @@ urlpatterns += patterns('',
     ),
     
     url(
+        r'^(?P<username>\w+)/milestones.html$',
+        "milestones.views.milestones",
+                                                             name="milestones",
+    ),
+    
+    url(
+        r'^smallbar/(?P<val>\d+\.\d+)--(?P<max_val>\d+\.\d+).png$',
+        "milestones.views.smallbar",
+                                                               name='smallbar',
+    ),
+    
+    url(
         r'^(?P<username>\w+)/currency.html$',
         "currency.views.currency",
-                                                                name="currency",
+                                                               name="currency",
     ),
     
     url(
