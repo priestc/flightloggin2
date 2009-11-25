@@ -16,7 +16,7 @@ function prepare_new_custom(wipe) {
 	if(wipe)
 		wipe_clean();
 	
-	$('#titlebar').text("New Place");
+	$('#titlebar').text("New Location");
 	$("#new_buttons").show();
 	$("#edit_buttons").hide();
 }
@@ -25,7 +25,7 @@ function prepare_edit_custom(wipe) {
 	if(wipe)
 		wipe_clean();
 	
-	$('#titlebar').text("Edit Place");
+	$('#titlebar').text("Edit Location");
 	$("#new_buttons").hide();
 	$("#edit_buttons").show();
 }

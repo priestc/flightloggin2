@@ -17,8 +17,8 @@ def records(request, shared, display_user):
             
     return locals()
 
-@render_to("places.html")
-def places(request, shared, display_user):
+@render_to("locations.html")
+def locations(request, shared, display_user):
     customs = Location.objects.filter(loc_class=3, user=display_user)
     
     if request.POST.get('submit', None) == 'Create New Place':

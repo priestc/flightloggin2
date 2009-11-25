@@ -244,9 +244,9 @@ urlpatterns += patterns('',
     ),
     
     url(
-        r'^(?P<username>\w+)/places.html$',
-        "records.views.places",
-                                                                 name="places",
+        r'^(?P<username>\w+)/locations.html$',
+        "records.views.locations",
+                                                              name="locations",
     ),
     
     url(

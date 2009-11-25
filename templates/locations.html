@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block places-sel %}nav_selected{% endblock%}
+{% block locations-sel %}nav_selected{% endblock%}
 
 {% block javascript %}
     <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/popup.js"></script>
@@ -23,7 +23,7 @@
 	</script>
 	
 	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/popup.css">
-	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/places.css">
+	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/locations.css">
 {% endblock %}
 
 {% block title %}Locations{% endblock %}
@@ -31,7 +31,7 @@
 {% block canvas %}
 
 {% if user.is_authenticated and not shared %}
-<input type="button" id="new_custom" value="New Place">
+<input type="button" id="new_custom" value="New Location">
 {% endif %}
 
 
@@ -87,15 +87,15 @@ Denver would be "DEN - !@CUS - DEN". It is important to log fly-over points
 accurately to differentiate between flights that quality for Point to Point XC.
 </div>
 
-<div id="popup" title="New Event">
+<div id="popup" title="New Location">
 	<table id="dragbar">
 		<tr>
-			<td><span id="titlebar">New Place</span></td>
+			<td><span id="titlebar">New Location</span></td>
 			<td><span id="close_x" title="Close this popup">[X]</span></td>
 		</tr>
 	</table>
 	
-	<form id="new_plane_form" action="{% url places display_user.username %}" method="post">
+	<form id="new_plane_form" action="{% url locations display_user.username %}" method="post">
 		<table>
 			<tbody>
 				<tr>
@@ -130,12 +130,12 @@ accurately to differentiate between flights that quality for Point to Point XC.
 		</table>
 		
     	<div id="new_buttons">
-			<input type="submit" name="submit" value="Create New Place" />
+			<input type="submit" name="submit" value="Create New Location" />
 		</div>
         {% if not shared %}
 		<div id="edit_buttons">
 			<input type="submit" name="submit" value="Submit Changes" />
-			<input type="submit" name="submit" value="Delete Place" />
+			<input type="submit" name="submit" value="Delete Location" />
 		</div>
         {% endif %}
 	</form>
