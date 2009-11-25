@@ -232,7 +232,7 @@ urlpatterns += patterns('',
     ),
     
     url(
-        r'^smallbar/(?P<val>\d+\.\d+)--(?P<max_val>\d+\.\d+).png$',
+        r'^smallbar/(?P<val>\d+(\.\d+)?)--(?P<max_val>\d+(\.\d+)?).png$',
         "milestones.views.smallbar",
                                                                name='smallbar',
     ),
