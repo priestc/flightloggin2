@@ -112,13 +112,15 @@ class Location(models.Model):
                 )
                 if not state:
                     print "NO STATE: %s" % self.identifier
+                
+                print state
                     
                 if state:   
                     region = state.upper()
                 else:
                     region = "US-U-A"
                     
-                self.region = Region.objects.get(code=region)
+                self.region = Region.objects.get(code="US-%s" % region)
            
         return super(Location,self).save()
     
