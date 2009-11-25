@@ -16,7 +16,7 @@ class PHPBackup(object):
     def get_file(self):
         import urllib2
         self.validate()
-        url = "http://flightlogg.in/backup.php?sec=%s" % self.uid
+        url = "http://old.flightlogg.in/backup.php?sec=%s" % self.uid
         f = urllib2.urlopen(url)
         return f
         
