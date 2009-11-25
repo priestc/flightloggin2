@@ -9,7 +9,7 @@ def milestones(request, shared, display_user):
 def part135ifr(display_user):
     
     from logbook.models import Flight
-    qs = Flight.objects.user(display_user)
+    qs = Flight.objects.user(display_user).filter(plane__cat_class=2)
     
     ###########################################################################
     
@@ -22,7 +22,7 @@ def part135ifr(display_user):
     
     inst = simulator_inst + plane_inst
     
-    ## part 135 IFR ###########################################################
+    ############ part 135 IFR #################################################
     
     part135 = {}
     
@@ -38,9 +38,13 @@ def part135ifr(display_user):
     
     overall_good = 0
     for item in ('total', 'night', 'p2p', 'inst'):
-        part135[item] = my_numbers[item]
-        part135['goal_%s' % item] = goal_numbers[item]
-        if part135[item] >= part135['goal_%s' % item]:
+        mine = my_numbers[item]
+        goal = goal_numbers[item]
+        
+        part135[item] = mine
+        part135['goal_%s' % item] = goal
+
+        if float(mine) >= float(goal):
             #the requirement is met
             part135['icon_%s' % item] = ':)'
         else:
@@ -50,7 +54,7 @@ def part135ifr(display_user):
     # if just one requirement is not met, overall good is false,
     # did not meet milestone
     part135['overall'] = overall_good > 0
-    
+
     return part135
 
 def smallbar(request, val, max_val):
