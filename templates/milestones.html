@@ -81,6 +81,13 @@
     </tr>
     
     <tr>
+        <td>{{ atp.icon_inst|safe }}</td>
+        <td>Instrument</td>
+        <td>{{ atp.inst }} / {{ atp.goal_inst }}</td>
+        <td><img src="{% url smallbar atp.inst atp.goal_inst %}"></td>
+    </tr>
+    
+    <tr>
         <td>{{ atp.icon_atp_xc|safe }}</td>
         <td>ATP XC</td>
         <td>{{ atp.atp_xc }} / {{ atp.goal_atp_xc }}</td>
