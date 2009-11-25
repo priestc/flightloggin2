@@ -69,7 +69,7 @@ urlpatterns += patterns('',
     url(
         r'^(?P<username>\w+)/states-(?P<type_>[\-\w]+)?.(?P<ext>(png|svg))$',
         "maps.states.view",
-                                                            name="state-map",
+                                                              name="state-map",
     ),
                                                                    
     (
@@ -109,7 +109,7 @@ urlpatterns += patterns('',
     url(
         r'^update-airports.py$',
         "airport.views.update_airports",
-                                                        name="del-airports",
+                                                           name="del-airports",
     ),
     
     url(   
@@ -150,13 +150,13 @@ urlpatterns += patterns('',
     url(
         r'^(?P<username>\w+)/email-backup.html$',
         "backup.views.emailbackup",
-                                                          name="email-backup",
+                                                           name="email-backup",
     ),
     
     url(
         r'^(?P<username>\w+)/routes-(?P<type_>\w+).kmz$',
         "maps.views.routes_kml",
-                                                            name="kml-route",
+                                                              name="kml-route",
     ),
     
     url(
@@ -168,7 +168,7 @@ urlpatterns += patterns('',
     url(
         r'^(?P<username>\w+)/8710.html$',
         "auto8710.views.auto8710",
-                                                                name="est",
+                                                                    name="est",
     ),
     
     url(
@@ -180,13 +180,13 @@ urlpatterns += patterns('',
     url(
         r'^(?P<username>\w+)/import.html$',
         "manage.views.import_v",
-                                                                name="import",
+                                                                 name="import",
     ),
     
     url(
         r'^(?P<username>\w+)/export.html$',
         "manage.views.export",
-                                                                name="export",
+                                                                 name="export",
     ),
     
     url(
@@ -198,7 +198,7 @@ urlpatterns += patterns('',
     url(
         r'^(?P<username>\w+)/events.html$',
         "records.views.events",
-                                                                name="events",
+                                                                 name="events",
     ),
     
     url(
@@ -216,13 +216,13 @@ urlpatterns += patterns('',
     url(
         r'^(?P<username>\w+)/planes.html$',
         "plane.views.planes",
-                                                                name="planes",
+                                                                 name="planes",
     ),
     
     url(
         r'^(?P<username>\w+)/maps.html$',
         "maps.views.maps",
-                                                                name="maps",
+                                                                   name="maps",
     ),
     
     url(
@@ -246,25 +246,25 @@ urlpatterns += patterns('',
     url(
         r'^(?P<username>\w+)/places.html$',
         "records.views.places",
-                                                                name="places",
+                                                                 name="places",
     ),
     
     url(
         r'^(?P<username>\w+)/backup/$',
         "backup.views.backup",
-                                                                name="backup",
+                                                                 name="backup",
     ),
     
     url(
         r'^(?P<username>\w+)/massentry.html$',
         "logbook.views.mass_entry",
-                                                            name="mass-entry",
+                                                             name="mass-entry",
     ),
     
     url(
         r'^(?P<username>\w+)/massedit-page-(?P<page>\d+).html$',
         "logbook.views.mass_edit",
-                                                            name="mass-edit",
+                                                              name="mass-edit",
     ),
     
     url(
@@ -281,25 +281,25 @@ urlpatterns += patterns('',
         
     url(
         r'^(?P<username>\w+)/sigs.html$',"sigs.views.sigs",
-                                                                name="sigs",
+                                                                   name="sigs",
     ),
     
     url(
         r'^(?P<username>\w+)/print.pdf$',
         "pdf.views.pdf",
-                                                                name="pdf",
+                                                                    name="pdf",
     ),
     
     url(
         r'^schedule-(?P<schedule>\w+).py$',
         "backup.views.schedule",
-                                                            name="schedule",
+                                                               name="schedule",
     ),
     
     url(
         r'^stats_save.py$',
         "site_stats.views.save_to_db",
-                                                            name="save_stats",
+                                                             name="save_stats",
     ),
     
     (

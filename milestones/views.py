@@ -1,10 +1,17 @@
 from annoying.decorators import render_to
 
+V = '<span class="v">&#10003;</span>'
+X = '<span class="x">&#10005;</span>'
+
+
 @render_to('milestones.html')
 def milestones(request, shared, display_user):
     part135 = part135ifr(display_user)
     return locals()
     
+def smallbar(request, val, max_val):
+    from small_progress_bar import SmallProgressBar
+    return SmallProgressBar(float(val), float(max_val)).as_png()
     
 def part135ifr(display_user):
     
@@ -36,7 +43,7 @@ def part135ifr(display_user):
                     'p2p': 500.0,
                     'inst': 75.0}
     
-    overall_good = 0
+    fails = 0
     for item in ('total', 'night', 'p2p', 'inst'):
         mine = my_numbers[item]
         goal = goal_numbers[item]
@@ -46,17 +53,18 @@ def part135ifr(display_user):
 
         if float(mine) >= float(goal):
             #the requirement is met
-            part135['icon_%s' % item] = ':)'
+            part135['icon_%s' % item] = V
         else:
-            part135['icon_%s' % item] = 'X'
-            overall_good += 1
+            part135['icon_%s' % item] = X
+            fails += 1
     
     # if just one requirement is not met, overall good is false,
     # did not meet milestone
-    part135['overall'] = overall_good > 0
+    if fails > 0:
+        part135['overall'] = X
+    else:
+        part135['overall'] = V
 
     return part135
 
-def smallbar(request, val, max_val):
-    from small_progress_bar import SmallProgressBar
-    return SmallProgressBar(float(val), float(max_val)).as_png()
+

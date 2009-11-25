@@ -1,0 +1,5 @@
+table.milestone_table        {margin: 0 auto 0 auto; border: 2px solid gray}
+table.milestone_table td     {text-align: left; padding-left: 10px}
+
+.x                           {color: red}
+.v                           {color: green}
