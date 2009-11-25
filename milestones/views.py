@@ -16,7 +16,7 @@ def smallbar(request, val, max_val):
 def part135ifr(display_user):
     
     from logbook.models import Flight
-    qs = Flight.objects.user(display_user).filter(plane__cat_class=2)
+    qs = Flight.objects.user(display_user)
     
     ###########################################################################
     
@@ -38,10 +38,10 @@ def part135ifr(display_user):
                   'p2p': "%.1f" % qs.sim(False).agg('p2p'),
                   'inst': inst}
                   
-    goal_numbers = {'total': 1200.0,
-                    'night': 100.0,
-                    'p2p': 500.0,
-                    'inst': 75.0}
+    goal_numbers = {'total': 1200,
+                    'night': 100,
+                    'p2p': 500,
+                    'inst': 75}
     
     fails = 0
     for item in ('total', 'night', 'p2p', 'inst'):

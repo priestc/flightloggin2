@@ -48,6 +48,9 @@
         <span class="{% block currency-sel %}{% endblock%}" >
         <a href="{% url currency display_user.username %}">Currency</a></span>
         
+        <span class="{% block milestones-sel %}{% endblock%}" >
+        <a href="{% url milestones display_user.username %}">Milestones</a></span>
+        
         {% if not shared %}
         <span class="{% block mass-sel %}{% endblock%}" >
         <a href="{% url mass-entry display_user.username %}">Mass Entry</a></span>
