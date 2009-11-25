@@ -9,7 +9,7 @@
 
 {% block canvas %}
 
-<h2>Part 135 IFR minimums {{ part135.overall|safe }}</h2>
+<h2>Part 135 IFR Minimums {{ part135.overall|safe }}</h2>
 <table class="milestone_table">
     <tr>
         <td>{{ part135.icon_total|safe }}</td>
@@ -38,6 +38,76 @@
         <td>{{ part135.inst }} / {{ part135.goal_inst }}</td>
         <td><img src="{% url smallbar part135.inst part135.goal_inst %}"></td>
     </tr>
+</table>
+
+<h2>Part 135 VFR Minimums {{ part135v.overall|safe }}</h2>
+<table class="milestone_table">
+    <tr>
+        <td>{{ part135v.icon_total|safe }}</td>
+        <td>Total Time</td>
+        <td>{{ part135v.total }} / {{ part135v.goal_total }}</td>
+        <td><img src="{% url smallbar part135v.total part135v.goal_total %}"></td>
+    </tr>
+    
+    <tr>
+        <td>{{ part135v.icon_night_p2p|safe }}</td>
+        <td>Night</td>
+        <td>{{ part135v.night_p2p }} / {{ part135v.goal_night_p2p }}</td>
+        <td><img src="{% url smallbar part135v.night_p2p part135v.goal_night_p2p %}"></td>
+    </tr>
+    
+    <tr>
+        <td>{{ part135v.icon_p2p|safe }}</td>
+        <td>Point to Point</td>
+        <td>{{ part135v.p2p }} / {{ part135v.goal_p2p }}</td>
+        <td><img src="{% url smallbar part135v.p2p part135v.goal_p2p %}"></td>
+    </tr>
+</table>
+
+<h2>ATP Airplane Minimums {{ atp.overall|safe }}</h2>
+<table class="milestone_table">
+    <tr>
+        <td>{{ atp.icon_total|safe }}</td>
+        <td>Total Time</td>
+        <td>{{ atp.total }} / {{ atp.goal_total }}</td>
+        <td><img src="{% url smallbar atp.total atp.goal_total %}"></td>
+    </tr>
+    
+    <tr>
+        <td>{{ atp.icon_night|safe }}</td>
+        <td>Night</td>
+        <td>{{ atp.night }} / {{ atp.goal_night }}</td>
+        <td><img src="{% url smallbar atp.night atp.goal_night %}"></td>
+    </tr>
+    
+    <tr>
+        <td>{{ atp.icon_atp_xc|safe }}</td>
+        <td>ATP XC</td>
+        <td>{{ atp.atp_xc }} / {{ atp.goal_atp_xc }}</td>
+        <td><img src="{% url smallbar atp.atp_xc atp.goal_atp_xc %}"></td>
+    </tr>
+
+    <tr>
+        <td>{{ atp.icon_pic|safe }}</td>
+        <td>PIC</td>
+        <td>{{ atp.pic }} / {{ atp.goal_pic }}</td>
+        <td><img src="{% url smallbar atp.pic atp.goal_pic %}"></td>
+    </tr>
+
+    <tr>
+        <td>{{ atp.icon_pic_night|safe }}</td>
+        <td>Night PIC</td>
+        <td>{{ atp.pic_night }} / {{ atp.goal_pic_night }}</td>
+        <td><img src="{% url smallbar atp.pic_night atp.goal_pic_night %}"></td>
+    </tr>
+
+    <tr>
+        <td>{{ atp.icon_pic_xc|safe }}</td>
+        <td>Night XC</td>
+        <td>{{ atp.pic_xc }} / {{ atp.goal_pic_xc }}</td>
+        <td><img src="{% url smallbar atp.pic_xc atp.goal_pic_xc %}"></td>
+    </tr>
+
 </table>
 
 {% endblock %}
