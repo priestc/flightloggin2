@@ -65,7 +65,7 @@ urlpatterns += patterns('',
         # username/bargraph/(column)/(func)/by-(agg).png
         'graphs.views.bargraph_image',
     ),
-                                
+
     url(
         r'^(?P<username>\w+)/states-(?P<type_>[\-\w]+)?.(?P<ext>(png|svg))$',
         "maps.states.view",

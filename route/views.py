@@ -2,9 +2,7 @@ from django.http import HttpResponse
 from models import Route
 
 def del_routes(request):
-    if not request.user.is_staff:
-        assert False
-        
+       
     count=Route.objects.filter(flight__pk__isnull=True).count()
     Route.objects.filter(flight__pk__isnull=True).delete()
     return HttpResponse("%s routes deleted" % count,
