@@ -7,8 +7,6 @@ from django.contrib.auth.decorators import login_required
 def image_redirect(request, shared, display_user, type_):
     """ Redirect to the pre-rendered png image
     """
-    if display_user.id == 1:
-        display_user = None # unset user so it uses all users
 
     path = "%s/%s/%s" % (settings.SITE_URL,
                          settings.STATES_URL,
@@ -23,7 +21,6 @@ def render_all(request):
     users = User.objects.order_by('id')
     
     for user in users:
-        print user
         render_for_user(user)
         
     return HttpResponse('done!', mimetype="text/plain")
@@ -48,10 +45,14 @@ def render_for_user(user):
     """
     import os
     
+    user_id = user.id
+    if user_id == 1:
+        user = None            # unset user so it uses all users
+        
     BMP = settings.BASE_MAP_PATH
     
     #the directory that the images will be saved to
-    directory = os.path.join(BMP, str(user.id))
+    directory = os.path.join(BMP, str(user_id))
     
     #if the directory is not there, then create it.
     if not os.path.isdir(directory):
