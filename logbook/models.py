@@ -207,13 +207,13 @@ class Flight(models.Model):
             return self.person
         
         elif cn == "fo":
-           if self.pic and self.dual_g <= 0:
+           if self.pic and (self.dual_g <= 0 and self.dual_r <= 0):
                return self.person
            else:
                return ""
                
         elif cn == "captain":
-           if self.sic:
+           if self.sic and (self.dual_g <= 0 and self.dual_r <= 0):
                return self.person
            else:
                return ""
