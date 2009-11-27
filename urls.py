@@ -25,23 +25,7 @@ urlpatterns += patterns('',
         r'^$',
         "django.views.generic.simple.redirect_to",
         {'url': 'news.html'},
-        name="root"
-    ),
-   
-    (
-        r'^admin/doc/',
-        include('django.contrib.admindocs.urls')
-    ),
-    
-    (
-        r'^admin/',
-        include(admin.site.urls),
-    ),
-    
-    (
-        r'^admin-manage.html$',
-        direct_to_template,
-        {'template': 'manage.html'},
+                                                                    name="root"
     ),
     
     ############################ graphs
@@ -65,20 +49,14 @@ urlpatterns += patterns('',
         # username/bargraph/(column)/(func)/by-(agg).png
         'graphs.views.bargraph_image',
     ),
-
-    url(
-        r'^(?P<username>\w+)/states-(?P<type_>[\w\-]+).png$',
-        "maps.states_views.image_redirect",
-                                                              name="state-map",
-    ),
                                                                    
     (
         r'^(?P<username>\w+)/sigs/(?P<columns>[\w\-]+).png',
         "sigs.views.make_sig",
     ),
     
-    ############################ main site
-    
+
+    ################################ admin functions
     
     (
         r'^feeds/(?P<url>.*)/$',
@@ -102,10 +80,40 @@ urlpatterns += patterns('',
     ),
     
     (
+        r'^recalc-images.py$',
+        "maps.states_views.render_all",
+    ),
+    
+    (
         r'^cookietest.py$',
         "manage.views.cookietest",
     ),
     
+    (
+        r'^openid/',
+        include('django_openid_auth.urls'),
+    ),
+    
+    (
+        r'^admin/doc/',
+        include('django.contrib.admindocs.urls')
+    ),
+    
+    (
+        r'^admin/',
+        include(admin.site.urls),
+    ),
+    
+    (
+        r'^admin-manage.html$',
+        direct_to_template,
+        {'template': 'manage.html'},
+    ),
+    
+    
+        ############################ main site
+        
+        
     url(
         r'^update-airports.py$',
         "airport.views.update_airports",
@@ -121,30 +129,25 @@ urlpatterns += patterns('',
     url(
         r'^news.html$',
         "main.views.news",
-        name="news",
+                                                                   name="news",
     ),
     
     url(
         r'^site_stats.html$',
         "site_stats.views.site_stats",
-        name="site_stats",
+                                                             name="site_stats",
     ),
     
     url(
         r'^faq.html$',
         "main.views.faq",
-        name="faq",
+                                                                    name="faq",
     ),
     
     url(
         r'^help.html$',
         "main.views.help",
-        name="help",
-    ),
-    
-    (
-        r'^openid/',
-        include('django_openid_auth.urls'),
+                                                                   name="help",
     ),
     
     url(
@@ -155,13 +158,13 @@ urlpatterns += patterns('',
     
     url(
         r'^(?P<username>\w+)/routes-(?P<type_>\w+).kmz$',
-        "maps.views.routes_kml",
+        "maps.kml_views.routes_kml",
                                                               name="kml-route",
     ),
     
     url(
         r'^(?P<username>\w+)/airports-(?P<type_>\w+).kmz$',
-        "maps.views.airports_kml",
+        "maps.kml_views.airports_kml",
                                                             name="kml-airport",
     ),
     
@@ -223,6 +226,18 @@ urlpatterns += patterns('',
         r'^(?P<username>\w+)/maps.html$',
         "maps.views.maps",
                                                                    name="maps",
+    ),
+    
+    url(
+        r'^(?P<username>\w+)/states-(?P<type_>[\w\-]+).png$',
+        "maps.states_views.image_redirect",
+                                                              name="state-map",
+    ),
+    
+    url(
+        r'^(?P<username>\w+)/recalc-mine.py$',
+        "maps.states_views.render_me",
+                                                              name="render-me",
     ),
     
     url(

@@ -1,8 +1,8 @@
 from states import CountStateMap, UniqueStateMap, FlatStateMap
-from share.decorator import secret_key
-from django.http import HttpResponseRedirect
+from share.decorator import secret_key, no_share
+from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
-
+from django.contrib.auth.decorators import login_required
 
 def image_redirect(request, shared, display_user, type_):
     """ Redirect to the pre-rendered png image
@@ -16,8 +16,8 @@ def image_redirect(request, shared, display_user, type_):
     
     return HttpResponseRedirect("%s/states-%s.png" % (path, type_))
 
-#@secret_key
-def render_all(): #request):
+@secret_key
+def render_all(request):
     from django.contrib.auth.models import User
     
     users = User.objects.all()
@@ -25,6 +25,22 @@ def render_all(): #request):
     for user in users:
         print user
         render_for_user(user)
+        
+    return HttpResponse('done!', mimetype="text/plain")
+
+
+@no_share
+@login_required
+def render_me(request, shared, display_user):
+    
+    render_for_user(display_user)
+
+    # return the user to their maps page with spiffy new updated images
+    from django.core.urlresolvers import reverse
+    url = reverse('maps', args=(display_user.username,) )
+
+    return HttpResponseRedirect(url)
+
 
 def render_for_user(user):
     """ Given a user instance, it renders the three map images and saves them

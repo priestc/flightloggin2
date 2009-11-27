@@ -61,27 +61,28 @@
 </table>
 
 <h2>Images</h2>
+<div class="instructions">
+These images are updated once a day. To force an update, click
+<a href="{% url render-me display_user %}">here</a>
+</div>
 <table id="images_table">
     <tr>
         <td>
             <h3>All states colored equally</h3>
-            {% url state-map display_user "colored" as colored_url %}
             <img src="{{ colored_url }}"><br>
-            {{ SITE_URL }}{{ colored_url }}
+            {{ colored_url }}
         </td>
         <td>
             <h3>States colored by total visits</h3>
-            {% url state-map display_user "count" as count_url %}
             <img src="{{ count_url }}"><br>
-            {{ SITE_URL }}{{ count_url }}
+            {{ count_url }}
         </td>
     </tr>
     <tr>
         <td colspan=2>
             <h3>States colored by unique airports visited</h3>
-            {% url state-map display_user "unique" as unique_url %}
             <img src="{{ unique_url }}"><br>
-            {{ SITE_URL }}{{ unique_url }}
+            {{ unique_url }}
         </td>
     </tr>
 </table>
