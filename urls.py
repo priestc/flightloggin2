@@ -67,8 +67,8 @@ urlpatterns += patterns('',
     ),
 
     url(
-        r'^(?P<username>\w+)/states-(?P<type_>[\-\w]+)?.(?P<ext>(png|svg))$',
-        "maps.states.view",
+        r'^(?P<username>\w+)/states-(?P<type_>[\w\-]+).png$',
+        "maps.states_views.image_redirect",
                                                               name="state-map",
     ),
                                                                    
@@ -303,7 +303,7 @@ urlpatterns += patterns('',
     ),
     
     (
-        r'^site-media/(?P<path>.*)$','django.views.static.serve',
+        r'^lcl_dev_media/(?P<path>.*)$','django.views.static.serve',
         {'document_root': '/srv/flightloggin/media',
             'show_indexes': True},
     ),

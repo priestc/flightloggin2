@@ -9,21 +9,6 @@ from matplotlib.colors import rgb2hex, LinearSegmentedColormap
 from django.db.models import Count
 from airport.models import Region, Location
 
-def view(request, shared, display_user, type_, ext):
-    if display_user.id == 1:
-        display_user = None # unset user so it uses all users
-
-    if type_ == 'unique':
-        im = UniqueStateMap(display_user, ext)
-
-    elif type_ == 'count':
-        im = CountStateMap(display_user, ext)
-
-    elif type_ == 'colored':
-        im = FlatStateMap(display_user, ext)
-
-    return im.output
-
 ###############################################################################
 ###############################################################################
 ###############################################################################
@@ -35,13 +20,14 @@ class StateMap(object):
                 projection='lcc',lat_1=33,lat_2=45,lon_0=-95)
     
     
-    def __init__(self, user, ext):
+    def __init__(self, user, ext='png'):
         self.user = user
         self.ext = ext
         self.get_cmap()
         
-    @property
-    def output(self):
+    def as_response(self):
+        """Returns a HttpResponse containing the png or svg file.
+        """
         from graphs.image_formats import plot_png2, plot_svg2
         
         if self.ext == 'png':
@@ -49,6 +35,16 @@ class StateMap(object):
         
         if self.ext == 'svg':
             return plot_svg2(self.plot)()
+        
+    def to_file(self, openfile):
+
+        fig = self.plot()
+        
+        fig.savefig(openfile,
+                    format="png",
+                    bbox_inches="tight",
+                    pad_inches=.05,
+                    edgecolor="white")
         
     def get_data(self):
         raise NotImplementedError
@@ -60,7 +56,7 @@ class StateMap(object):
         for state in qs:
             states_to_plot.update({state.get('name'): state.get('c', 1)})
 
-        fig = self.drawl_state_map(states_to_plot)
+        fig = self.draw_state_map(states_to_plot)
 
         count = self.get_disp_count(states_to_plot)
             
@@ -71,7 +67,7 @@ class StateMap(object):
         
         return fig
 
-    def drawl_state_map(self, states_to_plot):
+    def draw_state_map(self, states_to_plot):
         from matplotlib.patches import Polygon
         from airport.models import USStates
         import settings
@@ -103,7 +99,7 @@ class StateMap(object):
             
             if statename in states_to_plot:
                 c = float(states_to_plot[statename])
-                val = np.sqrt((c-min_)/(max_-min_))
+                val = np.sqrt( (c - min_) / (max_ - min_) )
                 color = self.cmap(val)[:3]
                 poly = Polygon(seg,facecolor=color)
                 ax.add_patch(poly)
