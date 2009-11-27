@@ -6,7 +6,7 @@ def maps(request, shared, display_user):
     
     base_url = "%s/%s/%s/states-" % (SITE_URL,
                                      STATES_URL,
-                                     display_user.username, )
+                                     display_user.id, )
     
     colored_url = "%s%s" % (base_url, "colored.png")
     unique_url = "%s%s" % (base_url, "unique.png")
