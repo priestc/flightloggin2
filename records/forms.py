@@ -13,9 +13,20 @@ class NonFlightForm(ModelForm):
         
 ##############################
 ##############################
-        
+from django.forms import widgets #import TextInput, HiddenInput
+
+class IdentWidget(widgets.TextInput):
+    def clean(self, value):
+        import re
+        value = re.sub(r'\W', '', value).upper()
+        return super(IdentWidget, self).clean(self, value)
+
 class CustomForm(ModelForm):
-    coordinates = forms.CharField(widget=forms.TextInput(), required=False, help_text="In decimal format (e.g.: 34.322631,-84.481517)")
+    coordinates = forms.CharField(widget=forms.TextInput(),
+                    required=False,
+                    help_text="In decimal format (e.g. 34.322631,-84.481517)")
+    
+    identifier = IdentWidget()
     
     class Meta:
         model = get_model('airport', 'Location')

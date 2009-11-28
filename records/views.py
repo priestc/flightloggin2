@@ -25,12 +25,6 @@ def locations(request, shared, display_user):
         form=CustomForm(request.POST)
         if form.is_valid():
             point = get_point(form.cleaned_data['coordinates'])
-            new_ident = form.cleaned_data['identifier']\
-                            .upper()\
-                            .replace('!','')\
-                            .replace('@','')
-                            
-            form.cleaned_data['identifier'] = new_ident
             custom = form.save(commit=False)
             custom.loc_class = 3
             custom.location = point
@@ -51,7 +45,6 @@ def locations(request, shared, display_user):
         form=CustomForm(request.POST, instance=custom)
         if form.is_valid():
             point = get_point(form.cleaned_data['coordinates'])
-            form.cleaned_data['identifier'] = form.cleaned_data['identifier'].upper()
             custom = form.save(commit=False)
             custom.location = point
             custom.loc_class = 3
