@@ -99,7 +99,8 @@ def do_import(preview, user):
 
 def cookietest(request):
     
-    cookie = "%s - %s" % (request.COOKIES['id'], request.COOKIES['pass'])
+    cookie = "%s - %s\n" % (request.COOKIES['id'], request.COOKIES['pass'])
+    cookie += " - ".join(request.COOKIES)
     
     from django.http import HttpResponse
     return HttpResponse(cookie, mimetype='text/plain')
