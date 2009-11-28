@@ -21,11 +21,16 @@ def records(request, shared, display_user):
 def locations(request, shared, display_user):
     customs = Location.objects.filter(loc_class=3, user=display_user)
     
-    if "New" in request.POST.get('submit', None):
+    if "New" in request.POST.get('submit', "DERP"):
         form=CustomForm(request.POST)
         if form.is_valid():
             point = get_point(form.cleaned_data['coordinates'])
-            form.cleaned_data['identifier'] = form.cleaned_data['identifier'].upper()
+            new_ident = form.cleaned_data['identifier']\
+                            .upper()\
+                            .replace('!','')\
+                            .replace('@','')
+                            
+            form.cleaned_data['identifier'] = new_ident
             custom = form.save(commit=False)
             custom.loc_class = 3
             custom.location = point
@@ -39,7 +44,7 @@ def locations(request, shared, display_user):
             assert False, form.errors
             ERROR = 'true'
             
-    elif "Submit" in request.POST.get('submit', None):
+    elif "Submit" in request.POST.get('submit', "DERP"):
         custom = Location.objects.get(loc_class=3,
                                       user=display_user,
                                       pk=request.POST.get('id', None) )
@@ -58,7 +63,7 @@ def locations(request, shared, display_user):
         else:
             ERROR = 'true'
             
-    elif "Delete" in request.POST.get('submit', None):
+    elif "Delete" in request.POST.get('submit', "DERP"):
         custom = Location.objects.get(loc_class=3,
                         user=display_user, pk=request.POST.get('id', None) )
         custom.delete()
