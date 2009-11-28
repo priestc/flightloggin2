@@ -6,6 +6,7 @@ COLUMN_NAMES = {
     "TOTAL": 'total',	
     "TOTALTIME": 'total',			
     "DURATION": 'total',
+    "CREDIT": "total",
     "DURATION OF FLIGHT": 'total',
     "TOTAL DURATION OF FLIGHT": 'total',
 				
@@ -16,9 +17,12 @@ COLUMN_NAMES = {
     "ROUTE OF FLIGHT": 'route',
     "ROUTE": 'route',
     "FROM": 'from_',
+    "ORIGIN": "from_",
     "TO": 'to',
     "VIA": 'via',
     "STOPS": 'via',
+    "DEST": "to",
+    "DESTINATION": "to",
     "ROUTE OF FLIGHT FROM":'from_',
     "ROUTE OF FLIGHT TO": 'to',
     "ROUTE OF FLIGHT VIA": 'via',
@@ -86,6 +90,7 @@ COLUMN_NAMES = {
     "INSTRUCTOR":'instructor',
     "FIRST OFFICER": 'fo',
     "CAPTAIN": 'captain',
+    "FLIGHT ATTENDANT": 'fa',
     "FLIGHT NUMBER": 'flight_number',
     "REMARKS": 'remarks',
     
@@ -124,7 +129,7 @@ CSV_FIELDS = (
           'total', 'sim', 'pic', 'solo', 'sic', 'night', 'dual_r','dual_g',
           'xc','act_inst', 'sim_inst', 'night_l','day_l', 'app',
           'person', 'remarks', 'holding', 'tracking', 'instructor', 'student',
-          'fo', 'captain', 'non_flying','pilot_checkride', 'ipc',
+          'fo', 'captain', 'fa', 'non_flying','pilot_checkride', 'ipc',
           'cfi_checkride','flying',
           )
 

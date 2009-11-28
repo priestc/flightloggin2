@@ -51,27 +51,13 @@ class PrepareLine(object):
             # if person is already set, then just return that
             return {"person": self.person} 
         
-        person=""
-        l = []
-        if self.dual_r:
-            l = [self.instructor, self.captain, self.student, self.fo]
-            
-        if self.dual_g:
-            l = [self.student, self.fo, self.instructor, self.captain]
-            
-        if self.sic:
-            l = [self.captain, self.instructor, self.student, self.fo]
-            
-        if self.pic:
-            l = [self.fo, self.captain, self.instructor, self.student]
-            
-        else:
-            l = [self.instructor, self.fo, self.captain, self.student]
-
-        for x in l:
-            if x:
-                person = x
-                break
+        to_join=[]
+        for x in [self.instructor, self.fo, self.captain, self.student, self.fa]:
+            if not x == "":
+                to_join.append(x)
+        
+        print to_join
+        person=", ".join(to_join)
         
         if person:
            return {"person": person}
