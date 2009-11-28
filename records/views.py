@@ -21,7 +21,7 @@ def records(request, shared, display_user):
 def locations(request, shared, display_user):
     customs = Location.objects.filter(loc_class=3, user=display_user)
     
-    if request.POST.get('submit', None) == 'Create New Location':
+    if "New" in request.POST.get('submit', None):
         form=CustomForm(request.POST)
         if form.is_valid():
             point = get_point(form.cleaned_data['coordinates'])
@@ -39,7 +39,7 @@ def locations(request, shared, display_user):
             assert False, form.errors
             ERROR = 'true'
             
-    elif request.POST.get('submit', None) == 'Submit Changes':
+    elif "Submit" in request.POST.get('submit', None):
         custom = Location.objects.get(loc_class=3,
                                       user=display_user,
                                       pk=request.POST.get('id', None) )
@@ -58,7 +58,7 @@ def locations(request, shared, display_user):
         else:
             ERROR = 'true'
             
-    elif request.POST.get('submit', None) == 'Delete Location':
+    elif "Delete" in request.POST.get('submit', None):
         custom = Location.objects.get(loc_class=3,
                         user=display_user, pk=request.POST.get('id', None) )
         custom.delete()
