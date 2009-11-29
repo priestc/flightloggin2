@@ -27,14 +27,14 @@
     
     <tr>
         <td>{{ part135.icon_p2p|safe }}</td>
-        <td>Point to Point</td>
+        <td>Point to Point<sup>3</sup></td>
         <td>{{ part135.p2p }} / {{ part135.goal_p2p }}</td>
         <td><img src="{% url smallbar part135.p2p part135.goal_p2p %}"></td>
     </tr>
 
     <tr>
         <td>{{ part135.icon_inst|safe }}</td>
-        <td>Instrument</td>
+        <td>Instrument<sup>2</sup></td>
         <td>{{ part135.inst }} / {{ part135.goal_inst }}</td>
         <td><img src="{% url smallbar part135.inst part135.goal_inst %}"></td>
     </tr>
@@ -75,21 +75,21 @@
     
     <tr>
         <td>{{ atp.icon_night|safe }}</td>
-        <td>Night</td>
+        <td>Night<sup>1</sup></td>
         <td>{{ atp.night }} / {{ atp.goal_night }}</td>
         <td><img src="{% url smallbar atp.night atp.goal_night %}"></td>
     </tr>
     
     <tr>
         <td>{{ atp.icon_inst|safe }}</td>
-        <td>Instrument</td>
+        <td>Instrument<sup>2</sup></td>
         <td>{{ atp.inst }} / {{ atp.goal_inst }}</td>
         <td><img src="{% url smallbar atp.inst atp.goal_inst %}"></td>
     </tr>
     
     <tr>
         <td>{{ atp.icon_atp_xc|safe }}</td>
-        <td>ATP XC</td>
+        <td>ATP XC<sup>4</sup></td>
         <td>{{ atp.atp_xc }} / {{ atp.goal_atp_xc }}</td>
         <td><img src="{% url smallbar atp.atp_xc atp.goal_atp_xc %}"></td>
     </tr>
@@ -116,5 +116,12 @@
     </tr>
 
 </table>
+<br>
+<div class="instructions">
+1: Includes up to 25 hours for each night landing after 20 total. <em>§ 61.159(5)(b)</em><br>
+2: Includes up to 50 hours of instrument time in a Simulator/FTD/PCATD <em>§ 61.159(3)(i)</em><br>
+3: Total time for any flight that depicts a flight from one airport to another regardless of length. (may not be logged as 'XC')<br>
+4: Total time for any flight that depicts a flight of more than 50 NM (may not be logged as 'XC')
+</div>
 
 {% endblock %}

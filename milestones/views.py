@@ -135,12 +135,23 @@ def atp_calc(qs):
     
     inst = simulator_inst + plane_inst
     
+    night_l = qs.sim(False).agg('night_l')
+    if night_l > 20:
+        if night_l > 45:
+            extra_night = 25
+        else:
+            extra_night = night_l
+    
+    night = qs.sim(False).agg('night')
+    
     ############ part 135 IFR #################################################
     
     atp = {}
     
+    
+    
     my_numbers = {'total':     "%.1f" % qs.sim(False).agg('total'),
-                  'night':     "%.1f" % qs.sim(False).agg('night'),
+                  'night':     "%.1f" % float(night+extra_night),
                   'atp_xc':    "%.1f" % qs.sim(False).agg('atp_xc'),
                   'inst':      inst,
                   'pic':       "%.1f" % qs.sim(False).agg('pic'),
