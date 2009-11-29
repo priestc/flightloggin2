@@ -135,6 +135,7 @@ def atp_calc(qs):
     
     inst = simulator_inst + plane_inst
     
+    extra_night=0
     night_l = qs.sim(False).agg('night_l')
     if night_l > 20:
         if night_l > 45:
