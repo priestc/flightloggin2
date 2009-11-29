@@ -21,7 +21,7 @@
     </tr>
     <tr>
         <td>Total flight hours from all users</td>
-        <td>{{ cs.total_hours|intcomma }}</td>
+        <td>{{ cs.total_hours|floatformat:1|intcomma }}</td>
     </tr>
     <tr>
         <td>Total number of flights logged</td>
