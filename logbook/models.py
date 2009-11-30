@@ -36,7 +36,8 @@ class Flight(models.Model):
     '1.0'
     """
 
-    from utils import QuerySet          ## add custom filters to custom manager
+    ## add custom filters to custom manager
+    from queryset_manager import QuerySet
     
     objects =  QuerySetManager()        ## add custom filterset manager
 
