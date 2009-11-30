@@ -100,7 +100,7 @@ def routes_kml(request, shared, display_user, type_):
         
         if other:
             folders.append(
-                RouteFolder(name="Other", qs=multi, style="#green_line")
+                RouteFolder(name="Other", qs=other, style="#green_line")
             )
             
     elif type_ == "flight_time":
