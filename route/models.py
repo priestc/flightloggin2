@@ -67,6 +67,13 @@ class RouteBase(models.Model):
     
 ###############################################################################
 
+class QuerySetManager(models.Manager):
+    def get_query_set(self):
+        return self.model.QuerySet(self.model)
+    
+    def __getattr__(self, name):
+        return getattr(self.get_query_set(), name)
+
 class Route(models.Model):
     """Represents a route the user went on for the flight
     
@@ -100,19 +107,23 @@ class Route(models.Model):
     >>> vta.id
     1000
     """
+    
+    ## add custom filters to custom manager
+    from queryset_manager import QuerySet
+    objects = QuerySetManager()        ## add custom filterset manager
 
     fancy_rendered =  models.TextField(blank=True, null=True)
     fallback_string = models.TextField(blank=True, null=True)
     simple_rendered = models.TextField(blank=True, null=True)
     kml_rendered =    models.TextField(blank=True, null=True)
     
-    max_width_all = models.FloatField(null=True, default=0)
-    max_width_land = models.FloatField(null=True, default=0)
+    max_width_all =   models.FloatField(null=True, default=0)
+    max_width_land =  models.FloatField(null=True, default=0)
     
-    max_start_all = models.FloatField(null=True, default=0)
-    max_start_land = models.FloatField(null=True, default=0)
+    max_start_all =   models.FloatField(null=True, default=0)
+    max_start_land =  models.FloatField(null=True, default=0)
     
-    total_line_all = models.FloatField(null=True, default=0)
+    total_line_all =  models.FloatField(null=True, default=0)
     total_line_land = models.FloatField(null=True, default=0)
     
     p2p = models.BooleanField()

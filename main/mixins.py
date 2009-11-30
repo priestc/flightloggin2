@@ -1,9 +1,19 @@
+from django.contrib.auth.models import User
+
 class UserMixin(object):
+    
+    user_field = "user"
+    
     def user(self, u):
-        from django.contrib.auth.models import User
+        
         if isinstance(u, User):
             if u.id == 1:
                 # if user == 1, don't filter by user at all
                 return self
-            return self.filter(user=u,)
-        return self.filter(user=User.objects.get(username=u))
+            ## filter by user instance
+            kwarg = {self.user_field: u}
+        else:
+            ## filter by username
+            kwarg = {self.user_field + "__username": u}
+
+        return self.filter(**kwarg)

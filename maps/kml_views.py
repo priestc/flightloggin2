@@ -51,14 +51,12 @@ def airports_kml(request, shared, display_user, type_):
     
 def routes_kml(request, shared, display_user, type_):
     from utils import RouteFolder
-    if display_user.id == 1:
-        user_filter = Route.objects.all
-    else:
-        user_filter = Route.objects.all
+    
+    
             
     if type_== "all":
         title = "All Routes"
-        all_r = Route.objects.filter(flight__user=display_user)\
+        all_r = Route.objects.user(display_user)\
                              .values('kml_rendered', 'simple_rendered')\
                              .order_by()\
                              .distinct()
@@ -70,27 +68,24 @@ def routes_kml(request, shared, display_user, type_):
     elif type_== "cat_class":
         title = "Routes by Multi/Single Engine"
         
-        single = Route.objects.filter(
-                               flight__user=display_user,
-                               flight__plane__cat_class__in=[1,3])\
+        single = Route.objects.user(display_user)\
+                              .filter(flight__plane__cat_class__in=[1,3])\
                               .values('kml_rendered', 'simple_rendered')\
                               .order_by()\
                               .distinct()
                               
-        multi = Route.objects.filter(
-                              flight__user=display_user,
-                              flight__plane__cat_class__in=[2,4])\
+        multi = Route.objects.user(display_user)\
+                             .filter(flight__plane__cat_class__in=[2,4])\
                              .values('kml_rendered', 'simple_rendered')\
                              .order_by()\
                              .distinct()
                              
-        other = Route.objects.filter(
-                              flight__user=display_user)\
-                              .exclude(flight__plane__cat_class__lte=4)\
-                              .exclude(flight__plane__cat_class__gte=15)\
-                              .values('kml_rendered', 'simple_rendered')\
-                              .order_by()\
-                              .distinct()
+        other = Route.objects.user(display_user)\
+                             .exclude(flight__plane__cat_class__lte=4)\
+                             .exclude(flight__plane__cat_class__gte=15)\
+                             .values('kml_rendered', 'simple_rendered')\
+                             .order_by()\
+                             .distinct()
         
         folders = []
         if single:
@@ -110,46 +105,40 @@ def routes_kml(request, shared, display_user, type_):
             
     elif type_ == "flight_time":
         title = "Routes by type of flight time"
-        dual_g = Route.objects.filter(
-                               flight__user=display_user,
-                               flight__dual_g__gt=0)\
+        dual_g = Route.objects.user(display_user)\
+                              .filter(flight__dual_g__gt=0)\
                               .values('kml_rendered', 'simple_rendered')\
                               .order_by()\
                               .distinct()
                               
-        dual_r = Route.objects.filter(
-                               flight__user=display_user,
-                               flight__dual_r__gt=0)\
+        dual_r = Route.objects.user(display_user)\
+                              .filter(flight__dual_r__gt=0)\
                               .values('kml_rendered', 'simple_rendered')\
                               .order_by()\
                               .distinct()
                               
-        solo =   Route.objects.filter(
-                               flight__user=display_user,
-                               flight__solo__gt=0)\
+        solo =   Route.objects.user(display_user)\
+                              .filter(flight__solo__gt=0)\
                               .values('kml_rendered', 'simple_rendered')\
                               .order_by()\
                               .distinct()
                               
-        sic =    Route.objects.filter(
-                               flight__user=display_user,
-                               flight__sic__gt=0)\
+        sic =    Route.objects.user(display_user)\
+                              .filter(flight__sic__gt=0)\
                               .values('kml_rendered', 'simple_rendered')\
                               .order_by()\
                               .distinct()
                               
-        inst =   Route.objects.filter(
-                               flight__user=display_user,
-                               flight__act_inst__gt=0)\
+        inst =   Route.objects.user(display_user)\
+                              .filter(flight__act_inst__gt=0)\
                               .values('kml_rendered', 'simple_rendered')\
                               .order_by()\
                               .distinct()
                               
-        pic =    Route.objects.filter(
-                               flight__user=display_user,
-                               flight__pic__gt=0,
-                               flight__dual_g=0,
-                               flight__solo=0)\
+        pic =    Route.objects.user(display_user)\
+                              .filter(flight__pic__gt=0,
+                                      flight__dual_g=0,
+                                      flight__solo=0)\
                               .values('kml_rendered', 'simple_rendered')\
                               .order_by()\
                               .distinct()
