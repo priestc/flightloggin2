@@ -385,7 +385,7 @@ class Columns(models.Model):
     date =      True
     
     plane =     models.BooleanField(FIELD_TITLES[FIELDS[1]],  default=True,
-                    help_text='Plane\'s tailnumber and type.')
+                    help_text="Plane's tailnumber and type.")
     reg =       models.BooleanField(FIELD_TITLES[FIELDS[2]],  default=False,
                     help_text='Just the plane\'s registration (tailnumber)')
     
@@ -480,21 +480,19 @@ class Columns(models.Model):
     max_width = models.BooleanField(FIELD_TITLES[FIELDS[41]], default=False,
                     help_text='Maximum distance between any two points in the route')
                     
-    
     person =    models.BooleanField(FIELD_TITLES[FIELDS[42]], default=True)
     
-    
     instructor= models.BooleanField(FIELD_TITLES[FIELDS[43]], default=False,
-                    help_text='\'Person\' if Dual Received is logged')
+                    help_text="'Person' if Dual Received is logged")
                     
     student =   models.BooleanField(FIELD_TITLES[FIELDS[44]], default=False,
-                    help_text='\'Person\' if Dual Given is logged')
+                    help_text="'Person' if Dual Given is logged")
                     
     fo =        models.BooleanField(FIELD_TITLES[FIELDS[45]], default=False,
-                    help_text='\'Person\' if PIC time is logged')
+                    help_text="'Person' if there is PIC time, and no dual is logged")
                     
     captain =   models.BooleanField(FIELD_TITLES[FIELDS[46]], default=False,
-                    help_text='\'Person\' if there is SIC time logged')
+                    help_text="'Person' if there is SIC time, and no dual is logged")
                     
     remarks =   models.BooleanField(FIELD_TITLES[FIELDS[47]], default=True) 
                     
