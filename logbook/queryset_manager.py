@@ -4,7 +4,7 @@ from django.db.models import Sum
 from constants import AGG_FIELDS, EXTRA_AGG, DB_FIELDS
 from main.mixins import UserMixin
 
-class QuerySet(QuerySet, UserMixin):
+class FlightQuerySet(QuerySet, UserMixin):
         
     ### by aircraft tags
     

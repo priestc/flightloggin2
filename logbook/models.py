@@ -30,7 +30,7 @@ class Flight(models.Model):
     """
 
     ## add custom filters to custom manager
-    from queryset_manager import QuerySet
+    from queryset_manager import FlightQuerySet as QuerySet
     
     objects =  QuerySetManager()        ## add custom filterset manager
 
@@ -340,13 +340,16 @@ class Flight(models.Model):
         if ret == "0" or ret == "0.0" or ret == 0:
             return ""
             
-        elif format == "decimal" and type(ret) == type(0.0):    # decimals are padded to one decimal space, converted to string, then returned
+        elif format == "decimal" and type(ret) == type(0.0):
+            # decimals are padded to one decimal, then converted to string
             return "%.1f" % ret
             
-        elif type(ret) == type(5):                              # int's are straight converted to string and returned
+        elif type(ret) == type(5):
+            # int's are straight converted to string and returned
             return str(ret)
             
-        elif format == "minutes" and type(ret) == type(0.0):    # convert to HH:MM
+        elif format == "minutes" and type(ret) == type(0.0):
+            # convert to HH:MM
             return to_minutes(ret)
             
         return ret
@@ -355,14 +358,15 @@ class Flight(models.Model):
     def make_pagination(cls, qs, profile, page):
         from django.core.paginator import Paginator, InvalidPage, EmptyPage
         
-        
-        paginator = Paginator(qs, per_page=profile.per_page)		#define how many flights will be on each page
+        #define how many flights will be on each page
+        paginator = Paginator(qs, per_page=profile.per_page)
 
         try:
             page_of_flights = paginator.page(page)
 
         except (EmptyPage, InvalidPage):
-            page_of_flights = paginator.page(paginator.num_pages)		#if that page is invalid, use the last page
+            #if that page is invalid, use the last page
+            page_of_flights = paginator.page(paginator.num_pages)
             page = paginator.num_pages
 
         b = range(1, page)[-5:]                        # before block
