@@ -41,56 +41,56 @@
 	<tbody>                                             {# AIRPLANE ROW #}
 		<tr>
 			<td rowspan="2">Airplanes</td>
-			<td rowspan="2">{{ airplane.total }}</td>
-			<td rowspan="2">{{ airplane.dual_r }}</td>
-			<td rowspan="2">{{ airplane.solo }}</td>
-			<td rowspan="1">{{ airplane.pic }}</td>
-			<td rowspan="2">{{ airplane.xc_dual_r }}</td>
-			<td rowspan="2">{{ airplane.xc_solo }}</td>
-			<td rowspan="1">{{ airplane.xc_pic }}</td>
-			<td rowspan="2">{{ airplane.inst }}</td>
-			<td rowspan="2">{{ airplane.night_dual_r }}</td>
-			<td rowspan="2">{{ airplane.night_l }}</td>
-			<td rowspan="1">{{ airplane.night_pic }}</td>
-			<td rowspan="1">{{ airplane.night_l_pic }}</td>
+			<td rowspan="2">{{ airplane.total|floatformat:1|intcomma }}</td>
+			<td rowspan="2">{{ airplane.dual_r|floatformat:1|intcomma }}</td>
+			<td rowspan="2">{{ airplane.solo|floatformat:1|intcomma }}</td>
+			<td rowspan="1">{{ airplane.pic|floatformat:1|intcomma }}</td>
+			<td rowspan="2">{{ airplane.xc_dual_r|floatformat:1|intcomma }}</td>
+			<td rowspan="2">{{ airplane.xc_solo|floatformat:1|intcomma }}</td>
+			<td rowspan="1">{{ airplane.xc_pic|floatformat:1|intcomma }}</td>
+			<td rowspan="2">{{ airplane.inst|floatformat:1|intcomma }}</td>
+			<td rowspan="2">{{ airplane.night_dual_r|floatformat:1|intcomma }}</td>
+			<td rowspan="2">{{ airplane.night_l|floatformat:1|intcomma }}</td>
+			<td rowspan="1">{{ airplane.night_pic|floatformat:1|intcomma }}</td>
+			<td rowspan="1">{{ airplane.night_l_pic|floatformat:1|intcomma }}</td>
 			<td rowspan="2" class="greyed">&nbsp;</td>
 			<td rowspan="2" class="greyed">&nbsp;</td>
 			<td rowspan="2" class="greyed">&nbsp;</td>
 			<td rowspan="2" class="greyed">&nbsp;</td>
 		</tr>
 		<tr>
-			<td>{{ airplane.sic }}</td>
-			<td>{{ airplane.sic_xc }}</td>
-			<td>{{ airplane.sic_night }}</td>
-			<td>{{ airplane.sic_night_l }}</td>
+			<td>{{ airplane.sic|floatformat:1|intcomma }}</td>
+			<td>{{ airplane.sic_xc|floatformat:1|intcomma }}</td>
+			<td>{{ airplane.sic_night|floatformat:1|intcomma }}</td>
+			<td>{{ airplane.sic_night_l|floatformat:1|intcomma }}</td>
 		</tr>
 
                                                         {# ROTORCRAFT ROW #}
 
 		<tr>
 			<td rowspan="2">Rotor-<br />craft</td>
-			<td rowspan="2">{{ rotorcraft.total }}</td>
-			<td rowspan="2">{{ rotorcraft.dual_r }}</td>
-			<td rowspan="2">{{ rotorcraft.solo }}</td>
-			<td rowspan="1">{{ rotorcraft.pic }}</td>
-			<td rowspan="2">{{ rotorcraft.xc_dual_r }}</td>
-			<td rowspan="2">{{ rotorcraft.xc_solo }}</td>
-			<td rowspan="1">{{ rotorcraft.xc_pic }}</td>
-			<td rowspan="2">{{ rotorcraft.inst }}</td>
-			<td rowspan="2">{{ rotorcraft.night_dual_r }}</td>
-			<td rowspan="2">{{ rotorcraft.night_l }}</td>
-			<td rowspan="1">{{ rotorcraft.night_pic }}</td>
-			<td rowspan="1">{{ rotorcraft.night_l_pic }}</td>
+			<td rowspan="2">{{ rotorcraft.total|floatformat:1|intcomma }}</td>
+			<td rowspan="2">{{ rotorcraft.dual_r|floatformat:1|intcomma }}</td>
+			<td rowspan="2">{{ rotorcraft.solo|floatformat:1|intcomma }}</td>
+			<td rowspan="1">{{ rotorcraft.pic|floatformat:1|intcomma }}</td>
+			<td rowspan="2">{{ rotorcraft.xc_dual_r|floatformat:1|intcomma }}</td>
+			<td rowspan="2">{{ rotorcraft.xc_solo|floatformat:1|intcomma }}</td>
+			<td rowspan="1">{{ rotorcraft.xc_pic|floatformat:1|intcomma }}</td>
+			<td rowspan="2">{{ rotorcraft.inst|floatformat:1|intcomma }}</td>
+			<td rowspan="2">{{ rotorcraft.night_dual_r|floatformat:1|intcomma }}</td>
+			<td rowspan="2">{{ rotorcraft.night_l|floatformat:1|intcomma }}</td>
+			<td rowspan="1">{{ rotorcraft.night_pic|floatformat:1|intcomma }}</td>
+			<td rowspan="1">{{ rotorcraft.night_l_pic|floatformat:1|intcomma }}</td>
 			<td rowspan="2" class="greyed">&nbsp;</td>
 			<td rowspan="2" class="greyed">&nbsp;</td>
 			<td rowspan="2" class="greyed">&nbsp;</td>
 			<td rowspan="2" class="greyed">&nbsp;</td>
 		</tr>
 		<tr>
-			<td>{{ rotorcraft.sic }}</td>
-			<td>{{ rotorcraft.sic_xc }}</td>
-			<td>{{ rotorcraft.sic_night }}</td>
-			<td>{{ rotorcraft.sic_night_l }}</td>
+			<td>{{ rotorcraft.sic|floatformat:1|intcomma }}</td>
+			<td>{{ rotorcraft.sic_xc|floatformat:1|intcomma }}</td>
+			<td>{{ rotorcraft.sic_night|floatformat:1|intcomma }}</td>
+			<td>{{ rotorcraft.sic_night_l|floatformat:1|intcomma }}</td>
 		</tr>
 		
 		                                                {# POWERED LIFT ROW #}
@@ -124,13 +124,13 @@
 
 		<tr>
 			<td rowspan="2">Gliders</td>
-			<td rowspan="2">{{ glider.total }}</td>
-			<td rowspan="2">{{ glider.dual_r }}</td>
-			<td rowspan="2">{{ glider.solo }}</td>
-			<td rowspan="2">{{ glider.pic }}</td>
-			<td rowspan="2">{{ glider.xc_dual_r}}</td>
-			<td rowspan="2">{{ glider.xc_solo }}</td>
-			<td rowspan="2">{{ glider.xc_pic }}</td>
+			<td rowspan="2">{{ glider.total|floatformat:1|intcomma }}</td>
+			<td rowspan="2">{{ glider.dual_r|floatformat:1|intcomma }}</td>
+			<td rowspan="2">{{ glider.solo|floatformat:1|intcomma }}</td>
+			<td rowspan="2">{{ glider.pic|floatformat:1|intcomma }}</td>
+			<td rowspan="2">{{ glider.xc_dual_r|floatformat:1|intcomma }}</td>
+			<td rowspan="2">{{ glider.xc_solo|floatformat:1|intcomma }}</td>
+			<td rowspan="2">{{ glider.xc_pic|floatformat:1|intcomma }}</td>
 			<td rowspan="2" class="greyed">&nbsp;</td>
 			<td rowspan="2" class="greyed">&nbsp;</td>
 			<td rowspan="2" class="greyed">&nbsp;</td>
@@ -175,13 +175,13 @@
 		<tr>
 			<td rowspan="1">Simulator</td>
 			<td rowspan="3" class="greyed">&nbsp;</td>
-			<td rowspan="1">{{ sim.dual_r }}</td>
+			<td rowspan="1">{{ sim.dual_r|floatformat:1|intcomma }}</td>
 			<td rowspan="3" class="greyed">&nbsp;</td>
 			<td rowspan="3" class="greyed">&nbsp;</td>
 			<td rowspan="3" class="greyed">&nbsp;</td>
 			<td rowspan="3" class="greyed">&nbsp;</td>
 			<td rowspan="3" class="greyed">&nbsp;</td>
-			<td rowspan="1">{{ sim.inst }}</td>
+			<td rowspan="1">{{ sim.inst|floatformat:1|intcomma }}</td>
 			<td rowspan="3" class="greyed">&nbsp;</td>
 			<td rowspan="3" class="greyed">&nbsp;</td>
 			<td rowspan="3" class="greyed">&nbsp;</td>
@@ -193,13 +193,13 @@
 		</tr>
 		<tr>
 			<td rowspan="1">FTD</td>
-			<td rowspan="1">{{ ftd.dual_r }}</td>
-			<td rowspan="1">{{ ftd.inst }}</td>
+			<td rowspan="1">{{ ftd.dual_r|floatformat:1|intcomma }}</td>
+			<td rowspan="1">{{ ftd.inst|floatformat:1|intcomma }}</td>
 		</tr>
 		<tr>
 			<td rowspan="1">PCATD</td>
-			<td rowspan="1">{{ pcatd.dual_r }}</td>
-			<td rowspan="1">{{ pcatd.inst }}</td>
+			<td rowspan="1">{{ pcatd.dual_r|floatformat:1|intcomma }}</td>
+			<td rowspan="1">{{ pcatd.inst|floatformat:1|intcomma }}</td>
 
 		</tr>
 	</tbody>
