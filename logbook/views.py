@@ -68,7 +68,7 @@ def logbook(request, shared, display_user, page=0):
     
     ##############################################################
     
-    all_flights = Flight.objects.user(display_user)
+    all_flights = Flight.objects.filter(user=display_user)
     
     if request.GET.get('c', "") == "t":
         ff=FilterForm(request.GET)
