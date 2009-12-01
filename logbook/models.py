@@ -6,14 +6,7 @@ from plane.models import Plane
 from route.models import Route
 from constants import *
 from utils import to_minutes
-    
-class QuerySetManager(models.Manager):
-    def get_query_set(self):
-        return self.model.QuerySet(self.model)
-    
-    def __getattr__(self, name):
-        return getattr(self.get_query_set(), name)
-
+from main.queryset_manager import QuerySetManager
 
 class Flight(models.Model):
     """

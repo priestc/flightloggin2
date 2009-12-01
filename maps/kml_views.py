@@ -14,10 +14,15 @@ def airports_kml(request, shared, display_user, type_):
     
     if type_=="all":
         title = "All Airports"
-        points = Location.objects.filter(loc_class=1,
-                    routebase__route__flight__user=display_user).distinct()
-        custom = Location.objects.filter(loc_class=3,
-                    routebase__route__flight__user=display_user).distinct()
+        points = Location.objects\
+                         .user(display_user)\
+                         .filter(loc_class=1)\
+                         .distinct()
+                         
+        custom = Location.objects\
+                         .user(display_user)\
+                         .filter(loc_class=3)\
+                         .distinct()
                     
         folders = []
         if points:

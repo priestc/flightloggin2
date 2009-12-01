@@ -140,21 +140,17 @@ class UniqueStateMap(StateMap):
     
     def get_data(self):
         
-        if self.user:
-            # all points in the USA connected to the user
-            all_points = Location.objects\
-              .filter(routebase__route__flight__user=self.user,country="US")\
-              .distinct()
-        else:
-            #all points in the us connected to all users
-            all_points = Location.objects\
-              .filter(routebase__isnull=False, country="US")\
-              .distinct()
+        # all points in the USA connected to the user
+        all_points = Location.objects\
+                             .user(self.user)\
+                             .filter(country="US")\
+                             .distinct()
+
         
         return Region.objects\
-            .filter(location__in=all_points)\
-            .values('name')\
-            .annotate(c=Count('location__region'))
+                     .filter(location__in=all_points)\
+                     .values('name')\
+                     .annotate(c=Count('location__region'))
     
     def get_cmap(self):
         self.cmap = cm.GMT_seis_r
@@ -168,19 +164,12 @@ class FlatStateMap(StateMap):
     label = "States"
     
     def get_data(self):
-        if self.user:
-            return Region.objects\
-                .filter(location__routebase__route__flight__user=self.user,
-                    country='US')\
-                .values('name')\
-                .distinct()
-        else:
-            return Region.objects\
-                .filter(location__routebase__isnull=False,
-                    country='US')\
-                .values('name')\
-                .distinct()
-            
+        return Region.objects\
+                     .user(self.user)\
+                     .filter(country='US')\
+                     .values('name')\
+                     .distinct()
+        
     def get_cmap(self):
         c=['#FF00FF','#15AC1C']
         self.cmap = LinearSegmentedColormap.from_list('mycm',c)
@@ -193,27 +182,50 @@ class CountStateMap(StateMap):
     label = "States"
     
     def get_data(self):
-        if self.user: 
-            return Region.objects\
-                .filter(location__routebase__route__flight__user=self.user,
-                    country='US')\
-                .values('name')\
-                .distinct().annotate(c=Count('code')) 
-        else:
-             return Region.objects\
-                .filter(location__routebase__isnull=False,
-                    country='US')\
-                .values('name')\
-                .distinct().annotate(c=Count('code')) 
+        return Region.objects\
+                     .user(self.user)\
+                     .filter(country='US')\
+                     .values('name')\
+                     .distinct()\
+                     .annotate(c=Count('code'))
 
     def get_cmap(self):
         self.cmap = cm.GMT_seis_r
 
     def get_disp_count(self, stp):
         return len(stp)
+    
+    
+class RelativeStateMap(StateMap):
+    label = "States"
+    
+    def get_data(self):
+        
+        overall_data = Region.objects\
+                             .filter(country='US')\
+                             .values('code')\
+                             .annotate(c=Count('location'))\
+                             .values('c','code')
+        
 
+        qs = Region.objects\
+                   .user(self.user)\
+                   .filter(country='US')\
+                   .values('name')\
+                   .distinct()\
+                   .annotate(c=Count('code')) 
 
+        ret = {}
+        for key,q in qs.items():
+            ret.update({key: overall_totals[key] / q[key]})
+            
+        return ret
+            
+    def get_cmap(self):
+        self.cmap = cm.GMT_seis_r
 
+    def get_disp_count(self, stp):
+        return len(stp)
 
 
 

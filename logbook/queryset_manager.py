@@ -213,6 +213,7 @@ class QuerySet(QuerySet, UserMixin):
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
+        
     #################@@##############
     
     def _db_agg(self, cn):

@@ -1,10 +1,12 @@
-from django.contrib.gis.db import models
+import os
 
-from constants import LOCATION_TYPE, LOCATION_CLASS
+from django.contrib.gis.db import models
+from django.contrib.gis.utils import LayerMapping
 from django.contrib.auth.models import User
 
-from django.contrib.gis.utils import LayerMapping
-import os
+from constants import LOCATION_TYPE, LOCATION_CLASS
+from main.queryset_manager import GeoQuerySetManager
+
 
 class Location(models.Model):
     """
@@ -16,6 +18,11 @@ class Location(models.Model):
     u'Georgia'    
     
     """
+    ## add custom filters to custom manager
+    from queryset_manager import LocationQuerySet as QuerySet
+    
+    ## add custom filterset manager
+    objects = GeoQuerySetManager()
     
     loc_class = models.IntegerField(choices=LOCATION_CLASS,
                                          default=0, blank=True, null=True)
@@ -32,7 +39,6 @@ class Location(models.Model):
     elevation = models.IntegerField(null=True, blank=True)
     
     location = models.PointField(null=True, blank=True)
-    objects = models.GeoManager()
 
     def __unicode__(self):
         return u"%s" % self.identifier
@@ -127,6 +133,13 @@ class Location(models.Model):
 ###############################################################################
     
 class Region(models.Model):
+    
+    ## add custom filters to custom manager
+    from queryset_manager import CountryRegionQuerySet as QuerySet
+    
+    ## add custom filterset manager
+    objects = GeoQuerySetManager()
+    
     code = models.CharField(max_length=48)
     country = models.CharField(max_length=2)
     name = models.CharField(max_length=60)
@@ -145,6 +158,12 @@ class Region(models.Model):
 ##############################################################################
 
 class Country(models.Model):
+    ## add custom filters to custom manager
+    from queryset_manager import CountryRegionQuerySet as QuerySet
+    
+    ## add custom filterset manager
+    objects = GeoQuerySetManager()
+    
     name = models.CharField(max_length=48)
     code = models.CharField(max_length=2, primary_key=True)
     continent = models.CharField(max_length=2)

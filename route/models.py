@@ -4,7 +4,6 @@ from django.contrib.gis.db import models
 from django.db.models import Q
 
 from share.middleware import share
-
 from airport.models import Location
 
 ###############################################################################
@@ -67,12 +66,7 @@ class RouteBase(models.Model):
     
 ###############################################################################
 
-class QuerySetManager(models.Manager):
-    def get_query_set(self):
-        return self.model.QuerySet(self.model)
-    
-    def __getattr__(self, name):
-        return getattr(self.get_query_set(), name)
+from main.queryset_manager import QuerySetManager
 
 class Route(models.Model):
     """Represents a route the user went on for the flight
