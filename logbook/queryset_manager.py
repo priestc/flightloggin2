@@ -1,7 +1,7 @@
 from django.db.models import Q
 from django.db.models.query import QuerySet
 from django.db.models import Sum
-from constants import AGG_FIELDS, EXTRA_AGG
+from constants import AGG_FIELDS, EXTRA_AGG, DB_FIELDS
 from main.mixins import UserMixin
 
 class QuerySet(QuerySet, UserMixin):
