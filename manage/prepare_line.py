@@ -55,8 +55,7 @@ class PrepareLine(object):
         for x in [self.instructor, self.fo, self.captain, self.student, self.fa]:
             if not x == "":
                 to_join.append(x)
-        
-        print to_join
+                
         person=", ".join(to_join)
         
         if person:
