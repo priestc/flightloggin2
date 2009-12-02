@@ -45,7 +45,7 @@ class BaseImport(object):
         """makes a dictreader that is seek'd to the first valid line of data"""
         
         dialect = self.get_dialect()
-        if dialect.delimiter == " ":
+        if dialect.delimiter not in (",", "\t"):
             dialect.delimiter = "\t"
                
         try:
