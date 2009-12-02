@@ -421,77 +421,83 @@ class Columns(models.Model):
                     help_text='Total time if the plane is multi-engine')
                     
     m_pic =     models.BooleanField(FIELD_TITLES[FIELDS[23]], default=False,
-                    help_text='PIC time if the plane is multi-engine and tagged as \'Turbine\'')
+                    help_text='PIC time if the plane is multi-engine')
                     
-    sea =       models.BooleanField(FIELD_TITLES[FIELDS[24]], default=False,
+    single =    models.BooleanField(FIELD_TITLES[FIELDS[24]], default=False,
+                    help_text='Total time if the plane is single-engine')
+                    
+    single_pic= models.BooleanField(FIELD_TITLES[FIELDS[25]], default=False,
+                    help_text='PIC time if the plane is single-engine')
+                    
+    sea =       models.BooleanField(FIELD_TITLES[FIELDS[26]], default=False,
                     help_text='Total time if the plane is a single-engine or multi-engine seaplane')
                     
-    sea_pic =   models.BooleanField(FIELD_TITLES[FIELDS[25]], default=False,
+    sea_pic =   models.BooleanField(FIELD_TITLES[FIELDS[27]], default=False,
                     help_text='PIC time if the plane is a seaplane')
                     
-    mes =       models.BooleanField(FIELD_TITLES[FIELDS[26]], default=False,
+    mes =       models.BooleanField(FIELD_TITLES[FIELDS[28]], default=False,
                     help_text='Total time if the plane is a multi-engine seaplane')
                     
-    mes_pic =   models.BooleanField(FIELD_TITLES[FIELDS[27]], default=False,
+    mes_pic =   models.BooleanField(FIELD_TITLES[FIELDS[29]], default=False,
                     help_text='PIC time if the plane is a multi-engine seaplane')
                     
-    turbine =   models.BooleanField(FIELD_TITLES[FIELDS[28]], default=False,
+    turbine =   models.BooleanField(FIELD_TITLES[FIELDS[30]], default=False,
                     help_text='Total time if the plane is tagged as \'Turbine\'')
                     
-    t_pic =     models.BooleanField(FIELD_TITLES[FIELDS[29]], default=False,
+    t_pic =     models.BooleanField(FIELD_TITLES[FIELDS[31]], default=False,
                     help_text='PIC time if the plane is tagged as \'Turbine\'') 
                     
-    mt =        models.BooleanField(FIELD_TITLES[FIELDS[30]], default=False,
+    mt =        models.BooleanField(FIELD_TITLES[FIELDS[32]], default=False,
                     help_text='Total time if the plane is multi-engine and tagged as \'Turbine\'')
                     
-    mt_pic =    models.BooleanField(FIELD_TITLES[FIELDS[31]], default=False,
+    mt_pic =    models.BooleanField(FIELD_TITLES[FIELDS[33]], default=False,
                     help_text='PIC time if the plane is multi-engine and tagged as \'Turbine\'')
     
-    complex =   models.BooleanField(FIELD_TITLES[FIELDS[32]], default=True,
+    complex =   models.BooleanField(FIELD_TITLES[FIELDS[34]], default=True,
                     help_text='Total time if plane is tagged \'Complex\'')
                     
-    hp =        models.BooleanField(FIELD_TITLES[FIELDS[33]], default=True,
+    hp =        models.BooleanField(FIELD_TITLES[FIELDS[35]], default=True,
                     help_text='Total time if plane is tagged \'High Performance\' or \'HP\'')
     
-    sim =       models.BooleanField(FIELD_TITLES[FIELDS[34]], default=False,
+    sim =       models.BooleanField(FIELD_TITLES[FIELDS[36]], default=False,
                     help_text='Total time if plane is a Simulator, FTD, or PCATD')
                     
-    tail =      models.BooleanField(FIELD_TITLES[FIELDS[35]], default=False,
+    tail =      models.BooleanField(FIELD_TITLES[FIELDS[37]], default=False,
                     help_text='Total time if the plane is tagged as \'Tailwheel\'')
                     
-    jet =       models.BooleanField(FIELD_TITLES[FIELDS[36]], default=False,
+    jet =       models.BooleanField(FIELD_TITLES[FIELDS[38]], default=False,
                     help_text='Total time if the plane is tagged as \'Jet\'')
                     
-    jet_pic =   models.BooleanField(FIELD_TITLES[FIELDS[37]], default=False,
+    jet_pic =   models.BooleanField(FIELD_TITLES[FIELDS[39]], default=False,
                     help_text='PIC time if the plane is tagged as \'Jet\'')
                     
-    line_dist = models.BooleanField(FIELD_TITLES[FIELDS[38]], default=True,
+    line_dist = models.BooleanField(FIELD_TITLES[FIELDS[40]], default=True,
                     help_text='Total distance of the route in Nautical Miles')
                     
-    atp_xc =    models.BooleanField(FIELD_TITLES[FIELDS[39]], default=False,
+    atp_xc =    models.BooleanField(FIELD_TITLES[FIELDS[41]], default=False,
                     help_text="Total time when the route's max width > 50 NM")
 
-    speed =     models.BooleanField(FIELD_TITLES[FIELDS[40]], default=False,
+    speed =     models.BooleanField(FIELD_TITLES[FIELDS[42]], default=False,
                     help_text="Distance / Total, in Nautical Miles per hour (Knots)")
                     
-    max_width = models.BooleanField(FIELD_TITLES[FIELDS[41]], default=False,
+    max_width = models.BooleanField(FIELD_TITLES[FIELDS[43]], default=False,
                     help_text='Maximum distance between any two points in the route')
                     
-    person =    models.BooleanField(FIELD_TITLES[FIELDS[42]], default=True)
+    person =    models.BooleanField(FIELD_TITLES[FIELDS[44]], default=True)
     
-    instructor= models.BooleanField(FIELD_TITLES[FIELDS[43]], default=False,
+    instructor= models.BooleanField(FIELD_TITLES[FIELDS[45]], default=False,
                     help_text="'Person' if Dual Received is logged")
                     
-    student =   models.BooleanField(FIELD_TITLES[FIELDS[44]], default=False,
+    student =   models.BooleanField(FIELD_TITLES[FIELDS[46]], default=False,
                     help_text="'Person' if Dual Given is logged")
                     
-    fo =        models.BooleanField(FIELD_TITLES[FIELDS[45]], default=False,
+    fo =        models.BooleanField(FIELD_TITLES[FIELDS[47]], default=False,
                     help_text="'Person' if there is PIC time, and no dual is logged")
                     
-    captain =   models.BooleanField(FIELD_TITLES[FIELDS[46]], default=False,
+    captain =   models.BooleanField(FIELD_TITLES[FIELDS[48]], default=False,
                     help_text="'Person' if there is SIC time, and no dual is logged")
                     
-    remarks =   models.BooleanField(FIELD_TITLES[FIELDS[47]], default=True) 
+    remarks =   models.BooleanField(FIELD_TITLES[FIELDS[49]], default=True) 
                     
     class Meta:
         verbose_name_plural = 'Columns'
