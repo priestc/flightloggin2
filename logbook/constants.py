@@ -74,9 +74,9 @@ AGG_FIELDS = [
 # fields that do get totals calculated, but require some extra processing
 EXTRA_AGG = [
           'total', 'total_s', 'p2p', 'complex', 'hp', 'sim', 'day', 'multi',
-          'm_pic', 'sea', 'sea_pic', 'mes', 'mes_pic', 'turbine', 't_pic',
-          'mt', 'mt_pic', 'complex', 'hp', 'sim', 'tail', 'jet', 'jet_pic',
-          "line_dist", "atp_xc"
+          "single", "single_pic", 'm_pic', 'sea', 'sea_pic', 'mes', 'mes_pic',
+          'turbine', 't_pic', 'mt', 'mt_pic', 'complex', 'hp', 'sim', 'tail',
+          'jet', 'jet_pic', "line_dist", "atp_xc"
           ]
 
 # fields that are optionally turned on and off, used to create the big list
