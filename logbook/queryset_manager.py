@@ -294,6 +294,9 @@ class FlightQuerySet(QuerySet, UserMixin):
         elif cn == 'single':
             return self.single().total(*args, **kwargs)
         
+        elif cn == 'single_pic':
+            return self.single().pic(*args, **kwargs)
+        
         elif cn == 'm_pic':
             return self.multi().pic(*args, **kwargs)
         
