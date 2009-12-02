@@ -34,8 +34,8 @@ class Histogram(object):
         # everything lined up, we'll compute the bin centers
         bincenters = 0.5*(bins[1:]+bins[:-1])
         # add a 'best fit' line for the normal PDF
-        y = mlab.normpdf( bincenters, mu, sigma)
-        l = ax.plot(bincenters, y, 'r--', linewidth=1)
+        #y = mlab.normpdf( bincenters, mu, sigma)
+        #l = ax.plot(bincenters, y, 'r--', linewidth=1)
 
         ax.set_xlabel('Hours')
         ax.set_ylabel('Probability')
