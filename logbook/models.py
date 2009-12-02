@@ -301,6 +301,12 @@ class Flight(models.Model):
         elif cn == "multi" and self.plane.is_multi():
             ret = self.total
 
+        elif cn == "single" and self.plane.is_single():
+            ret = self.total
+            
+        elif cn == "single_pic" and self.plane.is_single():
+            ret = self.pic
+
         elif cn == "sea" and self.plane.is_sea():
             ret = self.total
             
