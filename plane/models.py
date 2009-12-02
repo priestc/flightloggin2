@@ -126,6 +126,9 @@ class Plane(models.Model):
 
     def is_multi(self):
         return self.cat_class in [2,4]
+    
+    def is_single(self):
+        return self.cat_class in [1,3]
 
     def is_sea(self):
         return self.cat_class in [3,4]
