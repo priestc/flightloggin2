@@ -108,4 +108,7 @@ def bargraphs(request, shared, display_user):
     return locals()
 
 
-
+def histogram(request):
+    from histogram import Histogram
+    b = Histogram()
+    return b.as_png()

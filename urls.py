@@ -90,6 +90,11 @@ urlpatterns += patterns('',
     ),
     
     (
+        r'^histogram.py$',
+        "graphs.views.histogram",
+    ),
+    
+    (
         r'^openid/',
         include('django_openid_auth.urls'),
     ),

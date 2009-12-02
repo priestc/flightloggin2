@@ -344,8 +344,8 @@ class FlightQuerySet(QuerySet, UserMixin):
             if arg == 'day':
                 self = self.extra(select={'day': "total - night"})
             
-            if arg == 'instrument':
-                self = self.extra(select={'day': "act_inst + sim_inst"})
+            elif arg == 'instrument':
+                self = self.extra(select={'instrument': "act_inst + sim_inst"})
             
             elif arg == 'distance':
                 self = self.extra(select={"distance":'route_route.total_line_all'})
@@ -376,6 +376,15 @@ class FlightQuerySet(QuerySet, UserMixin):
                 self = self.extra(select={'single':
                     """CASE WHEN plane_plane.cat_class in (1,3)
                        THEN total
+                       ELSE 0
+                       END
+                    """
+                })
+                
+            elif arg == 'single_pic':
+                self = self.extra(select={'single':
+                    """CASE WHEN plane_plane.cat_class in (1,3)
+                       THEN pic
                        ELSE 0
                        END
                     """
