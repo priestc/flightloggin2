@@ -4,7 +4,7 @@ from logbook.models import Flight
 
 class FormLine(object):
 
-    cats = None
+    cats = None ## will be overwritten by subclasses
     
     total = "x&nbsp;"
     dual_r = "x&nbsp;"
@@ -121,6 +121,5 @@ def auto8710(request, shared, display_user):
     sim = Sim(display_user)
     ftd = FTD(display_user)
     pcatd = PCATD(display_user)
-    
-    
+     
     return locals()

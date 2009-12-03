@@ -1,25 +1,27 @@
 from django.contrib.auth.models import User
 
 class UserMixin(object):
-    
-    user_field = "user"
+
+    # the field where the user is linked to, this may be overwritten
+    # by the classes that use this mixin
+    user_field = "user" 
     
     def user(self, u):
         
-        if isinstance(u, User):
-            # if user == 1, filter by all users
-            if u.id == 1:
+        if u == 'ALL' or getattr(u, "id", 0) == 1:
                 
-                ## in the case of Location and Region, some filtering needs
-                ## to be done...
-                if "routebase" in self.user_field:
-                    return self.filter(routebase__isnull=False)
+            ## in the case of Location and Region, some filtering needs
+            ## to be done...
+            if "routebase" in self.user_field:
+                return self.filter(routebase__isnull=False)
             
-                ## the rest don't need to be filtered at all
-                else:
-                    return self
-            
-            
+            # don't filter anything for the 'ALL' user
+            return self
+        
+        #------------- filter by user ----------------------#
+        
+        
+        if isinstance(u, User):
             ## filter by user instance
             kwarg = {self.user_field: u}
         else:
