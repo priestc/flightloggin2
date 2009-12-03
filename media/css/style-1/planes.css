@@ -4,7 +4,8 @@ input[type="button"]        {margin-bottom: 10px}
 input[type=text],
 select, textarea	        {width: 200px; font-size: small !important}
 
-#tags_window                {background: white; font-size: x-small; border: 0px solid blue; padding: 5px;}
+#tags_window                {background: white; font-size: x-small;
+                             border: 0px solid blue; padding: 5px;}
 #tags_window a:hover        {color: lightgreen}
 
 textarea                    {height: 50px}

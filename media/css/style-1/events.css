@@ -1,0 +1,17 @@
+input[type="button"] {margin: 10px}
+ 
+table.nonflight_table {background: #dfdfdf; width: 100%; border-collapse: collapse}
+table.nonflight_table tr:first-child {background: #E0FFFF}
+table.nonflight_table td {border: 1px solid black; padding: 2px}
+ 
+
+td.date input {width: 100px}
+
+/* the text box for comments in the popup */ 
+textarea {width: 250px; height: 100px}
+
+
+#popup td:nth-child(2) {text-align: left}
+
+/* hidden date for the popup */
+.unformatted_date {display: none}

@@ -10,19 +10,9 @@
 {% block canvas %}
 
 <form action="{% url records display_user.username %}" method="post">
-    <div id="records_instructions">
-		Use this space to record any information you'd normally put in the back of a paper logbook.
-		Phone numbers and addresses of contacts; dates of endorsements; student signoffs and outcomes; notes, etc.
-	</div>
-
 	<div>
-		<textarea style="width:80%;height:400px" cols="50" rows="10" name="records">{{ records.text }}</textarea>
-
-		<br>
-		<br>
-		
-        {% if not shared %}
-		<input type="submit" value="Save" />
+	    {% if not shared %}
+		<input type="submit" value="Save" /><br><br>
 		{% endif %}
 		
 		{% if saved %}
@@ -31,9 +21,15 @@
 		<span style="color: red; font-weight: bold">Saved</span>
 		
 		{% endif %}
-
+		<textarea cols="50" rows="10" name="records">{{ records.text }}</textarea>
 	</div>
 </form>
+<br>
+    <div class="instructions">
+		Use this space to record any information you'd normally put in the back
+		of a paper logbook. Phone numbers and addresses of contacts; dates of
+		endorsements; student signoffs and outcomes; notes, etc.
+	</div>
 
 
 {% endblock %}

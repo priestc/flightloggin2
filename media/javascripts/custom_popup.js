@@ -29,3 +29,18 @@ function prepare_edit_custom(wipe) {
 	$("#new_buttons").hide();
 	$("#edit_buttons").show();
 }
+
+$(document).ready(function() {
+    
+    $("a.custom_click").click(function() {
+        prepare_edit_custom(true);
+        fill_in_custom(this.id);
+        fire_popup();
+    });
+    
+    $("#new_custom").click(function() {
+        prepare_new_custom(true);
+        fire_popup();
+    });
+    
+});

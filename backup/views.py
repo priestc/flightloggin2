@@ -37,7 +37,6 @@ def emailbackup(request, shared, display_user):
     return HttpResponse("email sent to %s" % sent, mimetype='text-plain')
 
 @secret_key
-@login_required
 def schedule(request, schedule):
     """Only send out the emails to the people who's schedule is exactly the
        one being passed as 'schedule'
@@ -64,6 +63,6 @@ def schedule(request, schedule):
 ##
 ## crontab:
 ##
-#30 5 1         * * wget http://beta.flightlogg.in/schedule-monthly.py
-#30 4 1,7,14,21 * * wget http://beta.flightlogg.in/schedule-weekly.py
-#30 3 1,14      * * wget http://beta.flightlogg.in/schedule-biweekly.py
+#30 5 1         * * wget http://flightlogg.in/schedule-monthly.py?sk=
+#30 4 1,7,14,21 * * wget http://flightlogg.in/schedule-weekly.py?sk=
+#30 3 1,14      * * wget http://flightlogg.in/schedule-biweekly.py?sk=

@@ -4,39 +4,8 @@
 {% block javascript %}
     <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/popup.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/event_popup.js"></script>
-	<script type="text/javascript">
-	    $(document).ready(function() {
-	        $("input[id$=date]").datepicker({
-			        dateFormat: "yy-mm-dd",
-			        yearRange: "-80:+1", 
-			        showOn: "button", 
-			        buttonImage: "{{ MEDIA_URL }}/images/calendar.gif", 
-			        buttonImageOnly: true ,
-			        changeYear: true
-	        }).addClass("embed");
-	        
-	        
-	        $("a.nonflight_click").click(function() {
-	        
-	            prepare_edit_event(true);
-	            fill_in_event(this.id);
-	            fire_popup();
-	    
-	        });
-	        
-	        $("#new_event").click(function() {
-	        
-	            prepare_new_event(true);
-	            
-	            fire_popup();
-	    
-	        });
-	        
-	    });
-    
-	</script>
-	{#<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/records.css">#}
 	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/popup.css">
+	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/events.css">
 {% endblock %}
 
 {% block title %}Events{% endblock %}
@@ -50,7 +19,9 @@
     <table class="minor_table">
         <thead>
        <tr>
-           <th>Date</th><th>Type</th><th>Remarks</th>
+           <td>Date</td>
+           <td>Type</td>
+           <td>Remarks</td>
        </tr>
        </thead>
     {% for nf in nonflights %}

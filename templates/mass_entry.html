@@ -2,9 +2,9 @@
 {% block mass-sel %}nav_selected{% endblock%}
 
 {% block javascript %}
-	<script>
+	<script type="text/javascript">
 	    $(document).ready(function() {
-	        $(".vDateField").datepicker({							// add the date pickers
+	        $(".vDateField").datepicker({
 			        dateFormat: "yy-mm-dd",
 			        yearRange: "-10:+1", 
 			        showOn: "button", 
@@ -17,12 +17,7 @@
 	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/mass_entry.css">
 {% endblock %}
 
-
-
 {% block title %}{% if edit %}Mass Edit{% else %}Mass Entry{% endif %}{% endblock %}
-
-
-
 
 {% block canvas %}
 {% include "pagination_table.html" %}

@@ -29,3 +29,32 @@ function prepare_edit_event(wipe) {
 	$("#new_buttons").hide();
 	$("#edit_buttons").show();
 }
+
+$(document).ready(function() {
+    $("input[id$=date]").datepicker({
+	        dateFormat: "yy-mm-dd",
+	        yearRange: "-80:+1", 
+	        showOn: "button", 
+	        buttonImage: MEDIA_URL + "/images/calendar.gif", 
+	        buttonImageOnly: true ,
+	        changeYear: true
+    }).addClass("embed");
+    
+    
+    $("a.nonflight_click").click(function() {
+    
+        prepare_edit_event(true);
+        fill_in_event(this.id);
+        fire_popup();
+
+    });
+    
+    $("#new_event").click(function() {
+    
+        prepare_new_event(true);
+        
+        fire_popup();
+
+    });
+    
+});

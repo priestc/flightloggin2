@@ -64,7 +64,10 @@ input[type=text]:disabled {background-color: #DDDDDD; color: #777777; border: 1p
 table.minor_table                     {width: 100%; border-collapse: collapse}
 
 /* the header row */
-table.minor_table th                  {border: 1px solid #C3C3C3; background: #E0FFFF; font-weight: normal; padding: 2px}
+table.minor_table thead td            {border: 1px solid #C3C3C3; background: #E0FFFF; font-weight: normal; padding: 2px}
+
+/* the footer row */
+table.minor_table tfoot td            {border: 1px solid #C3C3C3; background: #E0FFFF; font-weight: normal; padding: 2px}
 
 /* every other cell */
 table.minor_table td                  {border: 1px solid #C3C3C3; padding: 2px}

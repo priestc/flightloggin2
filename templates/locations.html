@@ -5,20 +5,7 @@
     <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/popup.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/custom_popup.js"></script>
 	<script type="text/javascript">
-	    $(document).ready(function() {
-	        
-	        $("a.custom_click").click(function() {
-	            prepare_edit_custom(true);
-	            fill_in_custom(this.id);
-	            fire_popup();
-	        });
-	        
-	        $("#new_custom").click(function() {
-	            prepare_new_custom(true);
-	            fire_popup();
-	        });
-	        
-	    });
+
     
 	</script>
 	
@@ -38,7 +25,13 @@
 <table id="custom_table" class="minor_table">
     <thead>
     <tr>
-        <th>Identifier</th><th>Name</th><th>Coordinates</th><th>Type</th><th>Municipality</th><th>Region</th><th>Country</th>
+        <td>Identifier</td>
+        <td>Name</td>
+        <td>Coordinates</td>
+        <td>Type</td>
+        <td>Municipality</td>
+        <td>Region</td>
+        <td>Country</td>
     </tr>
     </thead>
     {% for place in customs %}
