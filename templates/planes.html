@@ -5,36 +5,6 @@
 {% block javascript %}
     <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/plane_popup.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/popup.js"></script>
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$("#new_plane").click(function(){
-				wipe_clean();
-				prepare_new_plane(true);
-				fire_popup("popup");
-			})
-			
-			$("#p_t a").click(function(event){
-				wipe_clean();
-				prepare_edit_plane(true);
-				fill_in_plane(this.id);
-				fire_popup("popup");
-			});
-
-			$("#tags_window a").click(function() {
-				tag= $(this).text()
-
-				if(tag.search(' ') >= 0)
-				    tag = '"' + tag + '"';
-				
-				val = $("#id_tags").val();
-				
-				if(val == "")
-    				$("#id_tags").val(val + tag);
-    		    else
-    		        $("#id_tags").val(val + " " + tag);
-			});
-		});
-	</script>
 	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/popup.css">
 	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/planes.css">
 {% endblock %}
@@ -51,8 +21,8 @@
 		    <tr>
 			    <th>Tailnumber</th>
 			    <th>Manufacturer</th>
-			    <th>Model Name</th>
 			    <th>Type</th>
+			    <th>Model Name</th>
 			    <th>Category/Class</th>
 			    <th>Tags</th>
 			    <th>Description</th>
@@ -68,8 +38,8 @@
 			    {{plane.tailnumber}}
 			    {%endif%}</a></td>
 			    <td id="p{{ plane.id }}_manufacturer">{{ plane.manufacturer }}</td>
-			    <td id="p{{ plane.id }}_model">{{ plane.model }}</td>
 			    <td id="p{{ plane.id }}_type">{{ plane.type }}</td>
+			    <td id="p{{ plane.id }}_model">{{ plane.model }}</td>
 			    <td id="p{{ plane.id }}_cat_class">{{ plane.get_cat_class_display }}</td>
 			    <td id="p{{ plane.id }}_tags">{{ plane.get_tags_quote|join:", " }}</td>
 			    <td id="p{{ plane.id }}_description">{{ plane.description }}</td>
@@ -83,7 +53,9 @@
 	
 	    </tbody>
     </table>
-
+    <div id="mass_edit_link">
+        <a href="{% url mass-planes display_user %}">Mass Edit</a>
+    </div>
 
 <div id="popup" title="New Entry">
 	<table id="dragbar">
@@ -130,14 +102,15 @@
 				</tr>
 				
 				<tr>
+					<td>Tags</td>
+					<td>{{ form.tags }}</td>
+				</tr>
+				
+				<tr>
 					<td>{{ form.description.label_tag }}</td>
 					<td>{{ form.description }}</td>
 				</tr>
 				
-				<tr>
-					<td>Tags</td>
-					<td>{{ form.tags }}</td>
-				</tr>
 			</tbody>
 		</table>
 		

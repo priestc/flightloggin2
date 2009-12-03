@@ -78,7 +78,6 @@ class Flight(models.Model):
         return get_object_or_None(cls,  *args, **kwargs)
     
     def save(self, *args, **kwargs):
-        from share.middleware import share
         try:
             getattr(self, "user", None).username
         except:

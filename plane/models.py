@@ -49,6 +49,10 @@ class Plane(models.Model):
             if "frasca" in self.type.lower():
                 self.manufacturer="Frasca"
                 self.cat_class = 16
+                
+        if not self.user:
+            from share.middleware import share
+            self.user = share.get_display_user()
             
         super(Plane, self).save(*args, **kwargs)
 

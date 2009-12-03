@@ -228,6 +228,12 @@ urlpatterns += patterns('',
     ),
     
     url(
+        r'^(?P<username>\w+)/mass_planes.html$',
+        "plane.views.mass_planes",
+                                                            name="mass-planes",
+    ),
+    
+    url(
         r'^(?P<username>\w+)/maps.html$',
         "maps.views.maps",
                                                                    name="maps",

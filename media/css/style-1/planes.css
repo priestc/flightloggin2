@@ -21,3 +21,5 @@ td.empty_row                {font-weight: bold; font-size: large; padding: 10px}
 .tag3                       {font-size: x-small}
 .tag4                       {font-size: small}
 .tag5                       {font-size: medium}
+
+#mass_edit_link             {width: 100%; text-align: right; font-size: x-small}
