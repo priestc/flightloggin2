@@ -1,8 +1,13 @@
 #site_stats                     {font-size: large; margin: 0 auto 0 auto;
-                                 text-align: right}
+                                 text-align: right; border-collapse: collapse;
+                                 width: 100%}
+
+#site_stats td                  {border: 1px dotted gray; padding-right: 10px}
                                   
-#site_stats td:last-child       {text-align: right; font-weight: bold;
+#site_stats td:last-child       {text-align: left; font-weight: bold;
                                  padding-left: 10px}
+                                 
+#site_stats tr:nth-child(odd)   {background: #EEEEEE}
                                  
 #openid td, #openid th          {border: 1px dotted gray; text-align: center}
 #openid                         {margin: 0 auto 0 auto;}

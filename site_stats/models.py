@@ -158,8 +158,7 @@ class Stat(object):
             foo += "%s. %s (%s)\n" % (i+1, ident, count)
         
         return foo
-    
-    
+
     calc_most_common_manu = MostCommonManu()
     calc_most_common_type = MostCommonType()
     calc_most_common_tail = MostCommonTail()
