@@ -9,6 +9,21 @@
 
 
 {% block canvas %}
+<div class="instructions">
+<ul>
+    <li>The "Maps" link will open your routes in Google Maps. If your logbook is
+    very large, this option may not work. Google Maps has a file size limit
+    which may prevent it from working. Also, you must have "Allow Sharing"
+    enabled in the preferences section, because this is essentially sharing some of
+    your logbook data with Google.
+    </li>
+
+    <li>The "Earth" link will open your routes/airports in Google Earth. You
+    must have Google Earth installed for this to work. Google Earth has no size
+    limit, so this option should work for everybody.
+    </li>
+</ul>
+</div>
 <h2>Routes</h2>
 <table class="maps_table">
     <tr>
@@ -17,7 +32,6 @@
             <a href="{{ all_routes_url }}">Earth</a>&nbsp;&nbsp;
             <a href="http://maps.google.com?q={{ SITE_URL }}{{ all_routes_url|urlencode }}" target="_blank">Maps</a>
         </td>
-        
     </tr>
     <tr>
         <td>
@@ -62,7 +76,7 @@
 
 <h2>Images</h2>
 <div class="instructions">
-These images are updated once a day. To force an update, click
+These images are only updated when you say so. To perform an update, click
 <a href="{% url render-me display_user %}">here</a>
 </div>
 <table id="images_table">
