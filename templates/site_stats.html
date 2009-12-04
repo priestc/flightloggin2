@@ -78,18 +78,18 @@
         <td>{{ cs.route_earths|floatformat:1|intcomma }} Earths</td>
     </tr>
     <tr>
-        <td>Most common Tailnumbers</td>
-        <td>{{ cs.most_common_tail }}</td>
+        <td>Tailnumbers used by the most people</td>
+        <td>{{ cs.most_common_tail|linebreaksbr }}</td>
     </tr>
     
     <tr>
-        <td>Most common type</td>
-        <td>{{ cs.most_common_type }} </td>
+        <td>Types used by the most people</td>
+        <td>{{ cs.most_common_type|linebreaksbr }} </td>
     </tr>
     
     <tr>
-        <td>Most common manufacturer</td>
-        <td>{{ cs.most_common_manu }}</td>
+        <td>Most common manufacturers</td>
+        <td>{{ cs.most_common_manu|linebreaksbr }}</td>
     </tr>
 </table>
 <hr>
