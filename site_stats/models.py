@@ -209,7 +209,8 @@ class Stat(object):
         return self.non_empty_users
 
     def calc_users(self):
-        return User.objects.count()
+        self.users = User.objects.count()
+        return self.users
 
 
 
