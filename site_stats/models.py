@@ -98,6 +98,7 @@ class StatDB(models.Model):
 class Stat(object):
 
     def __init__(self):
+        self.users = User.objects.count()
         self.sda = datetime.date.today() - datetime.timedelta(days=7)
         #all flights in the past 7 days
         self.fsd = Flight.objects.filter(date__gte=self.sda)
@@ -209,7 +210,6 @@ class Stat(object):
         return self.non_empty_users
 
     def calc_users(self):
-        self.users = User.objects.count()
         return self.users
 
 
