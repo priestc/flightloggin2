@@ -26,6 +26,9 @@ COLUMN_NAMES = {
     "ROUTE OF FLIGHT FROM":'from_',
     "ROUTE OF FLIGHT TO": 'to',
     "ROUTE OF FLIGHT VIA": 'via',
+    "ROUTE VIA": 'via',
+    "ROUTE TO": 'to',
+    "ROUTE FROM": 'from_',
 
     "AIRCRAFT IDENT": 'tailnumber',
     "TAIL NUMBER": 'tailnumber',

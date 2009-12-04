@@ -117,8 +117,7 @@ class PrepareLine(object):
         
         #put together "from-via-to" fields, then return it
         elif self.to and self.from_ and self.via:
-            route = "%s %s %s" % \
-                (self.from_, self.via, self.to)
+            route = "%s %s %s" % (self.from_, self.via, self.to)
             return {"route": route}
         
         # no route
