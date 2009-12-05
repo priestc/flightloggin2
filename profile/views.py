@@ -33,7 +33,7 @@ def profile(request, shared, display_user):
         if request.POST.get("submit") == "Delete All Flights":
             Flight.objects.filter(user=display_user).delete()
         
-        elif request.POST.get("submit") == "Delete All Non-Flights":
+        elif request.POST.get("submit") == "Delete All Events":
             NonFlight.objects.filter(user=display_user).delete()
         
         elif request.POST.get("submit") == "Delete Unused Planes":
