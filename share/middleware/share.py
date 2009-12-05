@@ -56,7 +56,7 @@ class Share(object):
     @property
     def is_Google_KML(self):
         """is the requester google maps?"""
-        return self.useragent == "Kml-Google; (+http://code.google.com/apis/kml)"
+        return "Google" in self.useragent
     
     @property
     def is_staff(self):
@@ -67,18 +67,9 @@ class Share(object):
     def own_account(self):
         """is the user looking at his/her own account?"""
         return self.display_user == self.request.user
-    
-    @property
-    def can_share(self):
-        """Is the display user allowing others to see his/her account?"""
-        from profile.models import Profile
-        profile, c = Profile.objects.get_or_create(user=self.display_user)
-        return profile.share
-
 
     #########################
 
-    @property
     def determine(self):
         
         if self.is_Google_KML:
@@ -93,14 +84,8 @@ class Share(object):
             # requester is owner, let them in
             return self.full_access
         
-        if self.can_share:
-            # the owner allows sharing, so grant restricted access
-            return self.shared_access
+        return self.shared_access
         
-        # user does not want others to see his/her logbook, raise 404
-        raise PermissionDenied(
-            "%s elects to not allow others to see his/her account" % self.username
-        )
 
 ##############################################################
 
@@ -118,9 +103,9 @@ class ShareMiddleware(object):
         if 'username' in kwargs:
             try:
                 share = Share(request, kwargs.pop('username'))
-                shared, display_user = share.determine
+                shared, display_user = share.determine()
             except PermissionDenied, message:
-                return cant_share_view(message)
+                return cant_share_view(message) #XXX
             
             _thread_locals.display_user = display_user
             _thread_locals.shared = shared

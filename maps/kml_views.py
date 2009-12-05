@@ -1,12 +1,14 @@
 import zipfile, StringIO
 
-from logbook.models import Flight
-from route.models import RouteBase, Route
-
 from django.http import HttpResponse
 from django.template.loader import get_template
 from django.template import Context
 
+from logbook.models import Flight
+from route.models import RouteBase, Route
+from share.decorator import no_share
+
+@no_share('other')
 def airports_kml(request, shared, display_user, type_):
     from django.conf import settings
     from utils import AirportFolder 
@@ -52,13 +54,10 @@ def airports_kml(request, shared, display_user, type_):
                
     return response
     
-    
-    
+@no_share('other')   
 def routes_kml(request, shared, display_user, type_):
     from utils import RouteFolder
-    
-    
-            
+
     if type_== "all":
         title = "All Routes"
         all_r = Route.objects.user(display_user)\

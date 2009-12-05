@@ -38,7 +38,7 @@ def planes(request, shared, display_user):
     return locals()
 
 
-@no_share
+@no_share('NEVER')
 @login_required()
 @render_to('mass_planes.html')
 def mass_planes(request, shared, display_user, page=0):

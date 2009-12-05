@@ -1,9 +1,10 @@
 from annoying.decorators import render_to
+from share.decorator import no_share
 
 V = '<span class="v">&#10003;</span>'
 X = '<span class="x">&#10005;</span>'
 
-
+@no_share('other')
 @render_to('milestones.html')
 def milestones(request, shared, display_user):
     from logbook.models import Flight
@@ -14,13 +15,11 @@ def milestones(request, shared, display_user):
     atp = atp_calc(qs)
     
     return locals()
+
     
 def smallbar(request, val, max_val):
     from small_progress_bar import SmallProgressBar
     return SmallProgressBar(float(val), float(max_val)).as_png()
-
-
-
 
     
 def part135ifr(qs):

@@ -1,7 +1,9 @@
 import Image, ImageFont, ImageDraw
 from annoying.decorators import render_to
 from logbook.constants import FIELD_TITLES, GRAPH_FIELDS
+from share.decorator import no_share
 
+@no_share('other')
 @render_to('sigs.html')
 def sigs(request, shared, display_user):
     from logbook.constants import all_agg_checkbox
@@ -9,6 +11,7 @@ def sigs(request, shared, display_user):
     return locals()
 
 
+@no_share('other')
 def make_sig(request, shared, display_user, columns):
     
     columns = columns.split('-')
@@ -31,6 +34,8 @@ class Sig(object):
     font= "VeraMono.ttf"
     
     def __init__(self, user, columns):
+        self.user = user
+        
         from django.conf import settings
         
         self.data = {}
@@ -39,8 +44,7 @@ class Sig(object):
         self.max_title_width = max(len(text) for text in self.title_columns)
         
         width = (self.max_title_width + 9) * self.font_width + 2
-        
-        self.user = user
+
         self.im = Image.new("RGBA", (width, height))
         fontdir = settings.MEDIA_ROOT + "/fonts/" + self.font
         self.font = ImageFont.truetype(fontdir, 12)

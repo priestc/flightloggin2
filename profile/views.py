@@ -13,7 +13,7 @@ from airport.models import Location
 
 from logbook.constants import OPTION_FIELDS, FIELD_TITLES
 
-@no_share
+@no_share('NEVER')
 @login_required
 @render_to("preferences.html")
 def profile(request, shared, display_user):
@@ -90,43 +90,3 @@ def profile(request, shared, display_user):
         bool_fields.append("".join(row))
 
     return locals()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

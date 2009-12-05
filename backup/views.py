@@ -1,10 +1,12 @@
 import datetime
 
+from share.decorator import no_share, secret_key
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from annoying.decorators import render_to
 
 from classes import Backup, EmailBackup
+
 
 @login_required()   
 def backup(request, shared, display_user):
@@ -24,9 +26,7 @@ def backup(request, shared, display_user):
 #################################
 #################################
 
-from share.decorator import no_share, secret_key
-
-@no_share
+@no_share('NEVER')
 @login_required
 def emailbackup(request, shared, display_user):
     """Send email backup to the user"""

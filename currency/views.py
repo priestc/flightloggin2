@@ -7,6 +7,9 @@ from logbook.models import Flight
 from currency.currbox import MediCurrBox, LandCurrBox, CertCurrBox, InstCurrBox
 from FAA import FAA_Landing, FAA_Medical, FAA_Instrument
 
+from share.decorator import no_share
+
+@no_share('other')
 @render_to('currency.html')
 def currency(request, shared, display_user):
     curr_land = FAA_Landing(display_user)

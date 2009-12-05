@@ -8,7 +8,9 @@ from django.template import Context
 
 from logbook.models import Flight
 from logbook.constants import FIELD_ABBV
+from share.decorator import no_share
 
+@no_share('logbook')
 def pdf(request, display_user, shared):
     from reportlab.lib.styles import getSampleStyleSheet
     from reportlab.platypus import Table, TableStyle, Paragraph, SimpleDocTemplate
@@ -67,11 +69,9 @@ def pdf(request, display_user, shared):
      
     # Create the table with the necessary style, and add it to the
     # elements list.
-    table = Table(data, rowHeights=rows*[0.10*inch], style=ts, repeatRows=1)
-    
-    
+    table = Table(data, rowHeights=rows*[0.10*inch], style=ts, repeatRows=1) 
     
     elements.append(table)
-     
+    
     doc.build(elements)
     return response

@@ -1,8 +1,10 @@
-from logbook.constants import * #FIXME
-from annoying.decorators import render_to
-
 from django.utils.safestring import mark_safe
 
+from logbook.constants import GRAPH_FIELDS, AGG_FIELDS, FIELD_TITLES
+from annoying.decorators import render_to
+from share.decorator import no_share
+
+@no_share('other')
 def linegraph_image(request, shared, display_user,
                     columns, dates=None, ext='png', rate=True):
 
@@ -71,6 +73,7 @@ def bargraph_image(request, shared, display_user, column, func, agg):
 
 ###############################################################################
 
+@no_share('other')
 @render_to('linegraphs.html')
 def linegraphs(request, shared, display_user):
     """the view function that renders the graph builder interface"""
@@ -85,6 +88,7 @@ def linegraphs(request, shared, display_user):
     
 ###############################################################################
 
+@no_share('other')
 @render_to('bargraphs.html')
 def bargraphs(request, shared, display_user):
     """the view function that renders the graph builder interface"""   

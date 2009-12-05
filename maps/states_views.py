@@ -26,7 +26,7 @@ def render_all(request):
     return HttpResponse('done!', mimetype="text/plain")
 
 
-@no_share
+@no_share('NEVER')
 @login_required
 def render_me(request, shared, display_user):
     

@@ -15,7 +15,7 @@ def export(request, shared, display_user):
 
 @login_required()
 @render_to('import.html')
-@no_share
+@no_share('NEVER')
 def import_v(request, shared, display_user):
 
     fileform = ImportForm()

@@ -3,7 +3,7 @@ from settings_local import *
 
 PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
 TEMPLATE_DEBUG = DEBUG
-DEBUG_TOOLBAR = False
+DEBUG_TOOLBAR = True
 
 AUTH_PROFILE_MODULE = 'profile.profile'
 

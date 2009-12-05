@@ -2,7 +2,9 @@ from annoying.decorators import render_to
 from airport.models import Location
 from models import Records, NonFlight
 from forms import *
+from share.decorator import no_share
 
+@no_share('records')
 @render_to("records.html")
 def records(request, shared, display_user):
       
@@ -17,6 +19,7 @@ def records(request, shared, display_user):
             
     return locals()
 
+@no_share('logbook')
 @render_to("locations.html")
 def locations(request, shared, display_user):
     customs = Location.objects.filter(loc_class=3, user=display_user)
@@ -67,6 +70,7 @@ def locations(request, shared, display_user):
         
     return locals()
 
+@no_share('events')
 @render_to("events.html")
 def events(request, shared, display_user):
     

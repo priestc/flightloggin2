@@ -51,10 +51,24 @@ class Profile(models.Model):
                          default=False,
                      )
                      
-    share =          models.BooleanField(
-                         "Allow Sharing?",
+    logbook_share =  models.BooleanField("Share Basic Logbook",
                          default=True,
-                         help_text='Allows people to view your logbook',
+                         help_text='Allow other people to view your Flights, Locations, and Planes',
+                     )
+    
+    events_share =   models.BooleanField("Share Events",
+                         default=True,
+                         help_text='Allow other people to view your Events',
+                     )
+    
+    records_share =  models.BooleanField("Share Records",
+                         default=True,
+                         help_text='Allow other people to view your Records',
+                     )
+    
+    other_share =  models.BooleanField("Share everything else",
+                         default=True,
+                         help_text='Allows people to view everything else; Maps, Graphs, Sigs, Currency...',
                      )
 
     def __unicode__(self):

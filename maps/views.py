@@ -1,5 +1,7 @@
 from annoying.decorators import render_to
+from share.decorator import no_share
 
+@no_share('other')
 @render_to('maps.html')
 def maps(request, shared, display_user):
     from settings import MEDIA_URL, SITE_URL, STATES_URL
