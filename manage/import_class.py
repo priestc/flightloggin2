@@ -57,7 +57,6 @@ class BaseImport(object):
         titles = self.swap_out_flight_titles(titles)
         
         self.dr = csv.DictReader(self.f, titles, dialect=dialect)
-        self.dr.next()
             
     def action(self):
         """Go through each line, determine which type it is, then hand off that

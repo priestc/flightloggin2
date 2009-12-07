@@ -94,6 +94,7 @@ COLUMN_NAMES = {
     "FIRST OFFICER": 'fo',
     "CAPTAIN": 'captain',
     "FLIGHT ATTENDANT": 'fa',
+    "PERSON": 'person',
     "FLIGHT NUMBER": 'flight_number',
     "REMARKS": 'remarks',
     
