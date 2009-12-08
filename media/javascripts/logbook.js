@@ -22,6 +22,9 @@ function fill_in_flight(dom_id) {
 	var sic = $("#f" + id + " span.data_sic").text();
 	$("#id_new-sic").val(sic);
 	
+	var xc = $("#f" + id + " span.data_xc").text();
+	$("#id_new-xc").val(xc);
+	
 	var solo = $("#f" + id + " span.data_solo").text();
 	$("#id_new-solo").val(solo);
 	
