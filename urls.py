@@ -168,6 +168,12 @@ urlpatterns += patterns('',
     ),
     
     url(
+        r'^(?P<username>\w+)/realtime.html$',
+        "realtime.views.realtime",
+                                                               name="realtime",
+    ),
+    
+    url(
         r'^(?P<username>\w+)/email-backup.html$',
         "backup.views.emailbackup",
                                                            name="email-backup",
