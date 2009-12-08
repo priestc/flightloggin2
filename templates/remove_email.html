@@ -1,0 +1,23 @@
+{% extends "base-no-nav.html" %}
+
+{% block title %}Change Email{% endblock %}
+
+{% block javascript %}
+<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/milestones.css">
+{% endblock %}
+
+{% block canvas %}
+
+{% if not done %}
+    <h2>Select new email preference for {{ user.username }}:</h2>
+    <form id="prefs_form" action="{% url submit_change_email u %}" method="post">
+        {{ form.backup_freq }}
+        <br><br>
+        <input type="hidden" value="{{u}}" name="u">
+        <input type="submit">
+    </form>
+{% else %}
+    Done
+{% endif %}
+
+{% endblock %}
