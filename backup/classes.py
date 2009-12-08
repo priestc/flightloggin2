@@ -86,9 +86,6 @@ class EmailBackup(object):
         self.profile,c = Profile.objects.get_or_create(user=user)
         
         self.addr = self.profile.backup_email or self.profile.user.email
-        
-        if not self.addr:
-            raise Http404("No Email address to send to")
     
     def make_email(self):
         from django.core.mail import EmailMessage
@@ -119,6 +116,10 @@ class EmailBackup(object):
         """makes the email object, sends it, then, if successful, 
            returns the address it sent it to
         """
+        
+        if not self.addr:
+            return "--No email to send to--"
+        
         em = self.make_email()
         
         if not test:
