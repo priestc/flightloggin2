@@ -54,6 +54,9 @@ def bargraph_image(request, shared, display_user, column, func, agg):
     elif agg == 'category_class':
         Graph = g.CatClassBarGraph
         
+    elif agg == 'model':
+        Graph = g.ModelBarGraph
+        
     elif agg == 'year':
         Graph = g.YearBarGraph
         

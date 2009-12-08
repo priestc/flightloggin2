@@ -340,6 +340,20 @@ class ManufacturerBarGraph(BarGraph):
     def _field_title(self):
         return "plane__manufacturer"
     
+class ModelBarGraph(BarGraph):
+    
+    def get_data(self):
+        self.qs = (self.qs.values('plane__model')
+                    .distinct()
+                    .annotate(val=self.agg(self.time))
+                    .order_by('-val'))
+    
+    def title(self):
+        return "By Model"
+    
+    def _field_title(self):
+        return "plane__model"
+    
 class YearBarGraph(BarGraph):
     
     def get_data(self):
