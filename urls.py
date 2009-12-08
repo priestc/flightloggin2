@@ -132,6 +132,18 @@ urlpatterns += patterns('',
     ),
     
     url(
+        r'^change_email.html$',
+        "backup.views.change_email",
+                                                           name="change_email",
+    ),
+    
+    url(
+        r'^(?P<userid>\d+)_remove_email.html$',
+        "backup.views.submit_change",
+                                                    name="submit_change_email",
+    ),
+    
+    url(
         r'^news.html$',
         "main.views.news",
                                                                    name="news",

@@ -8,7 +8,10 @@ from django.http import Http404
 from logbook.constants import *
 
 MESSAGE = """This is a copy of your FlightLogg.in' logbook\n
-You are set to receive these messages %s."""
+You are set to receive these messages %s.\n\n"""
+
+REMOVE = """Go here to change email preferences:
+http://flightlogg.in/change_email.html?u=%s&t=%s"""
 
 class Backup(object):
 
@@ -94,11 +97,18 @@ class EmailBackup(object):
         today = datetime.date.today()
         
         message = MESSAGE % self.profile.get_backup_freq_display().lower()
+        
+        from main.utils import hash_ten
+        token = hash_ten(self.user.id)
+        
+        message += REMOVE % (self.user.id, token)
                             
         title = "%s's FlightLogg.in backup for %s" % (
                       self.profile.real_name or self.profile.user.username,
                       today
         )
+        
+        #import pdb; pdb.set_trace()
         
         file_ = Backup(self.user).output_zip().getvalue()
         

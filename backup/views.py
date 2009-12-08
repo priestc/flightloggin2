@@ -2,7 +2,7 @@ import datetime
 
 from share.decorator import no_share, secret_key
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from annoying.decorators import render_to
 
 from classes import Backup, EmailBackup
@@ -36,6 +36,37 @@ def emailbackup(request, shared, display_user):
     
     return HttpResponse("email sent to %s" % sent, mimetype='text-plain')
 
+@render_to('remove_email.html')
+def change_email(request):
+    u = request.GET.get('u')
+    t = request.GET.get('t')
+    
+    from main.utils import hash_ten
+    if not (u and t) or not (hash_ten(u) == t):
+        raise Http404
+    
+    from django.contrib.auth.models import User
+    user = User.objects.get(pk=u)
+
+    p = user.get_profile()
+    
+    from profile.forms import ProfileForm
+    form = ProfileForm(instance=p)
+           
+    
+    return locals()
+
+@render_to('remove_email.html')
+def submit_change(request, userid):
+    if request.POST:
+        new_pref = request.POST['backup_freq']
+        from profile.models import Profile
+        p=Profile.objects.filter(user__pk=request.POST['u'])\
+                         .update(backup_freq=new_pref)
+        done=True
+    
+    return locals()
+
 @secret_key
 def schedule(request, schedule):
     """Only send out the emails to the people who's schedule is exactly the
@@ -52,10 +83,10 @@ def schedule(request, schedule):
     elif schedule == 'monthly':
         users = User.objects.filter(profile__backup_freq=3)
     
-    ret = "%s - %s " % (schedule, datetime.datetime.now())    
+    ret = "%s - %s \n\n" % (schedule, datetime.datetime.now())    
     for user in users:
         em = EmailBackup(user, auto=True)
-        result = em.send(test=True)
+        result = em.send(test=False)
         ret += "%s [%s]\n" % (user.username, result)
     
     

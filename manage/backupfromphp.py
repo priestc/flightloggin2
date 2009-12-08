@@ -23,10 +23,8 @@ class PHPBackup(object):
     def _verify_pair(self, token, uid):
         """Actually does the verifying to make sure the token is correct
         """
-        import hashlib;
-        m = hashlib.sha256()
-        m.update(uid)
-        calc_token = m.hexdigest()[:10]
+        from main.utils import hash_ten
+        calc_token = hash_ten(uid)
         
         if not token == calc_token:
             raise InvalidToken
