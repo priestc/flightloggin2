@@ -54,8 +54,9 @@ def schedule(request, schedule):
     
     ret = "%s - %s " % (schedule, datetime.datetime.now())    
     for user in users:
-        EmailBackup(user, "auto").send()
-        ret += user.username + " "
+        em = EmailBackup(user, auto=True)
+        result = em.send(test=True)
+        ret += "%s [%s]\n" % (user.username, result)
     
     
     return HttpResponse(ret, mimetype="text/plain")

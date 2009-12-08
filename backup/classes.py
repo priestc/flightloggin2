@@ -106,19 +106,25 @@ class EmailBackup(object):
         file_ = Backup(self.user).output_zip().getvalue()
         
         if self.auto:
-            f = "FlightLogg.in' Auto Backup Mailer <info@flightlogg.in>"
+            f = "Auto Backup Mailer <info@flightlogg.in>"
         else:
-            f = "FlightLogg.in' Manual Backup Mailer <info@flightlogg.in>"
+            f = "Manual Backup Mailer <info@flightlogg.in>"
 
         email = EmailMessage(title, message, to=(self.addr,), from_email=f)
         email.attach("backup-%s.tsv.zip" % today, file_,)
             
         return email
     
-    def send(self):
+    def send(self, test=False):
         """makes the email object, sends it, then, if successful, 
            returns the address it sent it to
         """
-        sent = self.make_email().send()
-        if sent:
-            return self.addr
+        em = self.make_email()
+        
+        if not test:
+            sent = em.send()
+            
+        return self.addr
+
+
+
