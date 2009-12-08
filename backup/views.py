@@ -51,8 +51,8 @@ def schedule(request, schedule):
     
     elif schedule == 'monthly':
         users = User.objects.filter(profile__backup_freq=3)
-
-    ret = ""    
+    
+    ret = "%s - %s " % (schedule, datetime.datetime.now())    
     for user in users:
         EmailBackup(user, "auto").send()
         ret += user.username + " "
