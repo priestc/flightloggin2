@@ -2,18 +2,31 @@
 {% block realtime-sel %}nav_selected{% endblock%}
 
 {% block javascript %}
-	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/realtime.css">
-    <script type="text/javascript" href="{{ MEDIA_URL }}/javascripts/realtime.js"></script>
+	{#<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/realtime.css">#}
+<script type="text/javascript">
+    var DJANGO_SEED = {% now "U" %};
+</script>
+<script type="text/javascript" src="{{ MEDIA_URL }}/jquery/epiclock/jquery.epiclock.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/realtime.js"></script>
+
 {% endblock %}
 
-{% block title %}Maps{% endblock %}
+{% block title %}Realtime{% endblock %}
 
 
 {% block canvas %}
 
+<form action="{% url realtime display_user %}" method="post">
 
-omg realtime
+Current time: {% now "M-d-Y" %} <span id="time">{% now "h:m:s" %}</span>
 
+<div id="epiclock"></div>
+
+<br>
+
+<input type="button" value="Go On Duty">
+
+</form>
 {% endblock %}
 
 

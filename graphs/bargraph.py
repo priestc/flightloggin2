@@ -39,6 +39,9 @@ class BarGraph(object):
         from logbook.models import Flight
         self.qs = Flight.objects.filter(user=user)
         
+        if self.time == 'day':
+            self.qs = self.qs.add_column('day')
+        
     def output(self):
         self.get_data()
 

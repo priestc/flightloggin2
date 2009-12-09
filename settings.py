@@ -85,6 +85,7 @@ INSTALLED_APPS = (
     'profile',
     'route',
     'site_stats',
+    'realtime',
     
     'tagging',
     'django_extensions',)
