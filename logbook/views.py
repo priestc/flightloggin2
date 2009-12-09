@@ -152,7 +152,10 @@ def mass_entry(request, shared, display_user):
                 if instance.date:
                     instance.save()
             
-            return HttpResponseRedirect('/%s/logbook.html' % display_user)
+            from django.core.urlresolvers import reverse
+            return HttpResponseRedirect(
+                reverse('logbook', kwargs={"username": display_user.username})
+            )
         
     else:
         formset = NewFlightFormset(queryset=Flight.objects.get_empty_query_set(),
@@ -185,7 +188,11 @@ def mass_edit(request, shared, display_user, page=0):
         
         if formset.is_valid():
             formset.save()
-            return HttpResponseRedirect('/%s/logbook.html' % display_user)
+            from django.core.urlresolvers import reverse
+            return HttpResponseRedirect(
+                reverse('logbook-page',
+                        kwargs={"username": display_user.username,"page": page})
+            )
     else:
         formset = NewFlightFormset(queryset=qs,
                     planes_queryset=Plane.objects.user_common(display_user),

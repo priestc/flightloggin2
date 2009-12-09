@@ -89,6 +89,7 @@ class Flight(models.Model):
         
     class Meta:
         ordering = ["date", "id"]
+        get_latest_by = 'date'
         
     def disp_app(self):
         if self.app == 0:

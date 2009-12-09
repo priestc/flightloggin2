@@ -2,10 +2,10 @@
 {% block realtime-sel %}nav_selected{% endblock%}
 
 {% block javascript %}
-	{#<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/realtime.css">#}
+	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/realtime.css">
 <script type="text/javascript">
     var users_system = new Date().getTime() / 1000
-    var SERVER_OFFSET = {% now "U" %} - users_system;
+    var SERVER_OFFSET = {{ gmt|date:"U" }} - users_system;
 </script>
 <script type="text/javascript" src="{{ MEDIA_URL }}/jquery/epiclock/jquery.epiclock.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/realtime.js"></script>
@@ -17,16 +17,17 @@
 
 {% block canvas %}
 
-<form action="{% url realtime display_user %}" method="post">
 
-Current time: {% now "M-d-Y" %} <span id="time">{% now "h:i:s" %}</span>
+
+{{ gmt|date:"m-d-Y__H:i:s" }}</span>
 
 <div id="epiclock"></div>
 
 <br>
-
-<input type="button" value="Go On Duty">
-
+<form action="{% url realtime display_user %}" method="post">
+    {{ form.start }}{{ form.end }}
+    <input id="on_duty" type="button" value="Go On Duty">
+    <input id="off_duty" type="button" value="Go Off Duty">
 </form>
 {% endblock %}
 

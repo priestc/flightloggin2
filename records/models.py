@@ -45,6 +45,9 @@ class NonFlight(models.Model):
     remarks =   models.TextField(blank=True)
     non_flying = models.IntegerField(choices=NON_FLYING_CHOICES, default=0, blank=False)
 
+    class Meta:
+        get_latest_by = 'date'
+    
     def __unicode__(self):
         return u"%s -- %s" % (self.date, self.get_non_flying_display() )
     
