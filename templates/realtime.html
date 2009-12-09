@@ -4,7 +4,8 @@
 {% block javascript %}
 	{#<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/realtime.css">#}
 <script type="text/javascript">
-    var DJANGO_SEED = {% now "U" %};
+    var users_system = new Date().getTime() / 1000
+    var SERVER_OFFSET = {% now "U" %} - users_system;
 </script>
 <script type="text/javascript" src="{{ MEDIA_URL }}/jquery/epiclock/jquery.epiclock.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/realtime.js"></script>
