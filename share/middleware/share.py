@@ -121,6 +121,9 @@ class ShareMiddleware(object):
             _thread_locals.shared = shared
             _thread_locals.user = getattr(request, "user", None)
             
+            request.display_user = display_user
+            request.shared = shared
+            
             return view(request=request,
                         shared=shared,
                         display_user=display_user,

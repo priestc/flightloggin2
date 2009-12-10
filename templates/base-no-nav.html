@@ -46,21 +46,21 @@
 			</div>
 
             <div id="logged_in_as">
-                {% if DEMO %}**DEMO**{% endif %}
+                {% if DEMO %}
+                    <strong style="color:#AA3333">** VIEWING THE DEMO ACCOUNT **</strong>
+                {% endif %}
+                
 				{% if user.is_authenticated %}
-		
 					Logged in as: <span class="logged_user">{{ user.username }}</span>
-					
 				{% endif %}
+				
 				{% if shared %}
-			    
 					Viewing the logbook of: <span class="display_user">{{ display_user }}</span>
-					
 				{% endif %}
 				
 				{% if user.is_authenticated %}
 				    <a href="{% url logout %}">Log Out</a>
-				{% else %}
+				    {% else %}
 				    <a href="/openid/login">Sign-in/Register</a>
                 {% endif %}   
 
