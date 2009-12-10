@@ -116,7 +116,6 @@ def logbook(request, shared, display_user, page=0):
 ###############################################################################
 
 @no_share('NEVER')
-@login_required()
 @render_to("mass_entry.html")     
 def mass_entry(request, shared, display_user):
     
@@ -164,7 +163,6 @@ def mass_entry(request, shared, display_user):
     return locals()
 
 @no_share('NEVER')
-@login_required()
 @render_to("mass_entry.html")     
 def mass_edit(request, shared, display_user, page=0):
     edit = True 

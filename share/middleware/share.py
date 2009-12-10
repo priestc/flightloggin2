@@ -34,6 +34,12 @@ class Share(object):
         self.username = username
         self.display_user = get_object_or_None(User, username=username)
         
+        from django.conf import settings
+        if getattr(self.display_user, "id", 0) == settings.DEMO_USER_ID:
+            self.demo = True
+        else:
+            self.demo = False
+            
         if not self.display_user:
             # not a valid username, raise 404
             raise Http404("Username doesn't exist")
@@ -71,6 +77,10 @@ class Share(object):
     #########################
 
     def determine(self):
+        
+        if self.demo:
+            # Demo user, allow everything
+            return self.full_access
         
         if self.is_Google_KML:
             # Google gets let in no matter what

@@ -127,15 +127,19 @@ class EmailBackup(object):
            returns the address it sent it to
         """
         
+        from django.conf import settings
+        if self.user.id == settings.DEMO_USER_ID:
+            return """e-mail backups disabled for the demo account, please register an account to use this feature"""
+        
         if not self.addr:
-            return "--No email to send to--"
+            return "--No e-mail to send to--"
         
         em = self.make_email()
         
         if not test:
             sent = em.send()
             
-        return self.addr
+        return "e-mail sent to: %s" % self.addr
 
 
 

@@ -7,8 +7,7 @@ from annoying.decorators import render_to
 
 from classes import Backup, EmailBackup
 
-
-@login_required()   
+@no_share('logbook')  
 def backup(request, shared, display_user):
     
     # get a zip file of the csv of the users data
@@ -27,14 +26,13 @@ def backup(request, shared, display_user):
 #################################
 
 @no_share('NEVER')
-@login_required
 def emailbackup(request, shared, display_user):
     """Send email backup to the user"""
     
     email = EmailBackup(display_user)
     sent = email.send()
     
-    return HttpResponse("email sent to %s" % sent, mimetype='text-plain')
+    return HttpResponse(sent, mimetype='text-plain')
 
 @render_to('remove_email.html')
 def change_email(request):

@@ -13,7 +13,6 @@ from backupfromphp import PHPBackup, InvalidToken, InvalidURL
 def export(request, shared, display_user):
     return locals()
 
-@login_required()
 @render_to('import.html')
 @no_share('NEVER')
 def import_v(request, shared, display_user):

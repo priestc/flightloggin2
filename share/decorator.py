@@ -12,6 +12,11 @@ class no_share(object):
             
             if not field == 'NEVER':
                 user = kwargs['display_user']
+                from django.conf import settings
+                if getattr(user, "id", 0) == settings.DEMO_USER_ID:
+                    ## demo user, let them do anything
+                    return view(request, *args, **kwargs)
+                    
                 from profile.models import Profile
                 profile = Profile.get_for_user(user)
                 go_ahead = getattr(profile, "%s_share" % field)
