@@ -2,7 +2,7 @@ d = new Date();
 month = (d.getMonth()+1).toString().length < 2 ? "0" + (d.getMonth()+1) : (d.getMonth()+1);	//#add a leading zero if its only one digit, +1 because javascript is dum
 day = (d.getDate()).toString().length < 2 ? "0" + (d.getDate()) : (d.getDate());
 
-var todays_date = month + "/" + day + "/" + d.getFullYear();
+var todays_date = d.getFullYear() + "-" + month + "-" + day;
 
 //////////////////////////////////////////////////////////////////
 
@@ -10,7 +10,7 @@ function prepare_new_flight(wipe) {					    //prepares the new entry popup
 
 	if(wipe) {
     	wipe_clean();
-	    $("#id_date").val(todays_date);
+	    $("#id_new-date").val(todays_date);
 	}
 	
 	$('#titlebar').text("New Flight");
