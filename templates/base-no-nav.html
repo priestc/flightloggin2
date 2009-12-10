@@ -46,6 +46,7 @@
 			</div>
 
             <div id="logged_in_as">
+                {% if DEMO %}**DEMO**{% endif %}
 				{% if user.is_authenticated %}
 		
 					Logged in as: <span class="logged_user">{{ user.username }}</span>

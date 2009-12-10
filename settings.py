@@ -112,4 +112,5 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.core.context_processors.media',
     'style.context_processors.css_path',
+    'main.user_label.user_label',
 )
