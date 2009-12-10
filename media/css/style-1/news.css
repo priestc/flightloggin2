@@ -14,3 +14,8 @@
 	                 font-weight: bold}
 	     
 .news_box small     {font-size: small}
+
+#demo_link          {width: 100%;
+                     text-align: center;
+                     margin: 20px;
+                     font-size: medium}
