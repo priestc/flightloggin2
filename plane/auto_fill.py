@@ -1,16 +1,19 @@
 def autofill(type_):
     """give me the type, and I'll return the model name and the cat/class"""
-    type_ = type_.upper()
+    type_ = type_.upper().replace("-","")
     model = None
     t = None
+    c = None
     ret = {"manufacturer": None, "model": None, "cat_class": None, "tags": None}
+    
+    ## ----------------------------------------------------------------
     
     if type_.startswith("C") or type_.startswith("CE"):
         if   "120" in type_: model="";c=1;t="w"
         elif "140" in type_: model="";c=1;t="w"
         elif "150" in type_: model="";c=1
         elif "152" in type_: model="";c=1
-        elif "162" in type_: model="Skycatcher";c=1
+        elif "162" in type_: model="Skycatcher";c=1;t="l"
         elif "165" in type_: model="Airmaster";c=1
         elif "170" in type_: model="";c=1;t="w"
         elif "172" in type_: model="Skyhawk";c=1
@@ -37,12 +40,12 @@ def autofill(type_):
         elif "401" in type_: model="";c=2;t="ch"
         elif "402" in type_: model="";c=2;t="ch"
         elif "404" in type_: model="Titan";c=2;t="ch"
-        elif "406" in type_: model="Caravan II";c=2;t="tch"
+        elif "406" in type_: model="Caravan II";c=2;t="tcph"
         elif "411" in type_: model="";c=2;t="ch"
         elif "414" in type_: model="Conquest II";c=2;t="ch"
         elif "421" in type_: model="Golden Eagle";c=2;t="ch"
-        elif "425" in type_: model="Conquest";c=2;t="tch"
-        elif "441" in type_: model="Conquest II";c=2;t="tch"
+        elif "425" in type_: model="Conquest";c=2;t="tchp"
+        elif "441" in type_: model="Conquest II";c=2;t="tchp"
         elif "500" in type_: model="Citation I";c=2;t="tjch"
         elif "501" in type_: model="Citation I";c=2;t="tjch"
         elif "510" in type_: model="Citation Mustang";c=2;t="tjch"
@@ -60,6 +63,8 @@ def autofill(type_):
             ret["cat_class"] = c
         else:
             return ret
+    
+    ## ----------------------------------------------------------------
     
     elif type_.startswith("PA"):
         type_ = type_.replace('-', '')[2:]
@@ -125,6 +130,8 @@ def autofill(type_):
         else:
             return ret
     
+    ## ----------------------------------------------------------------
+    
     elif type_.startswith("BE"):
         if "16" in type_: model="";c=1
         elif "17" in type_: model="Staggerwing";c=1;t="w"
@@ -148,15 +155,15 @@ def autofill(type_):
         elif "88" in type_: model="Queen Air";c=2;t="ch"
         elif "76" in type_: model="Duchess";c=2;t="c"
         elif "77" in type_: model="Skipper";c=1
-        elif "90" in type_: model="King Air";c=2;t="tch"
-        elif "200" in type_: model="Super King Air";c=2;t="tch"
-        elif "300" in type_: model="Super King Air";c=2;t="tch"
-        elif "100" in type_: model="King Air";c=2;t="tch"
+        elif "90" in type_: model="King Air";c=2;t="tcph"
+        elif "200" in type_: model="Super King Air";c=2;t="tcph"
+        elif "300" in type_: model="Super King Air";c=2;t="tcph"
+        elif "100" in type_: model="King Air";c=2;t="tchp"
         elif "95" in type_: model="Travel Air";c=2;t="c"
-        elif "99" in type_: model="Airliner";c=2
+        elif "99" in type_: model="Airliner";c=2;t="tchp"
         elif "390" in type_: model="Premier";c=2;t="tch"
-        elif "1900" in type_: model="Airliner";c=2;t="tch"
-        elif "2000" in type_: model="Starship";c=2;t="tch"
+        elif "1900" in type_: model="Airliner";c=2;t="tchp"
+        elif "2000" in type_: model="Starship";c=2;t="tchp"
 
         if model is not None:
             ret["manufacturer"] = "Beechcraft"
@@ -164,6 +171,60 @@ def autofill(type_):
             ret["cat_class"] = c
         else:
             return ret
+    
+    ## ----------------------------------------------------------------
+        
+    elif type_.startswith("TB"):
+        if "700" in type_: model="";c=1;t="tchp"
+        elif "850" in type_: model="";c=1;t="tchp"
+        elif "9" in type_: model="Tampico";c=1
+        elif "10" in type_: model="Tobago";c=1
+        elif "20" in type_: model="Trinidad";c=1
+        elif "21" in type_: model="Trinidad";c=1
+        
+        if c is not None:
+            ret["manufacturer"] = "SOCATA"
+            ret["model"] = model
+            ret["cat_class"] = c
+        else:
+            return ret
+            
+    ## ----------------------------------------------------------------
+        
+    elif type_.startswith("DA"):
+        if "20" in type_ and not "C1" in type_: model="Katana";c=1
+        elif "20" in type_ and "C1" in type_: model="Evolution/Eclipse";c=1
+        elif "40" in type_: model="Star";c=1
+        elif "42" in type_: model="Twin Star";c=2;t="c"
+        
+        if c is not None:
+            ret["manufacturer"] = "Diamond"
+            ret["model"] = model
+            ret["cat_class"] = c
+        else:
+            return ret
+    
+    ## ----------------------------------------------------------------
+    
+    elif type_ == "SA227":
+        return {"manufacturer": "Swearingen",
+                "model": "Merlin/Metroliner",
+                "cat_class": 2,
+                "tags": "Turbine, HP, Turboprop, TR"}
+                
+    elif type_ == "CH2000" or type_ == "CH2T":
+        return {"manufacturer": "AMD",
+                "model": "Alarus",
+                "cat_class": 1,
+                "tags": None}
+    
+    elif type_ == "SR22" or type_ == "SR20":
+        return {"manufacturer": "Cirrus",
+                "model": "",
+                "cat_class": 1,
+                "tags": "HP, Glass"}
+    
+    ## -----------------------------------------------------------------
         
     if not ret['manufacturer']:
         return ret     #plane not found, return None
@@ -176,6 +237,9 @@ def autofill(type_):
     if "t" in t:
         tags.append("Turbine")
         
+    if "p" in t:
+        tags.append("Turboprop")
+        
     if "c" in t:
         tags.append("Complex")
         
@@ -187,6 +251,9 @@ def autofill(type_):
 
     if "w" in t:
         tags.append("Tailwheel")
+    
+    if "l" in t:
+        tags.append("LSA")
         
     ret["tags"] = ", ".join(tags)
     

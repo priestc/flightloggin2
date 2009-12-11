@@ -78,8 +78,7 @@ def currency(request, shared, display_user):
     ############################################ type ratings below
     
     type_ratings = Plane.objects.filter(user=display_user)\
-                                .filter( Q(tags__icontains="type rating") |
-                                         Q(tags__icontains="currency"))\
+                                .currency()\
                                 .values_list('type', flat=True)\
                                 .order_by().distinct()
     types_out = []
