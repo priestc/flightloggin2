@@ -103,7 +103,7 @@ $(document).ready(function() {
 		fire_popup();
 	});
 	
-	$("#logbook_table a").click(function(){			//make the edit popup when the date is clicked
+	$("a.popup_link").click(function(){			//make the edit popup when the date is clicked
 		wipe_clean();
 		prepare_edit_flight(true);
 		fill_in_flight(this.id);

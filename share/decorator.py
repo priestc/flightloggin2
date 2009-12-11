@@ -1,5 +1,4 @@
 from settings import SECRET_KEY
-from django.http import Http404
 
 class no_share(object):
     """Decorator to determine if the view should be executed based on
@@ -8,45 +7,51 @@ class no_share(object):
     """
 
     def determine(self, view, field, request, *args, **kwargs):
-        if kwargs.get('shared', True):
-            
-            if not field == 'NEVER':
-                user = kwargs['display_user']
-                from django.conf import settings
-                if getattr(user, "id", 0) == settings.DEMO_USER_ID:
-                    ## demo user, let them do anything
-                    return view(request, *args, **kwargs)
-                    
-                from profile.models import Profile
-                profile = Profile.get_for_user(user)
-                go_ahead = getattr(profile, "%s_share" % field)
-            
-            
-            ## can not view page because the user doesn't want it shared,
-            ## either redirect to a page that can be shared, or redirect
-            ## to the root page
-            if field == 'NEVER' or not go_ahead:
-                from django.http import HttpResponseRedirect
-                from django.core.urlresolvers import reverse
+        if not kwargs.get('shared'):
+            ## if it's not shared, then do nothing (user is viewing their
+            ## own account)
+            return view(request, *args, **kwargs)
+        
+        user = kwargs['display_user']
+        
+        from profile.models import Profile
+        profile = Profile.get_for_user(user)
+        
+        if not field == 'NEVER':
+            from django.conf import settings
+            if getattr(user, "id", 0) == settings.DEMO_USER_ID:
+                ## demo user, let them go hog wild
+                return view(request, *args, **kwargs)
                 
-                if getattr(profile, "logbook_share"):
-                    url = reverse('logbook', kwargs={"username": user.username})
-                elif getattr(profile, "other_share"):
-                    url = reverse('linegraphs', kwargs={"username": user.username})
-                else:
-                    url = "/"
-                    
-                return HttpResponseRedirect(url)
+            go_ahead = getattr(profile, "%s_share" % field)
+
+        
+        ## can not view page because the user doesn't want it shared,
+        ## either redirect to a page that can be shared, or redirect
+        ## to the root page
+        if field == 'NEVER' or not go_ahead:
+            from django.http import HttpResponseRedirect
+            from django.core.urlresolvers import reverse
             
-        return view(request, *args, **kwargs)
+            if getattr(profile, "logbook_share"):
+                url = reverse('logbook', kwargs={"username": user.username})
+            elif getattr(profile, "other_share"):
+                url = reverse('linegraphs', kwargs={"username": user.username})
+            else:
+                url = "/"
+                
+            return HttpResponseRedirect(url)
+        
+        # passes validation, render the view    
+        return view(request, *args, **kwargs) 
     
     def __init__(self, field):
         self.field = field
     
     def __call__(self, view):
-        def wrapper(request, *args, **kwargs):
+        def decorator(request, *args, **kwargs):
             return self.determine(view, self.field, request, *args, **kwargs)
-        return wrapper
+        return decorator
 
 class secret_key(object):
     def __init__(self, view):

@@ -38,7 +38,7 @@ $(document).ready(function() {
 		fire_popup("popup");
 	})
 	
-	$("#p_t a").click(function(event){
+	$("a.popup_link").click(function(event){
 		wipe_clean();
 		prepare_edit_plane(true);
 		fill_in_plane(this.id);

@@ -75,10 +75,14 @@
 </table>
 
 <h2>Images</h2>
-<div class="instructions">
-These images are only updated when you say so. To perform an update, click
-<a href="{% url render-me display_user %}">here</a>
-</div>
+
+{% if not shared %}
+    <div class="instructions">
+    These images are only updated when you say so. To perform an update, click
+    <a href="{% url render-me display_user %}">here</a>
+    </div>
+{% endif %}
+
 <table id="images_table">
     <tr>
         <td>

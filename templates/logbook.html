@@ -63,7 +63,7 @@
                     {% endfor %}
                     
 				<td colspan="6">
-				    {% if flights %}
+				    {% if flights and not shared %}
 					<a href="{% url mass-edit display_user.username page_of_flights.number %}">Mass Edit</a>
 					{% endif %}
 				</td>
@@ -87,6 +87,7 @@
 			
 		{% endfor %}
 		
+		{# header row at the bottom #}
 		<tr class='header'>
 		        {{ header_row|safe }}
 		</tr>

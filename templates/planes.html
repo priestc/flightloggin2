@@ -31,7 +31,8 @@
 	    <tbody>
 	    {% for plane in planes %}
 		    <tr>
-			    <td id="p{{ plane.id }}_tailnumber" title="Tailnumber (click to edit)"><a href="" id="p{{ plane.id }}">
+			    <td id="p{{ plane.id }}_tailnumber" title="Tailnumber (click to edit)">
+			    <a href="" id="p{{ plane.id }}" class="popup_link">
 			    {%if not plane.tailnumber%}
 			    &nbsp;&nbsp;
 			    {%else%}
@@ -55,7 +56,7 @@
     </table>
     <div id="mass_edit_link">
         {% if not shared %}
-        <a href="{% url mass-planes display_user %}">Mass Edit</a>
+        <a href="{% url mass-planes display_user %}">Mass Edit/Entry</a>
         {% endif %}
     </div>
 
