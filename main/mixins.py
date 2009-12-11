@@ -8,6 +8,8 @@ class UserMixin(object):
     
     def user(self, u):
         
+        #------------- filter by everyone ------------------#
+        
         if u == 'ALL' or getattr(u, "id", 0) == 1:
                 
             ## in the case of Location and Region, some filtering needs
@@ -20,11 +22,15 @@ class UserMixin(object):
         
         #------------- filter by user ----------------------#
         
-        
         if isinstance(u, User):
             ## filter by user instance
             kwarg = {self.user_field: u}
-        else:
+            
+        elif isinstance(u, int):
+            ## filter by user id
+            kwarg = {self.user_field + "__pk": u}  
+            
+        elif isinstance(u, str):
             ## filter by username
             kwarg = {self.user_field + "__username": u}
 

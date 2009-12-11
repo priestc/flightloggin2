@@ -1,11 +1,9 @@
 from django.db.models import Q
 from django.db.models.query import QuerySet
 from django.db.models import Sum
+from main.mixins import UserMixin
 
-class QuerySet(QuerySet):
-    
-    def user(self, u):
-        return self.filter(user=u)
+class PlaneQuerySet(QuerySet, UserMixin):
     
     def user_common(self, u):
         return self.filter(user__in=(1, u.id) )

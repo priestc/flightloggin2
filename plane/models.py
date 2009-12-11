@@ -17,7 +17,8 @@ class QuerySetManager(models.Manager):
 
 class Plane(models.Model):
     
-    from utils import QuerySet          ## add custom filters to custom manager
+    ## add custom filters to custom manager
+    from utils import PlaneQuerySet as QuerySet
     
     objects =  QuerySetManager()        ## add custom filterset manager
 
