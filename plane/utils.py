@@ -16,6 +16,6 @@ class PlaneQuerySet(QuerySet, UserMixin):
         from django.db.models import Q
         
         return self.filter( Q(tags__icontains="type rating") |
-                            Q(tags__icontains="tr") |
+                            Q(tags__contains="TR") |
                             Q(tags__icontains="currency")
                           )
