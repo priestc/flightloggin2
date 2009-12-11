@@ -47,11 +47,11 @@ class FlightQuerySet(QuerySet, UserMixin):
     def pseudo_category(self, cat):
         """used for instrument currency"""
         if cat == "fixed_wing":
-            return self.fixed_wing()
+            return self.curr_fixed_wing()
         elif cat == "glider":
             return self.glider()
         elif cat == "helicopter":
-            return self.helicopter()
+            return self.curr_helicopter()
         
     def multi(self, f=True):
         kwarg={"plane__cat_class__in": (2,4)}
@@ -76,6 +76,16 @@ class FlightQuerySet(QuerySet, UserMixin):
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
+    
+    def curr_fixed_wing(self, f=True):
+        """ fixed wing plus airplane sim and airplane FTD
+            for instrument currency
+        """
+        
+        kwarg={"plane__cat_class__in": (1,2,3,4,16,15)}
+        if not f:
+            return self.exclude(**kwarg)
+        return self.filter(**kwarg)
 
     def sim(self, f=True):
         kwarg={"plane__cat_class__gte": 15}
@@ -91,6 +101,14 @@ class FlightQuerySet(QuerySet, UserMixin):
     
     def helicopter(self, f=True):
         kwarg={"plane__cat_class": 6}
+        if not f:
+            return self.exclude(**kwarg)
+        return self.filter(**kwarg)
+    
+    def curr_helicopter(self, f=True):
+        """ filter helicopter, heli ftd and heli sim"""
+        
+        kwarg={"plane__cat_class__in": (6,17,18)}
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
