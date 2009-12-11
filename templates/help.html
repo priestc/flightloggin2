@@ -52,7 +52,8 @@ quitation marks (""), or else it will treat both words as seperate tags.
 <h2>What other plane tags do special things?</h2>
 
 The following are special tags: "Complex", "High Performance" (or just "HP"),
-"Turbine", "Jet", "Type Rating", and "Currency". The last two control which
+"Turbine", "Jet", "Type Rating" (or just "TR"), and "Currency". The last two
+control which
 types are kept track of in the currency section. If you want to keep track of
 your Boeing 757 landings (as per the FAA regs), just tag one of your Boeing
 757's as "Type Rating". Now all 757's (even the ones no specifically tagged)
@@ -72,7 +73,16 @@ identifiers are assumed to be depicting a landing. If you logged a flight as
 therefore not eligable as P2P time. On the other hand, "KLGA-BDL-KLGA" will be
 considered a P2P flight, because it assumes a landing at BDL.
 
-<h2>There is a typo or other incorrect information in someo fhte airport names
+<h2>What does "filter out spikes" and "include rate" do in the line graphs?</h2>
+
+"Include rate" will add a red line that represents the total hours of flight time
+in the past 30 days for any given date. The "filter out spikes" option will
+exclude any flights where the amount of time logged exceeds 24 hours. Such flights
+are most likely "adjustment entries" that represent carried over totals from
+previous logbooks. Filtering out spikes will give a more accurate the shape of
+the graph at the cost of some of the values being less than they actually are.
+
+<h2>There is a typo or other incorrect information in some of the airport names
 and locations, how can I fix this?</h2>
 
 FlightLogg.in' gets all it's airport and navaid data from
