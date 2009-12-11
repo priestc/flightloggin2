@@ -14,6 +14,15 @@ class PlaneQuerySet(QuerySet, UserMixin):
         """
         
         from django.db.models import Q
+
+# bring this back when tagging registering works again
+#
+#        from tagging.models import TaggedItem, Tag       
+#        curr_tags = Tag.objects.filter(
+#                                        Q(name__iexact='type rating') |
+#                                        Q(name__iexact='tr') |
+#                                        Q(name__iexact='currency')
+#                                      )
         
         return self.filter( Q(tags__icontains="type rating") |
                             Q(tags__contains="TR") |
