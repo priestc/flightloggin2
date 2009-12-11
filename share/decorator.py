@@ -21,9 +21,22 @@ class no_share(object):
                 profile = Profile.get_for_user(user)
                 go_ahead = getattr(profile, "%s_share" % field)
             
+            
+            ## can not view page because the user doesn't want it shared,
+            ## either redirect to a page that can be shared, or redirect
+            ## to the root page
             if field == 'NEVER' or not go_ahead:
-                from django.http import Http404
-                raise Http404('not availiable for sharing')
+                from django.http import HttpResponseRedirect
+                from django.core.urlresolvers import reverse
+                
+                if getattr(profile, "logbook_share"):
+                    url = reverse('logbook', kwargs={"username": user.username})
+                elif getattr(profile, "other_share"):
+                    url = reverse('linegraphs', kwargs={"username": user.username})
+                else:
+                    url = "/"
+                    
+                return HttpResponseRedirect(url)
             
         return view(request, *args, **kwargs)
     
