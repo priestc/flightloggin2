@@ -35,6 +35,7 @@ urlpatterns += patterns('',
         r'(?P<columns>[\w\-]+)/' +
         r'((?P<dates>\d{4}.\d{1,2}.\d{1,2}-\d{4}.\d{1,2}.\d{1,2})/)?' +
         r'(?P<rate>(rate|norate)?)' +
+        r'(?P<spikes>(-spikes|-nospikes)?)' +
         r'.(?P<ext>(png|svg))$',
         # username/linegraph/(columns)/(dates) or (all).extension
         "graphs.views.linegraph_image",

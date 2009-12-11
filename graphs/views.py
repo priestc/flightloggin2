@@ -6,22 +6,30 @@ from share.decorator import no_share
 
 @no_share('other')
 def linegraph_image(request, shared, display_user,
-                    columns, dates=None, ext='png', rate=True):
+                    columns, dates=None, ext='png', rate=True, spikes=True):
 
-    from linegraph import ProgressGraph
-        
     if rate == 'rate':
         rate = True
         
     elif rate == 'norate':
         rate = False
         
-    pg = ProgressGraph(display_user, columns, dates, rate)
+    if spikes == '-spikes':
+        spikes = True
+        
+    elif spikes == '-nospikes':
+        spikes = False
+        
+    from linegraph import ProgressGraph
+        
+    pg = ProgressGraph(display_user, columns, dates, rate, spikes)
     
     if ext == 'png':
         return pg.as_png()
     else:
         return pg.as_svg()
+
+##############################################################################
 
 def bargraph_image(request, shared, display_user, column, func, agg):
     

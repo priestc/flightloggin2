@@ -24,7 +24,7 @@ class ProgressGraph(object):
     class EmptyLogbook(Exception):
         pass
 
-    def __init__(self, user, columns, dates=None, rate=True):
+    def __init__(self, user, columns, dates=None, rate=True, spikes=True):
         self.user = user
         self.rate = rate
         if dates:
@@ -45,6 +45,13 @@ class ProgressGraph(object):
         
         from logbook.models import Flight
         self.start_qs = Flight.objects.user(user)
+        
+        time = columns.split('-')[0]
+        if not spikes:
+            #filter out spikes so it makes a smooth line
+            kwarg = {"%s__gte" % str(time): "24"}
+            print kwarg
+            self.start_qs = self.start_qs.exclude(**kwarg)
         
     def output(self):
         """get the plots, and make the titles"""

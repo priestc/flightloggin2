@@ -13,16 +13,23 @@ function render_line_graph(ext) {
         rate="norate";        
     }
     
+    if($("#filter_spikes:checked").val()){
+        spikes="nospikes";
+    }
+    else {
+        spikes="spikes";        
+    }
+    
     if(start && end)
-        url = sprintf("linegraph/%s/%s-%s/%s.%s",column, start, end, rate, ext)
+        url = sprintf("linegraph/%s/%s-%s/%s-%s.%s",column, start, end, rate, spikes, ext)
         
     else
-        url = sprintf("linegraph/%s/%s.%s",column, rate, ext)
+        url = sprintf("linegraph/%s/%s-%s.%s",column, rate, spikes, ext)
         
     if(ext=="png")
   	    $("#image").attr("src", url).css("display", "block")
   	else if(ext=="svg")
-  	    window.open(url) //$("#svg_link").attr("href", url)
+  	    window.open(url)
 
 }
 
