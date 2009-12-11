@@ -52,7 +52,10 @@ def mass_planes(request, shared, display_user, page=0):
         if formset.is_valid():
             formset.save()
             from django.http import HttpResponseRedirect
-            return HttpResponseRedirect('/%s/logbook.html' % display_user)
+            from django.core.urlresolvers import reverse 
+            return HttpResponseRedirect(reverse('planes',
+                                kwargs={"username": display_user.username})
+            )
     else:
         formset = PlaneFormset(queryset=qs)
     
