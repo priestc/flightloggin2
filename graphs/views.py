@@ -106,8 +106,10 @@ def bargraphs(request, shared, display_user):
     from constants import BAR_AGG_FIELDS
     for field in BAR_AGG_FIELDS:
         sys = field.split('By ')[1].lower().replace(" ",'_').replace('/','_')
-        agg_options.append("<option value=\"%s\">%s</option>" %
-                                (sys, field)
+        sel = ""
+        if field == "By Type": sel = " selected=\"selected\"" #default
+        agg_options.append("<option value=\"%s\"%s>%s</option>" %
+                                (sys, sel, field)
         )
         
     column_options = mark_safe("\n".join(column_options))
