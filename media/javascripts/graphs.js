@@ -28,6 +28,8 @@ function render_line_graph(ext) {
 
 $(document).ready(function() {
     
+    render_line_graph('png');
+    
     $(".render_button").click(function() {
     
         ext=$(this).attr('class').split(' ').slice(-1);
@@ -35,8 +37,8 @@ $(document).ready(function() {
         if(this.id == "line_graph")
             render_line_graph(ext);
         
-        if(this.id == "bar_graph")
-            render_bar_graph(ext);
+        //if(this.id == "bar_graph")
+        //   render_bar_graph(ext);
     
     });
     
