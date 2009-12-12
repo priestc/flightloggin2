@@ -10,8 +10,10 @@ class UserMixin(object):
         
         #------------- filter by everyone ------------------#
         
-        if u == 'ALL' or getattr(u, "id", 0) == 1:
-                
+        if (u == 'ALL' or
+            u == 1 or
+            getattr(u, "id", 0) == 1):
+               
             ## in the case of Location and Region, some filtering needs
             ## to be done...
             if "routebase" in self.user_field:
