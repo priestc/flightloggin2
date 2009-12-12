@@ -12,7 +12,8 @@ class UserMixin(object):
         
         if (u == 'ALL' or
             u == 1 or
-            getattr(u, "id", 0) == 1):
+            getattr(u, "id", 0) == 1) or
+            u is None:
                
             ## in the case of Location and Region, some filtering needs
             ## to be done...
