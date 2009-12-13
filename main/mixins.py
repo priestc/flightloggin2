@@ -23,7 +23,7 @@ class UserMixin(object):
             ## to be done...
             if self.routebase_join:
                 kwarg = {"%s__isnull" % self.routebase_join: False}
-                return self.filter(**kwarg)
+                return self.filter(**kwarg) ## distinct also should be added...
             
             # don't filter anything for the 'ALL' user
             return self

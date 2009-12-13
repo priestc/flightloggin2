@@ -25,7 +25,11 @@ class Location(models.Model):
     objects = GeoQuerySetManager()
     
     ## for the user mixin
-    routebase_join = "location__routebase"
+    routebase_join = "routebase"
+    user_field = "routebase__route__flight__user"
+    
+    
+    ## -----------------------------------------------------------------------
     
     loc_class = models.IntegerField(choices=LOCATION_CLASS,
                                          default=0, blank=True, null=True)
@@ -42,7 +46,9 @@ class Location(models.Model):
     elevation = models.IntegerField(null=True, blank=True)
     
     location = models.PointField(null=True, blank=True)
-
+    
+    ## -----------------------------------------------------------------------
+    
     def __unicode__(self):
         return u"%s" % self.identifier
     
@@ -145,6 +151,7 @@ class Region(models.Model):
     
     ## for the user mixin
     routebase_join = "location__routebase"
+    user_field = "location__routebase__route__flight__user"
     
     code = models.CharField(max_length=48)
     country = models.CharField(max_length=2)
