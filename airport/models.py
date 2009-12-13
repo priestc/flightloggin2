@@ -24,6 +24,9 @@ class Location(models.Model):
     ## add custom filterset manager
     objects = GeoQuerySetManager()
     
+    ## for the user mixin
+    routebase_join = "location__routebase"
+    
     loc_class = models.IntegerField(choices=LOCATION_CLASS,
                                          default=0, blank=True, null=True)
                                          
@@ -140,6 +143,9 @@ class Region(models.Model):
     ## add custom filterset manager
     objects = GeoQuerySetManager()
     
+    ## for the user mixin
+    routebase_join = "location__routebase"
+    
     code = models.CharField(max_length=48)
     country = models.CharField(max_length=2)
     name = models.CharField(max_length=60)
@@ -163,6 +169,9 @@ class Country(models.Model):
     
     ## add custom filterset manager
     objects = GeoQuerySetManager()
+    
+    ## for the user mixin
+    routebase_join = "location__routebase"
     
     name = models.CharField(max_length=48)
     code = models.CharField(max_length=2, primary_key=True)
@@ -273,34 +282,3 @@ def import_state(verbose=True):
                       transform=False, encoding='iso-8859-1')
 
     lm.save(strict=True, verbose=verbose)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

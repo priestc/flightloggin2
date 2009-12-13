@@ -44,11 +44,7 @@ def render_for_user(user):
         into the appropriate directory.
     """
     import os
-    
-    user_id = user.id
-    if user_id == 1:
-        user = None            # unset user so it uses all users
-        
+           
     BMP = settings.BASE_MAP_PATH
     
     #the directory that the images will be saved to

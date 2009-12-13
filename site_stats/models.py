@@ -190,7 +190,11 @@ class Stat(object):
         return RouteBase.objects.values('location').distinct().count()
     
     def calc_avg_duration(self):
-        return self.total_hours / self.total_logged
+        """ Average length of each flight, excluding adjustment entries
+        """
+        
+        hours = Flight.objects.exclude(total__gte=24).aggregate(t=Sum('total'))['t']
+        return hours / self.total_logged
     
     def calc_avg_per_active(self):
         return self.total_hours / self.non_empty_users

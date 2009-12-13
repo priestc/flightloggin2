@@ -105,6 +105,9 @@ class Route(models.Model):
     ## add custom filters to custom manager
     from queryset_manager import QuerySet
     objects = QuerySetManager()        ## add custom filterset manager
+    
+    ## for the user mixin
+    routebase_join = "routebase"
 
     fancy_rendered =  models.TextField(blank=True, null=True)
     fallback_string = models.TextField(blank=True, null=True)

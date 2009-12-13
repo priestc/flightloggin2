@@ -4,7 +4,11 @@ class UserMixin(object):
 
     # the field where the user is linked to, this may be overwritten
     # by the classes that use this mixin
-    user_field = "user" 
+    user_field = "user"
+    
+    ## the join path to the routebase table. This table needs to be filtered
+    ## even with the ALL user.
+    routebase_join = None 
     
     def user(self, u):
         
@@ -17,8 +21,9 @@ class UserMixin(object):
                
             ## in the case of Location and Region, some filtering needs
             ## to be done...
-            if "routebase" in self.user_field:
-                return self.filter(routebase__isnull=False)
+            if self.routebase_join:
+                kwarg = {"%s__isnull" % self.routebase_join: False}
+                return self.filter(**kwarg)
             
             # don't filter anything for the 'ALL' user
             return self

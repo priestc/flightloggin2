@@ -225,39 +225,4 @@ class RelativeStateMap(StateMap):
         self.cmap = cm.GMT_seis_r
 
     def get_disp_count(self, stp):
-        return len(stp)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
+        return len(stp)   

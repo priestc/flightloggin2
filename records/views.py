@@ -22,7 +22,7 @@ def records(request, shared, display_user):
 @no_share('logbook')
 @render_to("locations.html")
 def locations(request, shared, display_user):
-    customs = Location.objects.filter(loc_class=3, user=display_user)
+    customs = Location.objects.user_own(display_user)
     
     if "New" in request.POST.get('submit', "DERP"):
         form=CustomForm(request.POST)
