@@ -22,12 +22,7 @@ class Location(models.Model):
     from queryset_manager import LocationQuerySet as QuerySet
     
     ## add custom filterset manager
-    objects = GeoQuerySetManager()
-    
-    ## for the user mixin
-    routebase_join = "routebase"
-    user_field = "routebase__route__flight__user"
-    
+    objects = GeoQuerySetManager()    
     
     ## -----------------------------------------------------------------------
     
@@ -149,10 +144,6 @@ class Region(models.Model):
     ## add custom filterset manager
     objects = GeoQuerySetManager()
     
-    ## for the user mixin
-    routebase_join = "location__routebase"
-    user_field = "location__routebase__route__flight__user"
-    
     code = models.CharField(max_length=48)
     country = models.CharField(max_length=2)
     name = models.CharField(max_length=60)
@@ -176,9 +167,6 @@ class Country(models.Model):
     
     ## add custom filterset manager
     objects = GeoQuerySetManager()
-    
-    ## for the user mixin
-    routebase_join = "location__routebase"
     
     name = models.CharField(max_length=48)
     code = models.CharField(max_length=2, primary_key=True)
