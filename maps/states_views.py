@@ -48,7 +48,7 @@ def render_for_user(user):
     BMP = settings.BASE_MAP_PATH
     
     #the directory that the images will be saved to
-    directory = os.path.join(BMP, str(user_id))
+    directory = os.path.join(BMP, str(user.id))
     
     #if the directory is not there, then create it.
     if not os.path.isdir(directory):
