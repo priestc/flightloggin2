@@ -15,7 +15,9 @@
 	     
 .news_box small     {font-size: small}
 
-#demo_link          {width: 100%;
+#demo_link          {background: #DDDDDD;
+                     width: 100%;
+                     padding: 10px 0 10px 0;
                      text-align: center;
-                     margin: 20px;
+                     margin-bottom: 20px;
                      font-size: medium}
