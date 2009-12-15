@@ -88,14 +88,14 @@ INSTALLED_APPS = (
     'realtime',
     
     'tagging',
-    'django_extensions',)
+    'django_extensions',
+    'django_openid_auth',)
     
 if DEBUG_TOOLBAR:
     INSTALLED_APPS += ('debug_toolbar', )
     
 INSTALLED_APPS += (
-    'django_openid_auth',
-    
+   
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.auth',
