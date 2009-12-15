@@ -24,17 +24,20 @@ echo "columns";
 echo "news";
 /srv/flightloggin/manage.py dumpdata main.newsitem | bzip2 > /srv/flightloggin/fixtures/news.json.bz2;
 
+echo "countries and regions";
+/srv/flightloggin/manage.py dumpdata airport.country airport.region | bzip2 > /srv/flightloggin/fixtures/c_r.json.bz2;
+
 echo "locations"
-pg_dump -U django logbook --table=airport_location | bzip2 > locations.sql.bz2
+pg_dump -U django logbook --table=airport_location | bzip2 > /srv/flightloggin/fixtures/locations.sql.bz2
 
 echo "all borders"
-pg_dump -U django logbook --table=airport_usstates --table=airport_worldborders | bzip2 > borders.sql.bz2
+pg_dump -U django logbook --table=airport_usstates --table=airport_worldborders | bzip2 > /srv/flightloggin/fixtures/borders.sql.bz2
 
 echo "routebases"
-pg_dump -U django logbook --table=route_routebases | bzip2 > rb.sql.bz2
+pg_dump -U django logbook --table=route_routebase | bzip2 > /srv/flightloggin/fixtures/rb.sql.bz2
 
 echo "routes"
-pg_dump -U django logbook --table=route_route | bzip2 > routes.sql.bz2
+pg_dump -U django logbook --table=route_route | bzip2 > /srv/flightloggin/fixtures/routes.sql.bz2
 
 echo "flights"
-pg_dump -U django logbook --table=logbook_flight | bzip2 > flights.sql.bz2
+pg_dump -U django logbook --table=logbook_flight | bzip2 > /srv/flightloggin/fixtures/flights.sql.bz2
