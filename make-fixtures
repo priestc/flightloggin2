@@ -16,7 +16,7 @@ echo "profiles";
 /srv/flightloggin/manage.py dumpdata profile | bzip2 > /srv/flightloggin/fixtures/profile.json.bz2;
 
 echo "stats";
-/srv/flightloggin/manage.py dumpdata site-stats | bzip2 > /srv/flightloggin/fixtures/stats.json.bz2;
+/srv/flightloggin/manage.py dumpdata site_stats | bzip2 > /srv/flightloggin/fixtures/stats.json.bz2;
 
-echo "flights";
-/srv/flightloggin/manage.py dumpdata logbook | bzip2 > /srv/flightloggin/fixtures/logbook.json.bz2;
+echo "columns";
+/srv/flightloggin/manage.py dumpdata logbook.columns | bzip2 > /srv/flightloggin/fixtures/logbook.json.bz2;
