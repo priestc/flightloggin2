@@ -19,4 +19,22 @@ echo "stats";
 /srv/flightloggin/manage.py dumpdata site_stats | bzip2 > /srv/flightloggin/fixtures/stats.json.bz2;
 
 echo "columns";
-/srv/flightloggin/manage.py dumpdata logbook.columns | bzip2 > /srv/flightloggin/fixtures/logbook.json.bz2;
+/srv/flightloggin/manage.py dumpdata logbook.columns | bzip2 > /srv/flightloggin/fixtures/columns.json.bz2;
+
+echo "news";
+/srv/flightloggin/manage.py dumpdata main.newsitem | bzip2 > /srv/flightloggin/fixtures/news.json.bz2;
+
+echo "locations"
+pg_dump -U django logbook --table=airport_location | bzip2 > locations.sql.bz2
+
+echo "all borders"
+pg_dump -U django logbook --table=airport_usstates --table=airport_worldborders | bzip2 > borders.sql.bz2
+
+echo "routebases"
+pg_dump -U django logbook --table=route_routebases | bzip2 > rb.sql.bz2
+
+echo "routes"
+pg_dump -U django logbook --table=route_route | bzip2 > routes.sql.bz2
+
+echo "flights"
+pg_dump -U django logbook --table=logbook_flight | bzip2 > flights.sql.bz2
