@@ -45,6 +45,7 @@ class Plane(models.Model):
             d = autofill(self.type)
             
             if d.get('manufacturer', False):
+                ## autofill hit a match, use that data
                 self.manufacturer = d['manufacturer'] or ""
                 self.model = d['model'] or ""
                 self.cat_class = d['cat_class'] or 1

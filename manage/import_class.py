@@ -173,12 +173,17 @@ class DatabaseImport(PreviewImport):
     def handle_flight(self, line):
         from forms import ImportFlightForm
         
-        # get the plane based on the tailnumber and type, create if necessary
-        kwargs = {"tailnumber": line.get("tailnumber"), "user": self.user}
-        if line.get("type"):
-            kwargs.update({"type": line.get("type")})
+        if not line.get("tailnumber") == "":
+            # get the plane based on the tailnumber and type, create if necessary
+            kwargs = {"tailnumber": line.get("tailnumber"), "user": self.user}
+            if line.get("type"):
+                kwargs.update({"type": line.get("type")})
+                
+            plane, created = Plane.objects.get_or_create(**kwargs)
+        else:
+            ## 90 = the known plane
+            plane = Plane(pk=90) ## FIXME should be something more intuitive
             
-        plane, created = Plane.objects.get_or_create(**kwargs)
         line.update({"plane": plane.pk})
         
         flight = Flight(user=self.user)
