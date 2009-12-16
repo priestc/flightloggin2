@@ -19,13 +19,13 @@ class Histogram(object):
         ax = fig.add_subplot(111)
 
         # the histogram of the data
-        ax.hist(self.data, 60, normed=1, facecolor='green', alpha=0.75)
+        ax.hist(self.data, 60, facecolor='green', alpha=0.75)
 
         ax.set_xlabel('Total Flight Hours')
         ax.set_ylabel('Number of Users')
+        ax.minorticks_on()
 
-        ax.set_xlim(0, 2000)
-        ax.set_ylim(0, 0.003)
+        #ax.set_xlim(0, 2000)
         ax.grid(True)
         
         return fig

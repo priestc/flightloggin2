@@ -38,6 +38,8 @@ class PrepareLine(object):
         if self.remarks:   
             remarks = self.remarks.replace('\\r', '\n')
             
+        remarks = remarks.decode("utf-8", "ignore")
+            
         return {'remarks': remarks}
 
     #-----------------------------
