@@ -43,10 +43,12 @@ class Plane(models.Model):
                 
             from auto_fill import autofill
             d = autofill(self.type)
-            self.manufacturer = d['manufacturer'] or ""
-            self.model = d['model'] or ""
-            self.cat_class = d['cat_class'] or 1
-            self.tags = d['tags'] or ""
+            
+            if d.get('manufacturer', False):
+                self.manufacturer = d['manufacturer'] or ""
+                self.model = d['model'] or ""
+                self.cat_class = d['cat_class'] or 1
+                self.tags = d['tags'] or ""
             
             if "frasca" in self.type.lower():
                 self.manufacturer="Frasca"
