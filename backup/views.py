@@ -80,6 +80,12 @@ def schedule(request, schedule):
     
     elif schedule == 'monthly':
         users = User.objects.filter(profile__backup_freq=3)
+        
+    elif schedule == 'daily':
+        today = datetime.date.today()
+        users = User.objects.filter(profile__backup_freq=4,
+                                    userstoday__date=today
+                                   )
     
     ret = "%s - %s \n\n" % (schedule, datetime.datetime.now())    
     for user in users:
@@ -93,6 +99,7 @@ def schedule(request, schedule):
 ##
 ## crontab:
 ##
-#30 5 1         * * wget http://flightlogg.in/schedule-monthly.py?sk=
-#30 4 1,7,14,21 * * wget http://flightlogg.in/schedule-weekly.py?sk=
-#30 3 1,14      * * wget http://flightlogg.in/schedule-biweekly.py?sk=
+#30 5  1         * * wget http://flightlogg.in/schedule-monthly.py?sk=
+#30 4  1,7,14,21 * * wget http://flightlogg.in/schedule-weekly.py?sk=
+#30 3  1,14      * * wget http://flightlogg.in/schedule-biweekly.py?sk=
+#50 23 *         * * wget http://flightlogg.in/schedule-daily.py?sk=
