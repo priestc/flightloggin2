@@ -2,7 +2,6 @@ import matplotlib
 matplotlib.use('Agg')
 
 import numpy as np
-import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap, cm
 from matplotlib.colors import rgb2hex, LinearSegmentedColormap
 
@@ -25,9 +24,16 @@ class StateMap(object):
         self.ext = ext
         self.get_cmap()
         
+        #from matplotlib.figure import Figure
+        #self.fig = Figure(figsize=(3.5, 2.5),)
+        
+        import matplotlib.pyplot as plt
+        self.fig = plt.figure(figsize=(3.5, 2.5),)
+        
     def as_response(self):
         """Returns a HttpResponse containing the png or svg file.
         """
+        
         from graphs.image_formats import plot_png2, plot_svg2
         
         if self.ext == 'png':
@@ -37,10 +43,11 @@ class StateMap(object):
             return plot_svg2(self.plot)()
         
     def to_file(self, openfile):
-
-        fig = self.plot()
+        """ Make the image, and then save it to a file that is passed in
+        """
+        self.plot()
         
-        fig.savefig(openfile,
+        self.fig.savefig(openfile,
                     format="png",
                     bbox_inches="tight",
                     pad_inches=.05,
@@ -49,38 +56,35 @@ class StateMap(object):
     def get_data(self):
         raise NotImplementedError
 
-    def plot(self):     
+    def plot(self):
+        """ Plot the states, and then make the labels
+        """     
+        
         states_to_plot = {}   
         qs = self.get_data()
         
         for state in qs:
             states_to_plot.update({state.get('name'): state.get('c', 1)})
 
-        fig = self.draw_state_map(states_to_plot)
+        self.draw_state_map(states_to_plot)
 
         count = self.get_disp_count(states_to_plot)
             
-        plt.figtext(.15,
-                    .18,
-                    "%s\nUnique\n%s" % (count, self.label),
-                    size="small")
-        
-        return fig
+        self.fig.text(.15,
+                      .18,
+                      "%s\nUnique\n%s" % (count, self.label),
+                      size="small")
 
     def draw_state_map(self, states_to_plot):
         from matplotlib.patches import Polygon
-        from airport.models import USStates
         import settings
         
-        fig = plt.figure(figsize=(3.5, 2.5),)
-        
-        #states = USStates.objects.filter(state__in=states_to_plot.keys())
-        
-        self.m.readshapefile(settings.PROJECT_PATH + '/maps/st99_d00',
-                                'states',drawbounds=True)
+        import os
+        path = os.path.join(settings.PROJECT_PATH, 'maps', 'st99_d00')
+        self.m.readshapefile(path, 'states', drawbounds=True)
 
         text = []
-        ax = plt.gca()
+        ax = self.fig.gca()
 
         # get the min and max values for coloration
         try:
@@ -105,33 +109,32 @@ class StateMap(object):
                 ax.add_patch(poly)
                 
                 if statename == "Rhode Island" and not ri:
-                    plt.figtext(.83, .5, "RI", size="small", color=color)
+                    self.fig.text(.83, .5, "RI", size="small", color=color)
                     ri=True
                 
                 elif statename == "Connecticut" and not ct:
-                    plt.figtext(.83, .45, "CT", size="small", color=color)
+                    self.fig.text(.83, .45, "CT", size="small", color=color)
                     ct=True
                     
                 elif statename == "Delaware" and not de:
-                    plt.figtext(.83, .4, "DE", size="small", color=color)
+                    self.fig.text(.83, .4, "DE", size="small", color=color)
                     de=True
                     
                 elif statename == "Maryland" and not md:
-                    plt.figtext(.83, .35, "MD", size="small", color=color)
+                    self.fig.text(.83, .35, "MD", size="small", color=color)
                     md=True
                     
                 elif statename == "Alaska" and not ak:
-                    plt.figtext(.83, .3, "AK", size="small", color=color)
+                    self.fig.text(.83, .3, "AK", size="small", color=color)
                     ak=True
                     
                 elif statename == "Hawaii" and not hi:
-                    plt.figtext(.83, .25, "HI", size="small", color=color)
+                    self.fig.text(.83, .25, "HI", size="small", color=color)
                     hi=True
                     
                 elif statename == "District of Columbia" and not dc:
-                    plt.figtext(.83, .2, "DC", size="small", color=color)
+                    self.fig.text(.83, .2, "DC", size="small", color=color)
                     dc=True
-        return fig
     
 ###############################################################################
     
