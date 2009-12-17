@@ -27,8 +27,11 @@ def logbook(request, shared, display_user, page=0):
         
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/' + display_user.username +
-                '/logbook.html')
+            from backup.models import edit_logbook
+            edit_logbook.send(sender=display_user)
+            from django.core.urlresolvers import reverse
+            url = reverse('logbook', kwargs={"username": display_user.username})
+            return HttpResponseRedirect(url)
         else:
             ERROR = "'new'"
             
@@ -40,6 +43,8 @@ def logbook(request, shared, display_user, page=0):
         
         if form.is_valid():
             form.save()
+            from backup.models import edit_logbook
+            edit_logbook.send(sender=display_user)
             return HttpResponseRedirect(request.path)
         else:
             ERROR = "'edit'"
@@ -150,6 +155,10 @@ def mass_entry(request, shared, display_user):
                 instance.user = display_user
                 if instance.date:
                     instance.save()
+                    
+            # send signal
+            from backup.models import edit_logbook
+            edit_logbook.send(sender=display_user)
             
             from django.core.urlresolvers import reverse
             return HttpResponseRedirect(
@@ -186,6 +195,11 @@ def mass_edit(request, shared, display_user, page=0):
         
         if formset.is_valid():
             formset.save()
+            
+            # send signal
+            from backup.models import edit_logbook
+            edit_logbook.send(sender=display_user)
+            
             from django.core.urlresolvers import reverse
             return HttpResponseRedirect(
                 reverse('logbook-page',

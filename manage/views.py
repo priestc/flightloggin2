@@ -64,15 +64,25 @@ def import_v(request, shared, display_user):
         Error = "Invalid Token"
         
     except InvalidURL:
-        Error = "Invalid URL"  
+        Error = "Invalid URL"
+    
+    else:
+        # the import finished and there are no errors
+        if not preview:
+            from backup.models import edit_logbook
+            edit_logbook.send(sender=display_user)
          
     locs2 = locals()
     locs2.update(locs)
     return locs2
     
     
-def do_import(preview, user):   
+def do_import(preview, user):
+    """ An auxiliary view function. Returns variables that will be added to the
+        template context, but this function does not take a request object
+    """   
     f, previous = get_last(user.id)
+    
     #######################################################
 
     if not preview:
@@ -80,7 +90,8 @@ def do_import(preview, user):
         
     else:
         im = PreviewImport(user, f)
-        
+    
+    # do the actual import routine now    
     im.action()
 
     flight_out = im.flight_out
@@ -95,11 +106,3 @@ def do_import(preview, user):
     del im
     
     return locals()
-
-def cookietest(request):
-    
-    cookie = "%s - %s\n" % (request.COOKIES['id'], request.COOKIES['pass'])
-    cookie += " - ".join(request.COOKIES)
-    
-    from django.http import HttpResponse
-    return HttpResponse(cookie, mimetype='text/plain')

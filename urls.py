@@ -86,11 +86,6 @@ urlpatterns += patterns('',
     ),
     
     (
-        r'^cookietest.py$',
-        "manage.views.cookietest",
-    ),
-    
-    (
         r'^histogram.py$',
         "graphs.views.histogram",
     ),
