@@ -1,9 +1,5 @@
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-import numpy as np
-
 import datetime
+import numpy as np
 
 from django.utils.dateformat import format as dj_date_format
 
@@ -41,7 +37,8 @@ class ProgressGraph(object):
         self.columns = set(columns.split('-'))
         
         #create the figure instance
-        self.fig = plt.figure()
+        from matplotlib.figure import Figure
+        self.fig = Figure()
         
         from logbook.models import Flight
         self.start_qs = Flight.objects.user(user)
@@ -70,14 +67,14 @@ class ProgressGraph(object):
                 self.add_twin_graph(main_plot, rate_plot)
                 
         if not subtitle:
-            plt.figtext(.5,.5,"Nothing to Show",fontsize=18,ha='center')
+            self.fig.text(.5,.5,"Nothing to Show",fontsize=18,ha='center')
             
         elif len(self.columns) > 1:
-            plt.figtext(.5,.94,"Flight Time Progression", fontsize=18, ha='center')
-            plt.figtext(.5,.91,subtitle,fontsize=10,ha='center')
+            self.fig.text(.5,.94,"Flight Time Progression", fontsize=18, ha='center')
+            self.fig.text(.5,.91,subtitle,fontsize=10,ha='center')
         else:
-            plt.figtext(.5,.94,title, fontsize=18, ha='center')
-            plt.figtext(.5,.91,subtitle,fontsize=10,ha='center')
+            self.fig.text(.5,.94,title, fontsize=18, ha='center')
+            self.fig.text(.5,.91,subtitle,fontsize=10,ha='center')
         
         return self.fig
     
@@ -156,7 +153,7 @@ class ProgressGraph(object):
             
         # format the ticks based on the range of the dates
         from format_ticks import format_line_ticks
-        format_line_ticks(ax, plt, self.year_range)
+        format_line_ticks(ax, self.year_range)
         
         ax.grid(True)
 

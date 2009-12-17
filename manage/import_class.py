@@ -181,7 +181,7 @@ class DatabaseImport(PreviewImport):
                 
             plane, created = Plane.objects.get_or_create(**kwargs)
         else:
-            ## 90 = the known plane
+            ## 90 = the unknown plane
             plane = Plane(pk=90) ## FIXME should be something more intuitive
             
         line.update({"plane": plane.pk})

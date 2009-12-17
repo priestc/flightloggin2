@@ -9,23 +9,21 @@ class Histogram(object):
                         .filter(t__isnull=False)\
                         .values_list('t', flat=True)
                         
+        print self.data.count()
+                        
     def output(self):
         import numpy as np
-        import matplotlib
-        matplotlib.use('Agg')
-        import matplotlib.pyplot as plt
+        from matplotlib.figure import Figure
         
-        fig = plt.figure()
+        fig = Figure()
         ax = fig.add_subplot(111)
 
         # the histogram of the data
-        ax.hist(self.data, 60, facecolor='green', alpha=0.75)
+        ax.hist(self.data, 50, facecolor='green', alpha=0.75)
 
         ax.set_xlabel('Total Flight Hours')
         ax.set_ylabel('Number of Users')
         ax.minorticks_on()
-
-        #ax.set_xlim(0, 2000)
         ax.grid(True)
         
         return fig
