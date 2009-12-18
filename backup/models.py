@@ -13,6 +13,14 @@ class UsersToday(models.Model):
     
     def users_count(self):
         return self.logged_today.count()
+    
+    def usernames(self):
+        users = self.logged_today.order_by('username')
+        ret = []
+        for u in users:
+            ret.append(u.username)
+        
+        return ", ".join(ret)
 
 #########################################################
 
