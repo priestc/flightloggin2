@@ -14,7 +14,7 @@ class Profile(models.Model):
                      
     style =          models.IntegerField(
                          choices=STYLES,
-                         default=1,
+                         default=2,
                      )
                          
     date_format =    models.CharField(

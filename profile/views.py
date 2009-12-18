@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from share.decorator import no_share
 from annoying.decorators import render_to
 
+from django.conf import settings
+
 from plane.models import Plane
 from logbook.models import Flight
 from records.models import Records, NonFlight
@@ -57,11 +59,18 @@ def profile(request, shared, display_user):
                 column_form.save()
              
             if user_form.is_valid():
+                   
                 import re
                 ## remove illegal characters and spaces
                 user_form.cleaned_data['username'] = \
                     re.sub(r'\W', '', user_form.cleaned_data['username'])\
                     .replace(" ",'')
+                    
+                if display_user.id == settings.DEMO_USER_ID:
+                    ## don't let anyone change the demo's username or email
+                    ## it will break stuff
+                    user_form.cleaned_data['username'] = 'demo'
+                    user_form.cleaned_data['email'] = 'demo@what.com'
                 
                 user_form.save()        
     

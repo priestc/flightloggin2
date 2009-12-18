@@ -21,6 +21,9 @@ body                    {background: #CCE4EB; margin: 15px;
                          width: 100%;
                          border: 0}
                          
+span.logged_user,
+span.display_user       {font-weight: bold}
+                         
 #demo                   {font-weight: bold;
                          color: #AA3333}
 
