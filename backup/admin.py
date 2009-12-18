@@ -1,7 +1,8 @@
 from django.contrib import admin
 from models import UsersToday
 
-#class UsersAdmin(admin.ModelAdmin):
-#    pass
+class UsersTodayAdmin(admin.ModelAdmin):
+    list_display = ('date', 'users_count')
+    raw_id_fields = ('logged_today', )
 
-admin.site.register(UsersToday)
+admin.site.register(UsersToday, UsersTodayAdmin)

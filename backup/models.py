@@ -10,7 +10,9 @@ class UsersToday(models.Model):
         
     def __unicode__(self):
         return "%s (%s)" % (self.date, self.logged_today.count())
-
+    
+    def users_count(self):
+        return self.logged_today.count()
 
 #########################################################
 
