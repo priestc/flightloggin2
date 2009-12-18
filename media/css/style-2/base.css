@@ -28,20 +28,17 @@ body                    {background: #CCE4EB; margin: 15px;
 
 /* navbar for users who are not logged in */
 
-#nav_bar a              {color: #DFDFDF;
-                         font-weight: normal;
-                         text-decoration: none;
+#nav_bar a              {color: white;
                          margin-left: 5px;
-                         margin-right: 5px}
+                         margin-right: 5px;
+                         text-decoration: none}
                          
-#nav_bar a:hover        {color: white;
-                         font-weight: normal;
-                         text-decoration: underline}
+#nav_bar a:hover        {text-decoration: underline}
 
 #nav_bar .big           {font-size: large}
 
-.nav_selected           {background: #5DC7E9}
-.nav_selected a         {color: white !important}
+#nav_bar .nav_selected a {background: #5DC7E9;
+                          font-weight: bold}
 
 .display_user           {color: black}
 .logged_user            {color: black}
