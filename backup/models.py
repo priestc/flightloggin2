@@ -21,6 +21,15 @@ class UsersToday(models.Model):
             ret.append(u.username)
         
         return ", ".join(ret)
+    
+    def email_usernames(self):
+        users = self.logged_today.filter(profile__backup_freq=4).order_by('username')
+        ret = []
+        for u in users:
+            ret.append(u.username)
+        
+        return ", ".join(ret)
+        
 
 #########################################################
 
