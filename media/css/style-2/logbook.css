@@ -1,0 +1,79 @@
+#canvas                                      {width: 98%; max-width: none}
+
+/* the [Pilot Checkride] tag in the remarks section*/
+.flying_event                                {color: darkred; font-weight: bold}
+
+/* hidden data for the popup window */
+.date_col span                               {display: none}
+
+
+#logbook_table                               {width:100%;
+                                              border: 0px solid #C3C3C3;
+                                              background: white;
+                                              font-size: x-small;
+                                              border-collapse: collapse}
+
+/* odd rows */
+#logbook_table tbody tr:nth-child(even) td   {background: #E2EEEE}
+
+/* even rows */
+#logbook_table tbody tr:nth-child(odd) td    {background: #FFFFFF}
+
+
+
+/* all table cells */
+#logbook_table td                            {border: 1px solid #C3C3C3; padding: 1px}
+
+/* the remarks column */
+#logbook_table td:last-child:not([colspan])  {white-space: normal; text-align: left}
+
+/* both header rows at the top and bottom */
+#logbook_table tr.header td                  {background: #E0FFFF !important}
+
+/* mass edit link */
+#logbook_table tfoot td[colspan]             {border: none; text-align:right}
+
+td.empty_logbook                             {font-size: x-large; padding: 10px !important}
+
+#new_flight_button                           {margin: 10px }
+
+span.land                                    {text-decoration: underline}
+span.noland                                  {text-decoration: none}
+
+span.found_airport                           {color: MediumSlateBlue}
+span.found_navaid                            {color: SeaGreen}
+span.found_custom                            {color: Navy}                                             
+span.not_found                               {color: gray}
+span.local                                   {color: gray}
+
+/**************** custom view box ****************/
+
+#filter_box                             {width: 100%; background: white; border: 0px solid black; margin-top: 10px}
+#filter_box select[class*='__'],
+#filter_box input[class*='__']          {width: 100px}
+#filter_box td                          {width: 20%; text-align: center; border: 0px solid black; padding: 3px}
+#center_filter_table                    {margin: 0 auto 0 auto}
+#center_filter_table td                 {width: 33% !important; text-align: right}
+
+/* middle pane is a little bit wider */
+#filter_box td:nth-child(2)             {width: 60%}
+
+/* the little boxes and dropdowns in the middle pane*/
+.small_picker                           {width: 3em}
+.op_select                              {width: 4em; margin: 3px}
+
+/**/
+table#text_filters                      {margin: 0 auto 0 auto}
+table#text_filters td                   {text-align: right !important}
+table#text_filters td:last-child        {text-align: left !important}
+
+/* the start/end date box */
+td#date_filter_pane table               {margin: 0 auto 0 auto}
+td#date_filter_pane table td            {text-align: right !important}
+td#date_filter_pane table td:last-child {text-align: left !important}
+.date_align                             {width: 4em; border: 1px solid red; float: left}
+.date_picker                            {width: 8em; margin-top: 2px}
+
+/* the last panel (plane filters) */
+td#plane_filter_pane input,
+td#plane_filter_pane select                {width: 150px}

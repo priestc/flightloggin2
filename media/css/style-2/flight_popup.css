@@ -1,0 +1,53 @@
+#popup                                      {
+                                             width: 480px;}
+				 
+#new_entry_popup td                         {padding: 0}
+
+#flying_div                                 {padding: 5px}
+#table_holder                               {overflow: hidden; width:100%; border: 0px solid green}
+
+#flight_left_table                          {width: 53%; border: 0px solid black; float: left; margin-right: -10px}
+
+#flight_left_table input[type=text],
+textarea, select                            {width: 145px}
+
+#flight_left_table textarea                 {height: 5.5em}
+#flight_left_table tr td:first-child        {text-align: right; padding-right: 5px}
+#flight_left_table tr td:last-child	        {text-align: left}
+
+#flight_right_table                         {width: 47%; border: 0px solid black; float: right}
+#flight_right_table input[type=text]		{width: 2.9em}
+#flight_right_table input[type=button]		{margin-left: 5px}
+#flight_right_table tr td:last-child		{text-align: left; padding-left: 5px}
+#flight_right_table tr td:first-child		{text-align: right}
+
+#landings_table                             {width: 100%; margin-top: 5px; margin-bottom: 5px}
+#landings_table input[type=text]            {width: 2em}
+
+#flight_events_table                        {width: 99%;
+                                             border:1px solid black;
+                                             margin-left: auto;
+                                             margin-right: auto;
+                                             margin-bottom: 5px;
+                                             background: lightblue}
+
+#flight_events_table td                     {text-align: left;}
+
+ul.errorlist                                {color: red; margin: 0px; margin-right: 5px; padding: 0px; 
+                                             width: 145px; list-style-type: none; text-align: center; border: 1px solid red}
+
+#non_events_table                           {width: 100%; border:0px solid black; margin: 0em; background: lightblue}
+#non_events_table td                        {text-align: left; width: 33%;}
+
+#non_flying_div                             {text-align: center}
+#non_flying_div table:first-child, 
+#non_flying_div textarea                    {width: 85%; height: 5.5em;}
+#non_flying_div table:first-child td:first-child  {width: 30%; text-align: right; padding-right: 5px}
+#non_flying_div table:first-child td:last-child   {text-align: left}
+#non_flying_div input[type=text]            {width: 120px}
+
+
+#flight_buttons, #non_buttons               {width:100%; float: left; margin-bottom: 10px}
+
+
+#flight_left_table tr:first-child           {display:none}

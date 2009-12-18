@@ -1,0 +1,26 @@
+input[type="submit"],
+input[type="button"]        {margin-bottom: 10px}
+
+input[type=text],
+select, textarea	        {width: 200px; font-size: small !important}
+
+#tags_window                {background: white; font-size: x-small;
+                             border: 0px solid blue; padding: 5px;}
+#tags_window a:hover        {color: lightgreen}
+
+textarea                    {height: 50px}
+
+/* instructions for each field on the popup*/
+span.help_text              {color: gray; font-size: x-small; font-style: italic}
+
+/* message for when there are no planes to diaplay*/
+td.empty_row                {font-weight: bold; font-size: large; padding: 10px}
+
+/* the tag cloud in the popup window */
+.tag1                       {font-size: xx-small}
+.tag2                       {font-size: xx-small}
+.tag3                       {font-size: x-small}
+.tag4                       {font-size: small}
+.tag5                       {font-size: medium}
+
+#mass_edit_link             {width: 100%; text-align: right; font-size: x-small}

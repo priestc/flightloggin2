@@ -1,0 +1,5 @@
+table input,
+table select                  {width: 100%}
+
+table.mass_table              {border-collapse: collapse;
+                               margin: 0 auto 10px auto}

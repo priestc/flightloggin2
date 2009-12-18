@@ -1,5 +1,6 @@
 STYLES = (
     (1, "Green/Navy (Default)"),
+    (2, "Blue/Brown"),
 )
 
 BACKUP_FREQUENCY = (
