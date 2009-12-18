@@ -102,4 +102,4 @@ def schedule(request, schedule):
 #30 5  1         * * wget http://flightlogg.in/schedule-monthly.py?sk=
 #30 4  1,7,14,21 * * wget http://flightlogg.in/schedule-weekly.py?sk=
 #30 3  1,14      * * wget http://flightlogg.in/schedule-biweekly.py?sk=
-#50 23 *         * * wget http://flightlogg.in/schedule-daily.py?sk=
+#59 23 *         * * wget http://flightlogg.in/schedule-daily.py?sk=

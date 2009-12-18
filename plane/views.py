@@ -9,6 +9,7 @@ from forms import PopupPlaneForm
 def planes(request, shared, display_user):
     planes = Plane.objects.filter(user=display_user)
     form = PopupPlaneForm()
+    changed = False
     
     if request.POST.get('submit') == "Create New Plane":
         plane = Plane(user=request.user)
@@ -18,6 +19,7 @@ def planes(request, shared, display_user):
             plane=form.save(commit=False)
             plane.user=request.user
             plane.save()
+            changed = True
     
     elif request.POST.get('submit') == "Submit Changes":
         plane = Plane.objects.get(pk=request.POST.get("id"))
@@ -27,14 +29,20 @@ def planes(request, shared, display_user):
             plane=form.save(commit=False)
             plane.user=request.user
             plane.save()
+            changed = True
             
     elif request.POST.get('submit') == "Delete Plane":
         plane = Plane.objects.get(pk=request.POST.get("id"))
         
         if not plane.flight_set.all().count() > 0:
             plane.delete()
+            changed = True
             
-            
+    if changed:
+        from backup.models import edit_logbook
+        edit_logbook.send(sender=display_user)
+    
+           
     return locals()
 
 
@@ -53,9 +61,12 @@ def mass_planes(request, shared, display_user, page=0):
             formset.save()
             from django.http import HttpResponseRedirect
             from django.core.urlresolvers import reverse 
-            return HttpResponseRedirect(reverse('planes',
-                                kwargs={"username": display_user.username})
-            )
+            url = reverse('planes', kwargs={"username": display_user.username})
+            return HttpResponseRedirect(url)
+            
+            from backup.models import edit_logbook
+            edit_logbook.send(sender=display_user)
+    
     else:
         formset = PlaneFormset(queryset=qs)
     
