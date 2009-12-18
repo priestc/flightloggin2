@@ -16,10 +16,13 @@ body                    {background: #CCE4EB; margin: 15px;
 
 #logged_in_as           {float: right;
                          text-align: right;
-                         font-weight: 700;
+                         font-weight: normal;
                          color: #001147;
                          width: 100%;
                          border: 0}
+                         
+#demo                   {font-weight: bold;
+                         color: #AA3333}
 
 
 #nav_bar                {background: #665B1E;

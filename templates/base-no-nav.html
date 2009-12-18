@@ -47,7 +47,7 @@
 
             <div id="logged_in_as">
                 {% if DEMO %}
-                    <strong style="color:#AA3333">** VIEWING THE DEMO ACCOUNT **</strong>
+                    <span id="demo">** VIEWING THE DEMO ACCOUNT **</span>
                 {% endif %}
                 
 				{% if user.is_authenticated %}

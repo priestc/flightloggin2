@@ -100,6 +100,13 @@ class Profile(models.Model):
         else:
             return "Y-m-d"
         
+    def get_email(self):
+        if not self.user.email:
+            return self.backup_email
+        
+        return self.user.email
+    get_email.short_description="Email"
+        
     def adminlink(self):
         """Puts a link in the admin page for the user's logbook"""
         
