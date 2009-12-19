@@ -7,14 +7,14 @@
 
 #site_stats td                  {border: 1px dotted gray;
                                  padding-right: 10px;
-                                 background: {ss_strip1}}
+                                 background: white}
                                   
 #site_stats td:last-child       {text-align: left;
                                  font-weight: bold;
                                  padding-left: 10px}
 
 /* striping */                              
-#site_stats tr:nth-child(odd)   {background: {ss_strip2}}
+#site_stats tr:nth-child(odd)   {background: #DDDDDD}
                                  
 #openid td, #openid th          {border: 1px dotted gray; text-align: center}
 #openid                         {margin: 0 auto 0 auto;}
