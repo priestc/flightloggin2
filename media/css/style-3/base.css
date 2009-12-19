@@ -1,5 +1,5 @@
 
-body                    {background: #C0FFBB;
+body                    {background: white;
                          margin: 5px;
                          margin-top: 0px;
                          padding: 0px;
@@ -33,7 +33,7 @@ span.display_user       {font-weight: bold}
                          color: #AA3333}
 
 
-#nav_bar                {background: #001147;
+#nav_bar                {background: #FFC0C0;
                          color: white;
                          border: 0px;
                          width: 100%;
@@ -41,12 +41,12 @@ span.display_user       {font-weight: bold}
                          padding: 0;
                          padding-top: 3px;
                          padding-bottom: 3px;
-                         border: 0px dashed purple}
+                         border: 1px dashed purple}
                          
                          
 /* navbar for users who are not logged in */
 
-#nav_bar a              {color: white;
+#nav_bar a              {color: black;
                          margin-left: 3px;
                          margin-right: 3px;
                          text-decoration: none}
@@ -55,7 +55,7 @@ span.display_user       {font-weight: bold}
 
 #nav_bar .big           {font-size: large}
 
-#nav_bar .nav_selected a {background: #81D38F}
+#nav_bar .nav_selected a {background: red; font-weight: bold}
 
 .display_user           {color: black}
 .logged_user            {color: black}
@@ -75,7 +75,7 @@ span.display_user       {font-weight: bold}
                          top: 3px;
                          cursor: pointer;}
 	 
-a                       {color: #001147}
+a                       {color: #5D0A0A}
 
 h1                      {text-align: center;
                          font-weight: bold;
@@ -83,7 +83,7 @@ h1                      {text-align: center;
                          font-size: x-large;}
                          
 h2                      {font-weight: bold;
-                         color: #11566D;
+                         color: #DA7E16;
                          font-size: large}
 
 textarea                {border: 1px solid black;
@@ -126,23 +126,23 @@ table.minor_table                     {width:       100%;
 
 /* the header row */
 table.minor_table thead td            {border:      1px solid #C3C3C3;
-                                       background:  #E0FFFF;
+                                       background:  #FFB898;
                                        font-weight: normal;
                                        padding:     2px}
 
 /* the footer row */
-table.minor_table tfoot td            {border:      1px solid #C3C3C3;
-                                       background:  #E0FFFF;
+table.minor_table tfoot td            {border:      1px dashed #C3C3C3;
+                                       background:  #FFB898;
                                        font-weight: normal;
                                        padding:     2px}
 
 /* every other cell */
-table.minor_table td                  {border:      1px solid #C3C3C3;
+table.minor_table td                  {border:      1px dashed #C3C3C3;
                                        padding:     2px}
 
 /* striping */
-table.minor_table tr:nth-child(odd)   {background:  #D5E9D5}
-table.minor_table tr:nth-child(even)  {background:  #E7FFE7}
+table.minor_table tr:nth-child(odd)   {background:  #EFDEE2}
+table.minor_table tr:nth-child(even)  {background:  #DFDFDF}
 
 /* the empty message */
 table.minor_table td[colspan]         {font-size:   x-large;

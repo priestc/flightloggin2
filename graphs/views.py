@@ -80,7 +80,12 @@ def bargraph_image(request, shared, display_user, column, func, agg):
     else:
         assert False, "Agg not added to generator view"
     
-    return Graph(display_user, column, agg, func).as_png()
+    graph = Graph(display_user, column, agg, func)
+    
+    from profile.models import Profile
+    graph.color_profile = Profile.get_for_user(display_user).style
+    
+    return graph.as_png()
 
 ###############################################################################
 

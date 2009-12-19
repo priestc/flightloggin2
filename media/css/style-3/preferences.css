@@ -1,7 +1,7 @@
 
 fieldset                              {text-align: right}
 legend                                {font-size: large; font-weight: bold;
-                                        color: #11566d}
+                                        color: #DA7E16}
 input, select                         {width: 80%}
 input[type="checkbox"]                {width: auto}
 input[type='submit']                  {width: auto; margin-top: 15px}
@@ -41,7 +41,7 @@ td[colspan='4']                       {padding-bottom: 10px; text-align: center}
 
 /* striping */
 #columns_table tr:nth-child(even) td  {background: #EDEDED}
-#columns_table tr:nth-child(odd) td   {background: #E0FFFF}
+#columns_table tr:nth-child(odd) td   {background: #FFDDDD}
 
 /* help text row */
 #columns_table td:last-child          {width: 40em; font-size: xx-small;

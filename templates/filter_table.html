@@ -2,23 +2,16 @@
 <table id="filter_box">
     <tr>
         <td id="date_filter_pane">
-            <table>
-                <tr><td>
+
                 <input type="hidden" name="c" value="t">
-                {{ ff.start_date.label_tag }}</td><td>{{ ff.start_date }}
-                </td></r>
-                
-                <tr><td>
-                {{ ff.end_date.label_tag }}</td><td>{{ ff.end_date }}
-                </td></tr>
-                
-                <tr><td colspan="2">
-                {# Last {{ ff.last_flights }} Flights #}
-                </td></tr>
-            </table>
+                {{ ff.start_date.label_tag }} {{ ff.start_date }}
+                <br><br>
+                {{ ff.end_date.label_tag }} {{ ff.end_date }}
+
+
         </td>
         
-        <td>
+        <td id="time_filter_pane">
             {# produces a table with id='center_filter_table' #}
             {{ ff.render_table }}
             

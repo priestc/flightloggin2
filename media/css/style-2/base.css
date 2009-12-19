@@ -1,8 +1,13 @@
-body                    {background: #CCE4EB; margin: 15px;
-                         margin-top:0px; padding:0; font-size: small; 
-                         font-family: "Bitstream Vera Sans", sans-serif;
-                         min-height: 100%; height: 100%;}
 
+body                    {background: #CCE4EB;
+                         margin: 5px;
+                         margin-top: 0px;
+                         padding: 0px;
+                         font-size: small; 
+                         font-family: "Bitstream Vera Sans", sans-serif;
+                         min-height: 100%;
+                         height: 100%;}
+                         
 #header                 {margin:5px; overflow: hidden; border: 0px solid black}
 #main_content           {margin:5px; overflow: hidden; border: 0px solid black}
 
@@ -29,16 +34,16 @@ span.display_user       {font-weight: bold}
 
 
 #nav_bar                {background: #665B1E;
+                         color: white;
                          border: 0px;
                          width: 100%;
                          float: left;
-                         color: white;
                          padding: 0;
                          padding-top: 3px;
                          padding-bottom: 3px;
                          border: 0px solid #001147}
-
-
+                         
+                         
 /* navbar for users who are not logged in */
 
 #nav_bar a              {color: white;
@@ -50,8 +55,7 @@ span.display_user       {font-weight: bold}
 
 #nav_bar .big           {font-size: large}
 
-#nav_bar .nav_selected a {background: #5DC7E9;
-                          font-weight: bold}
+#nav_bar .nav_selected a {background: #5DC7E9; font-weight: bold}
 
 .display_user           {color: black}
 .logged_user            {color: black}
@@ -75,15 +79,25 @@ a                       {color: #001147}
 
 h1                      {text-align: center;
                          font-weight: bold;
-                         color: #665b1e;
+                         color: #0000FF;
                          font-size: x-large;}
                          
 h2                      {font-weight: bold;
-                         color: #11566d;
+                         color: #665B1E;
                          font-size: large}
 
-textarea                {border: 1px solid black; font-family: inherit; font-size: inherit; background: white}
-select                  {border: 1px solid black; background: #EEEEEE; font-size: smaller; font-family: inherit}
+textarea                {border: 1px solid black;
+                         font-family: inherit;
+                         font-size: inherit;
+                         background: white}
+                         
+select                  {border: 1px solid black;
+                         background: #EEEEEE;
+                         font-size: smaller;
+                         font-family: inherit}
+
+/* instructions boxes in a few of the pages */
+.instructions           {background: #DDDDDD; padding: 20px}
 
 input[type="button"]:hover,
 input[type="submit"]:hover,
@@ -96,37 +110,40 @@ button                  {border: 1px solid black}
 input[type="password"],
 input[type="text"]      {border: 1px solid black; background: white}
 
-input[type=text]:disabled {background-color: #DDDDDD; color: #777777; border: 1px dotted #EEEEEE}
+input[type=text]:disabled {background-color: #DDDDDD;
+                           color: #777777;
+                           border: 1px dotted #EEEEEE}
 
-#footer                 {text-align:center; font-size: x-small; color: gray;
-                         border: 0px solid black; width: 100%;}
+#footer                 {text-align:center;
+                         font-size: x-small;
+                         color: gray;
+                         width: 100%;}
                          
 /***** table for events, planes, and places *********/
 
-table.minor_table                     {width: 100%; border-collapse: collapse}
+table.minor_table                     {width:       100%;
+                                       border-collapse: collapse}
 
 /* the header row */
-table.minor_table thead td            {border: 1px solid #C3C3C3;
-                                       background: #C1E8E8;
+table.minor_table thead td            {border:      1px solid #C3C3C3;
+                                       background:  #C1E8E8;
                                        font-weight: normal;
-                                       padding: 2px}
+                                       padding:     2px}
 
 /* the footer row */
-table.minor_table tfoot td            {border: 1px solid #C3C3C3;
-                                       background: #C1E8E8;
+table.minor_table tfoot td            {border:      1px solid #C3C3C3;
+                                       background:  #C1E8E8;
                                        font-weight: normal;
-                                       padding: 2px}
+                                       padding:     2px}
 
 /* every other cell */
-table.minor_table td                  {border: 1px solid #C3C3C3;
-                                       padding: 2px}
+table.minor_table td                  {border:      1px solid #C3C3C3;
+                                       padding:     2px}
 
 /* striping */
-table.minor_table tr:nth-child(odd)   {background: #E2EEEE}
-table.minor_table tr:nth-child(even)  {background: #DFDFDF}
+table.minor_table tr:nth-child(odd)   {background:  #E2EEEE}
+table.minor_table tr:nth-child(even)  {background:  #DFDFDF}
 
 /* the empty message */
-table.minor_table td[colspan]         {font-size: x-large; padding: 10px}
-
-/* instructions boxes in a few of the pages */
-.instructions              {background: #DDDDDD; padding: 20px}
+table.minor_table td[colspan]         {font-size:   x-large;
+                                       padding:     10px}

@@ -2,7 +2,7 @@ from django.conf import settings
 
 class BarGraph(object):
     
-    bar_color = 'y'
+    color_profile = 1
     regular_font = ("VeraSe.ttf", 12)
     title_font =   ("VeraSeBd.ttf", 22)
     
@@ -41,8 +41,18 @@ class BarGraph(object):
         
         if self.time == 'day':
             self.qs = self.qs.add_column('day')
-        
+            
+    def get_color(self):
+        if self.color_profile == 1:
+            self.color = (58,241,135)
+        elif self.color_profile == 2:
+            self.color = "#46B9ED"
+        elif self.color_profile == 3:
+            self.color = "#DA7E16" 
+            
     def output(self):
+        
+        self.get_color()
         self.get_data()
 
         if not self.qs.extra(select={'a': 1}).values('a').order_by():
@@ -134,7 +144,7 @@ class BarGraph(object):
             self.draw.rectangle(
                 [(bar_start, draw_y),
                  (length + bar_start, yend)],
-                fill=(58,241,135),
+                fill=self.color,
                 outline='black',
             )
             

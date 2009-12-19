@@ -20,7 +20,7 @@ div.bfr             {float: left}
 div.cfi             {float: right}
 
 .expired            {background-color: gray}
-.current            {background-color: #8FBC8F}
+.current            {background-color: #DA7E16}
 .alert              {background-color: #AE345E}
 
 .nothing            {font-size: large; margin: 10px; text-align: center}

@@ -3,7 +3,8 @@ input[type="submit"],
 input[type="button"]                {margin-bottom: 10px}
 
 input[type=text],
-select, textarea	                {width: 200px; font-size: small !important}
+select, textarea	                {width: 200px;
+                                     font-size: small !important}
 
 input[type="button"]                {margin: 10px}
 
@@ -14,4 +15,6 @@ textarea                            {width: 250px; height: 100px}
 #popup td:nth-child(2)              {text-align: left}
 
 /* for the instructions for the coordinates on the popup */
-.help_text                          {color: gray; font-style: italic; font-size: x-small}
+.help_text                          {color: gray;
+                                     font-style: italic;
+                                     font-size: x-small}

@@ -2,32 +2,110 @@
 
 styles = {
 
+## green and navy
+"style-1": {"page_bg":          "#C0FFBB",
+           "link_color":        "#001147",
+           "h1_color":          "#DA7E16",
+           "h2_color":          "#11566D",
+           "error_color":       "red",
+           
+           #navbar
+           "navbar_bg":         "#001147",
+           "navbar_border":     "0px dashed purple",
+           "navbar_dots":       "white",
+           "navbar_text":       "white",
+           "navbar_hover":      "text-decoration: underline",
+           "navbar_sel":        "background: #81D38F",
+           "canvas_bg":         "white",
+           "canvas_border":     "0px solid purple",
+           
+           "widget_border":     "1px solid black",
+           
+           ## fancy table
+           "mt_header_color":   "#E0FFFF",
+           "mt_border":         "1px solid #C3C3C3",
+           "mt_strip1":         "#D5E9D5",
+           "mt_strip2":         "#E7FFE7",
+           
+           ## logbook
+           "remarks_event":     "color: navy; font-weight: bold",
+           "logbook_cells":     "border: 1px solid #C3C3C3; padding: 1px",
+           "logbook_strip1":    "#D3F0D8",
+           "logbook_strip2":    "white",
+           "logbook_header_c":  "#A7F4A6",
+           "logbook_border":    "none",
+           
+           "filter_border":     "none",
+           "filter_bg":         "white",
+           
+           ## new [X] popup
+           "popup_title_bg":    "#A7F4A6",
+           "popup_bottom_c":    "#A7F4A6",
+           
+           ## currency section
+           "current":           "#8FBC8F",
+           "expired":           "gray",
+           "alert":             "#AE345E",
+           
+           ## preferences
+           "pref_strip1":       "#C1DECD",
+           "pref_strip2":       "#91E6B4",
+           "pref_legend_c":     "#11566D",
+           
+           "news_bg":           "#DDDDDD",
+           "sig_bg":            "#EEE2EE",
+           
+           ## site stats
+           "ss_strip1":         "white",
+           "ss_strip2":         "#DDDDDD",
+           },
+
+## blue and brown
 "style-2": {"page_bg":          "#CCE4EB",
            "navbar_bg":         "#665B1E",
            "link_color":        "#001147",
            "h1_color":          "#0000FF",
-           "h2_color":          "#00FF00",
+           "h2_color":          "#665B1E",
+           "error_color":       "red",
            
            "navbar_border":     "0px solid #001147",
+           "navbar_dots":       "white",
            "navbar_text":       "white",
            "navbar_hover":      "text-decoration: underline",
            "navbar_sel":        "background: #5DC7E9; font-weight: bold",
-           "canvas_color":      "white",
+           "canvas_bg":         "white",
            "canvas_border":     "0px solid black",
            
            "widget_border":     "1px solid black",
            
            "mt_header_color":   "#C1E8E8",
            "mt_border":         "1px solid #C3C3C3",
-           
            "mt_strip1":         "#E2EEEE",
            "mt_strip2":         "#DFDFDF",
+           
+           ## logbook
+           "remarks_event":     "color: darkred; font-weight: bold",
+           "logbook_cells":     "border: 1px solid #C3C3C3; padding: 1px",
+           "logbook_strip1":    "#E2EEEE",
+           "logbook_strip2":    "white",
+           "logbook_header_c":  "#E0FFFF",
+           "logbook_border":    "0px solid #C3C3C3",
+           
+           "filter_border":     "0px dashed purple",
+           "filter_bg":         "#white",
+           
+           ## new [X] popup
+           "popup_title_bg":    "#CCE4EB",
+           "popup_bottom_c":    "#CCE4EB",
            
            "current":           "#5DC7E9",
            "expired":           "gray",
            "alert":             "#AE345E",
            
-           "popup_title_bg":    "#CCE4EB",
+           ## preferences
+           "pref_strip1":       "#EDEDED",
+           "pref_strip2":       "#E0FFFF",
+           "pref_legend_c":     "#11566d",
            
            "news_bg":           "#CCE4EB",
            
@@ -36,54 +114,66 @@ styles = {
            "ss_strip1":         "white",
            "ss_strip2":         "#EEEEEE",
            },
-           
+
+## red and orange
 "style-3": {"page_bg":          "white",
-           "navbar_bg":         "red",
-           "link_color":        "red",
-           "h1_color":          "red",
-           "h2_color":          "red",
+           "link_color":        "#5D0A0A",
+           "h1_color":          "#DA7E16",
+           "h2_color":          "#DA7E16",
+           "error_color":       "blue",
            
-           "navbar_border":     "1px solid purple",
-           "navbar_text":       "red",
+           #navbar
+           "navbar_bg":         "#FFC0C0",
+           "navbar_border":     "1px dashed purple",
+           "navbar_dots":       "white",
+           "navbar_text":       "black",
            "navbar_hover":      "text-decoration: underline",
            "navbar_sel":        "background: red; font-weight: bold",
-           "canvas_color":      "white",
-           "canvas_border":     "1px solid purple",
+           "canvas_bg":         "white",
+           "canvas_border":     "0px solid purple",
            
            "widget_border":     "1px solid black",
            
-           "mt_header_color":   "#C1E8E8",
-           "mt_border":         "1px solid #C3C3C3",
-           
-           "mt_strip1":         "#E2EEEE",
+           ## fancy table
+           "mt_header_color":   "#FFB898",
+           "mt_border":         "1px dashed #C3C3C3",
+           "mt_strip1":         "#EFDEE2",
            "mt_strip2":         "#DFDFDF",
            
-           "current":           "#5DC7E9",
+           ## logbook
+           "remarks_event":     "color: navy; font-weight: bold",
+           "logbook_cells":     "border: 1px dashed #C3C3C3; padding: 1px",
+           "logbook_strip1":    "#EEE2EE",
+           "logbook_strip2":    "#FAFAFA",
+           "logbook_header_c":  "#FFB898",
+           "logbook_border":    "0px solid #C3C3C3",
+           
+           "filter_border":     "1px dashed purple",
+           "filter_bg":         "#FFDDDD",
+           
+           ## new [X] popup
+           "popup_title_bg":    "#FFC0C0",
+           "popup_bottom_c":    "#FFC0C0",
+           
+           ## currency section
+           "current":           "#DA7E16",
            "expired":           "gray",
            "alert":             "#AE345E",
            
-           "popup_title_bg":    "#CCE4EB",
+           ## preferences
+           "pref_strip1":       "#EDEDED",
+           "pref_strip2":       "#FFDDDD",
+           "pref_legend_c":     "#DA7E16",
            
-           "news_bg":           "red",
+           "news_bg":           "#DDDDDD",
+           "sig_bg":            "#EEE2EE",
            
-           "sig_bg":            "red",
-           
+           ## site stats
            "ss_strip1":         "white",
-           "ss_strip2":         "red",
+           "ss_strip2":         "#DDDDDD",
            }
 
 }
-
-test = """
-
-body                    {background: %(page_bg)s;
-                         margin: 15px;}
-
-
-{df: %(page_bg)s; %(page_bg)s: dfdfd
-dsfdsfsdf}
-
-"""
 
 ###############################################################################
 ###############################################################################
@@ -92,7 +182,7 @@ dsfdsfsdf}
 
 base = """
 body                    {background: %(page_bg)s;
-                         margin: 15px;
+                         margin: 5px;
                          margin-top: 0px;
                          padding: 0px;
                          font-size: small; 
@@ -126,10 +216,10 @@ span.display_user       {font-weight: bold}
 
 
 #nav_bar                {background: %(navbar_bg)s;
+                         color: %(navbar_dots)s;
                          border: 0px;
                          width: 100%%;
                          float: left;
-                         color: %(navbar_text)s;
                          padding: 0;
                          padding-top: 3px;
                          padding-bottom: 3px;
@@ -138,7 +228,7 @@ span.display_user       {font-weight: bold}
                          
 /* navbar for users who are not logged in */
 
-#nav_bar a              {color: white;
+#nav_bar a              {color: %(navbar_text)s;
                          margin-left: 3px;
                          margin-right: 3px;
                          text-decoration: none}
@@ -153,13 +243,13 @@ span.display_user       {font-weight: bold}
 .logged_user            {color: black}
 
 /* the white background beneath (almost) all pages*/
-#canvas                 {%(canvas_color)s;
+#canvas                 {background: %(canvas_bg)s;
                          padding: 1em;
                          overflow:hidden;
                          max-width: 73em;
                          margin: 0 auto 0 auto;
                          text-align: center;
-                         border: 0px solid black}
+                         border: %(canvas_border)s}
 
 /* the little calendar icon for the date picker*/                       
 .embed + img            {position: relative;
@@ -264,9 +354,9 @@ div.night           {float: right}
 div.bfr             {float: left}
 div.cfi             {float: right}
 
-.expired            {background-color: {expired}}
-.current            {background-color: {current}}
-.alert              {background-color: {alert}}
+.expired            {background-color: %(expired)s}
+.current            {background-color: %(current)s}
+.alert              {background-color: %(alert)s}
 
 .nothing            {font-size: large; margin: 10px; text-align: center}
 
@@ -320,13 +410,17 @@ input[type="button"]        {margin: 10px}
                              
 #popup table                {margin-left: auto; margin-right: auto}
 
-#dragbar                    {background: {popup_title_bg};
+#dragbar                    {background: %(popup_title_bg)s;
                              width: 100%%;
                              text-align: right;
                              margin-bottom: .5em;
                              border-bottom: 1px solid black}
                              
-#dragbar td:first-child     {width:100%%; text-align:center; font-weight: bold; font-size: larger}
+#dragbar td:first-child     {width:100%%;
+                             text-align:center;
+                             font-weight: bold;
+                             font-size: larger}
+                             
 #dragbar td:last-child      {text-align:right}
 
 #close_x                    {cursor: pointer; font-weight: bold}
@@ -343,20 +437,33 @@ flight_popup = """
 #new_entry_popup td                         {padding: 0}
 
 #flying_div                                 {padding: 5px}
-#table_holder                               {overflow: hidden; width:100%%; border: 0px solid green}
 
-#flight_left_table                          {width: 53\%%; border: 0px solid black; float: left; margin-right: -10px}
+#table_holder                               {overflow: hidden;
+                                             width: 100%%}
 
+#flight_left_table                          {width: 53\%%;
+                                             border: 0px solid black;
+                                             float: left;
+                                             margin-right: -10px}
+
+/* the person/route/etc boxes */
 #flight_left_table input[type=text],
 textarea, select                            {width: 145px}
 
+/* the remarks box */
 #flight_left_table textarea                 {height: 5.5em}
 #flight_left_table tr td:first-child        {text-align: right; padding-right: 5px}
 #flight_left_table tr td:last-child	        {text-align: left}
 
-#flight_right_table                         {width: 47%%; border: 0px solid black; float: right}
+#flight_right_table                         {width: 47%%;
+                                             border: 0px solid black;
+                                             float: right}
+                                             
+/* flight time input boxs */
 #flight_right_table input[type=text]		{width: 2.9em}
-#flight_right_table input[type=button]		{margin-left: 5px}
+
+/* auto buttons */
+#flight_right_table input[type=button]		{margin: 0; margin-left: 5px}
 #flight_right_table tr td:last-child		{text-align: left; padding-left: 5px}
 #flight_right_table tr td:first-child		{text-align: right}
 
@@ -368,23 +475,19 @@ textarea, select                            {width: 145px}
                                              margin-left: auto;
                                              margin-right: auto;
                                              margin-bottom: 5px;
-                                             background: lightblue}
-
+                                             background: %(popup_bottom_c)s}
+                                             
+/* the box with all the checkboxes at the bottom */
 #flight_events_table td                     {text-align: left;}
 
-ul.errorlist                                {color: red; margin: 0px; margin-right: 5px; padding: 0px; 
-                                             width: 145px; list-style-type: none; text-align: center; border: 1px solid red}
-
-#non_events_table                           {width: 100%%; border:0px solid black; margin: 0em; background: lightblue}
-#non_events_table td                        {text-align: left; width: 33%%;}
-
-#non_flying_div                             {text-align: center}
-#non_flying_div table:first-child, 
-#non_flying_div textarea                    {width: 85%%; height: 5.5em;}
-#non_flying_div table:first-child td:first-child  {width: 30%%; text-align: right; padding-right: 5px}
-#non_flying_div table:first-child td:last-child   {text-align: left}
-#non_flying_div input[type=text]            {width: 120px}
-
+ul.errorlist                                {color: %(error_color)s;
+                                             margin: 0px;
+                                             margin-right: 5px;
+                                             padding: 0px; 
+                                             width: 145px;
+                                             list-style-type: none;
+                                             text-align: center;
+                                             border: 1px solid %(error_color)s}
 
 #flight_buttons, #non_buttons               {width:100%%; float: left; margin-bottom: 10px}
 
@@ -452,32 +555,32 @@ logbook = """
 #canvas                                      {width: 98%%; max-width: none}
 
 /* the [Pilot Checkride] tag in the remarks section*/
-.flying_event                                {color: darkred; font-weight: bold}
+.flying_event                                {%(remarks_event)s}
 
 /* hidden data for the popup window */
 .date_col span                               {display: none}
 
 
 #logbook_table                               {width:100%%;
-                                              border: 0px solid #C3C3C3;
+                                              border: %(logbook_border)s;
                                               background: white;
                                               font-size: x-small;
                                               border-collapse: collapse}
 
 /* odd rows */
-#logbook_table tbody tr:nth-child(even) td   {background: #E2EEEE}
+#logbook_table tbody tr:nth-child(even) td   {background: %(logbook_strip1)s}
 
 /* even rows */
-#logbook_table tbody tr:nth-child(odd) td    {background: #FFFFFF}
+#logbook_table tbody tr:nth-child(odd) td    {background: %(logbook_strip2)s}
 
 /* all table cells */
-#logbook_table td                            {border: 1px solid #C3C3C3; padding: 1px}
+#logbook_table td                            {%(logbook_cells)s}
 
 /* the remarks column */
 #logbook_table td:last-child:not([colspan])  {white-space: normal; text-align: left}
 
 /* both header rows at the top and bottom */
-#logbook_table tr.header td                  {background: #E0FFFF !important}
+#logbook_table tr.header td                  {background: %(logbook_header_c)s !important}
 
 /* mass edit link */
 #logbook_table tfoot td[colspan]             {border: none; text-align:right}
@@ -501,12 +604,23 @@ span.local                                   {color: gray}
 ###############################################################################
 
 custom_view = """
-#filter_box                             {width: 100%%; background: white; border: 0px solid black; margin-top: 10px}
+#filter_box                             {width: 100%%;
+                                         background: %(filter_bg)s;
+                                         border: %(filter_border)s;
+                                         margin-top: 10px}
+
+/* all non time boxes (the longer ones) */
 #filter_box select[class*='__'],
 #filter_box input[class*='__']          {width: 100px}
-#filter_box td                          {width: 20%%; text-align: center; border: 0px solid black; padding: 3px}
+
+#filter_box td                          {width: 20%%;
+                                         text-align: center;
+                                         border: 0px solid black;
+                                         padding: 3px}
+
 #center_filter_table                    {margin: 0 auto 0 auto}
-#center_filter_table td                 {width: 33%% !important; text-align: right}
+#center_filter_table td                 {width: 33%% !important;
+                                         text-align: right}
 
 /* middle pane is a little bit wider */
 #filter_box td:nth-child(2)             {width: 60%%}
@@ -607,7 +721,7 @@ news = """
 	                 margin-left: auto;
 	                 margin-bottom: 15px;
 	                 padding: 5px;
-	                 background: {news_bg}}
+	                 background: %(news_bg)s}
 
 .news_box p			{font-size: medium}
 
@@ -669,7 +783,7 @@ td.empty_row                {font-weight: bold;
 preferences = """
 fieldset                              {text-align: right}
 legend                                {font-size: large; font-weight: bold;
-                                        color: #11566d}
+                                        color: %(pref_legend_c)s}
 input, select                         {width: 80%%}
 input[type="checkbox"]                {width: auto}
 input[type='submit']                  {width: auto; margin-top: 15px}
@@ -705,11 +819,11 @@ td[colspan='4']                       {padding-bottom: 10px; text-align: center}
 
 /* header row */
 #columns_table tr:first-child > td    {width: 2em !important;
-                                        background: white !important}
+                                       background: white !important}
 
 /* striping */
-#columns_table tr:nth-child(even) td  {background: #EDEDED}
-#columns_table tr:nth-child(odd) td   {background: #E0FFFF}
+#columns_table tr:nth-child(even) td  {background: %(pref_strip1)s}
+#columns_table tr:nth-child(odd) td   {background: %(pref_strip2)s}
 
 /* help text row */
 #columns_table td:last-child          {width: 40em; font-size: xx-small;
@@ -742,7 +856,7 @@ sigs = """
 #sig_url                        {width: 50%%;
                                  padding: 20px;
                                  font-size: large;
-                                 background: {sig_bg};
+                                 background: %(sig_bg)s;
                                  text-align: center;
                                  margin: 0 auto 0 auto}
                              
@@ -784,8 +898,10 @@ if __name__ == "__main__":
     css = locals()
     
     import sys
-    import os  
+    import os
     directory = "style-%s" % sys.argv[1]
+    full_directory = "../media/css/" + directory
+    
     source = styles[directory]
     
     names = ('base', 'currency', 'events', 'flight_popup', 'help',
@@ -794,15 +910,13 @@ if __name__ == "__main__":
              'preferences', 'realtime', 'records', 'sigs', 'site_stats',
              'custom_view', 'route')
     
-    print directory
-    
-    if not os.path.isdir(directory):
-        os.makedirs(directory)
+    if not os.path.isdir(full_directory):
+        os.makedirs(full_directory)
     else:
         pass #assert False, "You must move/delete the old folder first"
                  
     for name in names:
-        f = open("%s/%s.css" % (directory, name.replace("__",'')), 'w')
+        f = open("%s/%s.css" % (full_directory, name.replace("__",'')), 'w')
         rendered = css[name] % source
         f.writelines(rendered)
 

@@ -1,0 +1,41 @@
+
+#filter_box                             {width: 100%;
+                                         background: #FFDDDD;
+                                         border: 1px dashed purple;
+                                         margin-top: 10px}
+
+/* all non time boxes (the longer ones) */
+#filter_box select[class*='__'],
+#filter_box input[class*='__']          {width: 100px}
+
+#filter_box td                          {width: 20%;
+                                         text-align: center;
+                                         border: 0px solid black;
+                                         padding: 3px}
+
+#center_filter_table                    {margin: 0 auto 0 auto}
+#center_filter_table td                 {width: 33% !important;
+                                         text-align: right}
+
+/* middle pane is a little bit wider */
+#filter_box td:nth-child(2)             {width: 60%}
+
+/* the little boxes and dropdowns in the middle pane*/
+.small_picker                           {width: 3em}
+.op_select                              {width: 4em; margin: 3px}
+
+/**/
+table#text_filters                      {margin: 0 auto 0 auto}
+table#text_filters td                   {text-align: right !important}
+table#text_filters td:last-child        {text-align: left !important}
+
+/* the start/end date box */
+td#date_filter_pane table               {margin: 0 auto 0 auto}
+td#date_filter_pane table td            {text-align: right !important}
+td#date_filter_pane table td:last-child {text-align: left !important}
+.date_align                             {width: 4em; border: 1px solid red; float: left}
+.date_picker                            {width: 8em; margin-top: 2px}
+
+/* the last panel (plane filters) */
+td#plane_filter_pane input,
+td#plane_filter_pane select                {width: 150px}

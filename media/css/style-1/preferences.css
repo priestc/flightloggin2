@@ -1,6 +1,7 @@
+
 fieldset                              {text-align: right}
 legend                                {font-size: large; font-weight: bold;
-                                        color: #11566d}
+                                        color: #11566D}
 input, select                         {width: 80%}
 input[type="checkbox"]                {width: auto}
 input[type='submit']                  {width: auto; margin-top: 15px}
@@ -22,7 +23,7 @@ ul                                    {font-sze: inherit; margin: 0; color: red;
 
 td[colspan='4']                       {padding-bottom: 10px; text-align: center}
 
-#columns_table                        {color: black; border: 1px solid black;
+#columns_table                        {color: black; border: 1px solid gray;
                                         margin-right: auto; margin-left: auto}
 
 /* the titles column */
@@ -30,13 +31,13 @@ td[colspan='4']                       {padding-bottom: 10px; text-align: center}
                                         padding: 0 3px 0 3px !important;
                                         width: 20em}
 
-/* the first two columns where the checkboxes are*/
+/* the first two columns where the checkboxes are */
 #columns_table td:nth-child(2),
 #columns_table td:first-child         {text-align: center; width: 2em}
 
 /* header row */
 #columns_table tr:first-child > td    {width: 2em !important;
-                                        background: white !important}
+                                       background: white !important}
 
 /* striping */
 #columns_table tr:nth-child(even) td  {background: #C1DECD}
@@ -46,6 +47,6 @@ td[colspan='4']                       {padding-bottom: 10px; text-align: center}
 #columns_table td:last-child          {width: 40em; font-size: xx-small;
                                         font-style: italics; color: black}
 
-.delete_box                           {text-align: center }
+.delete_box                           {text-align: center}
 
 #instructions                         {text-align: center; color: gray}

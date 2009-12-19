@@ -1,12 +1,13 @@
+
 #canvas             {text-align: left}
 
 .news_box			{border: 1px solid black;
-	                 width:50em;
-	                 margin-right:auto;
-	                 margin-left:auto;
+	                 width: 50em;
+	                 margin-right: auto;
+	                 margin-left: auto;
 	                 margin-bottom: 15px;
-	                 padding:5px;
-	                 background: #cce4eb}
+	                 padding: 5px;
+	                 background: #CCE4EB}
 
 .news_box p			{font-size: medium}
 

@@ -64,16 +64,17 @@
 
 				    {# so the space doesnt collapse #}
             </div>
-
-
-		    {% block navbar %}
-		    {% endblock %}
-
+            
+            <div style="width: 99.9%; padding-right: 5px; overflow: hidden"> 
+            {% block navbar %}
+	        {% endblock %}
+            </div>
             
 		</div>
         
         
         <div id="main_content">
+		    
             {% block no_canvas %}
 
             <div id="canvas">
