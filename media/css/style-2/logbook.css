@@ -19,8 +19,6 @@
 /* even rows */
 #logbook_table tbody tr:nth-child(odd) td    {background: #FFFFFF}
 
-
-
 /* all table cells */
 #logbook_table td                            {border: 1px solid #C3C3C3; padding: 1px}
 
@@ -35,7 +33,6 @@
 
 td.empty_logbook                             {font-size: x-large; padding: 10px !important}
 
-#new_flight_button                           {margin: 10px }
 
 span.land                                    {text-decoration: underline}
 span.noland                                  {text-decoration: none}

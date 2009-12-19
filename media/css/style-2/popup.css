@@ -1,3 +1,6 @@
+/* the "new" button at the top */
+input[type="button"]        {margin: 10px}
+
 #popup                      {position: absolute;
                              top: 50px;
                              left: 50px;
