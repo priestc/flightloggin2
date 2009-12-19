@@ -28,9 +28,9 @@ class Sig(object):
     
     title_columns = []
     max_title_width = 0
-    font = "VERDANA.TTF"
-    font_size = 15
-    line_height = 20
+    font = "VeraMono.ttf"
+    font_size = 12
+    line_height = 14
     
     def __init__(self, user, columns):
         import os
