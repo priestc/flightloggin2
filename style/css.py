@@ -169,8 +169,8 @@ styles = {
            "sig_bg":            "#EEE2EE",
            
            ## site stats
-           "ss_strip1":         "white",
-           "ss_strip2":         "#DDDDDD",
+           "ss_strip1":         "#DDDDDD",
+           "ss_strip2":         "white",
            }
 
 }
@@ -875,15 +875,15 @@ site_stats = """
                                  width: 100%%}
 
 #site_stats td                  {border: 1px dotted gray;
-                                 padding-right: 10px;
-                                 background: {ss_strip1}}
+                                 padding-right: 10px}
                                   
 #site_stats td:last-child       {text-align: left;
                                  font-weight: bold;
                                  padding-left: 10px}
 
 /* striping */                              
-#site_stats tr:nth-child(odd)   {background: {ss_strip2}}
+#site_stats tr:nth-child(odd)   {background-color: %(ss_strip2)s}
+#site_stats tr                  {background-color: %(ss_strip1)s}
                                  
 #openid td, #openid th          {border: 1px dotted gray; text-align: center}
 #openid                         {margin: 0 auto 0 auto;}

@@ -90,6 +90,18 @@ urlpatterns += patterns('',
         "graphs.views.histogram",
     ),
     
+    url(
+        r'^schedule-(?P<schedule>\w+).py$',
+        "backup.views.schedule",
+                                                               name="schedule",
+    ),
+    
+    url(
+        r'^stats_save.py$',
+        "site_stats.views.save_to_db",
+                                                             name="save_stats",
+    ),
+    
     (
         r'^openid/',
         include('django_openid_auth.urls'),
@@ -328,18 +340,6 @@ urlpatterns += patterns('',
         r'^(?P<username>\w+)/print.pdf$',
         "pdf.views.pdf",
                                                                     name="pdf",
-    ),
-    
-    url(
-        r'^schedule-(?P<schedule>\w+).py$',
-        "backup.views.schedule",
-                                                               name="schedule",
-    ),
-    
-    url(
-        r'^stats_save.py$',
-        "site_stats.views.save_to_db",
-                                                             name="save_stats",
     ),
     
     (

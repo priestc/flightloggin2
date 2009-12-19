@@ -26,49 +26,82 @@ def make_sig(request, shared, display_user, columns):
     
 class Sig(object):
     
-    data = {}
-    font_width = 7
-    line_height = 18
     title_columns = []
     max_title_width = 0
-    font= "VeraMono.ttf"
+    font = "VERDANA.TTF"
+    font_size = 15
+    line_height = 20
     
     def __init__(self, user, columns):
-        self.user = user
-        
+        import os
         from django.conf import settings
         
+        self.user = user
+        self.columns = columns
         self.data = {}
-        height = len(columns) * self.line_height
+        
+        print Image.VERSION
+        
+        fontdir = os.path.join(settings.MEDIA_ROOT, "fonts", self.font)
+        self.font = ImageFont.truetype(fontdir, self.font_size)
+        
         self.title_columns = [FIELD_TITLES[column] for column in columns]
-        self.max_title_width = max(len(text) for text in self.title_columns)
-        
-        width = (self.max_title_width + 9) * self.font_width + 2
-
-        self.im = Image.new("RGBA", (width, height))
-        fontdir = settings.MEDIA_ROOT + "/fonts/" + self.font
-        self.font = ImageFont.truetype(fontdir, 12)
-        self.draw = ImageDraw.Draw(self.im)
-        
-        for column in columns:
+    
+    def get_data(self):
+        for column in self.columns:
             self.get_column(column)
         
     def get_column(self, column):
         from logbook.models import Flight
         self.data[column] = Flight.objects.user(self.user).agg(column)
     
+    def output(self):
+        
+        self.get_data()
+        
+        self.t_width = max(self.font.getsize("%s: " % text)[0]
+                            for text in self.title_columns)
+                            
+        self.d_width = max(self.font.getsize(" %s " % num)[0]
+                            for num in self.data)
+                            
+        height = len(self.columns) * self.line_height
+        
+        width_padding = 10
+        
+        img_width = width_padding + self.t_width + self.d_width
+        
+        self.im = Image.new("RGBA", (img_width, height))
+        self.draw = ImageDraw.Draw(self.im)
+        
+        self.put_all_columns()
+        return self.im
+    
+    
     def put_all_columns(self):
+        
         i=0
         for key in GRAPH_FIELDS:
             if key in self.data.keys():
-                self.draw.text((1, (i*self.line_height)+1),
-                               ("%*s: %s") % (self.max_title_width+1,
-                                              " " + FIELD_TITLES[key],
-                                              self.data[key]),
+                disp = FIELD_TITLES[key]
+                down_from_top = (i*self.line_height)+1
+                this_width = self.font.getsize("%s: " % disp)[0]
+                title_over = self.t_width - this_width
+                
+                self.draw.text((title_over, down_from_top),
+                               " %s: " % FIELD_TITLES[key],
                                font=self.font,
                                fill='black')
+                
+                self.draw.text((self.t_width, down_from_top),
+                               " %s" % self.data[key],
+                               font=self.font,
+                               fill='black')
+                               
                 i += 1 #move the next line down one line width
-    
-    def output(self):
-        self.put_all_columns()
-        return self.im
+
+
+
+
+
+
