@@ -1,10 +1,38 @@
-colors2 = {"background":        "#CCE4EB",
-           "navbar_background": "#665B1E",
+colors2 = {"bg":                "#CCE4EB",
+           "navbar_bg":         "#665B1E",
+           "link color":        "#001147",
+           "h1_color":          "#0000FF",
+           "h2_color":          "#00FF00",
+           
+           "navbar_border":     "0px solid #001147",
+           "navbar_text":       "white",
+           "navbar_hover":      "text-decoration: underline",
+           "navbar_sel":        "background: #5DC7E9; font-weight: bold",
+           "canvas_color":      "white",
+           "canvas_border":     "0px solid black",
+           
+           "widget_border":     "1px solid black",
+           
+           "mt_header_color":   "#C1E8E8",
+           "mt_border":         "1px solid #C3C3C3",
+           
+           "mt_strip1":         "#E2EEEE",
+           "mt_strip2":         "#DFDFDF",
+           
+           "current":           "#5DC7E9"
+           "expired":           "gray",
+           "alert":             "#AE345E",
+           
+           "popup_title_bg":    "#CCE4EB",
+           
+           
+           
+           "sig_bg":            "pink",
            }
 
 
 base = """
-body                    {background: %(background)s;
+body                    {background: {bg};
                          margin: 15px;
                          margin-top: 0px;
                          padding: 0px;
@@ -38,15 +66,15 @@ span.display_user       {font-weight: bold}
                          color: #AA3333}
 
 
-#nav_bar                {background: %(navbar_bg)s;
+#nav_bar                {background: {navbar_bg};
                          border: 0px;
                          width: 100%;
                          float: left;
-                         color: white;
+                         color: {navbar_text};
                          padding: 0;
                          padding-top: 3px;
                          padding-bottom: 3px;
-                         border: 0px solid #001147}
+                         border: {navbar_border}}
 
 
 /* navbar for users who are not logged in */
@@ -56,18 +84,17 @@ span.display_user       {font-weight: bold}
                          margin-right: 3px;
                          text-decoration: none}
                          
-#nav_bar a:hover        {text-decoration: underline}
+#nav_bar a:hover        {{navbar_hover}}
 
 #nav_bar .big           {font-size: large}
 
-#nav_bar .nav_selected a {background: #5DC7E9;
-                          font-weight: bold}
+#nav_bar .nav_selected a {{navbar_sel}}
 
 .display_user           {color: black}
 .logged_user            {color: black}
 
 /* the white background beneath (almost) all pages*/
-#canvas                 {background: white;
+#canvas                 {{canvas_color};
                          padding: 1em;
                          overflow:hidden;
                          max-width: 73em;
@@ -81,19 +108,29 @@ span.display_user       {font-weight: bold}
                          top: 3px;
                          cursor: pointer;}
 	 
-a                       {color: #001147}
+a                       {color: {link_color}}
 
 h1                      {text-align: center;
                          font-weight: bold;
-                         color: %(navbar_bg)s;
+                         color: {h1_color};
                          font-size: x-large;}
                          
 h2                      {font-weight: bold;
-                         color: #11566d;
+                         color: {h2_color};
                          font-size: large}
 
-textarea                {border: 1px solid black; font-family: inherit; font-size: inherit; background: white}
-select                  {border: 1px solid black; background: #EEEEEE; font-size: smaller; font-family: inherit}
+textarea                {border: {widget_border};
+                         font-family: inherit;
+                         font-size: inherit;
+                         background: white}
+                         
+select                  {border: {widget_border};
+                         background: #EEEEEE;
+                         font-size: smaller;
+                         font-family: inherit}
+
+/* instructions boxes in a few of the pages */
+.instructions           {background: #DDDDDD; padding: 20px}
 
 input[type="button"]:hover,
 input[type="submit"]:hover,
@@ -101,15 +138,19 @@ button:hover            {cursor: pointer}
 
 input[type="submit"],
 input[type="button"],
-button                  {border: 1px solid black}
+button                  {border: {widget_border}}
 
 input[type="password"],
-input[type="text"]      {border: 1px solid black; background: white}
+input[type="text"]      {border: {widget_border}; background: white}
 
-input[type=text]:disabled {background-color: #DDDDDD; color: #777777; border: 1px dotted #EEEEEE}
+input[type=text]:disabled {background-color: #DDDDDD;
+                           color: #777777;
+                           border: 1px dotted #EEEEEE}
 
-#footer                 {text-align:center; font-size: x-small; color: gray;
-                         border: 0px solid black; width: 100%;}
+#footer                 {text-align:center;
+                         font-size: x-small;
+                         color: gray;
+                         width: 100%;}
                          
 /***** table for events, planes, and places *********/
 
@@ -117,29 +158,26 @@ table.minor_table                     {width: 100%; border-collapse: collapse}
 
 /* the header row */
 table.minor_table thead td            {border: 1px solid #C3C3C3;
-                                       background: #C1E8E8;
+                                       background: {mt_header_color};
                                        font-weight: normal;
                                        padding: 2px}
 
 /* the footer row */
-table.minor_table tfoot td            {border: 1px solid #C3C3C3;
-                                       background: #C1E8E8;
+table.minor_table tfoot td            {border: {mt_border};
+                                       background: {mt_header_color};
                                        font-weight: normal;
                                        padding: 2px}
 
 /* every other cell */
-table.minor_table td                  {border: 1px solid #C3C3C3;
+table.minor_table td                  {border: {mt_border};
                                        padding: 2px}
 
 /* striping */
-table.minor_table tr:nth-child(odd)   {background: #E2EEEE}
-table.minor_table tr:nth-child(even)  {background: #DFDFDF}
+table.minor_table tr:nth-child(odd)   {background: {mt_strip1}}
+table.minor_table tr:nth-child(even)  {background: {mt_strip2}}
 
 /* the empty message */
 table.minor_table td[colspan]         {font-size: x-large; padding: 10px}
-
-/* instructions boxes in a few of the pages */
-.instructions              {background: #DDDDDD; padding: 20px}
 """
 
 ###############################################################################
@@ -165,9 +203,9 @@ div.night           {float: right}
 div.bfr             {float: left}
 div.cfi             {float: right}
 
-.expired            {background-color: gray}
-.current            {background-color: #5DC7E9}
-.alert              {background-color: #AE345E}
+.expired            {background-color: {expired}}
+.current            {background-color: {current}}
+.alert              {background-color: {alert}}
 
 .nothing            {font-size: large; margin: 10px; text-align: center}
 
@@ -221,7 +259,12 @@ input[type="button"]        {margin: 10px}
                              
 #popup table                {margin-left: auto; margin-right: auto}
 
-#dragbar                    {background: lightblue; width:100%; text-align: right; margin-bottom: .5em; border-bottom: 1px solid black}
+#dragbar                    {background: {popup_title_bg};
+                             width: 100%;
+                             text-align: right;
+                             margin-bottom: .5em;
+                             border-bottom: 1px solid black}
+                             
 #dragbar td:first-child     {width:100%; text-align:center; font-weight: bold; font-size: larger}
 #dragbar td:last-child      {text-align:right}
 
@@ -529,17 +572,24 @@ input[type="button"]        {margin-bottom: 10px}
 input[type=text],
 select, textarea	        {width: 200px; font-size: small !important}
 
-#tags_window                {background: white; font-size: x-small;
-                             border: 0px solid blue; padding: 5px;}
+#tags_window                {background: white;
+                             font-size: x-small;
+                             border: 0px solid blue;
+                             padding: 5px;}
+                             
 #tags_window a:hover        {color: lightgreen}
 
 textarea                    {height: 50px}
 
 /* instructions for each field on the popup*/
-span.help_text              {color: gray; font-size: x-small; font-style: italic}
+span.help_text              {color: gray;
+                             font-size: x-small;
+                             font-style: italic}
 
 /* message for when there are no planes to diaplay*/
-td.empty_row                {font-weight: bold; font-size: large; padding: 10px}
+td.empty_row                {font-weight: bold;
+                             font-size: large;
+                             padding: 10px}
 
 /* the tag cloud in the popup window */
 .tag1                       {font-size: xx-small}
@@ -548,7 +598,9 @@ td.empty_row                {font-weight: bold; font-size: large; padding: 10px}
 .tag4                       {font-size: small}
 .tag5                       {font-size: medium}
 
-#mass_edit_link             {width: 100%; text-align: right; font-size: x-small}
+#mass_edit_link             {width: 100%;
+                             text-align: right;
+                             font-size: x-small}
 """
 
 ###############################################################################
@@ -611,26 +663,31 @@ td[colspan='4']                       {padding-bottom: 10px; text-align: center}
 
 realtime = """
 /* the countdown timer*/
-.epiclock              {font-size: large; color: green}
+.epiclock                       {font-size: large; color: green}
 """
 
 ###############################################################################
 
 records = """
-textarea                {width: 800px; height: 400px}
+textarea                        {width: 800px; height: 400px}
 """
 
 ###############################################################################
 
 sigs = """
-#checktable                {margin-left: auto; margin-right: auto}
-#checktable td             {text-align: left}
+#checktable                     {margin-left: auto; margin-right: auto}
+#checktable td                  {text-align: left}
 
-#sig_url                   {width: 50%; padding: 20px;
-                            font-size: large; background: pink;
-                            text-align: center; margin: 0 auto 0 auto}
+#sig_url                        {width: 50%;
+                                 padding: 20px;
+                                 font-size: large;
+                                 background: {sig_bg};
+                                 text-align: center;
+                                 margin: 0 auto 0 auto}
                              
-#image_div                 {padding: 20px; background: clear; min-width: 10%}
+#image_div                      {padding: 20px;
+                                 background: clear;
+                                 min-width: 10%}
 """
 
 ###############################################################################
