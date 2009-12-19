@@ -1,6 +1,10 @@
-colors2 = {"bg":                "#CCE4EB",
+#!/usr/bin/env python
+
+styles = {
+
+"style-2": {"page_bg":          "#CCE4EB",
            "navbar_bg":         "#665B1E",
-           "link color":        "#001147",
+           "link_color":        "#001147",
            "h1_color":          "#0000FF",
            "h2_color":          "#00FF00",
            
@@ -19,28 +23,83 @@ colors2 = {"bg":                "#CCE4EB",
            "mt_strip1":         "#E2EEEE",
            "mt_strip2":         "#DFDFDF",
            
-           "current":           "#5DC7E9"
+           "current":           "#5DC7E9",
            "expired":           "gray",
            "alert":             "#AE345E",
            
            "popup_title_bg":    "#CCE4EB",
            
-           
+           "news_bg":           "#CCE4EB",
            
            "sig_bg":            "pink",
+           
+           "ss_strip1":         "white",
+           "ss_strip2":         "#EEEEEE",
+           },
+           
+"style-3": {"page_bg":          "white",
+           "navbar_bg":         "red",
+           "link_color":        "red",
+           "h1_color":          "red",
+           "h2_color":          "red",
+           
+           "navbar_border":     "1px solid purple",
+           "navbar_text":       "red",
+           "navbar_hover":      "text-decoration: underline",
+           "navbar_sel":        "background: red; font-weight: bold",
+           "canvas_color":      "white",
+           "canvas_border":     "1px solid purple",
+           
+           "widget_border":     "1px solid black",
+           
+           "mt_header_color":   "#C1E8E8",
+           "mt_border":         "1px solid #C3C3C3",
+           
+           "mt_strip1":         "#E2EEEE",
+           "mt_strip2":         "#DFDFDF",
+           
+           "current":           "#5DC7E9",
+           "expired":           "gray",
+           "alert":             "#AE345E",
+           
+           "popup_title_bg":    "#CCE4EB",
+           
+           "news_bg":           "red",
+           
+           "sig_bg":            "red",
+           
+           "ss_strip1":         "white",
+           "ss_strip2":         "red",
            }
 
+}
+
+test = """
+
+body                    {background: %(page_bg)s;
+                         margin: 15px;}
+
+
+{df: %(page_bg)s; %(page_bg)s: dfdfd
+dsfdsfsdf}
+
+"""
+
+###############################################################################
+###############################################################################
+###############################################################################
+###############################################################################
 
 base = """
-body                    {background: {bg};
+body                    {background: %(page_bg)s;
                          margin: 15px;
                          margin-top: 0px;
                          padding: 0px;
                          font-size: small; 
                          font-family: "Bitstream Vera Sans", sans-serif;
-                         min-height: 100%;
-                         height: 100%;}
-
+                         min-height: 100%%;
+                         height: 100%%;}
+                         
 #header                 {margin:5px; overflow: hidden; border: 0px solid black}
 #main_content           {margin:5px; overflow: hidden; border: 0px solid black}
 
@@ -56,7 +115,7 @@ body                    {background: {bg};
                          text-align: right;
                          font-weight: normal;
                          color: #001147;
-                         width: 100%;
+                         width: 100%%;
                          border: 0}
                          
 span.logged_user,
@@ -66,17 +125,17 @@ span.display_user       {font-weight: bold}
                          color: #AA3333}
 
 
-#nav_bar                {background: {navbar_bg};
+#nav_bar                {background: %(navbar_bg)s;
                          border: 0px;
-                         width: 100%;
+                         width: 100%%;
                          float: left;
-                         color: {navbar_text};
+                         color: %(navbar_text)s;
                          padding: 0;
                          padding-top: 3px;
                          padding-bottom: 3px;
-                         border: {navbar_border}}
-
-
+                         border: %(navbar_border)s}
+                         
+                         
 /* navbar for users who are not logged in */
 
 #nav_bar a              {color: white;
@@ -84,17 +143,17 @@ span.display_user       {font-weight: bold}
                          margin-right: 3px;
                          text-decoration: none}
                          
-#nav_bar a:hover        {{navbar_hover}}
+#nav_bar a:hover        {%(navbar_hover)s}
 
 #nav_bar .big           {font-size: large}
 
-#nav_bar .nav_selected a {{navbar_sel}}
+#nav_bar .nav_selected a {%(navbar_sel)s}
 
 .display_user           {color: black}
 .logged_user            {color: black}
 
 /* the white background beneath (almost) all pages*/
-#canvas                 {{canvas_color};
+#canvas                 {%(canvas_color)s;
                          padding: 1em;
                          overflow:hidden;
                          max-width: 73em;
@@ -108,23 +167,23 @@ span.display_user       {font-weight: bold}
                          top: 3px;
                          cursor: pointer;}
 	 
-a                       {color: {link_color}}
+a                       {color: %(link_color)s}
 
 h1                      {text-align: center;
                          font-weight: bold;
-                         color: {h1_color};
+                         color: %(h1_color)s;
                          font-size: x-large;}
                          
 h2                      {font-weight: bold;
-                         color: {h2_color};
+                         color: %(h2_color)s;
                          font-size: large}
 
-textarea                {border: {widget_border};
+textarea                {border: %(widget_border)s;
                          font-family: inherit;
                          font-size: inherit;
                          background: white}
                          
-select                  {border: {widget_border};
+select                  {border: %(widget_border)s;
                          background: #EEEEEE;
                          font-size: smaller;
                          font-family: inherit}
@@ -138,10 +197,10 @@ button:hover            {cursor: pointer}
 
 input[type="submit"],
 input[type="button"],
-button                  {border: {widget_border}}
+button                  {border: %(widget_border)s}
 
 input[type="password"],
-input[type="text"]      {border: {widget_border}; background: white}
+input[type="text"]      {border: %(widget_border)s; background: white}
 
 input[type=text]:disabled {background-color: #DDDDDD;
                            color: #777777;
@@ -150,52 +209,54 @@ input[type=text]:disabled {background-color: #DDDDDD;
 #footer                 {text-align:center;
                          font-size: x-small;
                          color: gray;
-                         width: 100%;}
+                         width: 100%%;}
                          
 /***** table for events, planes, and places *********/
 
-table.minor_table                     {width: 100%; border-collapse: collapse}
+table.minor_table                     {width:       100%%;
+                                       border-collapse: collapse}
 
 /* the header row */
-table.minor_table thead td            {border: 1px solid #C3C3C3;
-                                       background: {mt_header_color};
+table.minor_table thead td            {border:      1px solid #C3C3C3;
+                                       background:  %(mt_header_color)s;
                                        font-weight: normal;
-                                       padding: 2px}
+                                       padding:     2px}
 
 /* the footer row */
-table.minor_table tfoot td            {border: {mt_border};
-                                       background: {mt_header_color};
+table.minor_table tfoot td            {border:      %(mt_border)s;
+                                       background:  %(mt_header_color)s;
                                        font-weight: normal;
-                                       padding: 2px}
+                                       padding:     2px}
 
 /* every other cell */
-table.minor_table td                  {border: {mt_border};
-                                       padding: 2px}
+table.minor_table td                  {border:      %(mt_border)s;
+                                       padding:     2px}
 
 /* striping */
-table.minor_table tr:nth-child(odd)   {background: {mt_strip1}}
-table.minor_table tr:nth-child(even)  {background: {mt_strip2}}
+table.minor_table tr:nth-child(odd)   {background:  %(mt_strip1)s}
+table.minor_table tr:nth-child(even)  {background:  %(mt_strip2)s}
 
 /* the empty message */
-table.minor_table td[colspan]         {font-size: x-large; padding: 10px}
+table.minor_table td[colspan]         {font-size:   x-large;
+                                       padding:     10px}
 """
 
 ###############################################################################
 
 currency = """
 #canvas             {text-align: left}
-div.currbox         {width: 100%; overflow: hidden; margin-bottom: 10px; text-align: center}
+div.currbox         {width: 100%%; overflow: hidden; margin-bottom: 10px; text-align: center}
 div.currbox p       {margin-top: 3px}
 h2                  {margin-left: auto; margin-right: auto}                  
 h3                  {font-size: large; color: black; margin: 11px 0 5px 0}
 
-div.inner_currbox   {border: 1px solid black; width: 49%; height: 100px}
-div.medical_third   {border: 1px solid black; width: 32%; height: 100px; float: left; margin: 5px}
-div.inst_four       {border: 1px solid black; width: 23.5%; height: 50px;
+div.inner_currbox   {border: 1px solid black; width: 49%%; height: 100px}
+div.medical_third   {border: 1px solid black; width: 32%%; height: 100px; float: left; margin: 5px}
+div.inst_four       {border: 1px solid black; width: 23.5%%; height: 50px;
                      float: left; margin: 5px; font-size: xx-small;
                      padding-top: 3px}
                      
-.inst_bar            {width: 99% !important; height: 30px !important}
+.inst_bar            {width: 99%% !important; height: 30px !important}
 
 div.day             {float: left}
 div.night           {float: right}
@@ -211,7 +272,7 @@ div.cfi             {float: right}
 
 
 
-table.currbox                 {width: 100%; border: 1px solid black;
+table.currbox                 {width: 100%%; border: 1px solid black;
                                text-align: center; font-size: xx-small;
                                height: 100px; border-collapse: collapse;}
                                
@@ -220,8 +281,8 @@ table.currbox td              {border: 1px solid black; padding: 0px}
 table.currbox td h3           {margin-top: 0px}
 tr.full_bar td                {text-align: center}
 
-table.instrument td           {width: 25%}
-table.medical td              {width: 33%}
+table.instrument td           {width: 25%%}
+table.medical td              {width: 33%%}
 """
 
 ###############################################################################
@@ -260,12 +321,12 @@ input[type="button"]        {margin: 10px}
 #popup table                {margin-left: auto; margin-right: auto}
 
 #dragbar                    {background: {popup_title_bg};
-                             width: 100%;
+                             width: 100%%;
                              text-align: right;
                              margin-bottom: .5em;
                              border-bottom: 1px solid black}
                              
-#dragbar td:first-child     {width:100%; text-align:center; font-weight: bold; font-size: larger}
+#dragbar td:first-child     {width:100%%; text-align:center; font-weight: bold; font-size: larger}
 #dragbar td:last-child      {text-align:right}
 
 #close_x                    {cursor: pointer; font-weight: bold}
@@ -282,9 +343,9 @@ flight_popup = """
 #new_entry_popup td                         {padding: 0}
 
 #flying_div                                 {padding: 5px}
-#table_holder                               {overflow: hidden; width:100%; border: 0px solid green}
+#table_holder                               {overflow: hidden; width:100%%; border: 0px solid green}
 
-#flight_left_table                          {width: 53%; border: 0px solid black; float: left; margin-right: -10px}
+#flight_left_table                          {width: 53\%%; border: 0px solid black; float: left; margin-right: -10px}
 
 #flight_left_table input[type=text],
 textarea, select                            {width: 145px}
@@ -293,16 +354,16 @@ textarea, select                            {width: 145px}
 #flight_left_table tr td:first-child        {text-align: right; padding-right: 5px}
 #flight_left_table tr td:last-child	        {text-align: left}
 
-#flight_right_table                         {width: 47%; border: 0px solid black; float: right}
+#flight_right_table                         {width: 47%%; border: 0px solid black; float: right}
 #flight_right_table input[type=text]		{width: 2.9em}
 #flight_right_table input[type=button]		{margin-left: 5px}
 #flight_right_table tr td:last-child		{text-align: left; padding-left: 5px}
 #flight_right_table tr td:first-child		{text-align: right}
 
-#landings_table                             {width: 100%; margin-top: 5px; margin-bottom: 5px}
+#landings_table                             {width: 100%%; margin-top: 5px; margin-bottom: 5px}
 #landings_table input[type=text]            {width: 2em}
 
-#flight_events_table                        {width: 99%;
+#flight_events_table                        {width: 99%%;
                                              border:1px solid black;
                                              margin-left: auto;
                                              margin-right: auto;
@@ -314,18 +375,18 @@ textarea, select                            {width: 145px}
 ul.errorlist                                {color: red; margin: 0px; margin-right: 5px; padding: 0px; 
                                              width: 145px; list-style-type: none; text-align: center; border: 1px solid red}
 
-#non_events_table                           {width: 100%; border:0px solid black; margin: 0em; background: lightblue}
-#non_events_table td                        {text-align: left; width: 33%;}
+#non_events_table                           {width: 100%%; border:0px solid black; margin: 0em; background: lightblue}
+#non_events_table td                        {text-align: left; width: 33%%;}
 
 #non_flying_div                             {text-align: center}
 #non_flying_div table:first-child, 
-#non_flying_div textarea                    {width: 85%; height: 5.5em;}
-#non_flying_div table:first-child td:first-child  {width: 30%; text-align: right; padding-right: 5px}
+#non_flying_div textarea                    {width: 85%%; height: 5.5em;}
+#non_flying_div table:first-child td:first-child  {width: 30%%; text-align: right; padding-right: 5px}
 #non_flying_div table:first-child td:last-child   {text-align: left}
 #non_flying_div input[type=text]            {width: 120px}
 
 
-#flight_buttons, #non_buttons               {width:100%; float: left; margin-bottom: 10px}
+#flight_buttons, #non_buttons               {width:100%%; float: left; margin-bottom: 10px}
 
 
 #flight_left_table tr:first-child           {display:none}
@@ -362,9 +423,9 @@ textarea                            {width: 250px; height: 100px}
 """
 ###############################################################################
 
-import_ = """
+import__ = """
 .flying_event                   {color: darkred; font-weight: bold}
-#canvas                         {max-width: 100% !important}
+#canvas                         {max-width: 100%% !important}
 
 .preview                        {border-collapse: collapse; border: 1px solid gray; margin: 10px auto auto auto}
 .preview td                     {font-size: x-small; border: 1px solid gray}
@@ -388,7 +449,7 @@ table#import_form input         {border: default; background: default}
 ###############################################################################
 
 logbook = """
-#canvas                                      {width: 98%; max-width: none}
+#canvas                                      {width: 98%%; max-width: none}
 
 /* the [Pilot Checkride] tag in the remarks section*/
 .flying_event                                {color: darkred; font-weight: bold}
@@ -397,7 +458,7 @@ logbook = """
 .date_col span                               {display: none}
 
 
-#logbook_table                               {width:100%;
+#logbook_table                               {width:100%%;
                                               border: 0px solid #C3C3C3;
                                               background: white;
                                               font-size: x-small;
@@ -440,15 +501,15 @@ span.local                                   {color: gray}
 ###############################################################################
 
 custom_view = """
-#filter_box                             {width: 100%; background: white; border: 0px solid black; margin-top: 10px}
+#filter_box                             {width: 100%%; background: white; border: 0px solid black; margin-top: 10px}
 #filter_box select[class*='__'],
 #filter_box input[class*='__']          {width: 100px}
-#filter_box td                          {width: 20%; text-align: center; border: 0px solid black; padding: 3px}
+#filter_box td                          {width: 20%%; text-align: center; border: 0px solid black; padding: 3px}
 #center_filter_table                    {margin: 0 auto 0 auto}
-#center_filter_table td                 {width: 33% !important; text-align: right}
+#center_filter_table td                 {width: 33%% !important; text-align: right}
 
 /* middle pane is a little bit wider */
-#filter_box td:nth-child(2)             {width: 60%}
+#filter_box td:nth-child(2)             {width: 60%%}
 
 /* the little boxes and dropdowns in the middle pane*/
 .small_picker                           {width: 3em}
@@ -482,7 +543,7 @@ h3                              {margin-bottom: 2px}
 .purple                         {color:#780078}
 .orange                         {color:#FFB114}
 
-#images_table                   {width: 100%;
+#images_table                   {width: 100%%;
                                  margin-left: auto;
                                  margin-right: auto}
                                  
@@ -490,17 +551,17 @@ h3                              {margin-bottom: 2px}
                                  margin-bottom: 20px;
                                  margin-right: auto;
                                  margin-left: auto;
-                                 width: 50%}
+                                 width: 50%%}
                                  
-.maps_table td                  {width: 50%; background: lightgray}
+.maps_table td                  {width: 50%%; background: lightgray}
 """
 
 ###############################################################################
 
 mass_entry = """
-#canvas                                   {max-width: 100%}
+#canvas                                   {max-width: 100%%}
 
-table.mass_table                          {width: 100%; border-collapse: collapse}
+table.mass_table                          {width: 100%%; border-collapse: collapse}
 table.mass_table input                    {font-size: small}
 
 tr.header_row td                          {font-size: x-small; background: white; padding: 0}
@@ -516,7 +577,7 @@ input.float_line                          {width: 2.4em; margin: 1px}
 
 mass_planes = """
 table input,
-table select                  {width: 100%}
+table select                  {width: 100%%}
 
 table.mass_table              {border-collapse: collapse;
                                margin: 0 auto 10px auto}
@@ -546,7 +607,7 @@ news = """
 	                 margin-left: auto;
 	                 margin-bottom: 15px;
 	                 padding: 5px;
-	                 background: %(background)s}
+	                 background: {news_bg}}
 
 .news_box p			{font-size: medium}
 
@@ -556,7 +617,7 @@ news = """
 .news_box small     {font-size: small}
 
 #demo_link          {background: #DDDDDD;
-                     width: 100%;
+                     width: 100%%;
                      padding: 10px 0 10px 0;
                      text-align: center;
                      margin-bottom: 20px;
@@ -598,7 +659,7 @@ td.empty_row                {font-weight: bold;
 .tag4                       {font-size: small}
 .tag5                       {font-size: medium}
 
-#mass_edit_link             {width: 100%;
+#mass_edit_link             {width: 100%%;
                              text-align: right;
                              font-size: x-small}
 """
@@ -609,24 +670,24 @@ preferences = """
 fieldset                              {text-align: right}
 legend                                {font-size: large; font-weight: bold;
                                         color: #11566d}
-input, select                         {width: 80%}
+input, select                         {width: 80%%}
 input[type="checkbox"]                {width: auto}
 input[type='submit']                  {width: auto; margin-top: 15px}
 
 ul                                    {font-sze: inherit; margin: 0; color: red;
                                         font-weight: bold}
 
-.prefs_table                          {width:100%; border: 0px solid black;
+.prefs_table                          {width:100%%; border: 0px solid black;
                                         font-size: medium; margin-right: auto;
                                         margin-left: auto}
 
-.prefs_table td:first-child           {border: 0px solid green; width: 50%;
+.prefs_table td:first-child           {border: 0px solid green; width: 50%%;
                                         text-align: right; padding-right: 10px}
 .prefs_table td                       {border: 0px solid blue; text-align: left;
-                                       width: 10%}
+                                       width: 10%%}
 
 /* The help text column */
-.prefs_table td:last-child            {font-size: small; color:gray; width: 30%}
+.prefs_table td:last-child            {font-size: small; color:gray; width: 30%%}
 
 td[colspan='4']                       {padding-bottom: 10px; text-align: center}
 
@@ -654,7 +715,7 @@ td[colspan='4']                       {padding-bottom: 10px; text-align: center}
 #columns_table td:last-child          {width: 40em; font-size: xx-small;
                                         font-style: italics; color: black}
 
-.delete_box                           {text-align: center }
+.delete_box                           {text-align: center}
 
 #instructions                         {text-align: center; color: gray}
 """
@@ -678,7 +739,7 @@ sigs = """
 #checktable                     {margin-left: auto; margin-right: auto}
 #checktable td                  {text-align: left}
 
-#sig_url                        {width: 50%;
+#sig_url                        {width: 50%%;
                                  padding: 20px;
                                  font-size: large;
                                  background: {sig_bg};
@@ -687,7 +748,7 @@ sigs = """
                              
 #image_div                      {padding: 20px;
                                  background: clear;
-                                 min-width: 10%}
+                                 min-width: 10%%}
 """
 
 ###############################################################################
@@ -697,20 +758,65 @@ site_stats = """
                                  margin: 0 auto 0 auto;
                                  text-align: right;
                                  border-collapse: collapse;
-                                 width: 100%}
+                                 width: 100%%}
 
 #site_stats td                  {border: 1px dotted gray;
-                                 padding-right: 10px}
+                                 padding-right: 10px;
+                                 background: {ss_strip1}}
                                   
 #site_stats td:last-child       {text-align: left;
                                  font-weight: bold;
                                  padding-left: 10px}
 
 /* striping */                              
-#site_stats tr:nth-child(odd)   {background: #EEEEEE}
+#site_stats tr:nth-child(odd)   {background: {ss_strip2}}
                                  
 #openid td, #openid th          {border: 1px dotted gray; text-align: center}
 #openid                         {margin: 0 auto 0 auto;}
 #openid td                      {text-align: left; padding: 0 10px 0 10px}
 #openid td:first-child          {text-align: right}
 """
+
+
+if __name__ == "__main__":
+    
+    # a dict containing all css strings undexed by filename
+    css = locals()
+    
+    import sys
+    import os  
+    directory = "style-%s" % sys.argv[1]
+    source = styles[directory]
+    
+    names = ('base', 'currency', 'events', 'flight_popup', 'help',
+             'import__', 'locations', 'logbook', 'maps', 'mass_entry',
+             'mass_planes', 'milestones', 'news', 'planes', 'popup',
+             'preferences', 'realtime', 'records', 'sigs', 'site_stats',
+             'custom_view', 'route')
+    
+    print directory
+    
+    if not os.path.isdir(directory):
+        os.makedirs(directory)
+    else:
+        pass #assert False, "You must move/delete the old folder first"
+                 
+    for name in names:
+        f = open("%s/%s.css" % (directory, name.replace("__",'')), 'w')
+        rendered = css[name] % source
+        f.writelines(rendered)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
