@@ -86,11 +86,15 @@ class StatDB(models.Model):
     num_7_days =       models.PositiveIntegerField(default=0, null=False)
     time_7_days =      models.FloatField(default=0, null=False)
     
+    #airport unique visitors
+    auv =              models.TextField(null=False)    
+    
     pwm_count =        models.PositiveIntegerField(default=0, null=False)
     pwm_hours =        models.FloatField(default=0, null=False)
     
-    #airport unique visitors
-    auv =              models.TextField(null=False)
+    unique_tn =        models.PositiveIntegerField(default=0, null=False)
+    day_wmu =          models.CharField(max_length=25, blank=True, null=True)
+    day_wmh =          models.CharField(max_length=25, blank=True, null=True)
     
     class Meta:
         get_latest_by = 'dt'
@@ -116,7 +120,7 @@ class Stat(object):
                   "unique_countries", "total_dist", "route_earths",
                   "most_common_tail", "most_common_type", "most_common_manu",
                   "auv", "time_7_days", "num_7_days", "user_7_days",
-                  "pwm_hours", "pwm_count", )
+                  "pwm_hours", "pwm_count", "unique_tn", 'day_wmh', 'day_wmu')
           
         kwargs = {"dt": datetime.datetime.now()}
         
@@ -127,6 +131,33 @@ class Stat(object):
         sdb.save()
     
     #--------------------------------------------------------------------------
+    
+    def calc_day_wmh(self):
+        """day with the most hours logged, ignoring entries > 24h"""
+        item = Flight.objects\
+                     .values('total', 'date')\
+                     .filter(total__lte=24)\
+                     .values('date')\
+                     .annotate(t=Sum('total'))\
+                     .order_by('-t')[0]
+                     
+        from django.utils.dateformat import format
+        return "%s (%s)" % (format(item['date'], 'd M, Y'), item['t'])
+    
+    def calc_day_wmu(self):
+        """day with most users having edited their logbook"""
+        from backup.models import UsersToday
+        item = UsersToday.objects\
+                          .annotate(c=Count('logged_today'))\
+                          .values('c', 'date')\
+                          .order_by('-c')[0]
+                          
+        from django.utils.dateformat import format
+                          
+        return "%s (%s)" % (format(item['date'], 'd M, Y'), item['c'])
+    
+    def calc_unique_tn(self):
+        return Plane.objects.values('tailnumber').distinct().count()
     
     def calc_pwm_hours(self):
         return self.pwm.order_by('-s').values('s')[:1][0]['s']

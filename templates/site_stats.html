@@ -23,6 +23,17 @@
         <td>Total flight hours from all users</td>
         <td>{{ cs.total_hours|floatformat:1|intcomma }}</td>
     </tr>
+    
+    <tr>
+        <td>Date where the most unique users edited some part of their logbook</td>
+        <td>{{ cs.day_wmu }}</td>
+    </tr>
+    
+    <tr>
+        <td>Date with the most hours logged by all users</td>
+        <td>{{ cs.day_wmh }}</td>
+    </tr>
+    
     <tr>
         <td>Total number of flights logged</td>
         <td>{{ cs.total_logged|intcomma }}</td>
@@ -77,6 +88,12 @@
         <td>Total distance of all routes in Earth Circumferences</td>
         <td>{{ cs.route_earths|floatformat:1|intcomma }} Earths</td>
     </tr>
+    
+    <tr>
+        <td>Total unique tailnumbers from all users</td>
+        <td>{{ cs.unique_tn }}</td>
+    </tr>
+    
     <tr>
         <td>Airports visited by the most users</td>
         <td>{{ cs.auv|linebreaksbr }}</td>
