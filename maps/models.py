@@ -11,7 +11,7 @@ def copy_empty_images(sender, **kwargs):
     import shutil
     from django.conf import settings
     
-    id_ = str(kwargs.pop('user').id)
+    id_ = str(kwargs.pop('instance').id)
     directory = os.path.join(settings.BASE_MAP_PATH, id_)
     os.makedirs(directory)
         
