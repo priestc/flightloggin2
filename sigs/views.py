@@ -3,10 +3,27 @@ from annoying.decorators import render_to
 from logbook.constants import FIELD_TITLES, GRAPH_FIELDS
 from share.decorator import no_share
 
+from main.table import html_table
+
+def all_agg_checkbox(prefix=""):
+    out = []
+    for field in GRAPH_FIELDS:
+        if field == 'total' or field == 'pic':
+            sel='checked="checked"'
+        else:
+            sel = ""
+        
+        out.append(
+        """<input %(sel)s type="checkbox" id="%(field)s">
+           <label for="%(field)s">%(display)s</label>""" %
+                {'sel': sel, 'field': field, 'display': FIELD_TITLES[field]}
+        )
+    
+    return html_table(out, 5, "checktable")
+
 @no_share('other')
 @render_to('sigs.html')
 def sigs(request, shared, display_user):
-    from logbook.constants import all_agg_checkbox
     checkbox_table = all_agg_checkbox()
     return locals()
 
@@ -28,6 +45,7 @@ class Sig(object):
     
     title_columns = []
     max_title_width = 0
+    #font = "Verdana.ttf"
     font = "VeraMono.ttf"
     font_size = 12
     line_height = 14
@@ -40,20 +58,18 @@ class Sig(object):
         self.columns = columns
         self.data = {}
         
-        print Image.VERSION
-        
         fontdir = os.path.join(settings.MEDIA_ROOT, "fonts", self.font)
         self.font = ImageFont.truetype(fontdir, self.font_size)
         
         self.title_columns = [FIELD_TITLES[column] for column in columns]
     
     def get_data(self):
-        for column in self.columns:
-            self.get_column(column)
-        
-    def get_column(self, column):
         from logbook.models import Flight
-        self.data[column] = Flight.objects.user(self.user).agg(column)
+        for column in self.columns:
+            self.data[column] = Flight.objects.user(self.user).agg(column)
+            
+        print self.data
+        
     
     def output(self):
         
@@ -62,12 +78,13 @@ class Sig(object):
         self.t_width = max(self.font.getsize("%s: " % text)[0]
                             for text in self.title_columns)
                             
-        self.d_width = max(self.font.getsize(" %s " % num)[0]
-                            for num in self.data)
-                            
-        height = len(self.columns) * self.line_height
+        self.d_width = max(self.font.getsize(" %.1f " % num)[0]
+                            for num in self.data.values())
         
-        width_padding = 10
+        width_padding = 0
+        height_padding = 3
+        
+        height = len(self.columns) * self.line_height + height_padding
         
         img_width = width_padding + self.t_width + self.d_width
         
@@ -77,9 +94,8 @@ class Sig(object):
         self.put_all_columns()
         return self.im
     
-    
     def put_all_columns(self):
-        
+
         i=0
         for key in GRAPH_FIELDS:
             if key in self.data.keys():
@@ -94,7 +110,7 @@ class Sig(object):
                                fill='black')
                 
                 self.draw.text((self.t_width, down_from_top),
-                               " %s" % self.data[key],
+                               " %.1f" % self.data[key],
                                font=self.font,
                                fill='black')
                                

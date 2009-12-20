@@ -61,7 +61,7 @@ GRAPH_FIELDS = [
           'act_inst', 'sim_inst', 'night_l','day_l', 'app','p2p', 'day',
           'multi', 'm_pic', 'sea', 'sea_pic', 'mes', 'mes_pic', 'turbine',
           't_pic', 'mt', 'mt_pic', 'complex', 'hp', 'sim', 'tail', 'jet',
-          'jet_pic',
+          'jet_pic', 'line_dist',
           ]
 
 # flight fields that get their totals straight from the SUM(x) database command,
@@ -230,41 +230,3 @@ FIELD_ABBV = {
     'atp_xc': "ATP XC",
     'speed': "Speed (kts)",
 }
-
-#########################################
-
-from main.table import html_table
-
-#def all_agg_select(prefix=""):
-#    out = []
-#    for field in GRAPH_FIELDS:
-#        out.append("<option name=\"%s%s\">%s</option>" % (prefix, field, FIELD_TITLES[field]))
-#        
-#    return mark_safe("<select>" + "".join(out) + "</select>")
-
-def all_agg_checkbox(prefix=""):
-    out = []
-    for field in GRAPH_FIELDS:
-        out.append(
-        """<input type="checkbox" id="%s"><label for="%s">%s</label>""" % \
-                      (field, field, FIELD_TITLES[field])
-        )
-    
-    return html_table(out, 5, "checktable")
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-        
