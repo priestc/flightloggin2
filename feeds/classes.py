@@ -12,8 +12,9 @@ class LatestFlights(Feed):
         if len(bits) != 1:
             raise ObjectDoesNotExist
         user=User.objects.get(username=bits[0])
+        
         try:
-            if not user.get_profile().share:
+            if not user.get_profile().logbook_share:
                 raise ObjectDoesNotExist 
         except:
             raise ObjectDoesNotExist
@@ -32,5 +33,5 @@ class LatestFlights(Feed):
         return "Latest flights logged by %s" % user.username
 
     def items(self, user):
-        return Flight.objects.filter(user=user).order_by('-date')[:15]
+        return Flight.objects.user(user).order_by('-date')[:15]
 

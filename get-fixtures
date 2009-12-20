@@ -3,6 +3,8 @@
 date=`date +%Y-%m-%d`
 myfilename="mysql-${date}.sql.bz2"
 
+echo "lets do this";
+
 # clean up the database, and create the backup file
 ssh chris@flightlogg.in "~/bin/mysql-clean; ~/bin/mysql-backup; /srv/flightloggin/make-fixtures";
 
