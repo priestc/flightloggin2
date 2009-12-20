@@ -87,6 +87,7 @@ INSTALLED_APPS = (
     'site_stats',
     'realtime',
     'backup',
+    'maps',
     
     'tagging',
     'django_extensions',
