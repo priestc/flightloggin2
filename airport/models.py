@@ -96,6 +96,15 @@ class Location(models.Model):
         
         return text
     
+    def get_users(self):
+        """ Returns all users who have flown to this location """
+        
+        from django.contrib.auth.models import User      
+        return User.objects\
+                   .filter(profile__social=True)\
+                   .filter(flight__route__routebase__location__id=self.id)\
+                   .distinct()
+    
     def save(self, *args, **kwargs):
         """ if it's a custom, automatically look up to see which country and
         or state the custom location falls into"""

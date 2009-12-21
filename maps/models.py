@@ -27,7 +27,7 @@ def copy_empty_images(sender, **kwargs):
         shutil.copy(blank, filename)
         
    
-## registere this function to be called whenever a user instance is saved
+## register this function to be called whenever a user instance is saved
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 post_save.connect(copy_empty_images, sender=User)

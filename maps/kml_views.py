@@ -8,6 +8,10 @@ from logbook.models import Flight
 from route.models import RouteBase, Route
 from share.decorator import no_share
 
+def single_route_kml(request, pk, earth):
+    return HttpResponse('hi')
+
+
 @no_share('other')
 def airports_kml(request, shared, display_user, type_):
     from django.conf import settings

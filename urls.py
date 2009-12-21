@@ -194,6 +194,24 @@ urlpatterns += patterns('',
     ),
     
     url(
+        r'^route-(?P<pk>\w+).kmz$',
+        "maps.kml_views.single_route_kml",
+        {'earth': True},                                    name="route-earth",
+    ),
+    
+    url(
+        r'^route-(?P<pk>\w+)$',
+        "maps.kml_views.single_route_kml",
+        {'earth': False},                                    name="route-maps",
+    ),
+    
+    url(
+        r'^route-users-(?P<pk>\w+)$',
+        "maps.kml_views.single_route_kml",
+                                                            name="route-users",
+    ),
+    
+    url(
         r'^(?P<username>\w+)/airports-(?P<type_>\w+).kmz$',
         "maps.kml_views.airports_kml",
                                                             name="kml-airport",

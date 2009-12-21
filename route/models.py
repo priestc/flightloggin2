@@ -274,6 +274,12 @@ class Route(models.Model):
         
         return diameter
     
+    def get_users(self):
+        """ Returns all users who have flown this exact route"""
+        from django.contrib.auth.models import User
+        return User.objects.filter(profile__social=True)\
+                   .filter(flight__route__simple_rendered=self.simple_rendered)
+    
     ################################
     
     def calc_max_start(self, a=None):

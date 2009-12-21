@@ -155,6 +155,18 @@ class Flight(models.Model):
         
         elif cn == "type":
             return self.plane.type
+        
+        elif cn == "links":
+            if self.route:
+                from django.core.urlresolvers import reverse
+                r = self.route
+                earth = reverse('route-earth', kwargs={"pk": r.id})
+                maps = reverse('route-maps', kwargs={"pk": r.id})
+                users = reverse('route-users', kwargs={"pk": r.id})
+                s = '<a href="%s">E</a> <a href="%s">M</a> <a href="%s">U</a>'
+                return mark_safe(s % (earth, maps, users))
+            else:
+                return ""
             
         elif cn == "f_route":
             if self.route.fancy_rendered:

@@ -5,6 +5,8 @@ from plane.constants import CATEGORY_CLASSES, FAKE_CLASSES
 
 class Profile(models.Model):
     user =           models.ForeignKey(User, primary_key=True)
+    
+    
 
     dob =            models.DateField(
                          "Date of Birth",
@@ -49,6 +51,10 @@ class Profile(models.Model):
     minutes =        models.BooleanField(
                          "Display times as HH:MM",
                          default=False,
+                     )
+                     
+    social =         models.BooleanField("List me in 'other users' lists",
+                         default=True,
                      )
                      
     logbook_share =  models.BooleanField("Share Basic Logbook",

@@ -60,6 +60,22 @@ class Plane(models.Model):
             self.user = share.get_display_user()
             
         super(Plane, self).save(*args, **kwargs)
+        
+    def get_users_tailnumber(self):
+        """Returns the users who also have flown in this tailnumber"""
+        
+        from django.contrib.auth.models import User
+        return User.objects\
+                   .filter(profile__social=True)\
+                   .filter(plane__tailnumber=self.tailnumber).distinct()
+    
+    def get_users_type(self):
+        """Returns the users who also have flown in this type"""
+        
+        from django.contrib.auth.models import User
+        return User.objects\
+                   .filter(profile__social=True)\
+                   .filter(plane__type=self.type).distinct()
 
     def __unicode__(self):
         if self.type:
