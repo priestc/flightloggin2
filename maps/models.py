@@ -13,7 +13,11 @@ def copy_empty_images(sender, **kwargs):
     
     id_ = str(kwargs.pop('instance').id)
     directory = os.path.join(settings.BASE_MAP_PATH, id_)
-    os.makedirs(directory)
+    try:
+        os.makedirs(directory)
+    except OSError:
+        ## if it already exists, then don't worry about it.
+        pass
         
     names = ('states-unique.png','states-count.png','states-colored.png')
         
