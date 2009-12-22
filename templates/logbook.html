@@ -114,16 +114,17 @@
             <a target="_blank" href="{% url s-route-maps row.flight.pk %}">
                 View this route in Google Maps
             </a>
-            {% comment %}
+
             <br>
-            <a href="{% url profile-route row.route.simple_rendered %}">
+            {% url profile-route row.route.simple_rendered as pr %}
+            <a href="{{pr}}">
                 More info about this route 
             </a>
             <br>
-            <a href="{% url profile-tailnumber row.flight.plane.tailnumber|upper|urlencode %}">
+            {% url profile-tailnumber row.flight.plane.tailnumber|upper|urlencode as pt%}
+            <a href="{{pt}}">
                 More info about this tailnumber
-            </a>
-            {% endcomment %}       
+            </a>      
             
         </div>
 	{% endfor %}
