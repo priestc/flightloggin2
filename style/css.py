@@ -34,6 +34,7 @@ styles = {
            "logbook_strip2":    "white",
            "logbook_header_c":  "#A7F4A6",
            "logbook_border":    "none",
+           "small_popup_bg":    "#A7F4A6",
            
            "filter_border":     "none",
            "filter_bg":         "white",
@@ -90,6 +91,7 @@ styles = {
            "logbook_strip2":    "white",
            "logbook_header_c":  "#E0FFFF",
            "logbook_border":    "0px solid #C3C3C3",
+           "small_popup_bg":    "#E0FFFF",
            
            "filter_border":     "0px dashed purple",
            "filter_bg":         "#white",
@@ -147,6 +149,7 @@ styles = {
            "logbook_strip2":    "#FAFAFA",
            "logbook_header_c":  "#FFB898",
            "logbook_border":    "0px solid #C3C3C3",
+           "small_popup_bg":    "#FFB898",
            
            "filter_border":     "1px dashed purple",
            "filter_bg":         "#FFDDDD",
@@ -587,7 +590,7 @@ logbook = """
 
 td.empty_logbook                             {font-size: x-large; padding: 10px !important}
 
-.small_popup                                 {background: white;
+.small_popup                                 {background: %(small_popup_bg)s;
                                               display:none;
                                               position: absolute;
                                               padding: 3px;

@@ -112,6 +112,8 @@ $(document).ready(function() {
 	});
 	
 	$("a.popup_link").click(function(){
+	
+    	close_all_small_popups()
     	
 	    //find the position of the date link that was clicked
 	    var pos = $(this).position();
