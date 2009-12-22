@@ -107,11 +107,11 @@
                 Edit this flight
             </a>
             <br>
-            <a href="{% url s-route-kml row.flight.pk %}" id="f{{row.pk}}">
+            <a target="_blank" href="{% url s-route-kml row.flight.pk %}" id="f{{row.pk}}">
                 View this route in Google Earth
             </a>
             <br>
-            <a href="{% url s-route-maps row.flight.pk %}" id="f{{row.pk}}">
+            <a target="_blank" href="{% url s-route-maps row.flight.pk %}" id="f{{row.pk}}">
                 View this route in Google Maps
             </a>
             {% comment %}
