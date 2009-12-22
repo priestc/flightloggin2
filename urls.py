@@ -218,9 +218,9 @@ urlpatterns += patterns('',
     ),
     
     url(
-        r'^plane-users-(?P<pk>\w+).html$',
-        "plane.views.users",
-                                                          name="s-plane-users",
+        r'^tailnumber-(?P<pk>\w+).html$',
+        "plane.views.tailnumber_profile",
+                                                     name="profile-tailnumber",
     ),
     
     url(

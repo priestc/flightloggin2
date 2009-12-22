@@ -76,8 +76,8 @@ def mass_planes(request, shared, display_user, page=0):
     
     return locals()
 
-@render_to('plane_users.html')
-def users(request, pk):
+@render_to('tailnumber_profile.html')
+def tailnumber_profile(request, pk):
     from django.contrib.auth.models import User
     from airport.models import Location
     

@@ -901,6 +901,10 @@ site_stats = """
 #openid td:first-child          {text-align: right}
 """
 
+item_profile = """
+a.noshare                       {color: gray}
+"""
+
 
 if __name__ == "__main__":
     
@@ -909,26 +913,34 @@ if __name__ == "__main__":
     
     import sys
     import os
-    directory = "style-%s" % sys.argv[1]
-    full_directory = "../media/css/" + directory
     
-    source = styles[directory]
-    
-    names = ('base', 'currency', 'events', 'flight_popup', 'help',
-             'import__', 'locations', 'logbook', 'maps', 'mass_entry',
-             'mass_planes', 'milestones', 'news', 'planes', 'popup',
-             'preferences', 'realtime', 'records', 'sigs', 'site_stats',
-             'custom_view', 'route')
-    
-    if not os.path.isdir(full_directory):
-        os.makedirs(full_directory)
+    if sys.argv[1] == 'all':
+        loop = (1,2,3)
     else:
-        pass #assert False, "You must move/delete the old folder first"
+        loop = (sys.argv[1], )
+    
+    for style in loop:    
+        directory = "style-%s" % style
+        full_directory = "../media/css/" + directory
+        
+        source = styles[directory]
+        
+        names = ('base', 'currency', 'events', 'flight_popup', 'help',
+                 'import__', 'locations', 'logbook', 'maps', 'mass_entry',
+                 'mass_planes', 'milestones', 'news', 'planes', 'popup',
+                 'preferences', 'realtime', 'records', 'sigs', 'site_stats',
+                 'custom_view', 'route', 'item_profile')
+        
+        if not os.path.isdir(full_directory):
+            os.makedirs(full_directory)
+        else:
+            pass #assert False, "You must move/delete the old folder first"
+        
                  
-    for name in names:
-        f = open("%s/%s.css" % (full_directory, name.replace("__",'')), 'w')
-        rendered = css[name] % source
-        f.writelines(rendered)
+        for name in names:
+            f = open("%s/%s.css" % (full_directory, name.replace("__",'')), 'w')
+            rendered = css[name] % source
+            f.writelines(rendered)
 
 
 

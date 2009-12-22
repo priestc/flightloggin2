@@ -2,10 +2,10 @@
 {% block realtime-sel %}nav_selected{% endblock%}
 
 {% block javascript %}
-<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/plane_users.css">
+<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/item_profile.css">
 {% endblock %}
 
-{% block title %}Plane Info - {{pk}}{% endblock %}
+{% block title %}Tailnumber Profile - {{pk}}{% endblock %}
 
 
 {% block canvas %}
@@ -13,32 +13,30 @@
 <h1>{{pk}}</h1>
 <h2>Users who have flown an aircraft with this tailnumber:</h2>
 
+{% spaceless %}
 {% for user in users %}
-
-
-    {% if not forloop.first %}
-    ,
-    {% endif %}
-
+    
+    {# the span is so it works with spaceless better #}
+    {% if not forloop.first %}<span>, </span>{% endif %}
+    
     {% if user.get_profile.logbook_share %}
-
-        <a class="noshare" href="" title="This user does not allow others to view his/her logbook">
-        {{user.username}}
-        </a>,
-        
+    
+        <a title="This user does not allow others to view his/her logbook"
+           class="noshare" href="">{{user.username}}</a>
+           
     {% else %}
-
-        <a href="{% url logbook user.username %}" title="Click to see this user's logbook">
-        {{user.username}}
-        </a>
-        
+    
+        <a href="{% url logbook user.username %}"
+           title="Click to see this user's logbook">{{user.username}}</a>
+           
     {% endif %}
-
+    
 {% empty %}
 
     (None)
 
 {% endfor %}
+{% endspaceless %}
 
 <hr>
 Total hours logged with this tailnumber: <strong>{{t_hours}}</strong>
@@ -48,7 +46,7 @@ Total number of flights logged with this tailnumber: <strong>{{t_flights}}</stro
 Number of unique airports this aircraft has landed at: <strong>{{t_airports}}</strong>
 <br>
 {% ifnotequal t_flights 0 %}
-<a href="{% url kml-plane pk %}" >View all flights in this plane in Google Earth</a>
+<a href="{% url kml-plane pk %}">View all flights in this plane in Google Earth</a>
 {% endifnotequal %}
 
 {% endblock %}
