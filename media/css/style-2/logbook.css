@@ -36,4 +36,7 @@ td.empty_logbook                             {font-size: x-large; padding: 10px 
 
 .small_popup                                 {background: white;
                                               display:none;
-                                              position: absolute}
+                                              position: absolute;
+                                              padding: 3px;
+                                              font-size: x-small;
+                                              border: 1px solid black;}
