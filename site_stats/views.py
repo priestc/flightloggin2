@@ -15,8 +15,11 @@ def site_stats(request):
 
 @secret_key
 def save_to_db(request):
+    import datetime
+    start = datetime.datetime.now()
     ss = Stat()
     ss.save_to_db()
+    stop = datetime.datetime.now()
     
     from django.http import HttpResponse
-    return HttpResponse("OK!", mimetype='text/plain')
+    return HttpResponse(str(stop-start), mimetype='text/plain')
