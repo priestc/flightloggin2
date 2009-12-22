@@ -120,7 +120,7 @@
                 More info about this route 
             </a>
             <br>
-            <a href="{% url profile-tailnumber row.flight.plane.tailnumber|upper %}">
+            <a href="{% url profile-tailnumber row.flight.plane.tailnumber|upper|urlencode %}">
                 More info about this tailnumber
             </a>        
             
