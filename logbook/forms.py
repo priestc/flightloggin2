@@ -173,21 +173,3 @@ class FixedPlaneModelFormset(BaseModelFormSet):
         form.fields["plane"] = PlaneField(
                 queryset=Plane.objects.get_empty_query_set(), required=True)
         form.fields['plane'].queryset = self.custom_queryset
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -8,6 +8,13 @@ class PopupPlaneForm(ModelForm):
     tags = TagField(widget=forms.Textarea, required=False)
     class Meta:
         model = Plane
+    
+    def clean(self):
+        
+        self.cleaned_data['tailnumber'] = \
+            self.cleaned_data['tailnumber'].replace(' ','')
+        
+        return self.cleaned_data
         
 class MassPlaneForm(ModelForm):
     description = CharField(required=False,
