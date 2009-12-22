@@ -65,7 +65,7 @@ styles = {
 "style-2": {"page_bg":          "#CCE4EB",
            "navbar_bg":         "#665B1E",
            "link_color":        "#001147",
-           "h1_color":          "#0000FF",
+           "h1_color":          "#2A5BD8",
            "h2_color":          "#665B1E",
            "error_color":       "red",
            

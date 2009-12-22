@@ -80,25 +80,34 @@ def mass_planes(request, shared, display_user, page=0):
 def tailnumber_profile(request, pk):
     from django.contrib.auth.models import User
     from airport.models import Location
-    
     from django.db.models import Sum
+    
+    types = Plane.objects\
+                 .filter(tailnumber__iexact=pk)\
+                 .values_list('type', flat=True)\
+                 .order_by()\
+                 .distinct()
+    
     users = User.objects\
                 .filter(profile__social=True)\
-                .filter(flight__plane__tailnumber=pk)\
+                .filter(flight__plane__tailnumber__iexact=pk)\
                 .order_by()\
                 .distinct()
     
     t_hours = Flight.objects\
-                    .filter(plane__tailnumber=pk)\
+                    .filter(plane__tailnumber__iexact=pk)\
                     .aggregate(s=Sum('total'))['s']
                     
-    t_flights = Flight.objects.filter(plane__tailnumber=pk).count()
+    t_flights = Flight.objects.filter(plane__tailnumber__iexact=pk).count()
     
     t_airports = Location.objects\
-                         .filter(routebase__land=True)\
-                         .filter(routebase__route__flight__plane__tailnumber=pk)\
-                         .order_by()\
-                         .distinct()\
-                         .count()
+             .filter(routebase__land=True)\
+             .filter(routebase__route__flight__plane__tailnumber__iexact=pk)\
+             .order_by()\
+             .distinct()\
+             .count()
     
     return locals()
+
+def type_profile(request, pk):
+    pass

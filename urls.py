@@ -188,46 +188,58 @@ urlpatterns += patterns('',
     ),
     
     url(
-        r'^(?P<username>\w+)/routes-(?P<type_>\w+).kmz$',
-        "maps.kml_views.routes_kml",
-                                                              name="kml-route",
-    ),
-    
-    url(
-        r'^plane-(?P<tn>\w+).kmz$',
+        r'^plane-(?P<tn>[\w-]+).kmz$',
         "maps.kml_views.all_plane_kml",
                                                               name="kml-plane",
     ),
     
     url(
-        r'^route-(?P<pk>\w+).kmz$',
+        r'^route-(?P<pk>[\w-]+).kmz$',
         "maps.kml_views.single_route_kml",
         {'earth': True},                                    name="s-route-kml",
     ),
     
     url(
-        r'^route-(?P<pk>\w+)$',
+        r'^route-(?P<pk>[\w-]+)$',
         "maps.kml_views.single_route_kml",
         {'earth': False},                                  name="s-route-maps",
     ),
     
+    #--------------------------------------------------------------------------
+    
     url(
-        r'^route-users-(?P<pk>\w+)$',
-        "maps.kml_views.users_route",
-                                                          name="s-route-users",
+        r'^route-(?P<pk>[\w-]+).html$',
+        "route.views.route_profile",
+                                                          name="profile-route",
     ),
     
     url(
-        r'^tailnumber-(?P<pk>\w+).html$',
+        r'^tailnumber-(?P<pk>[\w-]+).html$',
         "plane.views.tailnumber_profile",
                                                      name="profile-tailnumber",
     ),
+    
+    url(
+        r'^type-(?P<pk>[\w-]+).html$',
+        "plane.views.type_profile",
+                                                           name="profile-type",
+    ),
+    
+    #--------------------------------------------------------------------------
     
     url(
         r'^(?P<username>\w+)/airports-(?P<type_>\w+).kmz$',
         "maps.kml_views.airports_kml",
                                                             name="kml-airport",
     ),
+    
+    url(
+        r'^(?P<username>\w+)/routes-(?P<type_>\w+).kmz$',
+        "maps.kml_views.routes_kml",
+                                                              name="kml-route",
+    ),
+    
+    #--------------------------------------------------------------------------
     
     url(
         r'^(?P<username>\w+)/8710.html$',

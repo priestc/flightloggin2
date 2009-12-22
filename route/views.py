@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from models import Route
+from annoying.decorators import render_to
 
 def del_routes(request):
        
@@ -31,3 +32,36 @@ def hard_recalc_routes(request):
         
     return HttpResponse("%s routes 'hard' recalculated" % count,
                         mimetype='text/plain')
+                        
+
+@render_to('route_profile.html')
+def route_profile(request, pk):
+    from django.contrib.auth.models import User
+    from airport.models import Location
+    from logbook.models import Flight
+    from plane.models import Plane
+    from django.db.models import Sum
+    
+    users = User.objects\
+                .filter(profile__social=True)\
+                .filter(flight__route__simple_rendered__iexact=pk)\
+                .order_by()\
+                .distinct()
+                    
+    t_flights = Flight.objects.filter(route__simple_rendered__iexact=pk).count()
+    
+    types = Plane.objects\
+                 .exclude(type="")\
+                 .filter(flight__route__simple_rendered__iexact=pk)\
+                 .values_list('type', flat=True)\
+                 .order_by()\
+                 .distinct()
+                    
+    tailnumbers = Plane.objects\
+                       .exclude(tailnumber="")\
+                       .filter(flight__route__simple_rendered__iexact=pk)\
+                       .values_list('tailnumber', flat=True)\
+                       .order_by()\
+                       .distinct()
+    
+    return locals()

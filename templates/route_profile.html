@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% block realtime-sel %}nav_selected{% endblock%}
 
 {% block javascript %}
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/item_profile.css">
@@ -11,15 +10,7 @@
 {% block canvas %}
 
 <h1>{{ pk|upper }}</h1>
-{{types|join:" / "}}
-
-<br><br>
-{% ifnotequal t_flights 0 %}
-<a href="{% url kml-plane pk %}">View all flights in this plane with Google Earth</a>
-{% endifnotequal %}
-
-
-<h2>Users who have flown an aircraft with this tailnumber</h2>
+<h2>Users who have flown this route:</h2>
 
 {% spaceless %}
 {% for user in users %}
@@ -46,13 +37,13 @@
 {% endfor %}
 {% endspaceless %}
 
-<h2>Total hours logged with this tailnumber</h2>
-<big><strong>{{t_hours}}</strong></big>
+<h2>Total number of flights logged with this route</h2>
+<big><strong>{{ t_flights }}</strong></big>
 
-<h2>Total number of flights logged with this tailnumber</h2>
-<big><strong>{{t_flights}}</strong></big>
+<h2>Tailnumbers that have flown this route:</h2>
+<big><strong>{{ tailnumbers|join:", " }}</strong></big>
 
-<h2>Number of unique airports this aircraft has landed at</h2>
-<big><strong>{{t_airports}}</strong></big>
+<h2>Types that have flown this route</h2>
+<big><strong>{{ types|join:", " }}</strong></big>
 
 {% endblock %}

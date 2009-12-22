@@ -23,6 +23,7 @@ class LogbookRow(list):
     def __init__(self, flight, columns):
         self.flight = flight
         self.pk = flight.pk
+        self.route = flight.route
         self.columns = columns
         
         self.make_data()        

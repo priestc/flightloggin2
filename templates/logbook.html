@@ -103,27 +103,27 @@
 	{% for row in logbook %}
         <div class="small_popup" id="s{{row.pk}}">
         
-            <a href="" class="edit_popup_link" id="f{{row.pk}}">
+            <a href="" class="edit_popup_link" id="f{{row.pk}}" id="f{{row.pk}}">
                 Edit this flight
             </a>
             <br>
-            <a target="_blank" href="{% url s-route-kml row.flight.pk %}" id="f{{row.pk}}">
+            <a target="_blank" href="{% url s-route-kml row.flight.pk %}">
                 View this route in Google Earth
             </a>
             <br>
-            <a target="_blank" href="{% url s-route-maps row.flight.pk %}" id="f{{row.pk}}">
+            <a target="_blank" href="{% url s-route-maps row.flight.pk %}">
                 View this route in Google Maps
             </a>
-            {% comment %}
+            
             <br>
-            <a href="{% url s-route-users row.pk %}" id="f{{row.pk}}">
-                Other users who have flown this route
+            <a href="{% url profile-route row.route.simple_rendered %}">
+                More info about this route 
             </a>
             <br>
-            <a href="{% url s-plane-users row.flight.plane.pk %}" id="f{{row.pk}}">
-                Other users who have flown this plane ({{row.flight.plane.tailnumber}})
+            <a href="{% url profile-tailnumber row.flight.plane.tailnumber|upper %}">
+                More info about this tailnumber
             </a>        
-            {% endcomment %}
+            
         </div>
 	{% endfor %}
 	
