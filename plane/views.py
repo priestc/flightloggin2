@@ -65,6 +65,8 @@ def mass_planes(request, shared, display_user, page=0):
             url = reverse('planes', kwargs={"username": display_user.username})
             return HttpResponseRedirect(url)
             
+            ## send signal so this user is marked as having edited
+            ## their logbook for today
             from backup.models import edit_logbook
             edit_logbook.send(sender=display_user)
     
@@ -73,5 +75,13 @@ def mass_planes(request, shared, display_user, page=0):
     
     return locals()
 
+@render_to('plane_users.html')
 def users(request, pk):
-    return HttpResponse('not yet, coming soon.')
+    from django.contrib.auth.models import User
+    users = User.objects\
+                .filter(profile__social=True)\
+                .filter(flight__plane__tailnumber=pk)\
+                .order_by()\
+                .distinct()
+    
+    return locals()

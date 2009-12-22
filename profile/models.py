@@ -53,7 +53,7 @@ class Profile(models.Model):
                          default=False,
                      )
                      
-    social =         models.BooleanField("List me in 'other users' lists",
+    social =         models.BooleanField("Include me in site-wide stats and lists",
                          default=True,
                      )
                      

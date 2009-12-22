@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block realtime-sel %}nav_selected{% endblock%}
+
+{% block javascript %}
+<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/plane_users.css">
+{% endblock %}
+
+{% block title %}Plane Info - {{plane.tailnumber}}{% endblock %}
+
+
+{% block canvas %}
+
+
+
+{% for user in users %}
+
+{% if user.get_profile.logbook_share %}
+<a class="noshare" href="" title="This user does not allow others to view his/her logbook">
+{{user.username}}
+</a>,
+{% else %}
+<a href="{% url logbook user.username %}" title="Click to see this user's logbook">
+{{user.username}}
+</a>,
+{% endif %}
+{% endfor %}
+
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
