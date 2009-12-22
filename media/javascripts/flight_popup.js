@@ -33,6 +33,8 @@ function close_all_small_popups(){
 
 }
 
+$(document).click(close_all_small_popups);
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 $(document).ready(function() {
@@ -110,19 +112,19 @@ $(document).ready(function() {
 	});
 	
 	$("a.popup_link").click(function(){
-	    //make the little popup when the date is clicked
+    	
+	    //find the position of the date link that was clicked
 	    var pos = $(this).position();
 	    
 	    //the id of the flight
 		var f_id = this.id.substr(1);
 		
 		//grab the small popup window and place it next to the cursor
-		
-		close_all_small_popups()
-		
 		little_popup = $('#s' + f_id)
 		little_popup.css('top', pos.top+10).css('left', pos.left)
 		little_popup.show()
+		
+		return false
 		
 	});
 	
