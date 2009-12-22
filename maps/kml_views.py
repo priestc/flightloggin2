@@ -8,6 +8,15 @@ from logbook.models import Flight
 from route.models import RouteBase, Route
 from share.decorator import no_share
 
+from utils import RouteFolder
+
+def all_plane_kml(request, tn):
+    """ Returns a KMZ of all routes flown by the passed tailnumber"""
+    
+    qs = Route.objects.filter(flight__plane__tailnumber=tn)
+                  
+    return qs_to_split_kmz(qs)
+
 def single_route_kml(request, pk, earth):
     if not earth:
         from django.conf import settings
@@ -26,8 +35,102 @@ def single_route_kml(request, pk, earth):
 
     return folders_to_kmz_response([f])
 
+
 def users_route(request, pk):
+    """ prepares a pafe that displayes all users
+        who have flown a specefic route
+    """
+    
     return HttpResponse('not yet, coming soon.')
+
+
+
+def qs_to_split_kmz(qs):
+    
+    title = "Routes by type of flight time"
+    
+    dual_g = qs.filter(flight__dual_g__gt=0)\
+               .values('kml_rendered', 'simple_rendered')\
+               .order_by()\
+               .distinct()
+              
+    dual_r = qs.filter(flight__dual_r__gt=0)\
+               .values('kml_rendered', 'simple_rendered')\
+               .order_by()\
+               .distinct()
+                          
+    solo =   qs.filter(flight__solo__gt=0)\
+               .values('kml_rendered', 'simple_rendered')\
+               .order_by()\
+               .distinct()
+                          
+    sic =    qs.filter(flight__sic__gt=0)\
+               .values('kml_rendered', 'simple_rendered')\
+               .order_by()\
+               .distinct()
+                          
+    inst =   qs.filter(flight__act_inst__gt=0)\
+               .values('kml_rendered', 'simple_rendered')\
+               .order_by()\
+               .distinct()
+                          
+    pic =    qs.filter(flight__pic__gt=0,
+                       flight__dual_g=0,
+                       flight__solo=0)\
+               .values('kml_rendered', 'simple_rendered')\
+               .order_by()\
+               .distinct()
+
+    folders = []
+    if dual_g:
+        folders.append(
+            RouteFolder(name="Dual Given", qs=dual_g, style="#orange_line")
+        )
+        
+    if solo:
+        folders.append(
+            RouteFolder(name="Solo", qs=solo, style="#red_line")
+        )
+        
+    if pic:
+        folders.append(
+            RouteFolder(name="PIC", qs=pic, style="#red_line")
+        )
+        
+    if dual_r:
+        folders.append(
+            RouteFolder(name="Dual Received", qs=dual_r, style="#blue_line")
+        )
+
+    if sic:
+        folders.append(
+            RouteFolder(name="SIC", qs=sic, style="#purple_line")
+        )
+
+    if inst:
+        folders.append(
+            RouteFolder(name="Actual Instrument", qs=inst, style="#green_line")
+        )
+
+
+    return folders_to_kmz_response(folders, title)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 @no_share('other')
@@ -56,10 +159,38 @@ def airports_kml(request, shared, display_user, type_):
             folders.append(AirportFolder(name="All Places", qs=custom))
     
     return folders_to_kmz_response(folders, title)
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 @no_share('other')   
 def routes_kml(request, shared, display_user, type_):
-    from utils import RouteFolder
 
     if type_== "all":
         title = "All Routes"
@@ -71,6 +202,8 @@ def routes_kml(request, shared, display_user, type_):
         folders=[]
         if all_r:
             folders.append(RouteFolder(name="All Routes", qs=all_r))
+        
+        return folders_to_kmz_response(folders, title)
         
     elif type_== "cat_class":
         title = "Routes by Multi/Single Engine"
@@ -110,78 +243,13 @@ def routes_kml(request, shared, display_user, type_):
                 RouteFolder(name="Other", qs=other, style="#green_line")
             )
             
+        return folders_to_kmz_response(folders, title)
+            
     elif type_ == "flight_time":
-        title = "Routes by type of flight time"
-        dual_g = Route.objects.user(display_user)\
-                              .filter(flight__dual_g__gt=0)\
-                              .values('kml_rendered', 'simple_rendered')\
-                              .order_by()\
-                              .distinct()
-                              
-        dual_r = Route.objects.user(display_user)\
-                              .filter(flight__dual_r__gt=0)\
-                              .values('kml_rendered', 'simple_rendered')\
-                              .order_by()\
-                              .distinct()
-                              
-        solo =   Route.objects.user(display_user)\
-                              .filter(flight__solo__gt=0)\
-                              .values('kml_rendered', 'simple_rendered')\
-                              .order_by()\
-                              .distinct()
-                              
-        sic =    Route.objects.user(display_user)\
-                              .filter(flight__sic__gt=0)\
-                              .values('kml_rendered', 'simple_rendered')\
-                              .order_by()\
-                              .distinct()
-                              
-        inst =   Route.objects.user(display_user)\
-                              .filter(flight__act_inst__gt=0)\
-                              .values('kml_rendered', 'simple_rendered')\
-                              .order_by()\
-                              .distinct()
-                              
-        pic =    Route.objects.user(display_user)\
-                              .filter(flight__pic__gt=0,
-                                      flight__dual_g=0,
-                                      flight__solo=0)\
-                              .values('kml_rendered', 'simple_rendered')\
-                              .order_by()\
-                              .distinct()
-        
-        folders = []
-        if dual_g:
-            folders.append(
-                RouteFolder(name="Dual Given", qs=dual_g, style="#orange_line")
-            )
-            
-        if solo:
-            folders.append(
-                RouteFolder(name="Solo", qs=solo, style="#red_line")
-            )
-            
-        if pic:
-            folders.append(
-                RouteFolder(name="PIC", qs=pic, style="#red_line")
-            )
-            
-        if dual_r:
-            folders.append(
-                RouteFolder(name="Dual Received", qs=dual_r, style="#blue_line")
-            )
-
-        if sic:
-            folders.append(
-                RouteFolder(name="SIC", qs=sic, style="#purple_line")
-            )
-
-        if inst:
-            folders.append(
-                RouteFolder(name="Actual Instrument", qs=inst, style="#green_line")
-            )
+        qs = Route.objects.user(display_user)
+        return qs_to_split_kmz(qs)
                 
-    return folders_to_kmz_response(folders, title)
+    
 
 def folders_to_kmz_response(folders, title=None):
     

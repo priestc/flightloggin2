@@ -194,6 +194,12 @@ urlpatterns += patterns('',
     ),
     
     url(
+        r'^plane-(?P<tn>\w+).kmz$',
+        "maps.kml_views.all_plane_kml",
+                                                              name="kml-plane",
+    ),
+    
+    url(
         r'^route-(?P<pk>\w+).kmz$',
         "maps.kml_views.single_route_kml",
         {'earth': True},                                    name="s-route-kml",

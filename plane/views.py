@@ -4,6 +4,7 @@ from share.decorator import no_share
 from django.http import HttpResponse
 
 from models import Plane
+from logbook.models import Flight
 from forms import PopupPlaneForm
 
 @render_to('planes.html')
@@ -78,10 +79,26 @@ def mass_planes(request, shared, display_user, page=0):
 @render_to('plane_users.html')
 def users(request, pk):
     from django.contrib.auth.models import User
+    from airport.models import Location
+    
+    from django.db.models import Sum
     users = User.objects\
                 .filter(profile__social=True)\
                 .filter(flight__plane__tailnumber=pk)\
                 .order_by()\
                 .distinct()
+    
+    t_hours = Flight.objects\
+                    .filter(plane__tailnumber=pk)\
+                    .aggregate(s=Sum('total'))['s']
+                    
+    t_flights = Flight.objects.filter(plane__tailnumber=pk).count()
+    
+    t_airports = Location.objects\
+                         .filter(routebase__land=True)\
+                         .filter(routebase__route__flight__plane__tailnumber=pk)\
+                         .order_by()\
+                         .distinct()\
+                         .count()
     
     return locals()
