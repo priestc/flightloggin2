@@ -33,3 +33,10 @@
 #logbook_table tfoot td[colspan]             {border: none; text-align:right}
 
 td.empty_logbook                             {font-size: x-large; padding: 10px !important}
+
+.small_popup                                 {background: white;
+                                              display:none;
+                                              position: absolute;
+                                              padding: 3px;
+                                              font-size: x-small;
+                                              border: 1px solid black;}

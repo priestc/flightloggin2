@@ -9,7 +9,25 @@ from route.models import RouteBase, Route
 from share.decorator import no_share
 
 def single_route_kml(request, pk, earth):
-    return HttpResponse('hi')
+    if not earth:
+        from django.conf import settings
+        from django.core.urlresolvers import reverse
+        from django.http import HttpResponseRedirect
+        url = reverse('s-route-kml', kwargs={"pk":pk})
+        gm = "http://maps.google.com?q=%s%s" % (settings.SITE_URL, url)
+        return HttpResponseRedirect(gm)
+        
+        
+    from utils import RouteFolder
+    r = Route.objects.filter(flight__pk=pk)\
+                     .values('kml_rendered', 'simple_rendered')
+                     
+    f = RouteFolder(name="Route", qs=r, style="#red_line")
+
+    return folders_to_kmz_response([f])
+
+def users_route(request, pk):
+    return HttpResponse('not yet, coming soon.')
 
 
 @no_share('other')
@@ -37,26 +55,7 @@ def airports_kml(request, shared, display_user, type_):
         if custom:
             folders.append(AirportFolder(name="All Places", qs=custom))
     
-    kml = get_template('base.kml').render(
-                Context({"point_folders": folders, "title": title} )
-          ).encode('utf-8')
-    
-    ####################################
-    
-    sio = StringIO.StringIO()
-    
-    icon = settings.MEDIA_ROOT + "/icons/big/white_pad.png"
-    
-    z = zipfile.ZipFile(sio,'w', compression=zipfile.ZIP_DEFLATED)
-    z.writestr("doc.kml", kml)
-    z.write(icon, "files/icon.png")
-    z.close()
-
-    response = HttpResponse(sio.getvalue(),
-                            mimetype="application/vnd.google-earth.kmz",
-               )
-               
-    return response
+    return folders_to_kmz_response(folders, title)
     
 @no_share('other')   
 def routes_kml(request, shared, display_user, type_):
@@ -182,8 +181,12 @@ def routes_kml(request, shared, display_user, type_):
                 RouteFolder(name="Actual Instrument", qs=inst, style="#green_line")
             )
                 
+    return folders_to_kmz_response(folders, title)
+
+def folders_to_kmz_response(folders, title=None):
+    
     kml = get_template('base.kml').render(
-        Context({"route_folders": folders, "title": title})         
+        Context({"route_folders": folders})         
     )
     
     kml = kml.encode('utf-8')

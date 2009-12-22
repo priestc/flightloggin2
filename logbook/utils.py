@@ -22,6 +22,7 @@ class LogbookRow(list):
     
     def __init__(self, flight, columns):
         self.flight = flight
+        self.pk = flight.pk
         self.columns = columns
         
         self.make_data()        
@@ -40,7 +41,7 @@ class LogbookRow(list):
                 spans = self.get_data_spans()
                 date = dj_date_format(self.flight.column('date'),
                                       self.date_format)
-                title = "title=\"Date (click to edit)\""
+                title = "title=\"Date (click to so see more options)\""
                 disp = """<a %s href="" id="f%s" class=\"popup_link\">%s%s</a>""" % \
                             (title, self.flight.id, date, spans)
             else:

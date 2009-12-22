@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from annoying.decorators import render_to
 from share.decorator import no_share
+from django.http import HttpResponse
 
 from models import Plane
 from forms import PopupPlaneForm
@@ -71,3 +72,6 @@ def mass_planes(request, shared, display_user, page=0):
         formset = PlaneFormset(queryset=qs)
     
     return locals()
+
+def users(request, pk):
+    return HttpResponse('not yet, coming soon.')

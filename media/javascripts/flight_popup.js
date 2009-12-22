@@ -27,6 +27,12 @@ function prepare_edit_flight(wipe) {				//prepares the new entry popup
 	$("#edit_buttons").show();
 }
 
+function close_all_small_popups(){
+
+    $(".small_popup").hide();
+
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 $(document).ready(function() {
@@ -51,7 +57,7 @@ $(document).ready(function() {
 			changeYear: true 
 	}).addClass("embed");
 	
-	/////////////////////////////////////////                 confirm checkboxes for delete flight
+	///////////////////////////////////////// confirm checkboxes for delete flight
 	
 	$("#edit_buttons input[type='checkbox']").click(function() {
 	
@@ -62,7 +68,7 @@ $(document).ready(function() {
 	    
 	});
 	
-	/////////////////////////////////////////                     shortcut buttons
+	/////////////////////////////////////////shortcut buttons
 	
 	$('#auto_button').click(do_auto_button);
 	
@@ -79,9 +85,9 @@ $(document).ready(function() {
 	    
 	});
 	
-	/////////////////////////////////////////
+	/////////////////////////////////////////disable auto complete
 	
-	$("#id_new-date").attr("autocomplete", "off");					// disable auto complete
+	$("#id_new-date").attr("autocomplete", "off");
 	$("#id_new-total").attr("autocomplete", "off");
 	$("#id_new-pic").attr("autocomplete", "off");
 	$("#id_new-solo").attr("autocomplete", "off");
@@ -103,8 +109,27 @@ $(document).ready(function() {
 		fire_popup();
 	});
 	
-	$("a.popup_link").click(function(){			//make the edit popup when the date is clicked
+	$("a.popup_link").click(function(){
+	    //make the little popup when the date is clicked
+	    var pos = $(this).position();
+	    
+	    //the id of the flight
+		var f_id = this.id.substr(1);
+		
+		//grab the small popup window and place it next to the cursor
+		
+		close_all_small_popups()
+		
+		little_popup = $('#s' + f_id)
+		little_popup.css('top', pos.top+10).css('left', pos.left)
+		little_popup.show()
+		
+	});
+	
+	$("a.edit_popup_link").click(function(){
+    	//make the edit popup when the link for it is clicked
 		wipe_clean();
+		close_all_small_popups();
 		prepare_edit_flight(true);
 		fill_in_flight(this.id);
 		fire_popup();

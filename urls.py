@@ -196,19 +196,25 @@ urlpatterns += patterns('',
     url(
         r'^route-(?P<pk>\w+).kmz$',
         "maps.kml_views.single_route_kml",
-        {'earth': True},                                    name="route-earth",
+        {'earth': True},                                    name="s-route-kml",
     ),
     
     url(
         r'^route-(?P<pk>\w+)$',
         "maps.kml_views.single_route_kml",
-        {'earth': False},                                    name="route-maps",
+        {'earth': False},                                  name="s-route-maps",
     ),
     
     url(
         r'^route-users-(?P<pk>\w+)$',
-        "maps.kml_views.single_route_kml",
-                                                            name="route-users",
+        "maps.kml_views.users_route",
+                                                          name="s-route-users",
+    ),
+    
+    url(
+        r'^plane-users-(?P<pk>\w+).html$',
+        "plane.views.users",
+                                                          name="s-plane-users",
     ),
     
     url(

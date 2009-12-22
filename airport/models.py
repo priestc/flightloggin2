@@ -3,6 +3,7 @@ import os
 from django.contrib.gis.db import models
 from django.contrib.gis.utils import LayerMapping
 from django.contrib.auth.models import User
+from django.db.models import Count
 
 from constants import LOCATION_TYPE, LOCATION_CLASS
 from main.queryset_manager import GeoQuerySetManager
@@ -103,7 +104,7 @@ class Location(models.Model):
         return User.objects\
                    .filter(profile__social=True)\
                    .filter(flight__route__routebase__location__id=self.id)\
-                   .distinct()
+                   .distinct()\
     
     def save(self, *args, **kwargs):
         """ if it's a custom, automatically look up to see which country and
