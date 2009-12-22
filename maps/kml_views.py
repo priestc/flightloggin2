@@ -15,7 +15,7 @@ def all_plane_kml(request, tn):
     
     qs = Route.objects.filter(flight__plane__tailnumber=tn)
                   
-    return qs_to_split_kmz(qs)
+    return qs_to_time_kmz(qs)
 
 def single_route_kml(request, pk, earth):
     if not earth:
@@ -45,7 +45,10 @@ def users_route(request, pk):
 
 
 
-def qs_to_split_kmz(qs):
+def qs_to_time_kmz(qs):
+    """ From a routes queryset, return a folder'd up kmz file split up
+        by type of flight time. pic, sic, dual received, etc
+    """
     
     title = "Routes by type of flight time"
     
@@ -117,8 +120,46 @@ def qs_to_split_kmz(qs):
 
 
 
-
-
+def qs_to_catclass_kmz(qs):
+    """ From a routes queryset, return a folder'd up kmz file split up
+        by categoty class of the plane. single multi, helicopter, etc
+    """
+    
+    title = "Routes by Multi/Single Engine"
+        
+    single = qs.filter(flight__plane__cat_class__in=[1,3])\
+               .values('kml_rendered', 'simple_rendered')\
+               .order_by()\
+               .distinct()
+                          
+    multi = qs.filter(flight__plane__cat_class__in=[2,4])\
+              .values('kml_rendered', 'simple_rendered')\
+              .order_by()\
+              .distinct()
+                         
+    other = qs.exclude(flight__plane__cat_class__lte=4)\
+              .exclude(flight__plane__cat_class__gte=15)\
+              .values('kml_rendered', 'simple_rendered')\
+              .order_by()\
+              .distinct()
+    
+    folders = []
+    if single:
+        folders.append(
+            RouteFolder(name="Single-Engine", qs=single, style="#red_line")
+        )
+        
+    if multi:
+        folders.append(
+            RouteFolder(name="Multi-Engine", qs=multi, style="#blue_line")
+        )
+    
+    if other:
+        folders.append(
+            RouteFolder(name="Other", qs=other, style="#green_line")
+        )
+        
+    return folders_to_kmz_response(folders, title)
 
 
 
@@ -191,13 +232,14 @@ def airports_kml(request, shared, display_user, type_):
  
 @no_share('other')   
 def routes_kml(request, shared, display_user, type_):
-
+    
+    qs = Route.objects.user(display_user)
+    
     if type_== "all":
         title = "All Routes"
-        all_r = Route.objects.user(display_user)\
-                             .values('kml_rendered', 'simple_rendered')\
-                             .order_by()\
-                             .distinct()
+        all_r = qs.values('kml_rendered', 'simple_rendered')\
+                  .order_by()\
+                  .distinct()
 
         folders=[]
         if all_r:
@@ -206,48 +248,10 @@ def routes_kml(request, shared, display_user, type_):
         return folders_to_kmz_response(folders, title)
         
     elif type_== "cat_class":
-        title = "Routes by Multi/Single Engine"
-        
-        single = Route.objects.user(display_user)\
-                              .filter(flight__plane__cat_class__in=[1,3])\
-                              .values('kml_rendered', 'simple_rendered')\
-                              .order_by()\
-                              .distinct()
-                              
-        multi = Route.objects.user(display_user)\
-                             .filter(flight__plane__cat_class__in=[2,4])\
-                             .values('kml_rendered', 'simple_rendered')\
-                             .order_by()\
-                             .distinct()
-                             
-        other = Route.objects.user(display_user)\
-                             .exclude(flight__plane__cat_class__lte=4)\
-                             .exclude(flight__plane__cat_class__gte=15)\
-                             .values('kml_rendered', 'simple_rendered')\
-                             .order_by()\
-                             .distinct()
-        
-        folders = []
-        if single:
-            folders.append(
-                RouteFolder(name="Single-Engine", qs=single, style="#red_line")
-            )
-            
-        if multi:
-            folders.append(
-                RouteFolder(name="Multi-Engine", qs=multi, style="#blue_line")
-            )
-        
-        if other:
-            folders.append(
-                RouteFolder(name="Other", qs=other, style="#green_line")
-            )
-            
-        return folders_to_kmz_response(folders, title)
+        return qs_to_time_kmz(qs)
             
     elif type_ == "flight_time":
-        qs = Route.objects.user(display_user)
-        return qs_to_split_kmz(qs)
+        return qs_to_time_kmz(qs)
                 
     
 
