@@ -20,4 +20,4 @@ class TailnumberSitemap(Sitemap):
         try:
             return reverse("profile-tailnumber", kwargs={"pk": item})
         except:
-            return None
+            return ""

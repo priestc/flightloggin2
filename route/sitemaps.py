@@ -16,4 +16,4 @@ class RouteSitemap(Sitemap):
         try:
             return reverse("profile-route", kwargs={"pk": item})
         except:
-            return None
+            return ""
