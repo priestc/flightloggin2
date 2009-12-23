@@ -4,22 +4,38 @@ from django.contrib import admin
 
 admin.autodiscover()
 
-urlpatterns = patterns('django.contrib.auth',
-    url(r'^logout/$','views.logout', {"next_page": "/"}, name="logout"),
-)
+###############################################################################
 
 from feeds.classes import LatestFlights
 feeds = {
     'flights': LatestFlights,
 }
 
+###############################################################################
 
-handler404 = 'main.views.not_found'
+from route.sitemaps import RouteSitemap
+from plane.sitemaps import TailnumberSitemap
+
+sitemaps = {
+    'tailnumber': TailnumberSitemap,
+    'route': RouteSitemap
+}
+
+##############################################################################
+
+#handler404 = 'main.views.not_found'
 
 ## all views get `shared` and `display_user`
 ## variables from `username` via ShareMiddleware
 
-urlpatterns += patterns('',
+urlpatterns = patterns('',
+
+    (
+        r'^sitemap.xml$',
+        'django.contrib.sitemaps.views.sitemap',
+        {'sitemaps': sitemaps}
+    ),
+
     
     url(
         r'^$',
@@ -125,7 +141,12 @@ urlpatterns += patterns('',
     
     
         ############################ main site
-        
+    
+    url(
+        r'^logout/$','django.contrib.auth.views.logout',
+        {"next_page": "/"},
+                                                                  name="logout"
+    ),   
         
     url(
         r'^update-airports.py$',

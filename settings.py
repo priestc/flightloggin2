@@ -106,6 +106,7 @@ INSTALLED_APPS += (
     'django.contrib.gis',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'django.contrib.sitemaps',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

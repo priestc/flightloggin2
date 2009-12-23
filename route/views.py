@@ -48,7 +48,9 @@ def route_profile(request, pk):
                 .order_by()\
                 .distinct()
                     
-    t_flights = Flight.objects.filter(route__simple_rendered__iexact=pk).count()
+    t_flights = Flight.objects\
+                      .filter(route__simple_rendered__iexact=pk)\
+                      .count()
     
     types = Plane.objects\
                  .exclude(type="")\
