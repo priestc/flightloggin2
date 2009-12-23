@@ -32,9 +32,16 @@ urlpatterns = patterns('',
 
     (
         r'^sitemap.xml$',
+        'django.contrib.sitemaps.views.index',
+        {'sitemaps': sitemaps}
+    ),
+    
+    (
+        r'^sitemap-(?P<section>.+)\.xml$',
         'django.contrib.sitemaps.views.sitemap',
         {'sitemaps': sitemaps}
     ),
+
 
     
     url(

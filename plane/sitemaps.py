@@ -6,10 +6,14 @@ class TailnumberSitemap(Sitemap):
     priority = 0.5
 
     def items(self):
-        return Plane.objects\
+        p = Plane.objects\
                     .values_list('tailnumber', flat=True)\
                     .order_by()\
                     .distinct()
+        
+        p = [x.upper() for x in p]
+        
+        return p
     
     def location(self, item):
         from django.core.urlresolvers import reverse
