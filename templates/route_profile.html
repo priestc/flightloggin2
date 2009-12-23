@@ -10,7 +10,7 @@
 {% block canvas %}
 
 <h1>{{ pk|upper }}</h1>
-<h2>Users who have flown this route:</h2>
+<h2>Users who have flown this route</h2>
 
 {% spaceless %}
 {% for user in users %}
@@ -41,7 +41,15 @@
 <big><strong>{{ t_flights }}</strong></big>
 
 <h2>Tailnumbers that have flown this route:</h2>
-<big><strong>{{ tailnumbers|join:", " }}</strong></big>
+{% spaceless %}
+    {% for tn in tailnumbers %}
+        {% url profile-tailnumber tn|upper as url %}
+        
+        {% if not forloop.first %}<span>, </span>{% endif %}
+        
+        <a href="{{ url }}">{{ tn }}</a>
+    {% endfor %}
+{% endspaceless %}
 
 <h2>Types that have flown this route</h2>
 <big><strong>{{ types|join:", " }}</strong></big>
