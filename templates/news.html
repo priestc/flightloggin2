@@ -8,11 +8,12 @@
 
 {% block title %}News{% endblock %}
 {% block canvas %}
-    
+    {% if not user.is_authenticated %}
     <div id="demo_link">
     Welcome to FlightLogg.in! A online pilot's logbook, similar to Logbook Pro and LogShare.<br>
     See how FlightLogg.in' works first hand, <a href="/demo">click here to log into the demo account!</a>    
     </div>
+    {% endif %}
 {% for item in news %}
 
     <div class="news_box">
