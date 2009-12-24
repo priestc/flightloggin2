@@ -16,3 +16,5 @@ scp chris@flightlogg.in:/srv/flightloggin/fixtures/* /srv/flightloggin/fixtures;
 
 # delete the mysql backup file from the remote server (to save space)
 ssh chris@flightlogg.in "rm ~/backups/${myfilename}";
+
+exit

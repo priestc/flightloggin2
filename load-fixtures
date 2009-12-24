@@ -95,6 +95,7 @@ bunzip2 -c fixtures/routes.sql.bz2 | psql logbook
 echo "flights"
 bunzip2 -c fixtures/flights.sql.bz2 | psql logbook
 
+exit
 
 
 

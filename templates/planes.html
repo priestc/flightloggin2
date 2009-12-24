@@ -2,6 +2,8 @@
 {% load tagging_tags %}
 {% block planes-sel %}nav_selected{% endblock%}
 
+{% block description %}{{ display_user.username }}'s planes{% endblock%}
+
 {% block javascript %}
     <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/plane_popup.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/popup.js"></script>

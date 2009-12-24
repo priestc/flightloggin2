@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 
+{% block description %}{{ pk|upper }} route profile{% endblock%}
+
 {% block javascript %}
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/item_profile.css">
 {% endblock %}
 
-{% block title %}Tailnumber Profile - {{ pk|upper }}{% endblock %}
+{% block title %}Route Profile - {{ pk|upper }}{% endblock %}
 
 
 {% block canvas %}

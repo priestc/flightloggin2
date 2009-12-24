@@ -45,3 +45,5 @@ pg_dump -U django logbook --table=route_route | bzip2 > /srv/flightloggin/fixtur
 
 echo "flights"
 pg_dump -U django logbook --table=logbook_flight | bzip2 > /srv/flightloggin/fixtures/flights.sql.bz2
+
+exit
