@@ -10,7 +10,7 @@ from share.decorator import no_share
 
 from utils import RouteFolder
 
-def all_plane_kml(request, tn):
+def single_tailnumber_kml(request, tn):
     """ Returns a KMZ of all routes flown by the passed tailnumber"""
     
     qs = Route.objects.filter(flight__plane__tailnumber=tn)
@@ -35,15 +35,9 @@ def single_route_kml(request, pk, earth):
 
     return folders_to_kmz_response([f])
 
-
-def users_route(request, pk):
-    """ prepares a pafe that displayes all users
-        who have flown a specefic route
-    """
-    
-    return HttpResponse('not yet, coming soon.')
-
-
+def single_location_kml(request, pk):
+    qs = Route.objects.filter(routebase__location__identifier=pk.upper())               
+    return qs_to_time_kmz(qs)
 
 def qs_to_time_kmz(qs):
     """ From a routes queryset, return a folder'd up kmz file split up

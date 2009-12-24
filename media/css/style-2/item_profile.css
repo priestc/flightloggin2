@@ -1,2 +1,12 @@
 
 a.noshare                       {color: gray}
+
+#route_table                    {border: 1px solid gray;
+                                 max_width: 160em;
+                                 margin: 0 auto 0 auto}
+                                 
+#route_table td                 {padding: 3px;
+                                 text-align: left;
+                                 background: #DFDFDF}
+                                
+#route_table tr:last-child td   {text-align: center} 

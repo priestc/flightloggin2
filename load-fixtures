@@ -86,11 +86,11 @@ bunzip2 -c fixtures/locations.sql.bz2 | psql logbook
 echo "all borders"
 bunzip2 -c fixtures/borders.sql.bz2 | psql logbook
 
-echo "routebases"
-bunzip2 -c fixtures/rb.sql.bz2 | psql logbook
-
 echo "routes"
 bunzip2 -c fixtures/routes.sql.bz2 | psql logbook
+
+echo "routebases"
+bunzip2 -c fixtures/rb.sql.bz2 | psql logbook
 
 echo "flights"
 bunzip2 -c fixtures/flights.sql.bz2 | psql logbook

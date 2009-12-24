@@ -39,8 +39,14 @@ def route_profile(request, pk):
     from django.contrib.auth.models import User
     from airport.models import Location
     from logbook.models import Flight
+    from models import RouteBase
     from plane.models import Plane
     from django.db.models import Sum
+    
+    try:
+        route = Route.objects.filter(simple_rendered__iexact=pk)[0]
+    except:
+        route = None
     
     users = User.objects\
                 .filter(profile__social=True)\
@@ -65,5 +71,9 @@ def route_profile(request, pk):
                        .values_list('tailnumber', flat=True)\
                        .order_by()\
                        .distinct()
+                       
+    rbs = RouteBase.objects\
+                   .filter(route=route)\
+                   .order_by('sequence')
     
     return locals()

@@ -215,16 +215,24 @@ urlpatterns = patterns('',
                                                            name="email-backup",
     ),
     
+    #--------------------------------------------------------------------------
+     
     url(
         r'^plane-(?P<tn>[\w-]+).kmz$',
-        "maps.kml_views.all_plane_kml",
-                                                              name="kml-plane",
+        "maps.kml_views.single_tailnumber_kml",
+                                                       name="s-tailnumber-kml",
     ),
     
     url(
         r'^route-(?P<pk>[\w-]+).kmz$',
         "maps.kml_views.single_route_kml",
         {'earth': True},                                    name="s-route-kml",
+    ),
+    
+    url(
+        r'^location-(?P<pk>[A-Z0-9]+).kmz$',
+        "maps.kml_views.single_location_kml",
+                                                         name="s-location-kml",
     ),
     
     url(
@@ -251,6 +259,12 @@ urlpatterns = patterns('',
         r'^type-(?P<pk>[\w-]+).html$',
         "plane.views.type_profile",
                                                            name="profile-type",
+    ),
+    
+    url(
+        r'^location-(?P<pk>[A-Z0-9]+).html$',
+        "airport.views.airport_profile",
+                                                       name="profile-location",
     ),
     
     #--------------------------------------------------------------------------

@@ -27,6 +27,7 @@ class Location(models.Model):
     
     ## -----------------------------------------------------------------------
     
+    #navaid, airport, custom, etc
     loc_class = models.IntegerField(choices=LOCATION_CLASS,
                                          default=0, blank=True, null=True)
                                          
@@ -35,6 +36,7 @@ class Location(models.Model):
     country = models.ForeignKey("Country", null=True, blank=True)
     region = models.ForeignKey("Region", null=True, blank=True)
     
+    # vor, dme, small airport, etc
     loc_type = models.IntegerField(choices=LOCATION_TYPE, default=0)
 
     name = models.CharField(max_length=96, blank=True)

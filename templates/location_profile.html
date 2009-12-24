@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block realtime-sel %}nav_selected{% endblock%}
 
-{% block description %}{{ pk|upper }} tailnumber profile{% endblock%}
+{% block description %}{{ pk|upper }} location profile{% endblock%}
 
 {% block javascript %}
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/item_profile.css">
 {% endblock %}
 
-{% block title %}Tailnumber Profile - {{ pk|upper }}{% endblock %}
+{% block title %}{{ loc.get_loc_class_display }} Profile - {{ pk|upper }}{% endblock %}
 
 
 {% block canvas %}
@@ -17,11 +17,11 @@
 
 <br><br>
 {% ifnotequal t_flights 0 %}
-<a href="{% url s-tailnumber-kml pk %}">View all flights in this plane with Google Earth</a>
+<a href="{% url s-location-kml pk|upper %}">View all flights to this {{ loc.get_loc_class_display|lower }} with Google Earth</a>
 {% endifnotequal %}
 
 
-<h2>Users who have flown an aircraft with this tailnumber</h2>
+<h2>Users who have flown to this location</h2>
 
 {% spaceless %}
 {% for user in users %}
@@ -48,13 +48,18 @@
 {% endfor %}
 {% endspaceless %}
 
-<h2>Total hours logged with this tailnumber</h2>
-<big><strong>{{t_hours}}</strong></big>
-
-<h2>Total number of flights logged with this tailnumber</h2>
+<h2>Total number of flights logged to this {{ loc.get_loc_class_display|lower }}</h2>
 <big><strong>{{t_flights}}</strong></big>
 
-<h2>Number of unique airports this aircraft has landed at</h2>
-<big><strong>{{t_airports}}</strong></big>
+<h2>Tailnumbers that have flown to this {{ loc.get_loc_class_display|lower }}</h2>
+{% spaceless %}
+    {% for tn in tailnumbers %}
+        {% url profile-tailnumber tn|upper as url %}
+        
+        {% if not forloop.first %}<span>, </span>{% endif %}
+        
+        <a href="{{ url }}">{{ tn }}</a>
+    {% endfor %}
+{% endspaceless %}
 
 {% endblock %}

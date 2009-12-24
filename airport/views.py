@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from share.decorator import secret_key
 from django.http import Http404, HttpResponse
+from annoying.decorators import render_to
 
 from models import Location
 
@@ -50,4 +51,29 @@ def update_airports(request):
     navaids()
     
     return HttpResponse("done!")
+
+
+@render_to('location_profile.html')
+def airport_profile(request, pk):
+    
+    from plane.models import Plane
+    from logbook.models import Flight
+    from django.contrib.auth.models import User
+    
+    loc = Location.objects.filter(identifier=pk)[0]
+    
+    users = User.objects\
+                .filter(flight__route__routebase__location__identifier=pk)\
+                .distinct()
+    
+    tailnumbers = Plane.objects\
+                       .values_list('tailnumber', flat=True)\
+                       .filter(flight__route__routebase__location__identifier=pk)\
+                       .distinct()
+                       
+    t_flights = Flight.objects\
+                      .filter(route__routebase__location__identifier=pk)\
+                      .count()
+    return locals()
+    
     

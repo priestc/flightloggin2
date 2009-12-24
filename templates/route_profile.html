@@ -12,6 +12,19 @@
 {% block canvas %}
 
 <h1>{{ pk|upper }}</h1>
+
+<table id="route_table">
+{% for rb in rbs %}
+    <tr>      {% url profile-location rb.location.identifier as url %}
+        <td><a href="{{ url }}">{{ rb.location.identifier }}</a></td>
+        <td>{{ rb.location.name }} - {{ rb.location.location_summary }}</td>
+    </tr>
+{% endfor %}
+    <tr>
+        <td colspan="2">Total distance: {{ route.total_line_all|floatformat:1 }} NM</td>
+    </tr>
+</table>
+
 <h2>Users who have flown this route</h2>
 
 {% spaceless %}
