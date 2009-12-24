@@ -54,7 +54,15 @@
 <h2>Total number of flights logged with this tailnumber</h2>
 <big><strong>{{t_flights}}</strong></big>
 
-<h2>Number of unique airports this aircraft has landed at</h2>
-<big><strong>{{t_airports}}</strong></big>
+<h2>Airports this aircraft has landed at</h2>
+{% spaceless %}
+    {% for a in airports %}
+        {% url profile-location a|upper as url %}
+        
+        {% if not forloop.first %}<span>, </span>{% endif %}
+        
+        <a href="{{ url }}">{{ a }}</a>
+    {% endfor %}
+{% endspaceless %}
 
 {% endblock %}
