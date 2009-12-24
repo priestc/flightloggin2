@@ -69,7 +69,7 @@ def route_profile(request, pk):
                        .exclude(tailnumber="")\
                        .filter(flight__route__simple_rendered__iexact=pk)\
                        .values_list('tailnumber', flat=True)\
-                       .order_by()\
+                       .order_by('tailnumber')\
                        .distinct()
                        
     rbs = RouteBase.objects\

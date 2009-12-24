@@ -69,6 +69,7 @@ def airport_profile(request, pk):
     tailnumbers = Plane.objects\
                        .values_list('tailnumber', flat=True)\
                        .filter(flight__route__routebase__location__identifier=pk)\
+                       .order_by('tailnumber')\
                        .distinct()
                        
     t_flights = Flight.objects\

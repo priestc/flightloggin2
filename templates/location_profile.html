@@ -13,7 +13,7 @@
 {% block canvas %}
 
 <h1>{{ pk|upper }}</h1>
-{{types|join:" / "}}
+<strong>{{ loc.name }} - {{ loc.location_summary }}</strong>
 
 <br><br>
 {% ifnotequal t_flights 0 %}
@@ -54,7 +54,7 @@
 <h2>Tailnumbers that have flown to this {{ loc.get_loc_class_display|lower }}</h2>
 {% spaceless %}
     {% for tn in tailnumbers %}
-        {% url profile-tailnumber tn|upper as url %}
+        {% url profile-tailnumber tn as url %}
         
         {% if not forloop.first %}<span>, </span>{% endif %}
         
