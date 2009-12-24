@@ -5,7 +5,7 @@ styles = {
 ## green and navy
 "style-1": {"page_bg":          "#C0FFBB",
            "link_color":        "#001147",
-           "h1_color":          "#DA7E16",
+           "h1_color":          "#14146A",
            "h2_color":          "#11566D",
            "error_color":       "red",
            
