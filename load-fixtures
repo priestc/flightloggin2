@@ -1,0 +1,107 @@
+#! /bin/bash
+
+#clear everything
+psql logbook -c "Truncate auth_user cascade"
+psql logbook -c "Truncate auth_permission cascade"
+psql logbook -c "Truncate auth_message cascade"
+psql logbook -c "Truncate auth_group_permissions cascade"
+psql logbook -c "Truncate auth_group cascade"
+psql logbook -c "Truncate auth_user_groups cascade"
+psql logbook -c "Truncate auth_user_user_permissions cascade"
+
+psql logbook -c "Truncate airport_country cascade"
+psql logbook -c "Truncate airport_region cascade"
+psql logbook -c "Truncate airport_location cascade"
+psql logbook -c "Truncate airport_usstates cascade"
+psql logbook -c "Truncate airport_worldborders cascade"
+
+psql logbook -c "Truncate backup_userstoday cascade"
+psql logbook -c "Truncate backup_userstoday_logged_today cascade"
+
+psql logbook -c "Truncate django_content_type cascade"
+psql logbook -c "Truncate django_openid_auth_association cascade"
+psql logbook -c "Truncate django_openid_auth_nonce cascade"
+psql logbook -c "Truncate django_openid_auth_useropenid cascade"
+
+psql logbook -c "Truncate logbook_columns cascade"
+psql logbook -c "Truncate logbook_flight cascade"
+
+psql logbook -c "Truncate main_newsitem cascade"
+
+psql logbook -c "Truncate plane_plane cascade"
+
+psql logbook -c "Truncate profile_autobutton cascade"
+psql logbook -c "Truncate profile_entries cascade"
+psql logbook -c "Truncate profile_profile cascade"
+
+psql logbook -c "Truncate realtime_duty cascade"
+psql logbook -c "Truncate realtime_dutyflight cascade"
+
+psql logbook -c "Truncate records_nonflight cascade"
+psql logbook -c "Truncate records_records cascade"
+
+psql logbook -c "Truncate route_route cascade"
+psql logbook -c "Truncate route_routebase cascade"
+
+psql logbook -c "Truncate site_stats_statdb cascade"
+
+psql logbook -c "Truncate tagging_tag cascade"
+psql logbook -c "Truncate tagging_taggeditem cascade"
+
+echo "content-types"
+./manage.py loaddata fixtures/ct.json.bz2
+
+echo "auth"
+./manage.py loaddata fixtures/auth.json.bz2
+
+echo "plane"
+./manage.py loaddata fixtures/plane.json.bz2
+
+echo "records"
+./manage.py loaddata fixtures/records.json.bz2
+
+echo "profile"
+./manage.py loaddata fixtures/profile.json.bz2
+
+echo "stats"
+./manage.py loaddata fixtures/stats.json.bz2
+
+echo "columns"
+./manage.py loaddata fixtures/columns.json.bz2
+
+echo "news"
+./manage.py loaddata fixtures/news.json.bz2
+
+echo "countries and regions"
+./manage.py loaddata fixtures/c_r.json.bz2
+
+###############################################################
+
+echo "locations"
+bunzip2 -c fixtures/locations.sql.bz2 | psql logbook
+
+echo "all borders"
+bunzip2 -c fixtures/borders.sql.bz2 | psql logbook
+
+echo "routebases"
+bunzip2 -c fixtures/rb.sql.bz2 | psql logbook
+
+echo "routes"
+bunzip2 -c fixtures/routes.sql.bz2 | psql logbook
+
+echo "flights"
+bunzip2 -c fixtures/flights.sql.bz2 | psql logbook
+
+
+
+
+
+
+
+
+
+
+
+
+
+
