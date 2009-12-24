@@ -24,6 +24,10 @@ echo "columns";
 echo "news";
 /srv/flightloggin/manage.py dumpdata main.newsitem | bzip2 > /srv/flightloggin/fixtures/news.json.bz2;
 
+echo "openid";
+/srv/flightloggin/manage.py dumpdata django_openid_auth | bzip2 > /srv/flightloggin/fixtures/openid.json.bz2;
+
+
 echo "countries and regions";
 /srv/flightloggin/manage.py dumpdata airport.country airport.region | bzip2 > /srv/flightloggin/fixtures/c_r.json.bz2;
 

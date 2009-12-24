@@ -72,6 +72,9 @@ echo "columns"
 echo "news"
 ./manage.py loaddata fixtures/news.json.bz2
 
+echo "openid"
+./manage.py loaddata fixtures/openid.json.bz2
+
 echo "countries and regions"
 ./manage.py loaddata fixtures/c_r.json.bz2
 
