@@ -7,7 +7,7 @@
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/item_profile.css">
 {% endblock %}
 
-{% block title %}{{ loc.get_loc_class_display }} Profile - {{ pk|upper }}{% endblock %}
+{% block title %}{{ lc|capfirst }} Profile - {{ pk|upper }}{% endblock %}
 
 
 {% block canvas %}
@@ -17,11 +17,11 @@
 
 <br><br>
 {% ifnotequal t_flights 0 %}
-<a href="{% url s-location-kml pk|upper %}">View all flights to this {{ loc.get_loc_class_display|lower }} with Google Earth</a>
+<a href="{% url s-location-kml pk|upper %}">View all flights to this {{ lc }} with Google Earth</a>
 {% endifnotequal %}
 
 
-<h2>Users who have flown to this location</h2>
+<h2>Users who have flown to this {{ lc }}</h2>
 
 {% spaceless %}
 {% for user in users %}
@@ -48,10 +48,10 @@
 {% endfor %}
 {% endspaceless %}
 
-<h2>Total number of flights logged to this {{ loc.get_loc_class_display|lower }}</h2>
-<big><strong>{{t_flights}}</strong></big>
+<h2>Total number of flights logged to this {{ lc }}</h2>
+<big><strong>{{ t_flights|default:0 }}</strong></big>
 
-<h2>Tailnumbers that have flown to this {{ loc.get_loc_class_display|lower }}</h2>
+<h2>Tailnumbers that have flown to this {{ lc }}</h2>
 {% spaceless %}
     {% for tn in tailnumbers %}
         {% url profile-tailnumber tn as url %}
@@ -59,6 +59,10 @@
         {% if not forloop.first %}<span>, </span>{% endif %}
         
         <a href="{{ url }}">{{ tn }}</a>
+    {% empty %}
+
+        (None)
+        
     {% endfor %}
 {% endspaceless %}
 

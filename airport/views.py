@@ -60,7 +60,11 @@ def airport_profile(request, pk):
     from logbook.models import Flight
     from django.contrib.auth.models import User
     
-    loc = Location.objects.filter(identifier=pk)[0]
+    try:
+        loc = Location.objects.filter(identifier=pk)[0]
+    except:
+        t_flights = 0
+        return locals()
     
     users = User.objects\
                 .filter(flight__route__routebase__location__identifier=pk)\
@@ -75,6 +79,9 @@ def airport_profile(request, pk):
     t_flights = Flight.objects\
                       .filter(route__routebase__location__identifier=pk)\
                       .count()
+                      
+    lc = loc.get_loc_class_display().lower()
+    
     return locals()
     
     
