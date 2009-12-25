@@ -1,4 +1,5 @@
-#! /usr/bin/env python
+#!/home/chris/.virtualenvs/flightloggin/bin/python
+
 import os, sys
 import csv, re
 from psycopg2 import IntegrityError

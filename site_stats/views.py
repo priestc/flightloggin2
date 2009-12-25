@@ -1,6 +1,7 @@
 from annoying.decorators import render_to
 from models import Stat
 from share.decorator import secret_key
+from django.core.urlresolvers import reverse
 
 @render_to('site_stats.html')
 def site_stats(request):
@@ -10,6 +11,22 @@ def site_stats(request):
     
     from models import StatDB
     cs = StatDB.objects.latest()
+    
+    tails = cs.most_common_tail.split("\n")
+    linked_tail = ""
+    for line in tails[:-1]:  ## the last one will be an empty string
+        l = line.split(" ")
+        tn = l[1]
+        url = reverse('profile-tailnumber', kwargs={"pk": tn})
+        linked_tail += "%s <a href=\"%s\">%s</a> %s\n" % (l[0], url, tn, l[2])
+        
+    idents = cs.auv.split("\n")
+    linked_airports = ""
+    for line in idents[:-1]:
+        l = line.split(" ")
+        ident = l[1]
+        url = reverse('profile-location', kwargs={"pk": ident})
+        linked_airports += "%s <a href=\"%s\">%s</a> %s\n" % (l[0], url, ident, l[2])
 
     return locals()
 

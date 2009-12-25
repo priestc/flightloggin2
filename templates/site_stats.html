@@ -98,11 +98,11 @@
     
     <tr>
         <td>Airports visited by the most users</td>
-        <td>{{ cs.auv|linebreaksbr }}</td>
+        <td>{{ linked_airports|safe|linebreaksbr }}</td>
     </tr>
     <tr>
         <td>Tailnumbers used by the most users</td>
-        <td>{{ cs.most_common_tail|linebreaksbr }}</td>
+        <td>{{ linked_tail|safe|linebreaksbr }}</td>
     </tr>
     
     <tr>
