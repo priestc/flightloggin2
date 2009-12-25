@@ -906,13 +906,28 @@ a.noshare                       {color: gray}
 
 #route_table                    {border: 1px solid gray;
                                  max_width: 160em;
-                                 margin: 0 auto 0 auto}
+                                 margin: 10px auto 0 auto}
                                  
 #route_table td                 {padding: 3px;
                                  text-align: left;
                                  background: #DFDFDF}
                                 
-#route_table tr:last-child td   {text-align: center} 
+#route_table tr:last-child td   {text-align: center}
+
+table.main                      {width: 100%%;
+                                 background: #DDDDDD;
+                                 margin-top: 20px;
+                                 border-collapse: collapse}
+
+table.main td,
+table.main th                   {text-align: left;
+                                 border: 1px solid gray;
+                                 padding: 3px}
+
+table.main th                   {width: 30%%;}
+
+
+h1                              {margin-bottom: 0px}
 """
 
 
@@ -951,18 +966,3 @@ if __name__ == "__main__":
             f = open("%s/%s.css" % (full_directory, name.replace("__",'')), 'w')
             rendered = css[name] % source
             f.writelines(rendered)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

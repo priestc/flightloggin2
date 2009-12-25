@@ -14,56 +14,63 @@
 
 <h1>{{ pk|upper }}</h1>
 <strong>{{ loc.name }} - {{ loc.location_summary }}</strong>
-
-<br><br>
 {% ifnotequal t_flights 0 %}
-<a href="{% url s-location-kml pk|upper %}">View all flights to this {{ lc }} with Google Earth</a>
+<br><a href="{% url s-location-kml pk|upper %}">View all flights to this {{ lc }} with Google Earth</a>
 {% endifnotequal %}
+<table class="main">
+    <tr>
+        <th>Users who have flown to this {{ lc }}</th>
+        <td>
+            {% spaceless %}
+            {% for user in users %}
+                
+                {# the span is so it works with spaceless better #}
+                {% if not forloop.first %}<span>, </span>{% endif %}
+                
+                {% if user.get_profile.logbook_share %}
+                
+                    <a title="This user does not allow others to view his/her logbook"
+                       class="noshare" href="">{{user.username}}</a>
+                       
+                {% else %}
+                
+                    <a href="{% url logbook user.username %}"
+                       title="Click to see this user's logbook">{{user.username}}</a>
+                       
+                {% endif %}
+                
+            {% empty %}
 
+                (None)
 
-<h2>Users who have flown to this {{ lc }}</h2>
+            {% endfor %}
+            {% endspaceless %}
+        </td>
+    </tr>
 
-{% spaceless %}
-{% for user in users %}
-    
-    {# the span is so it works with spaceless better #}
-    {% if not forloop.first %}<span>, </span>{% endif %}
-    
-    {% if user.get_profile.logbook_share %}
-    
-        <a title="This user does not allow others to view his/her logbook"
-           class="noshare" href="">{{user.username}}</a>
-           
-    {% else %}
-    
-        <a href="{% url logbook user.username %}"
-           title="Click to see this user's logbook">{{user.username}}</a>
-           
-    {% endif %}
-    
-{% empty %}
+    <tr>
+        <th>Total number of flights logged to this {{ lc }}</th>
+        <td><big><strong>{{ t_flights|default:0 }}</strong></big></td>
+    </tr>
 
-    (None)
+    <tr>
+        <th>Tailnumbers that have flown to this {{ lc }}</th>
+        <td>
+            {% spaceless %}
+                {% for tn in tailnumbers %}
+                    {% url profile-tailnumber tn as url %}
+                    
+                    {% if not forloop.first %}<span>, </span>{% endif %}
+                    
+                    <a href="{{ url }}">{{ tn }}</a>
+                {% empty %}
 
-{% endfor %}
-{% endspaceless %}
-
-<h2>Total number of flights logged to this {{ lc }}</h2>
-<big><strong>{{ t_flights|default:0 }}</strong></big>
-
-<h2>Tailnumbers that have flown to this {{ lc }}</h2>
-{% spaceless %}
-    {% for tn in tailnumbers %}
-        {% url profile-tailnumber tn as url %}
-        
-        {% if not forloop.first %}<span>, </span>{% endif %}
-        
-        <a href="{{ url }}">{{ tn }}</a>
-    {% empty %}
-
-        (None)
-        
-    {% endfor %}
-{% endspaceless %}
+                    (None)
+                    
+                {% endfor %}
+            {% endspaceless %}
+        </td>
+    </tr>
+</table>
 
 {% endblock %}
