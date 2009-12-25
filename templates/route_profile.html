@@ -15,7 +15,7 @@
 
 <table id="route_table">
 {% for rb in rbs %}
-    <tr>      {% url profile-location rb.location.identifier as url %}
+    <tr>      {% url profile-airport rb.location.identifier as url %}
         <td><a href="{{ url }}">{{ rb.location.identifier }}</a></td>
         <td>{{ rb.location.name }} - {{ rb.location.location_summary }}</td>
     </tr>

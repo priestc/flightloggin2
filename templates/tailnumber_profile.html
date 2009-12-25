@@ -62,7 +62,7 @@
         <td>
             {% spaceless %}
             {% for a in airports %}
-                {% url profile-location a|upper as url %}
+                {% url profile-airport a|upper as url %}
                 
                 {% if not forloop.first %}<span>, </span>{% endif %}
                 

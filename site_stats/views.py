@@ -25,7 +25,7 @@ def site_stats(request):
     for line in idents[:-1]:
         l = line.split(" ")
         ident = l[1]
-        url = reverse('profile-location', kwargs={"pk": ident})
+        url = reverse('profile-airport', kwargs={"pk": ident})
         linked_airports += "%s <a href=\"%s\">%s</a> %s\n" % (l[0], url, ident, l[2])
 
     return locals()

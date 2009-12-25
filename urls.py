@@ -15,10 +15,12 @@ feeds = {
 
 from route.sitemaps import RouteSitemap
 from plane.sitemaps import TailnumberSitemap
+from airport.sitemaps import LocationSitemap
 
 sitemaps = {
     'tailnumber': TailnumberSitemap,
-    'route': RouteSitemap
+    'route': RouteSitemap,
+    'location': LocationSitemap,
 }
 
 ##############################################################################
@@ -262,9 +264,15 @@ urlpatterns = patterns('',
     ),
     
     url(
-        r'^location-(?P<pk>[A-Z0-9]+).html$',
+        r'^navaid-(?P<pk>[A-Z0-9]+).html$',
         "airport.views.airport_profile",
-                                                       name="profile-location",
+        {"navaid": True},                                name="profile-navaid",
+    ),
+    
+    url(
+        r'^airport-(?P<pk>[A-Z0-9-]+).html$',
+        "airport.views.airport_profile",
+        {"navaid": False},                              name="profile-airport",
     ),
     
     #--------------------------------------------------------------------------

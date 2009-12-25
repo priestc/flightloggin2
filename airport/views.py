@@ -54,17 +54,26 @@ def update_airports(request):
 
 
 @render_to('location_profile.html')
-def airport_profile(request, pk):
+def airport_profile(request, navaid, pk):
     
     from plane.models import Plane
     from logbook.models import Flight
     from django.contrib.auth.models import User
+    from django.http import Http404
     
     try:
         loc = Location.objects.filter(identifier=pk)[0]
-    except:
-        t_flights = 0
-        return locals()
+    except IndexError:
+        #t_flights = 0
+        #return locals()
+        raise Http404('no such airport')
+    
+    if loc.loc_class == 1 and navaid:
+        raise Http404
+    
+    if loc.loc_class == 2 and not navaid:
+        raise Http404
+        
     
     users = User.objects\
                 .filter(flight__route__routebase__location__identifier=pk)\
