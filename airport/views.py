@@ -80,6 +80,7 @@ def airport_profile(request, navaid, pk):
                 .distinct()
     
     tailnumbers = Plane.objects\
+                       .exclude(tailnumber="")\
                        .values_list('tailnumber', flat=True)\
                        .filter(flight__route__routebase__location__identifier=pk)\
                        .order_by('tailnumber')\
