@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block realtime-sel %}nav_selected{% endblock%}
 
-{% block description %}{{ pk|upper }} location profile{% endblock%}
+{% block description %}{{ loc.name }} - {{ loc.location_summary }} - {{ pk|upper }} location profile{% endblock%}
 
 {% block javascript %}
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/item_profile.css">

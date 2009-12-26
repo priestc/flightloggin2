@@ -62,7 +62,7 @@ def airport_profile(request, navaid, pk):
     from django.http import Http404
     
     try:
-        loc = Location.objects.filter(identifier=pk)[0]
+        loc = Location.objects.filter(loc_class__in=(1,2), identifier=pk)[0]
     except IndexError:
         #t_flights = 0
         #return locals()
