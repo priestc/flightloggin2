@@ -122,8 +122,6 @@ def airports():   #import airport
             
             except TypeError:
                 print "type - " + ident
-                
-            #print "already - " + ident
 
         else:
             count_to += 1

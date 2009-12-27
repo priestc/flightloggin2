@@ -6,17 +6,6 @@ from annoying.decorators import render_to
 from models import Location
 
 ################################
-
-
-def clear_locations():
-
-    #select all locations that are owned by the common user (pk=1)
-    airports = Location.objects.filter(user__id=1)
-    c = airports.count()
-    
-    airports.delete()
-    
-    return "%s locations deleted" % c
                         
 @secret_key
 def update_airports(request):

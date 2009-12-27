@@ -163,12 +163,6 @@ urlpatterns = patterns('',
                                                            name="del-airports",
     ),
     
-    url(   
-        r'^clear_locations.py$',
-        'airport.views.clear_locations',
-                                                        name="clear-locations",
-    ),
-    
     url(
         r'^change_email.html$',
         "backup.views.change_email",
