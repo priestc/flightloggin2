@@ -65,6 +65,7 @@ def airport_profile(request, navaid, pk):
         
     
     users = User.objects\
+                .filter(profile__social=True)\
                 .filter(flight__route__routebase__location__identifier=pk)\
                 .distinct()
     

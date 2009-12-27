@@ -6,6 +6,6 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'date_registered', 'real_name', 'get_email',
                     'date_format', 'adminlink')
     
-    list_filter = ('backup_freq', 'style')
+    list_filter = ('backup_freq', 'style', 'logbook_share', 'social')
 
 admin.site.register(Profile, ProfileAdmin)
