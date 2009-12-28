@@ -15,9 +15,6 @@ def update_airports(request):
     home = settings.PROJECT_PATH
     secret_key = settings.SECRET_KEY
     host = settings.SITE_URL
-    url = reverse('clear-locations')
-    
-    print clear_locations()
     
     if request.GET.get('get') == 'true':
         urls = {}
@@ -28,7 +25,8 @@ def update_airports(request):
         
         system_call = ""
         for name,url in urls.items():
-            system_call += "wget -O - %s > %s/airport/fixtures/%s.csv;" % (url, home, name)
+            system_call += "wget -O - %s > %s/airport/fixtures/%s.csv;"\
+                             % (url, home, name)
     
         os.system(system_call)
         

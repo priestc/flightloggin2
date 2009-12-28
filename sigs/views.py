@@ -23,17 +23,17 @@ def all_agg_checkbox(prefix=""):
 
 @no_share('other')
 @render_to('sigs.html')
-def sigs(request, shared, display_user):
+def sigs(request):
     checkbox_table = all_agg_checkbox()
     return locals()
 
 
 @no_share('other')
-def make_sig(request, shared, display_user, columns):
+def make_sig(request, columns):
     
     columns = columns.split('-')
     
-    sig = Sig(display_user, columns)
+    sig = Sig(request.display_user, columns)
     
     from django.http import HttpResponse
     response = HttpResponse(mimetype="image/png")

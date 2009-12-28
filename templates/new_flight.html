@@ -1,5 +1,5 @@
 <div id="popup" title="New Entry">
-	<form id="new_entry_form" action="{% url logbook-page display_user.username page %}" method="post">
+	<form id="new_entry_form" action="{% url logbook-page request.display_user.username page %}" method="post">
 		<table id="dragbar">
 		    <tr>
 			    <td><span id="titlebar">New Entry</span></td>
@@ -21,28 +21,28 @@
 			
 					<tr class="date_field">
 						<td>{{ form.date.label_tag }}</td>
-						<td>{{ form.date }}<br>{{form.date.errors}}</td>
+						<td>{{ form.date }}<br>{{ form.date.errors }}</td>
 					</tr>
 			
 			
 					<tr class="route_field">
 						<td>{{ form.route.label_tag }}</td>
-						<td>{{ form.route }}<br>{{form.route.errors}}</td>
+						<td>{{ form.route }}<br>{{ form.route.errors }}</td>
 					</tr>
 				
 					<tr class="plane_field">
 						<td>{{ form.plane.label_tag }}</td>
-						<td>{{ form.plane }}<br>{{form.plane.errors}}</td>
+						<td>{{ form.plane }}<br>{{ form.plane.errors }}</td>
 					</tr>
 					
 					<tr class="person_field">
 						<td>{{ form.person.label_tag }}</td>
-						<td>{{ form.person }}<br>{{form.person.errors}}</td>
+						<td>{{ form.person }}<br>{{ form.person.errors }}</td>
 					</tr>
 							
 					<tr class="remarks_field">
 						<td>{{ form.remarks.label_tag }}</td>
-						<td>{{ form.remarks }}<br>{{form.remarks.errors}}</td>
+						<td>{{ form.remarks }}<br>{{ form.remarks.errors }}</td>
 					</tr>
 				</tbody>
 			</table>
@@ -141,7 +141,7 @@
 				<div id="new_buttons">
 					<input type="submit" name="submit" value="Submit New Flight" id="submit_new_flight"/>
 			    </div>
-                {% if not shared %}
+                {% if not request.shared %}
 				<div id="edit_buttons">
 					<input type="submit" name="submit" value="Edit Flight" id="submit_edit_flight"/>
 					<input type="submit" name="submit" value="Delete Flight" id="delete_flight" disabled="disabled"/>

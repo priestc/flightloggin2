@@ -11,9 +11,9 @@ from share.decorator import no_share
 
 @no_share('other')
 @render_to('currency.html')
-def currency(request, shared, display_user):
-    curr_land = FAA_Landing(display_user)
-    curr_med = FAA_Medical(display_user)
+def currency(request):
+    curr_land = FAA_Landing(request.display_user)
+    curr_med = FAA_Medical(request.display_user)
 
     ############################################
     
@@ -28,27 +28,27 @@ def currency(request, shared, display_user):
     
     
     if Flight.objects.pseudo_category("fixed_wing").app().count() > 5:
-        curr_inst = FAA_Instrument(display_user)
+        curr_inst = FAA_Instrument(request.display_user)
         curr_inst.fake_class = "fixed_wing"
         cb = InstCurrBox(curr_inst, "Fixed Wing")
         inst_out.append(cb)
         cb.render()
         
     if Flight.objects.pseudo_category("helicopter").app().count() > 5:
-        curr_inst = FAA_Instrument(display_user)
+        curr_inst = FAA_Instrument(request.display_user)
         curr_inst.fake_class = "helicopter"
         cb = InstCurrBox(curr_inst, "Helicopter")
         inst_out.append(cb)
     
     if Flight.objects.pseudo_category("glider").app().count() > 5:
-        curr_inst = FAA_Instrument(display_user)
+        curr_inst = FAA_Instrument(request.display_user)
         curr_inst.fake_class = "glider"
         cb = InstCurrBox(curr_inst, "Glider")
         inst_out.append(cb)
     
     ############################################ landing below
         
-    cat_classes = Plane.objects.filter(user=display_user)\
+    cat_classes = Plane.objects.filter(user=request.display_user)\
                        .values_list('cat_class', flat=True)\
                        .order_by().distinct()
     cat_classes_out = []
@@ -62,7 +62,7 @@ def currency(request, shared, display_user):
     
     ############################################ tailwheel below
     
-    tailwheels = Plane.objects.filter(user=display_user)\
+    tailwheels = Plane.objects.filter(user=request.display_user)\
                               .filter( Q(tags__icontains="tailwheel"))\
                               .values_list('cat_class', flat=True)\
                               .order_by().distinct()
@@ -77,7 +77,7 @@ def currency(request, shared, display_user):
         
     ############################################ type ratings below
     
-    type_ratings = Plane.objects.filter(user=display_user)\
+    type_ratings = Plane.objects.filter(user=request.display_user)\
                                 .currency()\
                                 .values_list('type', flat=True)\
                                 .order_by().distinct()

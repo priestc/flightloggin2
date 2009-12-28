@@ -4,13 +4,13 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 
-def image_redirect(request, shared, display_user, type_):
+def image_redirect(request, type_):
     """ Redirect to the pre-rendered png image
     """
 
     path = "%s/%s/%s" % (settings.SITE_URL,
                          settings.STATES_URL,
-                         display_user.id)
+                         request.display_user.id)
     
     return HttpResponseRedirect("%s/states-%s.png" % (path, type_))
 
@@ -28,13 +28,13 @@ def render_all(request):
 
 @no_share('NEVER')
 @login_required
-def render_me(request, shared, display_user):
+def render_me(request):
     
-    render_for_user(display_user)
+    render_for_user(request.display_user)
 
     # return the user to their maps page with spiffy new updated images
     from django.core.urlresolvers import reverse
-    url = reverse('maps', args=(display_user.username,) )
+    url = reverse('maps', args=(request.display_user.username,) )
 
     return HttpResponseRedirect(url)
 

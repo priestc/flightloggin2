@@ -55,8 +55,8 @@
 					Logged in as: <span class="logged_user">{{ user.username }}</span>
 				{% endif %}
 				
-				{% if shared %}
-					Viewing the logbook of: <span class="display_user">{{ display_user }}</span>
+				{% if request.shared %}
+					Viewing the logbook of: <span class="display_user">{{ request.display_user }}</span>
 				{% endif %}
 				
 				{% if not user.is_authenticated %}

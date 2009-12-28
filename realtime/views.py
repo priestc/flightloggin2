@@ -1,7 +1,7 @@
 from annoying.decorators import render_to
 
 @render_to('realtime.html')
-def realtime(request, shared, display_user):
+def realtime(request):
     
     import datetime
     gmt = datetime.datetime.now() + datetime.timedelta(hours=5)

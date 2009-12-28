@@ -5,8 +5,8 @@ from annoying.decorators import render_to
 from share.decorator import no_share
 
 @no_share('other')
-def linegraph_image(request, shared, display_user,
-                    columns, dates=None, ext='png', rate=True, spikes=True):
+def linegraph_image(request, columns, dates=None, ext='png',
+                                                rate=True, spikes=True):
 
     if rate == 'rate':
         rate = True
@@ -22,7 +22,7 @@ def linegraph_image(request, shared, display_user,
         
     from linegraph import ProgressGraph
         
-    pg = ProgressGraph(display_user, columns, dates, rate, spikes)
+    pg = ProgressGraph(request.display_user, columns, dates, rate, spikes)
     
     if ext == 'png':
         return pg.as_png()
@@ -31,7 +31,7 @@ def linegraph_image(request, shared, display_user,
 
 ##############################################################################
 
-def bargraph_image(request, shared, display_user, column, func, agg):
+def bargraph_image(request, column, func, agg):
     
     import bargraph as g
         
@@ -80,10 +80,10 @@ def bargraph_image(request, shared, display_user, column, func, agg):
     else:
         assert False, "Agg not added to generator view"
     
-    graph = Graph(display_user, column, agg, func)
+    graph = Graph(request.display_user, column, agg, func)
     
     from profile.models import Profile
-    graph.color_profile = Profile.get_for_user(display_user).style
+    graph.color_profile = Profile.get_for_user(request.display_user).style
     
     return graph.as_png()
 
@@ -91,8 +91,8 @@ def bargraph_image(request, shared, display_user, column, func, agg):
 
 @no_share('other')
 @render_to('linegraphs.html')
-def linegraphs(request, shared, display_user):
-    """the view function that renders the graph builder interface"""
+def linegraphs(request):
+    """the view function that renders the linegraph builder interface"""
     
     column_options = []
     for field in GRAPH_FIELDS:
@@ -106,8 +106,8 @@ def linegraphs(request, shared, display_user):
 
 @no_share('other')
 @render_to('bargraphs.html')
-def bargraphs(request, shared, display_user):
-    """the view function that renders the graph builder interface"""   
+def bargraphs(request):
+    """the view function that renders the bargraph builder interface"""   
     
     column_options = []
     for field in ['total', 'route__total_line_all'] + AGG_FIELDS:

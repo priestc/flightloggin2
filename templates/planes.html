@@ -2,7 +2,7 @@
 {% load tagging_tags %}
 {% block planes-sel %}nav_selected{% endblock%}
 
-{% block description %}{{ display_user.username }}'s planes{% endblock%}
+{% block description %}{{ request.display_user.username }}'s planes{% endblock%}
 
 {% block javascript %}
     <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/plane_popup.js"></script>
@@ -15,7 +15,7 @@
 
 
 {% block canvas %}
-    {% if not shared %}
+    {% if not request.shared %}
 	<input id="new_plane" type="button" value="New Plane">
     {% endif %}
     <table id="p_t" class="minor_table">
@@ -57,8 +57,8 @@
 	    </tbody>
     </table>
     <div id="mass_edit_link">
-        {% if not shared %}
-        <a href="{% url mass-planes display_user %}">Mass Edit/Entry</a>
+        {% if not request.shared %}
+        <a href="{% url mass-planes request.display_user %}">Mass Edit/Entry</a>
         {% endif %}
     </div>
 
@@ -70,7 +70,7 @@
 		</tr>
 	</table>
 	
-	<form id="new_plane_form" action="{% url planes display_user.username %}" method="post">
+	<form id="new_plane_form" action="{% url planes request.display_user.username %}" method="post">
 		<table>
 			<tbody>
 				<tr>
@@ -130,7 +130,7 @@
 		<div id="new_plane_buttons">
 			<input type="submit" name="submit" value="Create New Plane" id="submit_new_flight" />
 		</div>
-        {% if not shared %}
+        {% if not request.shared %}
 		<div id="edit_plane_buttons">
 			<input type="submit" name="submit" value="Submit Changes" id="submit_edit_flight" />
 			<input type="submit" name="submit" value="Delete Plane" id="submit_delete_flight" />

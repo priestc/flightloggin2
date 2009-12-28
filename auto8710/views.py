@@ -110,16 +110,16 @@ class PCATD(FormLine):
     cats = (19, )
 
 @render_to('8710.html')
-def auto8710(request, shared, display_user):
+def auto8710(request):
     
-    airplane = Airplane(display_user)
-    rotorcraft = Rotorcraft(display_user)
-    lta = LTA(display_user)
-    glider = Glider(display_user)
-    pl = PoweredLift(display_user)
+    airplane = Airplane(request.display_user)
+    rotorcraft = Rotorcraft(request.display_user)
+    lta = LTA(request.display_user)
+    glider = Glider(request.display_user)
+    pl = PoweredLift(request.display_user)
     
-    sim = Sim(display_user)
-    ftd = FTD(display_user)
-    pcatd = PCATD(display_user)
+    sim = Sim(request.display_user)
+    ftd = FTD(request.display_user)
+    pcatd = PCATD(request.display_user)
      
     return locals()

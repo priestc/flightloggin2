@@ -8,10 +8,10 @@ from annoying.decorators import render_to
 from classes import Backup, EmailBackup
 
 @no_share('logbook')  
-def backup(request, shared, display_user):
+def backup(request):
     
     # get a zip file of the csv of the users data
-    sio = Backup(display_user).output_zip()
+    sio = Backup(request.display_user).output_zip()
     
     DATE = datetime.date.today()
     
@@ -26,10 +26,10 @@ def backup(request, shared, display_user):
 #################################
 
 @no_share('NEVER')
-def emailbackup(request, shared, display_user):
+def emailbackup(request):
     """Send email backup to the user"""
     
-    email = EmailBackup(display_user)
+    email = EmailBackup(request.display_user)
     sent = email.send()
     
     return HttpResponse(sent, mimetype='text-plain')

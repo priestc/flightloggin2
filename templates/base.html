@@ -2,75 +2,75 @@
 
 {% block navbar %}
     {# do not render the navbar when there is no logged in user (url tags will fail) #}
-    {% if display_user %}
+    {% if request.display_user %}
     <div id="nav_bar" summary="Top navigation bar">
     
-        {% if not shared or display_user.get_profile.logbook_share %}
+        {% if not request.shared or request.display_user.get_profile.logbook_share %}
         <span class="big {% block logbook-sel %}{% endblock%}" >
-        <a href="{% url logbook display_user.username %}">Flights</a></span>
+        <a href="{% url logbook request.display_user.username %}">Flights</a></span>
         {% endif %}
         
-        {% if not shared or display_user.get_profile.logbook_share %}
+        {% if not request.shared or request.display_user.get_profile.logbook_share %}
         &#8226;
         <span class="big {% block planes-sel %}{% endblock%}" >
-        <a href="{% url planes display_user.username %}">Planes</a></span>
+        <a href="{% url planes request.display_user.username %}">Planes</a></span>
         {% endif %}
         
-        {% if not shared or display_user.get_profile.events_share %}
+        {% if not request.shared or request.display_user.get_profile.events_share %}
         &#8226;
         <span class="big {% block events-sel %}{% endblock%}" >
-        <a href="{% url events display_user.username %}">Events</a></span>
+        <a href="{% url events request.display_user.username %}">Events</a></span>
         {% endif %}
         
-        {% if not shared or display_user.get_profile.logbook_share %}
+        {% if not request.shared or request.display_user.get_profile.logbook_share %}
         &#8226;
         <span class="big {% block locations-sel %}{% endblock%}" >
-        <a href="{% url locations display_user.username %}">Locations</a></span>
+        <a href="{% url locations request.display_user.username %}">Locations</a></span>
         {% endif %}
         
-        {% if not shared or display_user.get_profile.records_share %}
+        {% if not request.shared or request.display_user.get_profile.records_share %}
         &#8226;
         <span class="big {% block records-sel %}{% endblock%}" >
-        <a href="{% url records display_user.username %}">Records</a></span>
+        <a href="{% url records request.display_user.username %}">Records</a></span>
         {% endif %}
         
         <br>
         
-        {% if not shared or display_user.get_profile.other_share %}
+        {% if not request.shared or request.display_user.get_profile.other_share %}
         <span class="{% block linegraphs-sel %}{% endblock%}" >
-        <a href="{% url linegraphs display_user.username %}">Line Graphs</a></span>
+        <a href="{% url linegraphs request.display_user.username %}">Line Graphs</a></span>
         
         <span class="{% block bargraphs-sel %}{% endblock%}" >
-        <a href="{% url bargraphs display_user.username %}">Bar Graphs</a></span>
+        <a href="{% url bargraphs request.display_user.username %}">Bar Graphs</a></span>
         
         <span class="{% block maps-sel %}{% endblock%}" >
-        <a href="{% url maps display_user.username %}">Maps</a></span>
+        <a href="{% url maps request.display_user.username %}">Maps</a></span>
         
         <span class="{% block est-sel %}{% endblock%}" >
-        <a href="{% url est display_user.username %}">8710</a></span>
+        <a href="{% url est request.display_user.username %}">8710</a></span>
         
         <span class="{% block sigs-sel %}{% endblock%}" >
-        <a href="{% url sigs display_user.username %}">Sigs</a></span>
+        <a href="{% url sigs request.display_user.username %}">Sigs</a></span>
 
         <span class="{% block currency-sel %}{% endblock%}" >
-        <a href="{% url currency display_user.username %}">Currency</a></span>
+        <a href="{% url currency request.display_user.username %}">Currency</a></span>
         
         <span class="{% block milestones-sel %}{% endblock%}" >
-        <a href="{% url milestones display_user.username %}">Milestones</a></span>
+        <a href="{% url milestones request.display_user.username %}">Milestones</a></span>
         {% endif %}
         
-        {% if not shared %}
+        {% if not request.shared %}
         <span class="{% block mass-sel %}{% endblock%}" >
-        <a href="{% url mass-entry display_user.username %}">Mass Entry</a></span>
+        <a href="{% url mass-entry request.display_user.username %}">Mass Entry</a></span>
 
         <span class="{% block import-sel %}{% endblock%}" >
-        <a href="{% url import display_user.username %}">Import</a></span>
+        <a href="{% url import request.display_user.username %}">Import</a></span>
         
         <span class="{% block export-sel %}{% endblock%}" >
-        <a href="{% url export display_user.username %}">Export</a></span>
+        <a href="{% url export request.display_user.username %}">Export</a></span>
 
         <span class="{% block profile-sel %}{% endblock%}" >
-        <a href="{% url profile display_user.username %}">Preferences</a></span>
+        <a href="{% url profile request.display_user.username %}">Preferences</a></span>
         
         <span>
         <a href="/logout">Log Out</a></span>

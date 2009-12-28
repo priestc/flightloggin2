@@ -169,7 +169,7 @@ def qs_to_catclass_kmz(qs):
 
 
 @no_share('other')
-def airports_kml(request, shared, display_user, type_):
+def airports_kml(request, type_):
     from django.conf import settings
     from utils import AirportFolder 
     from airport.models import Location
@@ -177,12 +177,12 @@ def airports_kml(request, shared, display_user, type_):
     if type_=="all":
         title = "All Airports"
         points = Location.objects\
-                         .user(display_user)\
+                         .user(request.display_user)\
                          .filter(loc_class=1)\
                          .distinct()
                          
         custom = Location.objects\
-                         .user(display_user)\
+                         .user(request.display_user)\
                          .filter(loc_class=3)\
                          .distinct()
                     
@@ -225,9 +225,9 @@ def airports_kml(request, shared, display_user, type_):
 
  
 @no_share('other')   
-def routes_kml(request, shared, display_user, type_):
+def routes_kml(request, type_):
     
-    qs = Route.objects.user(display_user)
+    qs = Route.objects.user(request.display_user)
     
     if type_== "all":
         title = "All Routes"

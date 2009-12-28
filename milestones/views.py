@@ -6,9 +6,9 @@ X = '<span class="x">&#10005;</span>'
 
 @no_share('other')
 @render_to('milestones.html')
-def milestones(request, shared, display_user):
+def milestones(request):
     from logbook.models import Flight
-    qs = Flight.objects.user(display_user)
+    qs = Flight.objects.user(request.display_user)
     
     part135 = part135ifr(qs)
     part135v = part135vfr(qs)
@@ -23,6 +23,7 @@ def smallbar(request, val, max_val):
 
     
 def part135ifr(qs):
+    """ Part 135 IFR minimums """
     
     ###########################################################################
     
@@ -79,6 +80,7 @@ def part135ifr(qs):
 
 
 def part135vfr(qs):
+    """ Part 135 VFR minimums """
     
     ############ part 135 IFR #################################################
     
@@ -120,6 +122,7 @@ def part135vfr(qs):
 
 
 def atp_calc(qs):
+    """ ATP minimums """
     
     from logbook.models import Flight
     

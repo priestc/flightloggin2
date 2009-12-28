@@ -11,7 +11,7 @@ from logbook.constants import FIELD_ABBV
 from share.decorator import no_share
 
 @no_share('logbook')
-def pdf(request, display_user, shared):
+def pdf(request):
     from reportlab.lib.styles import getSampleStyleSheet
     from reportlab.platypus import Table, TableStyle, Paragraph, SimpleDocTemplate
     from reportlab.lib.units import inch
@@ -32,9 +32,9 @@ def pdf(request, display_user, shared):
                             author="FlightLogg.in")
      
     try:
-        name = display_user.get_profile().username
+        name = request.display_user.get_profile().username
     except:
-        name = display_user
+        name = request.display_user
 
     elements.append(Paragraph("%s's Logbook" % name, styles['Heading1']))
     elements.append(Paragraph(f_date, styles['Normal']))
@@ -43,7 +43,7 @@ def pdf(request, display_user, shared):
                     'act_inst', 'sim_inst', 'act_inst','xc','night','day_l',
                     'night_l','person', 'r_remarks')
                     
-    flights = Flight.objects.filter(user=display_user).select_related()
+    flights = Flight.objects.filter(user=request.display_user).select_related()
     rows = flights.count() + 1  #+1 because of the header
     header = [FIELD_ABBV[f] for f in print_fields]
     data = [header,]

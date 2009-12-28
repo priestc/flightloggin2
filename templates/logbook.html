@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block logbook-sel %}nav_selected{% endblock%}
 
-{% block description %}{{ display_user.username }}'s flights{% endblock%}
+{% block description %}{{ request.display_user.username }}'s flights{% endblock%}
 
 {% block javascript %}
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/popup.js"></script>
@@ -25,7 +25,7 @@
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/popup.css">
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/flight_popup.css">
 
-<link rel="alternate" title="{{display_user.username}}'s flights feed" href="/feeds/flights/{{display_user.username}}" type="application/rss+xml">
+<link rel="alternate" title="{{ request.display_user.username }}'s flights feed" href="/feeds/flights/{{request.display_user.username}}" type="application/rss+xml">
 
 {% endblock %}
 
@@ -33,7 +33,7 @@
 
 {% block canvas %}
     
-    {% if not shared %}
+    {% if not request.shared %}
 	<input id="new_flight_button" type="button" value="New Flight" />
 	{% endif %}
 	
@@ -70,8 +70,8 @@
                     {% endfor %}
                     
 				<td colspan="6">
-				    {% if flights and not shared %}
-					<a href="{% url mass-edit display_user.username page_of_flights.number %}">Mass Edit</a>
+				    {% if flights and not request.shared %}
+					<a href="{% url mass-edit request.display_user.username page_of_flights.number %}">Mass Edit</a>
 					{% endif %}
 				</td>
 			</tr>

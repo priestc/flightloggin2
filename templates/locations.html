@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block locations-sel %}nav_selected{% endblock%}
 
-{% block description %}{{ display_user.username }}'s custom locations{% endblock%}
+{% block description %}{{ request.display_user.username }}'s custom locations{% endblock%}
 
 {% block javascript %}
     <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/popup.js"></script>
@@ -19,7 +19,7 @@
 
 {% block canvas %}
 
-{% if user.is_authenticated and not shared %}
+{% if user.is_authenticated and not request.shared %}
 <input type="button" id="new_custom" value="New Location">
 {% endif %}
 
@@ -90,7 +90,7 @@ accurately to differentiate between flights that quality for Point to Point XC.
 		</tr>
 	</table>
 	
-	<form id="new_plane_form" action="{% url locations display_user.username %}" method="post">
+	<form id="new_plane_form" action="{% url locations request.display_user.username %}" method="post">
 		<table>
 			<tbody>
 				<tr>
@@ -127,7 +127,7 @@ accurately to differentiate between flights that quality for Point to Point XC.
     	<div id="new_buttons">
 			<input type="submit" name="submit" value="Create New Location" />
 		</div>
-        {% if not shared %}
+        {% if not request.shared %}
 		<div id="edit_buttons">
 			<input type="submit" name="submit" value="Submit Changes" />
 			<input type="submit" name="submit" value="Delete Location" />

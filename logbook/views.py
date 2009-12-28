@@ -17,48 +17,48 @@ from profile.models import Profile, AutoButton
 
 @no_share('logbook')
 @render_to("logbook.html")
-def logbook(request, shared, display_user, page=0):
+def logbook(request, page=0):
 
     form = FlightForm(prefix="new")
     
     if request.POST.get('submit', "") == "Submit New Flight":
-        flight = Flight(user=display_user)
+        flight = Flight(user=request.display_user)
         form = FlightForm(request.POST, instance=flight, prefix="new")
         
         if form.is_valid():
             form.save()
             from backup.models import edit_logbook
-            edit_logbook.send(sender=display_user)
+            edit_logbook.send(sender=request.display_user)
             from django.core.urlresolvers import reverse
-            url = reverse('logbook', kwargs={"username": display_user.username})
+            url = reverse('logbook', kwargs={"username": request.display_user.username})
             return HttpResponseRedirect(url)
         else:
             ERROR = "'new'"
             
     elif request.POST.get('submit', "") == "Edit Flight":
         flight_id = request.POST['id']
-        flight = Flight(pk=flight_id, user=display_user)
+        flight = Flight(pk=flight_id, user=request.display_user)
         
         form = FlightForm(request.POST, instance=flight, prefix="new")
         
         if form.is_valid():
             form.save()
             from backup.models import edit_logbook
-            edit_logbook.send(sender=display_user)
+            edit_logbook.send(sender=request.display_user)
             return HttpResponseRedirect(request.path)
         else:
             ERROR = "'edit'"
             
     elif request.POST.get('submit', "") == "Delete Flight":
         flight_id = request.POST['id']
-        Flight(pk=flight_id, user=display_user).delete()           
+        Flight(pk=flight_id, user=request.display_user).delete()           
         ERROR = 'false'
         return HttpResponseRedirect(request.path)
         
     ##############################################################
     
-    auto_button,c = AutoButton.objects.get_or_create(user=display_user)
-    cols, c = Columns.objects.get_or_create(user=display_user)
+    auto_button,c = AutoButton.objects.get_or_create(user=request.display_user)
+    cols, c = Columns.objects.get_or_create(user=request.display_user)
     
     header_row = cols.header_row()
     
@@ -69,12 +69,12 @@ def logbook(request, shared, display_user, page=0):
     ################## custom filter form ########################
     
     from custom_filter import make_filter_form
-    FilterForm = make_filter_form(display_user)
+    FilterForm = make_filter_form(request.display_user)
     ff = FilterForm()
     
     ##############################################################
     
-    all_flights = Flight.objects.filter(user=display_user)
+    all_flights = Flight.objects.filter(user=request.display_user)
     
     if request.GET.get('c', "") == "t":
         ff=FilterForm(request.GET)
@@ -88,7 +88,7 @@ def logbook(request, shared, display_user, page=0):
                 
     ############## get user preferences ##########################
     
-    profile,c = Profile.objects.get_or_create(user=display_user)
+    profile,c = Profile.objects.get_or_create(user=request.display_user)
     num_format = profile.get_format()
     date_format = profile.get_date_format()
     
@@ -122,10 +122,10 @@ def logbook(request, shared, display_user, page=0):
 
 @no_share('NEVER')
 @render_to("mass_entry.html")     
-def mass_entry(request, shared, display_user):
+def mass_entry(request):
     
     try:
-        profile = display_user.get_profile()
+        profile = request.display_user.get_profile()
     except:
         profile = Profile()
         
@@ -147,50 +147,50 @@ def mass_entry(request, shared, display_user):
             
         formset = NewFlightFormset(post,
                     queryset=Flight.objects.get_empty_query_set(),
-                    planes_queryset=Plane.objects.user_common(display_user))
+                    planes_queryset=Plane.objects.user_common(request.display_user))
         
         if formset.is_valid():
             for form in formset.forms:
                 instance = form.save(commit=False)
-                instance.user = display_user
+                instance.user = request.display_user
                 if instance.date:
                     instance.save()
                     
             # send signal
             from backup.models import edit_logbook
-            edit_logbook.send(sender=display_user)
+            edit_logbook.send(sender=request.display_user)
             
             from django.core.urlresolvers import reverse
             return HttpResponseRedirect(
-                reverse('logbook', kwargs={"username": display_user.username})
+                reverse('logbook', kwargs={"username": request.display_user.username})
             )
         
     else:
         formset = NewFlightFormset(queryset=Flight.objects.get_empty_query_set(),
-                    planes_queryset=Plane.objects.user_common(display_user))
+                    planes_queryset=Plane.objects.user_common(request.display_user))
 
     return locals()
 
 @no_share('NEVER')
 @render_to("mass_entry.html")     
-def mass_edit(request, shared, display_user, page=0):
+def mass_edit(request, page=0):
     edit = True 
-    flights = Flight.objects.filter(user=display_user)
+    flights = Flight.objects.filter(user=request.display_user)
     
     try:
-        profile = display_user.get_profile()
+        profile = request.display_user.get_profile()
     except:
         profile = Profile()
         
     start = (int(page)-1) * int(profile.per_page)
     duration = int(profile.per_page)
-    qs = Flight.objects.filter(user=display_user)[start:start+duration]
+    qs = Flight.objects.filter(user=request.display_user)[start:start+duration]
     NewFlightFormset = modelformset_factory(Flight, form=FormsetFlightForm,
             formset=FixedPlaneModelFormset, extra=0, can_delete=True)
         
     if request.POST.get('submit'):
         formset = NewFlightFormset(request.POST, queryset=qs,
-                    planes_queryset=Plane.objects.user_common(display_user)
+                    planes_queryset=Plane.objects.user_common(request.display_user)
                   )
         
         if formset.is_valid():
@@ -198,16 +198,16 @@ def mass_edit(request, shared, display_user, page=0):
             
             # send signal
             from backup.models import edit_logbook
-            edit_logbook.send(sender=display_user)
+            edit_logbook.send(sender=request.display_user)
             
             from django.core.urlresolvers import reverse
             return HttpResponseRedirect(
                 reverse('logbook-page',
-                        kwargs={"username": display_user.username,"page": page})
+                        kwargs={"username": request.display_user.username,"page": page})
             )
     else:
         formset = NewFlightFormset(queryset=qs,
-                    planes_queryset=Plane.objects.user_common(display_user),
+                    planes_queryset=Plane.objects.user_common(request.display_user),
                   )
     
     return locals()      

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block events-sel %}nav_selected{% endblock%}
 
-{% block description %}{{ display_user.username }}'s events{% endblock%}
+{% block description %}{{ request.display_user.username }}'s events{% endblock%}
 
 {% block javascript %}
     <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/popup.js"></script>
@@ -14,7 +14,7 @@
 
 {% block canvas %}
 
-{% if not shared %}
+{% if not request.shared %}
     <input type="button" id="new_event" value="New Event">
 {% endif %}
 
@@ -50,7 +50,7 @@
 		</tr>
 	</table>
 	
-	<form id="new_plane_form" action="{% url events display_user.username %}" method="post">
+	<form id="new_plane_form" action="{% url events request.display_user.username %}" method="post">
 		<table>
 			<tbody>
 				<tr>
@@ -78,7 +78,7 @@
     	<div id="new_buttons">
 			<input type="submit" name="submit" value="Create New Event" />
 		</div>
-        {% if not shared %}
+        {% if not request.shared %}
 		<div id="edit_buttons">
 			<input type="submit" name="submit" value="Submit Changes" />
 			<input type="submit" name="submit" value="Delete Event" />

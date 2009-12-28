@@ -8,12 +8,15 @@ class no_share(object):
     """
 
     def determine(self, view, field, request, *args, **kwargs):
-        if not kwargs.get('shared'):
+        
+        print "--- %s" % request.shared
+        
+        if not getattr(request, 'shared'):
             ## if it's not shared, then do nothing (user is viewing their
             ## own account)
             return view(request, *args, **kwargs)
         
-        user = kwargs['display_user']
+        user = request.display_user
         
         from profile.models import Profile
         profile = Profile.get_for_user(user)

@@ -10,15 +10,15 @@ from handle_uploads import save_php, save_upload, get_last
 from backupfromphp import PHPBackup, InvalidToken, InvalidURL
 
 @render_to('export.html')
-def export(request, shared, display_user):
+def export(request):
     return locals()
 
 @render_to('import.html')
 @no_share('NEVER')
-def import_v(request, shared, display_user):
+def import_v(request):
 
     fileform = ImportForm()
-    p, previous = get_last(display_user.id)
+    p, previous = get_last(request.display_user.id)
     
     if not request.method == 'POST':
         return locals()
@@ -46,13 +46,13 @@ def import_v(request, shared, display_user):
     locs = {}
     try:
         if f:
-            save_upload(f, display_user)
+            save_upload(f, request.display_user)
         elif url:
             f = ba.get_file()
-            save_php(f, display_user)
+            save_php(f, request.display_user)
         
         #now it's go time   
-        locs = do_import(preview, display_user)
+        locs = do_import(preview, request.display_user)
         
     except BaseImport.InvalidCSVError:
         Error = "Not a valid CSV file"
@@ -70,7 +70,7 @@ def import_v(request, shared, display_user):
         # the import finished and there are no errors
         if not preview:
             from backup.models import edit_logbook
-            edit_logbook.send(sender=display_user)
+            edit_logbook.send(sender=request.display_user)
          
     locs2 = locals()
     locs2.update(locs)

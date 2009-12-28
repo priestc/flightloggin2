@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block mass-sel %}nav_selected{% endblock%}
 
-{% block description %}{{ display_user.username }}'s mass entry page{% endblock%}
+{% block description %}{{ request.display_user.username }}'s mass entry page{% endblock%}
 
 {% block javascript %}
 	<script type="text/javascript">
@@ -25,9 +25,9 @@
 {% include "pagination_table.html" %}
 
 {% if edit %}
-<form action="{% url mass-edit display_user.username page %}" method="post">
+<form action="{% url mass-edit request.display_user.username page %}" method="post">
 {% else %}
-<form action="{% url mass-entry display_user.username %}" method="post">
+<form action="{% url mass-entry request.display_user.username %}" method="post">
 {% endif %}
 <div>{{ formset.management_form }}</div>
 <table class="mass_table">

@@ -6,7 +6,7 @@ def news(request):
     news = NewsItem.objects.all()[:15]
     
     if request.user.is_authenticated():
-        display_user = request.user
+        request.display_user = request.user
         
     return locals()
 

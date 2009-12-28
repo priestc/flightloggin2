@@ -6,7 +6,7 @@
 			{% if edit %}
 			<span class="first_page_index"><a href="{% url mass-edit 1 %}">First Page</a></span>
 			{% else %}
-			<span class="first_page_index"><a href="{% url logbook-page display_user.username 1 %}{{get}}">First Page</a></span>
+			<span class="first_page_index"><a href="{% url logbook-page request.display_user.username 1 %}{{get}}">First Page</a></span>
 			{% endif %}
 		</td>
 		
@@ -16,7 +16,7 @@
 					{% if edit %}
 				    <a href="{% url mass-edit p %}">{{ p }}</a>
 				    {% else %}
-					<a href="{% url logbook-page display_user.username p %}{{get}}">{{ p }}</a>
+					<a href="{% url logbook-page request.display_user.username p %}{{get}}">{{ p }}</a>
 					{% endif %}
 				{% endfor %}
 											
@@ -26,7 +26,7 @@
 				    {% if edit %}
 				    <a href="{% url mass-edit p %}">{{ p }}</a>
 				    {% else %}
-					<a href="{% url logbook-page display_user.username p %}{{get}}">{{ p }}</a>
+					<a href="{% url logbook-page request.display_user.username p %}{{get}}">{{ p }}</a>
 					{% endif %}
 				{% endfor %}
 			</div>
@@ -36,7 +36,7 @@
 		    {% if edit %}
 			<span class="last_page_index"><a href="{% url mass-edit page_of_flights.paginator.num_pages %}">Last Page</a></span>
 			{% else %}
-			<span class="last_page_index"><a href="{% url logbook-page display_user.username page_of_flights.paginator.num_pages %}{{get}}">Last Page</a></span>
+			<span class="last_page_index"><a href="{% url logbook-page request.display_user.username page_of_flights.paginator.num_pages %}{{get}}">Last Page</a></span>
 			{% endif %}
 		</td>
 	</tr>

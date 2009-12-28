@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block planes-sel %}nav_selected{% endblock%}
 
-{% block description %}{{ display_user.username }}'s mass edit/entry planes page{% endblock%}
+{% block description %}{{ request.display_user.username }}'s mass edit/entry planes page{% endblock%}
 
 {% block title %}Mass Edit Planes{% endblock %}
 
 {% block canvas %}
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/mass_planes.css">
-<form action="{% url mass-planes display_user.username %}" method="post">
+<form action="{% url mass-planes request.display_user.username %}" method="post">
 <div>{{ formset.management_form }}</div>
 <table class="mass_table minor_table">
 <thead>

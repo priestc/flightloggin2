@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block sigs-sel %}nav_selected{% endblock%}
 
-{% block description %}{{ display_user.username }}'s signature images generator{% endblock%}
+{% block description %}{{ request.display_user.username }}'s signature images generator{% endblock%}
 
 {% block javascript %}
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/sigs.js"></script>

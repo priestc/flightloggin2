@@ -124,7 +124,7 @@ class ShareMiddleware(object):
             request.display_user = display_user
             request.shared = shared
             
-            return view(request=request,
-                        shared=shared,
-                        display_user=display_user,
-                        *args, **kwargs)
+            return view(request=request, *args, **kwargs)
+                        #shared=shared,
+                        #display_user=display_user,
+                        

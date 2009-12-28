@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block maps-sel %}nav_selected{% endblock%}
 
-{% block description %}{{ display_user.username }}'s maps{% endblock%}
+{% block description %}{{ request.display_user.username }}'s maps{% endblock%}
 
 {% block javascript %}
 	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/maps.css">
@@ -30,7 +30,7 @@
 <table class="maps_table">
     <tr>
         <td>All Routes:</td>
-        <td>{% url kml-route display_user "all" as all_routes_url %}
+        <td>{% url kml-route request.display_user "all" as all_routes_url %}
             <a href="{{ all_routes_url }}">Earth</a>&nbsp;&nbsp;
             <a href="http://maps.google.com?q={{ SITE_URL }}{{ all_routes_url|urlencode }}" target="_blank">Maps</a>
         </td>
@@ -40,7 +40,7 @@
             <span class="red">Red: Single-Engine</span><br>
             <span class="blue">Blue: Multi-Engine</span>
         </td>
-        <td>{% url kml-route display_user "cat_class" as cat_class_url %}
+        <td>{% url kml-route request.display_user "cat_class" as cat_class_url %}
             <a href="{{cat_class_url }}">Earth</a>&nbsp;&nbsp;
             <a href="http://maps.google.com?q={{ SITE_URL }}{{cat_class_url|urlencode}}" target="_blank">Maps</a>
         </td>
@@ -55,7 +55,7 @@
             <span class="blue">Blue: Dual Received</span>
         </td>
         
-        <td>{% url kml-route display_user "flight_time" as flight_time_url %}
+        <td>{% url kml-route request.display_user "flight_time" as flight_time_url %}
             <a href="{{ flight_time_url }}">Earth</a>&nbsp;&nbsp;
             <a href="http://maps.google.com?q={{ SITE_URL }}{{ flight_time_url|urlencode }}" target="_blank">Maps</a>
         </td>
@@ -68,7 +68,7 @@
 <table class="maps_table">
     <tr>
         <td>All Airports:</td>
-        <td>{% url kml-airport display_user "all" as all_points_url %}
+        <td>{% url kml-airport request.display_user "all" as all_points_url %}
             <a href="{{ all_points_url }}">Earth</a>&nbsp;&nbsp;
             <a href="http://maps.google.com?q={{ SITE_URL }}{{ all_points_url|urlencode }}" target="_blank">Maps</a>
         </td>
@@ -78,10 +78,10 @@
 
 <h2>Images</h2>
 
-{% if not shared %}
+{% if not request.shared %}
     <div class="instructions">
     These images are only updated when you say so. To perform an update, click
-    <a href="{% url render-me display_user %}">here</a>
+    <a href="{% url render-me request.display_user %}">here</a>
     </div>
 {% endif %}
 

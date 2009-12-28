@@ -24,7 +24,7 @@
 <div id="epiclock"></div>
 
 <br>
-<form action="{% url realtime display_user %}" method="post">
+<form action="{% url realtime request.display_user %}" method="post">
     {{ form.start }}{{ form.end }}
     <input id="on_duty" type="button" value="Go On Duty">
     <input id="off_duty" type="button" value="Go Off Duty">

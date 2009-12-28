@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block linegraphs-sel %}nav_selected{% endblock%}
 
-{% block description %}{{ display_user.username }}'s line graphs{% endblock%}
+{% block description %}{{ request.display_user.username }}'s line graphs{% endblock%}
 
 {% block javascript %}
     <style>

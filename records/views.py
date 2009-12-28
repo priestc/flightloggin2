@@ -6,27 +6,27 @@ from share.decorator import no_share
 
 @no_share('records')
 @render_to("records.html")
-def records(request, shared, display_user):
+def records(request):
       
     if request.POST:
         text = request.POST.get('records', None)
-        records=Records(user=display_user, text=text)
+        records=Records(user=request.display_user, text=text)
         records.save()
         saved=True
         
         # send signal to specify this user as editing their data
         from backup.models import edit_logbook
-        edit_logbook.send(sender=display_user)
+        edit_logbook.send(sender=request.display_user)
     
     else:
-        records,c = Records.objects.get_or_create(user=display_user)
+        records,c = Records.objects.get_or_create(user=request.display_user)
             
     return locals()
 
 @no_share('logbook')
 @render_to("locations.html")
-def locations(request, shared, display_user):
-    customs = Location.objects.user_own(display_user)
+def locations(request):
+    customs = Location.objects.user_own(request.display_user)
     changed = False
     
     if "New" in request.POST.get('submit', "DERP"):
@@ -36,13 +36,13 @@ def locations(request, shared, display_user):
             custom = form.save(commit=False)
             custom.loc_class = 3
             custom.location = point
-            custom.user = display_user
+            custom.user = request.display_user
             
             custom.save()
             changed = True
             
             from route.models import Route
-            Route.render_custom(display_user)   #re-render routes with custom places
+            Route.render_custom(request.display_user)   #re-render routes with custom places
             
         else:
             assert False, form.errors
@@ -50,7 +50,7 @@ def locations(request, shared, display_user):
             
     elif "Submit" in request.POST.get('submit', "DERP"):
         custom = Location.objects.get(loc_class=3,
-                                      user=display_user,
+                                      user=request.display_user,
                                       pk=request.POST.get('id', None) )
         form=CustomForm(request.POST, instance=custom)
         if form.is_valid():
@@ -63,14 +63,14 @@ def locations(request, shared, display_user):
             changed = True
             
             from route.models import Route
-            Route.render_custom(display_user)   #re-render routes with custom places
+            Route.render_custom(request.display_user)   #re-render routes with custom places
             
         else:
             ERROR = 'true'
             
     elif "Delete" in request.POST.get('submit', "DERP"):
         custom = Location.objects.get(loc_class=3,
-                        user=display_user, pk=request.POST.get('id', None) )
+                        user=request.display_user, pk=request.POST.get('id', None) )
         custom.delete()
         changed = True
         form = CustomForm()
@@ -81,18 +81,18 @@ def locations(request, shared, display_user):
     if changed:
         # send signal to specify this user as editing their data
         from backup.models import edit_logbook
-        edit_logbook.send(sender=display_user)
+        edit_logbook.send(sender=request.display_user)
         
     return locals()
 
 @no_share('events')
 @render_to("events.html")
-def events(request, shared, display_user):
+def events(request):
     
     ##################################################
 
     try:
-        profile = display_user.get_profile()
+        profile = request.display_user.get_profile()
     except:
         from profile.models import Profile
         profile = Profile()
@@ -104,7 +104,7 @@ def events(request, shared, display_user):
     
     ##################################################
     
-    nonflights = NonFlight.objects.filter(user=display_user).order_by('date')
+    nonflights = NonFlight.objects.filter(user=request.display_user).order_by('date')
     changed = False
     
     if request.POST:
@@ -135,7 +135,7 @@ def events(request, shared, display_user):
     if changed:
         # send signal to specify this user as editing their data
         from backup.models import edit_logbook
-        edit_logbook.send(sender=display_user)
+        edit_logbook.send(sender=request.display_user)
     
     return locals()
 
