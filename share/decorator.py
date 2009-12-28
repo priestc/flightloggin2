@@ -9,8 +9,6 @@ class no_share(object):
 
     def determine(self, view, field, request, *args, **kwargs):
         
-        print "--- %s" % request.shared
-        
         if not getattr(request, 'shared'):
             ## if it's not shared, then do nothing (user is viewing their
             ## own account)
