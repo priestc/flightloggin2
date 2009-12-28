@@ -86,6 +86,7 @@ def tailnumber_profile(request, pk):
     types = Plane.objects\
                  .filter(tailnumber__iexact=pk)\
                  .values_list('type', flat=True)\
+                 .exclude(type="")\
                  .order_by()\
                  .distinct()
     

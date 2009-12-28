@@ -27,21 +27,23 @@ def currency(request):
     inst_out = []
     
     
-    if Flight.objects.user(request.display_user).pseudo_category("fixed_wing").app().count() > 5:
+    if Flight.objects.user(request.display_user)\
+                     .pseudo_category("fixed_wing").app().count() > 5:
         curr_inst = FAA_Instrument(request.display_user)
         curr_inst.fake_class = "fixed_wing"
         cb = InstCurrBox(curr_inst, "Fixed Wing")
         inst_out.append(cb)
         cb.render()
         
-    if Flight.objects.user(request.display_user).pseudo_category("helicopter").app().count() > 5:
-        print  "yup"
+    if Flight.objects.user(request.display_user)\
+                     .pseudo_category("helicopter").app().count() > 5:
         curr_inst = FAA_Instrument(request.display_user)
         curr_inst.fake_class = "helicopter"
         cb = InstCurrBox(curr_inst, "Helicopter")
         inst_out.append(cb)
     
-    if Flight.objects.user(request.display_user).pseudo_category("glider").app().count() > 5:
+    if Flight.objects.user(request.display_user)\
+                     .pseudo_category("glider").app().count() > 5:
         curr_inst = FAA_Instrument(request.display_user)
         curr_inst.fake_class = "glider"
         cb = InstCurrBox(curr_inst, "Glider")
@@ -49,7 +51,8 @@ def currency(request):
     
     ############################################ landing below
         
-    cat_classes = Plane.objects.user(request.display_user)\
+    cat_classes = Plane.objects\
+                       .user(request.display_user)\
                        .values_list('cat_class', flat=True)\
                        .order_by().distinct()
     cat_classes_out = []
