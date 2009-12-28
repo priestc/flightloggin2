@@ -8,6 +8,9 @@ class PlaneQuerySet(QuerySet, UserMixin):
     def user_common(self, u):
         return self.filter(user__in=(1, u.id) )
     
+    def tailwheel(self):
+        return self.filter( Q(tags__icontains="tailwheel"))
+    
     def currency(self):
         """ filters down to planes that are eligable for currency, e.g. tagged
             as either 'tr', 'type rating', or 'currency'

@@ -41,7 +41,7 @@ def currency(request):
         cb = InstCurrBox(curr_inst, "Helicopter")
         inst_out.append(cb)
     
-    if Flight.objects.pseudo_category("glider").app().count() > 5:
+    if Flight.objects.user(request.display_user).pseudo_category("glider").app().count() > 5:
         curr_inst = FAA_Instrument(request.display_user)
         curr_inst.fake_class = "glider"
         cb = InstCurrBox(curr_inst, "Glider")
@@ -49,7 +49,7 @@ def currency(request):
     
     ############################################ landing below
         
-    cat_classes = Plane.objects.filter(user=request.display_user)\
+    cat_classes = Plane.objects.user(request.display_user)\
                        .values_list('cat_class', flat=True)\
                        .order_by().distinct()
     cat_classes_out = []
@@ -63,8 +63,8 @@ def currency(request):
     
     ############################################ tailwheel below
     
-    tailwheels = Plane.objects.filter(user=request.display_user)\
-                              .filter( Q(tags__icontains="tailwheel"))\
+    tailwheels = Plane.objects.user(request.display_user)\
+                              .tailwheel()\
                               .values_list('cat_class', flat=True)\
                               .order_by().distinct()
     tailwheels_out = []   
@@ -78,7 +78,7 @@ def currency(request):
         
     ############################################ type ratings below
     
-    type_ratings = Plane.objects.filter(user=request.display_user)\
+    type_ratings = Plane.objects.user(request.display_user)\
                                 .currency()\
                                 .values_list('type', flat=True)\
                                 .order_by().distinct()
