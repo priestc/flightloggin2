@@ -37,13 +37,15 @@
             
             {% if user.get_profile.logbook_share %}
             
-                <a title="This user does not allow others to view his/her logbook"
-                   class="noshare" href="">{{user.username}}</a>
+                <a href="{% url logbook user.username %}"
+                   title="Click to see this user's logbook">{{user.username}}</a>
                    
             {% else %}
             
-                <a href="{% url logbook user.username %}"
-                   title="Click to see this user's logbook">{{user.username}}</a>
+                
+                   
+               <a title="This user does not allow others to view his/her logbook"
+                   class="noshare" href="">{{user.username}}</a>
                    
             {% endif %}
             
