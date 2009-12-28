@@ -27,14 +27,15 @@ def currency(request):
     inst_out = []
     
     
-    if Flight.objects.pseudo_category("fixed_wing").app().count() > 5:
+    if Flight.objects.user(request.display_user).pseudo_category("fixed_wing").app().count() > 5:
         curr_inst = FAA_Instrument(request.display_user)
         curr_inst.fake_class = "fixed_wing"
         cb = InstCurrBox(curr_inst, "Fixed Wing")
         inst_out.append(cb)
         cb.render()
         
-    if Flight.objects.pseudo_category("helicopter").app().count() > 5:
+    if Flight.objects.user(request.display_user).pseudo_category("helicopter").app().count() > 5:
+        print  "yup"
         curr_inst = FAA_Instrument(request.display_user)
         curr_inst.fake_class = "helicopter"
         cb = InstCurrBox(curr_inst, "Helicopter")
