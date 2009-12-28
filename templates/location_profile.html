@@ -1,6 +1,5 @@
 {% extends "base.html" %}
-{% block realtime-sel %}nav_selected{% endblock%}
-
+{% load userlist %}
 {% block description %}{{ loc.name }} - {{ loc.location_summary }} - {{ pk|upper }} location profile{% endblock%}
 
 {% block javascript %}
@@ -20,32 +19,7 @@
 <table class="main">
     <tr>
         <th>Users who have flown to this {{ lc }}</th>
-        <td>
-            {% spaceless %}
-            {% for user in users %}
-                
-                {# the span is so it works with spaceless better #}
-                {% if not forloop.first %}<span>, </span>{% endif %}
-                
-                {% if user.get_profile.logbook_share %}
-                
-                    <a href="{% url logbook user.username %}"
-                       title="Click to see this user's logbook">{{user.username}}</a>
-                                     
-                {% else %}
-                
-                    <a title="This user does not allow others to view his/her logbook"
-                       class="noshare" href="">{{user.username}}</a>
-                       
-                {% endif %}
-                
-            {% empty %}
-
-                (None)
-
-            {% endfor %}
-            {% endspaceless %}
-        </td>
+        <td>{{ users|list_users }}</td>
     </tr>
 
     <tr>

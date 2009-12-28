@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load userlist %}
 {% block realtime-sel %}nav_selected{% endblock%}
 
 {% block description %}{{ pk|upper }} tailnumber profile{% endblock%}
@@ -23,32 +24,7 @@
 <table class="main">
     <tr>
         <th>Users who have flown an aircraft with this tailnumber</th>
-        <td>
-            {% spaceless %}
-            {% for user in users %}
-                
-                {# the span is so it works with spaceless better #}
-                {% if not forloop.first %}<span>, </span>{% endif %}
-                
-                {% if user.get_profile.logbook_share %}
-                
-                    <a href="{% url logbook user.username %}"
-                       title="Click to see this user's logbook">{{user.username}}</a>
-                       
-                {% else %}
-                    
-                     <a title="This user does not allow others to view his/her logbook"
-                       class="noshare" href="">{{user.username}}</a>  
-                       
-                {% endif %}
-                
-            {% empty %}
-
-                (None)
-
-            {% endfor %}
-            {% endspaceless %}
-        </td>
+        <td>{{ users|list_users }}</td>
     </tr>
     <tr>
         <th>Total hours logged with this tailnumber</th>
