@@ -14,12 +14,12 @@ def planes(request):
     changed = False
     
     if request.POST.get('submit') == "Create New Plane":
-        plane = Plane(user=request.user)
+        plane = Plane(user=request.display_user)
         form = PopupPlaneForm(request.POST, instance=plane)      
         
         if form.is_valid():
             plane=form.save(commit=False)
-            plane.user=request.user
+            plane.user=request.display_user
             plane.save()
             changed = True
     
@@ -29,7 +29,7 @@ def planes(request):
         
         if form.is_valid():
             plane=form.save(commit=False)
-            plane.user=request.user
+            plane.user=request.display_user
             plane.save()
             changed = True
             
