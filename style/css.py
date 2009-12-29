@@ -863,8 +863,9 @@ sigs = """
 #checktable                     {margin-left: auto; margin-right: auto}
 #checktable td                  {text-align: left}
 
-#sig_url                        {width: 50%%;
+#sig_url                        {min-width: 800px;
                                  padding: 20px;
+                                 width: 50%%;
                                  font-size: large;
                                  background: %(sig_bg)s;
                                  text-align: center;

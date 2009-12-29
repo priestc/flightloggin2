@@ -4,6 +4,7 @@
 {% block description %}{{ request.display_user.username }}'s signature images generator{% endblock%}
 
 {% block javascript %}
+<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/sprintf.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/sigs.js"></script>
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/sigs.css">
 {% endblock %}
@@ -11,17 +12,30 @@
 {% block title %}Sigs{% endblock %}
 
 {% block canvas %}
-<p class="instructions">
-Create a small image that always displays the totals of various times in your
-logbook. Select the columns you want shown, then click the generate button.
-</p>
-{{checkbox_table}}
+    <p class="instructions">
+    Create a small image that always displays the totals of various times in your
+    logbook. Select the columns you want shown, then click the generate button.
+    </p>
 
-<input type="button" value="Generate" id="generate_button">
-<hr>
-<div id="image_div">
-    <img src="sigs/pic.png" id="sig_image">
-</div>
-<div id="sig_url"></div>
+    {{checkbox_table}}
+    <hr>
+    <input name="font" type="radio" value="Verdana">Verdana</input>
+    <input name="font" type="radio" value="VeraSe">Vera Serif</input>
+    <input name="font" type="radio" value="VeraMono" checked="checked">Vera Mono</input>
+    <input name="font" type="radio" value="Vera">Vera Sans</input>
+    <br>
+    <input name="size" type="radio" value="8">Very Small</input>
+    <input name="size" type="radio" value="10" checked="checked">Small</input>
+    <input name="size" type="radio" value="14">Medium</input>
+    <input name="size" type="radio" value="18">Large</input>
+    
+    <hr>
+    <input name="logo" type="radio" value="logo">Logo</input>
+    <input name="logo" type="radio" value="nologo" checked="checked">No Logo</input>
+    <hr>
+    <input type="button" value="Generate" id="generate_button">
+    <div id="image_div">
+        <img src="sigs/pic.png" id="sig_image">
+    </div>
+    <div id="sig_url"></div>
 {% endblock %}
-

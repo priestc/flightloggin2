@@ -6,11 +6,11 @@ p=p.join("/");
 
 
 // the default to show
-var url = p + "sigs/pic.png"
+var url = p + "sigs/pic.png";
 
 $(document).ready(function() {
 
-    generate()
+    generate();
 
 	$("#generate_button").click(generate);
 });
@@ -28,14 +28,26 @@ function get_url() {
     fields = []
 
     $("#checktable input:checked").each(function() {
-        fields.push(this.id)
+        fields.push(this.id);
     });
     
-    url = p + "sigs/" + fields.join("-") + ".png"
+    $("input[name='font']:checked").each(function() {
+        font = $(this).val();
+    });
+    
+    $("input[name='size']:checked").each(function() {
+        size = $(this).val();
+    });
+    
+    $("input[name='logo']:checked").each(function() {
+        logo = $(this).val();
+    });
+    
+    url = sprintf("%s%s-sigs/%s-%s/%s.png", p, logo, font, size, fields.join("-") )
 }
 
 function generate(event) {
-    get_url()
+    get_url();
 	generate_sig();
 	copy_url();
 }

@@ -75,9 +75,18 @@ urlpatterns = patterns('',
         # username/bargraph/(column)/(func)/by-(agg).png
         'graphs.views.bargraph_image',
     ),
-                                                                   
-    (
+    
+    ################################## sigs
+                                                              
+    (       # old sig url format (for legacy)
         r'^(?P<username>\w+)/sigs/(?P<columns>[\w\-]+).png',
+        "sigs.views.make_sig",
+        {"font": "VeraMono", "logo": "nologo"},
+    ),
+    
+    (       # new sig format
+        r'^(?P<username>\w+)/(?P<logo>(logo|nologo))-sigs/' + 
+        r'(?P<font>\w+)-(?P<size>\d{1,2})/(?P<columns>[\w\-]+).png',
         "sigs.views.make_sig",
     ),
     
