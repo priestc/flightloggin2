@@ -28,7 +28,7 @@ def sigs(request):
 
 
 @no_share('other')
-def make_sig(request, columns, logo, font, size):
+def make_sig(request, columns, logo, font, size=12):
     from classes import Sig
     columns = columns.split('-')
     
