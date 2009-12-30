@@ -240,7 +240,7 @@ def routes_kml(request, type_):
         return folders_to_kmz_response(folders, title)
         
     elif type_== "cat_class":
-        return qs_to_time_kmz(qs)
+        return qs_to_catclass_kmz(qs)
             
     elif type_ == "flight_time":
         return qs_to_time_kmz(qs)
