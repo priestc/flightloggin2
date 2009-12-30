@@ -229,9 +229,15 @@ urlpatterns = patterns('',
     ),
     
     url(
+        r'^route-(?P<ty>[\w-]+).kmz$',
+        "maps.kml_views.single_type_kml",
+                                                             name="s-type-kml",
+    ),
+    
+    url(
         r'^route-(?P<pk>[\w-]+).kmz$',
         "maps.kml_views.single_route_kml",
-        {'earth': True},                                    name="s-route-kml",
+                                                            name="s-route-kml",
     ),
     
     url(
@@ -240,10 +246,18 @@ urlpatterns = patterns('',
                                                          name="s-location-kml",
     ),
     
+    #--------------------------------------------------------------------------
+    
     url(
         r'^route-(?P<pk>[\w-]+)$',
         "maps.kml_views.single_route_kml",
         {'earth': False},                                  name="s-route-maps",
+    ),
+    
+    url(
+        r'^route-(?P<pk>[\w-]+)$',
+        "maps.kml_views.single_route_kml",
+        {'earth': False},                                   name="s-type-maps",
     ),
     
     #--------------------------------------------------------------------------

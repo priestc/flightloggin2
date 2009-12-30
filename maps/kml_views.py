@@ -8,14 +8,7 @@ from share.decorator import no_share
 
 from utils import RouteFolder
 
-def single_tailnumber_kml(request, tn):
-    """ Returns a KMZ of all routes flown by the passed tailnumber"""
-    
-    qs = Route.objects.filter(flight__plane__tailnumber=tn)
-                  
-    return qs_to_time_kmz(qs)
-
-def single_route_kml(request, pk, earth):
+def single_route_kml(request, pk, earth=True):
     if not earth:
         from django.conf import settings
         from django.core.urlresolvers import reverse
@@ -33,9 +26,26 @@ def single_route_kml(request, pk, earth):
 
     return folders_to_kmz_response([f])
 
+#------------------------------------------------------------------------------
+
 def single_location_kml(request, pk):
+    "Returns a KMZ of all routes flown to the passed location identifier"
     qs = Route.objects.filter(routebase__location__identifier=pk.upper())               
     return qs_to_time_kmz(qs)
+
+def single_type_kml(request, ty):
+    "Returns a KMZ of all routes flown by the passed aircraft type"
+    qs = Route.objects.filter(flight__plane__type=ty)
+    print qs, ty
+    return qs_to_time_kmz(qs)
+
+def single_tailnumber_kml(request, tn):
+    "Returns a KMZ of all routes flown by the passed tailnumber"
+    qs = Route.objects.filter(flight__plane__tailnumber=tn)
+    print qs, tn
+    return qs_to_time_kmz(qs)
+
+#------------------------------------------------------------------------------
 
 def qs_to_time_kmz(qs):
     """ From a routes queryset, return a folder'd up kmz file split up

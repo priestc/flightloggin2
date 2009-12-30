@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load profile_lists %}
+{% block description %}{{ pk|upper }} type profile{% endblock%}
+
+{% block javascript %}
+<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/item_profile.css">
+{% endblock %}
+
+{% block title %}Type Profile - {{ pk|upper }}{% endblock %}
+
+
+{% block canvas %}
+
+<h1>{{ pk|upper }}</h1>
+{{manufacturers|join:", "}}
+
+{% ifnotequal t_flights 0 %}
+<br><a href="{% url s-type-kml pk %}">View all flights in this type with Google Earth</a>
+{% endifnotequal %}
+
+
+<table class="main">
+    <tr>
+        <th>Users who have flown this aircraft type</th>
+        <td>{{ users|list_users }}</td>
+    </tr>
+    <tr>
+        <th>Total hours logged in this type</th>
+        <td><big><strong>{{ t_hours }}</strong></big></td>
+    </tr>
+    <tr>
+        <th>Total number of flights logged in this type</th>
+        <td><big><strong>{{ t_flights }}</strong></big></td>
+    </tr>
+    <tr>
+        <th>Number of unique airports this type has visited</th>
+        <td><big><strong>{{ u_airports }}</strong></big></td>
+    </tr>
+    <tr>
+        <th>Number of unique airports this type has visited</th>
+        <td>{{ tailnumbers|list_tailnumbers }}</td>
+    </tr>
+</table>
+
+{% endblock %}

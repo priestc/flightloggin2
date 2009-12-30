@@ -76,12 +76,16 @@ def mass_planes(request, page=0):
     
     return locals()
 
+
+###############################################################################
+
+from django.contrib.auth.models import User
+from airport.models import Location
+from route.models import Route
+from django.db.models import Sum
+
 @render_to('tailnumber_profile.html')
 def tailnumber_profile(request, pk):
-    from django.contrib.auth.models import User
-    from airport.models import Location
-    from route.models import Route
-    from django.db.models import Sum
     
     types = Plane.objects\
                  .filter(tailnumber__iexact=pk)\
@@ -111,5 +115,29 @@ def tailnumber_profile(request, pk):
     
     return locals()
 
+@render_to('type_profile.html')
 def type_profile(request, pk):
-    pass
+    
+    users = User.objects\
+                .filter(profile__social=True)\
+                .filter(flight__plane__type__iexact=pk)\
+                .order_by()\
+                .distinct()
+    
+    t_hours = Flight.objects\
+                    .filter(plane__type__iexact=pk)\
+                    .aggregate(s=Sum('total'))['s'] 
+    
+    t_flights = Flight.objects.filter(plane__type__iexact=pk).count()
+    
+    u_airports = Location.objects\
+                         .filter(routebase__route__flight__plane__type__iexact=pk)\
+                         .order_by()\
+                         .distinct()\
+                         .count()
+    
+    tailnumbers = Plane.objects\
+                       .values_list('tailnumber', flat=True)\
+                       .filter(type__iexact=pk)
+    
+    return locals()

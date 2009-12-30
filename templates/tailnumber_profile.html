@@ -1,7 +1,5 @@
 {% extends "base.html" %}
 {% load profile_lists %}
-{% block realtime-sel %}nav_selected{% endblock%}
-
 {% block description %}{{ pk|upper }} tailnumber profile{% endblock%}
 
 {% block javascript %}
@@ -14,10 +12,9 @@
 {% block canvas %}
 
 <h1>{{ pk|upper }}</h1>
-{{types|join:", "}}
 
 {% ifnotequal t_flights 0 %}
-<br><a href="{% url s-tailnumber-kml pk %}">View all flights in this plane with Google Earth</a>
+<br><a href="{% url s-tailnumber-kml pk %}">View all flights in this tailnumber with Google Earth</a>
 {% endifnotequal %}
 
 
@@ -34,9 +31,13 @@
         <th>Total number of flights logged with this tailnumber</th>
         <td><big><strong>{{t_flights}}</strong></big></td>
     </tr>
+    <tr>
         <th>Airports this aircraft has landed at</th>
         <td>{{ airports|list_airports }}</td>
     </tr>
+    <tr>
+        <th>Types this tailnumber has been registered to</th>
+        <td>{{ types|list_types }}</td>
+    </tr>
 </table>
-
 {% endblock %}
