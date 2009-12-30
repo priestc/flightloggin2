@@ -16,8 +16,8 @@
 <table id="route_table">
 {% for rb in rbs %}
     <tr>
-    {% if rb.unknown %}
-        <td>{{ rb.unknown }}</td>
+    {% if rb.unknown or rb.custom %}
+        <td>{{ rb.location.identifier }}</td>
         <td>&nbsp;</td>
         
     {% else %}   {% url profile-airport rb.location.identifier as url %}

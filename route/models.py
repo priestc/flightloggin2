@@ -38,6 +38,10 @@ class RouteBase(models.Model):
             ret = ret + " (NO LAND)"
             
         return ret
+    
+    def custom(self):
+        """ Returns true if the location is a custom identifier """
+        return self.location.loc_class == 3
         
     def destination(self):
         """ Returns the location object, or a string that represents the
