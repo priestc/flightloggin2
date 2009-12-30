@@ -138,6 +138,8 @@ def type_profile(request, pk):
     
     tailnumbers = Plane.objects\
                        .values_list('tailnumber', flat=True)\
-                       .filter(type__iexact=pk)
+                       .filter(type__iexact=pk)\
+                       .order_by()\
+                       .distinct()
     
     return locals()
