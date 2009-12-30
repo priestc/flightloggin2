@@ -1,5 +1,3 @@
-import zipfile, StringIO
-
 from django.http import HttpResponse
 from django.template.loader import get_template
 from django.template import Context
@@ -193,7 +191,7 @@ def airports_kml(request, type_):
         if custom:
             folders.append(AirportFolder(name="All Places", qs=custom))
     
-    return folders_to_kmz_response(folders, title)
+    return folders_to_kmz_response(folders, title, add_icon=True)
 
 
 
@@ -249,19 +247,44 @@ def routes_kml(request, type_):
                 
     
 
-def folders_to_kmz_response(folders, title=None):
+def folders_to_kmz_response(folders, title=None, add_icon=False):
+    
+    import zipfile
+    import cStringIO
+    
+    if add_icon:
+        folder_type = "point_folders"
+    else:
+        folder_type = "route_folders"
     
     kml = get_template('base.kml').render(
-        Context({"route_folders": folders})         
+        Context({folder_type: folders})         
     )
     
     kml = kml.encode('utf-8')
     
     ###############################################
     
-    response = HttpResponse(mimetype="application/vnd.google-earth.kmz")
+    sio = cStringIO.StringIO()
     
-    z = zipfile.ZipFile(response,'w', compression=zipfile.ZIP_DEFLATED)
+    z = zipfile.ZipFile(sio, 'w', compression=zipfile.ZIP_DEFLATED)
     z.writestr("doc.kml", kml)
     
-    return response
+    if add_icon:
+        from django.conf import settings
+        icon = "%s/icons/big/white_pad.png" % settings.MEDIA_ROOT
+        z.write(icon, "files/icon.png")
+        
+    z.close()
+    
+    return HttpResponse(sio.getvalue(),
+                        mimetype="application/vnd.google-earth.kmz")
+    
+    
+    
+    
+    
+    
+    
+    
+    
