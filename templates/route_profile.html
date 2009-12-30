@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load userlist %}
+{% load profile_lists %}
 {% block description %}{{ pk|upper }} route profile{% endblock%}
 
 {% block javascript %}
@@ -36,17 +36,7 @@
     </tr>
     <tr>
         <th>Tailnumbers that have flown this route:</th>
-        <td>
-            {% spaceless %}
-                {% for tn in tailnumbers %}
-                    {% url profile-tailnumber tn|upper as url %}
-                    
-                    {% if not forloop.first %}<span>, </span>{% endif %}
-                    
-                    <a href="{{ url }}">{{ tn }}</a>
-                {% endfor %}
-            {% endspaceless %}
-        </td>
+        <td>{{ tailnumbers|list_tailnumbers }}</td>
     </tr>
     <tr>
         <th>Types that have flown this route</th>

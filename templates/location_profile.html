@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load userlist %}
+{% load profile_lists %}
 {% block description %}{{ loc.name }} - {{ loc.location_summary }} - {{ pk|upper }} location profile{% endblock%}
 
 {% block javascript %}
@@ -29,21 +29,7 @@
 
     <tr>
         <th>Tailnumbers that have flown to this {{ lc }}</th>
-        <td>
-            {% spaceless %}
-                {% for tn in tailnumbers %}
-                    {% url profile-tailnumber tn as url %}
-                    
-                    {% if not forloop.first %}<span>, </span>{% endif %}
-                    
-                    <a href="{{ url }}">{{ tn }}</a>
-                {% empty %}
-
-                    (None)
-                    
-                {% endfor %}
-            {% endspaceless %}
-        </td>
+        <td>{{ tailnumbers|list_tailnumbers }}</td>
     </tr>
 </table>
 

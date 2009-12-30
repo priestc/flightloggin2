@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load userlist %}
+{% load profile_lists %}
 {% block realtime-sel %}nav_selected{% endblock%}
 
 {% block description %}{{ pk|upper }} tailnumber profile{% endblock%}
@@ -35,17 +35,7 @@
         <td><big><strong>{{t_flights}}</strong></big></td>
     </tr>
         <th>Airports this aircraft has landed at</th>
-        <td>
-            {% spaceless %}
-            {% for a in airports %}
-                {% url profile-airport a|upper as url %}
-                
-                {% if not forloop.first %}<span>, </span>{% endif %}
-                
-                <a href="{{ url }}">{{ a }}</a>
-            {% endfor %}
-            {% endspaceless %}
-        </td>
+        <td>{{ airports|list_airports }}</td>
     </tr>
 </table>
 

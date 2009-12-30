@@ -103,12 +103,11 @@ def tailnumber_profile(request, pk):
     t_flights = Flight.objects.filter(plane__tailnumber__iexact=pk).count()
     
     routes = Route.objects.filter(flight__plane__tailnumber=pk)
-    
     airports = Location.objects\
                        .filter(routebase__route__in=routes)\
-                       .values_list('identifier', flat=True)\
                        .order_by()\
                        .distinct()\
+                       .select_related()
     
     return locals()
 
