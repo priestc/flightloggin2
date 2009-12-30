@@ -22,7 +22,7 @@ def list_users(users):
                     % (url, user.username)
                
         else:
-            out += """<a title="This user does not allow othersto view his/her logbook"
+            out += """<a title="This user does not allow others to view his/her logbook"
                          class="noshare" href="">%s</a>""" % user.username
         
         out += ", "
