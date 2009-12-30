@@ -223,7 +223,7 @@ urlpatterns = patterns('',
     #--------------------------------------------------------------------------
      
     url(
-        r'^plane-(?P<tn>[\w-]+).kmz$',
+        r'^plane-(?P<tn>[\w\-\)\(]+).kmz$',
         "maps.kml_views.single_tailnumber_kml",
                                                        name="s-tailnumber-kml",
     ),
@@ -269,7 +269,7 @@ urlpatterns = patterns('',
     ),
     
     url(
-        r'^tailnumber-(?P<pk>[\w-]+).html$',
+        r'^tailnumber-(?P<pk>[\w\-\)\(]+).html$',
         "plane.views.tailnumber_profile",
                                                      name="profile-tailnumber",
     ),
@@ -290,6 +290,12 @@ urlpatterns = patterns('',
         r'^airport-(?P<pk>[A-Z0-9-]+).html$',
         "airport.views.airport_profile",
         {"navaid": False},                              name="profile-airport",
+    ),
+    
+    url(
+        r'^location-(?P<pk>[A-Z0-9-]+).html$',
+        "airport.views.location_redirect",
+                                                       name="profile-location",
     ),
     
     #--------------------------------------------------------------------------

@@ -63,6 +63,7 @@ def list_airports(tailnumbers):
     
     out = ""
     for tn in tailnumbers:
+        tn = tn.replace(' ','')
         url  = reverse('profile-tailnumber', kwargs={"pk": tn})
         out += "<a href=\"%s\">%s</a>, " % (url, tn)
         

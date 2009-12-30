@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from share.decorator import secret_key
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from annoying.decorators import render_to
 
 from models import Location
@@ -10,7 +11,6 @@ from models import Location
 @secret_key
 def update_airports(request):
     import os
-    from django.core.urlresolvers import reverse
     from django.conf import settings
     home = settings.PROJECT_PATH
     secret_key = settings.SECRET_KEY
@@ -82,4 +82,6 @@ def airport_profile(request, navaid, pk):
     
     return locals()
     
-    
+def location_redirect(request, pk):
+    url = reverse('profile-airport', kwargs={'pk': pk})
+    return HttpResponseRedirect(url)
