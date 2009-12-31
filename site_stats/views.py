@@ -27,7 +27,15 @@ def site_stats(request):
         ident = l[1]
         url = reverse('profile-airport', kwargs={"pk": ident})
         linked_airports += "%s <a href=\"%s\">%s</a> %s\n" % (l[0], url, ident, l[2])
-
+    
+    types = cs.most_common_type.split("\n")
+    linked_mct = ""
+    for line in types[:-1]:
+        l = line.split(" ")
+        ty = l[1]
+        url = reverse('profile-type', kwargs={"pk": ty})
+        linked_mct += "%s <a href=\"%s\">%s</a> %s\n" % (l[0], url, ty, l[2])
+    
     return locals()
 
 @secret_key

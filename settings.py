@@ -51,7 +51,7 @@ SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
-USE_I18N = True
+USE_I18N = False
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
