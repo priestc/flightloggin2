@@ -223,13 +223,13 @@ urlpatterns = patterns('',
     #--------------------------------------------------------------------------
      
     url(
-        r'^plane-(?P<tn>[\w\-\)\(]+).kmz$',
+        r'^tailnumber-(?P<tn>[\w\-\)\(]+).kmz$',
         "maps.kml_views.single_tailnumber_kml",
                                                        name="s-tailnumber-kml",
     ),
     
     url(
-        r'^route-(?P<ty>[\w-]+).kmz$',
+        r'^type-(?P<ty>[\w-]+).kmz$',
         "maps.kml_views.single_type_kml",
                                                              name="s-type-kml",
     ),
@@ -255,7 +255,7 @@ urlpatterns = patterns('',
     ),
     
     url(
-        r'^route-(?P<pk>[\w-]+)$',
+        r'^type-(?P<pk>[\w-]+)$',
         "maps.kml_views.single_route_kml",
         {'earth': False},                                   name="s-type-maps",
     ),

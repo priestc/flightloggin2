@@ -20,7 +20,9 @@ def single_route_kml(request, pk, earth=True):
         
     from utils import RouteFolder
     r = Route.objects.filter(flight__pk=pk)\
-                     .values('kml_rendered', 'simple_rendered')
+                     .values('kml_rendered', 'simple_rendered')\
+                     
+    print "srk", r, pk
                      
     f = RouteFolder(name="Route", qs=r, style="#red_line")
 
@@ -30,19 +32,20 @@ def single_route_kml(request, pk, earth=True):
 
 def single_location_kml(request, pk):
     "Returns a KMZ of all routes flown to the passed location identifier"
-    qs = Route.objects.filter(routebase__location__identifier=pk.upper())               
+    qs = Route.objects.filter(routebase__location__identifier=pk.upper())
+    print "slk"               
     return qs_to_time_kmz(qs)
 
 def single_type_kml(request, ty):
     "Returns a KMZ of all routes flown by the passed aircraft type"
     qs = Route.objects.filter(flight__plane__type=ty)
-    print qs, ty
+    print "styk", qs, ty
     return qs_to_time_kmz(qs)
 
 def single_tailnumber_kml(request, tn):
     "Returns a KMZ of all routes flown by the passed tailnumber"
     qs = Route.objects.filter(flight__plane__tailnumber=tn)
-    print qs, tn
+    print "stnk", qs, tn
     return qs_to_time_kmz(qs)
 
 #------------------------------------------------------------------------------
