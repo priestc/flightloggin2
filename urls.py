@@ -473,5 +473,9 @@ urlpatterns = patterns('',
         r'\.php',
         "redirect.views.redirect",
     ),
+    (
+        r'forums$',
+        "redirect.views.redirect_to_forums",
+    ),
 )
 
