@@ -33,6 +33,11 @@ sitemaps = {
 urlpatterns = patterns('',
 
     (
+        r'forums/?$',
+        "redirect.views.redirect_to_forums",
+    ),
+
+    (
         r'^sitemap.xml$',
         'django.contrib.sitemaps.views.index',
         {'sitemaps': sitemaps}
@@ -472,10 +477,6 @@ urlpatterns = patterns('',
     (
         r'\.php',
         "redirect.views.redirect",
-    ),
-    (
-        r'forums$',
-        "redirect.views.redirect_to_forums",
     ),
 )
 
