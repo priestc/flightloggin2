@@ -6,6 +6,9 @@ class LocationSitemap(Sitemap):
     priority = 0.5
 
     def items(self):
+        
+        # exclude custom locations
+        
         qs = Location.objects\
                      .exclude(loc_class=3)\
                      .values('identifier', 'loc_class')\

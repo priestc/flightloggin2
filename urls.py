@@ -14,11 +14,12 @@ feeds = {
 ###############################################################################
 
 from route.sitemaps import RouteSitemap
-from plane.sitemaps import TailnumberSitemap
+from plane.sitemaps import TailnumberSitemap, TypeSitemap
 from airport.sitemaps import LocationSitemap
 
 sitemaps = {
     'tailnumber': TailnumberSitemap,
+    'type': TypeSitemap,
     'route': RouteSitemap,
     'location': LocationSitemap,
 }
