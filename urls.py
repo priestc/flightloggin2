@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
-from django.views.generic.simple import direct_to_template
+from django.views.generic.simple import direct_to_template, redirect_to
 from django.contrib import admin
 
 admin.autodiscover()
@@ -32,6 +32,12 @@ sitemaps = {
 ## variables from `username` via ShareMiddleware
 
 urlpatterns = patterns('',
+
+    (
+        r'^favicon.ico$',
+        redirect_to,
+        {'url': '/fl-media/icons/favicon.ico'},
+    ),
 
     (
         r'forums/?$',
