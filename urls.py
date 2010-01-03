@@ -34,7 +34,7 @@ sitemaps = {
 urlpatterns = patterns('',
 
     (
-        r'^icons/favicon.ico$',
+        r'^icons/favicon.png$',
         redirect_to,
         {'url': '/fl-media/icons/favicon.ico'},
     ),
