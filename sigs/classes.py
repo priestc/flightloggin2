@@ -44,8 +44,6 @@ class Sig(object):
         from logbook.models import Flight
         for column in self.columns:
             self.data[column] = Flight.objects.user(self.user).agg(column)
-            
-        print self.data
         
     
     def output(self):

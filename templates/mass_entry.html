@@ -4,6 +4,9 @@
 {% block description %}{{ request.display_user.username }}'s mass entry page{% endblock%}
 
 {% block javascript %}
+<link rel="stylesheet"
+      type="text/css"
+      href="{{ MEDIA_URL }}/jquery/css/black-tie/jquery-ui-1.7.1.custom.css">  
 	<script type="text/javascript">
 	    $(document).ready(function() {
 	        $(".vDateField").datepicker({

@@ -6,10 +6,6 @@
         <meta name="KEYWORDS" content="Aircraft, Pilot Logbook, Open Source, GPL, Pilot Log, Flight Logbook, web application, Private Pilot">
         <meta name="google-site-verification" content="xe-f505ZHR6pNZzKFyeK5PNnZSkSZ8LlW979worOSHM" />
 		<link rel="icon" type="image/png" href="/icons/favicon.png">
-
-        <style type="text/css">
-            {% block css %}{% endblock %}
-        </style>
         
         <script type="text/javascript">
 	        MEDIA_URL = "{{ MEDIA_URL }}";
@@ -17,7 +13,6 @@
 	    </script>
 	
         <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/base.css">
-        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/jquery/css/black-tie/jquery-ui-1.7.1.custom.css">
 		
         <script type="text/javascript" src="{{ MEDIA_URL }}/jquery/jquery-1.3.2.js"></script>
         <script type="text/javascript" src="{{ MEDIA_URL }}/jquery/jquery-ui-1.7.1.custom.min.js"></script>
@@ -47,6 +42,7 @@
             </div>
 
             <div id="logged_in_as">
+            
                 {% if DEMO %}
                     <span id="demo">** VIEWING THE DEMO ACCOUNT **</span>
                 {% endif %}
@@ -61,9 +57,8 @@
 
                 {% if not user.is_authenticated %}
                     <a href="/openid/login">Sign-in/Register</a>
-                {% endif %}   
-
-				    {# so the space doesnt collapse #}
+                {% endif %}
+                
             </div>
             
             <div style="width: 99.9%; padding-right: 5px; overflow: hidden"> 
@@ -98,14 +93,14 @@
 		
 	</div>
 	<script type="text/javascript">
-            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-        </script>
-        <script type="text/javascript">
-            try {
-                var pageTracker = _gat._getTracker("UA-501381-5");
-                pageTracker._trackPageview();
-            } catch(err) {}
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+        try {
+            var pageTracker = _gat._getTracker("UA-501381-5");
+            pageTracker._trackPageview();
+        } catch(err) {}
     </script>
 	</body>
 </html>
