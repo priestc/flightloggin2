@@ -105,12 +105,14 @@ class Location(models.Model):
         """ if it's a custom, automatically look up to see which country and
         or state the custom location falls into"""
         
+        skip_find_region = kwargs.pop('skip_find_region')
+        
         ## just save if it's an airport
         if self.loc_class == 1:
             return super(Location, self).save(*args, **kwargs)
         
-        if self.location:
-            print "doing finding routine"
+        if self.location and not skip_find_region:
+            print "recheck"
             # automatically find which country the coordinates fall into
             loc = self.location.wkt
             

@@ -10,6 +10,18 @@ PROJECT_PATH = settings.PROJECT_PATH
 from django.contrib.auth.models import User
 ALL_USER = User(pk=1)
 
+def latlng_match(old_lat, new_lat, old_lng, new_lng):
+    """ Returns true of the lat and long values are both the same
+        from 5 decimal spaces
+    """
+    
+    s = "%3.8f" # format both values to 8 decimal spaces to compare
+    lng_match = s % float(old_lng) == s % float(new_lng)
+    lat_match = s % float(old_lat) == s % float(new_lat)
+    
+    #return true if they both match
+    return lat_match and lng_match
+
 def airports():   #import airport
     """
     id	 ident	type	name	latitude_deg	longitude_deg	elevation_ft	
@@ -97,31 +109,23 @@ def airports():   #import airport
 
 
         if not throw_out:
-            l = Location(
-                pk=            idd,
-                user=          ALL_USER,
-                loc_class=     1,
-                identifier=    ident,
-                name=          name,
-                region=        Region.goon(code=region, country=country),
-                municipality=  city,
-                country=       Country.objects.get(code=country),
-                elevation=     elev,
-                location=      "POINT (%s %s)" % (float(lng), float(lat)),
-                loc_type=      types[type_],
-            )
+            l = Location.objects.get(pk=idd)
+            
+            l.user = ALL_USER
+            l.loc_class = 1
+            l.identifier = ident
+            l.name = name
+            l.region = Region.goon(code=region, country=country)
+            l.municipality = city
+            l.country = Country.objects.get(code=country)
+            l.elevation = elev
+            l.location = "POINT (%s %s)" % (float(lng), float(lat))
+            l.loc_type = types[type_]
                 
             try:
                 l.save()
-
-            except ValueError:
-                print "value - " + ident
-
-            except IntegrityError:
-                print "integrity - " + ident
-            
-            except TypeError:
-                print "type - " + ident
+            except Exception, e:
+                print identifier, e
 
         else:
             count_to += 1
@@ -162,8 +166,6 @@ def navaids():
 
     for line in reader:
         count += 1
-        #if count > 30:
-        #    break
         
         ident = line["ident"]
         lat = line["latitude_deg"]
@@ -174,29 +176,30 @@ def navaids():
         #to avoid collisions with airport pk's
         idd =  int(line['id']) + 100000 
         
-        kwargs = {
-                  "loc_class":     2,
-                  "identifier":    ident,
-                  "name":          name,
-                  "location":      'POINT (%s %s)' % (lng, lat),
-                  "loc_type":      nav_types[type],
-                  "id":            idd,
-                  "user":          ALL_USER,
-                 }
+        l,c = Location.objects.get_or_create(id=idd)
         
-        loc = Location(**kwargs)
+        # if the lat and lng values are the same, then skip the expensive
+        # database process trying to figure out which region it belongs in
+        skip_find_region = latlng_match(l.location.y, lat,
+                                        l.location.x, lng)
+        
+        l.loc_class = 2
+        l.identifier = ident
+        l.name = name
+        l.location = 'POINT (%s %s)' % (lng, lat)
+        l.loc_type = nav_types[type]
+        l.user = ALL_USER
+        
+        if not skip_find_region:
+            print "redoing region:", ident
+            
+        if c:
+            print "new navaid:", ident
         
         try:
-            loc.save()
-
-        except ValueError:
-            print "value - %s" % ident
-
-        except IntegrityError:
-            print "integrity - %s" % ident
-        
-        except TypeError:
-            print "type - %s" % ident
+            l.save(skip_find_region=skip_find_region)
+        except Exception, e:
+            print "error:", ident, e
 
 ###############################################################################
 

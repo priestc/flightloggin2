@@ -74,36 +74,6 @@ from main.queryset_manager import QuerySetManager
 
 class Route(models.Model):
     """Represents a route the user went on for the flight
-    
-    >>> r=Route.from_string("!custom -> @hyp  //vta -= mer")
-    >>> r
-    <Route: CUSTOM-HYP-KVTA-MER>
-    >>> r.kml_rendered
-    '-120.400001526,37.2193984985\n-82.4617996216,40.0247001648'
-    >>> r.fancy_rendered
-    u'<span title="Custom" class="found_custom">CUSTOM</span>-<span title="El Nido - VOR-DME" class="found_navaid">HYP</span>-<span title="Newark, Ohio" class="found_airport">KVTA</span>-<span title="MER" class="not_found">MER</span>'
-    >>>
-    >>> vta=Airport.objects.get(identifier="KVTA")
-    >>> vta.municipality = "CHANGED NAME"
-    >>> vta.save()
-    >>>
-    >>> r.easy_render()
-    >>> r.fancy_rendered
-    u'<span title="Custom" class="found_custom">CUSTOM</span>-<span title="El Nido - VOR-DME" class="found_navaid">HYP</span>-<span title="CHANGED NAME, Ohio" class="found_airport">KVTA</span>-<span title="MER" class="not_found">MER</span>'
-    >>>
-    >>> vta.delete()
-    >>> vta.pk = 1000
-    >>> vta.save()
-    >>>
-    >>> r.hard_render()
-    >>> r.fancy_rendered
-    u'<span title="Custom" class="found_custom">CUSTOM</span>-<span title="El Nido - VOR-DME" class="found_navaid">HYP</span>-<span title="CHANGED NAME, Ohio" class="found_airport">KVTA</span>-<span title="MER" class="not_found">MER</span>'
-    >>>
-    >>> vta = r.routebase_set.all()[2].location
-    >>> vta
-    <Location: KVTA>
-    >>> vta.id
-    1000
     """
     
     ## add custom filters to custom manager
