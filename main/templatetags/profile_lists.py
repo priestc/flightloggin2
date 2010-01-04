@@ -90,3 +90,40 @@ def list_types(types):
     out = out[:-2]
     
     return mark_safe(out)
+
+###############################################################################
+
+@register.filter(name='routebase_row')
+def routebase_row(rb):
+    
+    ident = rb.location.identifier
+    
+    if not rb.location or rb.custom():
+        print "derp"
+        return mark_safe("<td>%s</td><td>&nbsp;</td>" % ident)
+        
+    if rb.location.loc_class == 1:   # airport
+        view = "profile-airport"
+    elif rb.location.loc_class == 2:
+        view = "profile-navaid"
+        
+    url = reverse(view, kwargs={"pk": ident})
+    out = "<td><a href=\"%s\">%s</a></td>\n" % (url, ident)
+    out += "<td>%s - %s</td>" % (rb.location.name, ident)
+    
+    return mark_safe(out)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    

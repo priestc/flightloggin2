@@ -16,16 +16,7 @@
 <table id="route_table">
 {% for rb in rbs %}
     <tr>
-    {% if rb.unknown or rb.custom %}
-        <td>{{ rb.location.identifier }}</td>
-        <td>&nbsp;</td>
-        
-    {% else %}   {% url profile-airport rb.location.identifier as url %}
-    
-        <td><a href="{{ url }}">{{ rb.location.identifier }}</a></td>
-        <td>{{ rb.location.name }} - {{ rb.location.location_summary }}</td>
-    
-    {% endif %}
+        {{ rb|routebase_row }}
     </tr>
 {% endfor %}
     <tr>

@@ -132,7 +132,8 @@ def type_profile(request, pk):
     t_flights = Flight.objects.filter(plane__type__iexact=pk).count()
     
     u_airports = Location.objects\
-                         .filter(routebase__route__flight__plane__type__iexact=pk)\
+                         .filter(routebase__route__flight__plane__type__iexact=pk,
+                                 loc_class__lte=2)\
                          .order_by()\
                          .distinct()\
                          .count()
