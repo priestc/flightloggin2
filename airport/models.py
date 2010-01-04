@@ -11,15 +11,7 @@ from main.queryset_manager import GeoQuerySetManager
 from main.mixins import GoonMixin
 
 class Location(models.Model):
-    """
-    >>> from django.contrib.auth.models import User
-    >>> u = User(pk=1)
-    >>> c = Location(name="test", user=u, loc_type=3, location='POINT (-84.481517 34.322631)')
-    >>> c.save()
-    >>> c.region.name
-    u'Georgia'    
-    
-    """
+
     ## add custom filters to custom manager
     from queryset_manager import LocationQuerySet as QuerySet
     
@@ -118,6 +110,7 @@ class Location(models.Model):
             return super(Location, self).save(*args, **kwargs)
         
         if self.location:
+            print "doing finding routine"
             # automatically find which country the coordinates fall into
             loc = self.location.wkt
             

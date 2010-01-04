@@ -90,6 +90,7 @@ INSTALLED_APPS = (
     'maps',
     
     'tagging',
+    'test_utils',
     'django_extensions',
     'django_openid_auth',)
     
