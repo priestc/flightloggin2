@@ -170,7 +170,9 @@ def navaids():
         lng = line["longitude_deg"]
         type = line["type"]
         name = line["name"]
-        idd =  int(line['id']) + 100000   #to avoid collisions with airport pk's
+        
+        #to avoid collisions with airport pk's
+        idd =  int(line['id']) + 100000 
         
         kwargs = {
                   "loc_class":     2,

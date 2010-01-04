@@ -104,12 +104,16 @@ def routebase_row(rb):
         
     if rb.location.loc_class == 1:   # airport
         view = "profile-airport"
+        right = "<td>%s - %s</td>" %\
+                 (rb.location.name, rb.location.location_summary())
+                 
     elif rb.location.loc_class == 2:
         view = "profile-navaid"
-        
+        right = "<td>%s</td>" % rb.location.location_summary()
+    
     url = reverse(view, kwargs={"pk": ident})
     out = "<td><a href=\"%s\">%s</a></td>\n" % (url, ident)
-    out += "<td>%s - %s</td>" % (rb.location.name, ident)
+    out += right
     
     return mark_safe(out)
     

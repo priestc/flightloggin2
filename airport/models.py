@@ -8,6 +8,7 @@ from django.db.models import Count
 from constants import LOCATION_TYPE, LOCATION_CLASS
 from main.queryset_manager import GeoQuerySetManager
 
+from main.mixins import GoonMixin
 
 class Location(models.Model):
     """
@@ -82,12 +83,12 @@ class Location(models.Model):
            EX: 'Newark, Ohio', 'Lilongwe, Malawi'.
         """
           
-        ret = []
+        items = []
         for item in (self.municipality, self.region_name(), self.country_name(), ):
             if item and item != "United States" and item != "(unassigned)":
-                ret.append(item)
+                items.append(item)
 
-        text = ", ".join(ret)
+        text = ", ".join(items)
         
         if self.loc_class == 2:
             ## if it's a navaid, add the name of the navaid as well as the
@@ -114,7 +115,7 @@ class Location(models.Model):
         
         ## just save if it's an airport
         if self.loc_class == 1:
-            return super(Location,self).save()
+            return super(Location, self).save(*args, **kwargs)
         
         if self.location:
             # automatically find which country the coordinates fall into
@@ -132,23 +133,22 @@ class Location(models.Model):
                 state = getattr(
                   USStates.goon(mpoly__contains=loc), 'state',''
                 )
+                
                 if not state:
                     print "NO STATE: %s" % self.identifier
-                
-                print state
                     
                 if state:   
                     region = state.upper()
                 else:
-                    region = "US-U-A"
+                    region = "U-A"
                     
-                self.region = Region.objects.get(code="US-%s" % region)
+                self.region = Region.goon(code="US-%s" % region)
                 
-        return super(Location,self).save()
+        return super(Location, self).save(*args, **kwargs)
     
 ###############################################################################
     
-class Region(models.Model):
+class Region(models.Model, GoonMixin):
     
     ## add custom filters to custom manager
     from queryset_manager import CountryRegionQuerySet as QuerySet
