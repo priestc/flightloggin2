@@ -108,7 +108,8 @@ def tailnumber_profile(request, pk):
     
     routes = Route.objects.filter(flight__plane__tailnumber=pk)
     airports = Location.objects\
-                       .filter(routebase__route__in=routes)\
+                       .filter(routebase__route__in=routes,
+                               loc_class__lte=2)\
                        .order_by()\
                        .distinct()\
                        .select_related()
