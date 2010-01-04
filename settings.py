@@ -31,7 +31,7 @@ AUTHENTICATION_BACKENDS = (
 ###################################################
 
 ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
+    ("Chris Priest", "nbvfour@gmail.com"),
 )
 
 MANAGERS = ADMINS
