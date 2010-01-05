@@ -1,3 +1,5 @@
+import re
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -58,6 +60,12 @@ class Plane(models.Model):
         if not self.user:
             from share.middleware import share
             self.user = share.get_display_user()
+        
+        # remove special characters and white space because they mess up
+        # the url resolvers    
+        self.type = re.sub('[\W\s]', '', self.type)
+        self.tailnumber = re.sub('[\W\s]', '', self.tailnumber)
+
             
         super(Plane, self).save(*args, **kwargs)
         
