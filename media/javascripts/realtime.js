@@ -13,17 +13,16 @@ $(function(){
 });
 
 function get_time_now() {
-    client_time = new Date();
-    client_ts = client_time.getTime();
-    adjusted_ts = client_ts + SERVER_OFFSET;
+    raw_str = $('#epiclock').text();
     
-    adjusted_time = new Date();
-    adjusted_time.setTime(adjusted_ts);
+    date = dateFormat(raw_str.substr(0,11), "yyyy-m-d")
+    time = raw_str.substr(11,8)
     
-    //alert("orig ts: " + client_time.format("isoDateTime"));
-    //alert("after adj: " + adjusted_time.format("isoDateTime"));
-
-    return adjusted_time.format("UTC:yyyy-mm-dd h:MM:ss");
+    //alert(date);
+    //alert(time);
+    
+    return date + " " + time
+    
 }
 
 
