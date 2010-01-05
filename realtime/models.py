@@ -8,6 +8,9 @@ class Duty(models.Model):
     start = models.DateTimeField()
     end = models.DateTimeField(null=True, blank=True)
     
+    def __unicode__(self):
+        return self.user.username
+    
     @classmethod
     def latest_open(cls, user):
         try:
@@ -82,7 +85,11 @@ class Duty(models.Model):
             return None
         else:
             return df
-        
+    
+    
+    
+    
+       
     def total_block(self):
         """
         Total of all closed blocks, in decimal hours
@@ -112,10 +119,10 @@ class Duty(models.Model):
 
 class DutyFlight(models.Model):
     block_start = models.DateTimeField()
-    airborne_start = models.DateTimeField()
+    airborne_start = models.DateTimeField(null=True, blank=True)
+    airborne_end = models.DateTimeField(null=True, blank=True)
+    block_end = models.DateTimeField(null=True, blank=True)
     
-    block_end = models.DateTimeField()
-    airborne_end = models.DateTimeField()
     
     duty = models.ForeignKey(Duty)
     
@@ -125,10 +132,14 @@ class DutyFlight(models.Model):
         """
         Checks to see that all datetimes fall in the correct order
         """
-        a = self.block_start < \
-            self.airborne_start < \
-            self.airborne_end < \
-            self.block_end
+        if self.airborne_start:
+            a = self.block_start < self.airborne_start
+            
+        if self.airborne_end:
+            a = self.block_start < self.airborne_start < self.airborne_end
+        
+        if self.block_end:
+            a = self.block_start < self.airborne_start < self.airborne_end < self.block_end
             
         # block must start after the duty begins
         b = self.duty.start < self.block_start
@@ -137,6 +148,8 @@ class DutyFlight(models.Model):
         # (ignore is check if the duty has not yet ended)
         if not self.duty.on_duty():
             c = self.block_end < self.duty.end
+        else:
+            c = True
             
         return a and b and c
         

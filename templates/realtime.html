@@ -14,7 +14,11 @@
     
     .on_duty    {width: 80%; background: lightgray; padding: 10px;
                  margin: 0 auto 0 auto;}
+    
+    .block      {width: 80%; background: lightblue; margin: 5px auto 5px auto;
+                 border: 1px solid gray}
 
+    .open_block {background: pink !important}
 </style>
 {% endblock %}
 
@@ -32,7 +36,7 @@
 <br>
 <form action="{% url realtime request.display_user %}" method="post">
     <input type="hidden" name="user" id="id_user" value="{{request.display_user.pk}}">
-    <span {#style="display: none"#}>
+    <span style="display: none">
         {{ form.start }}{{ form.end }}
     </span>
     {% if on_duty %}
@@ -43,7 +47,29 @@
             expires: {{latest_open_duty.time_expire_duty|date:"m-d-Y H:i:s T"}}
         <br><br>
         
-        <input name="submit" id="start_block" type="submit" value="Start Block Time">
+        {% for block in latest_open_duty.closed_blocks %}
+        
+            <div class="block">
+                FINISHED BLOCK<br>
+                {{block.block_start}} - {{block.block_end}} = {{block.block_time}}
+            </div>
+            
+        {% endfor %}
+        
+        {% if latest_open_duty.latest_open_block %}
+        
+            <div class="block open_block">
+            OPEN BLOCK<br>
+            {{latest_open_duty.latest_open_block}}
+            </div>
+            
+        {% else %}
+        
+            <input name="submit" id="start_block" type="submit" value="Start Block Time">
+        
+        {% endif %}
+        
+        
         
         <br><br>
         
