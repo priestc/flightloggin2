@@ -8,6 +8,14 @@ class Duty(models.Model):
     start = models.DateTimeField()
     end = models.DateTimeField(null=True, blank=True)
     
+    @classmethod
+    def latest_open(cls, user):
+        try:
+            return cls.objects.filter(user=user, end=None).latest()
+            
+        except Duty.DoesNotExist:
+            return Duty()
+           
     class Meta:
         get_latest_by = 'start'
         verbose_name_plural = "Duties"
@@ -21,15 +29,21 @@ class Duty(models.Model):
         return self.start and not self.end
     
     def time_expire_duty(self):
+        """
+        Time until the duty expires
+        """
         return self.start + datetime.timedelta(hours=14)
     
-    @classmethod
-    def latest_open(cls, user):
-        try:
-            return cls.objects.filter(user=user, end=None).latest()
-            
-        except Duty.DoesNotExist:
-            return Duty()
+    def duty_length(self):
+        """
+        The length of the duty time
+        """
+        if self.start and self.end:
+            return self.end - self.start
+        else:
+            return ""
+    
+
     
 
 class DutyFlight(models.Model):
