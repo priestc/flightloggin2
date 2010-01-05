@@ -63,8 +63,8 @@ class Plane(models.Model):
         
         # remove special characters and white space because they mess up
         # the url resolvers    
-        self.type = re.sub('[\W\s]', '', self.type)
-        self.tailnumber = re.sub('[\W\s]', '', self.tailnumber)
+        self.type = re.sub('[^-A-Za-z0-9]', '', self.type)
+        self.tailnumber = re.sub('[^-A-Za-z0-9]', '', self.tailnumber)
 
             
         super(Plane, self).save(*args, **kwargs)
