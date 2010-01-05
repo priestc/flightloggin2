@@ -4,14 +4,24 @@ from django.contrib.auth.models import User
 class Duty(models.Model):
     user = models.ForeignKey(User)
     start = models.DateTimeField()
-    end = models.DateTimeField()
+    end = models.DateTimeField(null=True, blank=True)
     
     class Meta:
-        get_latest_by = 'end'
+        get_latest_by = 'start'
         verbose_name_plural = "Duties"
     
     def on_duty(self):
-        return bool(self.end)
+        return not bool(self.end)
+    
+    @classmethod
+    def latest(cls, user):
+        try:
+            latest_duty = cls.objects.filter(user=user).latest()
+            
+        except Duty.DoesNotExist:
+            latest_duty = Duty()
+        
+        return latest_duty
     
 
 class DutyFlight(models.Model):

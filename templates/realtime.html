@@ -8,6 +8,7 @@
     var SERVER_OFFSET = {{ gmt|date:"U" }} - users_system;
 </script>
 <script type="text/javascript" src="{{ MEDIA_URL }}/jquery/epiclock/jquery.epiclock.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/date_format.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/realtime.js"></script>
 
 {% endblock %}
@@ -19,16 +20,23 @@
 
 
 
-{{ gmt|date:"m-d-Y__H:i:s" }}</span>
+{# gmt|date:"m-d-Y__H:i:s" #}
 
 <div id="epiclock"></div>
 
 <br>
 <form action="{% url realtime request.display_user %}" method="post">
+    <input type="hidden" name="user" id="id_user" value="{{request.display_user.pk}}">
+    <span {#style="display: none"#}>
     {{ form.start }}{{ form.end }}
-    <input id="on_duty" type="button" value="Go On Duty">
-    <input id="off_duty" type="button" value="Go Off Duty">
+    </span>
+    {% if on_duty %}
+        <input id="off_duty" type="submit" value="Go Off Duty">
+    {% else %}
+        <input id="on_duty" type="submit" value="Go On Duty">
+    {% endif %}
 </form>
+{{form.errors}}
 {% endblock %}
 
 

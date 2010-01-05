@@ -45,7 +45,7 @@ class Share(object):
             raise Http404("Username doesn't exist")
         
         self.request = request
-        self.useragent = request.META['HTTP_USER_AGENT']
+        self.useragent = request.META.get('HTTP_USER_AGENT', '')
         
     #########################
     

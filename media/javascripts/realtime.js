@@ -12,20 +12,33 @@ $(function(){
   
 });
 
+function get_time_now() {
+    client_time = new Date();
+    client_ts = client_time.getTime();
+    adjusted_ts = client_ts + SERVER_OFFSET;
+    
+    adjusted_time = new Date();
+    adjusted_time.setTime(adjusted_ts);
+    
+    //alert("orig ts: " + client_time.format("isoDateTime"));
+    //alert("after adj: " + adjusted_time.format("isoDateTime"));
+
+    return adjusted_time.format("UTC:yyyy-mm-dd h:MM:ss");
+}
+
+
 $(document).ready(function() {
 
     $("#on_duty").click(function() {
-        d = new Date();
-        current_time = d.getTime() + SERVER_OFFSET;
-        //alert(d.toUTCString(current_time) + "--" + SERVER_OFFSET);
-        str = d.toUTCString(current_time)
+    
+        str = get_time_now()
         $("#id_start").val(str);
     });
 
     $("#off_duty").click(function() {
     
-        alert("off duty");
-    
+        str = get_time_now()
+        $("#id_end").val(str);
     });
 
 });
