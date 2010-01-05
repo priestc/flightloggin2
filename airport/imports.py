@@ -109,7 +109,7 @@ def airports():   #import airport
 
 
         if not throw_out:
-            l = Location.objects.get(pk=idd)
+            l,c = Location.objects.get_or_create(pk=idd)
             
             l.user = ALL_USER
             l.loc_class = 1
@@ -121,6 +121,9 @@ def airports():   #import airport
             l.elevation = elev
             l.location = "POINT (%s %s)" % (float(lng), float(lat))
             l.loc_type = types[type_]
+            
+            if c:
+                print "new navaid:", ident
                 
             try:
                 l.save()

@@ -258,19 +258,7 @@ class Route(models.Model):
     
     def calc_max_start(self, a=None):
         """Returns the max distance between any point in the route and the
-           starting point. Used for ATP XC distance.
-           
-           >>> r=Route.from_string('kvta kuni')
-           >>> r.start_distance()
-           50.003471947098973
-           >>> r=Route.from_string('kmer kvta')
-           >>> r.start_distance()
-           0.0
-           >>> r=Route.from_string('kvta')
-           >>> r.start_distance()
-           0.0
-           
-        """
+           starting point. Used for ATP XC distance."""
         
         if not a:
             a = self._get_AllPoints()

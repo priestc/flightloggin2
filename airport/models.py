@@ -105,7 +105,9 @@ class Location(models.Model):
         """ if it's a custom, automatically look up to see which country and
         or state the custom location falls into"""
         
-        skip_find_region = kwargs.pop('skip_find_region')
+        skip_find_region = False
+        if 'skip_find_region' in kwargs.keys():
+            skip_find_region = kwargs.pop('skip_find_region')
         
         ## just save if it's an airport
         if self.loc_class == 1:

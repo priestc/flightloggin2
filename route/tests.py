@@ -1,23 +1,20 @@
-"""
-This file demonstrates two different styles of tests (one doctest and one
-unittest). These will both pass when you run "manage.py test".
-
-Replace these with more appropriate tests for your application.
-"""
-
 from django.test import TestCase
 
 class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.failUnlessEqual(1 + 1, 2)
-
-__test__ = {"doctest": """
-Another way to test that 1 + 1 is equal to 2.
-
->>> 1 + 1 == 2
-True
-"""}
+    
+    fixtures = ['airport/test-fixtures/test-location.json',
+                'airport/test-fixtures/test-country.json',
+                'airport/test-fixtures/test-region.json',]
+    
+    
+    def test_route_distance(self):
+        from models import Route
+        
+        r = Route.from_string('SNTR SSBT')
+        
+        ## 3 decimal places (forgive rounding errors)
+        s = "%3.3f"
+        real_val = 959.70030329462986
+        
+        self.failUnlessEqual(s % r.max_start_all, s % real_val)
 

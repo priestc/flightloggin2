@@ -48,3 +48,12 @@ class SimpleTest(TestCase):
         
         self.failUnlessEqual(loc.country.code, '')
         self.failUnlessEqual(loc.region, None)
+        
+    def test_profile_page(self):
+        response = self.client.get('/airport-SNTR.html')
+        self.failUnlessEqual(response.status_code, 200)
+        
+    def test_profile_redirect(self):
+        response = self.client.get('/location-SNTR.html')
+        self.failUnlessEqual(response.status_code, 302)  
+    
