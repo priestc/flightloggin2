@@ -24,8 +24,12 @@ sitemaps = {
     'location': LocationSitemap,
 }
 
-##############################################################################
+###############################################################################
 
+from plane.models import Plane
+
+
+###############################################################################
 #handler404 = 'main.views.not_found'
 
 ## all views get `shared` and `display_user`
@@ -281,13 +285,13 @@ urlpatterns = patterns('',
     ),
     
     url(
-        r'^tailnumber-(?P<pk>[\w\-\)\(]+).html$',
+        r'^tailnumber-(?P<pk>%s+).html$' % Plane.plane_regex,
         "plane.views.tailnumber_profile",
                                                      name="profile-tailnumber",
     ),
     
     url(
-        r'^type-(?P<pk>[\w-]+).html$',
+        r'^type-(?P<pk>%s+).html$' % Plane.plane_regex,
         "plane.views.type_profile",
                                                            name="profile-type",
     ),

@@ -35,6 +35,9 @@ class Plane(models.Model):
 
     tags =           TagField()
     
+    #regex that matches all tailnumbers and types
+    plane_regex = r'[A-Za-z0-9-\[\]\)\(}{]'
+    
     def save(self, *args, **kwargs):
         """Automatically fill in make/models if they are not already supplied
            and then save the object to the database
@@ -62,9 +65,13 @@ class Plane(models.Model):
             self.user = share.get_display_user()
         
         # remove special characters and white space because they mess up
-        # the url resolvers    
-        self.type = re.sub('[^-A-Za-z0-9]', '', self.type)
-        self.tailnumber = re.sub('[^-A-Za-z0-9]', '', self.tailnumber)
+        # the url resolvers
+        
+        # slip in a carrot to negate the regex
+        reg = '[^' + self.plane_regex[1:]
+        
+        self.type =       re.sub(reg, '', self.type)
+        self.tailnumber = re.sub(reg, '', self.tailnumber)
 
             
         super(Plane, self).save(*args, **kwargs)
