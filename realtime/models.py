@@ -207,8 +207,18 @@ class DutyFlight(models.Model):
         
         return (td.seconds / 60.0) / 60.0
 
-
-
+    def pointer(self):
+        if not self.block_start:
+            return "start_block"
+        
+        if not self.airborne_start:
+            return "start_airborne"
+            
+        if not self.airborne_end:
+            return "end_airborne"
+            
+        if not self.block_end:
+            return "end_block"
 
 
 

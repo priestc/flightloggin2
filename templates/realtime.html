@@ -11,14 +11,18 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/date_format.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/realtime.js"></script>
 <style type="text/css">
-    
-    .on_duty    {width: 80%; background: lightgray; padding: 10px;
-                 margin: 0 auto 0 auto;}
-    
-    .block      {width: 80%; background: lightblue; margin: 5px auto 5px auto;
-                 border: 1px solid gray}
 
-    .open_block {background: pink !important}
+    input[type="text"]         {width: 12em}
+    
+    .on_duty      {width: 90%; background: lightgray; padding: 10px;
+                   margin: 0 auto 0 auto;}
+    
+    .block        {width: 90%; background: lightblue; margin: 5px auto 5px auto;
+                   border: 1px solid gray}
+
+    .open_block   {background: pink !important}
+    
+    .block_table  {margin: 0 auto 0 auto}
 </style>
 {% endblock %}
 
@@ -48,32 +52,37 @@
         <br><br>
         
         {% for block in latest_open_duty.closed_blocks %}
-        
-            <div class="block">
-                FINISHED BLOCK<br>
-                {{block.block_start}} - {{block.block_end}} = {{block.block_time}}
-            </div>
+            
+            {% with "CLOSED" as block_title %}
+            {% with "block" as class %}
+            
+            {% include "block.html" %}
+            
+            {% endwith %}
+            {% endwith %}
             
         {% endfor %}
         
         {% if latest_open_duty.latest_open_block %}
         
-            <div class="block open_block">
-            OPEN BLOCK<br>
-            {{latest_open_duty.latest_open_block}}
-            </div>
+            {% with latest_open_duty.latest_open_block as block %}
+            {% with "OPEN" as block_title %}
+            {% with "block open_block" as class %}
+            
+            {% include "block.html" %}
+            
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
             
         {% else %}
         
             <input name="submit" id="start_block" type="submit" value="Start Block Time">
+            <br><br>
         
+            <input name="submit" id="off_duty" type="submit" value="Go Off Duty">
         {% endif %}
-        
-        
-        
-        <br><br>
-        
-        <input name="submit" id="off_duty" type="submit" value="Go Off Duty">
+                
         </div>
         
     {% else %}

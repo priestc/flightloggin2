@@ -1,0 +1,44 @@
+<div class="{{ class }}">
+    <table class="block_table">
+        <tr>
+            <td colspan="4">{{block_title}}</td>
+        </tr>
+        <tr>
+            <td>Block Start</td>
+            <td>Airborne Start</td>
+            <td>Airborne End</td>
+            <td>Block End</td>
+        </tr>
+        <tr>
+            <td><input name="b_start_{{block.pk}}" type="text" value="{{ block.block_start|default:"" }}"></td>
+            <td><input name="a_start_{{block.pk}}" type="text" value="{{ block.airborne_start|default:"" }}"></td>
+            <td><input name="a_end_{{block.pk}}" type="text" value="{{ block.airborne_end|default:"" }}"></td>
+            <td><input name="b_end_{{block.pk}}" type="text" value="{{ block.block_end|default:"" }}"></td>
+        </tr>
+        <tr>
+            <td>
+                {% ifequal block.pointer "start_block" %}
+                <input type="button" value="Now">
+                {% endifequal %}
+            </td>
+                
+            <td>
+                {% ifequal block.pointer "start_airborne" %}
+                <input type="button" value="Now">
+                {% endifequal %}
+            </td>
+            
+            <td>
+                {% ifequal block.pointer "end_airborne" %}
+                <input type="button" value="Now">
+                {% endifequal %}
+            </td>
+            
+            <td>
+                {% ifequal block.pointer "end_block" %}
+                <input type="button" value="Now">
+                {% endifequal %}
+            </td>
+        </tr>
+    </table>
+</div>
