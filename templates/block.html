@@ -18,25 +18,25 @@
         <tr>
             <td>
                 {% ifequal block.pointer "start_block" %}
-                <input type="button" value="Now">
+                <input type="button" value="Start Block Now">
                 {% endifequal %}
             </td>
                 
             <td>
                 {% ifequal block.pointer "start_airborne" %}
-                <input type="button" value="Now">
+                <input type="button" value="Take Off Now">
                 {% endifequal %}
             </td>
             
             <td>
                 {% ifequal block.pointer "end_airborne" %}
-                <input type="button" value="Now">
+                <input type="button" value="Land Now">
                 {% endifequal %}
             </td>
             
             <td>
                 {% ifequal block.pointer "end_block" %}
-                <input type="button" value="Now">
+                <input type="button" value="Close Block Now">
                 {% endifequal %}
             </td>
         </tr>

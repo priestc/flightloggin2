@@ -22,6 +22,14 @@ class Duty(models.Model):
     class Meta:
         get_latest_by = 'start'
         verbose_name_plural = "Duties"
+        
+    def is_valid(self):
+        t = []
+        for block in self.closed_blocks():
+            t.append(block.is_valid())
+            
+        
+            
     
     def on_duty(self):
         """ 

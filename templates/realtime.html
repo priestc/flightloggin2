@@ -12,7 +12,7 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/realtime.js"></script>
 <style type="text/css">
 
-    input[type="text"]         {width: 12em}
+    input[type="text"]         {width: 11em}
     
     .on_duty      {width: 90%; background: lightgray; padding: 10px;
                    margin: 0 auto 0 auto;}
@@ -23,6 +23,16 @@
     .open_block   {background: pink !important}
     
     .block_table  {margin: 0 auto 0 auto}
+    
+    .duty_header_table      {font-size: bigger;
+                             margin: 0 auto 0 auto;
+                             border: 1px solid gray}
+                             
+    .duty_header_table td   {border: 1px solid gray; padding: 3px}
+    
+    .duty_header_table th   {text-align: right;
+                             font-weight: normal;
+                             border: 1px solid gray; padding: 3px}
 </style>
 {% endblock %}
 
@@ -46,10 +56,19 @@
     {% if on_duty %}
     
         <div class="on_duty">
-            ** Currently on duty **<br><br>
-            went on: {{latest_open_duty.start|date:"m-d-Y H:i:s T"}}<br>
-            expires: {{latest_open_duty.time_expire_duty|date:"m-d-Y H:i:s T"}}
-        <br><br>
+            <table class="duty_header_table">
+                <tr>
+                    <td colspan="2"><strong>** Currently on duty **</strong></td>
+                </tr>
+                <tr>
+                    <th>Duty Started:</th>
+                    <td><input name="duty_start" value="{{ latest_open_duty.start }}"></td>
+                </tr>
+                <tr>
+                    <th>Must be off duty by:</th>
+                    <td>{{ latest_open_duty.time_expire_duty }}</td>
+                </tr>
+            </table>
         
         {% for block in latest_open_duty.closed_blocks %}
             
@@ -79,8 +98,8 @@
         
             <input name="submit" id="start_block" type="submit" value="Start Block Time">
             <br><br>
-        
             <input name="submit" id="off_duty" type="submit" value="Go Off Duty">
+            
         {% endif %}
                 
         </div>
@@ -88,6 +107,9 @@
     {% else %}
         <input name="submit" id="on_duty" type="submit" value="Go On Duty">
     {% endif %}
+    <br>
+    <input name="submit" type="submit" value="Commit">
+    
 </form>
 {{form.errors}}
 {% endblock %}

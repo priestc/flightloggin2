@@ -63,7 +63,7 @@ def list_airports(tailnumbers):
     
     out = ""
     for tn in tailnumbers:
-        tn_spaceless = tn.replace(' ','')
+        tn_spaceless = tn.replace(' ','').replace('#','')
         url  = reverse('profile-tailnumber', kwargs={"pk": tn_spaceless})
         out += "<a href=\"%s\">%s</a>, " % (url, tn)
         
@@ -82,7 +82,7 @@ def list_types(types):
     
     out = ""
     for ty in types:
-        ty_spaceless = ty.replace(' ','')
+        ty_spaceless = ty.replace(' ','').replace('#','')
         url  = reverse('profile-type', kwargs={"pk": ty_spaceless})
         out += "<a href=\"%s\">%s</a>, " % (url, ty)
         
