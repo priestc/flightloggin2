@@ -31,9 +31,9 @@
     {{ form.start }}{{ form.end }}
     </span>
     {% if on_duty %}
-        <input id="off_duty" type="submit" value="Go Off Duty">
+        <input name="submit" id="off_duty" type="submit" value="Go Off Duty">
     {% else %}
-        <input id="on_duty" type="submit" value="Go On Duty">
+        <input name="submit" id="on_duty" type="submit" value="Go On Duty">
     {% endif %}
 </form>
 {{form.errors}}

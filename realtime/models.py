@@ -11,17 +11,20 @@ class Duty(models.Model):
         verbose_name_plural = "Duties"
     
     def on_duty(self):
-        return not bool(self.end)
+        """ 
+        there is a start but there isnt a stop,
+        the duty is still active
+        """
+        
+        return self.start and not self.end 
     
     @classmethod
-    def latest(cls, user):
+    def latest_open(cls, user):
         try:
-            latest_duty = cls.objects.filter(user=user).latest()
+            return cls.objects.filter(user=user, end=None).latest()
             
         except Duty.DoesNotExist:
-            latest_duty = Duty()
-        
-        return latest_duty
+            return Duty()
     
 
 class DutyFlight(models.Model):
@@ -35,4 +38,3 @@ class DutyFlight(models.Model):
     
     def landed(self):
         return bool(self.airborne_end)
-            
