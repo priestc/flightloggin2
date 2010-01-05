@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -16,7 +18,10 @@ class Duty(models.Model):
         the duty is still active
         """
         
-        return self.start and not self.end 
+        return self.start and not self.end
+    
+    def time_expire_duty(self):
+        return self.start + datetime.timedelta(hours=14)
     
     @classmethod
     def latest_open(cls, user):
