@@ -35,7 +35,3 @@ class SimpleTest(TestCase):
         self.failUnlessEqual("%s" % p7, "N1234(1) (C172)")
         self.failUnlessEqual("%s" % p8, "N1234[1] (C-172)")
         self.failUnlessEqual("%s" % p9, "N1234{1} (C-172)")
-        
-        
-        
-        
