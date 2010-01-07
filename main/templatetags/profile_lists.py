@@ -97,10 +97,12 @@ def list_types(types):
 @register.filter(name='routebase_row')
 def routebase_row(rb):
     
-    ident = rb.location.identifier
+    # returns either the Location object, or a string representing the ident
+    dest = rb.destination()
+    
+    ident = getattr(dest, "identifier", dest)
     
     if not rb.location or rb.custom():
-        print "derp"
         return mark_safe("<td>%s</td><td>&nbsp;</td>" % ident)
         
     if rb.location.loc_class == 1:   # airport
