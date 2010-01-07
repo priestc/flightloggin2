@@ -33,7 +33,11 @@ class LogbookRow(list):
         self.data = {}
         for field in DB_FIELDS:
             data = self.flight.column(field)
-            self.data[field] = data
+            
+            if field == 'total' and data == "":
+                self.data[field] = self.flight.column("sim")
+            else:
+                self.data[field] = data
         
     def make_proper_columns(self):
         for column in self.columns:
@@ -53,7 +57,9 @@ class LogbookRow(list):
                           "title": FIELD_TITLES[column]} )
 
     def get_data_spans(self):
-        """Returns the <span>'s that hold the
+        """
+        Returns the <span>'s that hold the dta that is retrieved by the
+        popup when editing a flight
         """
         out = []
         for field in DB_FIELDS:
