@@ -1,292 +1,382 @@
 from constants import CSV_FIELDS
 
 class PrepareLine(object):
-    """In comes a dict straight from a CSV file, out comes a dict formatted
-       so it fits right in with the import form
+    """
+    In comes a dict straight from the CSV file, out comes a dict formatted
+    so it fits right in with the import form.
     """
     
     def __init__(self, line):
         self.line = line
         self.get_values()
-        
-        self.line_type = self.determine_type()
     
-    def clean_field(self, field):
-        func = getattr(self, "figure_%s" % field, "")
-        if callable(func):
-            # there is a clean function
-            return func()
+    def output(self):
+        return self.do_correct_fixing()
+    
+    def do_correct_fixing(self):
+        """
+        Determines what kind of entry this line is based on the special
+        tag at the begining of each line. Assumes the first line is the
+        date field.
+        """      
+        # if non-flight column is not empty, then this is a non-flight line
+        if self.non_flying:
+            return NonFlightFixer(self.line).output()
+         
+        elif self.date == "##RECORDS":
+            return RecordsFixer(self.line).output()
+           
+        elif self.date == "##PLANE":
+            return PlaneFixer(self.line).output()
+        
+        elif self.date == "##EVENT":
+            return EventFixer(self.line).output()
+        
+        elif self.date == "##LOC":
+            return LocationFixer(self.line).output()
+        
         else:
-            # no clean function, use what we already have
-            return {field: getattr(self, field)}
-
-    #-----------------------------
+            return FlightFixer(self.line).output()
         
     def get_values(self):
-        """sets variables corresponding to each valid CSV field"""
+        """
+        sets object instance variables corresponding to each valid CSV field
+        """
         
         for val in CSV_FIELDS:
             setattr(self, val, self.line.get(val, ""))
 
-    #-----------------------------        
-    
-    def figure_remarks(self):
-        """in flightloggin 1.0, newlines are coded
-        into '\r', so code the newlines back"""
-        
-        remarks = ""
-        if self.remarks:   
-            remarks = self.remarks.replace('\\r', '\n')
-            
-        remarks = remarks.decode("utf-8", "ignore")
-            
-        return {'remarks': remarks}
+###############################################################################
 
-    #-----------------------------
+def fix_remarks(remarks):
+    r"""
+    in flightloggin 1.0, newlines are coded
+    into '\r', so code the newlines back, also get rid of any invalid unicode
+    characters
+    """
+    
+    if remarks:   
+        remarks = remarks.replace('\\r', '\n')
+        remarks = remarks.decode("utf-8", "ignore")
+        return remarks
+
+    return ""
+
+def combine_person(person, instructor, captain, student, fa, fo):
+    """
+    Turn instructor, student, etc, fields into a single person field
+    """
+    
+    if person:
+        # if person is already set, then just return that
+        return person
+    
+    to_join=[]
+    for x in [instructor, fo, captain, student, fa]:
+        if x and not x == "":
+            to_join.append(x)
             
-    def figure_person(self):
-        """Turn instructor, student, etc, fields into a single person
-           field
+    new_person=", ".join(to_join)
+    
+    return new_person or ""
+
+
+###############################################################################     
+
+class Fixer(object):
+    def __init__(self, line):
+        self.line = line
+        
+    def proper_mapper(self, real_column):
+        """
+        The special CSV lines do not have proper headers, so this function
+        is used to get the proper field without needing to figure out which
+        header the field falls under. This function is only needed with Events,
+        Loc, Plane and all those sections. Flights do not need this because
+        flight lines always have proper headers.
         """
         
-        if self.person:
-            # if person is already set, then just return that
-            return {"person": self.person} 
+        mapper = getattr(self, "mapper", False)
         
-        to_join=[]
-        for x in [self.instructor, self.fo, self.captain, self.student, self.fa]:
-            if not x == "":
-                to_join.append(x)
-                
-        person=", ".join(to_join)
-        
-        if person:
-           return {"person": person}
-       
+        if mapper and real_column in mapper.keys():
+            return self.line.get(self.mapper[real_column])
         else:
-           return {'person': ""}
-
-    #-----------------------------
-       
-    def figure_tracking(self):
-        """if tracking value is anything but "No", then count it as
-           tracking. ForPilots logbooks do it this way"""
+            return self.line.get(real_column, "")
         
-        if not self.tracking:
-            return {'tracking': False}
+    def processor(self, column):
+        """
+        Calls the proper processor function if it exists
+        processor functions are used instead of proper_mapper to return
+        values that differ than whats exactly in the CSV file
+        """
+        proccess_function = getattr(self, column + "_processor", None)
         
-        
-        if self.tracking.upper() == "NO":
-            return {'tracking': False}
+        if proccess_function and callable(proccess_function):
+            return proccess_function()
         else:
-            return {'tracking': True}
-        
-    #-----------------------------
-            
-    def figure_holding(self):
-        """if holding value is anything but "No", then count it as
-           holding. ForPilots logbooks do it this way"""
-           
-        if not self.holding:
-            return {'holding': False}
-           
-        if self.holding.upper() == "NO":
-            return {'holding': False}
-        else:
-            return {'holding': True}
-        
-    #-----------------------------
+            raise NotImplementedError("No processor for this field")
     
-    @property    
-    def is_sim(self):
-        """if there is only a sim column, but not a total column, then
-           its a sim flight """
-       
-        return self.sim and not self.total
-
-    #-----------------------------
+    def output(self):
+        ## subclass name with the "Fixer" postfix removed and made lowercase
+        line_type = self.__class__.__name__[:-5].lower()
+        return line_type, self.as_dict()
+            
         
-    def figure_route(self):
+###############################################################################
+
+class LocationFixer(Fixer):
+    """
+    In comes a line straight from the dict (with incorrect headers),
+    out comes a properly formatted dict for creation of a Location object
+    """
+    
+    mapper = {
+                'identifier': 'tailnumber',
+                'name': 'type',
+                'lat': 'route',
+                'lng': 'total',
+                'municipality': 'pic',
+                'loc_type': 'solo',
+             }
+             
+    def location_processor(self):
+        """
+        Grabs the lattitude and longitude from the line and cats them together
+        to output a WKT representation for inputting to the PointField
+        """
+        
+        lat = self.proper_mapper('lat')
+        lng = self.proper_mapper('lng')
+        
+        return "POINT (%s %s)" % (lat, lng)
+        
+        
+    def as_dict(self):
+        return {
+                    'name':          self.proper_mapper('name'),
+                    'location':      self.processor("location"),
+                    'municipality':  self.proper_mapper("municipality"),
+                    "loc_type":      self.proper_mapper("loc_type"),
+               }
+    
+###############################################################################
+
+class RecordsFixer(Fixer):
+
+    mapper = {'records': 'tailnumber'}
+    
+    def records_processor(self):
+    
+        records = self.proper_mapper('records')
+        
+        if records:
+            return records.replace('\\r', '\n')
+        else:
+            return ""   
+    
+    def as_dict(self):
+      
+        return {
+                    "records": self.processor('records'),
+               }
+
+    
+###############################################################################    
+    
+class PlaneFixer(Fixer):
+
+    mapper = {
+                'SKIP': 'date',
+                'tailnumber': 'tailnumber',
+                'manufacturer': 'type',
+                'model': 'route',
+                'type': 'total',
+                'cat_class': 'pic',
+                'RT': 'solo',
+                'tags': 'sic',
+            }
+        
+    def tags_processor(self):
+        tags = self.proper_mapper('tags')
+        rt = self.proper_mapper('RT')
+        
+        # add the RT column if it's there (from flightloggin 1.0)
+        
+        if "R" in rt and "TYPE RATING" not in tags.upper():
+            tags += ', Type Rating'
+            
+        if "T" in rt and "TAILWHEEL" not in tags.upper():
+            tags += ', Tailwheel'
+        
+        return tags
+    
+    def as_dict(self):
+        return {
+                    "tailnumber":   self.proper_mapper('tailnumber'),
+                    "manufacturer": self.proper_mapper('manufacturer'),
+                    "model":        self.proper_mapper('model'),
+                    "type":         self.proper_mapper('type'),
+                    "cat_class":    self.proper_mapper('cat_class'),
+                    "tags":         self.processor('tags'),
+                    "description":  self.proper_mapper('description'),
+                }
+
+###############################################################################
+
+class EventFixer(Fixer):
+        
+    mapper = {
+                  'date': 'tailnumber',
+                  'non_flying': 'type',
+                  'remarks': 'route',
+             }
+             
+    def remarks_processor(self):
+        return fix_remarks(self.proper_mapper('remarks')),
+    
+    def as_dict(self):                 
+        return {
+                    "date":       self.proper_mapper('date'),
+                    "remarks":    self.processor('remarks'),
+                    "non_flying": self.proper_mapper('non_flying'),
+               }
+
+###############################################################################
+
+class NonFlightFixer(Fixer):
+    """
+    Fixes the old 'NonFlight' entries from flightloggin 1.0, which
+    was mixed in with the flight section of the backup file, therefore
+    no special mapping is needed
+    """
+    
+    def non_flying_processor(self):
+        from constants import NON_FLIGHT_TRANSLATE_NUM
+        return NON_FLIGHT_TRANSLATE_NUM[self.proper_mapper('non_flying')]
+    
+    def remarks_processor(self):
+        return fix_remarks(self.proper_mapper('remarks'))
+    
+    def as_dict(self):
+        return {
+                    "date":       self.proper_mapper('date'),
+                    "remarks":    self.processor('remarks'),
+                    "non_flying": self.processor('non_flying'),
+               }
+               
+###############################################################################
+    
+class FlightFixer(Fixer):
+    
+    def person_processor(self):
+        args = (
+                self.proper_mapper('person'),
+                self.proper_mapper('instructor'),
+                self.proper_mapper('captain'),
+                self.proper_mapper('student'),
+                self.proper_mapper('fa'),
+                self.proper_mapper('fo')
+               )
+
+        return combine_person(*args)
+    
+    def remarks_processor(self):
+        return fix_remarks( self.proper_mapper('remarks') )
+        
+    def pilot_checkride_processor(self):
+        if "P" in self.proper_mapper('flying'): return True
+        return False
+    
+    def cfi_checkride_processor(self):
+        if "C" in self.proper_mapper('flying'): return True
+        return False
+    
+    def ipc_processor(self):
+        if "I" in self.proper_mapper('flying'): return True
+        return False
+    
+    def flight_review_processor(self):
+        if "P" in self.proper_mapper('flying'): return True
+        return False
+    
+    def tracking_processor(self):
+        if "T" in self.proper_mapper('flying'): return True
+        return False
+    
+    def holding_processor(self):
+        if "H" in self.proper_mapper('flying'): return True
+        return False
+
+    def route_processor(self):
+        
+        route = self.proper_mapper('route')
+        to =    self.proper_mapper('to')
+        from_ = self.proper_mapper('from_')
+        via =   self.proper_mapper('via')
+        
         
         #return just the route field, if it's there
-        if self.route:
-            return {"route": self.route}
+        if route:
+            return route
          
         #put together "from-to" fields, then return it
-        elif self.to and self.from_ and not self.via:
-            route = "%s %s" % (self.from_, self.to)
-            return {"route": route}
+        elif to and from_ and not via:
+            return "%s %s" % (from_, to)
         
         #put together "from-via-to" fields, then return it
-        elif self.to and self.from_ and self.via:
-            route = "%s %s %s" % (self.from_, self.via, self.to)
-            return {"route": route}
+        elif to and from_ and via:
+            return "%s %s %s" % (from_, via, to)
         
         # no route
         else:
-            return {'route': ''}
-
-    #-----------------------------
-
-    def figure_flying(self):
-        """Set the proper flying column variables
-        """
-        dic = {}
+            return ""
         
-        if not self.flying:
-            return dic
+    def total_processor(self):
+        sim = self.proper_mapper('sim')
+        total = self.proper_mapper('total') 
         
-        if "P" in self.flying:
-            dic.update({"pilot_checkride": True})
-    
-        if "H" in self.flying:
-            dic.update({"holding": True})
-            
-        if "T" in self.flying:
-            dic.update({"tracking": True})
-            
-        if "C" in self.flying:
-            dic.update({"cfi_checkride": True})
-            
-        if "I" in self.flying:
-            dic.update({"ipc": True})
-    
-        return dic
-
-    #-----------------------------
-    
-    def figure_non_flying(self):
-        """Translates old non_flying codes to the new system
-        """
-        
-        from constants import NON_FLIGHT_TRANSLATE_NUM
-        
-        if not self.non_flying:
-            return {}
-        
-        new_number = NON_FLIGHT_TRANSLATE_NUM[self.non_flying]
-        return {'non_flying': new_number}
-    
-    #-----------------------------
-    
-    def figure_total(self):
-        if self.is_sim:
-            return {'total': self.sim}
+        if sim and not total:
+            return sim
         else:
-            return {'total': self.total}
-        
-    def determine_type(self):
-        """Determines what kind of entry this line is based on the special
-           tag at the begininf of each line. Assumes the first line of the
-           date field.
-        """      
-        # if non-flight column is not empty, then this is a non-flight line
-        if self.non_flying:
-            return "nonflight"
-        
-        #if line starts with this tag, then it's a records line   
-        elif self.date == "##RECORDS":
-            return "records"
-           
-        elif self.date == "##PLANE":
-            return "plane"
-        
-        elif self.date == "##EVENT":
-            return "event"
-        
-        elif self.date == "##LOC":
-            return "location"
-        
-        else:
-            return "flight"
+            return total
     
-    ###########################################################################
-    ###########################################################################
-        
-    def output(self):
-        """Returns the dict based on the line type, and the line type as well
-        """
-        # call the proper outout method depending on the line type
-        return self.line_type, getattr(self, "dict_%s" % self.line_type)()
     
-    def dict_nonflight(self):
-        """Create the dict as if it were a nonflight
-        """
-        output = {}
-        for field in ('date', 'remarks', 'non_flying'):
-            dic = self.clean_field(field)
-            output.update(dic)
-            
-        return output
+    def as_dict(self):
     
-    def dict_records(self):
-        """Create the dict as if it were a records
-        """
-        if self.tailnumber:
-            return {'records': self.tailnumber.replace('\\r', '\n')}
-        else:
-            return {'records': ''}
+        return {
+                    "date":            self.proper_mapper('date'),
+                    "tailnumber":      self.proper_mapper('tailnumber'),
+                    "type":            self.proper_mapper('type'),
+                    "route":           self.processor('route'),
+                    
+                    "total":           self.processor('total'),
+                    "sim":             self.proper_mapper('sim'),
+                    "pic":             self.proper_mapper('pic'),
+                    "sic":             self.proper_mapper('sic'),
+                    "solo":            self.proper_mapper('solo'),
+                    "dual_r":          self.proper_mapper('dual_r'),
+                    "dual_g":          self.proper_mapper('dual_g'),
+                    "act_inst":        self.proper_mapper('act_inst'),
+                    "sim_inst":        self.proper_mapper('sim_inst'),
+                    "night":           self.proper_mapper('night'),
+                    "xc":              self.proper_mapper('xc'),
+                    
+                    "app":             self.proper_mapper('app'),
+                    "day_l":           self.proper_mapper('night_l'),
+                    "night_l":         self.proper_mapper('day_l'),
+                    
+                    "remarks":         self.processor('remarks'),
+                    "person":          self.processor('person'),
+                    
+                    "holding":         self.processor('holding'),
+                    "tracking":        self.processor('tracking'),
+                    
+                    "pilot_checkride": self.processor("pilot_checkride"),
+                    "cfi_checkride":   self.processor("cfi_checkride"),
+                    "ipc":             self.processor("ipc"),
+                    "flight_review":   self.processor("flight_review"),
+               }
     
-    def dict_plane(self):
-        """Create the dict as if it were a plane
-        """
-        from constants import PLANE_HEADERS, PLANE_MAP
-        output = {}
-        for field in PLANE_HEADERS:
-            dic = {field: getattr(self, PLANE_MAP[field])}
-            output.update(dic)
-            
-        tags = output.get('tags') or ""
-        tagsu = tags.upper()
-        
-        ## translate the 'RT' column (flightloggin 1.0) to the proper tags
-        if "R" in (output.get('RT') or "ff") and "TYPE RATING" not in tagsu:
-            tags += ', Type Rating'
-            
-        if "T" in (output.get('RT') or "ff") and "TAILWHEEL" not in tagsu:
-            tags += ', Tailwheel'
-        
-        output.update({"tags": tags}) 
-        
-        del output['RT']
-            
-        return output
-        
-    def dict_flight(self):
-        """Create the dict as if it were a flight
-        """
-        
-        output = {}
-        for field in CSV_FIELDS:
-            dic = self.clean_field(field)
-            output.update(dic)
-        
-        # we dont need these anymore, get rid of them
-        del output['via']
-        del output['to']
-        del output['from_']
-        
-        return output
-    
-    def dict_event(self):
-        output = {}
-        
-        output['date'] = self.tailnumber
-        output['non_flying'] = self.type
-        output['remarks'] = self.route
-    
-    def dict_location(self):
-        output = {}
-        
-        output['date'] = self.date
-        output['non_flying'] = self.tailnumber
-        output['remarks'] = self.type
-
-
-
-
-
-
 
 
 

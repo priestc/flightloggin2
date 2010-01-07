@@ -66,31 +66,33 @@ class Plane(models.Model):
         
         # remove special characters and white space because they mess up
         # the url resolvers
+        #XXX replace with model validators when django 1.2 drops
         
         # slip in a carrot to negate the regex
         reg = '[^' + self.plane_regex[1:]
-        
-        self.type =       re.sub(reg, '', self.type)
-        self.tailnumber = re.sub(reg, '', self.tailnumber)
+      
+        self.type =       re.sub(reg, '', self.type or "")
+        self.tailnumber = re.sub(reg, '', self.tailnumber or "")
 
-            
         super(Plane, self).save(*args, **kwargs)
-        
-    def get_users_tailnumber(self):
+    
+    @classmethod    
+    def get_users_tailnumber(cls, tailnumber):
         """Returns the users who also have flown in this tailnumber"""
         
         from django.contrib.auth.models import User
         return User.objects\
                    .filter(profile__social=True)\
-                   .filter(plane__tailnumber=self.tailnumber).distinct()
-    
-    def get_users_type(self):
+                   .filter(plane__tailnumber=tailnumber).distinct()
+                   
+    @classmethod
+    def get_users_type(cls, ty):
         """Returns the users who also have flown in this type"""
         
         from django.contrib.auth.models import User
         return User.objects\
                    .filter(profile__social=True)\
-                   .filter(plane__type=self.type).distinct()
+                   .filter(plane__type=ty).distinct()
 
     def __unicode__(self):
         if self.type:

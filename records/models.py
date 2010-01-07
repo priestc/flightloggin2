@@ -1,14 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from constants import *
+from main.mixins import GoonMixin
 
-class Records(models.Model):
-    
-    @classmethod
-    def goon(cls, *args, **kwargs):
-        """get object or None"""
-        from annoying.functions import get_object_or_None
-        return get_object_or_None(cls,  *args, **kwargs)
+class Records(models.Model, GoonMixin):
     
     user = models.ForeignKey(User, unique=True, primary_key=True, editable=False)
     text = models.TextField(blank=True)
@@ -38,7 +33,7 @@ class Records(models.Model):
             self.user = share.get_display_user()
         super(Records,self).save(*args, **kwargs)
         
-class NonFlight(models.Model):
+class NonFlight(models.Model, GoonMixin):
 
     date =      models.DateField()
     user =      models.ForeignKey(User, blank=True)

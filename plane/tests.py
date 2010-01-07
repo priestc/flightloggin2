@@ -15,6 +15,7 @@ class SimpleTest(TestCase):
         p7 = Plane(type="C 172", tailnumber="N1234(1)")
         p8 = Plane(type="C-172", tailnumber="N1234[1]")
         p9 = Plane(type="C-172", tailnumber="N1234{1}")
+        p10 = Plane(type=None, tailnumber=None)
         
         p1.save()
         p2.save()
@@ -25,6 +26,7 @@ class SimpleTest(TestCase):
         p7.save()
         p8.save()
         p9.save()
+        p10.save()
         
         self.failUnlessEqual("%s" % p1, "N1234 (C-172)")
         self.failUnlessEqual("%s" % p2, "N1234 (C172)")
@@ -35,3 +37,4 @@ class SimpleTest(TestCase):
         self.failUnlessEqual("%s" % p7, "N1234(1) (C172)")
         self.failUnlessEqual("%s" % p8, "N1234[1] (C-172)")
         self.failUnlessEqual("%s" % p9, "N1234{1} (C-172)")
+        self.failUnlessEqual("%s" % p10, "")

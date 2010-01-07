@@ -14,12 +14,12 @@ class BaseImport(object):
     class InvalidCSVError(Exception):
         pass
     
-    def __init__(self, user, f):
+    def __init__(self, user, file_):
         
         self.user = user
-        self.f = f
+        self.file = file_
             
-        if not self.f:
+        if not self.file:
             raise self.NoFileError
         
         self.flight_out = []
@@ -28,15 +28,20 @@ class BaseImport(object):
         self.non_out = []
         
     def do_pre(self):
-        """get the first 10,000 characters of the file for preview purposes"""
-        self.f.seek(0)
-        self.pre = self.f.read(10000)
-        self.f.seek(0)
+        """
+        get the first 10,000 characters of the file to determine
+        the csv delimiter
+        """
+        self.file.seek(0)
+        pre = self.file.read(10000)
+        self.file.seek(0)
+        
+        return pre
         
     def get_dialect(self):
-        self.do_pre()
+        pre = self.do_pre()
         try:
-            return csv.Sniffer().sniff(self.pre)
+            return csv.Sniffer().sniff(pre)
         except:
             raise self.InvalidCSVError
         
@@ -49,14 +54,14 @@ class BaseImport(object):
             dialect.delimiter = "\t"
                
         try:
-            reader = csv.reader(self.f, dialect)
+            reader = csv.reader(self.file, dialect)
         except TypeError:
             raise RuntimeError, "Not a valid CSV file"
         
         titles = reader.next()
         titles = self.swap_out_flight_titles(titles)
         
-        self.dr = csv.DictReader(self.f, titles, dialect=dialect)
+        self.dr = csv.DictReader(self.file, titles, dialect=dialect)
             
     def action(self):
         """Go through each line, determine which type it is, then hand off that
@@ -73,7 +78,7 @@ class BaseImport(object):
             if line_type == "flight":
                 self.flight_out.append( self.handle_flight(dic) )
 
-            elif line_type == "nonflight":
+            elif line_type == "nonflight" or line_type == "event":
                 self.non_out.append( self.handle_nonflight(dic) )
                 
             elif line_type == "records":
@@ -81,6 +86,12 @@ class BaseImport(object):
                 
             elif line_type == "plane":
                 self.plane_out.append( self.handle_plane(dic) )
+            
+            elif line_type == "location":
+                pass
+            
+            else:
+                raise Exception
         
         self.make_headers()
         
@@ -126,7 +137,6 @@ class BaseImport(object):
 class PreviewImport(BaseImport):
 
     def handle_flight(self, line, submit=None):
-        
         out = ["<tr>"]
         from constants import PREVIEW_FIELDS
         for field in PREVIEW_FIELDS:
@@ -172,6 +182,9 @@ class DatabaseImport(PreviewImport):
                  
     def handle_flight(self, line):
         from forms import ImportFlightForm
+        
+        print line.get("tailnumber")
+        print line.get("type")
         
         if not line.get("tailnumber") == "":
             # get the plane based on the tailnumber and type, create if necessary

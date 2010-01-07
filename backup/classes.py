@@ -1,5 +1,5 @@
 import csv
-import StringIO
+import cStringIO
 import zipfile
 import datetime
 
@@ -26,7 +26,7 @@ class Backup(object):
         from logbook.models import Flight, Columns
         from airport.models import Location
 
-        csv_sio = StringIO.StringIO()
+        csv_sio = cStringIO.StringIO()
         writer = csv.writer(csv_sio, delimiter="\t")
         
         ##########################
@@ -35,7 +35,15 @@ class Backup(object):
         
         flights = Flight.objects.filter(user=self.user)
         for flight in flights:
-            writer.writerow([flight.column(field) for field in BACKUP_FIELDS])
+            tmp=[]
+            for field in BACKUP_FIELDS:
+                try:
+                    s = str(flight.column(field))
+                except:
+                    s = flight.column(field).encode("utf-8", "ignore")
+                tmp.append(s)
+                
+            writer.writerow(tmp)
         
         records = Records.goon(user=self.user)
         if records and records.text:
@@ -44,7 +52,8 @@ class Backup(object):
         planes = Plane.objects.filter(user=self.user)    
         for p in planes:
             writer.writerow(["##PLANE", p.tailnumber, p.manufacturer, p.model,
-                        p.type, p.cat_class, "X", ", ".join(p.get_tags())])
+                        p.type, p.cat_class, "X", ", ".join(p.get_tags()),
+                        p.description])
                         
         events = NonFlight.objects.filter(user=self.user)    
         for e in events:
@@ -61,8 +70,10 @@ class Backup(object):
             
             writer.writerow(["##LOC", l.identifier, l.name, x, y,
                     l.municipality, l.get_loc_type_display()])
-       
+                    
+        #save to self.csv before returning, for later use
         self.csv = csv_sio
+        
         return csv_sio
 
     def output_zip(self):
@@ -72,7 +83,7 @@ class Backup(object):
         
         DATE = datetime.date.today()
             
-        zip_sio = StringIO.StringIO()
+        zip_sio = cStringIO.StringIO()
         z = zipfile.ZipFile(zip_sio,'w', compression=zipfile.ZIP_DEFLATED)
         z.writestr("logbook-backup-%s.tsv" % DATE, self.csv.getvalue())
 
