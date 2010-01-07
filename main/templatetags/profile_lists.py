@@ -83,7 +83,12 @@ def list_types(types):
     
     out = ""
     for ty in types:
-        ty_spaceless = ty.replace(' ','').replace('#','').replace('?','')
+        ty_spaceless = ty.replace(' ','')\
+                         .replace('#','')\
+                         .replace('?','')\
+                         .replace('\\','')\
+                         .replace('/','')
+                         
         url  = reverse('profile-type', kwargs={"pk": ty_spaceless})
         out += "<a href=\"%s\">%s</a>, " % (url, ty)
         
