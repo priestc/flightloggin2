@@ -8,6 +8,8 @@ from tagging.fields import TagField
 import tagging
 from tagging.models import Tag
 
+from main.mixins import GoonMixin
+
 from constants import *
 
 class QuerySetManager(models.Manager):
@@ -17,7 +19,7 @@ class QuerySetManager(models.Manager):
     def __getattr__(self, name):
         return getattr(self.get_query_set(), name)
 
-class Plane(models.Model):
+class Plane(models.Model, GoonMixin):
     
     ## add custom filters to custom manager
     from utils import PlaneQuerySet as QuerySet
@@ -60,20 +62,14 @@ class Plane(models.Model):
                 self.manufacturer="Frasca"
                 self.cat_class = 16
                 
+        self.clean_type()
+        self.clean_tailnumber()
+                
         if not self.user:
             from share.middleware import share
             self.user = share.get_display_user()
         
-        # remove special characters and white space because they mess up
-        # the url resolvers
-        #XXX replace with model validators when django 1.2 drops
-        
-        # slip in a carrot to negate the regex
-        reg = '[^' + self.plane_regex[1:]
-      
-        self.type =       re.sub(reg, '', self.type or "")
-        self.tailnumber = re.sub(reg, '', self.tailnumber or "")
-
+        print self.tailnumber
         super(Plane, self).save(*args, **kwargs)
     
     @classmethod    
@@ -93,6 +89,29 @@ class Plane(models.Model):
         return User.objects\
                    .filter(profile__social=True)\
                    .filter(plane__type=ty).distinct()
+    
+    @classmethod
+    def regex_tail_type(cls, s):
+        reg = '[^' + cls.plane_regex[1:]
+        import re
+        return re.sub(reg, '', s or "")
+                   
+    def clean_tailnumber(self):
+        """
+        remove special characters and white space because they mess up
+        the url resolvers
+        !!replace with model validators when django 1.2 drops!!
+        """
+        self.tailnumber = Plane.regex_tail_type(self.tailnumber)
+        
+    def clean_type(self):
+        """
+        remove special characters and white space because they mess up
+        the url resolvers
+        !!replace with model validators when django 1.2 drops!!
+        """
+        self.type = Plane.regex_tail_type(self.type)
+        
 
     def __unicode__(self):
         if self.type:
@@ -105,12 +124,6 @@ class Plane(models.Model):
             disp = ""
             
         return u"%s%s" % (self.tailnumber, disp)
-    
-    @classmethod
-    def goon(cls, *args, **kwargs):
-        """get object or None"""
-        from annoying.functions import get_object_or_None
-        return get_object_or_None(cls,  *args, **kwargs)
     
     def fancy_name(self):
         ret = []

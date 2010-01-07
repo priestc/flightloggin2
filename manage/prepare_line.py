@@ -182,7 +182,9 @@ class RecordsFixer(Fixer):
 
     
 ###############################################################################    
-    
+
+from plane.models import Plane
+
 class PlaneFixer(Fixer):
 
     mapper = {
@@ -209,13 +211,19 @@ class PlaneFixer(Fixer):
             tags += ', Tailwheel'
         
         return tags
+
+    def type_processor(self):
+        return Plane.regex_tail_type(self.proper_mapper('type'))
+        
+    def tailnumber_processor(self):
+        return Plane.regex_tail_type(self.proper_mapper('tailnumber'))
     
     def as_dict(self):
         return {
-                    "tailnumber":   self.proper_mapper('tailnumber'),
+                    "tailnumber":   self.processor('tailnumber'),
                     "manufacturer": self.proper_mapper('manufacturer'),
                     "model":        self.proper_mapper('model'),
-                    "type":         self.proper_mapper('type'),
+                    "type":         self.processor('type'),
                     "cat_class":    self.proper_mapper('cat_class'),
                     "tags":         self.processor('tags'),
                     "description":  self.proper_mapper('description'),
@@ -340,13 +348,19 @@ class FlightFixer(Fixer):
         else:
             return total
     
+    def type_processor(self):
+        return Plane.regex_tail_type(self.proper_mapper('type'))
+        
+    def tailnumber_processor(self):
+        return Plane.regex_tail_type(self.proper_mapper('tailnumber'))
+    
     
     def as_dict(self):
     
         return {
                     "date":            self.proper_mapper('date'),
-                    "tailnumber":      self.proper_mapper('tailnumber'),
-                    "type":            self.proper_mapper('type'),
+                    "tailnumber":      self.processor('tailnumber'),
+                    "type":            self.processor('type'),
                     "route":           self.processor('route'),
                     
                     "total":           self.processor('total'),

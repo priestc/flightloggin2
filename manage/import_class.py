@@ -187,12 +187,12 @@ class DatabaseImport(PreviewImport):
         print line.get("type")
         
         if not line.get("tailnumber") == "":
-            # get the plane based on the tailnumber and type, create if necessary
             kwargs = {"tailnumber": line.get("tailnumber"), "user": self.user}
             if line.get("type"):
                 kwargs.update({"type": line.get("type")})
                 
             plane, created = Plane.objects.get_or_create(**kwargs)
+            
         else:
             ## 90 = the unknown plane
             plane = Plane(pk=90) ## FIXME should be something more intuitive
