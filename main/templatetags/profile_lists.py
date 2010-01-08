@@ -66,7 +66,7 @@ def list_airports(tailnumbers):
         ## hacks to deal with legacy data entered before validation was good
         tn_spaceless = tn.replace(' ','')\
                          .replace('#','')\
-                         .replace('?','')
+                         .replace('?','')\
                          .replace('\\','')\
                          .replace('/','')
                          
