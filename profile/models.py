@@ -92,9 +92,13 @@ class Profile(models.Model):
         try:
             return cls.objects.get(user=user)
         except cls.DoesNotExist:
-            p = cls(user=user)
-            p.save()
-            return p
+            
+            if user:
+                p = cls(user=user)
+                p.save()
+                return p
+            else:
+                return cls()
         
     def get_format(self):
         if self.minutes:
