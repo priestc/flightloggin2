@@ -375,12 +375,12 @@ class FAA_Medical(Currency):
            some variables based on when that medical was made, and what
            class it was
         """
-           
+        from profile.models import Profile
         try:
             ## try to get the user's DOB from their profile, if no profile
             # is made, assume they are over 40
-            dob = self.user.get_profile().dob
-        except AttributeError:
+            dob = Profile.get_for_user(self.user).dob
+        except AttributeError, Profile.DoesNotExist:
             dob = datetime.date(1915,7,21)
             
         status, end_date = self._determine("40", dob)

@@ -17,7 +17,8 @@ def currency(request):
 
     ############################################
     
-    cert_currbox = CertCurrBox(cfi=curr_land.flight_instructor(), bfr=curr_land.flight_review())
+    cert_currbox = CertCurrBox(cfi=curr_land.flight_instructor(),
+                               bfr=curr_land.flight_review())
     
     if not (curr_land.pilot or curr_land.cfi):
         del cert_currbox
