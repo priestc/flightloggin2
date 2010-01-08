@@ -38,7 +38,7 @@ class Plane(models.Model, GoonMixin):
     tags =           TagField()
     
     #regex that matches all tailnumbers and types
-    plane_regex = r'[A-Za-z0-9-\[\]\)\(}{]'
+    plane_regex = r'[A-Za-z0-9-\[\]\)\(}{\.]'
     
     def save(self, *args, **kwargs):
         """Automatically fill in make/models if they are not already supplied

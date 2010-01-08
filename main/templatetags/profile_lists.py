@@ -64,7 +64,12 @@ def list_airports(tailnumbers):
     out = ""
     for tn in tailnumbers:
         ## hacks to deal with legacy data entered before validation was good
-        tn_spaceless = tn.replace(' ','').replace('#','').replace('?','')
+        tn_spaceless = tn.replace(' ','')\
+                         .replace('#','')\
+                         .replace('?','')
+                         .replace('\\','')\
+                         .replace('/','')
+                         
         url  = reverse('profile-tailnumber', kwargs={"pk": tn_spaceless})
         out += "<a href=\"%s\">%s</a>, " % (url, tn)
         
