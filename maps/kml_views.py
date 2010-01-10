@@ -24,9 +24,9 @@ def single_route_kml(request, pk, earth=True):
 
 #------------------------------------------------------------------------------
 
-def single_location_kml(request, pk):
+def single_location_kml(request, ident):
     "Returns a KMZ of all routes flown to the passed location identifier"
-    qs = Route.objects.filter(routebase__location__identifier=pk.upper())
+    qs = Route.objects.filter(routebase__location__identifier=ident.upper())
     return qs_to_time_kmz(qs)
 
 def single_type_kml(request, ty):

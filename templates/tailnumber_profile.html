@@ -1,20 +1,20 @@
 {% extends "base.html" %}
 {% load profile_lists %}
-{% block description %}{{ pk|upper }} tailnumber profile{% endblock%}
+{% block description %}{{ tn|upper }} tailnumber profile{% endblock%}
 
 {% block javascript %}
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/item_profile.css">
 {% endblock %}
 
-{% block title %}Tailnumber Profile - {{ pk|upper }}{% endblock %}
+{% block title %}Tailnumber Profile - {{ tn|upper }}{% endblock %}
 
 
 {% block canvas %}
 
-<h1>{{ pk|upper }}</h1>
+<h1>{{ tn|upper }}</h1>
 
 {% ifnotequal t_flights 0 %}
-<br><a href="{% url s-tailnumber-kml pk %}">View all flights in this tailnumber with Google Earth</a>
+<br><a href="{% url s-tailnumber-kml tn %}">View all flights in this tailnumber with Google Earth</a>
 {% endifnotequal %}
 
 

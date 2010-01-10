@@ -85,28 +85,24 @@ from route.models import Route
 from django.db.models import Sum
 
 @render_to('tailnumber_profile.html')
-def tailnumber_profile(request, pk):
+def tailnumber_profile(request, tn):
     
     types = Plane.objects\
-                 .filter(tailnumber__iexact=pk)\
+                 .filter(tailnumber__iexact=tn)\
                  .values_list('type', flat=True)\
                  .exclude(type="")\
                  .order_by()\
                  .distinct()
     
-    users = User.objects\
-                .filter(profile__social=True)\
-                .filter(flight__plane__tailnumber__iexact=pk)\
-                .order_by()\
-                .distinct()
+    users = Plane.get_profiles(tn, 'tailnumber')
     
     t_hours = Flight.objects\
-                    .filter(plane__tailnumber__iexact=pk)\
+                    .filter(plane__tailnumber__iexact=tn)\
                     .aggregate(s=Sum('total'))['s']
                     
-    t_flights = Flight.objects.filter(plane__tailnumber__iexact=pk).count()
+    t_flights = Flight.objects.filter(plane__tailnumber__iexact=tn).count()
     
-    routes = Route.objects.filter(flight__plane__tailnumber=pk)
+    routes = Route.objects.filter(flight__plane__tailnumber=tn)
     airports = Location.objects\
                        .filter(routebase__route__in=routes,
                                loc_class__lte=2)\
@@ -117,22 +113,18 @@ def tailnumber_profile(request, pk):
     return locals()
 
 @render_to('type_profile.html')
-def type_profile(request, pk):
+def type_profile(request, ty):
     
-    users = User.objects\
-                .filter(profile__social=True)\
-                .filter(flight__plane__type__iexact=pk)\
-                .order_by()\
-                .distinct()
+    users = Plane.get_profiles(ty, 'type')
     
     t_hours = Flight.objects\
-                    .filter(plane__type__iexact=pk)\
+                    .filter(plane__type__iexact=ty)\
                     .aggregate(s=Sum('total'))['s'] 
     
-    t_flights = Flight.objects.filter(plane__type__iexact=pk).count()
+    t_flights = Flight.objects.filter(plane__type__iexact=ty).count()
     
     u_airports = Location.objects\
-                         .filter(routebase__route__flight__plane__type__iexact=pk,
+                         .filter(routebase__route__flight__plane__type__iexact=ty,
                                  loc_class__lte=2)\
                          .order_by()\
                          .distinct()\
@@ -140,7 +132,7 @@ def type_profile(request, pk):
     
     tailnumbers = Plane.objects\
                        .values_list('tailnumber', flat=True)\
-                       .filter(type__iexact=pk)\
+                       .filter(type__iexact=ty)\
                        .order_by()\
                        .distinct()
     

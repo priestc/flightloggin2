@@ -1,21 +1,21 @@
 {% extends "base.html" %}
 {% load profile_lists %}
-{% block description %}{{ pk|upper }} type profile{% endblock%}
+{% block description %}{{ ty|upper }} type profile{% endblock%}
 
 {% block javascript %}
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/item_profile.css">
 {% endblock %}
 
-{% block title %}Type Profile - {{ pk|upper }}{% endblock %}
+{% block title %}Type Profile - {{ ty|upper }}{% endblock %}
 
 
 {% block canvas %}
 
-<h1>{{ pk|upper }}</h1>
+<h1>{{ ty|upper }}</h1>
 {{manufacturers|join:", "}}
 
 {% ifnotequal t_flights 0 %}
-<br><a href="{% url s-type-kml pk %}">View all flights in this type with Google Earth</a>
+<br><a href="{% url s-type-kml ty %}">View all flights in this type with Google Earth</a>
 {% endifnotequal %}
 
 

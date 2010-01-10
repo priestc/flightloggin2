@@ -1,20 +1,20 @@
 {% extends "base.html" %}
 {% load profile_lists %}
-{% block description %}{{ loc.name }} - {{ loc.location_summary }} - {{ pk|upper }} location profile{% endblock%}
+{% block description %}{{ loc.name }} - {{ loc.location_summary }} - {{ ident|upper }} location profile{% endblock%}
 
 {% block javascript %}
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/item_profile.css">
 {% endblock %}
 
-{% block title %}{{ lc|capfirst }} Profile - {{ pk|upper }}{% endblock %}
+{% block title %}{{ lc|capfirst }} Profile - {{ ident|upper }}{% endblock %}
 
 
 {% block canvas %}
 
-<h1>{{ pk|upper }}</h1>
+<h1>{{ ident|upper }}</h1>
 <strong>{{ loc.name }} - {{ loc.location_summary }}</strong>
 {% ifnotequal t_flights 0 %}
-<br><a href="{% url s-location-kml pk|upper %}">View all flights to this {{ lc }} with Google Earth</a>
+<br><a href="{% url s-location-kml ident|upper %}">View all flights to this {{ lc }} with Google Earth</a>
 {% endifnotequal %}
 <table class="main">
     <tr>

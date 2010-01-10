@@ -7,23 +7,26 @@ register = template.Library()
 
 
 @register.filter(name='list_users')
-def list_users(users):
+def list_users(profiles):
     "Lists all users, with an appropriate link and link color"
     
-    if not users:
+    if not profiles:
         return mark_safe("<em>None</em>")
     
     out = "" 
 
-    for user in users:
-        if user.get_profile().logbook_share:
-            url = reverse('logbook', kwargs={"username": user.username})
+    for user in profiles:
+        username = user['user__username']
+        share = user['logbook_share']
+        
+        if share:
+            url = reverse('logbook', kwargs={"username": username})
             out += """<a href="%s" title="Click to see this user's logbook">%s</a>"""\
-                    % (url, user.username)
+                    % (url, username)
                
         else:
             out += """<a title="This user does not allow others to view his/her logbook"
-                         class="noshare" href="">%s</a>""" % user.username
+                         class="noshare" href="">%s</a>""" % username
         
         out += ", "
 
@@ -44,7 +47,7 @@ def list_airports(airports):
     out = ""
     for a in airports:
         ident = a.identifier
-        url  = reverse('profile-airport', kwargs={"pk": ident})
+        url  = reverse('profile-airport', kwargs={"ident": ident})
         out += "<a href=\"%s\" title=\"%s\">%s</a>, "\
                      % (url, a.location_summary(), ident)
         
@@ -70,7 +73,7 @@ def list_airports(tailnumbers):
                          .replace('\\','')\
                          .replace('/','')
                          
-        url  = reverse('profile-tailnumber', kwargs={"pk": tn_spaceless})
+        url  = reverse('profile-tailnumber', kwargs={"tn": tn_spaceless})
         out += "<a href=\"%s\">%s</a>, " % (url, tn)
         
     ## remove the last trailing ", "
@@ -94,7 +97,7 @@ def list_types(types):
                          .replace('\\','')\
                          .replace('/','')
                          
-        url  = reverse('profile-type', kwargs={"pk": ty_spaceless})
+        url  = reverse('profile-type', kwargs={"ty": ty_spaceless})
         out += "<a href=\"%s\">%s</a>, " % (url, ty)
         
     ## remove the last trailing ", "
@@ -124,7 +127,7 @@ def routebase_row(rb):
         view = "profile-navaid"
         right = "<td>%s</td>" % rb.location.location_summary()
     
-    url = reverse(view, kwargs={"pk": ident})
+    url = reverse(view, kwargs={"ident": ident})
     out = "<td><a href=\"%s\">%s</a></td>\n" % (url, ident)
     out += right
     

@@ -69,7 +69,6 @@ class Plane(models.Model, GoonMixin):
             from share.middleware import share
             self.user = share.get_display_user()
         
-        print self.tailnumber
         super(Plane, self).save(*args, **kwargs)
     
     @classmethod    
@@ -82,18 +81,25 @@ class Plane(models.Model, GoonMixin):
                    .filter(plane__tailnumber=tailnumber).distinct()
                    
     @classmethod
-    def get_users_type(cls, ty):
-        """Returns the users who also have flown in this type"""
+    def get_profiles(cls, val, field):
+        """
+        Returns the profiles of the users who have flown in this
+        type/tail/whatever
+        """
         
-        from django.contrib.auth.models import User
-        return User.objects\
-                   .filter(profile__social=True)\
-                   .filter(plane__type=ty).distinct()
+        kwarg = {"user__flight__plane__%s__iexact" % field: val}
+        
+        from profile.models import Profile
+        return Profile.objects\
+                   .filter(**kwarg)\
+                   .filter(social=True)\
+                   .values('user__username', 'user__id', 'logbook_share')\
+                   .order_by('user__username')\
+                   .distinct()
     
     @classmethod
     def regex_tail_type(cls, s):
         reg = '[^' + cls.plane_regex[1:]
-        import re
         return re.sub(reg, '', s or "")
                    
     def clean_tailnumber(self):

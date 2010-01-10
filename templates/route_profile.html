@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 {% load profile_lists %}
-{% block description %}{{ pk|upper }} route profile{% endblock%}
+{% block description %}{{ r|upper }} route profile{% endblock%}
 
 {% block javascript %}
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/item_profile.css">
 {% endblock %}
 
-{% block title %}Route Profile - {{ pk|upper }}{% endblock %}
+{% block title %}Route Profile - {{ r|upper }}{% endblock %}
 
 
 {% block canvas %}
 
-<h1>{{ pk|upper }}</h1>
+<h1>{{ r|upper }}</h1>
 
 <table id="route_table">
 {% for rb in rbs %}

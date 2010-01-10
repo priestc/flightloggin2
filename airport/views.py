@@ -41,7 +41,7 @@ def update_airports(request):
 
 
 @render_to('location_profile.html')
-def airport_profile(request, navaid, pk):
+def airport_profile(request, navaid, ident):
     
     from plane.models import Plane
     from logbook.models import Flight
@@ -49,7 +49,7 @@ def airport_profile(request, navaid, pk):
     from django.http import Http404
     
     try:
-        loc = Location.objects.filter(loc_class__in=(1,2), identifier=pk)[0]
+        loc = Location.objects.filter(loc_class__in=(1,2), identifier=ident)[0]
     except IndexError:
         #t_flights = 0
         #return locals()
@@ -62,26 +62,23 @@ def airport_profile(request, navaid, pk):
         raise Http404
         
     
-    users = User.objects\
-                .filter(profile__social=True)\
-                .filter(flight__route__routebase__location__identifier=pk)\
-                .distinct()
+    users = Location.get_profiles(ident, 'identifier')
     
     tailnumbers = Plane.objects\
                        .exclude(tailnumber="")\
                        .values_list('tailnumber', flat=True)\
-                       .filter(flight__route__routebase__location__identifier=pk)\
+                       .filter(flight__route__routebase__location__identifier=ident)\
                        .order_by('tailnumber')\
                        .distinct()
                        
     t_flights = Flight.objects\
-                      .filter(route__routebase__location__identifier=pk)\
+                      .filter(route__routebase__location__identifier=ident)\
                       .count()
                       
     lc = loc.get_loc_class_display().lower()
     
     return locals()
     
-def location_redirect(request, pk):
-    url = reverse('profile-airport', kwargs={'pk': pk})
+def location_redirect(request, ident):
+    url = reverse('profile-airport', kwargs={'ident': ident})
     return HttpResponseRedirect(url)

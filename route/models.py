@@ -116,6 +116,24 @@ class Route(models.Model):
     ##################################
     
     @classmethod
+    def get_profiles(cls, val, field):
+        """
+        Returns the profiles of the users who have flown in this
+        route
+        """
+        
+        kwarg = {"user__flight__route__%s__iexact" % field: val}
+        
+        from profile.models import Profile
+        return Profile.objects\
+                   .filter(**kwarg)\
+                   .filter(social=True)\
+                   .values('user__username', 'user__id', 'logbook_share')\
+                   .order_by('user__username')\
+                   .distinct()
+    
+    
+    @classmethod
     def render_custom(cls, user):
         qs = cls.objects.filter(flight__user=user)\
                     .filter(routebase__location__loc_class=3)

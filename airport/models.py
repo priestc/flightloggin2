@@ -10,7 +10,7 @@ from main.queryset_manager import GeoQuerySetManager
 
 from main.mixins import GoonMixin
 
-class Location(models.Model):
+class Location(models.Model, GoonMixin):
 
     ## add custom filters to custom manager
     from queryset_manager import LocationQuerySet as QuerySet
@@ -44,9 +44,21 @@ class Location(models.Model):
         return u"%s" % self.identifier
     
     @classmethod
-    def goon(cls, *args, **kwargs):
-        from annoying.functions import get_object_or_None
-        return get_object_or_None(cls,  *args, **kwargs)
+    def get_profiles(self, val, field):
+        """
+        Returns the profiles of the users who have flown in this
+        type/tail/whatever
+        """
+                   
+        from profile.models import Profile
+        kwarg = {"user__flight__route__routebase__location__%s__iexact" % field: val}
+        
+        return Profile.objects\
+                      .filter(social=True)\
+                      .filter(**kwarg)\
+                      .values('user__username', 'user__id', 'logbook_share')\
+                      .order_by('user__username')\
+                      .distinct()
         
     def region_name(self):
         if self.region:
