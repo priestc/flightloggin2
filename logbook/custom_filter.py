@@ -66,44 +66,69 @@ def make_filter_kwargs(self, qs):
 def make_filter_form(user):
     from plane.models import Plane
     
-    types = Plane.objects.filter(user=user).values_list('type',
-                                            flat=True).order_by().distinct()
-                                          
-    tt = [(t,t) for i,t in enumerate(types)]
-    tt.insert(0, ("", "-------"))
+    # all types the user has flown made into a list of strings
+    types_qs = Plane.objects\
+                 .filter(user=user)\
+                 .values_list('type',flat=True)\
+                 .order_by()\
+                 .distinct()
+    
+    # make that list of types into a list of tuples that can be made into a
+    # select box for the form
+    types = [(t,t) for i,t in enumerate(types_qs)]
+    types.insert(0, ("", "-------"))
     
     from plane.constants import CATEGORY_CLASSES
     CATEGORY_CLASSES = dict(CATEGORY_CLASSES)
     
-    cat_classes = Plane.objects.filter(user=user).values_list('cat_class',
-                                            flat=True).order_by().distinct()
+    # same but now for cat classes
+    cat_classes = Plane.objects\
+                       .filter(user=user)\
+                       .values_list('cat_class', flat=True)\
+                       .order_by()\
+                       .distinct()
                                             
     cc = [(t,CATEGORY_CLASSES[t]) for i,t in enumerate(cat_classes)]
     cc.insert(0, ("", "-------"))
     
+    dp = {"class": "date_picker"}
     operators = ( (0, "="), (1, ">"), (2, "<") )
-    fields = {'plane__tags': forms.CharField(required=False),
+    
+    fields = {
+              'plane__tags':       forms.CharField(required=False),
               'plane__tailnumber': forms.CharField(required=False),
-              'plane__type': forms.ChoiceField(choices=tt, required=False),
-              'plane__cat_class': forms.ChoiceField(choices=cc, required=False),
-              'start_date': forms.DateField(label="Start", required=False,
-                    widget=forms.TextInput(attrs={"class": "date_picker"})),
-              'end_date': forms.DateField(label="End", required=False,
-                    widget=forms.TextInput(attrs={"class": "date_picker"})),
-              'last_flights': forms.IntegerField(required=False,
-                    widget=forms.TextInput(attrs={"class": "small_picker"})),
-              'person': forms.CharField(required=False),
-              'remarks': forms.CharField(required=False),
+              'plane__type':       forms.ChoiceField(choices=types,
+                                                     required=False),
+              'plane__cat_class':  forms.ChoiceField(choices=cc,
+                                                     required=False),
+              'start_date':        forms.DateField(label="Start",
+                                             required=False,
+                                             widget=forms.TextInput(attrs=dp)),
+              'end_date':          forms.DateField(label="End",
+                                            required=False,
+                                            widget=forms.TextInput(attrs=dp)),
+                                            
+              'person':            forms.CharField(required=False),
+              'remarks':           forms.CharField(required=False),
               'route__fancy_rendered': forms.CharField(required=False,
                     label="Route"),
              }
              
     for field in FILTER_FIELDS:
-        d = {field: forms.FloatField(label=FIELD_ABBV[field], required=False,
-             widget=forms.TextInput(attrs={"class": "small_picker"})), 
-             "%s_op" % field: forms.ChoiceField(choices=operators, required=False,
-             widget=forms.Select(attrs={"class": "op_select"})),
+        d = {
+                field:          forms.FloatField(label=FIELD_ABBV[field],
+                                             required=False,
+                                             widget=forms.TextInput(
+                                             attrs={"class": "small_picker"})
+                                            ),
+                                              
+             "%s_op" % field:   forms.ChoiceField(choices=operators,
+                                                  required=False,
+                                                  widget=forms.Select(
+                                                  attrs={"class": "op_select"})
+                                                 ),
              }
+             
         fields.update(d)
         
     FilterForm = type('FilterForm', (forms.BaseForm,), { 'base_fields': fields })

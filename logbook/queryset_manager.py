@@ -352,7 +352,7 @@ class FlightQuerySet(QuerySet, UserMixin):
             return getattr(self, cn)(*args, **kwargs)
        
     def custom_logbook_view(self, ff):
-        #assert ff.is_valid(), ff.errors
+        assert ff.is_valid(), ff.errors
         
         self = ff.make_filter_kwargs(self)
         return self
