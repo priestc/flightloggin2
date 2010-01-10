@@ -17,7 +17,7 @@ def site_stats(request):
     for line in tails[:-1]:  ## the last one will be an empty string
         l = line.split(" ")
         tn = l[1]
-        url = reverse('profile-tailnumber', kwargs={"pk": tn})
+        url = reverse('profile-tailnumber', kwargs={"tn": tn})
         linked_tail += "%s <a href=\"%s\">%s</a> %s\n" % (l[0], url, tn, l[2])
         
     idents = cs.auv.split("\n")
@@ -25,7 +25,7 @@ def site_stats(request):
     for line in idents[:-1]:
         l = line.split(" ")
         ident = l[1]
-        url = reverse('profile-airport', kwargs={"pk": ident})
+        url = reverse('profile-airport', kwargs={"ident": ident})
         linked_airports += "%s <a href=\"%s\">%s</a> %s\n" % (l[0], url, ident, l[2])
     
     types = cs.most_common_type.split("\n")
@@ -33,7 +33,7 @@ def site_stats(request):
     for line in types[:-1]:
         l = line.split(" ")
         ty = l[1]
-        url = reverse('profile-type', kwargs={"pk": ty})
+        url = reverse('profile-type', kwargs={"ty": ty})
         linked_mct += "%s <a href=\"%s\">%s</a> %s\n" % (l[0], url, ty, l[2])
     
     return locals()
