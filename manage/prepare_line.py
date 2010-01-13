@@ -376,8 +376,8 @@ class FlightFixer(Fixer):
                     "xc":              self.proper_mapper('xc'),
                     
                     "app":             self.proper_mapper('app'),
-                    "day_l":           self.proper_mapper('night_l'),
-                    "night_l":         self.proper_mapper('day_l'),
+                    "day_l":           self.proper_mapper('day_l'),
+                    "night_l":         self.proper_mapper('night_l'),
                     
                     "remarks":         self.processor('remarks'),
                     "person":          self.processor('person'),
