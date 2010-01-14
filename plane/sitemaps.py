@@ -19,7 +19,7 @@ class TailnumberSitemap(Sitemap):
         item = item.replace(' ','')
         from django.core.urlresolvers import reverse
         try:
-            return reverse("profile-tailnumber", kwargs={"pk": item})
+            return reverse("profile-tailnumber", kwargs={"tn": item})
         except:
             return ""
         
@@ -42,6 +42,6 @@ class TypeSitemap(Sitemap):
         item = item.replace(' ','')
         from django.core.urlresolvers import reverse
         try:
-            return reverse("profile-type", kwargs={"pk": item})
+            return reverse("profile-type", kwargs={"ty": item})
         except:
             return ""
