@@ -17,13 +17,15 @@
 							{# only bound forms have the id attribute, so we must manually render this field#}
 						</td>
 					</tr>
-		
+					
+		            <tr>
+				        <td id="{{edit_or_new}}_error_cell">{{form.errors}}</td>
+				    </tr>
 			
 					<tr class="date_field">
 						<td>{{ form.date.label_tag }}</td>
 						<td>{{ form.date }}<br>{{ form.date.errors }}</td>
 					</tr>
-			
 			
 					<tr class="route_field">
 						<td>{{ form.route.label_tag }}</td>

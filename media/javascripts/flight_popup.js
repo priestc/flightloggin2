@@ -6,7 +6,7 @@ var todays_date = d.getFullYear() + "-" + month + "-" + day;
 
 //////////////////////////////////////////////////////////////////
 
-function prepare_new_flight(wipe) {					    //prepares the new entry popup
+function prepare_new(wipe) {					    //prepares the new entry popup
 
 	if(wipe) {
     	wipe_clean();
@@ -18,7 +18,7 @@ function prepare_new_flight(wipe) {					    //prepares the new entry popup
 	$("#new_buttons").show();
 }
 
-function prepare_edit_flight(wipe) {				//prepares the new entry popup
+function prepare_edit(wipe) {				//prepares the new entry popup
 	if(wipe)
 		wipe_clean();
 	
@@ -38,17 +38,6 @@ $(document).click(close_all_small_popups);
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 $(document).ready(function() {
-	
-	///////////////////////////////////////////
-	
-	if(ERROR == 'new') {
-	    prepare_new_flight(false)
-	    fire_popup("popup");
-	}
-	else if (ERROR == 'edit') {
-	    prepare_edit_flight(false)
-	    fire_popup("popup");
-	}
 	
 	$("#id_new-date, .date_picker").datepicker({	// add the date pickers
 			dateFormat: "yy-mm-dd",
@@ -107,7 +96,7 @@ $(document).ready(function() {
 	////////////////////////////////////////////////////////
 	
 	$("#new_flight_button").click(function(event) {			//make the popup when the new flight button is clicked
-		prepare_new_flight(true);
+		prepare_new(true);
 		fire_popup();
 	});
 	
@@ -134,7 +123,7 @@ $(document).ready(function() {
     	//make the edit popup when the link for it is clicked
 		wipe_clean();
 		close_all_small_popups();
-		prepare_edit_flight(true);
+		prepare_edit(true);
 		fill_in_flight(this.id);
 		fire_popup();
 	});

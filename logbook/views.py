@@ -24,6 +24,7 @@ def logbook(request, page=0):
     if request.POST.get('submit', "") == "Submit New Flight":
         flight = Flight(user=request.display_user)
         form = FlightForm(request.POST, instance=flight, prefix="new")
+        edit_or_new = "new"
         
         if form.is_valid():
             form.save()
@@ -32,27 +33,22 @@ def logbook(request, page=0):
             from django.core.urlresolvers import reverse
             url = reverse('logbook', kwargs={"username": request.display_user.username})
             return HttpResponseRedirect(url)
-        else:
-            ERROR = "'new'"
             
     elif request.POST.get('submit', "") == "Edit Flight":
         flight_id = request.POST['id']
         flight = Flight(pk=flight_id, user=request.display_user)
-        
         form = FlightForm(request.POST, instance=flight, prefix="new")
+        edit_or_new = "edit"
         
         if form.is_valid():
             form.save()
             from backup.models import edit_logbook
             edit_logbook.send(sender=request.display_user)
             return HttpResponseRedirect(request.path)
-        else:
-            ERROR = "'edit'"
             
     elif request.POST.get('submit', "") == "Delete Flight":
         flight_id = request.POST['id']
-        Flight(pk=flight_id, user=request.display_user).delete()           
-        ERROR = 'false'
+        Flight(pk=flight_id, user=request.display_user).delete()
         return HttpResponseRedirect(request.path)
         
     ##############################################################

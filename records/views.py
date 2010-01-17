@@ -31,6 +31,8 @@ def locations(request):
     
     if "New" in request.POST.get('submit', "DERP"):
         form=CustomForm(request.POST)
+        edit_or_new = 'new'
+        
         if form.is_valid():
             point = get_point(form.cleaned_data['coordinates'])
             custom = form.save(commit=False)
@@ -53,6 +55,8 @@ def locations(request):
                                       user=request.display_user,
                                       pk=request.POST.get('id', None) )
         form=CustomForm(request.POST, instance=custom)
+        edit_or_new = 'edit'
+        
         if form.is_valid():
             point = get_point(form.cleaned_data['coordinates'])
             custom = form.save(commit=False)
@@ -70,7 +74,9 @@ def locations(request):
             
     elif "Delete" in request.POST.get('submit', "DERP"):
         custom = Location.objects.get(loc_class=3,
-                        user=request.display_user, pk=request.POST.get('id', None) )
+                                      user=request.display_user,
+                                      pk=request.POST.get('id', None)
+                                     )
         custom.delete()
         changed = True
         form = CustomForm()

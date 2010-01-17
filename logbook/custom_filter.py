@@ -111,7 +111,7 @@ def make_filter_form(user):
               'person':            forms.CharField(required=False),
               'remarks':           forms.CharField(required=False),
               'route__fancy_rendered': forms.CharField(required=False,
-                    label="Route"),
+                                                       label="Route"),
              }
              
     for field in FILTER_FIELDS:

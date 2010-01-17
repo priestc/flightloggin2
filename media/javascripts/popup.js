@@ -1,6 +1,12 @@
 function wipe_clean() {
+
+    // uncheck all checkboxes and clear all input boxes
 	$("#popup input[type=text], #popup textarea, #popup select").val("");
 	$("#popup input[type=checkbox]").attr("checked", "");
+	
+	// remove the error messages
+	$("#popup td#new_error_cell").text("");
+	$("#popup td#edit_error_cell").text("");
 }
 
 function fire_popup() {
@@ -76,7 +82,20 @@ $(document).ready(function() {
 	$("#close_x").click(function(event) {
 		$("#popup").hide("slow");
 	});
+	
+	// fire popup if an error is detected
+	if( $("td#new_error_cell").text() != "" )  {     
+	    prepare_new();
+	    fire_popup();
+	}
+	
+	if( $("td#edit_error_cell").text() != "") {
+	    prepare_edit();
+	    fire_popup();
+	}
 });
+
+
 
 
 

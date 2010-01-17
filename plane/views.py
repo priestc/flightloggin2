@@ -16,6 +16,7 @@ def planes(request):
     if request.POST.get('submit') == "Create New Plane":
         plane = Plane(user=request.display_user)
         form = PopupPlaneForm(request.POST, instance=plane)      
+        edit_or_new = "new"
         
         if form.is_valid():
             plane=form.save(commit=False)
@@ -26,6 +27,7 @@ def planes(request):
     elif request.POST.get('submit') == "Submit Changes":
         plane = Plane.objects.get(pk=request.POST.get("id"))
         form = PopupPlaneForm(request.POST, instance=plane)
+        edit_or_new = "edit"
         
         if form.is_valid():
             plane=form.save(commit=False)

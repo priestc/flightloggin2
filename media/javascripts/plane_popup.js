@@ -13,7 +13,7 @@ function fill_in_plane(dom_id) {
 }
 
 
-function prepare_new_plane(wipe) {
+function prepare_new(wipe) {
 	if(wipe)
 		wipe_clean();
 	
@@ -22,7 +22,7 @@ function prepare_new_plane(wipe) {
 	$("#edit_plane_buttons").hide();
 }
 
-function prepare_edit_plane(wipe) {
+function prepare_edit(wipe) {
 	if(wipe)
 		wipe_clean();
 	
@@ -34,13 +34,13 @@ function prepare_edit_plane(wipe) {
 $(document).ready(function() {
 	$("#new_plane").click(function(){
 		wipe_clean();
-		prepare_new_plane(true);
+		prepare_new(true);
 		fire_popup("popup");
 	})
 	
 	$("a.popup_link").click(function(event){
 		wipe_clean();
-		prepare_edit_plane(true);
+		prepare_edit(true);
 		fill_in_plane(this.id);
 		fire_popup("popup");
 	});

@@ -11,8 +11,8 @@ class PopupPlaneForm(ModelForm):
     
     def clean(self):
         
-        self.cleaned_data['tailnumber'] = \
-            self.cleaned_data['tailnumber'].replace(' ','')
+        if " " in self.cleaned_data.get('tailnumber'):
+            raise forms.ValidationError("Spaces not allowed in Tailnumber")
         
         return self.cleaned_data
         

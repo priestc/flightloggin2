@@ -5,7 +5,7 @@
 
 {% block javascript %}
     <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/popup.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/custom_popup.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/location_popup.js"></script>
 	<script type="text/javascript">
 
     
@@ -97,6 +97,9 @@ accurately to differentiate between flights that quality for Point to Point XC.
 					<td>
 						<input type="hidden" name="id" id="id_id" value="" />
 					</td>
+				</tr>
+				<tr>
+				    <td id="{{edit_or_new}}_error_cell">{{form.errors}}</td>
 				</tr>
 				<tr>
 					<td>{{ form.identifier.label_tag }}</td>

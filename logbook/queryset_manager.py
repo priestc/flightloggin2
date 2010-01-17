@@ -281,6 +281,10 @@ class FlightQuerySet(QuerySet, UserMixin):
            
         if cn == "total_s" or cn == "total":
             return self.sim(False).total(*args, **kwargs)
+        
+        if cn == 'day':
+            return self.sim(False).total(*args, **kwargs) - \
+                     self.sim(False).night(*args, **kwargs)
             
         elif cn == "sim":
             return self.sim().total(*args, **kwargs)

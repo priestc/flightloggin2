@@ -12,7 +12,7 @@ function fill_in_custom(dom_id) {
 }
 
 
-function prepare_new_custom(wipe) {
+function prepare_new(wipe) {
 	if(wipe)
 		wipe_clean();
 	
@@ -21,7 +21,7 @@ function prepare_new_custom(wipe) {
 	$("#edit_buttons").hide();
 }
 
-function prepare_edit_custom(wipe) {
+function prepare_edit(wipe) {
 	if(wipe)
 		wipe_clean();
 	
@@ -33,13 +33,13 @@ function prepare_edit_custom(wipe) {
 $(document).ready(function() {
     
     $("a.custom_click").click(function() {
-        prepare_edit_custom(true);
+        prepare_edit(true);
         fill_in_custom(this.id);
         fire_popup();
     });
     
     $("#new_custom").click(function() {
-        prepare_new_custom(true);
+        prepare_new(true);
         fire_popup();
     });
     
