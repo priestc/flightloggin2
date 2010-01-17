@@ -71,6 +71,8 @@ def schedule(request, schedule):
        one being passed as 'schedule'
     """
     
+    test = request.GET.get('test') == 'true'
+    
     from django.contrib.auth.models import User
     if schedule == 'weekly':
         users = User.objects.filter(profile__backup_freq=1)
@@ -87,19 +89,29 @@ def schedule(request, schedule):
                                     userstoday__date=today
                                    )
     
-    ret = "%s - %s \n\n" % (schedule, datetime.datetime.now())    
+    ret = "%s - %s\n\n" % (schedule, datetime.datetime.now())    
     for user in users:
-        em = EmailBackup(user, auto=True)
-        result = em.send(test=False)
-        ret += "%s [%s]\n" % (user.username, result)
+        try:
+            em = EmailBackup(user, auto=True)
+        except Exception, e:
+            ## do not raise exception of a single user's email can't be made,
+            ## instead print the error message to the log
+            ret +=  "ERROR: %s - %s" % (self.user, e)
+        
+        else:
+            result = em.send(test=test)
+            ret += "%s [%s]\n" % (user.username, result)
     
     
-    return HttpResponse(ret, mimetype="text/plain")
+    r = HttpResponse(ret, mimetype="text/plain")
+    r['Content-Disposition'] = 'attachment; filename=%s.txt' % datetime.date.today()
+
+    return r
 
 ##
 ## crontab:
 ##
-#30 5  1         * * wget http://flightlogg.in/schedule-monthly.py?sk=
-#30 4  1,7,14,21 * * wget http://flightlogg.in/schedule-weekly.py?sk=
-#30 3  1,14      * * wget http://flightlogg.in/schedule-biweekly.py?sk=
-#59 23 *         * * wget http://flightlogg.in/schedule-daily.py?sk=
+#30 5  1         * * wget -O - http://flightlogg.in/schedule-monthly.py?sk= > /root/month
+#30 4  1,7,14,21 * * wget -O - http://flightlogg.in/schedule-weekly.py?sk= > /root/week
+#30 3  1,14      * * wget -O - http://flightlogg.in/schedule-biweekly.py?sk= > /root/biweek
+#59 23 *         * * wget -O - http://flightlogg.in/schedule-daily.py?sk= > /root/week

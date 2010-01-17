@@ -149,8 +149,9 @@ class EmailBackup(object):
         
         if not test:
             sent = em.send()
-            
-        return "e-mail sent to: %s" % self.addr
+            return "e-mail sent to: %s" % (self.user, self.addr)
+        else:
+            return "test: %s" % self.user
 
 
 
