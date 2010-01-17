@@ -25,5 +25,5 @@ class LocationSitemap(Sitemap):
             view = "profile-navaid"
             navaid = True
             
-        return reverse(view, kwargs={"pk": item.get('identifier')})
+        return reverse(view, kwargs={"ident": item.get('identifier')})
 
