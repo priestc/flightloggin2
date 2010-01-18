@@ -14,10 +14,12 @@ class BaseImport(object):
     class InvalidCSVError(Exception):
         pass
     
-    def __init__(self, user, file_):
+    def __init__(self, user, file_, force_tsv=False):
         
         self.user = user
         self.file = file_
+        
+        self.force_tsv = force_tsv
             
         if not self.file:
             raise self.NoFileError
@@ -49,9 +51,12 @@ class BaseImport(object):
     def get_dict_reader(self):
         """makes a dictreader that is seek'd to the first valid line of data"""
         
-        dialect = self.get_dialect()
-        if dialect.delimiter not in (",", "\t"):
-            dialect.delimiter = "\t"
+        if not self.force_tsv:
+            dialect = self.get_dialect()
+            if dialect.delimiter not in (",", "\t"):
+                dialect.delimiter = "\t"
+        else:
+            dialect = csv.excel_tab
                
         try:
             reader = csv.reader(self.file, dialect)

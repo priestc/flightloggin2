@@ -18,6 +18,8 @@ def export(request):
 def import_v(request):
 
     fileform = ImportForm()
+    
+    ## p=file, previous=dict with some metadata
     p, previous = get_last(request.display_user.id)
     
     if not request.method == 'POST':
@@ -33,15 +35,19 @@ def import_v(request):
         #the file form was used
         f = request.FILES.get('file')
         url = None
+        force_tsv = False
         
     elif request.POST.get('import_u') or request.POST.get('preview_u'):
         # the PHP backup thing was used, may throw errors
         url = request.POST.get('url')
         ba = PHPBackup(url)
         f = None
+        force_tsv = True
+        
     else:
         url = None
         f = None
+        force_tsv = False
     
     locs = {}
     try:
@@ -52,7 +58,7 @@ def import_v(request):
             save_php(f, request.display_user)
         
         #now it's go time   
-        locs = do_import(preview, request.display_user)
+        locs = do_import(preview, request.display_user, force_tsv)
         
     except BaseImport.InvalidCSVError:
         Error = "Not a valid CSV file"
@@ -77,7 +83,7 @@ def import_v(request):
     return locs2
     
     
-def do_import(preview, user):
+def do_import(preview, user, force_tsv):
     """ An auxiliary view function. Returns variables that will be added to the
         template context, but this function does not take a request object
     """   
@@ -86,10 +92,10 @@ def do_import(preview, user):
     #######################################################
 
     if not preview:
-        im = DatabaseImport(user, f)
+        im = DatabaseImport(user, f, force_tsv)
         
     else:
-        im = PreviewImport(user, f)
+        im = PreviewImport(user, f, force_tsv)
     
     # do the actual import routine now    
     im.action()

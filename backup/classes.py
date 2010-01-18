@@ -38,6 +38,9 @@ class Backup(object):
             tmp=[]
             for field in BACKUP_FIELDS:
                 try:
+                    ## nested try blocks are ugy, but this si the only
+                    ## way to have a way to make dates and unicode characters
+                    ## both made into strings
                     try:
                         s = str(flight.column(field))
                     except:
