@@ -38,7 +38,10 @@ class Backup(object):
             tmp=[]
             for field in BACKUP_FIELDS:
                 try:
-                    s = flight.column(field).encode("utf-8", "ignore")
+                    try:
+                        s = str(flight.column(field))
+                    except:
+                        s = flight.column(field).encode("utf-8", "ignore")
                     tmp.append(s)
                 except Exception, e:
                     tmp.append("error (%s): %s" % (e, flight.id))
