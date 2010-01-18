@@ -35,14 +35,13 @@ class Backup(object):
         
         flights = Flight.objects.filter(user=self.user)
         for flight in flights:
-            print flight.id
             tmp=[]
             for field in BACKUP_FIELDS:
                 try:
-                    s = str(flight.column(field))
-                except:
                     s = flight.column(field).encode("utf-8", "ignore")
-                tmp.append(s)
+                    tmp.append(s)
+                except Exception, e:
+                    tmp.append("error (%s): %s" % (e, flight.id))
                 
             writer.writerow(tmp)
         
