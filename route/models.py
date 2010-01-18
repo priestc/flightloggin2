@@ -97,7 +97,7 @@ class Route(models.Model):
     total_line_all =  models.FloatField(null=True, default=0)
     total_line_land = models.FloatField(null=True, default=0)
     
-    p2p = models.BooleanField()
+    p2p = models.BooleanField(default=False)
     
     # a queryset of all landing points and all points, internal only
     land_points = None

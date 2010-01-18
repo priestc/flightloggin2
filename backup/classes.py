@@ -35,6 +35,7 @@ class Backup(object):
         
         flights = Flight.objects.filter(user=self.user)
         for flight in flights:
+            print flight.id
             tmp=[]
             for field in BACKUP_FIELDS:
                 try:
