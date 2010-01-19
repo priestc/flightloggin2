@@ -198,6 +198,7 @@ class Plane(models.Model, GoonMixin):
         return self.cat_class == 4
     
     def is_sim(self):
+        """ Is this plane a sim, ftd or pcatd? (cat_class greater than 15) """
         return self.cat_class >= 15
 
 #tagging.register(Plane)

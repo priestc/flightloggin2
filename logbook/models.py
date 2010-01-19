@@ -262,7 +262,7 @@ class Flight(models.Model):
             
         ######################################
         
-        elif cn == 'day':
+        elif cn == 'day' and not self.plane.is_sim():
             ret = self.total - self.night
             if ret < 0:
                 ret = 0
