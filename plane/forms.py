@@ -9,12 +9,12 @@ class PopupPlaneForm(ModelForm):
     class Meta:
         model = Plane
     
-    def clean(self):
+    def clean_tailnumber(self):
         
         if " " in self.cleaned_data.get('tailnumber'):
             raise forms.ValidationError("Spaces not allowed in Tailnumber")
         
-        return self.cleaned_data
+        return self.cleaned_data['tailnumber']
         
 class MassPlaneForm(ModelForm):
     description = CharField(required=False,
