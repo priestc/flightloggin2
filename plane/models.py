@@ -40,6 +40,10 @@ class Plane(models.Model, GoonMixin):
     #regex that matches all tailnumbers and types
     plane_regex = r'[A-Za-z0-9-\[\]\)\(}{\.]'
     
+    @classmethod
+    def reverse_plane_regex(cls):
+        return '[^' + cls.plane_regex[1:]
+    
     def save(self, *args, **kwargs):
         """Automatically fill in make/models if they are not already supplied
            and then save the object to the database
@@ -98,9 +102,8 @@ class Plane(models.Model, GoonMixin):
                    .distinct()
     
     @classmethod
-    def regex_tail_type(cls, s):
-        reg = '[^' + cls.plane_regex[1:]
-        return re.sub(reg, '', s or "")
+    def regex_tail_type(cls, s):        
+        return re.sub(cls.reverse_plane_regex(), '', s or "")
                    
     def clean_tailnumber(self):
         """

@@ -8,7 +8,6 @@ from django.forms.util import ValidationError
 
 from models import *
 from route.forms import RouteField, RouteWidget
-from plane.forms import PlaneField
 from logbook.utils import from_minutes
 
 class BlankHourWidget(TextInput):
@@ -170,6 +169,6 @@ class FixedPlaneModelFormset(BaseModelFormSet):
 
     def add_fields(self, form, index):
         super(FixedPlaneModelFormset, self).add_fields(form, index)
-        form.fields["plane"] = PlaneField(
+        form.fields["plane"] = ModelChoiceField(
                 queryset=Plane.objects.get_empty_query_set(), required=True)
         form.fields['plane'].queryset = self.custom_queryset
