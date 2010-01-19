@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load cache %}
 
 {% block description %}{{ request.display_user.username }}'s electronic pilot logbook application{% endblock%}
 
@@ -14,16 +15,17 @@
     See how FlightLogg.in' works first hand, <a href="/demo">click here to log into the demo account!</a>    
     </div>
     {% endif %}
-{% for item in news %}
-
-    <div class="news_box">
-        <big>{{ item.title }}</big><br />
-        <small>{{ item.date|date:"l, F jS, Y" }}</small>
-        <p>
-        {{ item.text|safe|linebreaksbr }}
-        </p>
-    </div>
-
-{% endfor %}
-
+    {% cache 50000 news %}
+    
+        {% for item in news %}
+            <div class="news_box">
+                <big>{{ item.title }}</big><br />
+                <small>{{ item.date|date:"l, F jS, Y" }}</small>
+                <p>
+                {{ item.text|safe|linebreaksbr }}
+                </p>
+            </div>
+        {% endfor %}
+        
+    {% endcache %}
 {% endblock %}
