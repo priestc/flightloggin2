@@ -309,7 +309,7 @@ urlpatterns = patterns('',
     ),
     
     url(
-        r'^location-(?P<pk>[A-Z0-9-]+).html$',
+        r'^location-(?P<ident>[A-Z0-9-]+).html$',
         "airport.views.location_redirect",
                                                        name="profile-location",
     ),
