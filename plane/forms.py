@@ -16,7 +16,7 @@ def clean_tailnumber(self):
     
     ## if more than one character matches this regex, raise error
     if re.subn(Plane.reverse_plane_regex(), 'X', tn)[1] > 0:
-        raise forms.ValidationError("Invalid characters in Tailnumber")
+        raise forms.ValidationError("Invalid characters")
     
     return tn
 
@@ -29,7 +29,7 @@ def clean_type(self):
     
     ## if more than one character matches this regex, raise error
     if re.subn(Plane.reverse_plane_regex(), 'X', ty)[1] > 0:
-        raise forms.ValidationError("Invalid characters in Type")
+        raise forms.ValidationError("Invalid characters")
     
     return ty
 

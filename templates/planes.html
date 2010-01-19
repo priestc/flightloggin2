@@ -79,28 +79,33 @@
 					</td>
 				</tr>
 				<tr>
-				    <td id="{{edit_or_new}}_error_cell">{{form.errors}}</td>
+				    <td style="display: none" id="{{edit_or_new}}_error_cell">{{ form.errors }}</td>
+				</tr>
+				<tr>
+				    <td colspan="2">
+				        {{ form.non_field_errors }}
+				    </td>
 				</tr>
 				<tr>
 					<td>{{ form.tailnumber.label_tag }}<br>&nbsp;</td>
-					<td>{{ form.tailnumber }}<br>
+					<td>{{ form.tailnumber }}{{ form.tailnumber.errors|default:"<br>" }}
 					<span class="help_text">{{form.tailnumber.help_text}}</span></td>
 				</tr>
 				<tr>
 					<td>{{ form.manufacturer.label_tag }}<br>&nbsp;</td>
-					<td>{{ form.manufacturer }}<br>
+					<td>{{ form.manufacturer }}{{ form.manufacturer.errors|default:"<br>" }}
 					<span class="help_text">{{form.manufacturer.help_text}}</span></td>
 				</tr>
 			
 				<tr>
 					<td>{{ form.type.label_tag }}<br>&nbsp;</td>
-					<td>{{ form.type }}<br>
+					<td>{{ form.type }}{{ form.type.errors|default:"<br>" }}
 					<span class="help_text">{{form.type.help_text}}</span></td>
 				</tr>
 				
 				<tr>
 					<td>{{ form.model.label_tag }}<br>&nbsp;</td>
-					<td>{{ form.model }}<br>
+					<td>{{ form.model }}{{ form.model.errors|default:"<br>" }}
 					<span class="help_text">{{form.model.help_text}}</span></td>
 				</tr>
 				

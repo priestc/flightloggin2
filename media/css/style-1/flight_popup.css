@@ -47,15 +47,6 @@ textarea, select                            {width: 145px}
 /* the box with all the checkboxes at the bottom */
 #flight_events_table td                     {text-align: left;}
 
-ul.errorlist                                {color: red;
-                                             margin: 0px;
-                                             margin-right: 5px;
-                                             padding: 0px; 
-                                             width: 145px;
-                                             list-style-type: none;
-                                             text-align: center;
-                                             border: 1px solid red}
-
 #flight_buttons, #non_buttons               {width:100%; float: left; margin-bottom: 10px}
 
 

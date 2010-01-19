@@ -32,3 +32,13 @@ input[type="button"]        {margin: 10px}
 
 #edit_buttons,
 #new_buttons                {padding: 10px}
+
+ul.errorlist                {color: blue;
+                             margin: 0;
+                             margin-left: auto;
+                             margin-right: auto;
+                             padding: 0px; 
+                             width: 80%;
+                             list-style-type: none;
+                             text-align: center;
+                             border: 1px dotted blue}

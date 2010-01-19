@@ -18,8 +18,12 @@
 						</td>
 					</tr>
 					
+					<tr>
+				        <td >{{form.non_field_errors}}</td>
+				    </tr>
+					
 		            <tr>
-				        <td id="{{edit_or_new}}_error_cell">{{form.errors}}</td>
+				        <td style="display:none" id="{{edit_or_new}}_error_cell">{{form.errors}}</td>
 				    </tr>
 			
 					<tr class="date_field">

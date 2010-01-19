@@ -430,6 +430,16 @@ input[type="button"]        {margin: 10px}
 
 #edit_buttons,
 #new_buttons                {padding: 10px}
+
+ul.errorlist                {color: %(error_color)s;
+                             margin: 0;
+                             margin-left: auto;
+                             margin-right: auto;
+                             padding: 0px; 
+                             width: 80%%;
+                             list-style-type: none;
+                             text-align: center;
+                             border: 1px dotted %(error_color)s}
 """
 
 ###############################################################################
@@ -482,15 +492,6 @@ textarea, select                            {width: 145px}
                                              
 /* the box with all the checkboxes at the bottom */
 #flight_events_table td                     {text-align: left;}
-
-ul.errorlist                                {color: %(error_color)s;
-                                             margin: 0px;
-                                             margin-right: 5px;
-                                             padding: 0px; 
-                                             width: 145px;
-                                             list-style-type: none;
-                                             text-align: center;
-                                             border: 1px solid %(error_color)s}
 
 #flight_buttons, #non_buttons               {width:100%%; float: left; margin-bottom: 10px}
 
