@@ -8,12 +8,26 @@ def format_line_ticks(ax, year_range):
         ax.xaxis.set_minor_locator(mdates.DayLocator())
 
         ax.xaxis.set_major_formatter(mdates.DateFormatter('%d'))
+        
+        print "ft: 1; %s" % year_range
     
-    elif year_range < 0.2:       #less than a month
+    elif year_range < 0.18:       #less than a month
+        ax.xaxis.set_major_locator(mdates.WeekdayLocator(byweekday=1, interval=2))
+        ax.xaxis.set_minor_locator(mdates.WeekdayLocator(byweekday=1))
+
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%d %b'))
+        
+        print "ft: 2; %s" % year_range
+    
+    
+    
+    elif year_range < 0.3:       #less than a month
         ax.xaxis.set_major_locator(mdates.WeekdayLocator(byweekday=1))
         ax.xaxis.set_minor_locator(mdates.WeekdayLocator(byweekday=1))
 
         ax.xaxis.set_major_formatter(mdates.DateFormatter('%d %b'))
+        
+        print "ft: 3; %s" % year_range
         
          
 
@@ -28,7 +42,8 @@ def format_line_ticks(ax, year_range):
             tick.tick1line.set_markersize(0)
             tick.tick2line.set_markersize(0)
             tick.label1.set_horizontalalignment('center')
-
+            
+        print "ft: 4; %s" % year_range
     
     elif year_range < 1.1:
         ax.xaxis.set_major_locator(mdates.MonthLocator())
@@ -41,6 +56,8 @@ def format_line_ticks(ax, year_range):
             tick.tick1line.set_markersize(0)
             tick.tick2line.set_markersize(0)
             tick.label1.set_horizontalalignment('center')
+        
+        print "ft: 5; %s" % year_range
 
     elif year_range < 18.3:
         ax.xaxis.set_major_locator(mdates.YearLocator())
@@ -53,9 +70,13 @@ def format_line_ticks(ax, year_range):
             tick.tick1line.set_markersize(0)
             tick.tick2line.set_markersize(0)
             tick.label1.set_horizontalalignment('center')
+        
+        print "ft: 6; %s" % year_range
             
     else:
         ax.xaxis.set_major_locator(mdates.YearLocator(10))
         ax.xaxis.set_minor_locator(mdates.YearLocator(10))
 
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+    
+        print "ft: 7; %s" % year_range

@@ -9,6 +9,8 @@ def site_stats(request):
     ss = Stat()
     ss.openid()
     
+    from constants import STATS_TITLES as t
+    
     from models import StatDB
     cs = StatDB.objects.latest()
     
@@ -49,7 +51,11 @@ def save_to_db(request):
     from django.http import HttpResponse
     return HttpResponse(str(stop-start), mimetype='text/plain')
 
-def stats_graph(request, item):
+def stats_graph(request, item, ext):
     from graph import StatsGraph
     
-    return StatsGraph(item).as_png()
+    if ext == 'png':
+        return StatsGraph(item).as_png()
+    
+    elif ext == 'svg':
+        return StatsGraph(item).as_svg()

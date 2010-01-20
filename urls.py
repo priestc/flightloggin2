@@ -95,14 +95,14 @@ urlpatterns = patterns('',
     ################################## sigs
                                                               
     (       # old sig url format (for legacy)
-        r'^(?P<username>\w+)/sigs/(?P<columns>[\w\-]+).png',
+        r'^(?P<username>\w+)/sigs/(?P<columns>[\w\-]+)\.png',
         "sigs.views.make_sig",
         {"font": "VeraMono", "logo": "nologo"},
     ),
     
     (       # new sig format
         r'^(?P<username>\w+)/(?P<logo>(logo|nologo))-sigs/' + 
-        r'(?P<font>\w+)-(?P<size>\d{1,2})/(?P<columns>[\w\-]+).png',
+        r'(?P<font>\w+)-(?P<size>\d{1,2})/(?P<columns>[\w\-]+)\.png',
         "sigs.views.make_sig",
     ),
     
@@ -116,27 +116,27 @@ urlpatterns = patterns('',
     ),
     
     (
-        r'^easy-recalc-routes.py$',
+        r'^easy-recalc-routes\.py$',
         "route.views.easy_recalc_routes"
     ),
     
     (
-        r'^hard-recalc-routes.py$',
+        r'^hard-recalc-routes\.py$',
         "route.views.hard_recalc_routes",
     ),
     
     (
-        r'^del-routes.py$',
+        r'^del-routes\.py$',
         "route.views.del_routes",
     ),
     
     (
-        r'^recalc-images.py$',
+        r'^recalc-images\.py$',
         "maps.states_views.render_all",
     ),
     
     (
-        r'^histogram.py$',
+        r'^histogram\.py$',
         "graphs.views.histogram",
     ),
     
@@ -147,7 +147,7 @@ urlpatterns = patterns('',
     ),
     
     url(
-        r'^stats_save.py$',
+        r'^stats_save\.py$',
         "site_stats.views.save_to_db",
                                                              name="save_stats",
     ),
@@ -168,7 +168,7 @@ urlpatterns = patterns('',
     ),
     
     (
-        r'^admin-manage.html$',
+        r'^admin-manage\.html$',
         direct_to_template,
         {'template': 'manage.html'},
     ),
@@ -183,25 +183,25 @@ urlpatterns = patterns('',
     ),   
         
     url(
-        r'^update-airports.py$',
+        r'^update-airports\.py$',
         "airport.views.update_airports",
                                                            name="del-airports",
     ),
     
     url(
-        r'^change_email.html$',
+        r'^change_email\.html$',
         "backup.views.change_email",
                                                            name="change_email",
     ),
     
     url(
-        r'^(?P<userid>\d+)_remove_email.html$',
+        r'^(?P<userid>\d+)_remove_email\.html$',
         "backup.views.submit_change",
                                                     name="submit_change_email",
     ),
     
     url(
-        r'^news.html$',
+        r'^news\.html$',
         "main.views.news",
                                                                    name="news",
     ),
@@ -215,7 +215,7 @@ urlpatterns = patterns('',
     ),
     
     url(
-        r'^stats_graph/(?P<item>[\w_]+)\.png$',
+        r'^stats_graph/(?P<item>[\w_]+)\.(?P<ext>(png|svg))$',
         "site_stats.views.stats_graph",
                                                             name="stats_graph",
     ),

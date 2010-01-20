@@ -14,104 +14,109 @@
 <hr>
 <table id="site_stats">
     <tr>
-        <td>Total user accounts</td>
+        <td>{{ t.users.0 }}</td>
         <td>{{ cs.users }}</td>
     </tr>
     <tr>
-        <td>Number of users with a non-empty logbook</td>
+        <td>{{ t.non_empty_users.0 }}</td>
         <td>{{ cs.non_empty_users }}</td>
     </tr>
     <tr>
-        <td>Total flight hours from all users</td>
+        <td>{{ t.total_hours.0 }}</td>
         <td>{{ cs.total_hours|floatformat:1|intcomma }}</td>
     </tr>
     
     <tr>
-        <td>Date where the most unique users edited some part of their logbook</td>
+        <td>{{ t.day_wmu.0 }}</td>
         <td>{{ cs.day_wmu }}</td>
     </tr>
     
     <tr>
-        <td>Date with the most hours logged by all users</td>
+        <td>{{ t.day_wmh.0 }}</td>
         <td>{{ cs.day_wmh }}</td>
     </tr>
     
     <tr>
-        <td>Total number of flights logged</td>
+        <td>{{ t.total_logged.0 }}</td>
         <td>{{ cs.total_logged|intcomma }}</td>
     </tr>
+    
     <tr>
-        <td>Average duration of all logged flights</td>
+        <td>{{ t.avg_duration.0 }}</td>
         <td>{{ cs.avg_duration|floatformat:2 }}</td>
     </tr>
+    
     <tr>
-        <td>Average total hours logged per non-empty-logbook user</td>
+        <td>{{ t.avg_per_active.0 }}</td>
         <td>{{ cs.avg_per_active|floatformat:1|intcomma }}</td>
     </tr>
     
     <tr>
-        <td>The user with the most hours logged has X hours</td>
+        <td>{{ t.pwm_hours.0 }}</td>
         <td>{{ cs.pwm_hours|floatformat:1|intcomma }}</td>
     </tr>
     
     <tr>
-        <td>The user with the most flights logged has X entries</td>
+        <td>{{ t.pwm_count.0 }}</td>
         <td>{{ cs.pwm_count|intcomma }}</td>
     </tr>
     
     <tr>
-        <td>Total number of flights logged in the past 7 days</td>
+        <td>{{ t.num_7_days.0 }}</td>
         <td>{{ cs.num_7_days|intcomma }}</td>
     </tr>
     
     <tr>
-        <td>Number of unique users who have logged a flight in the past 7 days</td>
+        <td>{{ t.user_7_days.0 }}</td>
         <td>{{ cs.user_7_days|intcomma }}</td>
     </tr>
     
     <tr>
-        <td>Total flight hours logged in the past 7 days</td>
+        <td>{{ t.time_7_days.0 }}</td>
         <td>{{ cs.time_7_days|floatformat:1|intcomma }}</td>
     </tr>
     
     <tr>
-        <td>Total unique airports visited by all users</td>
+        <td>{{ t.unique_airports.0 }}</td>
         <td>{{ cs.unique_airports|intcomma }}</td>
     </tr>
+    
     <tr>
-        <td>Total unique countries visited by all users</td>
+        <td>{{ t.unique_countries.0 }}</td>
         <td>{{ cs.unique_countries|intcomma }}</td>
     </tr>
+    
     <tr>
-        <td>Total distance of all routes</td>
+        <td>{{ t.total_dist.0 }}</td>
         <td>{{ cs.total_dist|floatformat:1|intcomma }} NM</td>
     </tr>
+    
     <tr>
-        <td>Total distance of all routes in Earth Circumferences</td>
+        <td>{{ t.route_earths.0 }}</td>
         <td>{{ cs.route_earths|floatformat:1|intcomma }} Earths</td>
     </tr>
     
     <tr>
-        <td>Total unique tailnumbers from all users</td>
+        <td>{{ t.unique_tn.0 }}</td>
         <td>{{ cs.unique_tn }}</td>
     </tr>
     
     <tr>
-        <td>Airports visited by the most users</td>
+        <td>{{ t.most_common_airports.0 }}</td>
         <td>{{ linked_airports|safe|linebreaksbr }}</td>
     </tr>
     <tr>
-        <td>Tailnumbers used by the most users</td>
+        <td>{{ t.most_common_tails.0 }}</td>
         <td>{{ linked_tail|safe|linebreaksbr }}</td>
     </tr>
     
     <tr>
-        <td>Most common types</td>
+        <td>{{ t.most_common_types.0 }}</td>
         <td>{{ linked_mct|safe|linebreaksbr }} </td>
     </tr>
     
     <tr>
-        <td>Most common manufacturers</td>
+        <td>{{ t.most_common_manu.0 }}</td>
         <td>{{ cs.most_common_manu|linebreaksbr }}</td>
     </tr>
 </table>
