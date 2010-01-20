@@ -206,11 +206,21 @@ urlpatterns = patterns('',
                                                                    name="news",
     ),
     
+    #--------------------------------------------------------------------------
+    
     url(
-        r'^site_stats.html$',
+        r'^site_stats\.html$',
         "site_stats.views.site_stats",
                                                              name="site_stats",
     ),
+    
+    url(
+        r'^stats_graph/(?P<item>[\w_]+)\.png$',
+        "site_stats.views.stats_graph",
+                                                            name="stats_graph",
+    ),
+    
+    #--------------------------------------------------------------------------
     
     url(
         r'^faq.html$',

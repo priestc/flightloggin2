@@ -48,3 +48,8 @@ def save_to_db(request):
     
     from django.http import HttpResponse
     return HttpResponse(str(stop-start), mimetype='text/plain')
+
+def stats_graph(request, item):
+    from graph import StatsGraph
+    
+    return StatsGraph(item).as_png()
