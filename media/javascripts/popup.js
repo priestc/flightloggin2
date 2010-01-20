@@ -7,6 +7,8 @@ function wipe_clean() {
 	// remove the error messages
 	$("#popup td#new_error_cell").text("");
 	$("#popup td#edit_error_cell").text("");
+	$("#popup td#display_error_cell").text("");
+	$("#popup ul.errorlist").before("<br />").remove();
 }
 
 function fire_popup() {
@@ -91,6 +93,10 @@ $(document).ready(function() {
 	
 	if( $("td#edit_error_cell").text() != "") {
 	    prepare_edit();
+	    
+	    //set the id of the failed edit object to the popup
+	    
+	    
 	    fire_popup();
 	}
 });

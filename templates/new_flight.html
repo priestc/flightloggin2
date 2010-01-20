@@ -13,13 +13,13 @@
 				<tbody>
 					<tr>
 						<td>
-							<input type="hidden" name="id" id="id_new-id" value="{{form.instance.pk}}" />
+							<input type="hidden" name="id" id="id_new-id" value="{{ request.POST.id }}" />
 							{# only bound forms have the id attribute, so we must manually render this field#}
 						</td>
 					</tr>
 					
 					<tr>
-				        <td >{{form.non_field_errors}}</td>
+				        <td id="display_error_cell">{{form.non_field_errors}}</td>
 				    </tr>
 					
 		            <tr>

@@ -75,14 +75,14 @@
 			<tbody>
 				<tr>
 					<td>
-						<input type="hidden" name="id" id="id_id" value="" />
-					</td>
+						<input type="hidden" name="id" id="id_id" value="{{ request.POST.id }}" />
+					</td>  {# putting the POST.id here allows the edit popup to be populated with the ID when an edit fails  #}
 				</tr>
 				<tr>
 				    <td style="display: none" id="{{edit_or_new}}_error_cell">{{ form.errors }}</td>
 				</tr>
 				<tr>
-				    <td colspan="2">
+				    <td id="display_error_cell" colspan="2">
 				        {{ form.non_field_errors }}
 				    </td>
 				</tr>
