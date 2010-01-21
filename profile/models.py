@@ -102,7 +102,7 @@ class Profile(models.Model):
         else:
             return cls()
         
-    def get_format(self):
+    def get_num_format(self):
         if self.minutes:
             return "minutes"
         else:

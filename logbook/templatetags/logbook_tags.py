@@ -48,25 +48,33 @@ class DateCell(template.Node):
 
 @register.tag
 def make_display_cells(parser, token):
-    tag_name, row, columns = token.split_contents()    
-    return OtherCells(row, columns)
+    tag_name, row, columns, profile = token.split_contents()    
+    return OtherCells(row, columns, profile)
 
 
 class OtherCells(template.Node):
-    def __init__(self, row, columns):
+    def __init__(self, row, columns, profile):
         
         self.row_var = template.Variable(row)
         self.columns_var = template.Variable(columns)
+        self.profile_var = template.Variable(profile)
         
     def render(self, context):
         columns = self.columns_var.resolve(context)
         row = self.row_var.resolve(context)
+        profile = self.profile_var.resolve(context)
+        
+        num_format = profile.get_num_format()
         
         html = ""
         for column in columns.display_list():
             if not column == 'date':
+            
+                title = FIELD_TITLES[column]
+                data = row.column(column, num_format)
+                
                 html += '<td class="%s_col" title="%s" >%s</td>\n' %\
-                            (column, FIELD_TITLES[column], row.column(column))
+                            (column, title, data)
             
         return html
 
@@ -76,25 +84,31 @@ class OtherCells(template.Node):
 
 @register.tag
 def make_overall_agg_cells(parser, token):
-    tag_name, row, columns = token.split_contents()    
-    return TotalCells(row, columns)
+    tag_name, row, columns, profile = token.split_contents()    
+    return TotalCells(row, columns, profile)
 
 
 class TotalCells(template.Node):
-    def __init__(self, flights, columns):
+    def __init__(self, flights, columns, profile):
         
         self.flights_var = template.Variable(flights)
         self.columns_var = template.Variable(columns)
+        self.profile_var = template.Variable(profile)
         
     def render(self, context):
         flights = self.flights_var.resolve(context)
         columns = self.columns_var.resolve(context)
+        profile = self.profile_var.resolve(context)
+        
+        num_format = profile.get_num_format()
         
         html = ""
         for column in columns.agg_list():
             if not column == 'date':
+                title = FIELD_TITLES[column]
+                data = flights.agg(column, num_format)
                 html += '<td title="%s" class="%s_agg" >%s</td>\n' %\
-                            (FIELD_TITLES[column], column, flights.agg(column))
+                            (title, column, data)
             
         return html
 

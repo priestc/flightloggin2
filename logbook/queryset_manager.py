@@ -235,7 +235,7 @@ class FlightQuerySet(QuerySet, UserMixin):
     #################@@##############
     
     def _db_agg(self, cn):
-        """cn always equals a database column such as total or pic or xc
+        """cn always equals a database column such as total or pic or xc.
            returns the total for that field on the queryset after it has been
            properly filtered down"""
            
@@ -243,37 +243,38 @@ class FlightQuerySet(QuerySet, UserMixin):
             return 0
         
         if cn == 'line_dist':
-            return self.aggregate(Sum('route__total_line_all')).values()[0] or 0
+            ret = self.aggregate(Sum('route__total_line_all')).values()[0] or 0
+            print ret
+            return ret
        
         return self.aggregate(Sum(cn)).values()[0] or 0
     
-    def agg(self, cn):
+    def agg(self, cn, format='decimal'):
+        ret = None
         
         if cn in AGG_FIELDS:
-            return self._db_agg(cn)
+            ret = self._db_agg(cn)
         
         elif cn in EXTRA_AGG:
             if cn == "day":
                 #day is special, so it gets done here instead of 'filter_by_column'
                 night = self.sim(False)._db_agg('night')
                 total = self.sim(False)._db_agg('total')
-                return total - night
+                ret = total - night
             
             if cn == "pic_night":
-                return self.all_pic()._db_agg('night')
+                ret = self.all_pic()._db_agg('night')
             
             if cn == "line_dist":
-                return self._db_agg('line_dist')
+                ret = self._db_agg('line_dist')
+
+            if not cn.endswith("pic") and not ret:
+                ret = self.filter_by_column(cn)._db_agg('total')
+            elif not ret:
+                ret = self.filter_by_column(cn)._db_agg('pic')
             
-            try:
-                if not cn.endswith("pic"):
-                    return self.filter_by_column(cn)._db_agg('total')
-                else:
-                    return self.filter_by_column(cn)._db_agg('pic')
-            except AttributeError:
-                return 0.0      # return 0 if queryset is empty
-            
-        return "??"
+        from logbook.utils import proper_format
+        return proper_format(ret, cn, format)
     
     def filter_by_column(self, cn, *args, **kwargs):
         """filters the queryset to only include flights
