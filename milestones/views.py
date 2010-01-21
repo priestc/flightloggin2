@@ -28,21 +28,23 @@ def part135ifr(qs):
     ###########################################################################
     
     # only the first 25 hours of simulator instrument
-    plane_inst = qs.sim(False).agg('sim_inst') + qs.sim(False).agg('act_inst')
+    plane_inst = qs.sim(False).agg('sim_inst', float=True) + \
+                 qs.sim(False).agg('act_inst', float=True)
+                 
     simulator_inst = qs.sim(True).agg('sim_inst')
     
     if simulator_inst > 25:
         simulator_inst = 25
     
-    inst = simulator_inst + plane_inst
+    inst = str(float(simulator_inst) + float(plane_inst))
     
     ############ part 135 IFR #################################################
     
     part135 = {}
     
-    my_numbers = {'total': "%.1f" % qs.sim(False).agg('total'),
-                  'night': "%.1f" % qs.sim(False).agg('night'),
-                  'p2p': "%.1f" % qs.sim(False).agg('p2p'),
+    my_numbers = {'total': qs.sim(False).agg('total'),
+                  'night': qs.sim(False).agg('night'),
+                  'p2p': qs.sim(False).agg('p2p'),
                   'inst': inst}
                   
     goal_numbers = {'total': 1200,
@@ -86,9 +88,9 @@ def part135vfr(qs):
     
     part135 = {}
     
-    my_numbers = {'total':     "%.1f" % qs.sim(False).agg('total'),
-                  'night_p2p': "%.1f" % qs.sim(False).p2p().agg('night'),
-                  'p2p':       "%.1f" % qs.sim(False).agg('p2p'),}
+    my_numbers = {'total':     qs.sim(False).agg('total'),
+                  'night_p2p': qs.sim(False).p2p().agg('night'),
+                  'p2p':       qs.sim(False).agg('p2p'),}
                   
     goal_numbers = {'total': 500,
                     'night_p2p': 25,
@@ -129,8 +131,10 @@ def atp_calc(qs):
     ###########################################################################
     
     # only the first 25 hours of simulator instrument
-    plane_inst = qs.sim(False).agg('sim_inst') + qs.sim(False).agg('act_inst')
-    simulator_inst = qs.sim(True).agg('sim_inst')
+    plane_inst = qs.sim(False).agg('sim_inst', float=True) +\
+                 qs.sim(False).agg('act_inst', float=True)
+                 
+    simulator_inst = qs.sim(True).agg('sim_inst', float=True)
     
     if simulator_inst > 25:
         simulator_inst = 25
@@ -138,28 +142,26 @@ def atp_calc(qs):
     inst = simulator_inst + plane_inst
     
     extra_night=0
-    night_l = qs.sim(False).agg('night_l')
+    night_l = qs.sim(False).agg('night_l', float=True)
     if night_l > 20:
         if night_l > 45:
             extra_night = 25
         else:
             extra_night = night_l
     
-    night = qs.sim(False).agg('night')
+    night = qs.sim(False).agg('night', float=True)
     
     ############ part 135 IFR #################################################
     
-    atp = {}
+    atp = {}    
     
-    
-    
-    my_numbers = {'total':     "%.1f" % qs.sim(False).agg('total'),
+    my_numbers = {'total':     qs.sim(False).agg('total'),
                   'night':     "%.1f" % float(night+extra_night),
-                  'atp_xc':    "%.1f" % qs.sim(False).agg('atp_xc'),
+                  'atp_xc':    qs.sim(False).agg('atp_xc'),
                   'inst':      inst,
-                  'pic':       "%.1f" % qs.sim(False).agg('pic'),
-                  'pic_xc':    "%.1f" % qs.sim(False).xc().agg('pic'),
-                  'pic_night': "%.1f" % qs.sim(False).pic().agg('night'),}
+                  'pic':       qs.sim(False).agg('pic'),
+                  'pic_xc':    qs.sim(False).xc().agg('pic'),
+                  'pic_night': qs.sim(False).pic().agg('night'),}
                   
     goal_numbers = {'total': 1500,
                     'night': 100,

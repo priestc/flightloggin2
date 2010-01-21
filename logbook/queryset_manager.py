@@ -249,7 +249,11 @@ class FlightQuerySet(QuerySet, UserMixin):
        
         return self.aggregate(Sum(cn)).values()[0] or 0
     
-    def agg(self, cn, format='decimal'):
+    def agg(self, cn, format='decimal', float=False):
+        """
+        Aggregate this queryset based on the field passed. Always returns a string
+        """
+        
         ret = None
         
         if cn in AGG_FIELDS:
@@ -274,7 +278,10 @@ class FlightQuerySet(QuerySet, UserMixin):
                 ret = self.filter_by_column(cn)._db_agg('pic')
             
         from logbook.utils import proper_format
-        return proper_format(ret, cn, format)
+        if not float:
+            return proper_format(ret, cn, format)
+        else:
+            return ret
     
     def filter_by_column(self, cn, *args, **kwargs):
         """filters the queryset to only include flights
