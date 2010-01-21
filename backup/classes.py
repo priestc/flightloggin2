@@ -115,13 +115,15 @@ class EmailBackup(object):
 
         today = datetime.date.today()
         
+        unsub = self.make_unsubscrbe_link()
+        
         message = """This is a copy of your FlightLogg.in' logbook"""
         
         message += "\nYou are set to receive these messages %s." %\
                         self.profile.get_backup_freq_display().lower()
                     
         message += "\n\nGo here to change email preferences: %s" %\
-                        self.make_unsubscrbe_link()
+                        unsub
         
         ####~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                             
@@ -137,7 +139,12 @@ class EmailBackup(object):
         else:
             f = "Manual Backup Mailer <info@flightlogg.in>"
 
-        email = EmailMessage(title, message, to=(self.addr,), from_email=f)
+        email = EmailMessage(title,
+                             message,
+                             to=(self.addr,),
+                             from_email=f,
+                             headers={"List-Unsubscribe": unsub})
+                             
         email.attach("backup-%s.tsv.zip" % today, file_,)
             
         return email
