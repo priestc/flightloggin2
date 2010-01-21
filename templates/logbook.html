@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block logbook-sel %}nav_selected{% endblock%}
-
+{% load logbook_tags %}
 {% block description %}{{ request.display_user.username }}'s flights{% endblock%}
 
 {% block javascript %}
@@ -40,18 +40,18 @@
 		
 	<table id="logbook_table" summary="logbook table">
 		<thead>
-			<tr class='header'>
-                    {{ header_row|safe }}
+			<tr class="header">
+                    {{ cols.header_row|safe }}
 			</tr>
 		</thead>
 		
 		<tfoot>
 			<tr>
-				<td colspan="{{ prefix_len }}" id="page_total_title">
+				<td colspan="{{ cols.prefix_len }}" id="page_total_title">
 				Page Totals:
 				</td>
     
-                   {% for column in agg_columns %}
+                   {% for column in cols.agg_list %}
                        <td id="{{ column }}_pt" class="{{column}} pt"></td>
                    {% endfor %}
 
@@ -60,13 +60,11 @@
 			</tr>
 			<tr>
 
-				<td colspan="{{ prefix_len }}" id="overall_total_title">
+				<td colspan="{{ cols.prefix_len }}" id="overall_total_title">
 				{{total_sign}} Totals:
 				</td>
 
-                    {% for column in overall_totals %}
-                        <td>{{column}}</td>
-                    {% endfor %}
+                    {% make_overall_agg_cells all_flights cols%}
                     
 				<td colspan="6">
 				    {% if flights and not request.shared %}
@@ -78,11 +76,10 @@
 		
 		<tbody>
 
-		{% for row in logbook %}
+		{% for row in page_of_flights.object_list %}
 		<tr>
-            {% for item in row %}    
-                <td title="{{item.title}}" class="{{item.system}}_col">{{item.disp}}</td>    {# all other columns #}
-            {% endfor %}
+            {% make_date_cell row profile %}
+            {% make_display_cells row cols %}
 		</tr>
 		
 		{% empty %}
@@ -95,24 +92,24 @@
 		
 		{# header row at the bottom #}
 		<tr class='header'>
-		    {{ header_row|safe }}
+		    {{ cols.header_row|safe }}
 		</tr>
 		
 		</tbody>
 	</table>
 	
-	{% for row in logbook %}
+	{% for row in page_of_flights.object_list %}
         <div class="small_popup" id="s{{row.pk}}">
         
-            <a href="" class="edit_popup_link" id="f{{row.pk}}" id="f{{row.pk}}">
+            <a href="" class="edit_popup_link">
                 Edit this flight
             </a>
             <br>
-            <a target="_blank" href="{% url s-route-kml row.flight.pk %}">
+            <a target="_blank" href="{% url s-route-kml row.pk as kml %}{ {kml }}">
                 View this route in Google Earth
             </a>
             <br>
-            <a target="_blank" href="{% url s-route-maps row.flight.pk %}">
+            <a target="_blank" href="http://maps.google.com/?q=http://flightlogg.in{{ kml }}">
                 View this route in Google Maps
             </a>
 
