@@ -19,11 +19,6 @@
         <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/master.js"></script>
 				
         {% block javascript %}{% endblock %}
-
-        <script type="text/javascript"><!--
-            google_ad_client = "pub-7210120729072266"; google_ad_slot = "7862372281"; google_ad_width = 468; google_ad_height = 60;
-            //-->
-        </script>
 		
         <title>{% block title %}{% endblock %} - FlightLogg.in - Electronic Pilot Logbook</title>
     </head>
@@ -72,8 +67,11 @@
         <div id="main_content">
 		    
             {% block no_canvas %}
-
             <div id="canvas">
+                <div style="text-align: center; margin: auto auto 10px">
+                {# from the ad context processor #}
+                {{ proper_ad|safe }}
+                </div>
                 {% block canvas %}{% endblock %}
             </div>
             
