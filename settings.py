@@ -12,7 +12,7 @@ TEST_RUNNER='django.contrib.gis.tests.run_tests'
 
 
 # debug bar settings#############################
-#
+
 INTERNAL_IPS = ('127.0.0.1',)
 DEBUG_TOOLBAR_CONFIG = {"INTERCEPT_REDIRECTS": False}
 
@@ -61,10 +61,12 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'share.middleware.share.ShareMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
 if DEBUG_TOOLBAR:

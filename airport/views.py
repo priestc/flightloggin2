@@ -1,9 +1,9 @@
-from django.contrib.auth.decorators import login_required
-from share.decorator import secret_key
+from django.views.decorators.cache import cache_page
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from annoying.decorators import render_to
 
+from share.decorator import secret_key
+from annoying.decorators import render_to
 from models import Location
 
 ################################
@@ -40,6 +40,7 @@ def update_airports(request):
     return HttpResponse("done!")
 
 
+@cache_page(60 * 15)
 @render_to('location_profile.html')
 def airport_profile(request, navaid, ident):
     
