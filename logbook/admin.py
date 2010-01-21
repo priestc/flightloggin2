@@ -3,7 +3,7 @@ from models import *
 
 class FlightAdmin(admin.ModelAdmin):
     list_display = ('user', 'date', 'total', 'plane', 'route', 'remarks', )
-    search_fields = ('user__username', 'remarks')
+    search_fields = ('user__username', 'remarks', 'id')
     raw_id_fields = ('plane', 'route')
     #filter_horizontal = ('user', )
     

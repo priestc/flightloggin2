@@ -243,9 +243,7 @@ class FlightQuerySet(QuerySet, UserMixin):
             return 0
         
         if cn == 'line_dist':
-            ret = self.aggregate(Sum('route__total_line_all')).values()[0] or 0
-            print ret
-            return ret
+            return self.aggregate(Sum('route__total_line_all')).values()[0] or 0
        
         return self.aggregate(Sum(cn)).values()[0] or 0
     

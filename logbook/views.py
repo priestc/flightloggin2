@@ -68,16 +68,18 @@ def logbook(request, page=0):
     ##############################################################
     
     all_flights = Flight.objects.filter(user=request.display_user)
-
-    ff=FilterForm(request.GET)
-    filtered_flights = all_flights.custom_logbook_view(ff).select_related()
+    filtered_flights = all_flights.select_related()
     total_sign = "Overall"
     
     if request.GET:
+        ff=FilterForm(request.GET)
+        filtered_flights = filtered_flights.custom_logbook_view(ff)
         get= "?" + request.get_full_path().split('?')[1]
         total_sign = "Filter"
+        print "DERP"
     
-                
+    print filtered_flights.count()
+            
     ############## get user preferences ##########################
     
     before_block, after_block, page_of_flights = \
