@@ -18,7 +18,7 @@ from profile.models import Profile, AutoButton
 @no_share('logbook')
 @render_to("logbook.html")
 def logbook(request, page=0):
-
+    
     form = FlightForm(prefix="new")
     
     if request.POST.get('submit', "") == "Submit New Flight":
@@ -55,62 +55,38 @@ def logbook(request, page=0):
     
     auto_button,c = AutoButton.objects.get_or_create(user=request.display_user)
     cols, c = Columns.objects.get_or_create(user=request.display_user)
-    
-    header_row = cols.header_row()
-    
-    columns = cols.all_list()          # all activated column headers
-    prefix_len = cols.prefix_len()     # number of non-agg headers before total
-    agg_columns = cols.agg_list()      # all headers that get agg'd
+    profile,c = Profile.objects.get_or_create(user=request.display_user)
     
     ################## custom filter form ########################
     
     from custom_filter import make_filter_form
+    ## filter form is created dynamically because each user has different planes
+    ## so those dropdowns will be different
     FilterForm = make_filter_form(request.display_user)
     ff = FilterForm()
     
     ##############################################################
     
     all_flights = Flight.objects.filter(user=request.display_user)
+
+    ff=FilterForm(request.GET)
+    filtered_flights = all_flights.custom_logbook_view(ff).select_related()
+    total_sign = "Overall"
     
-    if request.GET.get('c', "") == "t":
-        ff=FilterForm(request.GET)
-        flights = all_flights.custom_logbook_view(ff).select_related()
-        all_flights = flights
+    if request.GET:
         get= "?" + request.get_full_path().split('?')[1]
         total_sign = "Filter"
-    else:
-        flights = all_flights.select_related()
-        total_sign = "Overall"
+    
                 
     ############## get user preferences ##########################
     
-    profile,c = Profile.objects.get_or_create(user=request.display_user)
-    num_format = profile.get_format()
-    date_format = profile.get_date_format()
-    
-    overall_totals = column_total_by_list(all_flights,
-                                          agg_columns,
-                                          format=num_format)
-    
-    if not flights:
-        return locals()
-    
     before_block, after_block, page_of_flights = \
-                   Flight.make_pagination(flights, profile, int(page))
-
-    ##############################################################
-    
-    from utils import LogbookRow
-    
-    LogbookRow = LogbookRow.set_formats(df=date_format, nf=num_format)
-    
-    logbook = []
-    for flight in list(page_of_flights.object_list):
-        row = LogbookRow(flight=flight, columns=columns)
-        logbook.append(row)
+                   Flight.make_pagination(filtered_flights, profile, int(page))
     
     #only make the page table if there are more than one pages overall
     do_pagination = page_of_flights.paginator.num_pages > 1
+    
+    
     
     return locals()
 

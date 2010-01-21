@@ -489,7 +489,7 @@ class Columns(models.Model):
     class Meta:
         verbose_name_plural = 'Columns'
 
-    def all_list(self):
+    def display_list(self):
         ret=[]
         for column in FIELDS:
             if getattr(self, column):
@@ -514,7 +514,7 @@ class Columns(models.Model):
 
     def header_row(self):
         ret = []
-        for column in self.all_list():
+        for column in self.display_list():
             if FIELD_ABBV.get(column):
                 name = FIELD_ABBV[column]
             else:

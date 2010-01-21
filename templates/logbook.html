@@ -11,7 +11,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        page_totals({{agg_columns|safe}})  // pass in the names of each column that needs a page total
+        page_totals({{cols.agg_list|safe}})  // pass in the names of each column that needs a page total
     });
     
     date_button = "{{MEDIA_URL}}/images/calendar.gif"
@@ -101,7 +101,7 @@
 	{% for row in page_of_flights.object_list %}
         <div class="small_popup" id="s{{row.pk}}">
         
-            <a href="" class="edit_popup_link">
+            <a href="" class="edit_popup_link" id="x{{row.pk}}">
                 Edit this flight
             </a>
             <br>

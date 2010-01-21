@@ -121,10 +121,13 @@ $(document).ready(function() {
 	
 	$("a.edit_popup_link").click(function(){
     	//make the edit popup when the link for it is clicked
+    	
+    	id = "f" + this.id.substr(1);
+    	
 		wipe_clean();
 		close_all_small_popups();
 		prepare_edit(true);
-		fill_in_flight(this.id);
+		fill_in_flight(id);
 		fire_popup();
 	});
 });

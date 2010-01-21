@@ -65,8 +65,8 @@ class OtherCells(template.Node):
         html = ""
         for column in columns.display_list():
             if not column == 'date':
-                html += '<td title="%s" class="%s_col" >%s</td>\n' %\
-                            (FIELD_TITLES[column], column, row.column(column))
+                html += '<td class="%s_col" title="%s" >%s</td>\n' %\
+                            (column, FIELD_TITLES[column], row.column(column))
             
         return html
 
@@ -89,7 +89,6 @@ class TotalCells(template.Node):
     def render(self, context):
         flights = self.flights_var.resolve(context)
         columns = self.columns_var.resolve(context)
-        print "fffffffff", flights
         
         html = ""
         for column in columns.agg_list():
