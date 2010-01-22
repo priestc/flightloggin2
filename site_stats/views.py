@@ -54,8 +54,14 @@ def save_to_db(request):
 def stats_graph(request, item, ext):
     from graph import StatsGraph
     
+    try:
+        g = StatsGraph(item)
+    except Exception, e:
+        from django.http import Http404
+        raise Http404(e)
+    
     if ext == 'png':
-        return StatsGraph(item).as_png()
+        return g.as_png()
     
     elif ext == 'svg':
-        return StatsGraph(item).as_svg()
+        return g.as_svg()
