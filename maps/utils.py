@@ -106,8 +106,6 @@ def folders_to_kmz_response(folders, title=None, add_icon=False):
     
     kml = kml.encode('utf-8')
     
-    ###############################################
-    
     sio = cStringIO.StringIO()
     
     z = zipfile.ZipFile(sio, 'w', compression=zipfile.ZIP_DEFLATED)
@@ -123,7 +121,8 @@ def folders_to_kmz_response(folders, title=None, add_icon=False):
     return HttpResponse(sio.getvalue(),
                         mimetype="application/vnd.google-earth.kmz")
 
-
+####################################
+####################################
 
 def qs_to_time_kmz(qs):
     """ From a routes queryset, return a folder'd up kmz file split up

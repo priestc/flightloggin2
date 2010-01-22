@@ -53,7 +53,14 @@
         </td>
     </tr>
     <tr>
-        <td colspan="3"><input type="submit" onclick="cleanup_filter_get()"></td>
+        <td colspan="3">
+            <input type="hidden" name="earth" value="true">
+            <input type="hidden" name="maps" value="true">
+            
+            <input id="logbook" class="filter_submit" type="submit" value="View in Logbook">
+            <input id="earth" class="filter_submit" type="submit" value="View in Google Earth">
+            <input id="maps" class="filter_submit" type="submit" value="View in Google Maps">
+        </td>
     </tr>
     
 </table>

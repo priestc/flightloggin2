@@ -15,8 +15,8 @@ from profile.models import Profile, AutoButton
 
 ###############################################################################
 
-@no_share('logbook')
 @render_to("logbook.html")
+@no_share('logbook')
 def logbook(request, page=0):
     
     form = FlightForm(prefix="new")
@@ -77,7 +77,26 @@ def logbook(request, page=0):
         get= "?" + request.get_full_path().split('?')[1]
         total_sign = "Filter"
             
-    ############## get user preferences ##########################
+    ############## google maps and google earth filter below ################
+    
+    earth = request.GET.get('earth')
+    maps = request.GET.get('maps')
+    
+    if earth == 'true':
+        from maps.utils import qs_to_time_kmz
+        from route.models import Route
+        routes = Route.objects.filter(flight__in=filtered_flights)
+        response = qs_to_time_kmz(routes)
+        response['Content-Disposition'] = 'attachment; filename=filter.kmz'
+        return response
+    
+    if maps == 'true':
+        url = "http://maps.google.com/?q=http://flightlogg.in/logbook.html%s"
+        get = get.replace('maps=true', "earth=true")
+        return HttpResponseRedirect(url % get)
+
+    
+    ############### pagination stuff below ############################
     
     before_block, after_block, page_of_flights = \
                    Flight.make_pagination(filtered_flights, profile, int(page))

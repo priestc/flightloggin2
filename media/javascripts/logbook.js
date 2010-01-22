@@ -175,9 +175,27 @@ function cleanup_filter_get() {
     }
 }
 
+$(document).ready(function() {
+    
+    $(".filter_submit").click(function() {
+        cleanup_filter_get();
+        
+        if (this.id == 'earth') {
+            $("#filterform [name=maps]").remove();
+        }
 
 
-
+        if (this.id == 'maps') {
+            $("#filterform [name=earth]").remove();
+        }
+           
+        if (this.id == 'logbook') {
+            $("#filterform [name=maps]").remove();
+            $("#filterform [name=earth]").remove();
+        }
+    });
+    
+});
 
 
 

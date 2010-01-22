@@ -295,10 +295,6 @@ button                  {border: %(widget_border)s}
 input[type="password"],
 input[type="text"]      {border: %(widget_border)s; background: white}
 
-input[type=text]:disabled {background-color: #DDDDDD;
-                           color: #777777;
-                           border: 1px dotted #EEEEEE}
-
 #footer                 {text-align:center;
                          font-size: x-small;
                          color: gray;
