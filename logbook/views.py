@@ -74,7 +74,8 @@ def logbook(request, page=0):
     if request.GET:
         ff=FilterForm(request.GET)
         filtered_flights = filtered_flights.custom_logbook_view(ff)
-        get= "?" + request.get_full_path().split('?')[1]
+        ## split it to get just the part after the '?', ignore the part before
+        get = "?" + request.get_full_path().split("?")[1]
         total_sign = "Filter"
             
     ############## google maps and google earth filter below ################
@@ -92,7 +93,7 @@ def logbook(request, page=0):
     
     if maps == 'true':
         url = "http://maps.google.com/?q=http://flightlogg.in/%s/logbook.html%s"
-        get = get.replace('maps=true', "earth=true")
+        get = get.replace('maps=true', "earth=true").replace('&', '%26')
         return HttpResponseRedirect(url % (request.display_user.username, get))
 
     
