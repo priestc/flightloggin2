@@ -133,3 +133,56 @@ function page_totals(columns){
         $("tfoot #" + column + "_pt").html(result);
     }
 }
+
+function cleanup_filter_get() {
+    // Remove all unused form elements by setting disabled=disabled so the
+    // variable isn't passed onto the URL which just clutters things up
+    
+    numeric_fields = ['pic', 'sic', 'dual_g', 'dual_r',
+                       'xc', 'total', 'line_dist', 'p2p',
+                       'max_width', 'app', 'day_l', 'night_l',
+                       'sim_inst','act_inst','night','solo'];
+    
+    for(var a=0; a < 16; a++) {
+        
+        field = numeric_fields[a];
+        
+        if($("#filterform input[name=" + field + "]").val() == '') {
+        
+            $("#filterform input[name=" + field + "]").attr('disabled', 'disabled');
+            $("#filterform select[name=" + field + "_op]").attr('disabled', 'disabled');
+        }
+    }
+    
+    text_fields = ['start_date', 'end_date', 'person', 'remarks',
+                   'route__fancy_rendered', 'plane__tags', 'plane__tailnumber'];
+    
+    for(var b=0; b < 7; b++) {
+    
+        field = text_fields[b];
+        
+        if($("#filterform input[name=" + field + "]").val() == '') {
+            $("#filterform input[name=" + field + "]").attr('disabled', 'disabled');
+        }
+    }
+    
+    if($("#filterform select[name=plane__type]").val() == '') {
+        $("#filterform select[name=plane__type]").attr('disabled', 'disabled');
+    }
+    
+    if($("#filterform select[name=plane__cat_class]").val() == '') {
+        $("#filterform select[name=plane__cat_class]").attr('disabled', 'disabled');
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
