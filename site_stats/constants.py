@@ -16,7 +16,7 @@ STATS_TITLES = {
     "unique_countries": ("Total unique countries visited by all users", "Unique Countries"),
     "total_dist":      ("Total distance of all routes", "Nautical Miles"),
     "route_earths":    ("Total distance of all routes in Earth Circumferences", "Earths"),
-    "unique_tn":       ("Total unique tailnumbers from all users", "NA"),
+    "unique_tn":       ("Total unique tailnumbers from all users", "Unique Tailnumbers"),
     "most_common_airports": ("Airports visited by the most users", "NA"),
     "most_common_tails": ("Tailnumbers used by the most users", "NA"),
     "most_common_types": ("Most common types", "NA"),
