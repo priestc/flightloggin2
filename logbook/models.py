@@ -8,7 +8,9 @@ from constants import *
 from utils import to_minutes
 from main.queryset_manager import QuerySetManager
 
-class Flight(models.Model):
+from main.mixins import GoonMixin
+
+class Flight(models.Model, GoonMixin):
 
     ## add custom filters to custom manager
     from queryset_manager import FlightQuerySet as QuerySet
@@ -52,11 +54,6 @@ class Flight(models.Model):
     @models.permalink
     def get_absolute_url(self):
         return ('logbook', [self.user.username])
-    
-    @classmethod
-    def goon(cls, *args, **kwargs):
-        from annoying.functions import get_object_or_None
-        return get_object_or_None(cls,  *args, **kwargs)
     
     def save(self, *args, **kwargs):
         try:
