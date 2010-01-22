@@ -64,7 +64,7 @@
 				{{total_sign}} Totals:
 				</td>
 
-                    {% make_overall_agg_cells all_flights cols profile %}
+                    {% make_overall_agg_cells filtered_flights cols profile %}
                     
 				<td colspan="6">
 				    {% if flights and not request.shared %}
