@@ -235,7 +235,7 @@ class ProgressGraph(object):
                         
             ## all stuff before the graph begins
             before_graph = self.start_qs.filter(date__lt=s-pad)
-            prev_total = before_graph.agg(column)
+            prev_total = before_graph.agg(column, float=True)
         else:
             # drawl graph from the start
             prev_total = 0
