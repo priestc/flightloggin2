@@ -6,7 +6,7 @@ STATS_TITLES = {
     "day_wmh":         ("Date with the most hours logged by all users","NA"),
     "total_logged":    ("Total number of flights logged","Flights"),
     "avg_duration":    ("Average duration of all logged flights","Length of flight in hours"),
-    "avg_per_active":  ("Average total hours logged per non-empty-logbook user","Length of flight in hours"),
+    "avg_per_active":  ("Average total hours logged per non-empty-logbook user","Total Logbook Hours"),
     "pwm_hours":       ("The user with the most hours logged has X hours", "Flight Hours"),
     "pwm_count":       ("The user with the most flights logged has X entries", "Number of Flights"),
     "num_7_days":      ("Total number of flights logged in the past 7 days","Number of Flights"),
