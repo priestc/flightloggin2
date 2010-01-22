@@ -91,9 +91,9 @@ def logbook(request, page=0):
         return response
     
     if maps == 'true':
-        url = "http://maps.google.com/?q=http://flightlogg.in/logbook.html%s"
+        url = "http://maps.google.com/?q=http://flightlogg.in/%s/logbook.html%s"
         get = get.replace('maps=true', "earth=true")
-        return HttpResponseRedirect(url % get)
+        return HttpResponseRedirect(url % (request.display_user.username, get))
 
     
     ############### pagination stuff below ############################
