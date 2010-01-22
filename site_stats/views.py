@@ -1,3 +1,4 @@
+from django.views.decorators.cache import cache_page
 from annoying.decorators import render_to
 from models import Stat
 from share.decorator import secret_key
@@ -51,6 +52,7 @@ def save_to_db(request):
     from django.http import HttpResponse
     return HttpResponse(str(stop-start), mimetype='text/plain')
 
+@cache_page(60 * 60 * 3)
 def stats_graph(request, item, ext):
     from graph import StatsGraph
     
