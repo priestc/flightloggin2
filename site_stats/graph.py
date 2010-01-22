@@ -15,8 +15,17 @@ class StatsGraph(object):
         
         from models import StatDB
         self.title = val
-        self.x = StatDB.objects.values_list('dt', flat=True).order_by('-dt')
-        self.y = StatDB.objects.values_list(val, flat=True).order_by('-dt')
+        print val
+        kwarg = {str(val): 0}
+        
+        self.x = StatDB.objects.exclude(**kwarg)\
+                               .values_list('dt', flat=True)\
+                               .order_by('-dt')
+        
+        
+        self.y = StatDB.objects.exclude(**kwarg)\
+                               .values_list(val, flat=True)\
+                               .order_by('-dt')
         
     def output(self):
         ax = self.fig.add_subplot(111)
