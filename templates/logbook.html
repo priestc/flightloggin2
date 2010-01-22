@@ -66,10 +66,7 @@
 
                     {% make_overall_agg_cells filtered_flights cols profile %}
                     
-				<td colspan="6">
-				    {% if flights and not request.shared %}
-					<a href="{% url mass-edit request.display_user.username page_of_flights.number %}">Mass Edit</a>
-					{% endif %}
+				<td colspan="6">    
 				</td>
 			</tr>
 		</tfoot>
@@ -97,6 +94,9 @@
 		
 		</tbody>
 	</table>
+	{% if page_of_flights.object_list and not request.shared %}
+		<a href="{% url mass-edit request.display_user.username page_of_flights.number %}">Mass Edit this page</a>
+	{% endif %}
 	
 	{% for row in page_of_flights.object_list %}
         <div class="small_popup" id="s{{row.pk}}">
