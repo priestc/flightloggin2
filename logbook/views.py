@@ -76,9 +76,6 @@ def logbook(request, page=0):
         filtered_flights = filtered_flights.custom_logbook_view(ff)
         get= "?" + request.get_full_path().split('?')[1]
         total_sign = "Filter"
-        print "DERP"
-    
-    print filtered_flights.count()
             
     ############## get user preferences ##########################
     

@@ -361,11 +361,9 @@ class FlightQuerySet(QuerySet, UserMixin):
         elif cn in DB_FIELDS:
             return getattr(self, cn)(*args, **kwargs)
        
-    def custom_logbook_view(self, ff):
-        assert ff.is_valid(), ff.errors
-        
-        self = ff.make_filter_kwargs(self)
-        return self
+    def custom_logbook_view(self, ff):        
+        new = ff.make_filter_kwargs(self)
+        return new
 
     def add_column(self, *args):
         for arg in args:

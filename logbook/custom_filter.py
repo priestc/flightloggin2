@@ -18,47 +18,58 @@ def make_filter_kwargs(self, qs):
        should be renamed
     """
     
-    # all filter fields not ending with "_op"
-    fields = filter(lambda x: not x[0].endswith("_op"),
-                    self.cleaned_data.iteritems())
+    if not self.is_valid():
+        return qs
     
+    def valid_filter(x):
+        """
+        Returns true if the field is a valid filterable field, that means it
+        is neither an 'op' field, nor is the value None or a blank string
+        """
+        
+        is_op = x[0].endswith("_op")
+        is_none = x[1] is None
+        is_blank = x[1] == ''
+        
+        return not (is_op or is_none or is_blank)
+    
+    fields = filter(valid_filter, self.cleaned_data.iteritems())
+                    
     for field,val in fields:
         
-        if (type(0) is type(val) and val >= 0) or val is not None:
+        if field == "start_date":
+            kwargs = {"date__gte": val}
+            qs = qs.filter(**kwargs)
+        
+        elif field == "end_date":
+            kwargs = {"date__lte": val}
+            qs = qs.filter(**kwargs)
             
-            if field == "start_date":        # date filters
-                kwargs = {"date__gte": val}
-                qs = qs.filter(**kwargs)
+        elif field == 'person':
+            kwargs = {"person__icontains": val}
+            qs = qs.filter(**kwargs)
             
-            elif field == "end_date":
-                kwargs = {"date__lte": val}
-                qs = qs.filter(**kwargs)
+        elif field == 'remarks':
+            kwargs = {"remarks__icontains": val}
+            qs = qs.filter(**kwargs)
+        
+        elif "__" in field:       # all "__" filters
+            kwargs = {"%s__icontains" % field: val}
+            qs = qs.filter(**kwargs)
+        
+        elif val>=0:                     # all time filters
+
+            # operator, '<', '>', or '='
+            op = self.cleaned_data.get(field + "_op", "")
+            
+            if op == "0":
+                qs = qs.filter_by_column(field, eq=val)
                 
-            elif field == 'person':
-                kwargs = {"person__icontains": val}
-                qs = qs.filter(**kwargs)
+            elif op == "1":
+                qs = qs.filter_by_column(field, gt=val)
                 
-            elif field == 'remarks':
-                kwargs = {"remarks__icontains": val}
-                qs = qs.filter(**kwargs)
-            
-            elif "__" in field:       # all "__" filters
-                kwargs = {"%s__icontains" % field: val}
-                qs = qs.filter(**kwargs)
-            
-            elif val>=0:                     # all time filters
-                filter_ = val
-                # operator, '<', '>', or '='
-                op = self.cleaned_data.get(field + "_op", "")
-                
-                if op == "0":
-                    qs = qs.filter_by_column(field, eq=val)
-                    
-                elif op == "1":
-                    qs = qs.filter_by_column(field, gt=val)
-                    
-                elif op == "2":
-                    qs = qs.filter_by_column(field, lt=val)
+            elif op == "2":
+                qs = qs.filter_by_column(field, lt=val)
 
     return qs
     
@@ -97,19 +108,24 @@ def make_filter_form(user):
     fields = {
               'plane__tags':       forms.CharField(required=False),
               'plane__tailnumber': forms.CharField(required=False),
+              
               'plane__type':       forms.ChoiceField(choices=types,
                                                      required=False),
+                                                     
               'plane__cat_class':  forms.ChoiceField(choices=cc,
                                                      required=False),
+                                                     
               'start_date':        forms.DateField(label="Start",
                                              required=False,
                                              widget=forms.TextInput(attrs=dp)),
+                                             
               'end_date':          forms.DateField(label="End",
                                             required=False,
                                             widget=forms.TextInput(attrs=dp)),
                                             
               'person':            forms.CharField(required=False),
               'remarks':           forms.CharField(required=False),
+              
               'route__fancy_rendered': forms.CharField(required=False,
                                                        label="Route"),
              }
