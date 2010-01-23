@@ -102,10 +102,14 @@ class StatDB(models.Model):
 class Stat(object):
 
     def __init__(self):
+        
+        from django.conf import settings
+        self.base_flights = Flight.objects.exclude(user__id=settings.DEMO_USER_ID)
+        
         self.users = User.objects.count()
         self.sda = datetime.date.today() - datetime.timedelta(days=7)
         #all flights in the past 7 days
-        self.fsd = Flight.objects.filter(date__gte=self.sda)
+        self.fsd = self.base_flights.filter(date__gte=self.sda)
         
         #person with most...
         self.pwm = User.objects.exclude(flight=None)\
@@ -125,7 +129,7 @@ class Stat(object):
         kwargs = {"dt": datetime.datetime.now()}
         
         for item in fields:
-            kwargs.update({item: getattr(self, "calc_%s" % item)()})
+            kwargs.update({item: getattr(self, "calc_%s" % item).__call__()})
         
         sdb = StatDB(**kwargs)
         sdb.save()
@@ -134,7 +138,7 @@ class Stat(object):
     
     def calc_day_wmh(self):
         """day with the most hours logged, ignoring entries > 24h"""
-        item = Flight.objects\
+        item = self.base_flights\
                      .values('total', 'date')\
                      .filter(total__lte=24)\
                      .values('date')\
@@ -150,7 +154,7 @@ class Stat(object):
         item = UsersToday.objects\
                           .annotate(c=Count('logged_today'))\
                           .values('c', 'date')\
-                          .order_by('-c')[0]
+                          .latest()
                           
         from django.utils.dateformat import format
                           
@@ -173,7 +177,7 @@ class Stat(object):
         return self.fsd.count()
     
     def calc_time_7_days(self):
-        return self.fsd.aggregate(s=Sum('total'))['s'] 
+        return self.fsd.exclude(total__gte=24).aggregate(s=Sum('total'))['s'] 
                           
     def calc_auv(self):
         qs = Location.objects\
@@ -190,6 +194,7 @@ class Stat(object):
         
         return foo
 
+    # these classes return callable objects
     calc_most_common_manu = MostCommonManu()
     calc_most_common_type = MostCommonType()
     calc_most_common_tail = MostCommonTail()
@@ -208,14 +213,6 @@ class Stat(object):
                         .values('location__country')\
                         .distinct()\
                         .count()
-
-    
-    
-    def calc_unique_countries(self):
-        return RouteBase.objects\
-                        .values('location__country')\
-                        .distinct()\
-                        .count()
     
     def calc_unique_airports(self):
         return RouteBase.objects.values('location').distinct().count()
@@ -224,18 +221,18 @@ class Stat(object):
         """ Average length of each flight, excluding adjustment entries
         """
         
-        hours = Flight.objects.exclude(total__gte=24).aggregate(t=Sum('total'))['t']
+        hours = self.base_flights.exclude(total__gte=24).aggregate(t=Sum('total'))['t']
         return hours / self.total_logged
     
     def calc_avg_per_active(self):
         return self.total_hours / self.non_empty_users
 
     def calc_total_logged(self):
-        self.total_logged = Flight.objects.count()
+        self.total_logged = self.base_flights.count()
         return self.total_logged
 
     def calc_total_hours(self):
-        self.total_hours = Flight.objects.aggregate(t=Sum('total'))['t']
+        self.total_hours = self.base_flights.aggregate(t=Sum('total'))['t']
         return self.total_hours
         
     def calc_non_empty_users(self):
