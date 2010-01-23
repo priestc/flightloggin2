@@ -159,7 +159,7 @@ class Stat(object):
         item = UsersToday.objects\
                           .annotate(c=Count('logged_today'))\
                           .values('c', 'date')\
-                          .latest()
+                          .order_by('-c')[0]
                           
         from django.utils.dateformat import format
                           
