@@ -11,57 +11,6 @@
 
 
 {% block canvas %}
-<div class="instructions">
-<ul>
-    <li>The "Maps" link will open your routes in Google Maps. If your logbook is
-    very large, this option may not work. Google Maps has a file size limit
-    which may prevent it from working. Also, you must have "Allow Sharing"
-    enabled in the preferences section, because this is essentially sharing some of
-    your logbook data with Google.
-    </li>
-
-    <li>The "Earth" link will open your routes/airports in Google Earth. You
-    must have Google Earth installed for this to work. Google Earth has no size
-    limit, so this option should work for everybody.
-    </li>
-</ul>
-</div>
-<h2>Routes</h2>
-<table class="maps_table">
-    <tr>
-        <td>All Routes:</td>
-        <td>{% url kml-route request.display_user "all" as all_routes_url %}
-            <a href="{{ all_routes_url }}">Earth</a>&nbsp;&nbsp;
-            <a href="http://maps.google.com?q={{ SITE_URL }}{{ all_routes_url|urlencode }}" target="_blank">Maps</a>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <span class="red">Red: Single-Engine</span><br>
-            <span class="blue">Blue: Multi-Engine</span>
-        </td>
-        <td>{% url kml-route request.display_user "cat_class" as cat_class_url %}
-            <a href="{{cat_class_url }}">Earth</a>&nbsp;&nbsp;
-            <a href="http://maps.google.com?q={{ SITE_URL }}{{cat_class_url|urlencode}}" target="_blank">Maps</a>
-        </td>
-    </tr>
-    
-    <tr>
-        <td>
-            <span class="green">Green: Instrument</span><br>
-            <span class="red">Red: PIC/Solo</span><br>
-            <span class="orange">Orange: Dual Given</span><br>
-            <span class="purple">Purple: SIC</span><br>
-            <span class="blue">Blue: Dual Received</span>
-        </td>
-        
-        <td>{% url kml-route request.display_user "flight_time" as flight_time_url %}
-            <a href="{{ flight_time_url }}">Earth</a>&nbsp;&nbsp;
-            <a href="http://maps.google.com?q={{ SITE_URL }}{{ flight_time_url|urlencode }}" target="_blank">Maps</a>
-        </td>
-    </tr>
-</table>
-
 
 <h2>Airports</h2>
 
