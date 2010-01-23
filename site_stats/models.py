@@ -103,20 +103,25 @@ class Stat(object):
 
     def __init__(self):
         
-        from django.conf import settings
-        self.base_flights = Flight.objects.exclude(user__id=settings.DEMO_USER_ID)
+        from django.conf import settings as ss
+        self.base_flights = Flight.objects.exclude(user__id=ss.DEMO_USER_ID)
         
         self.users = User.objects.count()
+        self.today = datetime.date.today()
+        
         self.sda = datetime.date.today() - datetime.timedelta(days=7)
-        #all flights in the past 7 days
-        self.fsd = self.base_flights.filter(date__gte=self.sda)
+        
+        #all flights in the past 7 days (but not in the future)
+        self.fsd = self.base_flights.filter(date__gte=self.sda,
+                                            date__lte=self.today)
         
         #person with most...
-        self.pwm = User.objects.exclude(flight=None)\
-                  .annotate(s=Sum('flight__total'))\
-                  .annotate(c=Count('flight__id'))\
-                  .annotate(a=Avg('flight__total'))\
-                  .exclude(a__gte=30)
+        self.pwm = User.objects\
+                       .exclude(flight=None)\
+                       .annotate(s=Sum('flight__total'))\
+                       .annotate(c=Count('flight__id'))\
+                       .annotate(a=Avg('flight__total'))\
+                       .exclude(a__gte=30)
                   
     def save_to_db(self):
         fields = ("users", "non_empty_users", "total_hours", "total_logged",
@@ -170,8 +175,15 @@ class Stat(object):
         return self.pwm.order_by('-c').values('c')[:1][0]['c']
         
     def calc_user_7_days(self):
-        return User.objects.filter(flight__date__gte=self.sda)\
-                   .distinct().count()
+        """
+        Number of users who have logged a flight between today and 7 days
+        ago, based on the date the flight took place
+        """
+        
+        return User.objects.filter(flight__date__gte=self.sda,
+                                   flight__date__lte=self.today)\
+                   .distinct()\
+                   .count()
     
     def calc_num_7_days(self):  
         return self.fsd.count()
