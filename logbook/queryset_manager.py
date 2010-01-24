@@ -116,6 +116,12 @@ class FlightQuerySet(QuerySet, UserMixin):
     ## by flight time
     
     def by_flight_time(self, col, f=True, eq=False, lt=None, gt=None):
+        """
+        Filteres the queryset to only include flights greater than, less than,
+        etc. the passed value of the given column name. All other flights
+        are filtered out.
+        """
+        
         if lt:
             kwarg={col + "__lt": lt}
         elif gt:
@@ -289,8 +295,13 @@ class FlightQuerySet(QuerySet, UserMixin):
             return self.sim(False).total(*args, **kwargs)
         
         if cn == 'day':
-            return self.sim(False).total(*args, **kwargs) - \
+            try:
+                return self.sim(False).total(*args, **kwargs) - \
                      self.sim(False).night(*args, **kwargs)
+            except TypeError:
+                # this column can't be made (filtered queryset is empty), so
+                # just do nothing
+                return self
             
         elif cn == "sim":
             return self.sim().total(*args, **kwargs)

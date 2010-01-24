@@ -157,9 +157,9 @@ class Stat(object):
         """day with most users having edited their logbook"""
         from backup.models import UsersToday
         item = UsersToday.objects\
-                          .annotate(c=Count('logged_today'))\
-                          .values('c', 'date')\
-                          .order_by('-c')[0]
+                         .annotate(c=Count('logged_today'))\
+                         .values('c', 'date')\
+                         .order_by('-c')[0]
                           
         from django.utils.dateformat import format
                           
@@ -185,7 +185,7 @@ class Stat(object):
                    .distinct()\
                    .count()
     
-    def calc_num_7_days(self):  
+    def calc_num_7_days(self):
         return self.fsd.count()
     
     def calc_time_7_days(self):
