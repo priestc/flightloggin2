@@ -31,7 +31,7 @@ def part135ifr(qs):
     plane_inst = qs.sim(False).agg('sim_inst', float=True) + \
                  qs.sim(False).agg('act_inst', float=True)
                  
-    simulator_inst = qs.sim(True).agg('sim_inst')
+    simulator_inst = qs.sim(True).agg('sim_inst', float=True)
     
     if simulator_inst > 25:
         simulator_inst = 25

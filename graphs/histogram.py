@@ -1,9 +1,11 @@
+from django.conf import settings
 from django.db.models import Sum
 from image_formats import plot_png, plot_svg, plot_png2, plot_svg2
 class Histogram(object):
     def __init__(self):
         from django.contrib.auth.models import User
         self.data = User.objects\
+                        .exclude(id=settings.DEMO_USER_ID)\
                         .values('id')\
                         .annotate(t=Sum('flight__total'))\
                         .filter(t__isnull=False)\
