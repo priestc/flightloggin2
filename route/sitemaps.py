@@ -14,6 +14,6 @@ class RouteSitemap(Sitemap):
     def location(self, item):
         from django.core.urlresolvers import reverse
         try:
-            return reverse("profile-route", kwargs={"pk": item})
+            return reverse("profile-route", kwargs={"r": item})
         except:
             return ""
