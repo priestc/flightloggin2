@@ -87,7 +87,7 @@ OPTION_FIELDS = [
           'sim', 'pic', 'sic', 'solo', 'day', 'night', 'dual_r','dual_g', 'xc',
           'act_inst', 'sim_inst', 'night_l','day_l', 'app', 'p2p', 'multi',
           'm_pic', "single", "single_pic", 'sea', 'sea_pic', 'mes', 'mes_pic',
-          'turbine', 't_pic', 'mt',
+          'tail', 'turbine', 't_pic', 'mt',
           'mt_pic', 'complex', 'hp', "line_dist", 'atp_xc', 'max_width','speed',
           
           'instructor', 'student','fo','captain',
