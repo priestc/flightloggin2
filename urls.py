@@ -96,14 +96,20 @@ urlpatterns = patterns('',
                                                               
     (       # old sig url format (for legacy)
         r'^(?P<username>\w+)/sigs/(?P<columns>[\w\-]+)\.png',
-        "sigs.views.make_sig",
+        "sigs.views.make_totals_sig",
         {"font": "VeraMono", "logo": "nologo"},
     ),
     
     (       # new sig format
         r'^(?P<username>\w+)/(?P<logo>(logo|nologo))-sigs/' + 
         r'(?P<font>\w+)-(?P<size>\d{1,2})/(?P<columns>[\w\-]+)\.png',
-        "sigs.views.make_sig",
+        "sigs.views.make_totals_sig",
+    ),
+    
+    (       # new sig format
+        r'^(?P<username>\w+)/ds-sigs/' + 
+        r'(?P<font>\w+)-(?P<size>\d{1,2})/(?P<mode>[\w]+)\.png',
+        "sigs.views.make_days_since_sig",
     ),
     
 

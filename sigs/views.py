@@ -28,11 +28,29 @@ def sigs(request):
 
 
 @no_share('other')
-def make_sig(request, columns, logo, font, size=12):
-    from classes import Sig
+def make_totals_sig(request, columns, logo, font, size=12):
+    from classes import TotalsSig
     columns = columns.split('-')
     
-    sig = Sig(request.display_user, columns, font=font, logo=logo, size=size)
+    sig = TotalsSig(request.display_user,
+                    columns=columns,
+                    font=font,
+                    logo=logo,
+                    size=size)
+    
+    from django.http import HttpResponse
+    response = HttpResponse(mimetype="image/png")
+    sig.output().save(response, "png")
+    return response
+
+@no_share('other')
+def make_days_since_sig(request, mode, font, size=12):
+    from classes import DaysSinceSig
+    
+    sig = DaysSinceSig(request.display_user,
+                       mode=mode,
+                       font=font,
+                       size=size)
     
     from django.http import HttpResponse
     response = HttpResponse(mimetype="image/png")

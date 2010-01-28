@@ -1,23 +1,17 @@
+import datetime
 import Image
 import ImageFont
 import ImageDraw
 
 from logbook.constants import FIELD_TITLES, GRAPH_FIELDS
 
-class Sig(object):
-    """ Creates a little image with the user's logbook totals for
-        linking in forum signatures and other uses
-    """
+class BaseSig(object):
     
-    title_columns = []
-    max_title_width = 0
-    
-    def __init__(self, user, columns, font="VeraMono", logo=False, size=12):
+    def __init__(self, user, font="VeraMono", logo=False, size=12):
         import os
         from django.conf import settings
         
         self.user = user
-        self.columns = columns
         self.data = {}
         
         assert int(size) <= 40, "Font size is too big"
@@ -34,11 +28,28 @@ class Sig(object):
         self.font = ImageFont.truetype(fontdir, self.font_size)
         
         self.line_height = self.font.getsize("TlIKOPgq")[1] + 2
+
+class TotalsSig(BaseSig):
+    """ Creates a little image with the user's logbook totals for
+        linking in forum signatures and other uses
+    """
+    
+    title_columns = []
+    max_title_width = 0
+    
+    def __init__(self, *args, **kwargs):
         
+        columns = kwargs.pop('columns')
+        self.columns = columns
         self.title_columns = [FIELD_TITLES[column] for column in columns]
+        
+        super(TotalsSig, self).__init__(*args, **kwargs)
+        
+        
     
     def get_data(self):
-        """ Returns a dict with all the user's logbook totals
+        """
+        Returns a dict with all the user's logbook totals
         """
         
         from logbook.models import Flight
@@ -109,3 +120,73 @@ class Sig(object):
                                
                 i += 1 #move the next line down one line width
 
+class DaysSinceSig(BaseSig):
+    def __init__(self, *args, **kwargs):
+        
+        self.mode = str(kwargs.pop('mode'))
+        
+        super(DaysSinceSig, self).__init__(*args, **kwargs)
+    
+    def figure_width(self):
+        pass
+    
+
+        
+    def figure_pre_text(self):
+        if self.mode == 'total':
+            title = "flight"
+            
+        elif self.mode == 'any':
+            title = "logbook entry"
+            
+        else:
+            title = FIELD_TITLES[self.mode] + " flight"
+        
+        self.pre_text = "Time since my last %s" % title
+        
+        
+        
+    def get_data(self):
+        
+        from logbook.models import Flight
+        from logbook.constants import FIELD_TITLES    
+        try:
+            last = Flight.objects.user(self.user)\
+                                 .by_flight_time(self.mode)\
+                                 .latest()
+                                 
+        except Flight.DoesNotExist:
+            last = None
+            
+        if last:
+            self.days_ago = (datetime.date.today() - last.date).days
+            self.unit = "days"
+        else:
+            self.days_ago = "Never"
+            self.unit = ""
+            
+        if self.days_ago > 365:
+            self.days_ago = "%.2f" % (self.days_ago / 365.0)
+            self.unit = 'years'
+            
+    
+    def output(self):
+        self.figure_pre_text()
+        self.get_data()
+        
+        text = "%s: %s %s" % (self.pre_text, self.days_ago, self.unit)
+        
+        width, height = self.font.getsize(text)
+        
+        self.im = Image.new("RGBA", (width+10, height+2))
+        self.draw = ImageDraw.Draw(self.im)
+        
+        self.draw.text(
+            (5, 0),
+            text,
+            font=self.font,
+            fill='black'
+        )
+        
+        return self.im
+    
