@@ -130,11 +130,19 @@
 				<td colspan="2">{{ profile_form.per_page }}</td>
 				<td>{{ profile_form.per_page.errors }}</td>
 			</tr>
+			
 			<tr>
 				<td>{{ profile_form.minutes.label_tag }}</td>
 				<td colspan="2">{{ profile_form.minutes }}</td>
 				<td>{{ profile_form.minutes.errors }}</td>
 			</tr>
+			
+			<tr>
+				<td>{{ profile_form.text_plane.label_tag }}</td>
+				<td colspan="2">{{ profile_form.text_plane }}</td>
+				<td>{{ profile_form.text_plane.errors }}</td>
+			</tr>
+			
 			<tr>
 				<td>{{ profile_form.date_format.label_tag }}</td>
 				<td colspan="2">{{ profile_form.date_format }}</td>
@@ -142,6 +150,7 @@
 				    Default: "Y-m-d" For a guide to date formatting, <a target="_blank" href="http://us3.php.net/manual/en/function.date.php">click here</a>
 				</td>
 			</tr>
+			
 			<tr>
 				<td></td>
 				<td></td>

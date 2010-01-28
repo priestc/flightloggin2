@@ -53,6 +53,11 @@ class Profile(models.Model):
                          default=False,
                      )
                      
+    text_plane =     models.BooleanField(
+                         "Use text field for entering tailnumber",
+                         default=False,
+                     )
+                     
     social =         models.BooleanField("Include me in site-wide stats and lists",
                          default=True,
                      )

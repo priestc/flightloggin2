@@ -8,7 +8,7 @@ from annoying.decorators import render_to
 from share.decorator import no_share
 
 from models import Flight, Columns
-from forms import *
+import forms
 from constants import *
 from totals import column_total_by_list
 from profile.models import Profile, AutoButton
@@ -18,12 +18,33 @@ from profile.models import Profile, AutoButton
 @render_to("logbook.html")
 @no_share('logbook')
 def logbook(request, page=0):
+    ##############################################################
     
-    form = FlightForm(prefix="new")
+    auto_button,c = AutoButton.objects.get_or_create(user=request.display_user)
+    cols, c = Columns.objects.get_or_create(user=request.display_user)
+    profile,c = Profile.objects.get_or_create(user=request.display_user)
+    
+    ##############################################################
+        
+    PopupFlightForm = forms.PopupFlightForm
+    PopupFlightForm.plane = forms.text_plane_field 
+    
+    if profile.text_plane:
+        # if the user wants a text field fo the plane, then swap in this field
+        # instead
+        PopupFlightForm.base_fields['plane'] = forms.text_plane_field
+
+    form = PopupFlightForm(user=request.display_user, prefix="new")
+    
+    ##############################################################
     
     if request.POST.get('submit', "") == "Submit New Flight":
         flight = Flight(user=request.display_user)
-        form = FlightForm(request.POST, instance=flight, prefix="new")
+        
+        form = PopupFlightForm(request.POST,
+                               user=request.display_user,
+                               instance=flight,
+                               prefix="new")
         edit_or_new = "new"
         
         if form.is_valid():
@@ -37,7 +58,11 @@ def logbook(request, page=0):
     elif request.POST.get('submit', "") == "Edit Flight":
         flight_id = request.POST['id']
         flight = Flight(pk=flight_id, user=request.display_user)
-        form = FlightForm(request.POST, instance=flight, prefix="new")
+        
+        form = PopupFlightForm(request.POST,
+                               user=request.display_user,
+                               instance=flight,
+                               prefix="new")
         edit_or_new = "edit"
         
         if form.is_valid():
@@ -104,8 +129,6 @@ def logbook(request, page=0):
     
     #only make the page table if there are more than one pages overall
     do_pagination = page_of_flights.paginator.num_pages > 1
-    
-    
     
     return locals()
 

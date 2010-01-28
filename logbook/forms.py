@@ -10,6 +10,8 @@ from models import *
 from route.forms import RouteField, RouteWidget
 from logbook.utils import from_minutes
 
+#####################################
+
 class BlankHourWidget(TextInput):
     def _format_value_out(self, value):
         """In: decimal number
@@ -54,8 +56,6 @@ class BlankIntWidget(BlankHourWidget):
         else:
             return str(value)
 
-###############################################################################
-
 class BlankHourField(forms.Field):
     widget = BlankHourWidget
     def clean(self, value):
@@ -88,16 +88,44 @@ class BlankIntField(BlankHourField):
     
 ###############################################################################
 
-class FlightForm(ModelForm):
+class TextPlaneField(ModelChoiceField):
+    """
+    A field that returns a plane instance and uses a text field instead of
+    a dropdown box
+    """
+    
+    widget = forms.TextInput()
+    
+    def clean(self, val):
+        from plane.models import Plane
+        
+        if val == '':
+            ## if the thing was blank, get and return the global unknown plane
+            from django.conf import settings
+            return Plane.objects.get(pk=settings.UNKNOWN_PLANE_ID)
+        
+        try:
+            ## self.user is set from the form __init__ function which is called
+            ## after this field instance is created
+            return Plane.objects.filter(tailnumber=val, user=self.user)[0]
+        except IndexError:
+            # it returned zero planes, no match, create the plane
+            return Plane.objects.create(tailnumber=val, user=self.user)
+
+        assert False, "text plane field not returning anything"
+        
+###############################################################################
+
+text_plane_field = \
+    TextPlaneField(
+       queryset=Plane.objects.get_empty_query_set()
+    )
+
+class PopupFlightForm(ModelForm):
     
     route =    RouteField(
                    required=False,
                    queryset=Route.objects.get_empty_query_set()
-               )
-    
-    plane =    ModelChoiceField(
-                   required=True,
-                   queryset=Plane.objects.get_empty_query_set()
                )
     
     total =    BlankDecimalField(label="Total Time")
@@ -116,27 +144,32 @@ class FlightForm(ModelForm):
     app =      BlankIntField(label="Approaches")
     
     
-    def __init__(self, *args, **kwargs):  
-        super(FlightForm, self).__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
         
-        from share.middleware import share
-        from django.db.models import Max
+        self.user = kwargs.pop('user')
+            
+        super(PopupFlightForm, self).__init__(*args, **kwargs)
+
         self.fields['date'].widget = widgets.AdminDateWidget()
+        
+        from django.db.models import Max
         self.fields['plane'].queryset = \
-                    Plane.objects\
-                    .user_common(share.get_display_user())\
+                 Plane.objects\
+                   .user_common(self.user)\
                     .annotate(fd=Max('flight__date')).order_by('-fd')
-        self.fields['plane'].default=1
-        self.fields['plane'].blank=False
-        self.fields['plane'].null=False
+        
+        self.fields['plane'].user = self.user
 
     class Meta:
         model = Flight
         exclude = ('user', )
+        
 
+
+        
 ###############################################################################
 
-class FormsetFlightForm(FlightForm):
+class FormsetFlightForm(PopupFlightForm):
     """Form used for the mass entry section. It's the same as the normal flight
        form except that it renders the route field as a string, and the
        remarks are in a big textbox

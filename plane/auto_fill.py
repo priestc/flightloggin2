@@ -218,11 +218,17 @@ def autofill(type_):
                 "cat_class": 1,
                 "tags": None}
     
-    elif type_ == "SR22" or type_ == "SR20":
+    elif type_ == "SR22":
         return {"manufacturer": "Cirrus",
                 "model": "",
                 "cat_class": 1,
                 "tags": "HP, Glass"}
+                
+    elif type_ == "SR20":
+        return {"manufacturer": "Cirrus",
+                "model": "",
+                "cat_class": 1,
+                "tags": "Glass"}
     
     ## -----------------------------------------------------------------
         

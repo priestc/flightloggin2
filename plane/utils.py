@@ -6,14 +6,19 @@ from main.mixins import UserMixin
 class PlaneQuerySet(QuerySet, UserMixin):
     
     def user_common(self, u):
-        return self.filter(user__in=(1, u.id) )
+        """
+        Filters the queryset by the passed user, as well as the 'common' user
+        """
+        from django.conf import settings
+        return self.filter(user__in=(settings.COMMON_USER_ID, u.id) )
     
     def tailwheel(self):
         return self.filter( Q(tags__icontains="tailwheel"))
     
     def currency(self):
-        """ filters down to planes that are eligable for currency, e.g. tagged
-            as either 'tr', 'type rating', or 'currency'
+        """
+        filters down to planes that are eligable for currency, e.g. tagged
+        as either 'tr', 'type rating', or 'currency'
         """
         
         from django.db.models import Q

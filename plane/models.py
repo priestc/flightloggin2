@@ -9,7 +9,6 @@ import tagging
 from tagging.models import Tag
 
 from main.mixins import GoonMixin
-
 from constants import *
 
 class QuerySetManager(models.Manager):
