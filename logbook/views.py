@@ -8,6 +8,7 @@ from annoying.decorators import render_to
 from share.decorator import no_share
 
 from models import Flight, Columns
+from plane.models import Plane
 import forms
 from constants import *
 from totals import column_total_by_list
@@ -138,15 +139,12 @@ def logbook(request, page=0):
 @render_to("mass_entry.html")     
 def mass_entry(request):
     
-    try:
-        profile = request.display_user.get_profile()
-    except:
-        profile = Profile()
+    profile,c = Profile.objects.get_or_create(user=request.display_user)
         
     NewFlightFormset = modelformset_factory(Flight,
-                                            form=FormsetFlightForm,
-                                            extra=profile.per_page,
-                                            formset=FixedPlaneModelFormset)
+                                       form=forms.FormsetFlightForm,
+                                       extra=profile.per_page,
+                                       formset=forms.FixedPlaneModelFormset)
         
     if request.POST.get('submit'):
         post = request.POST.copy()
@@ -161,7 +159,8 @@ def mass_entry(request):
             
         formset = NewFlightFormset(post,
                     queryset=Flight.objects.get_empty_query_set(),
-                    planes_queryset=Plane.objects.user_common(request.display_user))
+                    planes_queryset=Plane.objects.user_common(request.display_user)
+                  )
         
         if formset.is_valid():
             for form in formset.forms:
@@ -190,20 +189,20 @@ def mass_entry(request):
 def mass_edit(request, page=0):
     edit = True 
     flights = Flight.objects.filter(user=request.display_user)
-    
-    try:
-        profile = request.display_user.get_profile()
-    except:
-        profile = Profile()
+    profile,c = Profile.objects.get_or_create(user=request.display_user)
         
     start = (int(page)-1) * int(profile.per_page)
     duration = int(profile.per_page)
     qs = Flight.objects.filter(user=request.display_user)[start:start+duration]
-    NewFlightFormset = modelformset_factory(Flight, form=FormsetFlightForm,
-            formset=FixedPlaneModelFormset, extra=0, can_delete=True)
+    NewFlightFormset = modelformset_factory(Flight,
+                                            form=forms.FormsetFlightForm,
+                                            formset=forms.FixedPlaneModelFormset,
+                                            extra=0,
+                                            can_delete=True)
         
     if request.POST.get('submit'):
         formset = NewFlightFormset(request.POST, queryset=qs,
+                    user=request.display_user,
                     planes_queryset=Plane.objects.user_common(request.display_user)
                   )
         
@@ -221,7 +220,7 @@ def mass_edit(request, page=0):
             )
     else:
         formset = NewFlightFormset(queryset=qs,
-                    planes_queryset=Plane.objects.user_common(request.display_user),
+                planes_queryset=Plane.objects.user_common(request.display_user),
                   )
     
     return locals()      

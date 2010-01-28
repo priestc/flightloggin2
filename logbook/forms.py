@@ -9,6 +9,7 @@ from django.forms.util import ValidationError
 from models import *
 from route.forms import RouteField, RouteWidget
 from logbook.utils import from_minutes
+from plane.models import Plane
 
 #####################################
 
@@ -97,7 +98,6 @@ class TextPlaneField(ModelChoiceField):
     widget = forms.TextInput()
     
     def clean(self, val):
-        from plane.models import Plane
         
         if val == '':
             ## if the thing was blank, get and return the global unknown plane
@@ -146,8 +146,14 @@ class PopupFlightForm(ModelForm):
     
     def __init__(self, *args, **kwargs):
         
-        self.user = kwargs.pop('user')
+        if kwargs.has_key('user'):
+            self.user = kwargs.pop('user')
+        else:
+            from share.middleware import share
+            self.user = share.get_display_user()
             
+        print self.user
+        
         super(PopupFlightForm, self).__init__(*args, **kwargs)
 
         self.fields['date'].widget = widgets.AdminDateWidget()
@@ -194,10 +200,21 @@ class FormsetFlightForm(PopupFlightForm):
         
 from django.forms.models import BaseModelFormSet
 class FixedPlaneModelFormset(BaseModelFormSet):
-    def __init__(self, *args, **kwargs): 
+    """
+    An edited formset to deal with the custom plane queryset, as well as
+    passing in the user instance to each form
+    """
+    
+    def __init__(self, *args, **kwargs):
+        
         if kwargs.has_key('planes_queryset'):
             self.custom_queryset = kwargs['planes_queryset']
-            del kwargs['planes_queryset']         
+            del kwargs['planes_queryset']
+            
+        if kwargs.has_key('user'):
+            self.user = kwargs['user']
+            del kwargs['user']
+        
         super(FixedPlaneModelFormset, self).__init__(*args, **kwargs)
 
     def add_fields(self, form, index):
@@ -205,3 +222,5 @@ class FixedPlaneModelFormset(BaseModelFormSet):
         form.fields["plane"] = ModelChoiceField(
                 queryset=Plane.objects.get_empty_query_set(), required=True)
         form.fields['plane'].queryset = self.custom_queryset
+        
+    

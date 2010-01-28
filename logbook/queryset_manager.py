@@ -122,6 +122,10 @@ class FlightQuerySet(QuerySet, UserMixin):
         are filtered out.
         """
         
+        if col == 'any':
+            ## the 'any' column does nothing
+            return self
+        
         if lt:
             kwarg={col + "__lt": lt}
         elif gt:
