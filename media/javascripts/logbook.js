@@ -7,8 +7,12 @@ function fill_in_flight(dom_id) {
 	$("#id_new-date").val(date);
 
 	var plane = $("#f" + id + " span.data_plane").text();
-	if(plane != '')
+	if( $('#id_new-plane select').length ){
     	$("#id_new-plane option:contains(" + plane + ")").attr("selected", "selected");
+    } else {
+        plane = plane.split(' ')[0]
+        $("#id_new-plane").val(plane);
+    }
 	
 	var route = $("#f" + id + " span.data_route").text();
 	$("#id_new-route").val(route);
