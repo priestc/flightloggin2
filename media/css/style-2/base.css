@@ -8,22 +8,20 @@ body                    {background: #CCE4EB;
                          min-height: 100%;
                          height: 100%;}
                          
-#header                 {margin:5px; overflow: hidden; border: 0px solid black}
+#header                 {margin:5px; overflow: visible; border: 0px solid black}
+
 #main_content           {margin:5px; overflow: hidden; border: 0px solid black}
 
-#logo                   {height: 44px;
-                         margin-top: 11px;
-                         border: 0px solid black;}
+#logo                   {margin-top: 11px;
+                         margin-bottom: 5px;
+                         border: 0px;
+                         float: left;}
 
-#logo_box               {float: left}
-
-#advert_box             {float: right; height:60px}
-
-#logged_in_as           {float: right;
-                         text-align: right;
+#inner_header           {text-align: right;
                          font-weight: normal;
                          color: #001147;
                          width: 100%;
+                         overflow: hidden;
                          border: 0}
                          
 span.logged_user,
@@ -32,12 +30,11 @@ span.display_user       {font-weight: bold}
 #demo                   {font-weight: bold;
                          color: #AA3333}
 
+#navbar_header          {margin-bottom: 10px}
 
 #nav_bar                {background: #665B1E;
                          color: white;
-                         border: 0px;
                          width: 100%;
-                         float: left;
                          padding: 0;
                          padding-top: 3px;
                          padding-bottom: 3px;

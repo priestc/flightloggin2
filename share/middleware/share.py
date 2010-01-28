@@ -60,11 +60,6 @@ class Share(object):
     #########################
     
     @property
-    def is_Google_KML(self):
-        """is the requester google maps?"""
-        return "Google" in self.useragent
-    
-    @property
     def is_staff(self):
         """is the viewing person a site admin?"""
         return self.request.user.is_staff
@@ -80,10 +75,6 @@ class Share(object):
         
         if self.demo:
             # Demo user, allow everything
-            return self.full_access
-        
-        if self.is_Google_KML:
-            # Google gets let in no matter what
             return self.full_access
         
         if self.is_staff:
@@ -123,6 +114,13 @@ class ShareMiddleware(object):
             
             request.display_user = display_user
             request.shared = shared
+            
+            return view(request=request, *args, **kwargs)
+        
+        else:
+            
+            request.display_user = None
+            request.shared = False
             
             return view(request=request, *args, **kwargs)
                         

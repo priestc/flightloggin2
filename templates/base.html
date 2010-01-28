@@ -3,7 +3,7 @@
 {% block navbar %}
     {# do not render the navbar when there is no logged in user (url tags will fail) #}
     {% if request.display_user %}
-    <div id="nav_bar" summary="Top navigation bar">
+    <div id="nav_bar">
     
         {% if not request.shared or request.display_user.get_profile.logbook_share %}
         <span class="big {% block logbook-sel %}{% endblock%}" >
@@ -72,10 +72,9 @@
         <span class="{% block profile-sel %}{% endblock%}" >
         <a href="{% url profile request.display_user.username %}">Preferences</a></span>
         
-        <span>
-        <a href="/logout">Log Out</a></span>
         {% endif %}
 
     </div>
     {% endif %}
+
 {% endblock %}
