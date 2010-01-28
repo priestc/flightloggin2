@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
+from django.conf import settings
 
 from plane.models import Plane
 from route.models import Route
@@ -21,7 +22,7 @@ class Flight(models.Model, GoonMixin):
     user =     models.ForeignKey(User, blank=False, editable=False)
     remarks =  models.TextField(blank=True)
 
-    plane =    models.ForeignKey(Plane, default=1) # 1 = 'unknown' plane
+    plane =    models.ForeignKey(Plane, default=settings.UNKNOWN_PLANE_ID)
     route =    models.ForeignKey(Route, related_name="flight")
 
     total =    models.FloatField(    "Total Time",            default=0)
