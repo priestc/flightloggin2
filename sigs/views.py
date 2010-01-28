@@ -20,10 +20,37 @@ def all_agg_checkbox(prefix=""):
     
     return html_table(out, 5, "checktable")
 
+def all_agg_radiobox(any_=False, prefix="", name='radio'):
+    out = []
+    
+    #grab from global scope so we can ad to it
+    fields = GRAPH_FIELDS
+    
+    if any_:
+        fields += ['any']
+    
+    for field in fields:
+        if field == 'any':
+            sel='checked="checked"'
+        else:
+            sel = ""
+            
+        out.append(
+        """<input %(sel)s type="radio" id="%(field)s" name="%(name)s">
+           <label for="%(field)s">%(display)s</label>""" %
+                {'name': name,
+                 'sel': sel,
+                 'field': field,
+                 'display': FIELD_TITLES[field]}
+        )
+    
+    return html_table(out, 5, "radiotable")
+
 @no_share('other')
 @render_to('sigs.html')
 def sigs(request):
     checkbox_table = all_agg_checkbox()
+    radiobox_table = all_agg_radiobox(any_=True, name='lastx')
     return locals()
 
 

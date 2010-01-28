@@ -10,9 +10,10 @@ var url = p + "sigs/pic.png";
 
 $(document).ready(function() {
 
-    generate();
+    generate_totals();
 
-	$("#generate_button").click(generate);
+	$("#generate_totals").click(generate_totals);
+	$("#generate_lastx").click(generate_lastx);
 });
 
 function generate_sig() {
@@ -23,12 +24,15 @@ function copy_url() {
     $("#sig_url").text(url);
 }
 
-function get_url() {
+function get_url(type) {
     
-    fields = []
-
+    totals_fields = []
     $("#checktable input:checked").each(function() {
-        fields.push(this.id);
+        totals_fields.push(this.id);
+    });
+    
+    $("#radiotable input:checked").each(function() {
+        lastx_field = this.id;
     });
     
     $("input[name='font']:checked").each(function() {
@@ -43,11 +47,26 @@ function get_url() {
         logo = $(this).val();
     });
     
-    url = sprintf("%s%s-sigs/%s-%s/%s.png", p, logo, font, size, fields.join("-") )
+    if(type == 'totals'){
+        sig_type = sprintf("%s-sigs", logo);
+        items = totals_fields.join("-");
+    }
+    
+    if(type == 'lastx') {
+        sig_type = "ds-sigs";
+        items = lastx_field;
+    }
+    url = sprintf("%s%s/%s-%s/%s.png", p, sig_type, font, size, items )
 }
 
-function generate(event) {
-    get_url();
+function generate_totals(event) {
+    get_url('totals');
+	generate_sig();
+	copy_url();
+}
+
+function generate_lastx(event) {
+    get_url('lastx');
 	generate_sig();
 	copy_url();
 }

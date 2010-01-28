@@ -854,8 +854,8 @@ textarea                        {width: 800px; height: 400px}
 ###############################################################################
 
 sigs = """
-#checktable                     {margin-left: auto; margin-right: auto}
-#checktable td                  {text-align: left}
+#checktable, #radiotable        {margin-left: auto; margin-right: auto}
+#checktable td, #radiotable td  {text-align: left}
 
 #sig_url                        {min-width: 800px;
                                  padding: 20px;

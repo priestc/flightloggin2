@@ -151,8 +151,6 @@ class PopupFlightForm(ModelForm):
         else:
             from share.middleware import share
             self.user = share.get_display_user()
-            
-        print self.user
         
         super(PopupFlightForm, self).__init__(*args, **kwargs)
 

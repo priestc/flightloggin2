@@ -126,25 +126,34 @@ class DaysSinceSig(BaseSig):
         self.mode = str(kwargs.pop('mode'))
         
         super(DaysSinceSig, self).__init__(*args, **kwargs)
-    
-    def figure_width(self):
-        pass
-    
-
         
     def figure_pre_text(self):
         if self.mode == 'total':
-            title = "flight"
+            title = ""
             
         elif self.mode == 'any':
             title = "logbook entry"
             
         else:
-            title = FIELD_TITLES[self.mode] + " flight"
+            title = FIELD_TITLES[self.mode]
+            
+        ##########################
+            
+        if self.mode == 'app':
+            title = "Approach"
+        
+        elif self.mode == 'day_l':
+            title = "Day Landing"
+            
+        elif self.mode == 'night_l':
+            title = "Night Landing"
+        
+        else:
+            title += " flight"
+          
         
         self.pre_text = "Time since my last %s" % title
-        
-        
+
         
     def get_data(self):
         
@@ -152,7 +161,7 @@ class DaysSinceSig(BaseSig):
         from logbook.constants import FIELD_TITLES    
         try:
             last = Flight.objects.user(self.user)\
-                                 .by_flight_time(self.mode)\
+                                 .filter_by_column(self.mode)\
                                  .latest()
                                  
         except Flight.DoesNotExist:
@@ -161,13 +170,15 @@ class DaysSinceSig(BaseSig):
         if last:
             self.days_ago = (datetime.date.today() - last.date).days
             self.unit = "days"
+            
+            if self.days_ago > 365:
+                ## switch to years instead of days if it's
+                ## been a really long time
+                self.days_ago = "%.2f" % (self.days_ago / 365.0)
+                self.unit = 'years'
         else:
             self.days_ago = "Never"
             self.unit = ""
-            
-        if self.days_ago > 365:
-            self.days_ago = "%.2f" % (self.days_ago / 365.0)
-            self.unit = 'years'
             
     
     def output(self):

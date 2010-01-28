@@ -95,6 +95,8 @@ OPTION_FIELDS = [
           ]
  
 FIELD_TITLES = {
+    "any": "Any",
+
     "s_route": "Route (Simple)",
     "f_route": "Route (Fancy)",
     "r_route": "Route (Raw)",
