@@ -121,11 +121,6 @@ class FlightQuerySet(QuerySet, UserMixin):
         etc. the passed value of the given column name. All other flights
         are filtered out.
         """
-        from django.core.exceptions import FieldError
-        
-        if col == 'any':
-            ## the 'any' column does nothing
-            return self
         
         if lt:
             kwarg={col + "__lt": lt}
@@ -135,12 +130,10 @@ class FlightQuerySet(QuerySet, UserMixin):
             kwarg={col: eq}
         else:
             kwarg={col + "__gt": 0}
-        try:
-            if not f:
-                return self.exclude(**kwarg)
-            return self.filter(**kwarg)
-        except FieldError:
-            return getattr(self, col).__call__()
+
+        if not f:
+            return self.exclude(**kwarg)
+        return self.filter(**kwarg)
     
     def by_route_val(self, col, f=True, eq=False, lt=None, gt=None):
         if lt:
@@ -297,7 +290,11 @@ class FlightQuerySet(QuerySet, UserMixin):
     def filter_by_column(self, cn, *args, **kwargs):
         """filters the queryset to only include flights
            where the conditions exist"""
-           
+        
+        if cn == 'any':
+            ## the 'any' column does nothing
+            return self
+        
         if cn == "total_s" or cn == "total":
             return self.sim(False).total(*args, **kwargs)
         

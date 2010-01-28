@@ -148,6 +148,10 @@ class DaysSinceSig(BaseSig):
         elif self.mode == 'night_l':
             title = "Night Landing"
         
+        elif self.mode == 'any':
+            # do not do whats in the else block
+            pass
+        
         else:
             title += " flight"
           
