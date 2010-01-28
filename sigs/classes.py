@@ -152,6 +152,10 @@ class DaysSinceSig(BaseSig):
             # do not do whats in the else block
             pass
         
+        elif self.mode == 'total':
+            ## to prevent a double space between 'last' and 'flight'
+            title += "flight"
+        
         else:
             title += " flight"
           
@@ -180,6 +184,10 @@ class DaysSinceSig(BaseSig):
                 ## been a really long time
                 self.days_ago = "%.2f" % (self.days_ago / 365.0)
                 self.unit = 'years'
+                
+            if self.days_ago < 0:
+                self.days_ago = 'The future!'
+                self.unit = ''
         else:
             self.days_ago = "Never"
             self.unit = ""
