@@ -255,13 +255,13 @@ urlpatterns = patterns('',
     #--------------------------------------------------------------------------
      
     url(
-        r'^tailnumber-(?P<tn>[\w\-\)\(]+).kmz$',
+        r'^tailnumber-(?P<tn>%s+).kmz$' % Plane.plane_regex,
         "maps.kml_views.single_tailnumber_kml",
                                                        name="s-tailnumber-kml",
     ),
     
     url(
-        r'^type-(?P<ty>[\w-]+).kmz$',
+        r'^type-(?P<ty>%s+).kmz$' % Plane.plane_regex,
         "maps.kml_views.single_type_kml",
                                                              name="s-type-kml",
     ),
