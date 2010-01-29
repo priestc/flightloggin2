@@ -246,7 +246,10 @@ class Flight(models.Model, GoonMixin):
             return ret
         
         elif cn == 'speed':
-            return "%.1f" % self.speed
+            try:
+                return "%.1f" % self.speed
+            except:
+                return "0.0"
         
         ######################################
         
