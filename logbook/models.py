@@ -25,20 +25,20 @@ class Flight(models.Model, GoonMixin):
     plane =    models.ForeignKey(Plane, default=settings.UNKNOWN_PLANE_ID)
     route =    models.ForeignKey(Route, related_name="flight")
 
-    total =    models.FloatField(    "Total Time",            default=0)
-    pic =      models.FloatField(    "PIC",                   default=0)
-    sic =      models.FloatField(    "SIC",                   default=0)
-    solo =     models.FloatField(    "Solo",                  default=0)
-    night =    models.FloatField(    "Night",                 default=0)
-    dual_r =   models.FloatField(    "Dual Received",         default=0)
-    dual_g =   models.FloatField(    "Dual Given",            default=0)
-    xc =       models.FloatField(    "Cross Country",         default=0)
-    act_inst = models.FloatField(    "Actual Instrument",     default=0)
-    sim_inst = models.FloatField(    "Simulated Instrument",  default=0)
+    total =    models.FloatField("Total Time",            default=0)
+    pic =      models.FloatField("PIC",                   default=0)
+    sic =      models.FloatField("SIC",                   default=0)
+    solo =     models.FloatField("Solo",                  default=0)
+    night =    models.FloatField("Night",                 default=0)
+    dual_r =   models.FloatField("Dual Received",         default=0)
+    dual_g =   models.FloatField("Dual Given",            default=0)
+    xc =       models.FloatField("Cross Country",         default=0)
+    act_inst = models.FloatField("Actual Instrument",     default=0)
+    sim_inst = models.FloatField("Simulated Instrument",  default=0)
     
-    night_l =  models.PositiveIntegerField(   "Night Landings", default=0, null=False)
-    day_l =    models.PositiveIntegerField(   "Day Landings",   default=0, null=False)
-    app =      models.PositiveIntegerField(   "Approaches",     default=0, null=False)
+    night_l =  models.PositiveIntegerField("Night Landings", default=0, null=False)
+    day_l =    models.PositiveIntegerField("Day Landings",   default=0, null=False)
+    app =      models.PositiveIntegerField("Approaches",     default=0, null=False)
 
     holding =           models.BooleanField(                           default=False)
     tracking =          models.BooleanField("Intercepting & Tracking", default=False)
@@ -48,12 +48,23 @@ class Flight(models.Model, GoonMixin):
     ipc =               models.BooleanField("IPC",                     default=False)
 
     person =   models.CharField( max_length=60, blank=True, null=True)
-            
+    
+    #### inner values below, not directly editable by users
+    
+    speed = models.FloatField("Speed", default=0, null=True)
+    #gallons = models.FloatField("Gallons", default=0, null=True)
+    #per_hour = models.FloatField("Gallons Per Hour", default=0, null=True)
+    
     def __unicode__(self):
         return u"%s -- %s" % (self.date, self.remarks)
     
     @models.permalink
     def get_absolute_url(self):
+        """
+        All perma links for each flight instance point to the owner user's
+        logbook page
+        """
+        
         return ('logbook', [self.user.username])
     
     def save(self, *args, **kwargs):
@@ -234,17 +245,13 @@ class Flight(models.Model, GoonMixin):
                 return ""
             return ret
         
-        elif cn == 'speed' and self.route and self.total > 0:
-            ret = "%.1f" % (self.route.total_line_all / self.total)
-            if ret == "0.0":
-                return ""
-            return ret
+        elif cn == 'speed':
+            return "%.1f" % self.speed
         
+        ######################################
         
         elif cn == 'atp_xc'  and self.route and self.route.max_width_all > 49:
             ret = self.total
-
-        ######################################
         
         elif cn == "total" and not self.plane.is_sim():     #total
             ret = self.total
@@ -524,3 +531,44 @@ class Columns(models.Model):
 
     def __unicode__(self):
         return self.user.username
+
+
+
+###################
+## SIGNALS BELOW ##
+###################
+
+def connect_route(sender, **kwargs):
+    """
+    Fill in the speed and fuel burn columns
+    """
+    
+    flight = kwargs['instance']
+    route = flight.route
+    
+    #####
+    
+    time = flight.total    
+    distance = route.total_line_all
+
+    if distance > 0 and time > 0:  ## avoid zero division
+        speed = distance / time
+        flight.speed = speed
+    else:
+        speed = None
+    
+    #####
+
+
+models.signals.pre_save.connect(connect_route, sender=Flight)
+
+
+
+
+
+
+
+
+
+
+
