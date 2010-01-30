@@ -47,9 +47,9 @@ class Plane(models.Model, GoonMixin):
         """Automatically fill in make/models if they are not already supplied
            and then save the object to the database
         """
-        if not (self.manufacturer and
-                self.model and
-                self.cat_class) and self.type:
+        if (not self.manufacturer and
+            not self.model and
+            not self.cat_class) and self.type:
                 
             from auto_fill import autofill
             d = autofill(self.type)
