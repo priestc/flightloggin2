@@ -72,7 +72,7 @@ class Currency(object):
                         
                         "first_over":          ("6cm", "30d"),
                         "second_over":         ("12cm", "30d"),
-                        "third_over":          ("48cm", "30d"),
+                        "third_over":          ("24cm", "30d"),
                         
                         "instrument":          ("6cm", "30d"),
                         "ipc":                 ("6cm", "30d"),
