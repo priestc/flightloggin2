@@ -11,3 +11,7 @@ class NewsItem(models.Model):
 
     class Meta:
         ordering = ["-date"]
+        
+    @models.permalink
+    def get_absolute_url(self):
+        return  ('news', [])

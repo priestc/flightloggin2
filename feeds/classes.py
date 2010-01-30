@@ -39,17 +39,7 @@ class LatestFlights(Feed):
 class LatestNews(Feed):
     title = "FlightLogg.in News"
     link = "http://flightlogg.in"
-    description = "Latest news items from http://flightlogg.in"
-
-    def items(self):
-        return NewsItem.objects.order_by('-date')[:5]
-
-    def item_title(self, item):
-        return "%s - %s" % (item.date, item.title)
-
-    def item_description(self, item):
-        return item.text
     
-    def item_link(self):
-        return "http://flightlogg.in/news.html"
+    def items(self):
+        return NewsItem.objects.order_by('-date')[:15]
 
