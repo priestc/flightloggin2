@@ -8,8 +8,12 @@ function fill_in_flight(dom_id) {
 
 	var plane = $("#f" + id + " span.data_plane").text();
 	if( $('select#id_new-plane').length > 0 ){
+	    // if theres a select with the ID of new-plane, then use this method
+	    // to fill in the plane
     	$("#id_new-plane option:contains(" + plane + ")").attr("selected", "selected");
     } else {
+        // othewrwise, use this other method, because the plane field is
+        // a textbox
         plane = plane.split(' ')[0]
         $("#id_new-plane").val(plane);
     }

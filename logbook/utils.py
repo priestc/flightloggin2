@@ -50,3 +50,60 @@ def proper_format(val, field, format):
     
     if format == 'minutes':
         return to_minutes(val)
+    
+def handle_fuel_burn(val, time):
+    
+    import re
+    val = val.lower()
+    
+    ## the value with just the number part, the unit is removed
+    ## strip out all non-numeric characters but keep decimal point
+    num = re.sub(r'[^\.\d]', '', val)
+    num = float(num)
+    
+    
+    ####################### user entered pounds LL/pounds JetA per hour
+    
+    if val.endswith('pphll'):
+        gph = num / 6
+        g = gph * time
+        
+    elif val.endswith('pphj') or val.endswith('pph'):
+        gph = num / 6.8
+        g = gph * time
+        
+    ####################### user entered pounds LL/pounds JetA
+    
+    elif val.endswith('pll'):
+        g = num * 6
+        gph = g / time
+        
+        
+    elif val.endswith('p') or val.endswith('pj'):
+        g = num * 6.8
+        gph = g / time
+                
+    ######################## user entered gallons or liters
+    
+    elif val.endswith('g'):
+        print "g"
+        g = num
+        gph = (g / time)
+    
+    elif val.endswith('l'):
+        print "l"
+        g = num / 3.78541178 ## 1 gal = 3.78 liters
+        gph = (g / time)
+        
+    ####################### user entered gallons/liters per hour
+        
+    elif val.endswith('lph'):
+        gph = num / 3.78541178
+        g = gph * time
+        
+    else:
+        g = num * time
+        gph = num
+          
+    return g, gph
+        

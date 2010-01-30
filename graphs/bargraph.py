@@ -95,6 +95,9 @@ class BarGraph(object):
         """Makes the values for the vertical ticks, some will subclass over
            this
         """
+        if val == '':
+            val='UNKNOWN'
+            
         return val
     
     def format_annotation(self, value):
@@ -215,11 +218,12 @@ class BarGraph(object):
 class PersonBarGraph(BarGraph):
     
     def get_data(self):
-        self.qs = self.qs.values('person')\
-                    .exclude(person='')\
-                    .order_by('-val')\
-                    .distinct()\
-                    .annotate(val=self.agg(self.time))
+        self.qs = (self.qs.filter_by_column(self.time)
+                    .values('person')
+                    .exclude(person='')
+                    .order_by('-val')
+                    .distinct()
+                    .annotate(val=self.agg(self.time)))
     
     def title(self):
         return "By Person"
@@ -230,11 +234,15 @@ class PersonBarGraph(BarGraph):
 class FOBarGraph(BarGraph):
     
     def get_data(self):
-        self.qs = self.qs.dual_r(False).dual_g(False).pic().values('person')\
-                    .exclude(person='')\
-                    .order_by('-val')\
-                    .distinct()\
-                    .annotate(val=self.agg(self.time))
+        self.qs = (self.qs.filter_by_column(self.time)
+                    .dual_r(False)
+                    .dual_g(False)
+                    .pic()
+                    .values('person')
+                    .exclude(person='')
+                    .order_by('-val')
+                    .distinct()
+                    .annotate(val=self.agg(self.time)))
     
     def title(self):
         return "By First Officer"
@@ -245,11 +253,14 @@ class FOBarGraph(BarGraph):
 class CaptainBarGraph(BarGraph):
     
     def get_data(self):
-        self.qs = self.qs.dual_r(False).sic().values('person')\
-                    .exclude(person='')\
-                    .order_by('-val')\
-                    .distinct()\
-                    .annotate(val=self.agg(self.time))
+        self.qs = (self.qs.filter_by_column(self.time)
+                    .dual_r(False)
+                    .sic()
+                    .values('person')
+                    .exclude(person='')
+                    .order_by('-val')
+                    .distinct()
+                    .annotate(val=self.agg(self.time)))
     
     def title(self):
         return "By Captain"
@@ -261,7 +272,9 @@ class CaptainBarGraph(BarGraph):
 class StudentBarGraph(BarGraph):
     
     def get_data(self):
-        self.qs = (self.qs.dual_g().values('person')
+        self.qs = (self.qs.filter_by_column(self.time)
+                    .dual_g()
+                    .values('person')
                     .exclude(person='')
                     .order_by('-val')
                     .distinct()
@@ -276,7 +289,8 @@ class StudentBarGraph(BarGraph):
 class InstructorBarGraph(BarGraph):
     
     def get_data(self):
-        self.qs = (self.qs.dual_r().values('person')
+        self.qs = (self.qs.filter_by_column(self.time)
+                    .dual_r().values('person')
                     .exclude(person='')
                     .order_by('-val')
                     .distinct()
@@ -291,7 +305,8 @@ class InstructorBarGraph(BarGraph):
 class CatClassBarGraph(BarGraph):
     
     def get_data(self):
-        self.qs = (self.qs.values('plane__cat_class')
+        self.qs = (self.qs.filter_by_column(self.time)
+                    .values('plane__cat_class')
                     .order_by('-val')
                     .distinct()
                     .annotate(val=self.agg(self.time)))
@@ -312,7 +327,7 @@ class PlaneTypeBarGraph(BarGraph):
         
         time = self.time
         
-        self.qs = (self.qs.add_column(self.time)
+        self.qs = (self.qs.filter_by_column(self.time)
                     .values('plane__type')
                     .distinct()
                     .order_by('-val')
@@ -328,7 +343,8 @@ class PlaneTypeBarGraph(BarGraph):
 class TailnumberBarGraph(BarGraph):
     
     def get_data(self):
-        self.qs = (self.qs.values('plane__tailnumber')
+        self.qs = (self.qs.filter_by_column(self.time)
+                    .values('plane__tailnumber')
                     .distinct()
                     .order_by('-val')
                     .annotate(val=self.agg(self.time)))
@@ -342,7 +358,8 @@ class TailnumberBarGraph(BarGraph):
 class ManufacturerBarGraph(BarGraph):
     
     def get_data(self):
-        self.qs = (self.qs.values('plane__manufacturer')
+        self.qs = (self.qs.filter_by_column(self.time)
+                    .values('plane__manufacturer')
                     .distinct()
                     .annotate(val=self.agg(self.time))
                     .order_by('-val'))
@@ -356,7 +373,8 @@ class ManufacturerBarGraph(BarGraph):
 class ModelBarGraph(BarGraph):
     
     def get_data(self):
-        self.qs = (self.qs.values('plane__model')
+        self.qs = (self.qs.filter_by_column(self.time)
+                    .values('plane__model')
                     .distinct()
                     .annotate(val=self.agg(self.time))
                     .order_by('-val'))
@@ -371,6 +389,7 @@ class YearBarGraph(BarGraph):
     
     def get_data(self):
         self.qs = (self.qs.extra(select={'year':'EXTRACT (YEAR FROM date)' })
+                         .filter_by_column(self.time)
                          .values('year')
                          .distinct()
                          .order_by()
@@ -391,6 +410,7 @@ class MonthBarGraph(BarGraph):
     
     def get_data(self):
         self.qs = (self.qs.extra(select={'month':'EXTRACT (MONTH FROM date)' })
+                         .filter_by_column(self.time)
                          .values('month')
                          .distinct()
                          .order_by()
@@ -413,6 +433,7 @@ class DOWBarGraph(BarGraph):
     
     def get_data(self):
         self.qs = (self.qs.extra(select={'dow':'EXTRACT (DOW FROM date)' })
+                         .filter_by_column(self.time)
                          .values('dow')
                          .distinct()
                          .order_by()
@@ -435,6 +456,7 @@ class MonthYearBarGraph(BarGraph):
     
     def get_data(self):
         self.qs = (self.qs.extra(select={'my':"to_char(date, 'FMMonth YYYY')"})
+                         .filter_by_column(self.time)
                          .values('my')
                          .distinct()
                          .order_by()

@@ -39,6 +39,8 @@ class Flight(models.Model, GoonMixin):
     night_l =  models.PositiveIntegerField("Night Landings", default=0, null=False)
     day_l =    models.PositiveIntegerField("Day Landings",   default=0, null=False)
     app =      models.PositiveIntegerField("Approaches",     default=0, null=False)
+    
+    fuel_burn =         models.CharField("Fuel Burn", max_length=10, blank=True)
 
     holding =           models.BooleanField(                           default=False)
     tracking =          models.BooleanField("Intercepting & Tracking", default=False)
@@ -51,9 +53,10 @@ class Flight(models.Model, GoonMixin):
     
     #### inner values below, not directly editable by users
     
-    speed = models.FloatField("Speed", default=0, null=True)
-    #gallons = models.FloatField("Gallons", default=0, null=True)
-    #per_hour = models.FloatField("Gallons Per Hour", default=0, null=True)
+    speed = models.FloatField("Speed", default=None, null=True)
+    gallons = models.FloatField("Gallons", default=None, null=True)
+    gph = models.FloatField("Gallons Per Hour", default=None, null=True)
+    mpg = models.FloatField("Miles Per Gallon", default=None, null=True)
     
     def __unicode__(self):
         return u"%s -- %s" % (self.date, self.remarks)
@@ -231,7 +234,7 @@ class Flight(models.Model, GoonMixin):
             return ret
                      
         # return these immediately because
-        # they are distances, no hh:mm formatting
+        # they are not times, so no hh:mm formatting
         
         elif cn == 'line_dist' and self.route:
             ret = "%.1f" % self.route.total_line_all
@@ -246,10 +249,31 @@ class Flight(models.Model, GoonMixin):
             return ret
         
         elif cn == 'speed':
-            try:
+            if self.speed:
                 return "%.1f" % self.speed
-            except:
-                return "0.0"
+            else:
+                return ""
+            
+        elif cn == 'gallons':
+            if self.gallons:
+                return "%.1f" % self.gallons
+            else:
+                return ""
+        
+        elif cn == 'gph':
+            if self.gph:
+                return "%.1f" % self.gph
+            else:
+                return ""
+            
+        elif cn == 'mpg':
+            if self.mpg:
+                return "%.1f" % self.mpg
+            else:
+                return ""
+            
+        elif cn == 'fuel_burn':
+            return self.fuel_burn or ""
         
         ######################################
         
@@ -475,6 +499,15 @@ class Columns(models.Model):
     speed =     models.BooleanField(FIELD_TITLES['speed'], default=False,
                     help_text="Distance / Total, in Nautical Miles per hour (Knots)")
                     
+    gph =       models.BooleanField(FIELD_TITLES['gph'], default=False,
+                    help_text="Gallons of fuel burned per hour")
+    
+    mpg =       models.BooleanField(FIELD_TITLES['mpg'], default=False,
+                    help_text="Nautical miles per gallon of fuel burned")
+    
+    gallons =   models.BooleanField(FIELD_TITLES['gallons'], default=False,
+                    help_text="Gallons of fuel burned")
+                    
     max_width = models.BooleanField(FIELD_TITLES['max_width'], default=False,
                     help_text='Maximum distance between any two points in the route')
                     
@@ -492,7 +525,9 @@ class Columns(models.Model):
     captain =   models.BooleanField(FIELD_TITLES['captain'], default=False,
                     help_text="'Person' if there is SIC time, and no dual is logged")
                     
-    remarks =   models.BooleanField(FIELD_TITLES['remarks'], default=True) 
+    remarks =   models.BooleanField(FIELD_TITLES['remarks'], default=True)
+    
+    
                     
     class Meta:
         verbose_name_plural = 'Columns'
@@ -561,6 +596,13 @@ def connect_route(sender, **kwargs):
         speed = None
     
     #####
+    
+    if flight.fuel_burn:
+        from utils import handle_fuel_burn
+        flight.gallons, flight.gph = handle_fuel_burn(flight.fuel_burn, time)
+        
+        if distance > 0:
+            flight.mpg = distance / flight.gallons
 
 
 models.signals.pre_save.connect(connect_route, sender=Flight)

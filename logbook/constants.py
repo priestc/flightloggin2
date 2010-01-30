@@ -8,7 +8,7 @@ FIELDS = [
           "sea_pic", "mes", "mes_pic",
           
           "turbine", "t_pic", "mt", "mt_pic", "complex", "hp", "tail", "jet",
-          "jet_pic", "line_dist", "atp_xc", "speed",
+          "jet_pic", "line_dist", "atp_xc", 'gallons', 'gph', 'mpg', "speed",
           
           "max_width", "person", 'instructor', 'student', 'fo', 'captain',
           "remarks",
@@ -21,9 +21,10 @@ ALL_AGG_FIELDS = [
           "app", "p2p", "multi", "m_pic", "single", "single_pic", "sea",
           "sea_pic", "mes", "mes_pic",
           "turbine", "t_pic", "mt", "mt_pic", "complex", "hp", "tail", "jet",
-          "jet_pic","line_dist","atp_xc",
+          "jet_pic", "line_dist", "atp_xc", 'gallons'
           ]
-          
+
+## fields that are displayed before the total row starts         
 PREFIX_FIELDS = [
           "date", "plane", "reg", "f_route", "s_route", "r_route"
           ]
@@ -38,14 +39,16 @@ NUMERIC_FIELDS = [
 BACKUP_FIELDS = [
           'date', 'reg', 'type', 'route', 'total', 'pic', 'solo', 'sic',
           'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l',
-          'day_l', 'sim', 'app_num_only', 'person', 'r_remarks', 'flying',
+          'day_l', 'sim', 'app_num_only', 'person', 'fuel_burn', 'r_remarks', 
+          'flying',
           ]
 
 # fields that have a database column all to themseves
 DB_FIELDS = [
           'date', 'plane', 'route','total', 'pic', 'sic', 'solo', 'night',
           'dual_r','dual_g', 'xc','act_inst', 'sim_inst', 'night_l','day_l',
-          'app', 'person', 'remarks'
+          'app', 'person', 'fuel_burn', 'speed', 'gallons', 'gph', 'mpg',
+          'remarks'
           ]
           
 # for the logbook filter box, all fields that are numerical, but arent based
@@ -56,20 +59,20 @@ FILTER_FIELDS = [
           'line_dist','max_width',
           ]
 
-# fields to be fair game for the graphing functions and the sigs
+# fields to be fair game for the line graphing function and the sigs
 GRAPH_FIELDS = [
           'total', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc',
           'act_inst', 'sim_inst', 'night_l','day_l', 'app','p2p', 'day',
           'multi', 'm_pic', 'sea', 'sea_pic', 'mes', 'mes_pic', 'turbine',
           't_pic', 'mt', 'mt_pic', 'complex', 'hp', 'sim', 'tail', 'jet',
-          'jet_pic', 'line_dist',
+          'jet_pic', 'line_dist', 'gallons'
           ]
 
 # flight fields that get their totals straight from the SUM(x) database command,
-# must be in DB_FIELDS
+# must be in DB_FIELDS. The fields must make sense to sum them together.
 AGG_FIELDS = [
           'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst',
-          'sim_inst', 'night_l','day_l', 'app',
+          'sim_inst', 'night_l','day_l', 'app', 'gallons'
           ]
 
 # fields that do get totals calculated, but require some extra processing
@@ -89,7 +92,7 @@ OPTION_FIELDS = [
           'm_pic', "single", "single_pic", 'sea', 'sea_pic', 'mes', 'mes_pic',
           'tail', 'turbine', 't_pic', 'mt',
           'mt_pic', 'complex', 'hp', "line_dist", 'atp_xc', 'max_width','speed',
-          
+          'gallons', 'gph', 'mpg',
           'instructor', 'student','fo','captain',
           'person', 'remarks',
           ]
@@ -100,7 +103,7 @@ FIELD_TITLES = {
     "s_route": "Route (Simple)",
     "f_route": "Route (Fancy)",
     "r_route": "Route (Raw)",
-    "route": "Route",            #for the backup file
+    "route": "Route", #for the backup file (so the header doesn't print '(Raw)'
      
     "total_s": "Total (with Sim)",
     "total": "Total",
@@ -163,6 +166,9 @@ FIELD_TITLES = {
     'line_dist': "Distance",
     'atp_xc': "ATP XC",
     'speed': 'Speed',
+    'gph': "Gallons Per Hour",
+    'mpg': "Nautical Miles Per Gallon",
+    "gallons": "Gallons Burned",
 }
 
 FIELD_ABBV = {
@@ -232,4 +238,7 @@ FIELD_ABBV = {
     'line_dist': "Dist (NM)",
     'atp_xc': "ATP XC",
     'speed': "Speed (kts)",
+    'gph': "gph",
+    'mpg': "mpg",
+    "gallons": "Gallons",
 }

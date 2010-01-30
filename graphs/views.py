@@ -108,15 +108,16 @@ def linegraphs(request):
 @render_to('bargraphs.html')
 def bargraphs(request):
     """the view function that renders the bargraph builder interface"""   
+    from constants import BAR_AGG_FIELDS, BAR_FIELDS
     
     column_options = []
-    for field in ['total', 'route__total_line_all'] + AGG_FIELDS:
+    for field in BAR_FIELDS:
         column_options.append("<option value=\"%s\">%s</option>" %
                                         (field, FIELD_TITLES[field])
         )
     
     agg_options = []
-    from constants import BAR_AGG_FIELDS
+    
     for field in BAR_AGG_FIELDS:
         sys = field.split('By ')[1].lower().replace(" ",'_').replace('/','_')
         sel = ""

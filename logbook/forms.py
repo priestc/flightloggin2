@@ -166,7 +166,7 @@ class PopupFlightForm(ModelForm):
 
     class Meta:
         model = Flight
-        exclude = ('user', 'speed')
+        exclude = ('user', 'speed', 'gallons', 'gph', 'mpg')
         
 
 

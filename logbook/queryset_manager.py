@@ -190,6 +190,17 @@ class FlightQuerySet(QuerySet, UserMixin):
     def app(self, *args, **kwargs):
         return self.by_flight_time('app', *args, **kwargs)
     
+    def speed(self, *args, **kwargs):
+        return self.by_flight_time('speed', *args, **kwargs)
+    
+    def gph(self, *args, **kwargs):
+        return self.filter(gph__isnull=False).by_flight_time('gph', *args, **kwargs)
+    
+    def gallons(self, *args, **kwargs):
+        return self.filter(gph__isnull=False).by_flight_time('gallons', *args, **kwargs)
+    
+    def mpg(self, *args, **kwargs):
+        return self.filter(gph__isnull=False).by_flight_time('mpg', *args, **kwargs)
     ####################################################
     
     def all_night(self, f=True, lt=None, gt=None):
@@ -307,40 +318,40 @@ class FlightQuerySet(QuerySet, UserMixin):
                 # just do nothing
                 return self
             
-        elif cn == "sim":
+        if cn == "sim":
             return self.sim().total(*args, **kwargs)
             
-        elif cn == 'complex':
+        if cn == 'complex':
             return self.complex_().total(*args, **kwargs)
             
-        elif cn == 'hp':
+        if cn == 'hp':
             return self.hp().total(*args, **kwargs)
         
-        elif cn == 'p2p':
+        if cn == 'p2p':
             return self.p2p().total(*args, **kwargs)
 
-        elif cn == 'turbine':
+        if cn == 'turbine':
             return self.turbine().total(*args, **kwargs)
         
-        elif cn == 't_pic':
+        if cn == 't_pic':
             return self.turbine().pic(*args, **kwargs)
         
-        elif cn == 'mt':
+        if cn == 'mt':
             return self.multi().turbine().total(*args, **kwargs)
             
-        elif cn == 'mt_pic':
+        if cn == 'mt_pic':
             return self.multi().turbine().pic(*args, **kwargs)
             
-        elif cn == 'multi':
+        if cn == 'multi':
             return self.multi().total(*args, **kwargs)
         
-        elif cn == 'single':
+        if cn == 'single':
             return self.single().total(*args, **kwargs)
         
-        elif cn == 'single_pic':
+        if cn == 'single_pic':
             return self.single().pic(*args, **kwargs)
         
-        elif cn == 'm_pic':
+        if cn == 'm_pic':
             return self.multi().pic(*args, **kwargs)
         
         elif cn == 'sea':
@@ -367,7 +378,7 @@ class FlightQuerySet(QuerySet, UserMixin):
         elif cn == 'atp_xc':
             return self.sim(False).atp_xc().total(*args, **kwargs)
         
-        elif cn == 'line_dist':
+        elif cn == 'line_dist' or cn == 'route__total_line_all':
             return self.sim(False).by_route_val('total_line_all', *args, **kwargs)
         
         elif cn == 'max_width':
@@ -375,6 +386,8 @@ class FlightQuerySet(QuerySet, UserMixin):
         
         elif cn in DB_FIELDS:
             return getattr(self, cn)(*args, **kwargs)
+        
+        assert False, "%s is not a column name" % cn
        
     def custom_logbook_view(self, ff):        
         new = ff.make_filter_kwargs(self)
