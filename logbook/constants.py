@@ -166,6 +166,8 @@ FIELD_TITLES = {
     'line_dist': "Distance",
     'atp_xc': "ATP XC",
     'speed': 'Speed',
+    
+    'fuel_burn': "Fuel Burn",
     'gph': "Gallons Per Hour",
     'mpg': "Nautical Miles Per Gallon",
     "gallons": "Gallons Burned",
@@ -238,6 +240,8 @@ FIELD_ABBV = {
     'line_dist': "Dist (NM)",
     'atp_xc': "ATP XC",
     'speed': "Speed (kts)",
+    
+    'fuel_burn': "Burn",
     'gph': "gph",
     'mpg': "mpg",
     "gallons": "Gallons",
