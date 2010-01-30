@@ -93,7 +93,10 @@ def logbook(request, page=0):
     
     ##############################################################
     
-    all_flights = Flight.objects.filter(user=request.display_user)
+    all_flights = Flight.objects\
+                        .filter(user=request.display_user)\
+                        .order_by('date', 'id')
+                        
     filtered_flights = all_flights.select_related()
     total_sign = "Overall"
     

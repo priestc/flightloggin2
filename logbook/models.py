@@ -58,6 +58,10 @@ class Flight(models.Model, GoonMixin):
     gph = models.FloatField("Gallons Per Hour", default=None, null=True)
     mpg = models.FloatField("Miles Per Gallon", default=None, null=True)
     
+    class Meta:
+        ordering = ["-date", "id"]
+        get_latest_by = 'date'
+        
     def __unicode__(self):
         return u"%s -- %s" % (self.date, self.remarks)
     
@@ -80,9 +84,7 @@ class Flight(models.Model, GoonMixin):
         
         super(Flight,self).save(*args, **kwargs)
         
-    class Meta:
-        ordering = ["date", "id"]
-        get_latest_by = 'date'
+
         
     def disp_app(self):
         if self.app == 0:

@@ -203,11 +203,11 @@ class FAA_Landing(Currency):
             flight_date = Flight.objects\
                 .user(self.user)\
                 .filter(Q(pilot_checkride=True) | Q(flight_review=True))\
-                .values_list("date", flat=True).reverse()[0]
+                .values_list("date", flat=True).latest()
                 
             self.pilot_flight = True
             
-        except IndexError:
+        except Flight.DoesNotExist:
             flight_date = None
             
         try:
@@ -215,10 +215,10 @@ class FAA_Landing(Currency):
                                   .filter(user=self.user, non_flying=6)\
                                   .order_by('date')\
                                   .values_list("date", flat=True)\
-                                  .reverse()[0] # 6=wings
+                                  .latest()
                                   
             self.pilot_event = True
-        except IndexError:
+        except NonFlight.DoesNotExist:
             event_date = None
 
         ############
@@ -238,10 +238,10 @@ class FAA_Landing(Currency):
             checkride_date = Flight.objects\
                     .filter(user=self.user, cfi_checkride=True)\
                     .values_list("date", flat=True)\
-                    .reverse()[0]
+                    .latest()
                     
             self.cfi = True
-        except IndexError:
+        except Flight.DoesNotExist:
             checkride_date = date(1950, 2,4) # a generic old expired date
 
         try:
@@ -249,10 +249,10 @@ class FAA_Landing(Currency):
                     .filter(user=self.user, non_flying=4)\
                     .order_by('date')\
                     .values_list("date", flat=True)\
-                    .reverse()[0]
+                    .latest()
                     
             self.cfi = True
-        except IndexError:
+        except NonFlight.DoesNotExist:
             refresher_date = date(1950, 2,4) # a generic old expired date
 
         ############
@@ -273,14 +273,13 @@ class FAA_Instrument(Currency):
     
     def ipc(self):
         """Determine of the last IPC is still valid"""
-        
-        ipc_date = Flight.objects.user(self.user)\
+        try:
+            ipc_date = Flight.objects.user(self.user)\
                                  .filter(ipc=True)\
                                  .values_list("date", flat=True)\
-                                 .reverse()
-        try:
-            ipc_date = ipc_date[0]            
-        except IndexError:
+                                 .latest()    
+                                        
+        except Flight.DoesNotExist:
             ipc_date = None
         
         if not ipc_date:       # no ipc's in database, return "never"
@@ -390,13 +389,12 @@ class FAA_Medical(Currency):
 
         ###############
             
-        
-        last_medical = NonFlight.objects\
-                            .filter(user=self.user, non_flying__in=[1,2,3])\
-                            .order_by('-date')
         try:
-            last_medical = last_medical[0]                  
-        except IndexError:
+            last_medical = NonFlight.objects\
+                            .filter(user=self.user, non_flying__in=[1,2,3])\
+                            .latest()
+                         
+        except NonFlight.DoesNotExist:
             return None             #no medicals in logbook
             
         self.medical_date = last_medical.date
