@@ -1,5 +1,6 @@
 from django.contrib.syndication.feeds import Feed
 from logbook.models import Flight
+from main.models import NewsItem
 
 from django.contrib.syndication.feeds import FeedDoesNotExist
 from django.core.exceptions import ObjectDoesNotExist
@@ -34,4 +35,21 @@ class LatestFlights(Feed):
 
     def items(self, user):
         return Flight.objects.user(user).order_by('-date')[:15]
+
+class LatestNews(Feed):
+    title = "FlightLogg.in News"
+    link = "http://flightlogg.in"
+    description = "Latest news items from http://flightlogg.in"
+
+    def items(self):
+        return NewsItem.objects.order_by('-date')[:5]
+
+    def item_title(self, item):
+        return "%s - %s" % (item.date, item.title)
+
+    def item_description(self, item):
+        return item.text
+    
+    def item_link(self):
+        return "http://flightlogg.in/news.html"
 

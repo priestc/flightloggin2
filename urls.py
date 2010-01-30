@@ -6,9 +6,10 @@ admin.autodiscover()
 
 ###############################################################################
 
-from feeds.classes import LatestFlights
+from feeds.classes import LatestFlights, LatestNews
 feeds = {
     'flights': LatestFlights,
+    'news': LatestNews,
 }
 
 ###############################################################################
