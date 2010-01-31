@@ -115,6 +115,7 @@ input[type="text"]      {border: 1px solid black; background: white}
 /***** table for events, planes, and places *********/
 
 table.minor_table                     {width:       100%;
+                                       font-size:   small;
                                        border-collapse: collapse}
 
 /* the header row */

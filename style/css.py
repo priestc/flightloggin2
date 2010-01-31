@@ -300,6 +300,7 @@ input[type="text"]      {border: %(widget_border)s; background: white}
 /***** table for events, planes, and places *********/
 
 table.minor_table                     {width:       100%%;
+                                       font-size:   small;
                                        border-collapse: collapse}
 
 /* the header row */
