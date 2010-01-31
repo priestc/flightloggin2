@@ -203,7 +203,8 @@ class FAA_Landing(Currency):
             flight_date = Flight.objects\
                 .user(self.user)\
                 .filter(Q(pilot_checkride=True) | Q(flight_review=True))\
-                .values_list("date", flat=True).latest()
+                .values_list("date", flat=True)\
+                .latest()
                 
             self.pilot_flight = True
             

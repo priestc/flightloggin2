@@ -1,10 +1,9 @@
 function render_bar_graph() {
-
-    column = $("#bar_column").val();
-    agg = $("#agg").val();
-    func = $("#func").val();
     
-    url = sprintf("bargraph/%s/%s/by-%s.png", column, func, agg);
+    url = sprintf("bargraph/%s/%s/by-%s.png",
+                  $("#bar_column").val(),
+                  $("#func").val(),
+                  $("#agg").val());
         
     $("#image").attr("src", url).css("display", "block");
 
