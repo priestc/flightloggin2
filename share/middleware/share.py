@@ -99,8 +99,8 @@ class ShareMiddleware(object):
     """Middleware that determines if the user
     is vewing his own logbook, or viewing another."""
     
-    def process_view(self, request, view, args, kwargs):
-
+    def process_view(self, request, view, args, kwargs):   
+        
         if 'username' in kwargs:
             try:
                 share = Share(request, kwargs.pop('username'))
@@ -114,13 +114,6 @@ class ShareMiddleware(object):
             
             request.display_user = display_user
             request.shared = shared
-            
-            return view(request=request, *args, **kwargs)
-        
-        else:
-            
-            request.display_user = None
-            request.shared = False
             
             return view(request=request, *args, **kwargs)
                         

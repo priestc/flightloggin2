@@ -61,10 +61,11 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'share.middleware.share.ShareMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'share.middleware.share.ShareMiddleware',
+    
 )
 
 if DEBUG_TOOLBAR:

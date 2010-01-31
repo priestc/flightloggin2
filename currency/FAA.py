@@ -199,7 +199,7 @@ class FAA_Landing(Currency):
 
     def flight_review(self):
 
-        try:
+        try: # get latest checkride or flight review
             flight_date = Flight.objects\
                 .user(self.user)\
                 .filter(Q(pilot_checkride=True) | Q(flight_review=True))\
@@ -210,13 +210,12 @@ class FAA_Landing(Currency):
         except Flight.DoesNotExist:
             flight_date = None
             
-        try:
+        try: ## try to get wings program
             event_date = NonFlight.objects\
                                   .filter(user=self.user, non_flying=6)\
-                                  .order_by('date')\
                                   .values_list("date", flat=True)\
                                   .latest()
-                                  
+                                      
             self.pilot_event = True
         except NonFlight.DoesNotExist:
             event_date = None
@@ -243,11 +242,12 @@ class FAA_Landing(Currency):
             self.cfi = True
         except Flight.DoesNotExist:
             checkride_date = date(1950, 2,4) # a generic old expired date
-
+        
+        #############################
+        
         try:
             refresher_date = NonFlight.objects\
                     .filter(user=self.user, non_flying=4)\
-                    .order_by('date')\
                     .values_list("date", flat=True)\
                     .latest()
                     
@@ -272,7 +272,10 @@ class FAA_Instrument(Currency):
     fake_class = "fixed_wing"
     
     def ipc(self):
-        """Determine of the last IPC is still valid"""
+        """
+        Determine of the last IPC is still valid
+        """
+        
         try:
             ipc_date = Flight.objects.user(self.user)\
                                  .filter(ipc=True)\
@@ -289,6 +292,10 @@ class FAA_Instrument(Currency):
         return (status, ipc_date, end_date)
         
     def six(self):
+        """
+        Get the dates of the last 6 appoaches
+        """
+        
         last_six = Flight.objects\
                     .user(self.user)\
                     .pseudo_category(self.fake_class)\
@@ -308,18 +315,20 @@ class FAA_Instrument(Currency):
         return status, app_date, end
     
     def ht(self, ht):
+        """
+        Get the dates of the last 'holding' or 'tracking'
+        """
         kwarg = {ht: True}
         
-        date = Flight.objects\
+        try:
+            ht_date = Flight.objects\
                      .user(self.user)\
                      .pseudo_category(self.fake_class)\
                      .filter(**kwarg)\
-                     .order_by('-date')\
-                     .values_list('date', flat=True)
+                     .values_list('date', flat=True)\
+                     .latest()
         
-        try:
-            ht_date = date[0]
-        except IndexError:
+        except Flight.DoesNotExist:
             ht_date = None
         
         status, end = self._determine("instrument", ht_date)
