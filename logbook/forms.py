@@ -190,11 +190,6 @@ class FormsetFlightForm(PopupFlightForm):
     route = RouteField(
                 queryset=Route.objects.get_empty_query_set(),
                 widget=RouteWidget)
-    
-    class Meta:
-        model = Flight
-        exclude = ('user', )
-        
         
 from django.forms.models import BaseModelFormSet
 class FixedPlaneModelFormset(BaseModelFormSet):
