@@ -10,7 +10,7 @@
 
 {% if not done %}
     <h2>Select new email preference for {{ user.username }}:</h2>
-    <form id="prefs_form" action="{% url submit_change_email u %}" method="post">
+    <form id="prefs_form" action="{% url submit_change_email u as url%}{{url}}" method="post">
         {{ form.backup_freq }}
         <br><br>
         <input type="hidden" value="{{u}}" name="u">
