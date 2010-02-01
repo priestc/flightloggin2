@@ -12,11 +12,11 @@
 	        $(".vDateField").datepicker({
 			        dateFormat: "yy-mm-dd",
 			        yearRange: "-10:+1", 
-			        showOn: "button", 
-			        buttonImage: "{{ MEDIA_URL }}/images/calendar.gif", 
-			        buttonImageOnly: true,
+			        //showOn: "button", 
+			        //buttonImage: "{{ MEDIA_URL }}/images/calendar.gif", 
+			        //buttonImageOnly: true,
 			        changeYear: true
-	        }).addClass("embed");
+	        }); //.addClass("embed");
 	    });
 	</script>
 	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/mass_entry.css">
@@ -48,7 +48,7 @@
     <td>{{form.DELETE}}{{form.id}}</td>
     {% endif %}
     
-    <td>{{form.date}}</td>
+    <td class="date_cell">{{form.date}}</td>
     <td>{{form.plane}}</td>
     <td>{{form.route}}</td>
     <td>{{form.total}}</td>
