@@ -36,9 +36,31 @@
     <a href="http://openidexplained.com/" target="_blank">Click here for more Information about OpenID</a>
 </div>
 <br>
-<form method="post" action="." id="openid">
-    <div><input type="hidden" name="action" value="verify" />
-    </div>
-</form>
+
+<h1>Sign in with your OpenID</h1>
+{% if form.errors %}
+<p class="errors">Please correct errors below:<br />
+	{% if form.openid_identifier.errors %} 
+		<span class="error">{{ form.openid_identifier.errors|join:", " }}</span>
+	{% endif %}
+	{% if form.next.errors %} 
+		<span class="error">{{ form.next.errors|join:", " }}</span>
+	{% endif %}
+</p>
+{% endif %}
+<form name="fopenid" action="{{ action }}" method="post">
+	<fieldset>
+		<legend>Sign In Using Your OpenID</legend>
+        <div class="form-row">
+            <label for="id_openid_identifier">OpenID:</label><br />
+            {{ form.openid_identifier }}
+        </div>
+        <div class="submit-row "><input name="bsignin" type="submit" value="Sign in"></div>
+
+ {% if next %}
+	<input type="hidden" name="next" value="{{ next }}" />
+ {% endif %}
+
+	</fieldset>
 
 {% endblock %}

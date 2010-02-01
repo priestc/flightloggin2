@@ -36,7 +36,33 @@ from plane.models import Plane
 ## all views get `shared` and `display_user`
 ## variables from `username` via ShareMiddleware
 
-urlpatterns = patterns('',
+urlpatterns = patterns('django_openid_auth.views',
+    url(
+        r'^openid/login/$',
+        'login_begin',
+                                                            name="fancy-login",
+    ),
+    
+    url(
+        r'^openid/login2/$',
+        'login_begin',
+        {"template_name": "openid/alternate_login.html"},
+                                                            name="basic-login",
+    ),
+    
+    (
+        r'^openid/complete/$',
+        'login_complete',
+    ),
+    
+    url(
+        r'^logo.gif$',
+        'logo',
+                                                            name='openid-logo',
+    ),
+)
+
+urlpatterns += patterns('',
 
     (
         r'^icons/favicon.png$',
@@ -160,11 +186,6 @@ urlpatterns = patterns('',
     ),
     
     (
-        r'^openid/',
-        include('django_openid_auth.urls'),
-    ),
-    
-    (
         r'^admin/doc/',
         include('django.contrib.admindocs.urls')
     ),
@@ -184,9 +205,15 @@ urlpatterns = patterns('',
         ############################ main site
     
     url(
+        r'^login_wrapper/$',
+        'main.views.login_wrapper',
+                                                          name="login-wrapper",
+    ),  
+    
+    url(
         r'^logout/$','django.contrib.auth.views.logout',
         {"next_page": "/"},
-                                                                  name="logout"
+                                                                 name="logout",
     ),   
         
     url(
