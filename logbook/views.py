@@ -196,7 +196,11 @@ def mass_edit(request, page=0):
         
     start = (int(page)-1) * int(profile.per_page)
     duration = int(profile.per_page)
-    qs = Flight.objects.filter(user=request.display_user)[start:start+duration]
+    qs = Flight.objects.filter(user=request.display_user)\
+                       .order_by('date')[start:start+duration]
+    
+    print qs
+    
     NewFlightFormset = modelformset_factory(Flight,
                                             form=forms.FormsetFlightForm,
                                             formset=forms.FixedPlaneModelFormset,
@@ -212,7 +216,8 @@ def mass_edit(request, page=0):
         if formset.is_valid():
             formset.save()
             
-            # send signal
+            ## send signal to mark this user as having
+            ## edited their logbook for today
             from backup.models import edit_logbook
             edit_logbook.send(sender=request.display_user)
             
