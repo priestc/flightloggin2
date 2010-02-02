@@ -3,6 +3,12 @@
 </fb:header>
 
 <div>
-  content
+    <form method="post" action=".">
+    <input type="text" name="username"> <label for="username">Username</label><br>
+    <input type="text" name="secret_key"> <label for="secret_key">Secret Key</label><br>
+    <input type="submit" value="Submit">
+    </form>
 </div>
+
+{{message}}
 
