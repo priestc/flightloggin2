@@ -54,8 +54,8 @@
 			</tr>
 
 			<tr>
-				<td></td>
-				<td></td>
+				<td>Your secret key</td>
+				<td>{{ profile_form.instance.secret_key }}</td>
 				<td></td>
 				<td></td>
 			</tr>
@@ -237,5 +237,7 @@
 </form>
 {{auto_form.errors}}
 {{column_form.errors}}
+{{profile_form.errors}}
+{{user_form.errors}}
 
 {% endblock %}

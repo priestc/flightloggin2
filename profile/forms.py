@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 class ProfileForm(ModelForm):
     class Meta:
         model = Profile
-        exclude = ('user', 'secret_key')
+        exclude = ('user')
 
 class ColumnsForm(ModelForm):
     class Meta:

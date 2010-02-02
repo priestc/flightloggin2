@@ -1,0 +1,6 @@
+<fb:header>
+    Welcome, <fb:name uid="{{ uid }}" firstnameonly="true" useyou="false" />!
+</fb:header>
+
+your flightloggin username: {{ user.username }}
+your total time: {{ tt }}

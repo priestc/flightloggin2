@@ -85,9 +85,17 @@ class Profile(models.Model, GoonMixin):
     
     secret_key =     models.CharField(
                          blank=False,
+                         null=False,
                          max_length=8,
                          default="",
+                         editable=False,
                      )
+    
+    facebook_uid =   models.IntegerField(
+                         editable=False,
+                         null=False,
+                     )
+
 
     def __unicode__(self):
         return u"%s - %s" % (self.user, self.real_name)
