@@ -6,3 +6,10 @@ import facebook.djangofb as facebook
 def canvas(request):
     uid = request.facebook.uid
     return locals()
+
+@render_to('facebook_app/canvas.fbml')
+@facebook.require_login()
+def profile_tab(request):
+    uid = request.facebook.uid
+    return locals()
+
