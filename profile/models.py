@@ -126,10 +126,23 @@ class Profile(models.Model):
             return "Y-m-d"
     
     def calc_secret_key(self):
-        s = self.user.id + self.user.date_joined + settings.SECRET_KEY
+        """
+        calculate a secret key for use in facebook and twitter apps
+        this key only needs to be calculated once per user account
+        """
+        
+        from django.conf import settings
         from main.utils import hash_ten
-        self.secret_key = hash_ten(s, length=8)
-        self.save()
+        
+        s = "%s%s%s" % (self.user.id,
+                        self.user.date_joined,
+                        settings.SECRET_KEY)
+              
+        return hash_ten(s, length=8)
+        
+    def save(self, *args, **kwargs):
+        self.secret_key = self.calc_secret_key()
+        super(Profile, self).save(*args, **kwargs)
        
         
     def get_email(self):
