@@ -62,6 +62,8 @@ urlpatterns = patterns('django_openid_auth.views',
     ),
 )
 
+###############################################################################
+
 urlpatterns += patterns('',
 
     (
@@ -94,6 +96,13 @@ urlpatterns += patterns('',
         "django.views.generic.simple.redirect_to",
         {'url': 'news.html'},
                                                                     name="root"
+    ),
+    
+    ############################ facebook app
+    
+    (
+        r'^facebook',
+        include('facebook_app.urls'),
     ),
     
     ############################ graphs
