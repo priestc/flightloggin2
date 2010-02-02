@@ -67,7 +67,8 @@ def handle_fuel_burn(val, time):
     except:
         raise ValidationError("Invalid Fuel Burn Value")
     
-    #print num, unit
+    if num == 0:
+        return (0,0)
     
     ####################### user entered pounds LL/pounds JetA per hour
     
@@ -83,25 +84,35 @@ def handle_fuel_burn(val, time):
     
     elif unit == 'pll':
         g = num * 6
-        gph = g / time
+        if time > 0:
+            gph = (g / time)
+        else:
+            gph = 0
         
         
     elif unit == 'p' or unit == 'pj':
         g = num * 6.8
-        gph = g / time
+        if time > 0:
+            gph = (g / time)
+        else:
+            gph = 0
                 
     ######################## user entered gallons or liters
     
     elif unit == 'g':
-        print "g"
         g = num
-        gph = (g / time)
+        if time > 0:
+            gph = (g / time)
+        else:
+            gph = 0
     
     elif unit == 'l':
-        print "l"
         g = num / 3.78541178 ## 1 gal = 3.78 liters
-        gph = (g / time)
-        
+        if time > 0:
+            gph = (g / time)
+        else:
+            gph = 0
+                
     ####################### user entered gallons/liters per hour
         
     elif unit == 'lph':

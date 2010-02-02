@@ -1,4 +1,7 @@
 from django.test import TestCase
+
+from django.conf import settings
+
 from models import Flight
 from plane.models import Plane
 from route.models import Route
@@ -52,8 +55,7 @@ class SimpleTest(TestCase):
         # special remarks and events
         #########################################################
         
-        p = Plane(tailnumber="N444444", cat_class=4, type="TYPE")
-        p.save()
+        
         
         r = Route.from_string('SNTR SNTR')
         
@@ -82,3 +84,55 @@ class SimpleTest(TestCase):
         
         response = self.client.get('/test/logbook.html')
         self.failUnlessEqual(response.status_code, 200)
+
+class FuelBurn(TestCase): 
+
+    def setUp(self):
+        self.p = Plane(tailnumber="N444444", cat_class=4, type="TYPE")
+        self.p.save()
+        
+        self.u = User(username='bob')
+        self.u.save()
+        
+        self.f = Flight(plane=self.p,
+                   route=Route.from_string('mer-lga'),
+                   user=self.u,
+                   date='2009-01-05',
+                   total=10.0,
+                 )
+        self.f.save()
+        
+    def test_regular_fuel_burn(self):
+        
+        self.f.fuel_burn = '98gph'
+        self.f.save()
+        
+        self.failUnlessEqual(self.f.gallons, 980.0)
+        self.failUnlessEqual(self.f.gph, 98)
+        
+        self.f.fuel_burn = '874.5 g'
+        self.f.save()
+        
+        self.failUnlessEqual(self.f.gallons, 874.5)
+        self.failUnlessEqual(self.f.gph, 87.45)
+
+    def test_zero_val_fuel_burn(self):
+        
+        self.f.fuel_burn = '0 gph'
+        self.f.save()
+        
+        self.failUnlessEqual(self.f.gallons, 0)
+        self.failUnlessEqual(self.f.gph, 0)
+        
+        self.f.fuel_burn = '56 g'
+        self.f.total = 0
+        self.f.save()
+        
+        self.failUnlessEqual(self.f.gallons, 56)
+        self.failUnlessEqual(self.f.gph, 0)
+
+
+
+
+
+
