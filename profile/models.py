@@ -141,7 +141,13 @@ class Profile(models.Model):
         return hash_ten(s, length=8)
         
     def save(self, *args, **kwargs):
-        self.secret_key = self.calc_secret_key()
+        """
+        add the secret key if it isn't already set, otherwise,
+        just do save as normal
+        """
+        
+        if self.secret_key == '':
+            self.secret_key = self.calc_secret_key()
         super(Profile, self).save(*args, **kwargs)
        
         
