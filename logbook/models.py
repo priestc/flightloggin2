@@ -603,7 +603,7 @@ def connect_route(sender, **kwargs):
         from utils import handle_fuel_burn
         flight.gallons, flight.gph = handle_fuel_burn(flight.fuel_burn, time)
         
-        if distance > 0:
+        if distance > 0 and flight.gallons > 0:
             flight.mpg = distance / flight.gallons
 
 
