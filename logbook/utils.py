@@ -54,56 +54,66 @@ def proper_format(val, field, format):
 def handle_fuel_burn(val, time):
     
     import re
+    from django.forms.util import ValidationError
+    
     val = val.lower()
     
     ## the value with just the number part, the unit is removed
     ## strip out all non-numeric characters but keep decimal point
-    num = re.sub(r'[^\.\d]', '', val)
-    num = float(num)
+    num = re.sub(r'[^\.\d\s]', '', val)
+    unit = re.sub(r'[\.\d\s]', '', val)
+    try:
+        num = float(num)
+    except:
+        raise ValidationError("Invalid Fuel Burn Value")
     
+    #print num, unit
     
     ####################### user entered pounds LL/pounds JetA per hour
     
-    if val.endswith('pphll'):
+    if unit == 'pphll':
         gph = num / 6
         g = gph * time
         
-    elif val.endswith('pphj') or val.endswith('pph'):
+    elif unit == 'pphj' or unit == 'pph':
         gph = num / 6.8
         g = gph * time
         
     ####################### user entered pounds LL/pounds JetA
     
-    elif val.endswith('pll'):
+    elif unit == 'pll':
         g = num * 6
         gph = g / time
         
         
-    elif val.endswith('p') or val.endswith('pj'):
+    elif unit == 'p' or unit == 'pj':
         g = num * 6.8
         gph = g / time
                 
     ######################## user entered gallons or liters
     
-    elif val.endswith('g'):
+    elif unit == 'g':
         print "g"
         g = num
         gph = (g / time)
     
-    elif val.endswith('l'):
+    elif unit == 'l':
         print "l"
         g = num / 3.78541178 ## 1 gal = 3.78 liters
         gph = (g / time)
         
     ####################### user entered gallons/liters per hour
         
-    elif val.endswith('lph'):
+    elif unit == 'lph':
         gph = num / 3.78541178
         g = gph * time
         
-    else:
+    elif unit == 'gph' or unit == '':
         g = num * time
         gph = num
+    
+    else:
+        raise ValidationError("Invalid Fuel Burn Unit")
           
     return g, gph
         

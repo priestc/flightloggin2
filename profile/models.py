@@ -77,9 +77,15 @@ class Profile(models.Model):
                          help_text='Allow other people to view your Records',
                      )
     
-    other_share =  models.BooleanField("Share everything else",
+    other_share =    models.BooleanField("Share everything else",
                          default=True,
                          help_text='Allows people to view everything else; Maps, Graphs, Sigs, Currency...',
+                     )
+    
+    secret_key =     models.CharField(
+                         blank=False,
+                         max_length=8,
+                         default="",
                      )
 
     def __unicode__(self):
@@ -118,6 +124,13 @@ class Profile(models.Model):
             return self.date_format
         else:
             return "Y-m-d"
+    
+    def calc_secret_key(self):
+        s = self.user.id + self.user.date_joined + settings.SECRET_KEY
+        from main.utils import hash_ten
+        self.secret_key = hash_ten(s, length=8)
+        self.save()
+       
         
     def get_email(self):
         if not self.user.email:

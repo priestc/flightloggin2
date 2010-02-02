@@ -159,14 +159,23 @@ class PopupFlightForm(ModelForm):
         from django.db.models import Max
         self.fields['plane'].queryset = \
                  Plane.objects\
-                   .user_common(self.user)\
-                    .annotate(fd=Max('flight__date')).order_by('-fd')
+                      .user_common(self.user)\
+                      .annotate(fd=Max('flight__date')).order_by('-fd')
         
         self.fields['plane'].user = self.user
 
     class Meta:
         model = Flight
         exclude = ('user', 'speed', 'gallons', 'gph', 'mpg')
+        
+    def clean_fuel_burn(self):
+        from utils import handle_fuel_burn
+        value = self.cleaned_data['fuel_burn']
+        
+        ## this will raise the proper validation errors
+        handle_fuel_burn(value, 56)
+        
+        return value
         
 
 
