@@ -115,8 +115,32 @@ class FuelBurn(TestCase):
         
         self.failUnlessEqual(self.f.gallons, 874.5)
         self.failUnlessEqual(self.f.gph, 87.45)
+        
+    def test_conversion(self):
+        """
+        Test that teh conversion routines are accurate
+        """
+        
+        self.f.fuel_burn = '10 l'
+        self.f.save()
+        
+        self.failUnlessEqual("%.2f" % self.f.gallons, "%.2f" % 2.64172052)
+        
+        self.f.fuel_burn = '60 pll'
+        self.f.save()
+        
+        self.failUnlessEqual(self.f.gallons, 360)
+        
+        self.f.fuel_burn = '60p'
+        self.f.save()
+        
+        self.failUnlessEqual(self.f.gallons, 408.0)
 
-    def test_zero_val_fuel_burn(self):
+    def test_zero_fuel_burn(self):
+        """
+        Test that the routine can handle fuel burns that are zero
+        and where the time is zero
+        """
         
         self.f.fuel_burn = '0 gph'
         self.f.save()
@@ -130,6 +154,26 @@ class FuelBurn(TestCase):
         
         self.failUnlessEqual(self.f.gallons, 56)
         self.failUnlessEqual(self.f.gph, 0)
+
+
+        self.f.fuel_burn = '56 gph'
+        self.f.total = 0
+        self.f.save()
+        
+        self.failUnlessEqual(self.f.gallons, 0)
+        self.failUnlessEqual(self.f.gph, 56)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
