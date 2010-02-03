@@ -172,6 +172,9 @@ class PopupFlightForm(ModelForm):
         from utils import handle_fuel_burn
         value = self.cleaned_data['fuel_burn']
         
+        if value == '':
+            return ''
+        
         ## this will raise the proper validation errors
         handle_fuel_burn(value, 56)
         

@@ -7,57 +7,67 @@ from plane.models import Plane
 from route.models import Route
 from django.contrib.auth.models import User
 
-class SimpleTest(TestCase):
+class ColumnsTest(TestCase):
     
     fixtures = ['airport/test-fixtures/test-location.json']
     
-    def test_logbook_columns(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
+    def setUp(self):
         import datetime
         today = datetime.date.today()
         
-        # multi engine land p2p > 50nm
+        self.u = User(username='test')
+        self.u.save()
+        
+        self.baron = Plane(tailnumber="N1234", type='BE-55')
+        self.baron.save()
+        
+        self.seaplane = Plane(tailnumber="N5678", cat_class=3)
+        self.seaplane.save()
+        
+        self.local_route = Route.from_string('SNTR SNTR')
+        self.more50nm_route = Route.from_string('SNTR SSBT')
+        self.less50nm_route = Route.from_string('SNTR SNTR')
+        
+        self.f = Flight(plane=self.baron,
+                        total=11.0,
+                        pic=10.0,
+                        date=today,
+                        route=self.local_route)
+        self.f.save()
+        
+        
+    def test_cat_class_columns(self):
+        """
+        Tests that all the columns that deal with category/lass
+        output the correct value
+        """
+        
+        # multi engine land
         #########################################################
         
-        p = Plane(tailnumber="N1234", cat_class=2, type='BE-55')
-        p.save()
+        self.f.plane = self.baron
+        self.f.save()
         
-        r = Route.from_string('SNTR SSBT')
-        
-        f = Flight(plane=p, total=11.0, pic=10.0, date=today, route=r)
-        f.save()
-        
-        self.failUnlessEqual(f.column('single'), "")
-        self.failUnlessEqual(f.column('p2p'), "11.0")
-        self.failUnlessEqual(f.column('m_pic'), "10.0")
-        self.failUnlessEqual(f.column('plane'), "N1234 (BE-55)")
-        self.failUnlessEqual(f.column('line_dist'), "959.7")
-        self.failUnlessEqual(f.column('atp_xc'), "11.0")
+        self.failUnlessEqual(self.f.column('single'), "")
+        self.failUnlessEqual(self.f.column('m_pic'), "10.0")
+        self.failUnlessEqual(self.f.column('m_t'), "")
                 
         # multi-sea local
         #########################################################
         
-        p = Plane(tailnumber="N5678", cat_class=4)
-        p.save()
+        self.f.plane = self.seaplane
+        self.f.save()
         
-        r = Route.from_string('SNTR SNTR')
-        
-        f = Flight(plane=p, total=11.0, pic=10.0, date=today, route=r)
-        f.save()
-        
-        self.failUnlessEqual(f.column('p2p'), "")
-        self.failUnlessEqual(f.column('atp_xc'), "")
-        self.failUnlessEqual(f.column('sea_pic'), "10.0")
-        self.failUnlessEqual(f.column('tailnumber'), "N5678")
-        
-        # special remarks and events
-        #########################################################
+        self.failUnlessEqual(self.f.column('single'), "11.0")
+        self.failUnlessEqual(self.f.column('m_pic'), "")
+        self.failUnlessEqual(self.f.column('m_t'), "")
+    
+    def test_route_columns(self):
+        """
+        Tests the columns that depend on the properties of the route
+        """
         
         
-        
-        r = Route.from_string('SNTR SNTR')
         
         f = Flight(plane=p,
                    total=11.0,
@@ -78,12 +88,9 @@ class SimpleTest(TestCase):
         self.failUnlessEqual(f.column('tailnumber'), "N444444")
         self.failUnlessEqual(f.column('remarks'), "<span class=\"flying_event\">[IPC][Instructor Checkride]</span> remarks derp")
         
-    def test_empty_logbook_page(self):
-        u = User(username='test')
-        u.save()
-        
-        response = self.client.get('/test/logbook.html')
-        self.failUnlessEqual(response.status_code, 200)
+    #def test_empty_logbook_page(self):
+    #    response = self.client.get('/test/logbook.html')
+    #    self.failUnlessEqual(response.status_code, 200)
 
 class FuelBurn(TestCase): 
 
