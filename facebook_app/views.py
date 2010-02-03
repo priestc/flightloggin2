@@ -40,7 +40,15 @@ def profile_tab(request):
         user = None
 
     if user:
-        tt = Flight.objects.user(user).sim(False).aggregate(s=Sum('total'))['s']
+        tt = Flight.objects\
+                   .user(user)\
+                   .sim(False)\
+                   .aggregate(s=Sum('total'))['s']
+        
+        airport_matches = 9
+        
+        fb_profiles = Profile.objects.filter(facebook_uid__gte=0)
+        
     else:
         return canvas(request)
     

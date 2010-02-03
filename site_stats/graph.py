@@ -15,17 +15,22 @@ class StatsGraph(object):
         
         from models import StatDB
         self.title = val
-        print val
         kwarg = {str(val): 0}
+
+        self.qs = StatDB.objects.exclude(**kwarg)      
+                                    
+        if self.title.endswith("_7_days"):
+            ## filter queryset to only show one data point per day
+            ## this is because the 7 days graphs data is only precise to the
+            ## day. Below the queryset is limited to only items that are
+            ## taken at the 9 PM data poll.
+            self.qs = self.qs.extra(where=['EXTRACT (HOUR FROM dt) = 18'])
         
-        self.x = StatDB.objects.exclude(**kwarg)\
-                               .values_list('dt', flat=True)\
-                               .order_by('-dt')
+        self.y = self.qs.values_list(val, flat=True).order_by('-dt')
+        self.x = self.qs.values_list('dt', flat=True).order_by('-dt')
         
         
-        self.y = StatDB.objects.exclude(**kwarg)\
-                               .values_list(val, flat=True)\
-                               .order_by('-dt')
+        print self.x.query.as_sql()
         
     def output(self):
         ax = self.fig.add_subplot(111)

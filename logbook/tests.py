@@ -9,7 +9,9 @@ from django.contrib.auth.models import User
 
 class ColumnsTest(TestCase):
     
-    fixtures = ['airport/test-fixtures/test-location.json']
+    fixtures = ['airport/test-fixtures/ohio.json',
+                'airport/test-fixtures/test-region.json',
+                'airport/test-fixtures/test-country.json']
     
     def setUp(self):
         import datetime
@@ -24,21 +26,19 @@ class ColumnsTest(TestCase):
         self.seaplane = Plane(tailnumber="N5678", cat_class=3)
         self.seaplane.save()
         
-        self.local_route = Route.from_string('SNTR SNTR')
-        self.more50nm_route = Route.from_string('SNTR SSBT')
-        self.less50nm_route = Route.from_string('SNTR SNTR')
+        self.local_route = Route.from_string('kvta kvta')
+        self.more50nm_route = Route.from_string('kvta kluk')
+        self.less50nm_route = Route.from_string('kvta kcmh')
         
-        self.f = Flight(plane=self.baron,
-                        total=11.0,
+        self.f = Flight(total=11.0,
                         pic=10.0,
                         date=today,
                         route=self.local_route)
-        self.f.save()
         
         
     def test_cat_class_columns(self):
         """
-        Tests that all the columns that deal with category/lass
+        Tests that all the columns that deal with category/class
         output the correct value
         """
         
@@ -62,35 +62,45 @@ class ColumnsTest(TestCase):
         self.failUnlessEqual(self.f.column('m_pic'), "")
         self.failUnlessEqual(self.f.column('m_t'), "")
     
-    def test_route_columns(self):
+    def test_local_route_columns(self):
         """
         Tests the columns that depend on the properties of the route
+        when the route is a local flight
         """
         
+        self.f.route = self.local_route
+        self.f.save()
         
+        self.failUnlessEqual(self.f.column('p2p'), "")
+        self.failUnlessEqual(self.f.column('atp_xc'), "")
+        self.failUnlessEqual(self.f.column('max_width'), "")
+        self.failUnlessEqual(self.f.column('line_dist'), "")
+    
+    def test_less_50_nm_route(self):
+        """
+        Tests the columns that depend on the properties of the route
+        when the route is a long greater than 50nm flight
+        """
         
-        f = Flight(plane=p,
-                   total=11.0,
-                   pic=10.0,
-                   date=today,
-                   route=r,
-                   app=5,
-                   holding=True,
-                   tracking=True,
-                   remarks="remarks derp",
-                   ipc=True,
-                   cfi_checkride=True)
-        f.save()
+        self.f.route = self.less50nm_route
+        self.f.save()
         
-        self.failUnlessEqual(f.column('type'), "TYPE")
-        self.failUnlessEqual(f.column('app'), "5 HT")
-        self.failUnlessEqual(f.column('sea_pic'), "10.0")
-        self.failUnlessEqual(f.column('tailnumber'), "N444444")
-        self.failUnlessEqual(f.column('remarks'), "<span class=\"flying_event\">[IPC][Instructor Checkride]</span> remarks derp")
+        self.failUnlessEqual(self.f.column('p2p'), "11.0")
+        self.failUnlessEqual(self.f.column('atp_xc'), "")
+        self.failUnlessEqual(self.f.column('max_width'), "19.9")
+        self.failUnlessEqual(self.f.column('line_dist'), "19.9")
         
-    #def test_empty_logbook_page(self):
-    #    response = self.client.get('/test/logbook.html')
-    #    self.failUnlessEqual(response.status_code, 200)
+        self.f.route = self.more50nm_route
+        self.f.save()
+        
+        self.failUnlessEqual(self.f.column('p2p'), "11.0")
+        self.failUnlessEqual(self.f.column('atp_xc'), "11.0")
+        self.failUnlessEqual(self.f.column('max_width'), "106.5")
+        self.failUnlessEqual(self.f.column('line_dist'), "106.2")
+        
+    def test_empty_logbook_page(self):
+        response = self.client.get('/test/logbook.html')
+        self.failUnlessEqual(response.status_code, 200)
 
 class FuelBurn(TestCase): 
 

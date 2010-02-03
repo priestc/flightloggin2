@@ -61,7 +61,7 @@ class MostCommonTail(MostCommonPlane):
                       .order_by('-c')[:10]
 
 class StatDB(models.Model):
-    dt = models.DateTimeField()
+    dt =               models.DateTimeField()
     
     users =            models.PositiveIntegerField(default=0, null=False)
     non_empty_users =  models.PositiveIntegerField(default=0, null=False)

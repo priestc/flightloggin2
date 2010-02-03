@@ -160,7 +160,8 @@ class PopupFlightForm(ModelForm):
         self.fields['plane'].queryset = \
                  Plane.objects\
                       .user_common(self.user)\
-                      .annotate(fd=Max('flight__date')).order_by('-fd')
+                      .annotate(fd=Max('flight__date'))\
+                      .order_by('-fd')
         
         self.fields['plane'].user = self.user
 

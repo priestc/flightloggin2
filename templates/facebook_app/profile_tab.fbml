@@ -2,5 +2,6 @@
     Welcome, <fb:name uid="{{ uid }}" firstnameonly="true" useyou="false" />!
 </fb:header>
 
-your flightloggin username: {{ user.username }}
-your total time: {{ tt }}
+<a href="http://flightlogg.in{% url logbook user.username %}>{{ user.username }}'s full FlightLogg.in' logbook</a>
+<br>
+{{ user.username }}'s total time: {{ tt }}

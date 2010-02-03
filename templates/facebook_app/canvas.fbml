@@ -1,14 +1,27 @@
-<fb:header>
-    Welcome, <fb:name uid="{{ uid }}" firstnameonly="true" useyou="false" />!
-</fb:header>
-
 {% if not message %}
+<style>
+    td     {padding: 3px}
+</style>
 
-    <form method="post" action=".">
-    <input type="text" name="username"> <label for="username">Username</label><br>
-    <input type="text" name="secret_key"> <label for="secret_key">Secret Key</label><br>
-    <input type="submit" value="Submit">
-    </form>
+<form method="post" action=".">
+<table>
+    <tr>
+        <td colspan="3">Before you can use this app, you must provide your FlightLogg.in' account information</td>
+    </tr>
+    <tr>
+        <td><label for="username">FlghtLogg.in' Username</label></td>
+        <td><input type="text" name="username"></td>
+    </tr>
+    <tr>
+        <td><label for="secret_key">Secret Key</label></td>
+        <td><input type="text" name="secret_key"></td>
+        <td>(found in the preferences section)</td>
+    </tr>
+    <tr>
+        <td colspan="3"><input type="submit" value="Submit"></td>
+    </tr>
+<table>
+</form>
 
 {% else %}
     {{message}}
