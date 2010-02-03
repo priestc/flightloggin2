@@ -6,13 +6,26 @@
 <script type="text/javascript">
     var users_system_ts = new Date().getTime() / 1000
     var SERVER_OFFSET = {{ gmt|date:"U" }} - users_system_ts;
+    var URLS = {}
+    URLS['go_on_duty'] = "{% url ajax_go_on_duty request.display_user %}"
+    URLS['go_off_duty'] = "{% url ajax_go_off_duty request.display_user %}"
+    
+    $(document).ready(function() {
+  
+        {% if duty %}
+        switch_to_on_duty({{duty.id}})
+        {% endif %}
+        
+    });
+    
 </script>
 <script type="text/javascript" src="{{ MEDIA_URL }}/jquery/epiclock/jquery.epiclock.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/date_format.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/realtime.js"></script>
 <style type="text/css">
 
-    input[type="text"]         {width: 11em}
+    input[type="text"]         {width: 11em;}
+    input[type="button"]       {margin: 5px}
     
     .on_duty      {width: 90%; background: lightgray; padding: 10px;
                    margin: 0 auto 0 auto;}
@@ -33,7 +46,15 @@
     .duty_header_table th   {text-align: right;
                              font-weight: normal;
                              border: 1px solid gray; padding: 3px}
+
+    #hidden_duty_box        {display: none}
+    
+    .duty_box               {background: gray;
+                             border: 1px solid darkgray;
+                             padding: 5px;
+                             margin: 5px}
 </style>
+
 {% endblock %}
 
 {% block title %}Realtime{% endblock %}
@@ -41,76 +62,23 @@
 
 {% block canvas %}
 
-
-
-{# gmt|date:"m-d-Y__H:i:s" #}
-
 <div id="epiclock"></div>
 
-<br>
-<form action="{% url realtime request.display_user %}" method="post">
-    <input type="hidden" name="user" id="id_user" value="{{request.display_user.pk}}">
-    <span style="display: none">
-        {{ form.start }}{{ form.end }}
-    </span>
-    {% if on_duty %}
+
+    <input id="go_on_duty" type="button" value="Go On Duty">
     
-        <div class="on_duty">
-            <table class="duty_header_table">
-                <tr>
-                    <td colspan="2"><strong>** Currently on duty **</strong></td>
-                </tr>
-                <tr>
-                    <th>Duty Started:</th>
-                    <td><input name="duty_start" value="{{ latest_open_duty.start }}"></td>
-                </tr>
-                <tr>
-                    <th>Must be off duty by:</th>
-                    <td>{{ latest_open_duty.time_expire_duty }}</td>
-                </tr>
-            </table>
-        
-        {% for block in latest_open_duty.closed_blocks %}
-            
-            {% with "CLOSED" as block_title %}
-            {% with "block" as class %}
-            
-            {% include "block.html" %}
-            
-            {% endwith %}
-            {% endwith %}
-            
-        {% endfor %}
-        
-        {% if latest_open_duty.latest_open_block %}
-        
-            {% with latest_open_duty.latest_open_block as block %}
-            {% with "OPEN" as block_title %}
-            {% with "block open_block" as class %}
-            
-            {% include "block.html" %}
-            
-            {% endwith %}
-            {% endwith %}
-            {% endwith %}
-            
-        {% else %}
-        
-            <input name="submit" id="start_block" type="submit" value="Start Block Time">
-            <br><br>
-            <input name="submit" id="off_duty" type="submit" value="Go Off Duty">
-            
-        {% endif %}
-                
-        </div>
-        
-    {% else %}
-        <input name="submit" id="on_duty" type="submit" value="Go On Duty">
-    {% endif %}
+    <div id="hidden_duty_box" class="duty_box">
+        <span>Went on at: <input type="text" id="duty_start_disp">
+        <br>
+        <input id="go_off_duty" type="button" value="Go Off Duty">
+    </div>
+    
+
+<div class="block_div" style="display: none">    
+    <input id="start_block" type="button" value="Start Block Time">
     <br>
-    <input name="submit" type="submit" value="Commit">
-    
-</form>
+    <input id="end_block" type="button" value="End Block Time">
+</div>
 {{form.errors}}
 {% endblock %}
 

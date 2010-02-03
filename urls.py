@@ -37,6 +37,10 @@ from plane.models import Plane
 ## variables from `username` via ShareMiddleware
 
 urlpatterns = patterns('django_openid_auth.views',
+
+    ###########################################################################
+
+
     url(
         r'^openid/login/$',
         'login_begin',
@@ -65,6 +69,31 @@ urlpatterns = patterns('django_openid_auth.views',
 ###############################################################################
 
 urlpatterns += patterns('',
+
+    url(
+        r'^(?P<username>\w+)/realtime.html$',
+        "realtime.views.realtime2",
+                                                               name="realtime",
+    ),
+    
+    (
+        r'^(?P<username>\w+)/duty_status/$',
+        "realtime.views.ajax_duty_status",
+    ),
+    
+    url(
+        r'^(?P<username>\w+)/go_on_duty/$',
+        "realtime.views.ajax_go_on_duty",
+                                                        name="ajax_go_on_duty",
+    ),
+    
+    url(
+        r'^(?P<username>\w+)/go_off_duty/$',
+        "realtime.views.ajax_go_off_duty",
+                                                       name="ajax_go_off_duty",
+    ),
+    
+    ##########################################################################
 
     (
         r'^icons/favicon.png$',
@@ -275,12 +304,6 @@ urlpatterns += patterns('',
         r'^help.html$',
         "main.views.help",
                                                                    name="help",
-    ),
-    
-    url(
-        r'^(?P<username>\w+)/realtime.html$',
-        "realtime.views.realtime",
-                                                               name="realtime",
     ),
     
     url(

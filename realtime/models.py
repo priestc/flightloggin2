@@ -17,7 +17,7 @@ class Duty(models.Model):
             return cls.objects.filter(user=user, end=None).latest()
             
         except Duty.DoesNotExist:
-            return Duty()
+            return None
            
     class Meta:
         get_latest_by = 'start'
@@ -28,8 +28,7 @@ class Duty(models.Model):
         for block in self.closed_blocks():
             t.append(block.is_valid())
             
-        
-            
+    ############
     
     def on_duty(self):
         """ 
