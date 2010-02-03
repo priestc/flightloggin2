@@ -179,7 +179,7 @@ urlpatterns += patterns('',
     
     (
         r'^histogram\.py$',
-        "graphs.views.histogram",
+        "site_stats.views.histogram",
     ),
     
     url(

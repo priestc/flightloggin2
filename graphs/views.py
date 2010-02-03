@@ -129,9 +129,3 @@ def bargraphs(request):
     column_options = mark_safe("\n".join(column_options))
     agg_options = mark_safe("\n".join(agg_options))
     return locals()
-
-
-def histogram(request):
-    from histogram import Histogram
-    b = Histogram()
-    return b.as_png()

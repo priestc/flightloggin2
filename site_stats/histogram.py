@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db.models import Sum
-from image_formats import plot_png, plot_svg, plot_png2, plot_svg2
+from graphs.image_formats import plot_png, plot_svg
+
 class Histogram(object):
     def __init__(self):
         from django.contrib.auth.models import User
@@ -10,8 +11,6 @@ class Histogram(object):
                         .annotate(t=Sum('flight__total'))\
                         .filter(t__isnull=False)\
                         .values_list('t', flat=True)
-                        
-        print self.data.count()
                         
     def output(self):
         import numpy as np

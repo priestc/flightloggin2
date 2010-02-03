@@ -42,7 +42,6 @@ class StatsGraph(object):
         import time        
         from graphs.format_ticks import format_line_ticks
         from constants import STATS_TITLES
-        ## 
         
         x = list(self.x)
         start = time.mktime(x[-1].timetuple())

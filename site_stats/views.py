@@ -67,3 +67,9 @@ def stats_graph(request, item, ext):
     
     elif ext == 'svg':
         return g.as_svg()
+
+@cache_page(60 * 60 * 3)
+def histogram(request):
+    from histogram import Histogram
+    b = Histogram()
+    return b.as_png()
