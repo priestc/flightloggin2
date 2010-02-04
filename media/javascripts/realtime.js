@@ -24,18 +24,24 @@ function get_time_now() {
     
 }
 
-function switch_to_on_duty(duty_id) {
-// at the dom elements to display the page for when the user is on duty
-
+function switch_to_on_duty(json) {
     // set the pk of the duty object in teh database to the id of
     // the DOM element
-    $("#hidden_duty_box").attr("id", "duty_" + duty_id).show();
+    $("#hidden_duty_box").attr("id", "duty_" + json.duty.id).show();
+    
+    // hide the "go on duty" button
     $("#go_on_duty").hide();
+    
+    // fill in the "went on duty" textbox
+    $("#on_duty_time").val(json.duty.start);
 }
 
-function switch_to_off_duty(duty_id) {
+function switch_to_off_duty(json) {
 
-    $("#duty_" + duty_id).attr("id", "hidden_duty_box");
+    // change the id of this element so it is hidden again
+    $("#duty_" + json.duty.id).attr("id", "hidden_duty_box");
+    
+    // show the "go on duty" button
     $("#go_on_duty").show();
 }
 
@@ -51,8 +57,13 @@ $(document).ready(function() {
         $("#id_start").val(str);
         
         $.getJSON(URLS['go_on_duty'], {timestamp: str}, function(json){
-        
-            switch_to_on_duty(json.duty_id)
+
+            if (json.result == 'ok') {
+                switch_to_on_duty(json);
+            }
+            else {
+                alert(json.result);
+            }
         
         });
                   
@@ -62,8 +73,13 @@ $(document).ready(function() {
         str = get_time_now()
         $.getJSON(URLS['go_off_duty'], {timestamp: str}, function(json){
         
-            switch_to_off_duty(json.duty_id);
-        
+            if (json.result == 'ok') {
+                switch_to_off_duty(json);
+            }
+            
+            else {
+                alert(json.result);
+            }
         });
     });
 

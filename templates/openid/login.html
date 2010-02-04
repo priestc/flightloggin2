@@ -2,8 +2,6 @@
 
 {% block title %}Sign in using OpenID{% endblock %}
 
-{#############################################################################}
-
 {% block javascript %}
 <script type="text/javascript" src="{{ MEDIA_URL }}/openid-realselector/js/jquery.openid.min.js"></script>	
 <link rel="stylesheet" href="{{ MEDIA_URL }}/openid-realselector/css/style.css">
@@ -16,8 +14,6 @@
 	});
 </script>
 {% endblock %}
-
-{#############################################################################}
 
 {% block canvas %}
 <div class="instructions">
@@ -35,10 +31,13 @@
     <br><br>
     <a href="http://openidexplained.com/" target="_blank">Click here for more Information about OpenID</a>
 </div>
+
 <br>
-<form method="post" action="." id="openid">
-    <div><input type="hidden" name="action" value="verify" />
-    </div>
-</form>
+
+{% if old_browser %}
+    {% include "openid/basic_login.html" %}
+{% else%}
+    {% include "openid/fancy_login.html" %}
+{% endif %}
 
 {% endblock %}

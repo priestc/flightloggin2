@@ -23,16 +23,3 @@ def help(request):
 def not_found(request):
     from django.http import HttpResponse
     return HttpResponse('404')
-
-def login_wrapper(request):
-    from django.http import HttpResponseRedirect
-    from django.core.urlresolvers import reverse
-    
-    ua = request.META['HTTP_USER_AGENT']
-    
-    if ("MSIE 7.0" in ua) or ("MSIE 6.0" in ua):
-        url = reverse('basic-login')
-    else:
-        url = reverse('fancy-login')    
-        
-    return HttpResponseRedirect(url)

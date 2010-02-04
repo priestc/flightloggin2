@@ -120,6 +120,19 @@ class Duty(models.Model):
             total_time += block.total_airborne_hours()
         
         return total_time
+    
+    def as_json_dict(self):
+        """
+        Return a dict that can be easiely serializable to JSON
+        (basically convert the datetime's to strings)
+        """
+        
+        start = str(self.start)
+        end = str(self.end)
+        
+        return {"start": start,
+                "end": end,
+                "id": self.id}
             
     
 #------------------------------------------------------------------------------

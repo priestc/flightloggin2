@@ -28,28 +28,28 @@ def json_view(func):
         except KeyboardInterrupt:
             # Allow keyboard interrupts through for debugging.
             raise
-        except Exception, e:
-            # Mail the admins with the error
-            exc_info = sys.exc_info()
-            subject = 'JSON view error: %s' % request.path
-            try:
-                request_repr = repr(request)
-            except:
-                request_repr = 'Request repr() unavailable'
-            import traceback
-            message = 'Traceback:\n%s\n\nRequest:\n%s' % (
-                '\n'.join(traceback.format_exception(*exc_info)),
-                request_repr,
-                )
-            mail_admins(subject, message, fail_silently=True)
+#        except Exception, e:
+#            # Mail the admins with the error
+#            exc_info = sys.exc_info()
+#            subject = 'JSON view error: %s' % request.path
+#            try:
+#                request_repr = repr(request)
+#            except:
+#                request_repr = 'Request repr() unavailable'
+#            import traceback
+#            message = 'Traceback:\n%s\n\nRequest:\n%s' % (
+#                '\n'.join(traceback.format_exception(*exc_info)),
+#                request_repr,
+#                )
+#            mail_admins(subject, message, fail_silently=True)
 
-            # Come what may, we're returning JSON.
-            if hasattr(e, 'message'):
-                msg = e.message
-            else:
-                msg = _('Internal error')+': '+str(e)
-            response = {'result': 'error',
-                        'text': msg}
+#            # Come what may, we're returning JSON.
+#            if hasattr(e, 'message'):
+#                msg = e.message
+#            else:
+#                msg = _('Internal error')+': '+str(e)
+#            response = {'result': 'error',
+#                        'text': msg}
 
         json = simplejson.dumps(response)
         return HttpResponse(json, mimetype='application/json')

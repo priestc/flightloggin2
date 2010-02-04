@@ -118,4 +118,5 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.media',
     'style.context_processors.css_path',
     'main.user_label.user_label',
+    'main.context_processors.old_browser',
 )

@@ -44,14 +44,7 @@ urlpatterns = patterns('django_openid_auth.views',
     url(
         r'^openid/login/$',
         'login_begin',
-                                                            name="fancy-login",
-    ),
-    
-    url(
-        r'^openid/login2/$',
-        'login_begin',
-        {"template_name": "openid/alternate_login.html"},
-                                                            name="basic-login",
+                                                                  name="login",
     ),
     
     (
@@ -240,13 +233,7 @@ urlpatterns += patterns('',
     ),
     
     
-        ############################ main site
-    
-    url(
-        r'^login_wrapper/$',
-        'main.views.login_wrapper',
-                                                          name="login-wrapper",
-    ),  
+        ############################ main site 
     
     url(
         r'^logout/$','django.contrib.auth.views.logout',

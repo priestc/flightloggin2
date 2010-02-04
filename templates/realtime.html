@@ -13,7 +13,7 @@
     $(document).ready(function() {
   
         {% if duty %}
-        switch_to_on_duty({{duty.id}})
+        switch_to_on_duty({json: {duty: {id: {{duty.id}} }}})
         {% endif %}
         
     });
@@ -23,6 +23,19 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/date_format.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/realtime.js"></script>
 <style type="text/css">
+
+    #clock_box                 {border: 1px solid green;
+                                width: 15em;
+                                color: #4AAE74;
+                                margin: 0 auto 0 auto;
+                                background: #B8FFD5}
+    
+    /* the individual clock digits */
+    .epiclock                  {color: black;
+                                font-size: large}
+                                
+    /* the entire clock block */                   
+    #epiclock                  {padding: 2px}
 
     input[type="text"]         {width: 11em;}
     input[type="button"]       {margin: 5px}
@@ -61,14 +74,16 @@
 
 
 {% block canvas %}
-
-<div id="epiclock"></div>
+<div id="clock_box">
+    <strong>The current time:</strong>
+    <div id="epiclock"></div>
+</div>
 
 
     <input id="go_on_duty" type="button" value="Go On Duty">
     
     <div id="hidden_duty_box" class="duty_box">
-        <span>Went on at: <input type="text" id="duty_start_disp">
+        <span>Went on at: <input type="text" id="on_duty_time"></span>
         <br>
         <input id="go_off_duty" type="button" value="Go Off Duty">
     </div>

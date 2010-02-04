@@ -61,17 +61,15 @@ def ajax_go_on_duty(request):
     ret = {}
     
     #---------
-    
-    start = atd(request.GET['timestamp'])
-    
+
     duty = Duty.latest_open(user=request.display_user) or \
            Duty(user=request.display_user)
            
-    duty.start = start
-
+    duty.start = atd(request.GET['timestamp'])
+    
     duty.save()
     
-    ret['duty_id'] = duty.id
+    ret['duty'] = duty.as_json_dict()
     
     return ret
     
@@ -85,12 +83,11 @@ def ajax_go_off_duty(request):
     ret = {}
     
     #---------
-    
-    end = atd(request.GET['timestamp'])          
-    duty.end = end
+      
+    duty.end = atd(request.GET['timestamp'])
     duty.save()
     
-    ret['duty_id'] = duty.id
+    ret['duty'] = duty.as_json_dict()
     
     return ret
 
