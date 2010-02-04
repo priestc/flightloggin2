@@ -59,7 +59,7 @@ class Flight(models.Model, GoonMixin):
     mpg = models.FloatField("Miles Per Gallon", default=None, null=True)
     
     class Meta:
-        ordering = ["-date", "id"]
+        ordering = ["-id"]
         get_latest_by = 'date'
         
     def __unicode__(self):
@@ -124,7 +124,7 @@ class Flight(models.Model, GoonMixin):
         if not ret:
             return ""
         else:    
-            return mark_safe("<span class=\"flying_event\">%s</span> " % ret)
+            return mark_safe('<span class="flying_event">%s</span> ' % ret)
 
     def column(self, cn, format="decimal", ret=0.0):
         """Returns a string that represents the column being passed

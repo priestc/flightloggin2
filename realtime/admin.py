@@ -1,17 +1,15 @@
 from django.contrib import admin
-from models import *
+from models import Block, Duty
 
 class BlockInline(admin.TabularInline):
-    model = DutyFlight
+    model = Block
     extra = 3
-
 
 class DutyAdmin(admin.ModelAdmin):
     list_display = ('user', 'start', 'end', 'duty_length')
     inlines = (BlockInline, )
 
-
-class DutyFlightAdmin(admin.ModelAdmin):
+class BlockAdmin(admin.ModelAdmin):
     list_display = ('duty',
                     'block_start',
                     'airborne_start',
@@ -19,10 +17,7 @@ class DutyFlightAdmin(admin.ModelAdmin):
                     'block_end',
                     'block_time',
                     'airborne_time',
-                    'is_valid',)
-                    
-                    
-                    
+                    'is_valid',)         
                     
 admin.site.register(Duty, DutyAdmin)    
-admin.site.register(DutyFlight, DutyFlightAdmin)
+admin.site.register(Block, BlockAdmin)

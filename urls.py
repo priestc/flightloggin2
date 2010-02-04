@@ -86,6 +86,11 @@ urlpatterns += patterns('',
                                                        name="ajax_go_off_duty",
     ),
     
+    url(
+        r'^(?P<username>\w+)/get_master_duty/$',
+        "realtime.views.ajax_get_master_duty",
+                                                   name="ajax_get_master_duty",
+    ),
     ##########################################################################
 
     (

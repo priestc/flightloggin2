@@ -9,9 +9,9 @@ from django.contrib.auth.models import User
 
 class ColumnsTest(TestCase):
     
-    fixtures = ['airport/test-fixtures/ohio.json',
-                'airport/test-fixtures/test-region.json',
-                'airport/test-fixtures/test-country.json']
+    #fixtures = ['airport/test-fixtures/ohio.json',
+    #            'airport/test-fixtures/test-region.json',
+    #            'airport/test-fixtures/test-country.json']
     
     def setUp(self):
         import datetime
@@ -27,8 +27,13 @@ class ColumnsTest(TestCase):
         self.seaplane.save()
         
         self.local_route = Route.from_string('kvta kvta')
+        
         self.more50nm_route = Route.from_string('kvta kluk')
+        self.no_land_more50nm_route = Route.from_string('kvta @kluk kvta')
+        
         self.less50nm_route = Route.from_string('kvta kcmh')
+        self.no_land_less50nm_route = Route.from_string('kvta @kcmh kvta')
+        
         
         self.f = Flight(total=11.0,
                         pic=10.0,
@@ -68,7 +73,7 @@ class ColumnsTest(TestCase):
         when the route is a local flight
         """
         
-        self.f.route = self.local_route
+        self.f.route = self.local_route     # vta vta
         self.f.save()
         
         self.failUnlessEqual(self.f.column('p2p'), "")
@@ -79,10 +84,10 @@ class ColumnsTest(TestCase):
     def test_less_50_nm_route(self):
         """
         Tests the columns that depend on the properties of the route
-        when the route is a long greater than 50nm flight
+        when the route is greater than 50nm
         """
         
-        self.f.route = self.less50nm_route
+        self.f.route = self.less50nm_route   # vta cmh
         self.f.save()
         
         self.failUnlessEqual(self.f.column('p2p'), "11.0")
@@ -90,7 +95,29 @@ class ColumnsTest(TestCase):
         self.failUnlessEqual(self.f.column('max_width'), "19.9")
         self.failUnlessEqual(self.f.column('line_dist'), "19.9")
         
-        self.f.route = self.more50nm_route
+        self.f.route = self.no_land_less50nm_route  # vta @cmh vta
+        self.f.save()
+        
+        self.failUnlessEqual(self.f.column('p2p'), "")
+        self.failUnlessEqual(self.f.column('atp_xc'), "")
+        self.failUnlessEqual(self.f.column('max_width'), "19.9")
+        self.failUnlessEqual(self.f.column('line_dist'), "39.7")
+        
+    def test_more_50_nm_route(self):
+        """
+        Tests the columns that depend on the properties of the route
+        when the route is less than 50nm
+        """
+        
+        self.f.route = self.no_land_more50nm_route  # vta @luk vta
+        self.f.save()
+        
+        self.failUnlessEqual(self.f.column('p2p'), "")
+        self.failUnlessEqual(self.f.column('atp_xc'), "11.0")
+        self.failUnlessEqual(self.f.column('max_width'), "106.5")
+        self.failUnlessEqual(self.f.column('line_dist'), "212.5")
+        
+        self.f.route = self.more50nm_route     # vta luk
         self.f.save()
         
         self.failUnlessEqual(self.f.column('p2p'), "11.0")
@@ -98,9 +125,9 @@ class ColumnsTest(TestCase):
         self.failUnlessEqual(self.f.column('max_width'), "106.5")
         self.failUnlessEqual(self.f.column('line_dist'), "106.2")
         
-    def test_empty_logbook_page(self):
-        response = self.client.get('/test/logbook.html')
-        self.failUnlessEqual(response.status_code, 200)
+    #def test_empty_logbook_page(self):
+    #    response = self.client.get('/test/logbook.html')
+    #    self.failUnlessEqual(response.status_code, 200)
 
 class FuelBurn(TestCase): 
 

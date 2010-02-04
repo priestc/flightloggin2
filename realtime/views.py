@@ -1,7 +1,7 @@
 import datetime
 from annoying.decorators import render_to
 from main.utils import json_view
-from models import Duty
+from models import Duty, Block
 
 @render_to('realtime.html')
 def realtime(request):
@@ -57,7 +57,6 @@ from main.utils import ajax_timestamp_to_datetime as atd
 @json_view
 def ajax_go_on_duty(request):
     assert request.GET, "Error: no get data"
-    #assert not Duty.latest_open(user=request.display_user), "Duty already open"
     ret = {}
     
     #---------
@@ -66,9 +65,13 @@ def ajax_go_on_duty(request):
            Duty(user=request.display_user)
            
     duty.start = atd(request.GET['timestamp'])
-    
     duty.save()
     
+    #if not duty.latest_open_block():
+    #    block = Block(duty=duty)
+    #    block.save()
+    #    ret['block_id'] = block.id
+        
     ret['duty'] = duty.as_json_dict()
     
     return ret
@@ -92,6 +95,21 @@ def ajax_go_off_duty(request):
     return ret
 
 #########
+
+@json_view
+def ajax_get_master_duty(request):
+    """
+    Returns a huge json response describing the totality of the latest Duty
+    object and all of it's blocks within
+    """
+    
+    duty = Duty.latest_open(user=request.display_user)
+    if duty:
+        blocks_list = [b.as_json_dict() for b in duty.block_set.all()]
+        return {"duty": duty.as_json_dict(), "blocks": blocks_list}
+    
+    return {'nothing': True}
+    
 
 def ajax_new_block(request):
     pass

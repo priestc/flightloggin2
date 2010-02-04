@@ -61,7 +61,7 @@ class Duty(models.Model):
         """
         
         blocks = []
-        for block in self.dutyflight_set.order_by('block_start'):
+        for block in self.block_set.order_by('block_start'):
             if block.block_finished():
                 blocks.append(block)
         
@@ -73,7 +73,7 @@ class Duty(models.Model):
         """
         
         blocks = []
-        for block in self.dutyflight_set\
+        for block in self.block_set\
                          .filter(airborne_end__isnull=False)\
                          .order_by('block_start'):
                          
@@ -84,8 +84,8 @@ class Duty(models.Model):
     
     def latest_open_block(self):
         try:
-            df = self.dutyflight_set.order_by('-block_start')[0]
-        except IndexError:
+            df = self.block_set.latest()
+        except Block.DoesNotExist:
             return None
         
         if df.block_finished():
@@ -127,26 +127,25 @@ class Duty(models.Model):
         (basically convert the datetime's to strings)
         """
         
-        start = str(self.start)
-        end = str(self.end)
-        
-        return {"start": start,
-                "end": end,
+        return {"start": str(self.start),
+                "end": str(self.end),
                 "id": self.id}
             
     
 #------------------------------------------------------------------------------
 
-class DutyFlight(models.Model):
+class Block(models.Model):
+    duty = models.ForeignKey(Duty)
+    
     block_start = models.DateTimeField()
     airborne_start = models.DateTimeField(null=True, blank=True)
     airborne_end = models.DateTimeField(null=True, blank=True)
-    block_end = models.DateTimeField(null=True, blank=True)
-    
-    
-    duty = models.ForeignKey(Duty)
+    block_end = models.DateTimeField(null=True, blank=True)    
     
     #####################################
+    
+    class Meta:
+        get_latest_by = 'block_start'
     
     def is_valid(self):
         """
@@ -172,7 +171,6 @@ class DutyFlight(models.Model):
             c = True
             
         return a and b and c
-        
     is_valid.boolean = True
     
     def airborne_finished(self):
@@ -240,6 +238,15 @@ class DutyFlight(models.Model):
         if not self.block_end:
             return "end_block"
 
-
-
+    def as_json_dict(self):
+        """
+        Return a dict that can be easiely serializable to JSON
+        (basically convert the datetime's to strings)
+        """
+        
+        return {"block_start": str(self.block_start),
+                "flight_start": str(self.flight_start),
+                "flight_end": str(self.flight_end),
+                "block_end": str(self.block_end),
+                "id": self.id}
         

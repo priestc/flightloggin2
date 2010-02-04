@@ -9,12 +9,10 @@
     var URLS = {}
     URLS['go_on_duty'] = "{% url ajax_go_on_duty request.display_user %}"
     URLS['go_off_duty'] = "{% url ajax_go_off_duty request.display_user %}"
+    URLS['get_master_duty'] = "{% url ajax_get_master_duty request.display_user %}"
     
     $(document).ready(function() {
-  
-        {% if duty %}
-        switch_to_on_duty({json: {duty: {id: {{duty.id}} }}})
-        {% endif %}
+
         
     });
     
