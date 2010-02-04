@@ -168,19 +168,25 @@ class Profile(models.Model, GoonMixin):
     get_email.short_description="Email"
         
     def adminlink(self):
-        """Puts a link in the admin page for the user's logbook"""
+        "Puts a link in the admin page for the user's logbook"
         
         return "<a target='_blank' href='http://beta.flightlogg.in%s'>Link</a>"\
                     % self.get_absolute_url()
     adminlink.allow_tags = True
     
     def date_registered(self):
-        """Used in the admin interface to see when a user registered"""
+        "Used in the admin interface to see when a user registered"
         
         from django.utils.dateformat import format
         return format(self.user.date_joined, "M jS, Y")
     date_registered.admin_order_field = 'user__date_joined'
 
+    def flightcount(self):
+        "Number of flights the user has logged"
+        
+        from logbook.models import Flight
+        return Flight.objects.filter(user=self.user).count()
+    flightcount.short_description = '#'
 
 class Entries(models.Model):
     user =          models.ForeignKey(User, blank=False, primary_key=True)
