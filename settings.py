@@ -118,5 +118,5 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'style.context_processors.css_path',
     'main.context_processors.user_label',
     'main.context_processors.old_browser',
-    'main.context_processors.do_toolbar',
+    'main.context_processors.figure_navbar',
 )

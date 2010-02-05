@@ -23,19 +23,23 @@ def user_label(request):
         return {"DEMO": True}
     return {}
 
-def do_toolbar(request):
+def figure_navbar(request):
     from django.contrib.auth.models import User
         
     if getattr(request, "display_user", False):
         ## viewing an app page, print the navbar for the user whose app
         ## it belongs to
-        return {"navbar_user": request.display_user}
+        ret = {"navbar_user": request.display_user}
     
     elif getattr(request, "user", User()).is_authenticated():
         ## the user is logged in, just viewing a common page
         ## print the navbar for their app
-        return {"navbar_user": request.user}
+        ret = {"navbar_user": request.user}
     
     else:
         ## user is not logged in and viewing a common page
-        return {"navbar_user": User(username="demo")}
+        ret = {"navbar_user": User(username="demo")}
+        
+    ret.update({"shared": getattr(request, "shared", False)})
+    
+    return ret

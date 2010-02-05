@@ -1,29 +1,31 @@
+{% load cache %}
+{% cache 1800 navbar user  %}
 <div id="nav_bar">
 
-    {% if not request.shared or user.get_profile.logbook_share %}
+    {% if not shared or user.get_profile.logbook_share %}
     <span class="big" id="logbook-sel">
     <a href="{% url logbook user.username as url %}{{ url }}">Flights</a></span>
     {% endif %}
     
-    {% if not request.shared or user.get_profile.logbook_share %}
+    {% if not shared or user.get_profile.logbook_share %}
     &#8226;
     <span class="big" id="planes-sel">
     <a href="{% url planes user.username as url %}{{ url }}">Planes</a></span>
     {% endif %}
     
-    {% if not request.shared or user.get_profile.events_share %}
+    {% if not shared or user.get_profile.events_share %}
     &#8226;
     <span class="big" id="events-sel">
     <a href="{% url events user.username as url %}{{ url }}">Events</a></span>
     {% endif %}
     
-    {% if not request.shared or user.get_profile.logbook_share %}
+    {% if not shared or user.get_profile.logbook_share %}
     &#8226;
     <span class="big" id="locations-sel">
     <a href="{% url locations user.username as url %}{{ url }}">Locations</a></span>
     {% endif %}
     
-    {% if not request.shared or user.get_profile.records_share %}
+    {% if not shared or user.get_profile.records_share %}
     &#8226;
     <span class="big" id="records-sel">
     <a href="{% url records user.username as url %}{{ url }}">Records</a></span>
@@ -31,7 +33,7 @@
     
     <br>
     
-    {% if not request.shared or user.get_profile.other_share %}
+    {% if not shared or user.get_profile.other_share %}
     <span id="linegraphs-sel">
     <a href="{% url linegraphs user.username as url %}{{ url }}">Line Graphs</a></span>
     
@@ -54,7 +56,7 @@
     <a href="{% url milestones user.username as url %}{{ url }}">Milestones</a></span>
     {% endif %}
     
-    {% if not request.shared %}
+    {% if not shared %}
     <span id="mass-sel">
     <a href="{% url mass-entry user.username as url %}{{ url }}">Mass Entry</a></span>
 
@@ -66,7 +68,7 @@
 
     <span id="profile-sel">
     <a href="{% url profile user.username as url %}{{ url }}">Preferences</a></span>
-    
     {% endif %}
 
 </div>
+{% endcache %}
