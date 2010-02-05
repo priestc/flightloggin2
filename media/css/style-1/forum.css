@@ -1,0 +1,82 @@
+
+#djangoForumBody {
+    width: 90%;
+    margin: 0 auto;
+    text-align: left;
+}
+
+#djangoForumList,
+#djangoForumThreadList,
+#djangoForumThreadPosts {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#djangoForumList td,
+#djangoForumThreadList td,
+#djangoForumThreadPosts td {
+    border: solid #777 1px;
+    padding: 6px;
+}
+
+#djangoForumList .djangoForumListDetails {
+    width: 70%;
+}
+
+#djangoForumList .djangoForumListDetails strong {
+    font-size: 120%;
+}
+
+#djangoForumList .djangoForumListDetails .djangoForumStats {
+    font-size: 80%;
+}
+
+.djangoForumListLastPost,
+.djangoForumThreadLastPost {
+    background-color: #ccc;
+    border-bottom: solid #777 1px;
+}
+
+#djangoForumList th,
+#djangoForumThreadList th,
+#djangoForumThreadPosts th {
+    background-color: #14146A;
+    border: solid #777 1px;
+    color: #fff;
+    text-align: left;
+    padding: 4px;
+}
+
+#djangoForumThreadPosts th {
+    width: 20%;
+}
+
+#djangoForumBreadcrumbs {
+    padding: 20px;
+}
+
+#djangoForumBody label {
+    font-size: 110%;
+    font-weight: bold;
+    display: block;
+    padding: 4px;
+}
+
+#djangoForumThreadPostDetail {
+    width: 20%;
+}
+.djangoForumPagination {
+    display: inline;
+}
+
+div.new_thread {
+    padding: 5px;
+    border: 2px solid gray;
+    background: #aaa;
+}
+
+div.new_reply {
+    padding: 5px;
+    border: 2px solid gray;
+    background: #ddd;
+}
