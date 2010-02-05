@@ -38,5 +38,4 @@ def do_toolbar(request):
     
     else:
         ## user is not logged in and viewing a common page
-        
         return {"navbar_user": User(username="demo")}

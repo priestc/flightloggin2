@@ -15,7 +15,7 @@ Martin Conte Mac Donell <Reflejo@gmail.com>
       txt: {
         label: 'Enter your {provider} {username}',
         username: 'username',
-        title: 'Select your openID provider',
+        title: 'Select your OpenID provider',
         sign: 'Sign-In'
       },
       /*
