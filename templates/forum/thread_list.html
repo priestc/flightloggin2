@@ -66,9 +66,10 @@
 </ul>
 {% endif %}
 
-<h2>{% trans "Create a Thread" %}</h2>
+
 {% if user.is_authenticated %}
 <div class="new_thread">
+    <h2>{% trans "Create a Thread" %}</h2>
     <form method='post' action='new/'>
     <p><span>{% trans "Posting As" %}: <strong>{{ user.username }}</strong></span></p>
     {{ form.as_p }}
