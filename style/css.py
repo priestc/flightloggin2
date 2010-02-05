@@ -937,6 +937,77 @@ table.main th                   {width: 30%%;}
 h1                              {margin-bottom: 0px}
 """
 
+forum = """
+#djangoForumBody {
+    width: 90%%;
+    margin: 0 auto;
+    text-align: left;
+}
+
+#djangoForumList,
+#djangoForumThreadList,
+#djangoForumThreadPosts {
+    border-collapse: collapse;
+    width: 100%%;
+}
+
+#djangoForumList td,
+#djangoForumThreadList td,
+#djangoForumThreadPosts td {
+    border: solid #777 1px;
+    padding: 6px;
+}
+
+#djangoForumList .djangoForumListDetails {
+    width: 70%%;
+}
+
+#djangoForumList .djangoForumListDetails strong {
+    font-size: 120%%;
+}
+
+#djangoForumList .djangoForumListDetails .djangoForumStats {
+    font-size: 80%%;
+}
+
+.djangoForumListLastPost,
+.djangoForumThreadLastPost {
+    background-color: #ccc;
+    border-bottom: solid #777 1px;
+}
+
+#djangoForumList th,
+#djangoForumThreadList th,
+#djangoForumThreadPosts th {
+    background-color: %(h1_color)s;
+    border: solid #777 1px;
+    color: #fff;
+    text-align: left;
+    padding: 4px;
+}
+
+#djangoForumThreadPosts th {
+    width: 20%%;
+}
+
+#djangoForumBreadcrumbs {
+    padding: 20px;
+}
+
+#djangoForumBody label {
+    font-size: 110%%;
+    font-weight: bold;
+    display: block;
+    padding: 4px;
+}
+
+#djangoForumThreadPostDetail {
+    width: 20%%;
+}
+.djangoForumPagination {
+    display: inline;
+}
+"""
 
 if __name__ == "__main__":
     
@@ -961,7 +1032,7 @@ if __name__ == "__main__":
                  'import__', 'locations', 'logbook', 'maps', 'mass_entry',
                  'mass_planes', 'milestones', 'news', 'planes', 'popup',
                  'preferences', 'realtime', 'records', 'sigs', 'site_stats',
-                 'custom_view', 'route', 'item_profile')
+                 'custom_view', 'route', 'item_profile', 'forum')
         
         if not os.path.isdir(full_directory):
             os.makedirs(full_directory)
