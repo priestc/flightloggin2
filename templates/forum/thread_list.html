@@ -68,11 +68,13 @@
 
 <h2>{% trans "Create a Thread" %}</h2>
 {% if user.is_authenticated %}
-<form method='post' action='new/'>
-<p><label>{% trans "Posting As" %}</label><span>{{ user.username }}</span></p>
-{{ form.as_p }}
-<p><input type='submit' value='{% trans "Post" %}' /></p>
-</form>
+<div class="new_thread">
+    <form method='post' action='new/'>
+    <p><span>{% trans "Posting As" %}: <strong>{{ user.username }}</strong></span></p>
+    {{ form.as_p }}
+    <p><input type='submit' value='{% trans "Post" %}' /></p>
+    </form>
+</div>
 {% else %}
 <p>Please login to create a thread.</p>
 {% endif %}

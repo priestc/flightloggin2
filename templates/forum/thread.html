@@ -31,16 +31,17 @@
 {% endif %}
 
 {% if request.user.is_authenticated %}<p><a href="{% url forum_subscriptions %}?next={{ request.path }}">{% trans "Update Subscriptions" %}</a></p>{% endif %}
-<h2>{% trans "Post a Reply" %}</h2>
+    <div class="new_reply"><h2>{% trans "Post a Reply" %}</h2>
 {% if thread.closed %}
-<p>{% trans "Sorry, this thread is closed. No further replies are permitted." %}</p>
+    <p>{% trans "Sorry, this thread is closed. No further replies are permitted." %}</p>
 {% else %}
 {% if user.is_authenticated %}
-<form method='post' action='reply/'>
-<p><label>{% trans "Posting As" %}</label><span>{{ user.username }}</span></p>
-{{ form.as_p }}
-<input type='submit' value='{% trans "Submit" %}' />
-</form>
+    <form method='post' action='reply/'>
+    <p>{% trans "Posting As" %}: <strong>{{ user.username }}</strong></p>
+    {{ form.as_p }}
+    <input type='submit' value='{% trans "Submit" %}' />
+    </form>
+</div>
 {% else %}
 <p>{% trans "Please login to post a reply." %}</p>
 {% endif %}

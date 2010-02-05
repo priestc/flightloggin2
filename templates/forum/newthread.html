@@ -14,13 +14,13 @@
 
 
 {% block content %}
-
-<h2>{% trans "Create a Thread" %}</h2>
-<form method='post' action='./'>
-{% if form.errors %}<ul>{{ form.errors.as_ul }}</ul>{% endif %}
-<p><label>{% trans "Posting As" %}</label><span>{{ user.username }}</span></p>
-{{ form.as_p }}
-<p><input type='submit' value='{% trans "Post" %}' /></p>
-</form>
-
+<div class="new_thread">
+    <h2>{% trans "Create a Thread" %}</h2>
+    <form method='post' action='./'>
+    {% if form.errors %}<ul>{{ form.errors.as_ul }}</ul>{% endif %}
+    <p><label>{% trans "Posting As" %}</label><span>{{ user.username }}</span></p>
+    {{ form.as_p }}
+    <p><input type='submit' value='{% trans "Post" %}' /></p>
+    </form>
+</div>
 {% endblock %}

@@ -1007,6 +1007,18 @@ forum = """
 .djangoForumPagination {
     display: inline;
 }
+
+div.new_thread {
+    padding: 5px;
+    border: 2px solid gray;
+    background: #aaa;
+}
+
+div.new_reply {
+    padding: 5px;
+    border: 2px solid gray;
+    background: #ddd;
+}
 """
 
 if __name__ == "__main__":
