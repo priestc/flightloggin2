@@ -90,8 +90,8 @@ class Share(object):
 
 ##############################################################
 
-def cant_share_view(message):
-    return HttpResponseForbidden(message)
+#def cant_share_view(message):
+#    return 
 
 ##############################################################
 
@@ -106,7 +106,8 @@ class ShareMiddleware(object):
                 share = Share(request, kwargs.pop('username'))
                 shared, display_user = share.determine()
             except PermissionDenied, message:
-                return cant_share_view(message) #XXX
+                view = lambda x: HttpResponseForbidden(x)
+                return view(message)
             
             _thread_locals.display_user = display_user
             _thread_locals.shared = shared
@@ -116,4 +117,19 @@ class ShareMiddleware(object):
             request.shared = shared
             
             return view(request=request, *args, **kwargs)
-                        
+#        
+#    def process_response(self, request, response):
+#        
+#        if getattr("request", "display_user", False):
+#            print "DISPLAY_USER"
+#        else:
+#            print "NOPE"
+#            
+#        return response
+
+
+
+
+
+
+            

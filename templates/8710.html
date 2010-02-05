@@ -1,13 +1,12 @@
 {% extends "base.html" %}
-{% block est-sel %}nav_selected{% endblock %}
 {% load humanize %}
 
 {% block description %}{{ request.display_user.username }}'s 8710 data{% endblock%}
 
 {% block title %}8710{% endblock %}
 
-{% block canvas %}
 
+{% block javascript %}
 <style type="text/css">
     table#est td.greyed      {background: #CCCCCC}
     table#est                {border: 1px solid black; font-size: x-small}
@@ -15,6 +14,10 @@
     div#instruction ul       {text-align: left}
     div#instruction li       {margin: 8px}
 </style>
+<script type="text/javascript">NAVBAR_HIGHLIGHT = "est-sel";</script>
+{% endblock %}
+
+{% block canvas %}
 {% autoescape off %}
 <table summary="8710 Data" id="est">
 	<thead>

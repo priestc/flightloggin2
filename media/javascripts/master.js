@@ -1,7 +1,14 @@
 $(document).ready(function() {
-	$("a[href=]").click(function(event) {			//all fake anchors are disabled
+    // all fake anchors are disabled
+	$("a[href=]").click(function(event) {
 		event.preventDefault();
 	});
+	
+	
+	// highlight the correct navbar item based on a javascript
+	// variable on each page
+	if (typeof(NAVBAR_HIGHLIGHT) != "undefined")
+    	$("#" + NAVBAR_HIGHLIGHT).addClass('nav_selected')
 	
 	jQuery.fn.centerScreen = function(loaded) {
         var obj = this;

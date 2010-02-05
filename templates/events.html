@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% block events-sel %}nav_selected{% endblock%}
 
 {% block description %}{{ request.display_user.username }}'s events{% endblock%}
 
@@ -9,6 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/popup.css">
 	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/events.css">
 	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/jquery/css/black-tie/jquery-ui-1.7.1.custom.css">
+	<script type="text/javascript">NAVBAR_HIGHLIGHT = "events-sel";</script>
 {% endblock %}
 
 {% block title %}Events{% endblock %}

@@ -1,8 +1,11 @@
 {% extends "base.html" %}
-{% block export-sel %}nav_selected{% endblock%}
 {% block title %}Export{% endblock %}
 
 {% block description %}{{ request.display_user.username }}'s export options{% endblock%}
+
+{% block javascript %}
+<script type="text/javascript">NAVBAR_HIGHLIGHT = "export-sel";</script>
+{% endblock %}
 
 {% block canvas %}
 

@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load tagging_tags %}
-{% block planes-sel %}nav_selected{% endblock%}
 
 {% block description %}{{ request.display_user.username }}'s planes{% endblock%}
 
@@ -9,6 +8,7 @@
     <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/popup.js"></script>
 	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/popup.css">
 	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/planes.css">
+    <script type="text/javascript">NAVBAR_HIGHLIGHT = "planes-sel";</script>
 {% endblock %}
 
 {% block title %}Planes{% endblock %}

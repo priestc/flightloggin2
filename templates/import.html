@@ -1,24 +1,21 @@
 {% extends "base.html" %}
-{% block import-sel %}nav_selected{% endblock%}
 
 {% block description %}{{ request.display_user.username }}'s import options{% endblock%}
+{% block title %}Import{% endblock %}
 
 {% block javascript %}
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/import.css">
-<script>
-$(document).ready(function() {
-    $("form").submit(function() {
-    
-        $('#progress').show()
-    
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("form").submit(function() {
+        
+            $('#progress').show()
+        
+        });
     });
-});
+    NAVBAR_HIGHLIGHT = "import-sel";
 </script>
 {% endblock %}
-
-
-{% block title %}Import{% endblock %}
-
 
 {% block canvas %}
 

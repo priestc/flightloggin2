@@ -63,6 +63,8 @@ urlpatterns = patterns('django_openid_auth.views',
 
 urlpatterns += patterns('',
 
+    (r'^newforum/', include('forum.urls')),
+
     url(
         r'^(?P<username>\w+)/realtime.html$',
         "realtime.views.realtime2",

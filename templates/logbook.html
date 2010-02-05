@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% block logbook-sel %}nav_selected{% endblock%}
 {% load logbook_tags %}
 {% block description %}{{ request.display_user.username }}'s flights{% endblock%}
 
@@ -10,6 +9,7 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/sprintf.js"></script>
 
 <script type="text/javascript">
+    NAVBAR_HIGHLIGHT = "logbook-sel";
     $(document).ready(function() {
         page_totals({{cols.agg_list|safe}})  // pass in the names of each column that needs a page total
     });

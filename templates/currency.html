@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block currency-sel %}nav_selected{% endblock%}
 
 {% block description %}{{ request.display_user.username }}'s currency{% endblock%}
 
 {% block javascript %}
 	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/currency.css">
+	<script type="text/javascript">NAVBAR_HIGHLIGHT = "currency-sel";</script>
 {% endblock %}
 
 {% block title %}Currency{% endblock %}

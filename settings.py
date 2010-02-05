@@ -12,7 +12,7 @@ TEST_RUNNER='django.contrib.gis.tests.run_tests'
 
 # debug bar settings#############################
 
-INTERNAL_IPS = ('127.0.0.1',)
+INTERNAL_IPS = ('127.0.0.1','192.168.1.145')
 DEBUG_TOOLBAR_CONFIG = {"INTERCEPT_REDIRECTS": False}
 
 #openid settings #################################
@@ -91,15 +91,11 @@ INSTALLED_APPS = (
     'maps',
     
     'tagging',
+    'forum',
     'test_utils',
     'django_extensions',
-    'django_openid_auth',)
     
-if DEBUG_TOOLBAR:
-    INSTALLED_APPS += ('debug_toolbar', )
-    
-INSTALLED_APPS += (
-   
+    'django_openid_auth',
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.auth',
@@ -111,12 +107,16 @@ INSTALLED_APPS += (
     'django.contrib.sitemaps',
 )
 
+if DEBUG_TOOLBAR:
+    INSTALLED_APPS += ('debug_toolbar', )
+
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.auth',
     'django.core.context_processors.debug',
     'django.core.context_processors.request',
     'django.core.context_processors.media',
     'style.context_processors.css_path',
-    'main.user_label.user_label',
+    'main.context_processors.user_label',
     'main.context_processors.old_browser',
+    'main.context_processors.do_toolbar',
 )

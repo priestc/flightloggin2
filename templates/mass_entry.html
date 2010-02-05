@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% block mass-sel %}nav_selected{% endblock%}
 
 {% block description %}{{ request.display_user.username }}'s mass entry page{% endblock%}
 
@@ -18,6 +17,8 @@
 			        changeYear: true
 	        }); //.addClass("embed");
 	    });
+	    
+	    var NAVBAR_HIGHLIGHT = "mass-sel";
 	</script>
 	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/mass_entry.css">
 {% endblock %}

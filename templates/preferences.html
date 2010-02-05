@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% block profile-sel %}nav_selected{% endblock%}
 
 {% block description %}{{ request.display_user.username }}'s preferences page{% endblock%}
 
@@ -7,6 +6,7 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/preferences.js"></script>
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/preferences.css">
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/jquery/css/black-tie/jquery-ui-1.7.1.custom.css">
+<script type="text/javascript">NAVBAR_HIGHLIGHT = "profile-sel";</script>
 {% endblock %}
 
 

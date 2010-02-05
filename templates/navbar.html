@@ -1,0 +1,72 @@
+<div id="nav_bar">
+
+    {% if not request.shared or user.get_profile.logbook_share %}
+    <span class="big" id="logbook-sel">
+    <a href="{% url logbook user.username as url %}{{ url }}">Flights</a></span>
+    {% endif %}
+    
+    {% if not request.shared or user.get_profile.logbook_share %}
+    &#8226;
+    <span class="big" id="planes-sel">
+    <a href="{% url planes user.username as url %}{{ url }}">Planes</a></span>
+    {% endif %}
+    
+    {% if not request.shared or user.get_profile.events_share %}
+    &#8226;
+    <span class="big" id="events-sel">
+    <a href="{% url events user.username as url %}{{ url }}">Events</a></span>
+    {% endif %}
+    
+    {% if not request.shared or user.get_profile.logbook_share %}
+    &#8226;
+    <span class="big" id="locations-sel">
+    <a href="{% url locations user.username as url %}{{ url }}">Locations</a></span>
+    {% endif %}
+    
+    {% if not request.shared or user.get_profile.records_share %}
+    &#8226;
+    <span class="big" id="records-sel">
+    <a href="{% url records user.username as url %}{{ url }}">Records</a></span>
+    {% endif %}
+    
+    <br>
+    
+    {% if not request.shared or user.get_profile.other_share %}
+    <span id="linegraphs-sel">
+    <a href="{% url linegraphs user.username as url %}{{ url }}">Line Graphs</a></span>
+    
+    <span id="bargraphs-sel">
+    <a href="{% url bargraphs user.username as url %}{{ url }}">Bar Graphs</a></span>
+    
+    <span id="maps-sel">
+    <a href="{% url maps user.username as url %}{{ url }}">Maps</a></span>
+    
+    <span id="est-sel">
+    <a href="{% url est user.username as url %}{{ url }}">8710</a></span>
+    
+    <span id="sigs-sel">
+    <a href="{% url sigs user.username as url %}{{ url }}">Sigs</a></span>
+
+    <span id="currency-sel">
+    <a href="{% url currency user.username as url %}{{ url }}">Currency</a></span>
+    
+    <span id="milestones-sel">
+    <a href="{% url milestones user.username as url %}{{ url }}">Milestones</a></span>
+    {% endif %}
+    
+    {% if not request.shared %}
+    <span id="mass-sel">
+    <a href="{% url mass-entry user.username as url %}{{ url }}">Mass Entry</a></span>
+
+    <span id="import-sel">
+    <a href="{% url import user.username as url %}{{ url }}">Import</a></span>
+    
+    <span id="export-sel">
+    <a href="{% url export user.username as url %}{{ url }}">Export</a></span>
+
+    <span id="profile-sel">
+    <a href="{% url profile user.username as url %}{{ url }}">Preferences</a></span>
+    
+    {% endif %}
+
+</div>

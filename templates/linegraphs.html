@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% block linegraphs-sel %}nav_selected{% endblock%}
 
 {% block description %}{{ request.display_user.username }}'s line graphs{% endblock%}
 
@@ -16,7 +15,7 @@
     <script type="text/javascript">
     date_button = "{{MEDIA_URL}}/images/calendar.gif";
     year_range = "1990:2009";
-	
+	NAVBAR_HIGHLIGHT = "linegraphs-sel";
 	</script>
 {% endblock %}
 
