@@ -96,6 +96,7 @@ def list_types(types):
                          .replace('#','')\
                          .replace('?','')\
                          .replace('\\','')\
+                         .replace('_','')\
                          .replace('/','')\
                          .replace(',','') or "None"
         
