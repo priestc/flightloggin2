@@ -30,6 +30,8 @@ class LandCurrBox(CurrBox):
         
         if cat_class:
             self.title = CATEGORY_CLASSES[self.cat_class][1]
+        else:
+            self.title = "??"
         
         elif tr:
             self.title = tr
