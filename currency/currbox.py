@@ -27,11 +27,11 @@ class LandCurrBox(CurrBox):
     def __init__(self, cat_class=0, tr=None, tail=False):
     
         self.cat_class = cat_class
-        
+
+        self.title = ""        
+
         if cat_class:
             self.title = CATEGORY_CLASSES[self.cat_class][1]
-        else:
-            self.title = "??"
         
         elif tr:
             self.title = tr
