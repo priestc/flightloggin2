@@ -1,3 +1,5 @@
+from django.views.decorators.cache import cache_page
+
 from logbook.models import Flight
 from route.models import RouteBase, Route
 from share.decorator import no_share
@@ -40,6 +42,7 @@ def single_location_kml(request, ident):
 
 #------------------------------------------------------------------------------
 
+@cache_page(60 * 60)
 def routes_location_kml(request, ident):
     "Returns a KMZ of all routes flown to the passed location identifier"
     
@@ -60,11 +63,13 @@ def routes_location_kml(request, ident):
     
     return folders_to_kmz_response(folders, ident, add_icon=True)
 
+@cache_page(60 * 60)
 def routes_type_kml(request, ty):
     "Returns a KMZ of all routes flown by the passed aircraft type"
     qs = Route.objects.filter(flight__plane__type=ty)
     return qs_to_time_kmz(qs)
 
+@cache_page(60 * 60)
 def routes_tailnumber_kml(request, tn):
     "Returns a KMZ of all routes flown by the passed tailnumber"
     qs = Route.objects.filter(flight__plane__tailnumber=tn)
