@@ -1,12 +1,10 @@
 class RenderedRoute(object):
     name = ""
     kml = ""
-    pk = ""
     
     def __init__(self, name, pk, kml):
         self.kml = kml
         self.name = name
-        self.id = pk
 
 class BaseFolder(object):
     index = 0
@@ -38,8 +36,7 @@ class RouteFolder(BaseFolder):
         for route in self.qs:
             self.rendered_routes.append(
                 RenderedRoute(name=route['simple_rendered'],
-                              kml=route['kml_rendered'],
-                              pk=route['id'],)
+                              kml=route['kml_rendered'],)
             )
     def next(self):
         try:
