@@ -912,6 +912,10 @@ site_stats = """
 
 item_profile = """
 
+div#top_link                    {font-size: x-small;
+                                 text-align: left;
+                                 margin-bottom: -5px}
+
 div#gmap                        {width: 100%%;
                                  margin: 10px auto 0px auto;
                                  height: 25em;
