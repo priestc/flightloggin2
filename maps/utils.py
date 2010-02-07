@@ -118,7 +118,7 @@ def folders_to_kmz_response(folders, title=None,
     kml = kml.encode('utf-8')
     
     if not compression:
-        return HttpResponse(kml, mimetype="text/plain")
+        return HttpResponse(kml, mimetype="application/vnd.google-earth.kml+xml")
     
     #################################
      

@@ -49,7 +49,7 @@ def routes_location_kml(request, ident):
     folders[0] = AirportFolder(name="Airport", qs=l)
     folders[1] = RouteFolder(name="Routes", qs=qs)
     
-    return folders_to_kmz_response(folders, ident, add_icon=True, compression=False)
+    return folders_to_kmz_response(folders, ident, add_icon=True)
 
 def routes_type_kml(request, ty):
     "Returns a KMZ of all routes flown by the passed aircraft type"
