@@ -58,6 +58,9 @@
 	        <Placemark>
 		        <name>{{route.name}}</name>
 		        <styleUrl>{{folder.style}}</styleUrl>
+		        <description>
+		        <![CDATA[<a href="http://flightlogg.in{% url single_route-kml route.id %}{{ url }}">fff</a>]]>
+            </description>
 		        <LineString>
 			        <tessellate>1</tessellate>		
 			        <coordinates>

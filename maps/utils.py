@@ -1,10 +1,12 @@
 class RenderedRoute(object):
     name = ""
     kml = ""
+    pk = ""
     
-    def __init__(self, name, kml):
+    def __init__(self, name, pk, kml):
         self.kml = kml
         self.name = name
+        self.id = pk
 
 class BaseFolder(object):
     index = 0
@@ -12,8 +14,6 @@ class BaseFolder(object):
     
     def __iter__(self):
         return self
-
-
                
 class RouteFolder(BaseFolder):
     
@@ -38,7 +38,8 @@ class RouteFolder(BaseFolder):
         for route in self.qs:
             self.rendered_routes.append(
                 RenderedRoute(name=route['simple_rendered'],
-                              kml=route['kml_rendered'])
+                              kml=route['kml_rendered'],
+                              pk=route['id'],)
             )
     def next(self):
         try:
@@ -104,7 +105,7 @@ from django.template import Context
 from django.http import HttpResponse
 
 def folders_to_kmz_response(folders, title=None,
-                            add_icon=False, disable_compression=False):
+                            add_icon=False, compression=True):
     
     import zipfile
     import cStringIO
@@ -119,7 +120,7 @@ def folders_to_kmz_response(folders, title=None,
     
     kml = kml.encode('utf-8')
     
-    if disable_compression:
+    if not compression:
         return HttpResponse(kml, mimetype="text/plain")
     
     #################################

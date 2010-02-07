@@ -34,9 +34,14 @@ def single_location_kml(request, ident):
 def routes_location_kml(request, ident):
     "Returns a KMZ of all routes flown to the passed location identifier"
     
+    from django.db.models import Max
+    
     qs = Route.objects\
               .filter(routebase__location__identifier=ident.upper())\
-              .values('kml_rendered', 'simple_rendered').distinct()
+              .values('kml_rendered', 'simple_rendered')\
+              .distinct()\
+              .annotate(id=Max('id')) # clever way to get around
+                                      # id without screwing up distinct()
               
     l = Location.objects.filter(identifier=ident).filter(loc_class=1)\
     
@@ -44,7 +49,7 @@ def routes_location_kml(request, ident):
     folders[0] = AirportFolder(name="Airport", qs=l)
     folders[1] = RouteFolder(name="Routes", qs=qs)
     
-    return folders_to_kmz_response(folders, ident, add_icon=True, disable_compression=False)
+    return folders_to_kmz_response(folders, ident, add_icon=True, compression=False)
 
 def routes_type_kml(request, ty):
     "Returns a KMZ of all routes flown by the passed aircraft type"
