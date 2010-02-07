@@ -51,4 +51,7 @@ def figure_navbar(request):
     return ret
 
 def site_url(request):
-    return {"SITE_URL": settings.SITE_URL}
+    
+    gmk = settings.GOOGLE_MAPS_KEY
+    
+    return {"SITE_URL": settings.SITE_URL, "GOOGLE_MAPS_KEY": gmk}
