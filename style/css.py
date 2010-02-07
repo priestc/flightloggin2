@@ -908,7 +908,15 @@ site_stats = """
 #openid td:first-child          {text-align: right}
 """
 
+###############################################################################
+
 item_profile = """
+
+div#gmap                        {width: 100%%;
+                                 margin: 10px auto 0px auto;
+                                 height: 25em;
+                                 background: green;}
+
 a.noshare                       {color: gray}
 
 #route_table                    {border: 1px solid gray;
@@ -936,6 +944,8 @@ table.main th                   {width: 30%%;}
 
 h1                              {margin-bottom: 0px}
 """
+
+###############################################################################
 
 forum = """
 #djangoForumBody {

@@ -119,4 +119,5 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'main.context_processors.user_label',
     'main.context_processors.old_browser',
     'main.context_processors.figure_navbar',
+    'main.context_processors.site_url',
 )

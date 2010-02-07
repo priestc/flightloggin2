@@ -310,40 +310,32 @@ urlpatterns += patterns('',
      
     url(
         r'^tailnumber-(?P<tn>%s+).kmz$' % Plane.plane_regex,
-        "maps.kml_views.single_tailnumber_kml",
-                                                       name="s-tailnumber-kml",
+        "maps.kml_views.routes_tailnumber_kml",
+                                              name="routes_for_tailnumber-kml",
     ),
     
     url(
         r'^type-(?P<ty>%s+).kmz$' % Plane.plane_regex,
-        "maps.kml_views.single_type_kml",
-                                                             name="s-type-kml",
+        "maps.kml_views.routes_type_kml",
+                                                    name="routes_for_type-kml",
     ),
     
     url(
         r'^route-(?P<pk>[\w-]+).kmz$',
         "maps.kml_views.single_route_kml",
-                                                            name="s-route-kml",
+                                                       name="single_route-kml",
+    ),
+    
+    url(
+        r'^single_location-(?P<ident>[A-Z0-9]+).kmz$',
+        "maps.kml_views.single_location_kml",
+                                                    name="single_location-kml",
     ),
     
     url(
         r'^location-(?P<ident>[A-Z0-9]+).kmz$',
-        "maps.kml_views.single_location_kml",
-                                                         name="s-location-kml",
-    ),
-    
-    #--------------------------------------------------------------------------
-    
-    url(
-        r'^route-(?P<pk>[\w-]+)$',
-        "maps.kml_views.single_route_kml",
-        {'earth': False},                                  name="s-route-maps",
-    ),
-    
-    url(
-        r'^type-(?P<ty>[\w-]+)$',
-        "maps.kml_views.single_route_kml",
-        {'earth': False},                                   name="s-type-maps",
+        "maps.kml_views.routes_location_kml",
+                                                name="routes_for_location-kml",
     ),
     
     #--------------------------------------------------------------------------

@@ -24,6 +24,12 @@ def user_label(request):
     return {}
 
 def figure_navbar(request):
+    """
+    Figure out which user the navbar is made for
+    also add the shared variable so template cache tags don't freak out when
+    the request.shared isn't set
+    """
+    
     from django.contrib.auth.models import User
         
     if getattr(request, "display_user", False):
@@ -43,3 +49,6 @@ def figure_navbar(request):
     ret.update({"shared": getattr(request, "shared", False)})
     
     return ret
+
+def site_url(request):
+    return {"SITE_URL": settings.SITE_URL}

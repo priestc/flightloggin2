@@ -3,18 +3,14 @@ from route.models import RouteBase, Route
 from share.decorator import no_share
 
 from utils import *
+from airport.models import Location
 
-def single_route_kml(request, pk, earth=True):
-    if not earth:
-        from django.conf import settings
-        from django.core.urlresolvers import reverse
-        from django.http import HttpResponseRedirect
-        url = reverse('s-route-kml', kwargs={"pk":pk})
-        gm = "http://maps.google.com?q=%s%s" % (settings.SITE_URL, url)
-        return HttpResponseRedirect(gm)
-        
-        
-    from utils import RouteFolder
+def single_route_kml(request, pk):
+    """
+    Return a KMZ file representing a single route. The route PK is passed in as
+    opposed to a string representation of the route 
+    """
+
     r = Route.objects.filter(flight__pk=pk)\
                      .values('kml_rendered', 'simple_rendered')\
                      
@@ -22,19 +18,30 @@ def single_route_kml(request, pk, earth=True):
 
     return folders_to_kmz_response([f])
 
+def single_location_kml(request, ident):
+    """
+    Return a KMZ file representing a single location. Passed in is the ident.
+    """
+
+    l = Location.objects.filter(identifier=ident).filter(loc_class=1)\
+                     
+    f = AirportFolder(name=ident, qs=l)
+
+    return folders_to_kmz_response([f], add_icon=True)
+
 #------------------------------------------------------------------------------
 
-def single_location_kml(request, ident):
+def routes_location_kml(request, ident):
     "Returns a KMZ of all routes flown to the passed location identifier"
     qs = Route.objects.filter(routebase__location__identifier=ident.upper())
     return qs_to_time_kmz(qs)
 
-def single_type_kml(request, ty):
+def routes_type_kml(request, ty):
     "Returns a KMZ of all routes flown by the passed aircraft type"
     qs = Route.objects.filter(flight__plane__type=ty)
     return qs_to_time_kmz(qs)
 
-def single_tailnumber_kml(request, tn):
+def routes_tailnumber_kml(request, tn):
     "Returns a KMZ of all routes flown by the passed tailnumber"
     qs = Route.objects.filter(flight__plane__tailnumber=tn)
     return qs_to_time_kmz(qs)
@@ -44,8 +51,6 @@ def single_tailnumber_kml(request, tn):
 @no_share('other')
 def airports_kml(request, type_):
     from django.conf import settings
-    from utils import AirportFolder 
-    from airport.models import Location
     
     if type_=="all":
         title = "All Airports"

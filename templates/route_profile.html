@@ -4,6 +4,9 @@
 
 {% block javascript %}
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/item_profile.css">
+<script>
+    var kml_url = "{% url logbook bob %}"
+</script>
 {% endblock %}
 
 {% block title %}Route Profile - {{ r|upper }}{% endblock %}
@@ -12,6 +15,9 @@
 {% block canvas %}
 
 <h1>{{ r|upper }}</h1>
+
+<div id="gmap">
+</div>
 
 <table id="route_table">
 {% for rb in rbs %}
