@@ -52,7 +52,7 @@ def save_to_db(request):
     from django.http import HttpResponse
     return HttpResponse(str(stop-start), mimetype='text/plain')
 
-#@cache_page(60 * 60 * 3)
+@cache_page(60 * 60 * 3)
 def stats_graph(request, item, ext):
     from graph import StatsGraph
     
