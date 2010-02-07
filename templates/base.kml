@@ -59,7 +59,7 @@
 		        <name>{{route.name}}</name>
 		        <styleUrl>{{folder.style}}</styleUrl>
 		        <description>
-		        <![CDATA[<a href="http://flightlogg.in{% url profile-route route.id %}{{ url }}">See who has flown this route</a>]]>
+		        <![CDATA[<a href="http://flightlogg.in{% url profile-route route.name as url %}{{ url }}">See who has flown this route</a>]]>
             </description>
 		        <LineString>
 			        <tessellate>1</tessellate>		

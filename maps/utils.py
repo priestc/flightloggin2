@@ -2,7 +2,7 @@ class RenderedRoute(object):
     name = ""
     kml = ""
     
-    def __init__(self, name, pk, kml):
+    def __init__(self, name, kml):
         self.kml = kml
         self.name = name
 
