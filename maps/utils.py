@@ -111,14 +111,10 @@ def folders_to_kmz_response(folders, title=None,
         Context({"folders": folders})         
     )
     
-    print folders[0]
-    for p in folders[0]:
-        print p
-    
     kml = kml.encode('utf-8')
     
     if not compression:
-        return HttpResponse(kml, mimetype="application/vnd.google-earth.kml+xml")
+        return HttpResponse(kml, mimetype="text/plain") #application/vnd.google-earth.kml+xml")
     
     #################################
      

@@ -309,31 +309,31 @@ urlpatterns += patterns('',
     #--------------------------------------------------------------------------
      
     url(
-        r'^tailnumber-(?P<tn>%s+).kmz$' % Plane.plane_regex,
+        r'^tailnumber-(?P<tn>%s+)\.kmz$' % Plane.plane_regex,
         "maps.kml_views.routes_tailnumber_kml",
                                               name="routes_for_tailnumber-kml",
     ),
     
     url(
-        r'^type-(?P<ty>%s+).kmz$' % Plane.plane_regex,
+        r'^type-(?P<ty>%s+)\.kmz$' % Plane.plane_regex,
         "maps.kml_views.routes_type_kml",
                                                     name="routes_for_type-kml",
     ),
     
     url(
-        r'^route-(?P<pk>[\w-]+).kmz$',
+        r'^route-(?P<pk>[0-9]+)(?P<f>[f]?)\.kmz$',
         "maps.kml_views.single_route_kml",
                                                        name="single_route-kml",
     ),
     
     url(
-        r'^single_location-(?P<ident>[A-Z0-9]+).kmz$',
+        r'^single_location-(?P<ident>[A-Z0-9]+)\.kmz$',
         "maps.kml_views.single_location_kml",
                                                     name="single_location-kml",
     ),
     
     url(
-        r'^location-(?P<ident>[A-Z0-9]+).kmz$',
+        r'^location-(?P<ident>[A-Z0-9]+)\.kmz$',
         "maps.kml_views.routes_location_kml",
                                                 name="routes_for_location-kml",
     ),

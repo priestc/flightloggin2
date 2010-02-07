@@ -5,15 +5,24 @@ from share.decorator import no_share
 from utils import *
 from airport.models import Location
 
-def single_route_kml(request, pk):
+def single_route_kml(request, pk, f=False):
     """
     Return a KMZ file representing a single route. The route PK is passed in as
-    opposed to a string representation of the route 
+    opposed to a string representation of the route.
+    
+    If f=true, the pk is the
+    pk of the flight the route is connected to (for one case in the logbook
+    template where the flight pk is only available)
     """
-
-    r = Route.objects.filter(flight__pk=pk)\
+    
+    if f == "f":
+        kwarg = {"flight__pk": pk}
+    else:
+        kwarg = {"pk": pk}
+    
+    r = Route.objects.filter(**kwarg)\
                      .values('kml_rendered', 'simple_rendered')\
-                     
+                  
     f = RouteFolder(name="Route", qs=r, style="#red_line")
 
     return folders_to_kmz_response([f])
