@@ -14,7 +14,7 @@
 <h1>{{ tn|upper }}</h1>
 
 {% ifnotequal t_flights 0 %}
-<br><a href="{% url s-tailnumber-kml tn %}">View all flights in this tailnumber with Google Earth</a>
+<br><a href="{% url routes_for_tailnumber-kml tn %}">View all flights in this tailnumber with Google Earth</a>
 {% endifnotequal %}
 
 

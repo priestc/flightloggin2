@@ -15,7 +15,7 @@
 {{manufacturers|join:", "}}
 
 {% ifnotequal t_flights 0 %}
-<br><a href="{% url s-type-kml ty %}">View all flights in this type with Google Earth</a>
+<br><a href="{% url routes_for_type-kml ty %}">View all flights in this type with Google Earth</a>
 {% endifnotequal %}
 
 
