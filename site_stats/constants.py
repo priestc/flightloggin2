@@ -10,7 +10,7 @@ STATS_TITLES = {
     "pwm_hours":       ("The user with the most hours logged has X hours", "Flight Hours"),
     "pwm_count":       ("The user with the most flights logged has X entries", "Number of Flights"),
     "num_7_days":      ("Total number of flights logged in the past 7 days","Number of Flights"),
-    "user_7_days":     ("Number of unique users who have logged a flight in the past 7 days","Users"),
+    "user_7_days":     ("Unique users who have logged a flight in the past 7 days","Users"),
     "time_7_days":     ("Total flight hours logged in the past 7 days", "Flight Hours"),
     "unique_airports": ("Total unique airports visited by all users", "Unique Airports"),
     "unique_countries": ("Total unique countries visited by all users", "Unique Countries"),

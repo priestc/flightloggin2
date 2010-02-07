@@ -29,9 +29,6 @@ class StatsGraph(object):
         self.y = self.qs.values_list(val, flat=True).order_by('-dt')
         self.x = self.qs.values_list('dt', flat=True).order_by('-dt')
         
-        
-        print self.x.query.as_sql()
-        
     def output(self):
         ax = self.fig.add_subplot(111)
         ax.plot(self.x,
