@@ -33,8 +33,18 @@ def single_location_kml(request, ident):
 
 def routes_location_kml(request, ident):
     "Returns a KMZ of all routes flown to the passed location identifier"
-    qs = Route.objects.filter(routebase__location__identifier=ident.upper())
-    return qs_to_time_kmz(qs)
+    
+    qs = Route.objects\
+              .filter(routebase__location__identifier=ident.upper())\
+              .values('kml_rendered', 'simple_rendered').distinct()
+              
+    l = Location.objects.filter(identifier=ident).filter(loc_class=1)\
+    
+    folders=[0,1]
+    folders[0] = AirportFolder(name="Airport", qs=l)
+    folders[1] = RouteFolder(name="Routes", qs=qs)
+    
+    return folders_to_kmz_response(folders, ident, add_icon=True, disable_compression=False)
 
 def routes_type_kml(request, ty):
     "Returns a KMZ of all routes flown by the passed aircraft type"

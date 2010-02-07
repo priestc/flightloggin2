@@ -5,12 +5,22 @@ class RenderedRoute(object):
     def __init__(self, name, kml):
         self.kml = kml
         self.name = name
-        
-class RouteFolder(object):
-    name = ""
-    rendered_routes = []
+
+class BaseFolder(object):
     index = 0
+    name = ""
+    
+    def __iter__(self):
+        return self
+
+
+               
+class RouteFolder(BaseFolder):
+    
+    rendered_routes = []
+    
     style="#red_line"
+    has_routes = True
 
     def __init__(self, name, qs, style=None):
         self.rendered_routes=[]
@@ -20,14 +30,16 @@ class RouteFolder(object):
             self.style = style
             
         self.figure_qs()
+    
+    def __str__(self):
+        return "<RouteFolder: %s routes>" % len(self.rendered_routes)
 
     def figure_qs(self):
         for route in self.qs:
-            self.rendered_routes.append(RenderedRoute(name=route['simple_rendered'], kml=route['kml_rendered']))
-        
-    def __iter__(self):
-        return self
-
+            self.rendered_routes.append(
+                RenderedRoute(name=route['simple_rendered'],
+                              kml=route['kml_rendered'])
+            )
     def next(self):
         try:
             ret = self.rendered_routes[self.index]
@@ -36,8 +48,8 @@ class RouteFolder(object):
             
         self.index+=1
         return ret
-
-#########################################################################################################################################
+        
+###############################################################################
 
 class RenderedAirport(object):
     name = ""
@@ -51,12 +63,13 @@ class RenderedAirport(object):
         self.ls = destination.location_summary()
         self.identifier = destination.identifier
     
-class AirportFolder(RouteFolder):
+class AirportFolder(BaseFolder):
     name = ""
     rendered_airports = []
     index = 0
     style="#red_line"
-
+    has_points = True
+    
     def __init__(self, name, qs, style=None):
         self.rendered_airports=[]
         self.name = name
@@ -67,7 +80,7 @@ class AirportFolder(RouteFolder):
         self.figure_qs()
 
     def __str__(self):
-        return "<AF: %s>" % len(self.rendered_airports)
+        return "<AirportFolder: %s points>" % len(self.rendered_airports)
 
     def figure_qs(self):
         for airport in self.qs:
@@ -90,22 +103,27 @@ from django.template.loader import get_template
 from django.template import Context
 from django.http import HttpResponse
 
-def folders_to_kmz_response(folders, title=None, add_icon=False):
+def folders_to_kmz_response(folders, title=None,
+                            add_icon=False, disable_compression=False):
     
     import zipfile
     import cStringIO
     
-    if add_icon:
-        folder_type = "point_folders"
-    else:
-        folder_type = "route_folders"
-    
     kml = get_template('base.kml').render(
-        Context({folder_type: folders})         
+        Context({"folders": folders})         
     )
+    
+    print folders[0]
+    for p in folders[0]:
+        print p
     
     kml = kml.encode('utf-8')
     
+    if disable_compression:
+        return HttpResponse(kml, mimetype="text/plain")
+    
+    #################################
+     
     sio = cStringIO.StringIO()
     
     z = zipfile.ZipFile(sio, 'w', compression=zipfile.ZIP_DEFLATED)
@@ -121,8 +139,7 @@ def folders_to_kmz_response(folders, title=None, add_icon=False):
     return HttpResponse(sio.getvalue(),
                         mimetype="application/vnd.google-earth.kmz")
 
-####################################
-####################################
+###############################################################################
 
 def qs_to_time_kmz(qs):
     """ From a routes queryset, return a folder'd up kmz file split up

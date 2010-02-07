@@ -9,7 +9,6 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/item_profile.js"></script>
 <script>
     var routes_kml_url = "http://flightlogg.in{% url routes_for_location-kml loc.identifier as foo %}{{ foo }}"
-    var point_kml_url = "http://flightlogg.in{% url s-location-kml loc.identifier as foo %}{{ foo }}"
 </script>
 {% endblock %}
 

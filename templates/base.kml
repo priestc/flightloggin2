@@ -2,7 +2,7 @@
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Document>
 	<name>{{title}}</name>
-	{% if route_folders %}
+
 	<Style id="purple_line">
 		<LineStyle>
 			<color>ccFF78B4</color>{# B478FF #}
@@ -37,25 +37,7 @@
 			<width>2</width>
 		</LineStyle>
 	</Style>
-	{% for folder in route_folders %}
-    <Folder>
-    <name>{{folder.name}}</name>
-	    {% for route in folder %}
-	    <Placemark>
-		    <name>{{route.name}}</name>
-		    <styleUrl>{{folder.style}}</styleUrl>
-		    <LineString>
-			    <tessellate>1</tessellate>		
-			    <coordinates>
-			    {{route.kml}}
-			    </coordinates>
-		    </LineString>
-	    </Placemark>
-	    {% endfor %}
-	</Folder>
-	{% endfor %}
-	{% endif %}
-	{% if point_folders %}
+	
 	<Style id="icon">
 		<IconStyle>
 		    <color>ff0000ff</color>
@@ -66,7 +48,28 @@
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
 	</Style>
-	{% for folder in point_folders %}
+
+{% for folder in folders %}	
+
+    {% if folder.has_routes %}
+        <Folder>
+        <name>{{folder.name}}</name>
+	        {% for route in folder %}
+	        <Placemark>
+		        <name>{{route.name}}</name>
+		        <styleUrl>{{folder.style}}</styleUrl>
+		        <LineString>
+			        <tessellate>1</tessellate>		
+			        <coordinates>
+			        {{route.kml}}
+			        </coordinates>
+		        </LineString>
+	        </Placemark>
+	        {% endfor %}
+	    </Folder>
+    {% endif %}
+
+    {% if folder.has_points %}
 	<Folder>
 	<name>{{folder.name}}</name>
         {% for point in folder %}
@@ -82,7 +85,8 @@
 	    </Placemark>
 	    {% endfor %}
 	</Folder>
-	{% endfor %}
-	{% endif %}
+    {% endif %}
+    
+{% endfor %}
 </Document>
 </kml>

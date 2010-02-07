@@ -23,16 +23,6 @@ $(document).ready(function() {
 	
 	initialize();
 	
-	var point = new GGeoXml(point_kml_url, function(){
-	
-		if (point.loadedCorrectly())
-		{
-			map.addOverlay(point);
-			point.gotoDefaultViewport(map)
-		}
-
-	});
-	
 	var kml = new GGeoXml(routes_kml_url, function(){
 	
 		if (kml.loadedCorrectly())
