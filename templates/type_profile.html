@@ -21,23 +21,23 @@
 
 <table class="main">
     <tr>
-        <th>Users who have flown this aircraft type</th>
+        <th>Users who have flown a {{ ty }}</th>
         <td>{{ users|list_users }}</td>
     </tr>
     <tr>
-        <th>Total hours logged in this type</th>
+        <th>Total hours logged in a {{ ty }}</th>
         <td><big><strong>{{ t_hours }}</strong></big></td>
     </tr>
     <tr>
-        <th>Total number of flights logged in this type</th>
+        <th>Total number of flights logged in a {{ ty }}</th>
         <td><big><strong>{{ t_flights }}</strong></big></td>
     </tr>
     <tr>
-        <th>Number of unique airports this type has visited</th>
+        <th>Number of unique airports a {{ ty }} has visited</th>
         <td><big><strong>{{ u_airports }}</strong></big></td>
     </tr>
     <tr>
-        <th>Tailnumbers that are of this type</th>
+        <th>Tailnumbers that are a {{ ty }}</th>
         <td>{{ tailnumbers|list_tailnumbers }}</td>
     </tr>
 </table>

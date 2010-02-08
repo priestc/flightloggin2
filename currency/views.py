@@ -54,6 +54,7 @@ def currency(request):
         
     cat_classes = Plane.objects\
                        .user(request.display_user)\
+                       .exclude(cat_class=0)\
                        .values_list('cat_class', flat=True)\
                        .order_by().distinct()
     cat_classes_out = []

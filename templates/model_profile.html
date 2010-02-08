@@ -24,15 +24,15 @@
 
 <table class="main">
     <tr>
-        <th>Users who have flown {{ model }}</th>
+        <th>Users who have flown a {{ model }}</th>
         <td>{{ users|list_users }}</td>
     </tr>
     <tr>
-        <th>Total hours logged in {{ model }}</th>
+        <th>Total hours logged in a {{ model }}</th>
         <td><big><strong>{{ t_hours|floatformat:1|intcomma }}</strong></big></td>
     </tr>
     <tr>
-        <th>Total number of flights logged in {{ model }}</th>
+        <th>Total number of flights logged in a {{ model }}</th>
         <td><big><strong>{{ t_flights|intcomma }}</strong></big></td>
     </tr>
     <tr>
