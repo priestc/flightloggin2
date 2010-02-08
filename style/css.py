@@ -522,35 +522,15 @@ textarea                            {width: 250px; height: 100px}
                                      font-style: italic;
                                      font-size: x-small}
 """
-###############################################################################
-
-import__ = """
-.flying_event                   {color: darkred; font-weight: bold}
-#canvas                         {max-width: 100%% !important}
-
-.preview                        {border-collapse: collapse; border: 1px solid gray; margin: 10px auto auto auto}
-.preview td                     {font-size: x-small; border: 1px solid gray}
-
-tr.bad td                       {background: pink}
-tr.good td                      {background: #A2E4A7}
-tr.header td                    {background: #C7A16E}
-
-div#progress                    {font-size: large; margin: 10px;
-                                 background: #EEEEEE;
-                                 border: 1px solid gray}
-                                 
-table#import_form               {margin: 10px auto 10px auto; background: #EDEDED;
-                                 border: 1px solid black}
-                                 
-table#import_form td            {padding: 10px; border: 1px ridge gray}
-
-table#import_form input         {border: default; background: default}
-"""
 
 ###############################################################################
 
 logbook = """
-#canvas                                      {width: 98%%; max-width: none}
+#main_content                                {overflow: visible}
+
+#canvas                                      {overflow: visible;
+                                              width: 98%%; 
+                                              max-width: 98%%;}
 
 /* the [Pilot Checkride] tag in the remarks section*/
 .flying_event                                {%(remarks_event)s}
@@ -591,6 +571,31 @@ td.empty_logbook                             {font-size: x-large; padding: 10px 
                                               padding: 3px;
                                               font-size: x-small;
                                               border: 1px solid black;}
+"""
+
+###############################################################################
+
+import__ = """
+.flying_event                   {color: darkred; font-weight: bold}
+#canvas                         {max-width: 100%% !important}
+
+.preview                        {border-collapse: collapse; border: 1px solid gray; margin: 10px auto auto auto}
+.preview td                     {font-size: x-small; border: 1px solid gray}
+
+tr.bad td                       {background: pink}
+tr.good td                      {background: #A2E4A7}
+tr.header td                    {background: #C7A16E}
+
+div#progress                    {font-size: large; margin: 10px;
+                                 background: #EEEEEE;
+                                 border: 1px solid gray}
+                                 
+table#import_form               {margin: 10px auto 10px auto; background: #EDEDED;
+                                 border: 1px solid black}
+                                 
+table#import_form td            {padding: 10px; border: 1px ridge gray}
+
+table#import_form input         {border: default; background: default}
 """
 
 ###############################################################################
