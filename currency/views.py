@@ -70,6 +70,7 @@ def currency(request):
     
     tailwheels = Plane.objects.user(request.display_user)\
                               .tailwheel()\
+                              .exclude(cat_class=0)\
                               .values_list('cat_class', flat=True)\
                               .order_by().distinct()
     tailwheels_out = []   
@@ -85,6 +86,7 @@ def currency(request):
     
     type_ratings = Plane.objects.user(request.display_user)\
                                 .currency()\
+                                .exclude(cat_class=0)\
                                 .values_list('type', flat=True)\
                                 .order_by().distinct()
     types_out = []
