@@ -32,6 +32,15 @@ class BaseHistogram(NothingHereMixin):
         
         return fig
     
+    def remove_outliers(self):
+        import numpy
+        # convert to numpy array
+        A = numpy.array(self.data)
+        
+        # remove all outliers
+        dev = (3*A.std())
+        self.data = list(A[(A < A.mean()+dev) & (A > A.mean()-dev)])
+    
     def as_png(self):
         return plot_png(self.output)()
 
@@ -58,16 +67,18 @@ class ModelSpeedHistogram(BaseHistogram):
         
         model = self.kwargs.pop('model')
         
-        self.data = Flight.objects\
-                          .user('ALL')\
-                          .filter(plane__model__iexact=model)\
-                          .exclude(speed__isnull=True)\
-                          .exclude(speed__gte=500)\
-                          .exclude(speed=0)\
-                          .exclude(app__gt=1)\
-                          .exclude(route__total_line_all__lt=50)\
-                          .values_list('speed', flat=True)
-                   
+        A = Flight.objects\
+                  .user('ALL')\
+                  .filter(plane__model__iexact=model)\
+                  .exclude(speed__isnull=True)\
+                  .exclude(speed__gte=500)\
+                  .exclude(speed=0)\
+                  .exclude(app__gt=1)\
+                  .exclude(route__total_line_all__lt=50)\
+                  .values_list('speed', flat=True)
+        
+        self.remove_outliers()
+                  
         self.x_label = "Speed of flight (knots)"
         self.y_label = "Number of flights"
         self.title = "Speed of %s Flights" % model
@@ -86,6 +97,8 @@ class TypeSpeedHistogram(BaseHistogram):
                           .exclude(app__gt=1)\
                           .exclude(route__total_line_all__lt=50)\
                           .values_list('speed', flat=True)
+        
+        self.remove_outliers()
                    
         self.x_label = "Speed of flight (knots)"
         self.y_label = "Number of flights"
