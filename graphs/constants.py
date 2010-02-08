@@ -18,4 +18,5 @@ BAR_FIELDS = ['total',
               'route__total_line_all',
               'speed',
               'mpg',
+              'gph',
               ] + AGG_FIELDS
