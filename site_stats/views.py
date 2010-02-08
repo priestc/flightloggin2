@@ -29,17 +29,20 @@ def site_stats(request):
         l = line.split(" ")
         ident = l[1]
         url = reverse('profile-airport', kwargs={"ident": ident})
+
         linked_airports += "%s <a href=\"%s\">%s</a> %s\n" % (l[0], url, ident, l[2])
     
     ## XXX: this is no longer types, now models, the db columns need to
     # be renamed to 'models' at some point
-    types = cs.most_common_type.split("\n")
+    models = cs.most_common_type.split("\n")
     linked_mct = ""
-    for line in types[:-1]:
+    for line in models[:-1]:
         l = line.split(" ")
-        ty = l[1]
-        url = reverse('profile-model', kwargs={"model": ty})
-        linked_mct += "%s <a href=\"%s\">%s</a> %s\n" % (l[0], url, ty, l[2])
+        model = l[1]
+        url = reverse('profile-model', kwargs={"model": model})
+        # put the space back in instead of the underscore
+        model = model.replace('_', ' ')
+        linked_mct += "%s <a href=\"%s\">%s</a> %s\n" % (l[0], url, model, l[2])
     
     return locals()
 

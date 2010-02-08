@@ -17,7 +17,9 @@ class MostCommonPlane(object):
     def __call__(self):
         derp = ""
         for i,item in enumerate(self.p):
-            ident = item[self.title]
+            # when the ident is the model, some will have a space, so replace
+            # that space with an underscore (for a better URL)
+            ident = item[self.title].replace(" ", "_")
             count = item[self.count]
             derp += "%s. %s (%s)\n" % (i+1, ident, count)
         
