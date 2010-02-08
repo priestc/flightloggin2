@@ -67,15 +67,15 @@ class ModelSpeedHistogram(BaseHistogram):
         
         model = self.kwargs.pop('model')
         
-        A = Flight.objects\
-                  .user('ALL')\
-                  .filter(plane__model__iexact=model)\
-                  .exclude(speed__isnull=True)\
-                  .exclude(speed__gte=500)\
-                  .exclude(speed=0)\
-                  .exclude(app__gt=1)\
-                  .exclude(route__total_line_all__lt=50)\
-                  .values_list('speed', flat=True)
+        self.data = Flight.objects\
+              .user('ALL')\
+              .filter(plane__model__iexact=model)\
+              .exclude(speed__isnull=True)\
+              .exclude(speed__gte=500)\
+              .exclude(speed=0)\
+              .exclude(app__gt=1)\
+              .exclude(route__total_line_all__lt=50)\
+              .values_list('speed', flat=True)
         
         self.remove_outliers()
                   
@@ -90,13 +90,13 @@ class TypeSpeedHistogram(BaseHistogram):
         type_ = self.kwargs.pop('type_')
         
         self.data = Flight.objects\
-                          .user('ALL')\
-                          .filter(plane__type__iexact=type_)\
-                          .exclude(speed__isnull=True)\
-                          .exclude(speed=0)\
-                          .exclude(app__gt=1)\
-                          .exclude(route__total_line_all__lt=50)\
-                          .values_list('speed', flat=True)
+              .user('ALL')\
+              .filter(plane__type__iexact=type_)\
+              .exclude(speed__isnull=True)\
+              .exclude(speed=0)\
+              .exclude(app__gt=1)\
+              .exclude(route__total_line_all__lt=50)\
+              .values_list('speed', flat=True)
         
         self.remove_outliers()
                    
