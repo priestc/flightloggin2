@@ -92,7 +92,7 @@ class Currency(object):
         if not today:
             self.TODAY = date.today()
     
-    def _determine(self, method, start_date):
+    def _determine(self, method, start_date, as_of_date=None):
         """determine if the current date is before, after,
         or in the expire timeframe, or the alert timeframe."""
         
@@ -105,17 +105,20 @@ class Currency(object):
         
         expire_date = get_date(expire_time, start_date)
         alert_date = minus_alert(alert_time, expire_date)
+        
+        if not as_of_date:
+            as_of_date = self.TODAY
 
         #today is later than expire date, EXPIRED
-        if self.TODAY > expire_date:
+        if as_of_date > expire_date:
             return ("EXPIRED", expire_date)
         
         #today is later than alert, but not past expired date, ALERT
-        elif self.TODAY <= expire_date and self.TODAY >= alert_date:
+        elif as_of_date <= expire_date and as_of_date >= alert_date:
             return ("ALERT", expire_date)
         
         #today is before expire date, and before alert date, CURRENT
-        elif self.TODAY <= expire_date and self.TODAY < alert_date:
+        elif as_of_date <= expire_date and as_of_date < alert_date:
             return ("CURRENT", expire_date)
         
         else:
@@ -384,6 +387,15 @@ class FAA_Medical(Currency):
            some variables based on when that medical was made, and what
            class it was
         """
+        
+        try:
+            last_medical = NonFlight.objects\
+                            .filter(user=self.user, non_flying__in=[1,2,3])\
+                            .latest()
+                         
+        except NonFlight.DoesNotExist:
+            return None             #no medicals in logbook
+        
         from profile.models import Profile
         try:
             ## try to get the user's DOB from their profile, if no profile
@@ -392,20 +404,12 @@ class FAA_Medical(Currency):
         except AttributeError, Profile.DoesNotExist:
             dob = datetime.date(1915,7,21)
             
-        status, end_date = self._determine("40", dob)
+        status, end_date = self._determine("40", dob, as_of_date=last_medical.date)
         
         ## if this comes back expired, user is over 40
         self.over_40 = (status == "EXPIRED")
-
+        
         ###############
-            
-        try:
-            last_medical = NonFlight.objects\
-                            .filter(user=self.user, non_flying__in=[1,2,3])\
-                            .latest()
-                         
-        except NonFlight.DoesNotExist:
-            return None             #no medicals in logbook
             
         self.medical_date = last_medical.date
         self.medical_class = last_medical.non_flying
@@ -432,7 +436,7 @@ class FAA_Medical(Currency):
 
     def second_class(self):
     
-        if not self.medical_date or not self.over_40:
+        if not self.medical_date:
             self._get_medical_info()
 
         #if medical was issued as a third, it can never be a second
@@ -450,7 +454,7 @@ class FAA_Medical(Currency):
     
     def third_class(self):
     
-        if not self.medical_date or not self.over_40:
+        if not self.medical_date:
             self._get_medical_info()
 
         if not self.medical_class:
