@@ -86,7 +86,7 @@ def mass_planes(request, page=0):
 from django.contrib.auth.models import User
 from airport.models import Location
 from route.models import Route
-from django.db.models import Sum
+from django.db.models import Sum, Avg, Max
 
 @cache_page(60 * 15)
 @render_to('tailnumber_profile.html')
@@ -99,7 +99,7 @@ def tailnumber_profile(request, tn):
                  .order_by()\
                  .distinct()
     
-    users = Plane.get_profiles(tn, 'tailnumber')
+    users = Plane.get_profiles(tailnumber=tn)
     
     t_hours = Flight.objects\
                     .filter(plane__tailnumber__iexact=tn)\
@@ -121,7 +121,8 @@ def tailnumber_profile(request, tn):
 @render_to('type_profile.html')
 def type_profile(request, ty):
     
-    users = Plane.get_profiles(ty, 'type')
+    ## the users who have flown this type
+    users = Plane.get_profiles(type=ty)
     
     t_hours = Flight.objects\
                     .filter(plane__type__iexact=ty)\
@@ -141,5 +142,48 @@ def type_profile(request, ty):
                        .filter(type__iexact=ty)\
                        .order_by()\
                        .distinct()
+    
+    return locals()
+
+@cache_page(60 * 15)
+@render_to('model_profile.html')
+def model_profile(request, model):
+    
+    model = model.replace('_', ' ')
+    
+    ## the users who have flown this type
+    users = Plane.get_profiles(model=model)
+    
+    # total hours in model
+    t_hours = Flight.objects\
+                    .filter(plane__model__iexact=model)\
+                    .aggregate(s=Sum('total'))['s'] 
+    
+    # total flights in model
+    t_flights = Flight.objects.filter(plane__model__iexact=model).count()
+    
+    # unique airports
+    u_airports = Location.objects\
+                         .filter(routebase__route__flight__plane__model__iexact=model,
+                                 loc_class__lte=2)\
+                         .order_by()\
+                         .distinct()\
+                         .count()
+    
+    # tailnumbers of this model
+    tailnumbers = Plane.objects\
+                       .values_list('tailnumber', flat=True)\
+                       .filter(model__iexact=model)\
+                       .order_by()\
+                       .distinct()
+    
+    avg_speed = Flight.objects\
+                      .user('ALL')\
+                      .filter(plane__model__iexact=model)\
+                      .exclude(speed__lte=30)\
+                      .exclude(app__gt=1)\
+                      .exclude(route__total_line_all__lt=50)\
+                      .aggregate(s=Avg('speed'))['s'] 
+                      
     
     return locals()

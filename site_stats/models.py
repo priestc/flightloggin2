@@ -42,8 +42,8 @@ class MostCommonType(MostCommonPlane):
     def __init__(self):
         self.p = Plane.objects\
                       .exclude(flight=None)\
-                      .exclude(type='')\
-                      .values('type')\
+                      .exclude(model='')\
+                      .values('model')\
                       .distinct()\
                       .annotate(c=Count('id'))\
                       .order_by('-c')[:10]

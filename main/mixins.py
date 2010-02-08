@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.conf import settings
 
 class UserMixin(object):
 
@@ -25,8 +26,9 @@ class UserMixin(object):
                 kwarg = {"%s__isnull" % self.routebase_join: False}
                 return self.filter(**kwarg) ## distinct also should be added...
             
-            # don't filter anything for the 'ALL' user
-            return self
+            # don't filter anything for the 'ALL' user,
+            # except for the demo user
+            return self.exclude(user__id=settings.DEMO_USER_ID)
         
         #------------- filter by user ----------------------#
         
@@ -57,3 +59,13 @@ class GoonMixin(object):
     @classmethod
     def goof(cls, *args, **kwargs):
         return get_object_or_404(cls, *args, **kwargs)
+    
+###############################################################################
+    
+class NothingHereMixin(object):
+    @property
+    def NothingHereGraph(self):
+        from matplotlib.figure import Figure
+        fig = Figure()
+        fig.text(.5,.5,"Nothing to Show",fontsize=18,ha='center')
+        return fig

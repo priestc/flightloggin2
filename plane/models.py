@@ -84,11 +84,14 @@ class Plane(models.Model, GoonMixin):
                    .filter(plane__tailnumber=tailnumber).distinct()
                    
     @classmethod
-    def get_profiles(cls, val, field):
+    def get_profiles(cls, **kwarg):
         """
         Returns the profiles of the users who have flown in this
-        type/tail/whatever
+        type/tail/whatever. Takes one kwarg; model='blah', type='blah'
         """
+        
+        field = kwarg.keys()[0]
+        val = kwarg.values()[0]
         
         kwarg = {"user__flight__plane__%s__iexact" % field: val}
         

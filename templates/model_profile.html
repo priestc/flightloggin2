@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load profile_lists %}
+{% load humanize %}
+
+{% block description %}{{ model|upper }} model profile{% endblock%}
+
+{% block javascript %}
+<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/item_profile.css">
+{% endblock %}
+
+{% block title %}Model Profile - {{ model }}{% endblock %}
+
+
+{% block canvas %}
+
+<h1>{{ model }}</h1>
+{{ manufacturers|join:", " }}
+
+{% ifnotequal t_flights 0 %}
+<br>
+<a href="{% url routes_for_type-kml model as url %}{{ url }}">View all flights in this type with Google Earth</a>
+{% endifnotequal %}
+
+
+<table class="main">
+    <tr>
+        <th>Users who have flown this model</th>
+        <td>{{ users|list_users }}</td>
+    </tr>
+    <tr>
+        <th>Total hours logged in this type</th>
+        <td><big><strong>{{ t_hours|floatformat:1|intcomma }}</strong></big></td>
+    </tr>
+    <tr>
+        <th>Total number of flights logged in this type</th>
+        <td><big><strong>{{ t_flights|intcomma }}</strong></big></td>
+    </tr>
+    <tr>
+        <th>Tailnumbers that are of this model</th>
+        <td>{{ tailnumbers|list_tailnumbers }}</td>
+    </tr>
+    <tr>
+        <th>Average speed of all flights</th>
+        <td>{{ avg_speed|floatformat:2 }} knots</td>
+    </tr>
+</table>
+
+{% endblock %}

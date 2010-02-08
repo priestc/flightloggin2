@@ -64,7 +64,8 @@ urlpatterns = patterns('django_openid_auth.views',
 urlpatterns += patterns('',
 
     (r'^newforum/', include('forum.urls')),
-
+    (r'^histogram/', include('histogram.urls')),
+    
     url(
         r'^(?P<username>\w+)/realtime.html$',
         "realtime.views.realtime2",
@@ -206,11 +207,6 @@ urlpatterns += patterns('',
         "maps.states_views.render_all",
     ),
     
-    (
-        r'^histogram\.py$',
-        "site_stats.views.histogram",
-    ),
-    
     url(
         r'^schedule-(?P<schedule>\w+).py$',
         "backup.views.schedule",
@@ -341,37 +337,43 @@ urlpatterns += patterns('',
     #--------------------------------------------------------------------------
     
     url(
-        r'^route-(?P<r>[\w-]+).html$',
+        r'^route-(?P<r>[\w-]+)\.html$',
         "route.views.route_profile",
                                                           name="profile-route",
     ),
     
     url(
-        r'^tailnumber-(?P<tn>%s+).html$' % Plane.plane_regex,
+        r'^tailnumber-(?P<tn>%s+)\.html$' % Plane.plane_regex,
         "plane.views.tailnumber_profile",
                                                      name="profile-tailnumber",
     ),
     
     url(
-        r'^type-(?P<ty>%s+).html$' % Plane.plane_regex,
+        r'^type-(?P<ty>%s+)\.html$' % Plane.plane_regex,
         "plane.views.type_profile",
                                                            name="profile-type",
     ),
     
     url(
-        r'^navaid-(?P<ident>[A-Z0-9]+).html$',
+        r'^model-(?P<model>.+)\.html$',
+        "plane.views.model_profile",
+                                                          name="profile-model",
+    ),
+    
+    url(
+        r'^navaid-(?P<ident>[A-Z0-9]+)\.html$',
         "airport.views.airport_profile",
         {"navaid": True},                                name="profile-navaid",
     ),
     
     url(
-        r'^airport-(?P<ident>[A-Z0-9-]+).html$',
+        r'^airport-(?P<ident>[A-Z0-9-]+)\.html$',
         "airport.views.airport_profile",
         {"navaid": False},                              name="profile-airport",
     ),
-    
+
     url(
-        r'^location-(?P<ident>[A-Z0-9-]+).html$',
+        r'^location-(?P<ident>[A-Z0-9-]+)\.html$',
         "airport.views.location_redirect",
                                                        name="profile-location",
     ),
@@ -379,13 +381,13 @@ urlpatterns += patterns('',
     #--------------------------------------------------------------------------
     
     url(
-        r'^(?P<username>\w+)/airports-(?P<type_>\w+).kmz$',
+        r'^(?P<username>\w+)/airports-(?P<type_>\w+)\.kmz$',
         "maps.kml_views.airports_kml",
                                                             name="kml-airport",
     ),
     
     url(
-        r'^(?P<username>\w+)/routes-(?P<type_>\w+).kmz$',
+        r'^(?P<username>\w+)/routes-(?P<type_>\w+)\.kmz$',
         "maps.kml_views.routes_kml",
                                                               name="kml-route",
     ),
@@ -393,103 +395,103 @@ urlpatterns += patterns('',
     #--------------------------------------------------------------------------
     
     url(
-        r'^(?P<username>\w+)/8710.html$',
+        r'^(?P<username>\w+)/8710\.html$',
         "auto8710.views.auto8710",
                                                                     name="est",
     ),
     
     url(
-        r'^(?P<username>\w+)/preferences.html$',
+        r'^(?P<username>\w+)/preferences\.html$',
         "profile.views.profile",
                                                                 name="profile",
     ),
     
     url(
-        r'^(?P<username>\w+)/import.html$',
+        r'^(?P<username>\w+)/import\.html$',
         "manage.views.import_v",
                                                                  name="import",
     ),
     
     url(
-        r'^(?P<username>\w+)/export.html$',
+        r'^(?P<username>\w+)/export\.html$',
         "manage.views.export",
                                                                  name="export",
     ),
     
     url(
-        r'^(?P<username>\w+)/records.html$',
+        r'^(?P<username>\w+)/records\.html$',
         "records.views.records",
                                                                 name="records",
     ),
     
     url(
-        r'^(?P<username>\w+)/events.html$',
+        r'^(?P<username>\w+)/events\.html$',
         "records.views.events",
                                                                  name="events",
     ),
     
     url(
-        r'^(?P<username>\w+)/linegraphs.html$',
+        r'^(?P<username>\w+)/linegraphs\.html$',
         "graphs.views.linegraphs",
                                                              name="linegraphs",
     ),
     
     url(
-        r'^(?P<username>\w+)/bargraphs.html$',
+        r'^(?P<username>\w+)/bargraphs\.html$',
         "graphs.views.bargraphs",
                                                               name="bargraphs",
     ),
     
     url(
-        r'^(?P<username>\w+)/planes.html$',
+        r'^(?P<username>\w+)/planes\.html$',
         "plane.views.planes",
                                                                  name="planes",
     ),
     
     url(
-        r'^(?P<username>\w+)/mass_planes.html$',
+        r'^(?P<username>\w+)/mass_planes\.html$',
         "plane.views.mass_planes",
                                                             name="mass-planes",
     ),
     
     url(
-        r'^(?P<username>\w+)/maps.html$',
+        r'^(?P<username>\w+)/maps\.html$',
         "maps.views.maps",
                                                                    name="maps",
     ),
     
     url(
-        r'^(?P<username>\w+)/states-(?P<type_>[\w\-]+).png$',
+        r'^(?P<username>\w+)/states-(?P<type_>[\w\-]+)\.png$',
         "maps.states_views.image_redirect",
                                                               name="state-map",
     ),
     
     url(
-        r'^(?P<username>\w+)/recalc-mine.py$',
+        r'^(?P<username>\w+)/recalc-mine\.py$',
         "maps.states_views.render_me",
                                                               name="render-me",
     ),
     
     url(
-        r'^(?P<username>\w+)/milestones.html$',
+        r'^(?P<username>\w+)/milestones\.html$',
         "milestones.views.milestones",
                                                              name="milestones",
     ),
     
     url(
-        r'^smallbar/(?P<val>\d+(\.\d+)?)--(?P<max_val>\d+(\.\d+)?).png$',
+        r'^smallbar/(?P<val>\d+(\.\d+)?)--(?P<max_val>\d+(\.\d+)?)\.png$',
         "milestones.views.smallbar",
                                                                name='smallbar',
     ),
     
     url(
-        r'^(?P<username>\w+)/currency.html$',
+        r'^(?P<username>\w+)/currency\.html$',
         "currency.views.currency",
                                                                name="currency",
     ),
     
     url(
-        r'^(?P<username>\w+)/locations.html$',
+        r'^(?P<username>\w+)/locations\.html$',
         "records.views.locations",
                                                               name="locations",
     ),
@@ -501,44 +503,45 @@ urlpatterns += patterns('',
     ),
     
     url(
-        r'^(?P<username>\w+)/massentry.html$',
+        r'^(?P<username>\w+)/massentry\.html$',
         "logbook.views.mass_entry",
                                                              name="mass-entry",
     ),
     
     url(
-        r'^(?P<username>\w+)/massedit-page-(?P<page>\d+).html$',
+        r'^(?P<username>\w+)/massedit-page-(?P<page>\d+)\.html$',
         "logbook.views.mass_edit",
                                                               name="mass-edit",
     ),
     
     url(
-        r'^(?P<username>\w+)/logbook.html$',
+        r'^(?P<username>\w+)/logbook\.html$',
         "logbook.views.logbook",
                                                                 name="logbook",
     ),
     
     url(
-        r'^(?P<username>\w+)/logbook-page-(?P<page>\d+).html',
+        r'^(?P<username>\w+)/logbook-page-(?P<page>\d+)\.html',
         "logbook.views.logbook",
                                                            name="logbook-page",
     ),
         
     url(
-        r'^(?P<username>\w+)/sigs.html$',"sigs.views.sigs",
+        r'^(?P<username>\w+)/sigs\.html$',
+        "sigs.views.sigs",
                                                                    name="sigs",
     ),
     
     url(
-        r'^(?P<username>\w+)/print.pdf$',
+        r'^(?P<username>\w+)/print\.pdf$',
         "pdf.views.pdf",
                                                                     name="pdf",
     ),
     
     (
-        r'^lcl_dev_media/(?P<path>.*)$','django.views.static.serve',
-        {'document_root': '/srv/flightloggin/media',
-            'show_indexes': True},
+        r'^lcl_dev_media/(?P<path>.*)$',
+        'django.views.static.serve',
+        {'document_root': '/srv/flightloggin/media', 'show_indexes': True},
     ),
 
     (
