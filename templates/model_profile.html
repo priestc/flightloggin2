@@ -24,25 +24,23 @@
 
 <table class="main">
     <tr>
-        <th>Users who have flown this model</th>
+        <th>Users who have flown {{ model }}</th>
         <td>{{ users|list_users }}</td>
     </tr>
     <tr>
-        <th>Total hours logged in this type</th>
+        <th>Total hours logged in {{ model }}</th>
         <td><big><strong>{{ t_hours|floatformat:1|intcomma }}</strong></big></td>
     </tr>
     <tr>
-        <th>Total number of flights logged in this type</th>
+        <th>Total number of flights logged in {{ model }}</th>
         <td><big><strong>{{ t_flights|intcomma }}</strong></big></td>
     </tr>
     <tr>
-        <th>Tailnumbers that are of this model</th>
+        <th>Tailnumbers that are a {{ model }}</th>
         <td>{{ tailnumbers|list_tailnumbers }}</td>
     </tr>
-    <tr>
-        <th>Average speed of all flights</th>
-        <td>{{ avg_speed|floatformat:2 }} knots</td>
-    </tr>
 </table>
+<br>
+<img src="{% url histogram-model model %}" alt="Speed Histogram">
 
 {% endblock %}

@@ -29,6 +29,7 @@ class MostCommonManu(MostCommonPlane):
     
     def __init__(self):
         self.p = Plane.objects\
+                      .user('ALL')\
                       .exclude(flight=None)\
                       .exclude(manufacturer='')\
                       .values('manufacturer')\
@@ -36,11 +37,12 @@ class MostCommonManu(MostCommonPlane):
                       .annotate(c=Count('id'))\
                       .order_by('-c')[:10]
 
-class MostCommonType(MostCommonPlane):
-    title = "type"
+class MostCommonModel(MostCommonPlane):
+    title = "model"
     count = "c"
     def __init__(self):
         self.p = Plane.objects\
+                      .user('ALL')\
                       .exclude(flight=None)\
                       .exclude(model='')\
                       .values('model')\
@@ -53,6 +55,7 @@ class MostCommonTail(MostCommonPlane):
     count = "c"
     def __init__(self):
         self.p = Plane.objects\
+                      .user('ALL')\
                       .exclude(flight=None)\
                       .exclude(tailnumber='')\
                       .values('tailnumber')\
@@ -103,8 +106,7 @@ class Stat(object):
 
     def __init__(self):
         
-        from django.conf import settings as ss
-        self.base_flights = Flight.objects.exclude(user__id=ss.DEMO_USER_ID)
+        self.base_flights = Flight.objects.user('ALL')
         
         self.users = User.objects.count()
         self.today = datetime.date.today()
@@ -208,12 +210,12 @@ class Stat(object):
 
     # these classes return callable objects
     calc_most_common_manu = MostCommonManu()
-    calc_most_common_type = MostCommonType()
+    calc_most_common_type = MostCommonModel()
     calc_most_common_tail = MostCommonTail()
     
     def calc_route_earths(self):
         """Must be called after calc_total_dist"""
-        EARTH = 21620.6641 #circumference of the earth in NM'
+        EARTH = 21620.6641 #circumference of the earth in NM
         return self.total_dist / EARTH  
     
     def calc_total_dist(self):

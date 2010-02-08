@@ -50,7 +50,7 @@ class UserTotalsHistogram(BaseHistogram):
                         
         self.x_label = 'Total Flight Hours'
         self.y_label = 'Number of Users'
-        self.title = ""
+        self.title = "Distribution of Logbook Totals"
 
 class ModelSpeedHistogram(BaseHistogram):
     def get_data(self):
