@@ -25,6 +25,9 @@ class UserMixin(object):
             flight_date_field = "date"
             user_field = "user"
             
+        elif class_name == "LocationQuerySet":
+            user_field = "routebase__route__flight__user"
+            
         #------------- filter by everyone ------------------#
         
         if (u == 'ALL' or
