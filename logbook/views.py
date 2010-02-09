@@ -18,6 +18,13 @@ from profile.models import Profile, AutoButton
 
 @render_to("logbook.html")
 @no_share('logbook')
+def edit_logbook(request, page=0):
+    assert request.POST, "No post"
+    
+    
+
+@render_to("logbook.html")
+@no_share('logbook')
 def logbook(request, page=0):
     ##############################################################
     
@@ -50,10 +57,14 @@ def logbook(request, page=0):
         
         if form.is_valid():
             form.save()
+            
             from backup.models import edit_logbook
             edit_logbook.send(sender=request.display_user)
+            
             from django.core.urlresolvers import reverse
-            url = reverse('logbook', kwargs={"username": request.display_user.username})
+            kwarg = {"username": request.display_user.username}
+            url = reverse('logbook', kwargs=kwarg)
+            
             return HttpResponseRedirect(url)
             
     elif request.POST.get('submit', "") == "Edit Flight":
@@ -94,7 +105,7 @@ def logbook(request, page=0):
     ##############################################################
     
     all_flights = Flight.objects\
-                        .filter(user=request.display_user)\
+                        .user(request.display_user, disable_future=True)\
                         .order_by('date', 'id')
                         
     filtered_flights = all_flights.select_related()
