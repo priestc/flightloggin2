@@ -14,81 +14,79 @@ from constants import *
 from totals import column_total_by_list
 from profile.models import Profile, AutoButton
 
+from utils import proper_flight_form, logbook_url
+
+###############################################################################
+
+def delete_flight(request, page):
+    if request.display_user.username != 'ALL':
+        flight_id = request.POST['id']
+        Flight(pk=flight_id, user=request.display_user).delete()
+    
+    url = logbook_url(request.display_user, page)
+    return HttpResponseRedirect(url)
+
+###############################################################################
+
+def edit_flight(request, page):
+    assert request.POST, "No post"
+    
+    profile,c = Profile.objects.get_or_create(user=request.display_user)
+    PopupFlightForm = proper_flight_form(profile)
+    
+    flight_id = request.POST['id']
+    flight = Flight(pk=flight_id, user=request.display_user)
+
+    form = PopupFlightForm(request.POST,
+                           user=request.display_user,
+                           instance=flight,
+                           prefix="new")
+
+    if form.is_valid() and request.display_user.username != 'ALL':
+        form.save()
+        from backup.models import edit_logbook
+        
+        edit_logbook.send(sender=request.display_user)
+        url = logbook_url(request.display_user, page)
+        
+        return HttpResponseRedirect(url)
+        
+    return logbook(request, form=form, fail="edit")
+    
+###############################################################################
+
+def new_flight(request, page):
+    assert request.POST, "No post"
+    
+    profile,c = Profile.objects.get_or_create(user=request.display_user)
+    PopupFlightForm = proper_flight_form(profile)
+
+    flight = Flight(user=request.display_user)
+    
+    form = PopupFlightForm(request.POST,
+                           user=request.display_user,
+                           instance=flight,
+                           prefix="new")
+    
+    if form.is_valid() and request.display_user.username != 'ALL':
+        form.save()
+        
+        from backup.models import edit_logbook
+        edit_logbook.send(sender=request.display_user)
+        
+        url = logbook_url(request.display_user, page)
+        return HttpResponseRedirect(url)
+
+    return logbook(request, form=form, fail="new")
+    
 ###############################################################################
 
 @render_to("logbook.html")
 @no_share('logbook')
-def edit_logbook(request, page=0):
-    assert request.POST, "No post"
-    
-    
-
-@render_to("logbook.html")
-@no_share('logbook')
-def logbook(request, page=0):
-    ##############################################################
-    
-    auto_button,c = AutoButton.objects.get_or_create(user=request.display_user)
-    cols, c = Columns.objects.get_or_create(user=request.display_user)
-    profile,c = Profile.objects.get_or_create(user=request.display_user)
-    
-    ##############################################################
-        
-    PopupFlightForm = forms.PopupFlightForm
-    PopupFlightForm.plane = forms.text_plane_field 
-    
-    if profile.text_plane:
-        # if the user wants a text field fo the plane, then swap in this field
-        # instead
-        PopupFlightForm.base_fields['plane'] = forms.text_plane_field
-
-    form = PopupFlightForm(user=request.display_user, prefix="new")
-    
-    ##############################################################
-    
-    if request.POST.get('submit', "") == "Submit New Flight":
-        flight = Flight(user=request.display_user)
-        
-        form = PopupFlightForm(request.POST,
-                               user=request.display_user,
-                               instance=flight,
-                               prefix="new")
-        edit_or_new = "new"
-        
-        if form.is_valid():
-            form.save()
-            
-            from backup.models import edit_logbook
-            edit_logbook.send(sender=request.display_user)
-            
-            from django.core.urlresolvers import reverse
-            kwarg = {"username": request.display_user.username}
-            url = reverse('logbook', kwargs=kwarg)
-            
-            return HttpResponseRedirect(url)
-            
-    elif request.POST.get('submit', "") == "Edit Flight":
-        flight_id = request.POST['id']
-        flight = Flight(pk=flight_id, user=request.display_user)
-        
-        form = PopupFlightForm(request.POST,
-                               user=request.display_user,
-                               instance=flight,
-                               prefix="new")
-        edit_or_new = "edit"
-        
-        if form.is_valid():
-            form.save()
-            from backup.models import edit_logbook
-            edit_logbook.send(sender=request.display_user)
-            return HttpResponseRedirect(request.path)
-            
-    elif request.POST.get('submit', "") == "Delete Flight":
-        flight_id = request.POST['id']
-        Flight(pk=flight_id, user=request.display_user).delete()
-        return HttpResponseRedirect(request.path)
-        
-    ##############################################################
+def logbook(request, page=0, form=None, fail=None):
+    """
+    Prepare the Logbook page
+    """
     
     auto_button,c = AutoButton.objects.get_or_create(user=request.display_user)
     cols, c = Columns.objects.get_or_create(user=request.display_user)
@@ -145,8 +143,20 @@ def logbook(request, page=0):
     #only make the page table if there are more than one pages overall
     do_pagination = page_of_flights.paginator.num_pages > 1
     
+    if not form:
+        PopupFlightForm = proper_flight_form(profile)
+        form = PopupFlightForm(prefix="new")
+    else:
+        ## set this variable so we know which popup to prepare to enter the
+        ## failed form data
+        edit_or_new = fail
+        
     return locals()
 
+###############################################################################
+###############################################################################
+###############################################################################
+###############################################################################
 ###############################################################################
 
 @no_share('NEVER')

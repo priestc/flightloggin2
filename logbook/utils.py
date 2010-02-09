@@ -127,4 +127,35 @@ def handle_fuel_burn(val, time):
         raise ValidationError("Invalid Fuel Burn Unit")
           
     return g, gph
-        
+
+
+def logbook_url(user, page):
+    """
+    Redirect the user to their logbook page, if the page==0, just redirect
+    them to plain ol' logbook.html
+    """
+    from django.core.urlresolvers import reverse
+    
+    if int(page) == 0 or not page:
+        kwargs = {'username': user.username}
+        view = "logbook"
+    else:
+        kwargs = {'username': user.username, 'page': page}
+        view = "logbook-page"
+
+    return reverse(view, kwargs=kwargs)
+
+def proper_flight_form(profile):
+    """
+    Prepares the popup flight form based on how the user wants each field
+    widget to be rendered as.
+    """
+    
+    from logbook.forms import PopupFlightForm, text_plane_field
+    
+    if profile.text_plane:
+        # if the user wants a text field fo the plane, then swap in this field
+        # instead
+        PopupFlightForm.base_fields['plane'] = text_plane_field
+
+    return PopupFlightForm       

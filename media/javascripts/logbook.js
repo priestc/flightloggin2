@@ -188,6 +188,25 @@ function cleanup_filter_get() {
 
 $(document).ready(function() {
     
+    $("#submit_edit_flight").click(function() {
+    
+        $("#new_entry_form").attr("action", edit_url)
+    
+    });
+    
+    $("#submit_new_flight").click(function() {
+    
+        $("#new_entry_form").attr("action", new_url)
+    
+    });
+    
+    $("#delete_flight").click(function() {
+    
+        $("#new_entry_form").attr("action", delete_url)
+    
+    });
+    
+    
     $(".filter_submit").click(function() {
         cleanup_filter_get();
         

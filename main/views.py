@@ -9,11 +9,6 @@ def news(request):
         request.display_user = request.user
         
     return locals()
-
-@render_to("faq.html")
-def faq(request):
-    title="FAQ"
-    return locals()
     
 @render_to("help.html")
 def help(request):

@@ -1,5 +1,11 @@
+<script>
+    var edit_url = "{% url edit_flight request.display_user.username page %}";
+    var delete_url = "{% url delete_flight request.display_user.username page %}";
+    var new_url = "{% url new_flight request.display_user.username page %}";
+</script>
+
 <div id="popup" title="New Entry">
-	<form id="new_entry_form" action="{% url logbook-page request.display_user.username page %}" method="post">
+	<form id="new_entry_form" action="placeholder" method="post">
 		<table id="dragbar">
 		    <tr>
 			    <td><span id="titlebar">New Entry</span></td>
@@ -23,7 +29,7 @@
 				    </tr>
 					
 		            <tr>
-				        <td style="display:none" id="{{edit_or_new}}_error_cell">{{form.errors}}</td>
+				        <td style="display:none" id="{{ edit_or_new }}_error_cell">{{form.errors}}</td>
 				    </tr>
 			
 					<tr class="date_field">

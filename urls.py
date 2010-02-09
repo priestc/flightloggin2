@@ -285,12 +285,6 @@ urlpatterns += patterns('',
     #--------------------------------------------------------------------------
     
     url(
-        r'^faq.html$',
-        "main.views.faq",
-                                                                    name="faq",
-    ),
-    
-    url(
         r'^help.html$',
         "main.views.help",
                                                                    name="help",
@@ -514,6 +508,8 @@ urlpatterns += patterns('',
                                                               name="mass-edit",
     ),
     
+    ###########################################################################
+    
     url(
         r'^(?P<username>\w+)/logbook\.html$',
         "logbook.views.logbook",
@@ -521,10 +517,30 @@ urlpatterns += patterns('',
     ),
     
     url(
+        r'^(?P<username>\w+)/edit_flight-(?P<page>\d+)/$',
+        "logbook.views.edit_flight",
+                                                            name="edit_flight",
+    ),
+    
+    url(
+        r'^(?P<username>\w+)/new_flight-(?P<page>\d+)/$',
+        "logbook.views.new_flight",
+                                                             name="new_flight",
+    ),
+    
+    url(
+        r'^(?P<username>\w+)/delete_flight-(?P<page>\d+)/$',
+        "logbook.views.delete_flight",
+                                                          name="delete_flight",
+    ),
+    
+    url(
         r'^(?P<username>\w+)/logbook-page-(?P<page>\d+)\.html',
         "logbook.views.logbook",
                                                            name="logbook-page",
     ),
+    
+    ###########################################################################
         
     url(
         r'^(?P<username>\w+)/sigs\.html$',

@@ -71,6 +71,3 @@ def ajax_timestamp_to_datetime(s):
 
 
 
-
-
-

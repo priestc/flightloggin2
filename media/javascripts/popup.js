@@ -86,17 +86,13 @@ $(document).ready(function() {
 	});
 	
 	// fire popup if an error is detected
-	if( $("td#new_error_cell").text() != "" )  {     
+	if( $("td#new_error_cell").text() != "" ) {     
 	    prepare_new();
 	    fire_popup();
 	}
 	
 	if( $("td#edit_error_cell").text() != "") {
-	    prepare_edit();
-	    
-	    //set the id of the failed edit object to the popup
-	    
-	    
+	    prepare_edit();   
 	    fire_popup();
 	}
 });

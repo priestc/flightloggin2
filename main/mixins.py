@@ -17,8 +17,6 @@ class UserMixin(object):
         
         class_name = self.__class__.__name__
         
-        print class_name
-        
         if class_name == "PlaneQuerySet":
             flight_date_field = "flight__date"
             user_field = "user"

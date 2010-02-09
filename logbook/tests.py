@@ -9,9 +9,9 @@ from django.contrib.auth.models import User
 
 class ColumnsTest(TestCase):
     
-    #fixtures = ['airport/test-fixtures/ohio.json',
-    #            'airport/test-fixtures/test-region.json',
-    #            'airport/test-fixtures/test-country.json']
+    fixtures = ['airport/test-fixtures/ohio.json',
+                'airport/test-fixtures/test-region.json',
+                'airport/test-fixtures/test-country.json']
     
     def setUp(self):
         import datetime
