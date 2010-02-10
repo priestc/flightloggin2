@@ -455,8 +455,8 @@ urlpatterns += patterns('',
     ),
     
     url(
-        r'^(?P<username>\w+)/states-(?P<type_>[\w\-]+)\.png$',
-        "maps.states_views.image_redirect",
+        r'^(?P<username>\w+)/states-(?P<type_>[\w\-]+)\.(?P<ext>(png|svg))$',
+        "maps.states_views.render_image",
                                                               name="state-map",
     ),
     

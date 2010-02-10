@@ -5,7 +5,6 @@ from django.db.models import Sum
 from main.mixins import UserMixin
 
 class LocationQuerySet(QuerySet, UserMixin):
-    user_field = 'routebase__route__flight__user'
     routebase_join = "routebase"
     
     def user_own(self, user):
@@ -15,5 +14,4 @@ class LocationQuerySet(QuerySet, UserMixin):
         return self.filter(loc_class=3, user=user)
     
 class CountryRegionQuerySet(QuerySet, UserMixin):    
-    user_field = 'location__routebase__route__flight__user'
     routebase_join = "location__routebase"

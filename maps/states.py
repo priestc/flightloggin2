@@ -1,9 +1,8 @@
-import matplotlib
-matplotlib.use('Agg')
-
 import numpy as np
+
 from mpl_toolkits.basemap import Basemap, cm
 from matplotlib.colors import rgb2hex, LinearSegmentedColormap
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 from django.db.models import Count
 from airport.models import Region, Location
@@ -14,44 +13,50 @@ from airport.models import Region, Location
 
 class StateMap(object):
     
-    # the map, centered to the continental US
-    m = Basemap(llcrnrlon=-119,llcrnrlat=22,urcrnrlon=-64,urcrnrlat=49,
-                projection='lcc',lat_1=33,lat_2=45,lon_0=-95)
-    
-    
     def __init__(self, user, ext='png'):
         self.user = user
         self.ext = ext
         self.get_cmap()
         
-        #from matplotlib.figure import Figure
-        #self.fig = Figure(figsize=(3.5, 2.5),)
+        from matplotlib.figure import Figure
+        self.fig = Figure(figsize=(3.5, 2.5),)
         
-        import matplotlib.pyplot as plt
-        self.fig = plt.figure(figsize=(3.5, 2.5),)
+        self.canvas = FigureCanvas(self.fig)
+        self.ax = self.fig.add_subplot(111)
+        
+        self.m = Basemap(llcrnrlon=-120,
+                         llcrnrlat=20.8,
+                         urcrnrlon=-61.5,
+                         urcrnrlat=50.3,
+                         projection='lcc',
+                         lat_1=33,
+                         lat_2=45,
+                         lon_0=-95,
+                         ax=self.ax)
         
     def as_response(self):
-        """Returns a HttpResponse containing the png or svg file.
+        """
+        Returns a HttpResponse containing the png or svg file.
         """
         
-        from graphs.image_formats import plot_png2, plot_svg2
-        
-        if self.ext == 'png':
-            return plot_png2(self.plot)()
-        
-        if self.ext == 'svg':
-            return plot_svg2(self.plot)()
-        
-    def to_file(self, openfile):
-        """ Make the image, and then save it to a file that is passed in
-        """
         self.plot()
         
-        self.fig.savefig(openfile,
-                    format="png",
+        if self.ext == "png":
+            mime = "image/png"
+        else:
+            mime = "image/svg+xml"
+        
+        from django.http import HttpResponse
+        response = HttpResponse(mimetype=mime)
+        
+        self.fig.savefig(response,
+                    format=self.ext,
                     bbox_inches="tight",
-                    pad_inches=.05,
-                    edgecolor="white")
+                    pad_inches=-.1,
+                    edgecolor="white",
+                    transparent=True)
+                    
+        return response
         
     def get_data(self):
         raise NotImplementedError
@@ -70,7 +75,7 @@ class StateMap(object):
 
         count = self.get_disp_count(states_to_plot)
             
-        self.fig.text(.15,
+        self.fig.text(.16,
                       .18,
                       "%s\nUnique\n%s" % (count, self.label),
                       size="small")
@@ -101,39 +106,47 @@ class StateMap(object):
         for i,seg in enumerate(self.m.states):
             statename = self.m.states_info[i]['NAME']
             
-            if statename in states_to_plot:
+            colorize_state = statename in states_to_plot
+            
+            if colorize_state:
                 c = float(states_to_plot[statename])
                 val = np.sqrt( (c - min_) / (max_ - min_) )
                 color = self.cmap(val)[:3]
-                poly = Polygon(seg,facecolor=color)
-                ax.add_patch(poly)
+            else:
+                color = "white"    
+            
+            poly = Polygon(seg,facecolor=color)
+            ax.add_patch(poly)
+            
+            if colorize_state:  
+                over = .815
                 
                 if statename == "Rhode Island" and not ri:
-                    self.fig.text(.83, .5, "RI", size="small", color=color)
+                    self.fig.text(over, .5, "RI", size="small", color=color)
                     ri=True
                 
                 elif statename == "Connecticut" and not ct:
-                    self.fig.text(.83, .45, "CT", size="small", color=color)
+                    self.fig.text(over, .45, "CT", size="small", color=color)
                     ct=True
                     
                 elif statename == "Delaware" and not de:
-                    self.fig.text(.83, .4, "DE", size="small", color=color)
+                    self.fig.text(over, .4, "DE", size="small", color=color)
                     de=True
                     
                 elif statename == "Maryland" and not md:
-                    self.fig.text(.83, .35, "MD", size="small", color=color)
+                    self.fig.text(over, .35, "MD", size="small", color=color)
                     md=True
                     
                 elif statename == "Alaska" and not ak:
-                    self.fig.text(.83, .3, "AK", size="small", color=color)
+                    self.fig.text(over, .3, "AK", size="small", color=color)
                     ak=True
                     
                 elif statename == "Hawaii" and not hi:
-                    self.fig.text(.83, .25, "HI", size="small", color=color)
+                    self.fig.text(over, .25, "HI", size="small", color=color)
                     hi=True
                     
                 elif statename == "District of Columbia" and not dc:
-                    self.fig.text(.83, .2, "DC", size="small", color=color)
+                    self.fig.text(over, .2, "DC", size="small", color=color)
                     dc=True
     
 ###############################################################################
@@ -156,7 +169,8 @@ class UniqueStateMap(StateMap):
                      .annotate(c=Count('location__region'))
     
     def get_cmap(self):
-        self.cmap = cm.GMT_seis_r
+        c=['#3342C1','#C1333B']
+        self.cmap = LinearSegmentedColormap.from_list('mycm',c)
     
     def get_disp_count(self, stp):
         """stp = states to plot, a dict of all states and their values"""
@@ -193,7 +207,8 @@ class CountStateMap(StateMap):
                      .annotate(c=Count('code'))
 
     def get_cmap(self):
-        self.cmap = cm.GMT_seis_r
+        c=['#3342C1','#C1333B']
+        self.cmap = LinearSegmentedColormap.from_list('mycm',c)
 
     def get_disp_count(self, stp):
         return len(stp)

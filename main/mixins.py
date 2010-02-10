@@ -28,6 +28,9 @@ class UserMixin(object):
         elif class_name == "LocationQuerySet":
             user_field = "routebase__route__flight__user"
             
+        elif class_name == "CountryRegionQuerySet":
+            user_field = "location__routebase__route__flight__user"
+            
         #------------- filter by everyone ------------------#
         
         if (u == 'ALL' or
