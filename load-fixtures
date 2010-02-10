@@ -1,5 +1,14 @@
 #! /bin/bash
 
+# only let thi script run on the development server (chris-comp), 
+# otherwise it will clear the production database, and that would not be good
+
+if [ $(hostname) != 'chris-comp' ]
+then
+    echo "not chris-comp";
+    exit
+fi
+
 #clear everything
 psql logbook -c "Truncate auth_user cascade"
 psql logbook -c "Truncate auth_permission cascade"
