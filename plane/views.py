@@ -187,3 +187,23 @@ def model_profile(request, model):
                       
     
     return locals()
+
+@render_to('search_tailnumbers.html')
+def search_tailnumbers(request):
+
+    if not request.GET:
+        return locals()
+    
+    from django.db.models import Q
+    
+    s = request.GET.get('q')
+    
+    results = Plane.objects\
+                   .filter(tailnumber__icontains=s)\
+                   .values('manufacturer', 'tailnumber', 'type', 'model')\
+                   .distinct()
+    
+    count = results.count()
+    did_something = True
+    
+    return locals()

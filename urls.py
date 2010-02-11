@@ -66,8 +66,11 @@ urlpatterns += patterns('',
     (r'^newforum/', include('forum.urls')),
     (r'^histogram/', include('histogram.urls')),
     
+    (r'^search/locations\.html$', 'airport.views.search_airport'),
+    (r'^search/tailnumbers\.html$', 'plane.views.search_tailnumbers'),
+    
     url(
-        r'^(?P<username>\w+)/realtime.html$',
+        r'^(?P<username>\w+)/realtime\.html$',
         "realtime.views.realtime2",
                                                                name="realtime",
     ),

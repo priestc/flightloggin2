@@ -64,6 +64,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'pagination.middleware.PaginationMiddleware',
     'facebook.djangofb.FacebookMiddleware',
     
 )
@@ -93,6 +94,7 @@ INSTALLED_APPS = (
     'tagging',
     'forum',
     'test_utils',
+    'pagination',
     'django_extensions',
     
     'django_openid_auth',

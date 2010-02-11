@@ -83,3 +83,29 @@ def airport_profile(request, navaid, ident):
 def location_redirect(request, ident):
     url = reverse('profile-airport', kwargs={'ident': ident})
     return HttpResponseRedirect(url)
+
+
+
+@render_to('search_locations.html')
+def search_airport(request):
+
+    if not request.GET:
+        return locals()
+    
+    from django.db.models import Q
+    
+    s = request.GET.get('q')
+    
+    q = ( Q(identifier__icontains=s)
+        | Q(name__icontains=s)
+        | Q(municipality__icontains=s)
+        )
+    
+    results = Location.objects\
+                      .filter(loc_class__in=(1,2,))\
+                      .filter(q)
+    
+    count = results.count()
+    did_something = True
+    
+    return locals()

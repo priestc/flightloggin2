@@ -600,6 +600,24 @@ table#import_form input         {border: default; background: default}
 
 ###############################################################################
 
+item_search = """
+#results_table              {margin: 0 auto 0 auto;
+                             min-width: 50%%;
+                             margin-top: 10px;
+                             border: 1px solid black}
+#results_table td,
+#results_table th           {text-align: left}
+
+#results_table th           {background: #DDDDDD}
+
+p#count                     {font-weight: bold}
+p.pagination                {margin: 5px}
+
+#results_table tr:nth-child(odd)      {background: %(logbook_strip1)s;)
+"""
+
+###############################################################################
+
 route = """
 span.land                                    {text-decoration: underline}
 span.noland                                  {text-decoration: none}
@@ -1063,7 +1081,8 @@ if __name__ == "__main__":
                  'import__', 'locations', 'logbook', 'maps', 'mass_entry',
                  'mass_planes', 'milestones', 'news', 'planes', 'popup',
                  'preferences', 'realtime', 'records', 'sigs', 'site_stats',
-                 'custom_view', 'route', 'item_profile', 'forum')
+                 'custom_view', 'route', 'item_profile', 'forum',
+                 'item_search')
         
         if not os.path.isdir(full_directory):
             os.makedirs(full_directory)
