@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load profile_lists %}
+{% load pagination_tags %}
+{% block description %}Search FlightLogg.in for Tailnumbers{% endblock%}
+
+{% block javascript %}
+<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/item_search.css">
+{% endblock %}
+
+{% block title %}Find Airports{% endblock %}
+
+
+{% block canvas %}
+
+    <h1>Find Tailnumbers</h1><br>
+    <form action="/search/tailnumbers.html" method="get">
+        <input type="text" name="q">
+        <input type="submit">
+    </form>
+    
+    {% if results %}
+        {% autopaginate results 50 %}
+    {% endif %}
+    
+    {% for result in results %}
+        {% if forloop.first %}
+            <p id="count">Returned {{ count }} results</p>
+            <p class="paginate">{% paginate %}</p>
+            
+            <table id="results_table">
+            <tr>    
+                <th>Tailnumber</th>
+                <th>Manufacturer</th>
+                <th>Model</th>
+                <th>Type</th>
+            </tr>
+            {% endif %}
+
+            {% url profile-tailnumber result.tailnumber as url %}
+
+            <tr>    
+                <td><a href="{{ url }}">{{ result.tailnumber }}</a></td>
+                <td>{{ result.manufacturer }}</td>
+                <td>{{ result.model }}</td>
+                <td>{{ result.type }}</td>
+            </tr>
+        
+        {% if forloop.last %}
+            </table>
+            <p class="paginate">{% paginate %}</p>
+        {% endif %}
+    {% empty %}
+        {% if did_something %}
+            <p>No Results</p>
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}

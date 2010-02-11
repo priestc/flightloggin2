@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load profile_lists %}
+{% load pagination_tags %}
+{% block description %}Search FlightLogg.in for locations; Navaids and Airports{% endblock%}
+
+{% block javascript %}
+<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/item_search.css">
+{% endblock %}
+
+{% block title %}Find Airports{% endblock %}
+
+
+{% block canvas %}
+
+    <h1>Find Airports</h1><br>
+    <form action="/search/locations.html" method="get">
+        <input type="text" name="q">
+        <input type="submit">
+    </form>
+    
+    {% if results %}
+        {% autopaginate results 50 %}
+    {% endif %}
+    
+    {% for result in results %}
+        {% if forloop.first %}
+            <p><strong>Returned {{ count }} results</strong></p>
+            <p>{% paginate %}</p>
+            <table id="results_table">
+            <tr>    
+            <td>Ident</td>
+            <td>Name</td>
+            <td>Location</td>
+        </tr>
+        {% endif %}
+        
+        
+            {% ifequal result.loc_class 1 %}
+                {% url profile-airport result.identifier as url %}
+            {% endifequal %}
+            
+            {% ifequal result.loc_class 2 %}
+                {% url profile-navaid result.identifier as url %}
+            {% endifequal %}
+            
+        <tr>    
+            <td><a href="{{ url }}">{{ result.identifier }}</a></td>
+            <td>{{result.name}}</td>
+            <td>{{result.location_summary }}</td>
+        </tr>
+        
+        {% if forloop.last %}
+            </table>
+        {% endif %}
+    {% empty %}
+        {% if did_something %}
+            <p>No Results</p>
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}
