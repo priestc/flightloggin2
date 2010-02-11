@@ -51,6 +51,10 @@ def route_profile(request, r):
     except:
         route = None
         rbs = None
+        
+    if not route:
+        from django.http import Http404
+        raise Http404
     
     users = Route.get_profiles(r, 'simple_rendered')
                     

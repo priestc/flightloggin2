@@ -314,7 +314,7 @@ urlpatterns += patterns('',
     ),
     
     url(
-        r'^route-(?P<pk>[0-9]+)(?P<f>[fr]?)\.kmz$',
+        r'^route-(?P<pk>\d+)(?P<f>[fr]?)\.kmz$',
         "maps.kml_views.single_route_kml",
                                                        name="single_route-kml",
     ),

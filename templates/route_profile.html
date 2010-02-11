@@ -18,7 +18,7 @@
 
 <h1>{{ r|upper }}</h1>
 <div id="top_link">
-    <a href="{% url single_route-kml route.pk "r" %}">View in Google Earth</a>
+    <a href="{% url single_route-kml route.pk "r" as url %}{{ url }}">View in Google Earth</a>
 </div>
 <div id="gmap">
 </div>
