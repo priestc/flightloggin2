@@ -19,6 +19,11 @@ from utils import proper_flight_form, logbook_url
 ###############################################################################
 
 def delete_flight(request, page):
+    
+    if not request.POST:
+        url = logbook_url(request.display_user, page)
+        return HttpResponseRedirect(url)
+        
     if request.display_user.username != 'ALL':
         flight_id = request.POST['id']
         Flight(pk=flight_id, user=request.display_user).delete()
@@ -29,7 +34,9 @@ def delete_flight(request, page):
 ###############################################################################
 
 def edit_flight(request, page):
-    assert request.POST, "No post"
+    if not request.POST:
+        url = logbook_url(request.display_user, page)
+        return HttpResponseRedirect(url)
     
     profile,c = Profile.objects.get_or_create(user=request.display_user)
     PopupFlightForm = proper_flight_form(profile)
@@ -56,7 +63,9 @@ def edit_flight(request, page):
 ###############################################################################
 
 def new_flight(request, page):
-    assert request.POST, "No post"
+    if not request.POST:
+        url = logbook_url(request.display_user, page)
+        return HttpResponseRedirect(url)
     
     profile,c = Profile.objects.get_or_create(user=request.display_user)
     PopupFlightForm = proper_flight_form(profile)
