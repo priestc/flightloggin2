@@ -115,7 +115,7 @@ class StateMap(object):
             else:
                 color = "white"    
             
-            poly = Polygon(seg,facecolor=color)
+            poly = Polygon(seg,facecolor=color, lw=0)
             ax.add_patch(poly)
             
             if colorize_state:  
