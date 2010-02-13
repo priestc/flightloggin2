@@ -61,7 +61,9 @@ def delete_flight(request, page):
 ###############################################################################
 
 def edit_flight(request, page):
-
+    
+    url = logbook_url(request.display_user, page)
+        
     if not request.POST:
         return HttpResponseRedirect(url)
     
@@ -82,7 +84,6 @@ def edit_flight(request, page):
         from backup.models import edit_logbook
         edit_logbook.send(sender=request.display_user)
         
-        url = logbook_url(request.display_user, page)
         return HttpResponseRedirect(url)
         
     return logbook(request, form=form, fail="edit")
