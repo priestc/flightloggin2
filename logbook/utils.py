@@ -171,6 +171,7 @@ def expire_page(user=None, page=None, url=None):
     
     request = HttpRequest()
     request.path = url
+    print url
     key = get_cache_key(request)
     
     if key and cache.has_key(key):   
@@ -194,7 +195,7 @@ def expire_all(user):
     total_flights = Flight.objects.user(user).count()
     last_page = int(math.ceil(total_flights / float(per_page)))
 
-    for page in range(1,last_page):
+    for page in range(1,last_page+1):
         expire_page(user, page)
 
 
