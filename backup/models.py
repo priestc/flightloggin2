@@ -47,6 +47,5 @@ def add_to_email_queue(sender, **kwargs):
     ut,c = UsersToday.objects.get_or_create(date=today)
     ut.logged_today.add(sender)
     ut.save()
-    
 
 edit_logbook.connect(add_to_email_queue)

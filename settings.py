@@ -78,7 +78,7 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_PATH, 'templates')
 )
 
-INSTALLED_APPS = (
+INSTALLED_APPS += (
     'logbook',
     'records',
     'plane',
@@ -93,9 +93,7 @@ INSTALLED_APPS = (
     
     'tagging',
     'forum',
-    'test_utils',
     'pagination',
-    'django_extensions',
     
     'django_openid_auth',
     'django.contrib.admin',

@@ -607,15 +607,40 @@ def connect_route(sender, **kwargs):
             flight.mpg = distance / flight.gallons
 
 
+def expire_logbook_cache(sender, **kwargs):
+    """
+    When the user save new preferences, expire the caches on all logbook
+    pages
+    """
+    
+    from utils import expire_all, expire_page
+    
+    try:
+        user = kwargs['instance'].user
+    except KeyError:
+        pass
+    
+    try:
+        user = kwargs['user']
+    except KeyError:
+        pass
+    
+    assert user, "No user to expire logbook page cache"
+    
+    page = kwargs.get('page', None)
+    
+    if page:
+        expire_page(user, page)
+    
+    else:
+        expire_all(user)
+    
+    
+   
 models.signals.pre_save.connect(connect_route, sender=Flight)
 
+from profile.models import Profile 
+models.signals.post_save.connect(expire_logbook_cache, sender=Profile)
 
-
-
-
-
-
-
-
-
-
+from backup.models import edit_logbook
+edit_logbook.connect(expire_logbook_cache)

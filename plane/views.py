@@ -201,7 +201,8 @@ def search_tailnumbers(request):
     results = Plane.objects\
                    .filter(tailnumber__icontains=s)\
                    .values('manufacturer', 'tailnumber', 'type', 'model')\
-                   .distinct()
+                   .distinct()\
+                   .order_by('tailnumber')
     
     count = results.count()
     did_something = True

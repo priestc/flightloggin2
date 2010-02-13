@@ -158,4 +158,40 @@ def proper_flight_form(profile):
         # instead
         PopupFlightForm.base_fields['plane'] = text_plane_field
 
-    return PopupFlightForm       
+    return PopupFlightForm   
+
+def expire_page(user=None, page=None, url=None):
+
+    from django.core.cache import cache
+    from django.http import HttpRequest
+    from django.utils.cache import get_cache_key
+    
+    if not url:
+        url = logbook_url(user, page)
+    
+    request = HttpRequest()
+    request.path = url
+    key = get_cache_key(request)
+    
+    if key and cache.has_key(key):   
+        cache.delete(key)
+        
+def expire_all(user):
+    """
+    Expire all logbook pages in the passed user's logbook section
+    This function is used after the user changes his preferences and it
+    effects all pages in his logbook
+    """
+    
+    from logbook.models import Flight
+    
+    try:
+        per_page = user.get_profile().per_page
+    except:
+        return
+    
+    total_flights = Flight.objects.user(user).count()
+    total_pages = total_flights / per_page
+
+    for page in range(0,total_pages+1):
+        expire_page(user, page)
