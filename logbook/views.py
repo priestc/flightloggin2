@@ -54,9 +54,7 @@ def delete_flight(request, page):
         Flight(pk=flight_id, user=request.display_user).delete()
         
         from backup.models import edit_logbook
-        edit_logbook.send(sender=request.display_user,
-                          page=page,
-                          user=request.display_user)
+        edit_logbook.send(sender=request.display_user)
     
     return HttpResponseRedirect(url)
 
@@ -82,9 +80,7 @@ def edit_flight(request, page):
         form.save()
         
         from backup.models import edit_logbook
-        edit_logbook.send(sender=request.display_user,
-                          page=page,
-                          user=request.display_user)
+        edit_logbook.send(sender=request.display_user)
         
         url = logbook_url(request.display_user, page)
         return HttpResponseRedirect(url)
@@ -112,9 +108,7 @@ def new_flight(request, page):
         form.save()
         
         from backup.models import edit_logbook
-        edit_logbook.send(sender=request.display_user,
-                          page=page,
-                          user=request.display_user)
+        edit_logbook.send(sender=request.display_user)
         
         url = logbook_url(request.display_user, page)
         return HttpResponseRedirect(url)
@@ -286,7 +280,7 @@ def mass_edit(request, page=0):
             ## send signal to mark this user as having
             ## edited their logbook for today
             from backup.models import edit_logbook
-            edit_logbook.send(sender=request.display_user, page=page)
+            edit_logbook.send(sender=request.display_user)
             
             from django.core.urlresolvers import reverse
             return HttpResponseRedirect(

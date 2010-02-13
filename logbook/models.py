@@ -606,6 +606,9 @@ def connect_route(sender, **kwargs):
         if distance > 0 and flight.gallons > 0:
             flight.mpg = distance / flight.gallons
 
+models.signals.pre_save.connect(connect_route, sender=Flight)
+
+###############################################################################
 
 def expire_logbook_cache(sender, **kwargs):
     """
@@ -614,23 +617,8 @@ def expire_logbook_cache(sender, **kwargs):
     """
     
     from utils import expire_all
-    
-    try:
-        user = kwargs['instance'].user
-    except KeyError:
-        pass
-    
-    try:
-        user = kwargs['user']
-    except KeyError:
-        pass
-    
-    assert user, "No user to expire logbook page cache"
 
-    expire_all(user)
-   
-   
-models.signals.pre_save.connect(connect_route, sender=Flight)
+    expire_all(sender)
 
 from profile.models import Profile 
 models.signals.post_save.connect(expire_logbook_cache, sender=Profile)
