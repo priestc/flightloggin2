@@ -188,9 +188,6 @@ class DatabaseImport(PreviewImport):
     def handle_flight(self, line):
         from forms import ImportFlightForm
         
-        print line.get("tailnumber")
-        print line.get("type")
-        
         if not line.get("tailnumber") == "":
             kwargs = {"tailnumber": line.get("tailnumber"), "user": self.user}
             if line.get("type"):

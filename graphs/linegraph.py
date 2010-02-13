@@ -47,7 +47,6 @@ class ProgressGraph(object):
         if not spikes:
             #filter out spikes so it makes a smooth line
             kwarg = {"%s__gte" % str(time): "24"}
-            print kwarg
             self.start_qs = self.start_qs.exclude(**kwarg)
         
     def output(self):

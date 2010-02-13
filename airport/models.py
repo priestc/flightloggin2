@@ -126,7 +126,6 @@ class Location(models.Model, GoonMixin):
             return super(Location, self).save(*args, **kwargs)
         
         if self.location and not skip_find_region:
-            print "recheck"
             # automatically find which country the coordinates fall into
             loc = self.location.wkt
             

@@ -389,16 +389,13 @@ class Route(models.Model):
             else:
                 flight_id = f.id
                 user = f.user
-                print "got userid from flight join"
             
         if (not user) and username:
             from django.contrib.auth.models import User
             user = User.objects.get(username=username)
-            print "got user from seperate query"
             
         if not user and not username:
             user = share.get_display_user()
-            print user, "got user from share thingy"
         
         new_route = MakeRoute(self.fallback_string, user).get_route()
         

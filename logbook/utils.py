@@ -171,7 +171,6 @@ def expire_page(user=None, page=None, url=None):
     
     request = HttpRequest()
     request.path = url
-    print url
     key = get_cache_key(request)
     
     if key and cache.has_key(key):   
