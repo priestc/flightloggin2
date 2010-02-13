@@ -184,6 +184,7 @@ def expire_all(user):
     """
     
     from logbook.models import Flight
+    import math
     
     try:
         per_page = user.get_profile().per_page
@@ -191,7 +192,9 @@ def expire_all(user):
         return
     
     total_flights = Flight.objects.user(user).count()
-    total_pages = total_flights / per_page
+    last_page = int(math.ceil(total_flights / float(per_page)))
 
-    for page in range(0,total_pages+1):
+    for page in range(1,last_page):
         expire_page(user, page)
+
+

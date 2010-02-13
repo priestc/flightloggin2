@@ -246,12 +246,6 @@ urlpatterns += patterns('',
         r'^logout/$','django.contrib.auth.views.logout',
         {"next_page": "/"},
                                                                  name="logout",
-    ),   
-        
-    url(
-        r'^update-airports\.py$',
-        "airport.views.update_airports",
-                                                           name="del-airports",
     ),
     
     url(
@@ -516,8 +510,14 @@ urlpatterns += patterns('',
     
     url(
         r'^(?P<username>\w+)/logbook\.html$',
-        "logbook.views.logbook",
+        "logbook.views.root_logbook",
                                                                 name="logbook",
+    ),
+    
+    url(
+        r'^(?P<username>\w+)/logbook-page-(?P<page>\d+)\.html',
+        "logbook.views.logbook",
+                                                           name="logbook-page",
     ),
     
     url(
@@ -537,13 +537,7 @@ urlpatterns += patterns('',
         "logbook.views.delete_flight",
                                                           name="delete_flight",
     ),
-    
-    url(
-        r'^(?P<username>\w+)/logbook-page-(?P<page>\d+)\.html',
-        "logbook.views.logbook",
-                                                           name="logbook-page",
-    ),
-    
+
     ###########################################################################
         
     url(

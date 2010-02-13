@@ -613,7 +613,7 @@ def expire_logbook_cache(sender, **kwargs):
     pages
     """
     
-    from utils import expire_all, expire_page
+    from utils import expire_all
     
     try:
         user = kwargs['instance'].user
@@ -626,16 +626,9 @@ def expire_logbook_cache(sender, **kwargs):
         pass
     
     assert user, "No user to expire logbook page cache"
-    
-    page = kwargs.get('page', None)
-    
-    if page:
-        expire_page(user, page)
-    
-    else:
-        expire_all(user)
-    
-    
+
+    expire_all(user)
+   
    
 models.signals.pre_save.connect(connect_route, sender=Flight)
 

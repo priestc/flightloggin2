@@ -2,7 +2,8 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.forms.models import modelformset_factory
 from django.forms.formsets import formset_factory
-
+from django.core.urlresolvers import reverse
+    
 from annoying.decorators import render_to
 from share.decorator import no_share
 
@@ -15,6 +16,30 @@ from profile.models import Profile, AutoButton
 from utils import proper_flight_form, logbook_url, expire_page
 
 from django.views.decorators.cache import cache_page
+
+###############################################################################
+
+def root_logbook(request):
+    """
+    Find the last page in the user's logbook, then redirect to that page
+    
+    """
+    
+    from django.core.urlresolvers import reverse
+    import math
+    
+    try:
+        per_page = request.display_user.get_profile().per_page
+    except:
+        per_page = 50
+    
+    flights = Flight.objects.user(request.display_user).count()
+    last_page = int(math.ceil(flights / float(per_page)))
+    
+    url = reverse("logbook-page", kwargs={"page": last_page,
+                                          "username": request.display_user})
+    
+    return HttpResponseRedirect(url)
 
 ###############################################################################
 
@@ -101,10 +126,14 @@ def new_flight(request, page):
 @cache_page(60 * 60 * 24)
 @render_to("logbook.html")
 @no_share('logbook')
-def logbook(request, page=0, form=None, fail=None):
+def logbook(request, page, form=None, fail=None):
     """
     Prepare the Logbook page
     """
+    
+    if page == "0":
+        url = reverse("logbook", kwargs={"username": request.display_user})
+        return HttpResponseRedirect(url)
     
     auto_button,c = AutoButton.objects.get_or_create(user=request.display_user)
     cols, c = Columns.objects.get_or_create(user=request.display_user)
