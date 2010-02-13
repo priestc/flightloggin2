@@ -2,7 +2,7 @@ from django.contrib.sitemaps import Sitemap
 from models import Plane
 
 class TailnumberSitemap(Sitemap):
-    changefreq = "daily"
+    changefreq = "weekly"
     priority = 0.5
 
     def items(self):
@@ -25,7 +25,7 @@ class TailnumberSitemap(Sitemap):
         
 
 class TypeSitemap(Sitemap):
-    changefreq = "daily"
+    changefreq = "weekly"
     priority = 0.5
 
     def items(self):
@@ -43,5 +43,26 @@ class TypeSitemap(Sitemap):
         from django.core.urlresolvers import reverse
         try:
             return reverse("profile-type", kwargs={"ty": item})
+        except:
+            return ""
+        
+
+class ModelSitemap(Sitemap):
+    changefreq = "weekly"
+    priority = 0.5
+
+    def items(self):
+        p = Plane.objects\
+                    .values_list('model', flat=True)\
+                    .order_by()\
+                    .distinct()
+        
+        return p
+    
+    def location(self, item):
+        item = item.replace(' ','_')
+        from django.core.urlresolvers import reverse
+        try:
+            return reverse("profile-model", kwargs={"model": item})
         except:
             return ""
