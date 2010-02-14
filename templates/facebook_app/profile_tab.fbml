@@ -7,11 +7,10 @@
 <style type="text/css">
 table                    {width: 100%}
 td, th                   {background: #ddd; text-align: left}
+th                       {font-weight: bold}
 </style>
 
 <a href="http://flightlogg.in{% url logbook user.username %}"><fb:name uid="{{ uid }}" useyou="false" />'s full FlightLogg.in' logbook</a>
-<br><br>
-<fb:name uid="{{ uid }}" useyou="false" />'s total flight time: <strong>{{ tt }}</strong>
 <br><br>
 Last 5 flights:
 <table>
@@ -40,6 +39,13 @@ Last 5 flights:
     </tr>
     {% endfor %}
 </table>
+
 <br><br>
 States I've flown to:<br>
 <img src="http://flightlogg.in{% url state-map user.username "count" "png" %}">
+
+<br><br>
+<big>
+<fb:name uid="{{ uid }}" useyou="false" />'s total flight time: <strong>{{ tt }}</strong>
+</big>
+
