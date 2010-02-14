@@ -48,4 +48,3 @@ States I've flown to:<br>
 <big>
 <fb:name uid="{{ uid }}" useyou="false" />'s total flight time: <strong>{{ tt }}</strong>
 </big>
-
