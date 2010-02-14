@@ -67,9 +67,9 @@ red = been to lots of airports there, blue = not so much<br>
 <div id="wrapper">
     <div id="total_time">
         <fb:name uid="{{ uid }}" useyou="false" />'s total flight time:
-        <strong>{{ tt }}</strong>
+        <b>{{ tt }}</b>
         <br>
-        <smaller><a href="http://flightlogg.in{% url logbook user.username %}">
-        full logbook</a></smaller>
+        <small><a href="http://flightlogg.in{% url logbook user.username %}">
+        full logbook</a></small>
     </div>
 </div>
