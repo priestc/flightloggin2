@@ -1,6 +1,6 @@
 <img src="http://flightlogg.in/fl-media/css/style-2/logo.png">
 <br><br>
-Connect your facebook account up to your <a href="http://flightlogg.in">FlightLogg.in</a>
+Connect with your <a href="http://flightlogg.in">FlightLogg.in</a>
 account and share your pilot logbook to others through your facebook profile.
 <br><br>
 There are currently <b>{{ users }}</b> user accounts in flightlogg.in,
