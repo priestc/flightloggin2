@@ -28,10 +28,10 @@ def canvas(request):
 
     return locals()
 
-@facebook.require_login()
+#@facebook.require_login()
 @render_to('facebook_app/profile_tab.fbml')
 def profile_tab(request):
-    uid = request.facebook.uid # 12314662 #
+    uid = 12314662 #request.facebook.uid # 
     
     try:
         user = User.objects.get(profile__facebook_uid=uid)

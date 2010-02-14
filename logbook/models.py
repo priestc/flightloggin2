@@ -85,7 +85,7 @@ class Flight(models.Model, GoonMixin):
         super(Flight,self).save(*args, **kwargs)
         
     def conditions_of_flight(self):
-        fields = ['pic', 'act_inst', 'sic', 'dual_g', 'dual_r']
+        fields = ['pic', 'act_inst', 'sic', 'dual_g', 'dual_r', 'night']
         l = [FIELD_ABBV[field] for field in fields if self.column(field)]
         
         return ", ".join(l)

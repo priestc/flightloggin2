@@ -5,15 +5,34 @@
 {% endcomment %}
 
 <style type="text/css">
-table                    {width: 100%}
-td, th                   {background: #ddd; text-align: left}
-th                       {font-weight: bold}
+#flight table                    {width: 100%;
+                                  border: 2px solid #aaa;
+                                  margin: 10px;}
+
+#flight td,
+#flight th                       {background: #ddd;
+                                  text-align: left;
+                                  padding: 3px}
+
+#flight th                       {font-weight: bold}
+
+#total_time                      {background: #ddd;
+                                  font-size: large;
+                                  width: 40%;
+                                  text-align: center;
+                                  margin-top: 10px}
+                                  
+#map                             {margin: 10px auto 10px auto;
+                                  text-align: center;}
+
 </style>
 
+<div id="total_time">
+<fb:name uid="{{ uid }}" useyou="false" />'s total flight time: <strong>{{ tt }}</strong><br>
 <a href="http://flightlogg.in{% url logbook user.username %}"><fb:name uid="{{ uid }}" useyou="false" />'s full FlightLogg.in' logbook</a>
-<br><br>
+</div>
 Last 5 flights:
-<table>
+<table id="flight">
     <tr>
         <th>Date</th>
         <th>Hours</th>
@@ -40,11 +59,8 @@ Last 5 flights:
     {% endfor %}
 </table>
 
-<br><br>
+<div id="map">
 States I've flown to:<br>
 <img src="http://flightlogg.in{% url state-map user.username "count" "png" %}">
+</div>
 
-<br><br>
-<big>
-<fb:name uid="{{ uid }}" useyou="false" />'s total flight time: <strong>{{ tt }}</strong>
-</big>
