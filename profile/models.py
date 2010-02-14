@@ -85,6 +85,7 @@ class Profile(models.Model, GoonMixin):
     
     secret_key =     models.CharField(
                          blank=False,
+                         default="",
                          null=False,
                          max_length=8,
                          default="",
@@ -93,6 +94,7 @@ class Profile(models.Model, GoonMixin):
     
     facebook_uid =   models.CharField(
                          null=False,
+                         default="",
                          max_length=20,
                          #editable=False,  
                      )
