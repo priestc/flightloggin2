@@ -1,0 +1,28 @@
+{% if not message %}
+<style>
+    td     {padding: 3px}
+</style>
+
+<form method="post" action=".">
+<table>
+    <tr>
+        <td colspan="3">Before you can use this app, you must provide your FlightLogg.in' account information</td>
+    </tr>
+    <tr>
+        <td><label for="username">FlghtLogg.in' Username</label></td>
+        <td><input type="text" name="username"></td>
+    </tr>
+    <tr>
+        <td><label for="secret_key">Secret Key</label></td>
+        <td><input type="text" name="secret_key"></td>
+        <td>(found in the preferences section)</td>
+    </tr>
+    <tr>
+        <td colspan="3"><input type="submit" value="Submit"></td>
+    </tr>
+<table>
+</form>
+
+{% else %}
+    {{message}}
+{% endif %}

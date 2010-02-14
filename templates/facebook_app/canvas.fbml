@@ -1,28 +1,7 @@
-{% if not message %}
-<style>
-    td     {padding: 3px}
-</style>
-
-<form method="post" action=".">
-<table>
-    <tr>
-        <td colspan="3">Before you can use this app, you must provide your FlightLogg.in' account information</td>
-    </tr>
-    <tr>
-        <td><label for="username">FlghtLogg.in' Username</label></td>
-        <td><input type="text" name="username"></td>
-    </tr>
-    <tr>
-        <td><label for="secret_key">Secret Key</label></td>
-        <td><input type="text" name="secret_key"></td>
-        <td>(found in the preferences section)</td>
-    </tr>
-    <tr>
-        <td colspan="3"><input type="submit" value="Submit"></td>
-    </tr>
-<table>
-</form>
-
-{% else %}
-    {{message}}
-{% endif %}
+<img src="http://flightlogg.in/fl-media/css/style-2/logo.png">
+<br><br>
+Connect your facebook account up to your <a href="http://flightlogg.in">FlightLogg.in</a>
+account and share your pilot logbook to others through your facebook profile.
+<br><br>
+There are currently <b>{{ users }}</b> user accounts in flightlogg.in,
+<b>{{ fb_users }}</b> of which are using this facebook application
