@@ -84,7 +84,12 @@ class Flight(models.Model, GoonMixin):
         
         super(Flight,self).save(*args, **kwargs)
         
-
+    def conditions_of_flight(self):
+        fields = ['pic', 'pic', 'sic', 'dual_g', 'dual_r']
+        l = [FIELD_ABBV[field] for field in fields if self.column(field)]
+        
+        return ", ".join(l)
+            
         
     def disp_app(self):
         if self.app == 0:
@@ -107,6 +112,7 @@ class Flight(models.Model, GoonMixin):
         """Returns the special events with HTML formatting, if no events,
         return nothing
         """
+        
         ret = ""
         
         if self.ipc:

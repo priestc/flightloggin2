@@ -1,7 +1,45 @@
+{% comment %}
 <fb:header>
-    Welcome, <fb:name uid="{{ uid }}" firstnameonly="true" useyou="false" />!
+    Welcome, <fb:name uid="{{ uid }}" useyou="false" />!
 </fb:header>
+{% endcomment %}
 
-<a href="http://flightlogg.in{% url logbook user.username %}>{{ user.username }}'s full FlightLogg.in' logbook</a>
-<br>
-{{ user.username }}'s total time: {{ tt }}
+<style type="text/css">
+table                    {width: 100%}
+td, th                   {background: #ddd; text-align: left}
+</style>
+
+<a href="http://flightlogg.in{% url logbook user.username %}"><fb:name uid="{{ uid }}" useyou="false" />'s full FlightLogg.in' logbook</a>
+<br><br>
+<fb:name uid="{{ uid }}" useyou="false" />'s total time: {{ tt }}
+<br><br>
+Last 5 flights:
+<table>
+    <tr>
+        <th>Date</th>
+        <th>Hours</th>
+        <th>Plane</th>
+        <th>Route</th>
+        <th>Conditions of flight</th>
+        <th>Person</th>
+        <th>Remarks</th>
+    </tr>
+    {% for flight in last_flights %}
+    <tr>
+        <td>{{ flight.date }}</td>
+        <td>{{ flight.total }}</td>
+        
+        {% url profile-tailnumber flight.plane.tailnumber as url %}
+        <td><a href="{{ url }}">{{ flight.plane }}</a></td>
+        
+        {% url profile-route flight.route.simple_rendered as url %}
+        <td><a href="{{ url }}">{{ flight.route.fancy_rendered|safe }}</a></td>
+        <td>{{ flight.conditions_of_flight }}</td>
+        <td>{{ flight.person }}</td>
+        <td>{{ flight.remarks }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<br><br>
+States I've flown to:<br>
+<img src="{% url state-map user.username "count" "png" %}">

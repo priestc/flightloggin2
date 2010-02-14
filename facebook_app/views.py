@@ -7,14 +7,13 @@ from profile.models import Profile
 from django.contrib.auth.models import User
 from logbook.models import Flight
 
-@render_to('facebook_app/canvas.fbml')
 @facebook.require_login()
+@render_to('facebook_app/canvas.fbml')
 def canvas(request):
     uid = request.facebook.uid
 
     username = request.POST.get('username', None)
     secret_key = request.POST.get('secret_key', None)
-
 
     if username and secret_key:
 
@@ -29,10 +28,10 @@ def canvas(request):
 
     return locals()
 
-@render_to('facebook_app/profile_tab.fbml')
 @facebook.require_login()
+@render_to('facebook_app/profile_tab.fbml')
 def profile_tab(request):
-    uid = request.facebook.uid
+    uid = request.facebook.uid # 12314662 #
     
     try:
         user = User.objects.get(profile__facebook_uid=uid)
@@ -44,6 +43,9 @@ def profile_tab(request):
                    .user(user)\
                    .sim(False)\
                    .aggregate(s=Sum('total'))['s']
+        
+        last_flights = list(Flight.objects.user(user).order_by('-date')[:5])
+        last_flights.reverse()
         
         airport_matches = 9
         
