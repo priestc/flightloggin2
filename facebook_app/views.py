@@ -32,6 +32,7 @@ def canvas(request):
 @render_to('facebook_app/profile_tab.fbml')
 def profile_tab(request):
     uid = request.facebook.uid # 12314662 #
+    ## http://www.facebook.com/profile.php?ref=profile&id=100000800702266
     
     try:
         user = User.objects.get(profile__facebook_uid=uid)

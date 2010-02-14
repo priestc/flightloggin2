@@ -61,7 +61,7 @@ Last 5 flights:
 <div id="map">
 States I've flown to:<br>
 red = been to lots of airports there, blue = not so much<br>
-<img src="http://flightlogg.in{% url state-map user.username "count" "png" %}">
+<img src="http://flightlogg.in{% url state-map user.username "unique" "png" %}">
 </div>
 
 <div id="wrapper">
