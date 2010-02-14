@@ -135,12 +135,14 @@ def folders_to_kmz_response(folders, title=None,
 
 ###############################################################################
 
-def qs_to_time_kmz(qs):
-    """ From a routes queryset, return a folder'd up kmz file split up
-        by type of flight time. pic, sic, dual received, etc
+def qs_to_time_kmz(qs, big_points=None):
+    """
+    From a routes queryset, return a folder'd up kmz file split up
+    by type of flight time. pic, sic, dual received, etc
     """
     
     title = "Routes by type of flight time"
+    add_icon = False
     
     dual_g = qs.filter(flight__dual_g__gt=0)\
                .values('kml_rendered', 'simple_rendered')\
@@ -205,8 +207,13 @@ def qs_to_time_kmz(qs):
             RouteFolder(name="Actual Instrument", qs=inst, style="#green_line")
         )
 
+    if big_points:
+        add_icon=True
+        folders.append(
+            AirportFolder(name=big_points[0].identifier, qs=big_points)
+        )
 
-    return folders_to_kmz_response(folders, title)
+    return folders_to_kmz_response(folders, title, add_icon=add_icon)
 
 
 

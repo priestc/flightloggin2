@@ -57,11 +57,7 @@ def routes_location_kml(request, ident):
               
     l = Location.objects.filter(identifier=ident).filter(loc_class=1)\
     
-    folders=[0,1]
-    folders[0] = AirportFolder(name="Airport", qs=l)
-    folders[1] = RouteFolder(name="Routes", qs=qs)
-    
-    return folders_to_kmz_response(folders, ident, add_icon=True)
+    return qs_to_time_kmz(qs, big_points=l)
 
 @cache_page(60 * 60)
 def routes_type_kml(request, ty):
@@ -76,6 +72,8 @@ def routes_tailnumber_kml(request, tn):
     return qs_to_time_kmz(qs)
 
 #------------------------------------------------------------------------------
+## soon to be deprecated functions below
+
 
 @no_share('other')
 def airports_kml(request, type_):
