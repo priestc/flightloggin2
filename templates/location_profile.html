@@ -7,7 +7,7 @@
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/item_profile.css">
 <script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key={{ GOOGLE_MAPS_KEY }}"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/item_profile.js"></script>
-<script>
+<script type="text/javascript">
     var routes_kml_url = "http://flightlogg.in{% url routes_for_location-kml loc.identifier as url %}{{ url }}"
 </script>
 {% endblock %}

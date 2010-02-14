@@ -98,6 +98,13 @@ def tailnumber_profile(request, tn):
                  .exclude(type="")\
                  .order_by()\
                  .distinct()
+                 
+    models = Plane.objects\
+                 .filter(tailnumber__iexact=tn)\
+                 .values_list('model', flat=True)\
+                 .exclude(model="")\
+                 .order_by()\
+                 .distinct()
     
     users = Plane.get_profiles(tailnumber=tn)
     

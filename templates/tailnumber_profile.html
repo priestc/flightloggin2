@@ -4,6 +4,11 @@
 
 {% block javascript %}
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/item_profile.css">
+<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/item_profile.js"></script>
+<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key={{ GOOGLE_MAPS_KEY }}"></script>
+<script type="text/javascript">
+    var routes_kml_url = "http://flightlogg.in{% url routes_for_tailnumber-kml tn as url %}{{ url }}"
+</script>
 {% endblock %}
 
 {% block title %}Tailnumber Profile - {{ tn|upper }}{% endblock %}
@@ -13,10 +18,11 @@
 
 <h1>{{ tn|upper }}</h1>
 
-{% ifnotequal t_flights 0 %}
-<br><a href="{% url routes_for_tailnumber-kml tn %}">View all flights in this tailnumber with Google Earth</a>
-{% endifnotequal %}
-
+<div id="top_link">
+    <a href="{% url routes_for_tailnumber-kml tn as url %}{{ url }}">View in Google Earth</a>
+</div>
+<div id="gmap">
+</div>
 
 <table class="main">
     <tr>
@@ -24,20 +30,20 @@
         <td>{{ users|list_users }}</td>
     </tr>
     <tr>
-        <th>Total hours logged with this tailnumber</th>
+        <th>Total hours logged in {{ tn }}</th>
         <td><big><strong>{{ t_hours }}</strong></big></td>
     </tr>
     <tr>
-        <th>Total number of flights logged with this tailnumber</th>
+        <th>Total number of flights logged in {{ tn }}</th>
         <td><big><strong>{{ t_flights }}</strong></big></td>
     </tr>
     <tr>
-        <th>Airports this aircraft has landed at</th>
-        <td>{{ airports|list_airports }}</td>
+        <th>Types {{ tn }} has been registered to</th>
+        <td>{{ types|list_types }}</td>
     </tr>
     <tr>
-        <th>Types this tailnumber has been registered to</th>
-        <td>{{ types|list_types }}</td>
+        <th>Models {{ tn }} has been registered to</th>
+        <td>{{ models|list_models }}</td>
     </tr>
 </table>
 {% endblock %}

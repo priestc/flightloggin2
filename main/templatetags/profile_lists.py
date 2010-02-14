@@ -110,6 +110,31 @@ def list_types(types):
 
 ###############################################################################
 
+@register.filter(name='list_models')
+def list_models(models):
+    
+    if not models:
+        return mark_safe("<em>None</em>")
+    
+    out = ""
+    for m in models:
+        m_spaceless = m.replace(' ','_')\
+                         .replace('#','')\
+                         .replace('?','')\
+                         .replace('\\','')\
+                         .replace('/','')\
+                         .replace(',','') or "None"
+                        
+        url  = reverse('profile-model', kwargs={"model": m_spaceless})
+        out += "<a href=\"%s\">%s</a>, " % (url, m)
+        
+    ## remove the last trailing ", "
+    out = out[:-2]
+    
+    return mark_safe(out)
+    
+###############################################################################
+
 @register.filter(name='routebase_row')
 def routebase_row(rb):
     
