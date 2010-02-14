@@ -27,11 +27,6 @@
 
 </style>
 
-<div id="total_time">
-<fb:name uid="{{ uid }}" useyou="false" />'s total flight time: <strong>{{ tt }}</strong><br>
-<a href="http://flightlogg.in{% url logbook user.username %}"><fb:name uid="{{ uid }}" useyou="false" />'s full FlightLogg.in' logbook</a>
-</div>
-
 Last 5 flights:
 <table id="flight">
     <tr>
@@ -62,6 +57,11 @@ Last 5 flights:
 
 <div id="map">
 States I've flown to:<br>
-<img src="http://flightlogg.in{% url state-map user.username "count" "png" %}">
+<img src="http://flightlogg.in{% url state-map user.username "count" "png" %}"><br>
+red = been there a lot, blue = not so much
 </div>
 
+<div id="total_time">
+<fb:name uid="{{ uid }}" useyou="false" />'s total flight time: <strong>{{ tt }}</strong><br>
+<a href="http://flightlogg.in{% url logbook user.username %}">full logbook</a>
+</div>
