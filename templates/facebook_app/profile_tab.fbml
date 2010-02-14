@@ -31,6 +31,7 @@
 <fb:name uid="{{ uid }}" useyou="false" />'s total flight time: <strong>{{ tt }}</strong><br>
 <a href="http://flightlogg.in{% url logbook user.username %}"><fb:name uid="{{ uid }}" useyou="false" />'s full FlightLogg.in' logbook</a>
 </div>
+
 Last 5 flights:
 <table id="flight">
     <tr>
