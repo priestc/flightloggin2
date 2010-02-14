@@ -88,11 +88,11 @@ class Profile(models.Model, GoonMixin):
                          default="",
                          null=False,
                          max_length=8,
-                         default="",
                          #editable=False,
                      )
     
     facebook_uid =   models.CharField(
+                         blank=True,
                          null=False,
                          default="",
                          max_length=20,
