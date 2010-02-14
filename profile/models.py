@@ -91,9 +91,10 @@ class Profile(models.Model, GoonMixin):
                          #editable=False,
                      )
     
-    facebook_uid =   models.IntegerField(null=False,
-                         #editable=False,
-                         
+    facebook_uid =   models.CharField(
+                         null=False,
+                         max_length=20,
+                         #editable=False,  
                      )
 
 
