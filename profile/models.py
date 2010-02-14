@@ -88,12 +88,12 @@ class Profile(models.Model, GoonMixin):
                          null=False,
                          max_length=8,
                          default="",
-                         editable=False,
+                         #editable=False,
                      )
     
-    facebook_uid =   models.IntegerField(
-                         editable=False,
-                         null=False,
+    facebook_uid =   models.IntegerField(null=False,
+                         #editable=False,
+                         
                      )
 
 
