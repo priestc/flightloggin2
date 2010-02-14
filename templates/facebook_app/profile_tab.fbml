@@ -11,7 +11,7 @@ td, th                   {background: #ddd; text-align: left}
 
 <a href="http://flightlogg.in{% url logbook user.username %}"><fb:name uid="{{ uid }}" useyou="false" />'s full FlightLogg.in' logbook</a>
 <br><br>
-<fb:name uid="{{ uid }}" useyou="false" />'s total time: {{ tt }}
+<fb:name uid="{{ uid }}" useyou="false" />'s total flight time: <strong>{{ tt }}</strong>
 <br><br>
 Last 5 flights:
 <table>
@@ -30,10 +30,10 @@ Last 5 flights:
         <td>{{ flight.total }}</td>
         
         {% url profile-tailnumber flight.plane.tailnumber as url %}
-        <td><a href="{{ url }}">{{ flight.plane }}</a></td>
+        <td><a href="http://flightlogg.in{{ url }}">{{ flight.plane }}</a></td>
         
         {% url profile-route flight.route.simple_rendered as url %}
-        <td><a href="{{ url }}">{{ flight.route.fancy_rendered|safe }}</a></td>
+        <td><a href="http://flightlogg.in{{ url }}">{{ flight.route.fancy_rendered|safe }}</a></td>
         <td>{{ flight.conditions_of_flight }}</td>
         <td>{{ flight.person }}</td>
         <td>{{ flight.remarks }}</td>
@@ -42,4 +42,4 @@ Last 5 flights:
 </table>
 <br><br>
 States I've flown to:<br>
-<img src="{% url state-map user.username "count" "png" %}">
+<img src="http://flightlogg.in{% url state-map user.username "count" "png" %}">
