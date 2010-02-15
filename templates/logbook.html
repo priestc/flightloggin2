@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load logbook_tags %}
+{% load cache %}
+
 {% block description %}{{ request.display_user.username }}'s flights{% endblock%}
 
 {% block javascript %}
@@ -72,20 +74,21 @@
 		</tfoot>
 		
 		<tbody>
-
-		{% for row in page_of_flights.object_list %}
-		<tr>
-            {% make_date_cell row profile %}
-            {% make_display_cells row cols profile %}
-		</tr>
+        {% cache 10800 logbook page request.display_user %}
+		    {% for row in page_of_flights.object_list %}
+		    <tr>
+                {% make_date_cell row profile %}
+                {% make_display_cells row cols profile %}
+		    </tr>
 		
-		{% empty %}
+		    {% empty %}
 	
-		<tr>
-			<td colspan="50" class="empty_logbook">No flights to display</td>
-		</tr>
+		    <tr>
+			    <td colspan="50" class="empty_logbook">No flights to display</td>
+		    </tr>
 			
-		{% endfor %}
+		    {% endfor %}
+		{% endcache %}
 		
 		{# header row at the bottom #}
 		<tr class='header'>

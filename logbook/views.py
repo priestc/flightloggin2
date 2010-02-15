@@ -13,7 +13,7 @@ import forms
 from constants import *
 from profile.models import Profile, AutoButton
 
-from utils import proper_flight_form, logbook_url, expire_page
+from utils import proper_flight_form, logbook_url
 
 from django.views.decorators.cache import cache_page
 
@@ -54,7 +54,7 @@ def delete_flight(request, page):
         Flight(pk=flight_id, user=request.display_user).delete()
         
         from backup.models import edit_logbook
-        edit_logbook.send(sender=request.display_user)
+        edit_logbook.send(sender=request.display_user, page=page)
     
     return HttpResponseRedirect(url)
 
@@ -82,7 +82,7 @@ def edit_flight(request, page):
         form.save()
         
         from backup.models import edit_logbook
-        edit_logbook.send(sender=request.display_user)
+        edit_logbook.send(sender=request.display_user, page=page)
         
         return HttpResponseRedirect(url)
         
@@ -118,7 +118,6 @@ def new_flight(request, page):
     
 ###############################################################################
 
-#@cache_page(60 * 60 * 24)
 @render_to("logbook.html")
 @no_share('logbook')
 def logbook(request, page=0, form=None, fail=None):
@@ -281,7 +280,7 @@ def mass_edit(request, page=0):
             ## send signal to mark this user as having
             ## edited their logbook for today
             from backup.models import edit_logbook
-            edit_logbook.send(sender=request.display_user)
+            edit_logbook.send(sender=request.display_user, page=page)
             
             from django.core.urlresolvers import reverse
             return HttpResponseRedirect(

@@ -160,21 +160,22 @@ def proper_flight_form(profile):
 
     return PopupFlightForm   
 
-def expire_page(user=None, page=None, url=None):
+def expire_logbook_cache_page(user=None, page=None):
 
     from django.core.cache import cache
-    from django.http import HttpRequest
-    from django.utils.cache import get_cache_key
+    from django.utils.hashcompat import md5_constructor
+    from django.utils.http import urlquote
+
+    fragment_name = 'logbook'
+    variables = [page, user]
     
-    if not url:
-        url = logbook_url(user, page)
+    print "expiring", page, user
     
-    request = HttpRequest()
-    request.path = url
-    key = get_cache_key(request)
-    
-    if key and cache.has_key(key):   
-        cache.delete(key)
+    args = md5_constructor(u':'.join([urlquote(var) for var in variables]))
+    cache_key = 'template.cache.%s.%s' % (fragment_name, args.hexdigest())
+    cache.delete(cache_key)
+
+
         
 def expire_all(user):
     """
@@ -195,6 +196,6 @@ def expire_all(user):
     last_page = int(math.ceil(total_flights / float(per_page)))
 
     for page in range(1,last_page+1):
-        expire_page(user, page)
+        expire_logbook_cache_page(user, page)
 
 

@@ -622,9 +622,16 @@ def expire_logbook_cache(sender, **kwargs):
     pages
     """
     
-    from utils import expire_all
+    from utils import expire_all, expire_logbook_cache_page
+    
+    user = sender
+    page = kwargs.get('page', None)
+    
+    if page:
+        expire_logbook_cache_page(user, page)
+    else:
+        expire_all(user)
 
-    expire_all(sender)
 
 from profile.models import Profile 
 models.signals.post_save.connect(expire_logbook_cache, sender=Profile)
