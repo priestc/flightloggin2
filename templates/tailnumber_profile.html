@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load profile_lists %}
+{% load cache %}
+
 {% block description %}{{ tn|upper }} tailnumber profile{% endblock%}
 
 {% block javascript %}
@@ -7,12 +9,12 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/item_profile.js"></script>
 <script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key={{ GOOGLE_MAPS_KEY }}"></script>
 <script type="text/javascript">
-    var routes_kml_url = "http://flightlogg.in{% url routes_for_tailnumber-kml tn as url %}{{ url }}"
+    {% url routes_for_tailnumber-kml tn as url %}
+    var routes_kml_url = "http://flightlogg.in{{ url }}"
 </script>
 {% endblock %}
 
 {% block title %}Tailnumber Profile - {{ tn|upper }}{% endblock %}
-
 
 {% block canvas %}
 
@@ -24,6 +26,7 @@
 <div id="gmap">
 </div>
 
+{% cache 10800 tn_profile tn %}
 <table class="main">
     <tr>
         <th>Users who have flown an aircraft with this tailnumber</th>
@@ -46,4 +49,6 @@
         <td>{{ models|list_models }}</td>
     </tr>
 </table>
+{% endcache %}
+
 {% endblock %}

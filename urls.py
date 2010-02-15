@@ -66,6 +66,7 @@ urlpatterns += patterns('',
 
     (r'^newforum/', include('forum.urls')),
     (r'^histogram/', include('histogram.urls')),
+    (r'^kml/', include('maps.kml_urls')),
     
     (r'^search/locations\.html$', 'airport.views.search_airport'),
     (r'^search/tailnumbers\.html$', 'plane.views.search_tailnumbers'),
@@ -293,39 +294,7 @@ urlpatterns += patterns('',
         "backup.views.emailbackup",
                                                            name="email-backup",
     ),
-    
-    #--------------------------------------------------------------------------
-     
-    url(
-        r'^tailnumber-(?P<tn>%s+)\.kmz$' % Plane.plane_regex,
-        "maps.kml_views.routes_tailnumber_kml",
-                                              name="routes_for_tailnumber-kml",
-    ),
-    
-    url(
-        r'^type-(?P<ty>%s+)\.kmz$' % Plane.plane_regex,
-        "maps.kml_views.routes_type_kml",
-                                                    name="routes_for_type-kml",
-    ),
-    
-    url(
-        r'^route-(?P<pk>\d+)(?P<f>[fr]?)\.kmz$',
-        "maps.kml_views.single_route_kml",
-                                                       name="single_route-kml",
-    ),
-    
-    url(
-        r'^single_location-(?P<ident>[A-Z0-9]+)\.kmz$',
-        "maps.kml_views.single_location_kml",
-                                                    name="single_location-kml",
-    ),
-    
-    url(
-        r'^location-(?P<ident>[A-Z0-9]+)\.kmz$',
-        "maps.kml_views.routes_location_kml",
-                                                name="routes_for_location-kml",
-    ),
-    
+
     #--------------------------------------------------------------------------
     
     url(

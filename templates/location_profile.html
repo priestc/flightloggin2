@@ -1,23 +1,24 @@
 {% extends "base.html" %}
 {% load profile_lists %}
+{% load cache %}
+
 {% block description %}{{ loc.name }} - {{ loc.location_summary }} - {{ ident|upper }} location profile{% endblock%}
-{% block title %}{{ lc|capfirst }} Profile - {{ ident|upper }}{% endblock %}
 
 {% block javascript %}
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/item_profile.css">
 <script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key={{ GOOGLE_MAPS_KEY }}"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/item_profile.js"></script>
 <script type="text/javascript">
-    var routes_kml_url = "http://flightlogg.in{% url routes_for_location-kml loc.identifier as url %}{{ url }}"
+    {% url routes_for_location-kml loc.identifier as url %}
+    var routes_kml_url = "http://flightlogg.in{{ url }}"
 </script>
 {% endblock %}
 
-
-
+{% block title %}{{ lc|capfirst }} Profile - {{ ident|upper }}{% endblock %}
 
 {% block canvas %}
-<h1>{{ ident|upper }}</h1>
 
+<h1>{{ ident|upper }}</h1>
 <strong>{{ loc.name }} - {{ loc.location_summary }}</strong>
 
 <div id="top_link">
@@ -26,6 +27,7 @@
 <div id="gmap">
 </div>
 
+{% cache 10800 loc_profile ident %}
 <table class="main">
     <tr>
         <th>Users who have flown to this {{ lc }}</th>
@@ -42,4 +44,6 @@
         <td>{{ tailnumbers|list_tailnumbers }}</td>
     </tr>
 </table>
+{% endcache %}
+
 {% endblock %}

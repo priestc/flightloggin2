@@ -1,27 +1,33 @@
 {% extends "base.html" %}
 {% load profile_lists %}
 {% load humanize %}
+{% load cache %}
 
 {% block description %}{{ model|upper }} model profile{% endblock%}
 
 {% block javascript %}
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/item_profile.css">
+<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key={{ GOOGLE_MAPS_KEY }}"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/item_profile.js"></script>
+<script type="text/javascript">
+    {% url routes_for_model-kml model=url_model %}
+    var routes_kml_url = "http://flightlogg.in{{ url }}"
+</script>
 {% endblock %}
 
 {% block title %}Model Profile - {{ model }}{% endblock %}
 
-
 {% block canvas %}
 
 <h1>{{ model }}</h1>
-{{ manufacturers|join:", " }}
 
-{% ifnotequal t_flights 0 %}
-<br>
-<a href="{% url routes_for_type-kml model as url %}{{ url }}">View all flights in this type with Google Earth</a>
-{% endifnotequal %}
+<div id="top_link">
+    <a href="{% url routes_for_model-kml model as url %}{{ url }}">View in Google Earth</a>
+</div>
+<div id="gmap">
+</div>
 
-
+{% cache 10800 model_profile model %}
 <table class="main">
     <tr>
         <th>Users who have flown a {{ model }}</th>
@@ -40,6 +46,8 @@
         <td>{{ tailnumbers|list_tailnumbers }}</td>
     </tr>
 </table>
+{% endcache %}
+
 <br>
 <img src="{% url histogram-model model %}" alt="Speed Histogram">
 

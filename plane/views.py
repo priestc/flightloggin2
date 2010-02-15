@@ -146,6 +146,7 @@ def type_profile(request, ty):
 @render_to('model_profile.html')
 def model_profile(request, model):
     
+    url_model = model
     model = model.replace('_', ' ')
     
     ## the users who have flown this type
