@@ -46,51 +46,27 @@
                     {{ cols.header_row|safe }}
 			</tr>
 		</thead>
+		{% if get %}
+		    {% include "logbook_totals_part.html" %}
+		{% else %}
 		
-		{% cache 10800 logbook_totals request.display_user %}
-		<tfoot>
-			<tr>
-				<td colspan="{{ cols.prefix_len }}" id="page_total_title">
-				Page Totals:
-				</td>
-    
-                   {% for column in cols.agg_list %}
-                       <td id="{{ column }}_pt" class="{{column}} pt"></td>
-                   {% endfor %}
-
-				<td colspan="6">
-				</td>
-			</tr>
-			<tr>
-
-				<td colspan="{{ cols.prefix_len }}" id="overall_total_title">
-				{{total_sign}} Totals:
-				</td>
-
-                    {% make_overall_agg_cells filtered_flights cols profile %}
-                    
-				<td colspan="6">    
-				</td>
-			</tr>
-		</tfoot>
-		{% endcache %}
-		
+		    {% cache 10800 logbook_totals request.display_user %}
+                {% include "logbook_totals_part.html" %}
+		    {% endcache %}
+		    
+		{% endif %}
 		<tbody>
-        {% cache 10800 logbook page request.display_user %}
-		    {% for row in page_of_flights.object_list %}
-		    <tr>
-                {% make_date_cell row profile %}
-                {% make_display_cells row cols profile %}
-		    </tr>
+		{% if get %}
 		
-		    {% empty %}
-	
-		    <tr>
-			    <td colspan="50" class="empty_logbook">No flights to display</td>
-		    </tr>
-			
-		    {% endfor %}
-		{% endcache %}
+		    {% include "logbook_cells_part.html" %}
+		    
+		{% else %}
+		
+            {% cache 10800 logbook page request.display_user %}
+		        {% include "logbook_cells_part.html" %}
+		    {% endcache %}
+		    
+		{% endif %}
 		
 		{# header row at the bottom #}
 		<tr class='header'>

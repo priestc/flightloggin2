@@ -1,0 +1,15 @@
+{% load logbook_tags %}
+
+{% for row in page_of_flights.object_list %}
+    <tr>
+        {% make_date_cell row profile %}
+        {% make_display_cells row cols profile %}
+    </tr>
+
+    {% empty %}
+
+    <tr>
+        <td colspan="50" class="empty_logbook">No flights to display</td>
+    </tr>
+
+{% endfor %}

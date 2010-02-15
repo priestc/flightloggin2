@@ -1,0 +1,27 @@
+{% load logbook_tags %}
+
+<tfoot>
+	<tr>
+		<td colspan="{{ cols.prefix_len }}" id="page_total_title">
+		Page Totals:
+		</td>
+
+           {% for column in cols.agg_list %}
+               <td id="{{ column }}_pt" class="{{column}} pt"></td>
+           {% endfor %}
+
+		<td colspan="6">
+		</td>
+	</tr>
+	<tr>
+
+		<td colspan="{{ cols.prefix_len }}" id="overall_total_title">
+		{{total_sign}} Totals:
+		</td>
+
+            {% make_overall_agg_cells filtered_flights cols profile %}
+            
+		<td colspan="6">    
+		</td>
+	</tr>
+</tfoot>
