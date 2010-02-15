@@ -85,8 +85,8 @@ class Profile(models.Model, GoonMixin):
     
     secret_key =     models.CharField(
                          blank=False,
-                         default="",
                          null=False,
+                         default="",
                          max_length=8,
                          #editable=False,
                      )

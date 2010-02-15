@@ -1,5 +1,4 @@
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.cache import cache_page
 from django.http import HttpResponse
 
 from annoying.decorators import render_to
@@ -88,7 +87,6 @@ from airport.models import Location
 from route.models import Route
 from django.db.models import Sum, Avg, Max
 
-@cache_page(60 * 15)
 @render_to('tailnumber_profile.html')
 def tailnumber_profile(request, tn):
     
@@ -118,7 +116,6 @@ def tailnumber_profile(request, tn):
     
     return locals()
 
-@cache_page(60 * 15)
 @render_to('type_profile.html')
 def type_profile(request, ty):
     
@@ -146,7 +143,6 @@ def type_profile(request, ty):
     
     return locals()
 
-@cache_page(60 * 15)
 @render_to('model_profile.html')
 def model_profile(request, model):
     
