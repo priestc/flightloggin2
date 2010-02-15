@@ -55,8 +55,16 @@
                     </div>
                     
                     {% load gravatar_tags %}
-                    <div style="margin-left: 3px; margin-top: 2px; width: 80px; float: right">
-                    {% gravatar request.display_user %}
+                    <div style="margin-left: 3px; margin-top: 2px; float: right">
+                        {% if request.display_user %}
+                            {% gravatar request.display_user %}
+                        {% else %}
+                        
+                            {% if user.is_authenticated %}
+                                {% gravatar user %}
+                            {% endif %}
+                            
+                        {% endif %}
                     </div>
                 
                 </div>
