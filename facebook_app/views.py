@@ -31,8 +31,11 @@ def register(request):
 @facebook.require_login()
 @render_to('facebook_app/profile_tab.fbml')
 def profile_tab(request):
+    
+    if request.POST:
+        return register(request)
+    
     uid = request.facebook.uid # 12314662 #
-    ## http://www.facebook.com/profile.php?ref=profile&id=100000800702266
     
     try:
         user = User.objects.get(profile__facebook_uid=uid)
@@ -53,7 +56,7 @@ def profile_tab(request):
         fb_profiles = Profile.objects.filter(facebook_uid__gte=0)
         
     else:
-        return canvas(request)
+        return register(request)
     
     return locals()
 

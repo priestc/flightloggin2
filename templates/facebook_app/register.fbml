@@ -9,7 +9,7 @@
         <td colspan="3">Before you can use this app, you must provide your FlightLogg.in' account information</td>
     </tr>
     <tr>
-        <td><label for="username">FlghtLogg.in' Username</label></td>
+        <td><label for="username">FlightLogg.in' Username</label></td>
         <td><input type="text" name="username"></td>
     </tr>
     <tr>

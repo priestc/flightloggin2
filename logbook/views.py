@@ -118,7 +118,7 @@ def new_flight(request, page):
     
 ###############################################################################
 
-@cache_page(60 * 60 * 24)
+#@cache_page(60 * 60 * 24)
 @render_to("logbook.html")
 @no_share('logbook')
 def logbook(request, page=0, form=None, fail=None):
