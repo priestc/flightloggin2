@@ -6,6 +6,8 @@ TEMPLATE_DEBUG = DEBUG
 
 AUTH_PROFILE_MODULE = 'profile.profile'
 
+## gravatar settings
+GRAVATAR_DEFAULT_IMAGE = "monsterid"
 
 ## postgis setting for testing
 TEST_RUNNER='django.contrib.gis.tests.run_tests'
@@ -94,6 +96,7 @@ INSTALLED_APPS += (
     'tagging',
     'forum',
     'pagination',
+    'gravatar',
     
     'django_openid_auth',
     'django.contrib.admin',

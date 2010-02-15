@@ -25,33 +25,44 @@
     <body>
     <div id="holder">
 
-        <div id="logo_header">
+        <div id="logo_header" style="overflow: hidden">
 
             <div id="inner_header">
             
                 <a href="/"><img id="logo" src="{{ CSS_URL }}/logo.png" alt="FlightLogg.in' Logo" /></a>
-            
-                {% if DEMO %}
-                    <span id="demo">** VIEWING THE DEMO ACCOUNT **</span>
-                {% endif %}
+                
+                <div id="userbox" style="float: right; overflow: hidden">
+                    <div style="float: left">
+                    {% if DEMO %}
+                        <span id="demo">** VIEWING THE DEMO ACCOUNT **</span>
+                    {% endif %}
 
-                {% if user.is_authenticated %}
-	                Logged in as: <span class="logged_user">{{ user.username }}</span>
-                {% endif %}
+                    {% if user.is_authenticated %}
+	                    Logged in as: <span class="logged_user">{{ user.username }}</span>
+                    {% endif %}
 
-                {% ifnotequal request.user request.display_user %}
-                {% if request.display_user %}
-	                <br>Viewing the logbook of: <span class="display_user">{{ request.display_user }}</span>
-	            {% endif %}
-                {% endifnotequal %}
+                    {% ifnotequal request.user request.display_user %}
+                    {% if request.display_user %}
+	                    <br>Viewing the logbook of: <span class="display_user">{{ request.display_user }}</span>
+	                {% endif %}
+                    {% endifnotequal %}
 
-                {% if not user.is_authenticated %}
-                    <br><a href="{% url login %}">Sign-in/Register</a>
-                {% else %}
-                    <br><a href="/logout">Log Out</a>
-                {% endif %}
-
+                    {% if not user.is_authenticated %}
+                        <br><a href="{% url login %}">Sign-in/Register</a>
+                    {% else %}
+                        <br><a href="/logout">Log Out</a>
+                    {% endif %}
+                    </div>
+                    
+                    {% load gravatar_tags %}
+                    <div style="margin-left: 3px; margin-top: 2px; width: 80px; float: right">
+                    {% gravatar request.display_user %}
+                    </div>
+                
+                </div>
             </div>
+            
+            
 
 		</div>
         

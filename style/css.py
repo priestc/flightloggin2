@@ -197,7 +197,7 @@ body                    {background: %(page_bg)s;
 
 #main_content           {margin:5px; overflow: hidden; border: 0px solid black}
 
-#logo                   {margin-top: 11px;
+#logo                   {margin-top: 16px;
                          margin-bottom: 5px;
                          border: 0px;
                          float: left;}
