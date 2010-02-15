@@ -21,10 +21,9 @@ def currency(request):
 
     ############################################
     
-    cert_currbox = CertCurrBox(cfi=curr_land.flight_instructor(),
-                               bfr=curr_land.flight_review())
+    cert_currbox = CertCurrBox(request.display_user)
     
-    if not (curr_land.has_bfr_event or curr_land.has_cfi_event):
+    if not (cert_currbox.do_bfr or cert_currbox.do_cfi):
         del cert_currbox
     
     ############################################ instrument below

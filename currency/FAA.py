@@ -128,10 +128,6 @@ class FAA_Landing(Currency):
     
     # (name: duration, alert time) (24 calendar months, 30 days)
 
-    over_40 = False
-    has_bfr_event = False
-    has_cfi_event = False
-
     def landing(self, cat_class=0, tr=None, tail=False, night=False):
         """Returns the date of the third to last day or night landing,
         and whether or not it qualifies the user to be current"""
@@ -199,6 +195,10 @@ class FAA_Landing(Currency):
         
         return (status, start_date, end_date)
 
+class FAA_Certs(Currency):
+
+    has_bfr_event = False
+    has_cfi_event = False
 
     def flight_review(self):
 
@@ -246,7 +246,7 @@ class FAA_Landing(Currency):
             self.has_cfi_event = True
             
         except Flight.DoesNotExist:
-            checkride_date = date(1950, 2,4) # a generic old expired date
+            checkride_date = None
         
         #############################
         
@@ -258,7 +258,7 @@ class FAA_Landing(Currency):
                     
             self.cfi = True
         except NonFlight.DoesNotExist:
-            refresher_date = date(1950, 2,4) # a generic old expired date
+            refresher_date = None
 
         ############
 

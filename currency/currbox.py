@@ -133,10 +133,25 @@ class CertCurrBox(CurrBox):
 
     cfi = False
     bfr = False
+    
+    do_cfi = True
+    do_bfr = True
         
-    def __init__(self, cfi, bfr):
-        self.cfi = cfi
-        self.bfr = bfr
+    def __init__(self, user):
+        
+        from FAA import FAA_Certs
+        
+        cert_object = FAA_Certs(user)
+        
+        self.cfi = cert_object.flight_instructor()
+        self.bfr = cert_object.flight_review()
+        
+        
+        if self.cfi[0] == "NEVER":
+            self.do_cfi = False
+            
+        if self.bfr[0] == "NEVER":
+            self.do_bfr = False
 
     def render(self):
         
