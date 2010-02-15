@@ -47,6 +47,7 @@
 			</tr>
 		</thead>
 		
+		{% cache 10800 logbook_totals request.display_user %}
 		<tfoot>
 			<tr>
 				<td colspan="{{ cols.prefix_len }}" id="page_total_title">
@@ -72,6 +73,7 @@
 				</td>
 			</tr>
 		</tfoot>
+		{% endcache %}
 		
 		<tbody>
         {% cache 10800 logbook page request.display_user %}

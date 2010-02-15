@@ -158,7 +158,24 @@ def proper_flight_form(profile):
         # instead
         PopupFlightForm.base_fields['plane'] = text_plane_field
 
-    return PopupFlightForm   
+    return PopupFlightForm
+
+
+
+def expire_logbook_cache_totals(user=None):
+
+    from django.core.cache import cache
+    from django.utils.hashcompat import md5_constructor
+    from django.utils.http import urlquote
+
+    fragment_name = 'logbook_totals'
+    variables = [user,]
+    
+    args = md5_constructor(u':'.join([urlquote(var) for var in variables]))
+    cache_key = 'template.cache.%s.%s' % (fragment_name, args.hexdigest())
+    cache.delete(cache_key)
+    
+
 
 def expire_logbook_cache_page(user=None, page=None):
 
@@ -169,12 +186,12 @@ def expire_logbook_cache_page(user=None, page=None):
     fragment_name = 'logbook'
     variables = [page, user]
     
-    print "expiring", page, user
-    
     args = md5_constructor(u':'.join([urlquote(var) for var in variables]))
     cache_key = 'template.cache.%s.%s' % (fragment_name, args.hexdigest())
     cache.delete(cache_key)
-
+    
+    expire_logbook_cache_totals(user)
+    
 
         
 def expire_all(user):
