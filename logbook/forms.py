@@ -197,7 +197,8 @@ class FormsetFlightForm(PopupFlightForm):
                 required=False)
                 
     person = forms.CharField(
-                widget=forms.TextInput(attrs={"class": "person_line"}),
+                widget=forms.TextInput(attrs={"class": "person_line",
+                                              "maxlength": 60}),
                 required=False)
                 
     route = RouteField(
@@ -214,19 +215,18 @@ class FixedPlaneModelFormset(BaseModelFormSet):
     def __init__(self, *args, **kwargs):
         
         if kwargs.has_key('planes_queryset'):
-            self.custom_queryset = kwargs['planes_queryset']
-            del kwargs['planes_queryset']
+            self.custom_queryset = kwargs.pop('planes_queryset')
             
         if kwargs.has_key('user'):
-            self.user = kwargs['user']
-            del kwargs['user']
+            self.user = kwargs.pop('user')
         
         super(FixedPlaneModelFormset, self).__init__(*args, **kwargs)
 
     def add_fields(self, form, index):
         super(FixedPlaneModelFormset, self).add_fields(form, index)
-        form.fields["plane"] = ModelChoiceField(
-                queryset=Plane.objects.get_empty_query_set(), required=True)
+        
+        pqs = Plane.objects.get_empty_query_set()
+        form.fields["plane"] = ModelChoiceField(queryset=pqs, required=True)
         form.fields['plane'].queryset = self.custom_queryset
         
     
