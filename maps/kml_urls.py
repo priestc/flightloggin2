@@ -16,7 +16,7 @@ urlpatterns = patterns('maps.kml_views',
     
     url(
         r'model-(?P<model>.+)\.kmz$',
-        "routes_location_kml",
+        "routes_model_kml",
                                                    name="routes_for_model-kml",
     ),
     
