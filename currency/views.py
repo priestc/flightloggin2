@@ -12,6 +12,10 @@ from share.decorator import no_share
 @no_share('other')
 @render_to('currency.html')
 def currency(request):
+    """
+    Prepare the currency page
+    """
+    
     curr_land = FAA_Landing(request.display_user)
     curr_med = FAA_Medical(request.display_user)
 
@@ -20,7 +24,7 @@ def currency(request):
     cert_currbox = CertCurrBox(cfi=curr_land.flight_instructor(),
                                bfr=curr_land.flight_review())
     
-    if not (curr_land.pilot or curr_land.cfi):
+    if not (curr_land.has_bfr_event or curr_land.has_cfi_event):
         del cert_currbox
     
     ############################################ instrument below
