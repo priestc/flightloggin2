@@ -52,7 +52,7 @@ class UserMixin(object):
             if disable_future:
                 # exclude flights that are logged in the future
                 # mainly used for the ALL logbook view page
-                kwarg = {flight_date_field + "__gte": datetime.date.today()}
+                kwarg = {flight_date_field + "__gt": datetime.date.today()}
                 ret = ret.exclude(**kwarg)
             
             
