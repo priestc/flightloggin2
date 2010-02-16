@@ -26,6 +26,7 @@ class UserMixin(object):
         elif class_name == "RouteQuerySet":
             flight_date_field = "flight__date"
             routebase_join = "routebase"
+            user_field = "flight__user"
             
         elif class_name == "FlightQuerySet":
             flight_date_field = "date"
