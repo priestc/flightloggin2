@@ -77,7 +77,7 @@ class Route(models.Model):
     """
     
     ## add custom filters to custom manager
-    from queryset_manager import QuerySet
+    from queryset_manager import RouteQuerySet as QuerySet
     objects = QuerySetManager()        ## add custom filterset manager
 
     fancy_rendered =  models.TextField(blank=True, null=True)
