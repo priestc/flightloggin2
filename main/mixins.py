@@ -17,13 +17,17 @@ class UserMixin(object):
         
         class_name = self.__class__.__name__
         
+        user_field = "user"
+        
         if class_name == "PlaneQuerySet":
             flight_date_field = "flight__date"
-            user_field = "user"
+        
+        elif class_name == "RouteQuerySet":
+            flight_date_field = "flight__date"
+            routebase_join = "routebase"
             
         elif class_name == "FlightQuerySet":
             flight_date_field = "date"
-            user_field = "user"
             
         elif class_name == "LocationQuerySet":
             user_field = "routebase__route__flight__user"
@@ -40,7 +44,7 @@ class UserMixin(object):
                
             ## in the case of Location and Region, some filtering needs
             ## to be done...
-            if self.routebase_join:
+            if routebase_join:
                 kwarg = {"%s__isnull" % self.routebase_join: False}
                 return self.filter(**kwarg) ## distinct also should be added...
             
