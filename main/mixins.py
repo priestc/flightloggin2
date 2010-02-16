@@ -18,6 +18,7 @@ class UserMixin(object):
         class_name = self.__class__.__name__
         
         user_field = "user"
+        routebase_join = None
         
         if class_name == "PlaneQuerySet":
             flight_date_field = "flight__date"
