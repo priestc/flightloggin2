@@ -9,11 +9,6 @@ def news(request):
         request.display_user = request.user
         
     return locals()
-    
-@render_to("help.html")
-def help(request):
-    title="Help"
-    return locals()
 
 def not_found(request):
     from django.http import HttpResponse

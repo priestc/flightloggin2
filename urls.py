@@ -71,6 +71,21 @@ urlpatterns += patterns('',
     (r'^search/locations\.html$', 'airport.views.search_airport'),
     (r'^search/tailnumbers\.html$', 'plane.views.search_tailnumbers'),
     
+    
+    url(
+        r'^help.html$',
+        direct_to_template,
+        {"template": "help.html"},
+                                                                   name="help",
+    ),
+    
+    url(
+        r'^privacy_policy.html$',
+        direct_to_template,
+        {"template": "privacy.html"},
+                                                                name="privacy",
+    ),
+    
     url(
         r'^(?P<username>\w+)/realtime\.html$',
         "realtime.views.realtime2",
@@ -282,12 +297,6 @@ urlpatterns += patterns('',
     ),
     
     #--------------------------------------------------------------------------
-    
-    url(
-        r'^help.html$',
-        "main.views.help",
-                                                                   name="help",
-    ),
     
     url(
         r'^(?P<username>\w+)/email-backup.html$',
