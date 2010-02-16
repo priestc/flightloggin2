@@ -929,6 +929,29 @@ site_stats = """
 #openid                         {margin: 0 auto 0 auto;}
 #openid td                      {text-align: left; padding: 0 10px 0 10px}
 #openid td:first-child          {text-align: right}
+
+#popup_div                      {position: absolute;
+                                 display: none;
+                                 right: 50px;
+                                 top: 50px;
+                                 background: none;}
+                                 
+#popup_div img                  {margin: 0}
+
+#popup_div div.wrapper          {width: 100%%;}
+
+#popup_div div.x                {position: relative;
+                                 top: 22px;
+                                 right: 6px;
+                                 text-align: right;
+                                 z-index: 2}
+                                 
+a.x                             {background: white;
+                                 font-weight: bold;
+                                 color: black;
+                                 padding: 0 2px 0 2px;
+                                 text-decoration: none;
+                                 border: 1px solid black}
 """
 
 ###############################################################################

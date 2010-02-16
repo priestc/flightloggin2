@@ -5,6 +5,7 @@
 
 {% block javascript %}
     <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/site_stats.css"> 
+    <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/site_stats.js"></script>
 {% endblock %}
 
 {% block title %}Site Stats{% endblock %}
@@ -14,80 +15,80 @@
 <hr>
 <table id="site_stats">
     <tr>
-        <td>{{ t.users.0 }} <a href="stats_graph/users.png">G</a></td>
+        <td>{{ t.users.0 }} <a href="" class="graph_popup" id="users">G</a></td>
         <td>{{ cs.users }}</td>
     </tr>
     <tr>
-        <td>{{ t.non_empty_users.0 }} <a href="stats_graph/non_empty_users.png">G</a></td>
+        <td>{{ t.non_empty_users.0 }} <a href="" class="graph_popup" id="non_empty_users">G</a></td>
         <td>{{ cs.non_empty_users }}</td>
     </tr>
     <tr>
-        <td>{{ t.total_hours.0 }} <a href="stats_graph/total_hours.png">G</a></td>
+        <td>{{ t.total_hours.0 }} <a href="" class="graph_popup" id="total_hours">G</a></td>
         <td>{{ cs.total_hours|floatformat:1|intcomma }}</td>
     </tr>
     
     <tr>
-        <td>{{ t.total_logged.0 }} <a href="stats_graph/total_logged.png">G</a></td>
+        <td>{{ t.total_logged.0 }} <a href="" class="graph_popup" id="total_logged">G</a></td>
         <td>{{ cs.total_logged|intcomma }}</td>
     </tr>
     
     <tr>
-        <td>{{ t.avg_duration.0 }} <a href="stats_graph/avg_duration.png">G</a></td>
+        <td>{{ t.avg_duration.0 }} <a href="" class="graph_popup" id="avg_duration">G</a></td>
         <td>{{ cs.avg_duration|floatformat:2 }}</td>
     </tr>
     
     <tr>
-        <td>{{ t.avg_per_active.0 }} <a href="stats_graph/avg_per_active.png">G</a></td>
+        <td>{{ t.avg_per_active.0 }} <a href="" class="graph_popup" id="avg_per_active">G</a></td>
         <td>{{ cs.avg_per_active|floatformat:1|intcomma }}</td>
     </tr>
     
     <tr>
-        <td>{{ t.pwm_hours.0 }} <a href="stats_graph/pwm_hours.png">G</a></td>
+        <td>{{ t.pwm_hours.0 }} <a href="" class="graph_popup" id="pwm_hours">G</a></td>
         <td>{{ cs.pwm_hours|floatformat:1|intcomma }}</td>
     </tr>
     
     <tr>
-        <td>{{ t.pwm_count.0 }} <a href="stats_graph/pwm_count.png">G</a></td>
+        <td>{{ t.pwm_count.0 }} <a href="" class="graph_popup" id="pwm_count">G</a></td>
         <td>{{ cs.pwm_count|intcomma }}</td>
     </tr>
     
     <tr>
-        <td>{{ t.num_7_days.0 }} <a href="stats_graph/num_7_days.png">G</a></td>
+        <td>{{ t.num_7_days.0 }} <a href="" class="graph_popup" id="num_7_days">G</a></td>
         <td>{{ cs.num_7_days|intcomma }}</td>
     </tr>
     
     <tr>
-        <td>{{ t.user_7_days.0 }} <a href="stats_graph/user_7_days.png">G</a></td>
+        <td>{{ t.user_7_days.0 }} <a href="" class="graph_popup" id="user_7_days">G</a></td>
         <td>{{ cs.user_7_days|intcomma }}</td>
     </tr>
     
     <tr>
-        <td>{{ t.time_7_days.0 }} <a href="stats_graph/time_7_days.png">G</a></td>
+        <td>{{ t.time_7_days.0 }} <a href="" class="graph_popup" id="time_7_days">G</a></td>
         <td>{{ cs.time_7_days|floatformat:1|intcomma }}</td>
     </tr>
     
     <tr>
-        <td>{{ t.unique_airports.0 }} <a href="stats_graph/unique_airports.png">G</a></td>
+        <td>{{ t.unique_airports.0 }} <a href="" class="graph_popup" id="unique_airports">G</a></td>
         <td>{{ cs.unique_airports|intcomma }}</td>
     </tr>
     
     <tr>
-        <td>{{ t.unique_countries.0 }} <a href="stats_graph/unique_countries.png">G</a></td>
+        <td>{{ t.unique_countries.0 }} <a href="" class="graph_popup" id="unique_countries">G</a></td>
         <td>{{ cs.unique_countries|intcomma }}</td>
     </tr>
     
     <tr>
-        <td>{{ t.total_dist.0 }} <a href="stats_graph/total_dist.png">G</a></td>
+        <td>{{ t.total_dist.0 }} <a href="" class="graph_popup" id="total_dist">G</a></td>
         <td>{{ cs.total_dist|floatformat:1|intcomma }} NM</td>
     </tr>
     
     <tr>
-        <td>{{ t.route_earths.0 }} <a href="stats_graph/route_earths.png">G</a></td>
+        <td>{{ t.route_earths.0 }} <a href="" class="graph_popup" id="route_earths">G</a></td>
         <td>{{ cs.route_earths|floatformat:1|intcomma }} Earths</td>
     </tr>
     
     <tr>
-        <td>{{ t.unique_tn.0 }} <a href="stats_graph/unique_tn.png">G</a></td>
+        <td>{{ t.unique_tn.0 }} <a href="" class="graph_popup" id="unique_tn">G</a></td>
         <td>{{ cs.unique_tn }}</td>
     </tr>
     
@@ -147,6 +148,8 @@
          <td>{{ ss.others }} </td><td> {{ ss.o_p|floatformat:1 }}%</td>
     </tr>
 </table>
+
+<div id="popup_div"><div class="x"><a href="" title="close this popup" class="x">X</a></div><img src="dummy"></div>
 
 <img src="{% url histogram-user_totals %}" alt="Distribution of Logbook Totals amoung users">
 
