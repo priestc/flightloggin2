@@ -153,7 +153,7 @@ class Route(models.Model):
         return qs.count()
     
     @classmethod
-    def easy_render_all(cls):
+    def easy_render_all(cls, only_unknowns=False):
         """
         Re-renders ALL instances of Routes in the database. Easy render
         is not an expensive operation (relatively), so this isn't
@@ -163,6 +163,9 @@ class Route(models.Model):
         from multiprocessing import Process
 
         qs = cls.objects.order_by('-id')
+        
+        if only_unknowns:
+            qs = qs.filter(routebase__unknown__isnull=False)
         
         def chunks(l, n):
             for i in xrange(0, len(l), n):
@@ -215,8 +218,11 @@ class Route(models.Model):
     def hard_render_unknowns(cls):
         routes = cls.objects.filter(routebase__unknown__isnull=False)
         
-        for r in routes:
+        for r in routes.iterator():
             r.hard_render()
+            
+        # now remove all orphaned routes
+        cls.objects.filter(flight__id=None).delete()
     
     @classmethod
     def from_string(cls, raw_route_string, user=None):
