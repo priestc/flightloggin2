@@ -40,18 +40,25 @@ class RouteBase(models.Model):
         return ret
     
     def custom(self):
-        """ Returns true if the location is a custom identifier """
+        """
+        Returns true if the location is a custom identifier
+        """
+        
         return self.location.loc_class == 3
         
     def destination(self):
-        """ Returns the location object, or a string that represents the
-            identifier if unknown
         """
+        Returns the location object, or a string that represents the
+        identifier if unknown
+        """
+        
         return self.location or self.unknown
     
     @property
     def loc_class(self):
-        """return the type of location, zero if it has no location"""
+        """
+        return the type of location, zero if it has no location
+        """
         
         return getattr(self.destination(), "loc_class", 0)
     
@@ -62,7 +69,10 @@ class RouteBase(models.Model):
             return "Unknown"
     
     def owner(self):
-        """Return the owner of the routebase. Only used in the admin"""
+        """
+        Return the owner of the routebase. Only used in the admin
+        """
+        
         try:
             return self.route.flight.all()[0].user.username
         except IndexError:
@@ -73,7 +83,8 @@ class RouteBase(models.Model):
 from main.queryset_manager import QuerySetManager
 
 class Route(models.Model):
-    """Represents a route the user went on for the flight
+    """
+    Represents a route the user went on for the flight
     """
     
     ## add custom filters to custom manager
@@ -104,7 +115,10 @@ class Route(models.Model):
         return self.simple_rendered or "Empty"
     
     def owner(self):
-        """Return the owner of the route. Only used in the admin"""
+        """
+        Return the owner of the route. Only used in the admin
+        """
+        
         try:
             return self.flight.all()[0].user.username
         except IndexError:
@@ -140,19 +154,20 @@ class Route(models.Model):
     
     @classmethod
     def easy_render_all(cls):
-        """Re-renders ALL instances of Routes in the database. Easy render
-           is not an expensive operation (relatively), so this isn't
-           needing to be done in patches like hard_render.
         """
-        qs = cls.objects.all()
-        for r in qs:
-            r.easy_render()
-        return qs.count()
+        Re-renders ALL instances of Routes in the database. Easy render
+        is not an expensive operation (relatively), so this isn't
+        needing to be done in patches like hard_render.
+        """
+        
+        return len([r.easy_render() for r in cls.objects.all()])
     
     @classmethod
     def hard_render_user(cls, username=None, user=None, no_dupe=True):
-        """Hard re-render all routes for the given username
         """
+        Hard re-render all routes for the given username
+        """
+        
         if username:
             from django.contrib.auth.models import User
             user=User.objects.get(username=username)
@@ -183,8 +198,10 @@ class Route(models.Model):
     
     @classmethod
     def from_string(cls, raw_route_string, user=None):
-        """Create a route object from a waw string
         """
+        Create a route object from a waw string
+        """
+        
         # so we know which user to make the custom points from
         # if no user explicitly given, try to get the currently logged in user
         if not user:
@@ -214,8 +231,8 @@ class Route(models.Model):
     #################################
     
     def _get_LandingPoints(self):
-        """return a queryset containing all points where a landing took
-           place.
+        """
+        return a queryset containing all points where a landing took place.
         """
         
         if not self.land_points:
@@ -228,8 +245,9 @@ class Route(models.Model):
         return self.land_points
     
     def _get_AllPoints(self):
-        """return a queryset of all points, regardless whether a landing
-           was done there or not
+        """
+        Return a queryset of all points, regardless whether a landing
+        was done there or not
         """
         
         if not self.all_points:
@@ -243,8 +261,8 @@ class Route(models.Model):
         return self.all_points
     
     def calc_max_width(self, a=None):
-        """returns the max distance between any two points in the
-           route.a
+        """
+        returns the max distance between any two points in the route
         """
         
         if not a:
@@ -264,7 +282,10 @@ class Route(models.Model):
         return diameter
     
     def get_users(self):
-        """ Returns all users who have flown this exact route"""
+        """
+        Returns all users who have flown this exact route
+        """
+        
         from django.contrib.auth.models import User
         return User.objects.filter(profile__social=True)\
                    .filter(flight__route__simple_rendered=self.simple_rendered)
@@ -272,8 +293,10 @@ class Route(models.Model):
     ################################
     
     def calc_max_start(self, a=None):
-        """Returns the max distance between any point in the route and the
-           starting point. Used for ATP XC distance."""
+        """
+        Returns the max distance between any point in the route and the
+        starting point. Used for ATP XC distance.
+        """
         
         if not a:
             a = self._get_AllPoints()
@@ -289,7 +312,10 @@ class Route(models.Model):
         return max(dist)
     
     def calc_total_line(self, a=None):
-        """returns the distance between each point in the route"""
+        """
+        returns the distance between each point in the route
+        """
+        
         if not a:
             a = self._get_AllPoints()
             
@@ -310,10 +336,12 @@ class Route(models.Model):
     ################################
     
     def easy_render(self):
-        """Rerenders the HTML for displaying the route. Takes info from the
-           already defines routebases. For rerendering after updating Airport
-           info, use hard_render()
         """
+        Rerenders the HTML for displaying the route. Takes info from the
+        already defines routebases. For rerendering after updating Airport
+        info, use hard_render()
+        """
+        
         fancy = []
         simple = []
         kml = []
@@ -368,11 +396,12 @@ class Route(models.Model):
         self.save()
         
     def hard_render(self, user=None, username=None, flight_id=None):
-        """Spawns a new Route object based on it's own fallback_string,
-           connects it to the flight that the old route was connected to.
-           Then returns the newly created Route instance. This is used to
-           redo all the routebases after the navaid/airport database has been
-           updated and all the primary keys are changed.
+        """
+        Spawns a new Route object based on it's own fallback_string,
+        connects it to the flight that the old route was connected to.
+        Then returns the newly created Route instance. This is used to
+        redo all the routebases after the navaid/airport database has been
+        updated and all the primary keys are changed.
         """
         
         if not flight_id:
@@ -407,9 +436,10 @@ class Route(models.Model):
 ###############################################################################
   
 class MakeRoute(object):
-    """creates a route object from a string. The constructor takes a user
-       instance because it needs to know which "namespace" to use for
-       looking up custom places.
+    """
+    creates a route object from a string. The constructor takes a user
+    instance because it needs to know which "namespace" to use for
+    looking up custom places.
     """
     
     def __init__(self, fallback_string, user):
@@ -443,8 +473,9 @@ class MakeRoute(object):
    
             
     def normalize(self, string):
-        """removes all cruf away from the route string, returns only the
-           alpha numeric characters with clean seperators
+        """
+        removes all cruf away from the route string, returns only the
+        alpha numeric characters with clean seperators
         """
         
         import re
@@ -457,8 +488,9 @@ class MakeRoute(object):
     ########################################################### 
         
     def find_navaid(self, ident, i, last_rb=None):
-        """Searches the database for the navaid object according to ident.
-           if it finds a match, creates and returns a routebase object
+        """
+        Searches the database for the navaid object according to ident.
+        if it finds a match, creates and returns a routebase object
         """
                
         if last_rb:
@@ -491,8 +523,9 @@ class MakeRoute(object):
     ###########################################################################
 
     def find_custom(self, ident, i, force=False):
-        """Tries to find the custom point, if it can't find one, and
-           force = True, it adds it to the user's custom list.
+        """
+        Tries to find the custom point, if it can't find one, and
+        force = True, it adds it to the user's custom list.
         """
         
         ident = ident[:8]
@@ -527,7 +560,8 @@ class MakeRoute(object):
         return None
 
     def make_routebases_from_fallback_string(self, route):
-        """returns a list of RouteBase objects according to the fallback_string,
+        """
+        returns a list of RouteBase objects according to the fallback_string,
         basically hard_render()
         """
         
