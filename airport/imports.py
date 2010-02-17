@@ -11,8 +11,9 @@ from django.contrib.auth.models import User
 ALL_USER = User(pk=1)
 
 def latlng_match(old_lat, new_lat, old_lng, new_lng):
-    """ Returns true of the lat and long values are both the same
-        from 5 decimal spaces
+    """
+    Returns true of the lat and long values are both the same from 8 decimal
+    spaces
     """
     
     s = "%3.8f" # format both values to 8 decimal spaces to compare
@@ -21,6 +22,14 @@ def latlng_match(old_lat, new_lat, old_lng, new_lng):
     
     #return true if they both match
     return lat_match and lng_match
+
+def re_render_all():
+    
+    routes = Route.objects.all()
+    
+    for r in routes:
+        r.easy
+    
 
 def airports():   #import airport
     """
@@ -123,7 +132,7 @@ def airports():   #import airport
             l.loc_type = types[type_]
             
             if c:
-                print "new navaid:", ident
+                print "new airport:", ident
                 
             try:
                 l.save()

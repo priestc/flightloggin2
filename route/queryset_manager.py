@@ -1,5 +1,5 @@
-from django.contrib.gis.db.models.query import GeoQuerySet as QuerySet
+from django.contrib.gis.db.models.query import GeoQuerySet
 from main.mixins import UserMixin
 
-class RouteQuerySet(QuerySet, UserMixin):
+class RouteQuerySet(GeoQuerySet, UserMixin):
     pass
