@@ -915,7 +915,7 @@ site_stats = """
                                  width: 100%%}
 
 #site_stats td                  {border: 1px dotted gray;
-                                 padding-right: 10px}
+                                 padding-right: 10px;}
                                   
 #site_stats td:last-child       {text-align: left;
                                  font-weight: bold;
@@ -924,7 +924,11 @@ site_stats = """
 /* striping */                              
 #site_stats tr:nth-child(odd)   {background-color: %(ss_strip2)s}
 #site_stats tr                  {background-color: %(ss_strip1)s}
-                                 
+
+#site_stats img                 {border: 0px;
+                                 margin: 0px;
+                                 vertical-align: middle}
+                             
 #openid td, #openid th          {border: 1px dotted gray; text-align: center}
 #openid                         {margin: 0 auto 0 auto;}
 #openid td                      {text-align: left; padding: 0 10px 0 10px}

@@ -38,8 +38,9 @@ import django.dispatch
 edit_logbook = django.dispatch.Signal()
 
 def add_to_email_queue(sender, **kwargs):
-    """ Add the user to the list of users who have edited their logbook
-        today. This function gets called whenever a logbook is edited
+    """
+    Add the user to the list of users who have edited their logbook
+    today. This function gets called whenever a logbook is edited
     """
     
     import datetime
