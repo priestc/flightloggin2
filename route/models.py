@@ -160,7 +160,9 @@ class Route(models.Model):
         needing to be done in patches like hard_render.
         """
         
-        return len([r.easy_render() for r in cls.objects.all()])
+        for r in cls.objects.all():
+            print r.pk
+            r.easy_render()
     
     @classmethod
     def hard_render_user(cls, username=None, user=None, no_dupe=True):
@@ -225,8 +227,8 @@ class Route(models.Model):
         self.max_width_all = self.calc_max_width(all_points)
         self.max_width_land = self.calc_max_width(land_points)
         
-        self.total_line_all = self.calc_total_line(all_points)
-        self.total_line_land = self.calc_total_line(land_points)
+        self.total_line_all = self.calc_total_line(points="all")
+        self.total_line_land = self.calc_total_line(points="land")
         
     #################################
     
@@ -311,35 +313,42 @@ class Route(models.Model):
          
         return max(dist)
     
-    def calc_total_line(self, a=None):
+    def calc_total_line(self, points="all"):
         """
         returns the distance between each point in the route
         """
         
-        if not a:
-            a = self._get_AllPoints()
+        rbs = self.routebase_set .order_by('sequence')          
             
-        ls = a.make_line()
+        if points == "land":
+            rbs = rbs.exclude(land=False)
+        
+        # convert to [(lat,lng), ...] while maintaining the same order
+        # skipping any routebase that has no location
+        points = [(rb.location.location.x, rb.location.location.y)
+                        for rb in rbs if rb.location]
         
         dist = []
         from utils import coord_dist
-        for i,po in enumerate(ls):
+        for i,po in enumerate(points):
             try:
-                next = ls[1+i]
-            except:
+                next = points[1+i]
+            except IndexError:
                 pass
             else:
                 from django.contrib.gis.geos import Point
                 dist.append(coord_dist(Point(po), Point(next)))
          
         return sum(dist)
+    
     ################################
     
     def easy_render(self):
         """
         Rerenders the HTML for displaying the route. Takes info from the
         already defines routebases. For rerendering after updating Airport
-        info, use hard_render()
+        info, use hard_render() 120414 210991
+        problem: 169668
         """
         
         fancy = []
