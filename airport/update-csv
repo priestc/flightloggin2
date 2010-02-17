@@ -1,8 +1,8 @@
 #! /bin/bash
 
-cd fixtures
+cd csv
 
-wget http://www.ourairports.com/data/regions.csv;
-wget http://www.ourairports.com/data/countries.csv;
-wget http://www.ourairports.com/data/airports.csv;
-wget http://www.ourairports.com/data/navaids.csv;
+wget -O - http://www.ourairports.com/data/regions.csv > regions.csv;
+wget -O - http://www.ourairports.com/data/countries.csv > countries.csv;
+wget -O - http://www.ourairports.com/data/airports.csv > airports.csv;
+wget -O - http://www.ourairports.com/data/navaids.csv > navaids.csv;
