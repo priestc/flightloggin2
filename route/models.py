@@ -160,9 +160,29 @@ class Route(models.Model):
         needing to be done in patches like hard_render.
         """
         
-        for r in cls.objects.all():
-            print r.pk
-            r.easy_render()
+        from multiprocessing import Process
+
+        qs = cls.objects.order_by('-id')
+        
+        def chunks(l, n):
+            for i in xrange(0, len(l), n):
+                yield l[i:i+n]
+     
+        def actor(chunk):
+            for r in chunk:
+                r.easy_render()
+     
+        a=0
+        for chunk in chunks(qs, 500):
+            print "CHUNK----", a
+            
+            p = Process(target=actor, args=(chunk,))
+            p.start()
+            p.join()
+            
+            a += 1
+            
+            
     
     @classmethod
     def hard_render_user(cls, username=None, user=None, no_dupe=True):
@@ -318,7 +338,7 @@ class Route(models.Model):
         returns the distance between each point in the route
         """
         
-        rbs = self.routebase_set .order_by('sequence')          
+        rbs = self.routebase_set.order_by('sequence')          
             
         if points == "land":
             rbs = rbs.exclude(land=False)
@@ -326,7 +346,7 @@ class Route(models.Model):
         # convert to [(lat,lng), ...] while maintaining the same order
         # skipping any routebase that has no location
         points = [(rb.location.location.x, rb.location.location.y)
-                        for rb in rbs if rb.location]
+                        for rb in rbs if rb.location and rb.location.location]
         
         dist = []
         from utils import coord_dist
