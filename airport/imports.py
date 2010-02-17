@@ -37,7 +37,7 @@ def airports():   #import airport
     continent	iso_country	iso_region	municipality	scheduled_service
     gps_code	iata_code	local_code	home_link	wikipedia_link	keywords
     """
-    path = os.path.join(PROJECT_PATH, 'airport', 'fixtures', 'airports.csv')
+    path = os.path.join(PROJECT_PATH, 'airport', 'csv', 'airports.csv')
     f = open(path, 'rb')
     reader = csv.reader(f, "excel")
     titles = reader.next()
@@ -157,7 +157,7 @@ def navaids():
     associated_airport
     """
     
-    path = os.path.join(PROJECT_PATH, 'airport', 'fixtures', 'navaids.csv')
+    path = os.path.join(PROJECT_PATH, 'airport', 'csv', 'navaids.csv')
     f = open(path, 'rb')
     
     reader = csv.reader(f, "excel")
@@ -221,7 +221,7 @@ def regions():   #import region
     keywords
     """
 
-    path = os.path.join(PROJECT_PATH, 'airport', 'fixtures', 'regions.csv')
+    path = os.path.join(PROJECT_PATH, 'airport', 'csv', 'regions.csv')
     f = open(path, 'rb')
     
     reader = csv.reader(f, "excel")
@@ -252,7 +252,7 @@ def countries():   #import country
     id	code	name	continent	wikipedia_link	keywords
     """
 
-    path = os.path.join(PROJECT_PATH, 'airport', 'fixtures', 'countries.csv')
+    path = os.path.join(PROJECT_PATH, 'airport', 'csv', 'countries.csv')
     f = open(path, 'rb')
     
     reader = csv.reader(f, "excel")
