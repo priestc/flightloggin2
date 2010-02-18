@@ -194,7 +194,7 @@ def expire_logbook_cache_page(user=None, page=None):
     
 
         
-def expire_all(user):
+def expire_all(user=None, profile=None):
     """
     Expire all logbook pages in the passed user's logbook section
     This function is used after the user changes his preferences and it
@@ -204,10 +204,15 @@ def expire_all(user):
     from logbook.models import Flight
     import math
     
-    try:
-        per_page = user.get_profile().per_page
-    except:
-        return
+    if user:
+        try:
+            per_page = user.get_profile().per_page
+        except:
+            return
+    
+    elif profile:
+        per_page = profile.per_page
+        user = profile.user
     
     total_flights = Flight.objects.user(user).count()
     last_page = int(math.ceil(total_flights / float(per_page)))

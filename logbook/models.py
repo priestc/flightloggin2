@@ -619,20 +619,29 @@ models.signals.pre_save.connect(connect_route, sender=Flight)
 def expire_logbook_cache(sender, **kwargs):
     """
     When the user save new preferences, expire the caches on all logbook
-    pages
+    pages. This function is called two was: one was is by the Profile
+    save signal, where sender will be the profile class, and the other way
+    is by the edit_logbook signasl, in which the user instance will be the
+    sender
     """
     
     from utils import expire_all, expire_logbook_cache_page
     
-    user = sender
     page = kwargs.get('page', None)
     
     if page:
+        user = sender
         expire_logbook_cache_page(user, page)
+        
+    elif sender.__name__ == "Profile":
+        profile = kwargs.pop('instance')
+        expire_all(profile=profile)
+
     else:
-        expire_all(user)
-
-
+        user = sender
+        expire_all(user=user)
+    
+    
 from profile.models import Profile 
 models.signals.post_save.connect(expire_logbook_cache, sender=Profile)
 
