@@ -633,7 +633,7 @@ def expire_logbook_cache(sender, **kwargs):
         user = sender
         expire_logbook_cache_page(user, page)
         
-    elif sender.__name__ == "Profile":
+    elif getattr(sender, "__name__", "ff") == "Profile":
         profile = kwargs.pop('instance')
         expire_all(profile=profile)
 
