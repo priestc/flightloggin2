@@ -218,12 +218,22 @@ class Route(models.Model):
     def hard_render_unknowns(cls):
         routes = cls.objects.filter(routebase__unknown__isnull=False)
         
+        print "routes with unknowns before:", routes.count()
+        
+        import datetime
+        now = datetime.datetime.now()
         for r in routes.iterator():
             r.hard_render()
             
         # now remove all orphaned routes
         cls.objects.filter(flight__id=None).delete()
-    
+        
+        now2 = datetime.datetime.now()
+        
+        print "routes with unknowns after:", routes.count()
+        
+        return now2-now
+        
     @classmethod
     def from_string(cls, raw_route_string, user=None):
         """
@@ -656,3 +666,35 @@ class MakeRoute(object):
                 p2p.append(loc)
 
         return len(set(p2p)) > 1, routebases
+
+def re_render_routes(sender, **kwargs):
+    """
+    When the user edits their locations, re-render all custom/unknown routes
+    """
+    
+    instance = kwargs.get('instance', None)
+    
+    if not instance:
+        return
+    
+    print "not return"
+    
+    from route.models import Route
+    
+    qs = Route.objects\
+              .user(instance.user)\
+              .filter( models.Q(routebase__location__loc_class=3) | 
+                       models.Q(routebase__unknown__isnull=False) |
+                       models.Q(fallback_string__contains='!')
+                     )\
+              .distinct()
+
+    print qs
+
+    for r in qs.iterator():
+        print r.id
+        r.hard_render()
+    
+from airport.models import Location
+models.signals.post_save.connect(re_render_routes, sender=Location)
+models.signals.post_delete.connect(re_render_routes, sender=Location)

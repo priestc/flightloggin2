@@ -16,7 +16,7 @@ def records(request):
         
         # send signal to specify this user as editing their data
         from backup.models import edit_logbook
-        edit_logbook.send(sender=request.display_user)
+        edit_logbook.send(sender=request.display_user, touch_cache=False)
     
     else:
         records,c = Records.objects.get_or_create(user=request.display_user)
@@ -43,9 +43,6 @@ def locations(request):
             custom.save()
             changed = True
             
-            from route.models import Route
-            Route.render_custom(request.display_user)   #re-render routes with custom places
-            
         else:
             assert False, form.errors
             ERROR = 'true'
@@ -65,9 +62,6 @@ def locations(request):
             
             custom.save()
             changed = True
-            
-            from route.models import Route
-            Route.render_custom(request.display_user)   #re-render routes with custom places
             
         else:
             ERROR = 'true'
@@ -141,7 +135,7 @@ def events(request):
     if changed:
         # send signal to specify this user as editing their data
         from backup.models import edit_logbook
-        edit_logbook.send(sender=request.display_user)
+        edit_logbook.send(sender=request.display_user, touch_cache=False)
     
     return locals()
 
