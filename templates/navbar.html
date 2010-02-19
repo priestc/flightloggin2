@@ -1,5 +1,5 @@
 {% load cache %}
-{% cache 1800 navbar user  %}
+{% cache 1800 navbar user shared %}
 <div id="nav_bar">
 
     {% if not shared or user.get_profile.logbook_share %}
