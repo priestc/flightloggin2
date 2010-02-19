@@ -285,7 +285,10 @@ class Flight(models.Model, GoonMixin):
         
         ######################################
         
-        elif cn == 'atp_xc'  and self.route and self.route.max_width_all > 49:
+        elif cn == 'atp_xc' and self.route.max_width_all > 49:
+            ret = self.total
+        
+        elif cn == 'p61_xc' and self.route.max_width_land > 49:
             ret = self.total
         
         elif cn == "total" and not self.plane.is_sim():     #total
@@ -504,6 +507,9 @@ class Columns(models.Model):
     atp_xc =    models.BooleanField(FIELD_TITLES['atp_xc'], default=False,
                     help_text="Total time when the route's max width > 50 NM")
 
+    p61_xc =    models.BooleanField(FIELD_TITLES['p61_xc'], default=False,
+                    help_text="Total time when the route's max width > 50 NM (only counting landing points)")
+    
     speed =     models.BooleanField(FIELD_TITLES['speed'], default=False,
                     help_text="Distance / Total, in Nautical Miles per hour (Knots)")
                     

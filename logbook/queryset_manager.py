@@ -243,6 +243,12 @@ class FlightQuerySet(QuerySet, UserMixin):
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
     
+    def p61_xc(self, f=True):
+        kwarg={"route__max_width_land__gt": 49}
+        if not f:
+            return self.exclude(**kwarg)
+        return self.filter(**kwarg)
+    
     def line_dist(self, f=True):
         kwarg={"route__total_line_all__gt": 0}
         if not f:
@@ -377,6 +383,9 @@ class FlightQuerySet(QuerySet, UserMixin):
         
         elif cn == 'atp_xc':
             return self.sim(False).atp_xc().total(*args, **kwargs)
+        
+        elif cn == 'p61_xc':
+            return self.sim(False).p61_xc().total(*args, **kwargs)
         
         elif cn == 'line_dist' or cn == 'route__total_line_all':
             return self.sim(False).by_route_val('total_line_all', *args, **kwargs)

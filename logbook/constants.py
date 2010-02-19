@@ -8,7 +8,8 @@ FIELDS = [
           "sea_pic", "mes", "mes_pic",
           
           "turbine", "t_pic", "mt", "mt_pic", "complex", "hp", "tail", "jet",
-          "jet_pic", "line_dist", "atp_xc", 'gallons', 'gph', 'mpg', "speed",
+          "jet_pic", "line_dist", "p61_xc", "atp_xc", 'gallons', 'gph', 'mpg',
+          "speed",
           
           "max_width", "person", 'instructor', 'student', 'fo', 'captain',
           "remarks",
@@ -21,7 +22,7 @@ ALL_AGG_FIELDS = [
           "app", "p2p", "multi", "m_pic", "single", "single_pic", "sea",
           "sea_pic", "mes", "mes_pic",
           "turbine", "t_pic", "mt", "mt_pic", "complex", "hp", "tail", "jet",
-          "jet_pic", "line_dist", "atp_xc", 'gallons'
+          "jet_pic", "line_dist", "p61_xc", "atp_xc", 'gallons'
           ]
 
 ## fields that are displayed before the total row starts         
@@ -80,7 +81,7 @@ EXTRA_AGG = [
           'total', 'total_s', 'p2p', 'complex', 'hp', 'sim', 'day', 'multi',
           "single", "single_pic", 'm_pic', 'sea', 'sea_pic', 'mes', 'mes_pic',
           'turbine', 't_pic', 'mt', 'mt_pic', 'complex', 'hp', 'sim', 'tail',
-          'jet', 'jet_pic', "line_dist", "atp_xc"
+          'jet', 'jet_pic', "line_dist", "p61_xc", "atp_xc"
           ]
 
 # fields that are optionally turned on and off, used to create the big list
@@ -91,7 +92,8 @@ OPTION_FIELDS = [
           'act_inst', 'sim_inst', 'night_l','day_l', 'app', 'p2p', 'multi',
           'm_pic', "single", "single_pic", 'sea', 'sea_pic', 'mes', 'mes_pic',
           'tail', 'turbine', 't_pic', 'mt',
-          'mt_pic', 'complex', 'hp', "line_dist", 'atp_xc', 'max_width','speed',
+          'mt_pic', 'complex', 'hp', "line_dist", "p61_xc",
+          'atp_xc', 'max_width','speed',
           'gallons', 'gph', 'mpg',
           'instructor', 'student','fo','captain',
           'person', 'remarks',
@@ -164,7 +166,8 @@ FIELD_TITLES = {
     'route__total_line_all': "Route Distance (NM)", ## bargraph
     'max_width': "Max Width",
     'line_dist': "Distance",
-    'atp_xc': "ATP XC",
+    'atp_xc': "ATP Cross Country",
+    'p61_xc': "Part 61 Cross Country",
     'speed': 'Speed',
     
     'fuel_burn': "Fuel Burn",
@@ -239,6 +242,7 @@ FIELD_ABBV = {
     'max_width': "Max W. (NM)",
     'line_dist': "Dist (NM)",
     'atp_xc': "ATP XC",
+    'p61_xc': "61 XC",
     'speed': "Speed (kts)",
     
     'fuel_burn': "Burn",

@@ -17,7 +17,7 @@ class RouteWidget(TextInput):
 
     def render(self, name, value, attrs=None):
         value = self._format_value_out(value)
-        attrs.update({"class": "route_field"})
+        attrs.update({"class": "route_field", "maxlength": 30})
         return super(RouteWidget, self).render(name, value, attrs)
         
     def _has_changed(self, initial, data):
