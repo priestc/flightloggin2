@@ -3,5 +3,6 @@
 Connect with your <a href="http://flightlogg.in">FlightLogg.in</a>
 account and share your pilot logbook to others through your facebook profile.
 <br><br>
-There are currently <b>{{ users }}</b> user accounts in flightlogg.in,
+There are currently <b>{{ users }}</b> user accounts on FlightLogg.in',
 <b>{{ fb_users }}</b> of which are using this facebook application
+<br>

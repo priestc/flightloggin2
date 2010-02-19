@@ -10,4 +10,9 @@ urlpatterns = patterns('facebook_app.views',
         r'profile-tab/?',
         'profile_tab',
     ),
+    
+    (
+        r'register/?',
+        'register',
+    ),
 )

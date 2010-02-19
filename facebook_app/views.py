@@ -10,19 +10,24 @@ from logbook.models import Flight
 @facebook.require_login()
 @render_to('facebook_app/register.fbml')
 def register(request):
-    uid = request.facebook.uid
 
+    uid = request.facebook.uid
+   
+    if not request.facebook.added:
+        message = "please add this app to register"
+        return locals()
+    
     username = request.POST.get('username', None)
     secret_key = request.POST.get('secret_key', None)
 
     if username and secret_key:
-
-	p = Profile.goon(user__username=username, secret_key=secret_key)
+        p = Profile.goon(user__username=username, secret_key=secret_key)
 
         if p:
             p.facebook_uid = uid
             p.save()
-            message = "You are authenticated!"
+            return profile_tab(request, registered=True)
+        
         else:
             message = "There was an error :("
 
@@ -30,12 +35,19 @@ def register(request):
 
 @facebook.require_login()
 @render_to('facebook_app/profile_tab.fbml')
-def profile_tab(request):
+def profile_tab(request, registered=False):
+    """
+    Render the profile tab page. This is the main page for this app.
+    If the user is not authenticated, it will redirect to the register
+    view where the sign-up form is rendered.
+    """
     
-    if request.POST:
+    if request.POST.get('username', None) and not registered:
         return register(request)
     
-    uid = request.facebook.uid # 12314662 #
+    ## uid == the uid of the person's profile, not the person
+    ## viewing the app page
+    uid = request.facebook.uid
     
     try:
         user = User.objects.get(profile__facebook_uid=uid)
@@ -51,10 +63,6 @@ def profile_tab(request):
         last_flights = list(Flight.objects.user(user).order_by('-date')[:5])
         last_flights.reverse()
         
-        airport_matches = 9
-        
-        fb_profiles = Profile.objects.filter(facebook_uid__gte=0)
-        
     else:
         return register(request)
     
@@ -64,7 +72,34 @@ def profile_tab(request):
 @render_to('facebook_app/canvas.fbml')
 def canvas(request):
     
+    if request.POST.get('username', None):
+        return register(request)
+    
     users = User.objects.count()
     fb_users = Profile.objects.exclude(facebook_uid="").count()
     
     return locals()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

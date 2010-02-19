@@ -67,6 +67,7 @@ urlpatterns += patterns('',
     (r'^newforum/', include('forum.urls')),
     (r'^histogram/', include('histogram.urls')),
     (r'^kml/', include('maps.kml_urls')),
+    (r'^facebook', include('facebook_app.urls')),
     
     (r'^search/locations\.html$', 'airport.views.search_airport'),
     (r'^search/tailnumbers\.html$', 'plane.views.search_tailnumbers'),
@@ -150,10 +151,7 @@ urlpatterns += patterns('',
     
     ############################ facebook app
     
-    (
-        r'^facebook',
-        include('facebook_app.urls'),
-    ),
+
     
     ############################ graphs
 

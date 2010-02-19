@@ -3,6 +3,10 @@
     td     {padding: 3px}
 </style>
 
+<h2>This user has not yet authenticated themselves properly to use this application</h2>
+<br>
+
+<fb:visible-to-owner>
 <form method="post" action=".">
 <table>
     <tr>
@@ -22,7 +26,7 @@
     </tr>
 <table>
 </form>
-
+</fb:visible-to-owner>
 {% else %}
     {{message}}
 {% endif %}
