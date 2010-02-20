@@ -47,7 +47,7 @@ class UserMixin(object):
             ## in the case of Location and Region, some filtering needs
             ## to be done...
             if routebase_join:
-                kwarg = {"%s__isnull" % self.routebase_join: False}
+                kwarg = {"%s__isnull" % routebase_join: False}
                 return self.filter(**kwarg) ## distinct also should be added...
             
             # don't filter anything for the 'ALL' user,

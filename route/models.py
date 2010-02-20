@@ -672,15 +672,14 @@ def re_render_routes(sender, **kwargs):
     When the user edits their locations, re-render all custom/unknown routes
     """
     
-    instance = kwargs.get('instance', None)
-    
-    if not instance:
-        return
-    
-    print "not return"
-    
+    from django.conf import settings
     from route.models import Route
     
+    instance = kwargs.get('instance', None)
+    
+    if not instance or instance.user.id == settings.COMMON_USER_ID:
+        return
+
     qs = Route.objects\
               .user(instance.user)\
               .filter( models.Q(routebase__location__loc_class=3) | 
