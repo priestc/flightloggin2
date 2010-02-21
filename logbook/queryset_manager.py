@@ -76,6 +76,12 @@ class FlightQuerySet(QuerySet, UserMixin):
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
+
+    def powered(self, f=True):
+        q = Q(plane__cat_class__in=(0, 5)) | Q(plane__cat_class__gte=15)
+        if not f:
+            return self.filter(q)     # these are switched
+        return self.exclude(q)
     
     def curr_fixed_wing(self, f=True):
         """ fixed wing plus airplane sim and airplane FTD
@@ -272,7 +278,8 @@ class FlightQuerySet(QuerySet, UserMixin):
     
     def agg(self, cn, format='decimal', float=False):
         """
-        Aggregate this queryset based on the field passed. Always returns a string
+        Aggregate this queryset based on the field passed.
+        Always returns a string, unless the float argument is True
         """
         
         ret = None
@@ -282,19 +289,26 @@ class FlightQuerySet(QuerySet, UserMixin):
         
         elif cn in EXTRA_AGG:
             if cn == "day":
-                #day is special, so it gets done here instead of 'filter_by_column'
+                # day is special, so it gets done here instead of
+                # 'filter_by_column'
                 night = self.sim(False)._db_agg('night')
                 total = self.sim(False)._db_agg('total')
                 ret = total - night
             
-            if cn == "pic_night":
+            elif cn == 'inst':
+                sim = self.sim(False)._db_agg('act_inst')
+                actual = self.sim(False)._db_agg('sim_inst')
+                ret = sim + actual
+            
+            elif cn == "pic_night":
                 ret = self.all_pic()._db_agg('night')
             
-            if cn == "line_dist":
+            elif cn == "line_dist":
                 ret = self._db_agg('line_dist')
 
-            if not cn.endswith("pic") and not ret:
+            elif not cn.endswith("pic") and not ret:
                 ret = self.filter_by_column(cn)._db_agg('total')
+                
             elif not ret:
                 ret = self.filter_by_column(cn)._db_agg('pic')
             

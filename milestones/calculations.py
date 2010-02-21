@@ -29,10 +29,15 @@ def figure_dual60(qs):
     #filter flights between today and 60 days ago, count dual_r hours
     last_60_days = qs.filter(date__range=(sixty_days_ago, today)).agg('dual_r')
     
+    
+    
     # get the date of the 5th to last dual_r hour
     dual = qs.dual_r().order_by('-date')
     date = get_date_of_5_hours(dual)
     
+    if not date:
+        return
+
     remain = 60 - (datetime.date.today() - date).days
 
     return {
@@ -132,12 +137,12 @@ def p61_commercial(qs):
     data = {
             'total':           (qs.agg('total'),                      250),
             't_powered':       (qs.powered().agg('total'),            100),
-            't_airplane':      (qs.airplane().agg('pic'),              50),
+            't_airplane':      (qs.fixed_wing().agg('pic'),            50),
             'pic':             (qs.agg('pic'),                        100),
-            'pic_airplane':    (qs.airplane().agg('pic'),              50),
+            'pic_airplane':    (qs.fixed_wing().agg('pic'),            50),
             'pic_xc':          (qs.p61_xc().agg('pic'),                50),
-            'airplane_pic_xc': (qs.airplane().p61_xc().agg('pic'),     50),
-            'inst_dual':       (qs.dual().agg('inst'),                 10),
+            'airplane_pic_xc': (qs.fixed_wing().p61_xc().agg('pic'),   50),
+            'inst_dual':       (qs.dual_r().agg('inst'),               10),
             'complex':         (qs.complex().agg('total'),             10),
             }
                  

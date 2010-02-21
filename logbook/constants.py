@@ -81,7 +81,7 @@ EXTRA_AGG = [
           'total', 'total_s', 'p2p', 'complex', 'hp', 'sim', 'day', 'multi',
           "single", "single_pic", 'm_pic', 'sea', 'sea_pic', 'mes', 'mes_pic',
           'turbine', 't_pic', 'mt', 'mt_pic', 'complex', 'hp', 'sim', 'tail',
-          'jet', 'jet_pic', "line_dist", "p61_xc", "atp_xc"
+          'jet', 'jet_pic', "line_dist", "p61_xc", "atp_xc", 'inst',
           ]
 
 # fields that are optionally turned on and off, used to create the big list
