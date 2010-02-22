@@ -33,7 +33,7 @@ def currency(request):
                      
     if Flight.objects.user(request.display_user)\
                      .pseudo_category("fixed_wing")\
-                     .agg('app') > 5:
+                     .agg('app', float=True) > 5:
 
         curr_inst = FAA_Instrument(request.display_user)
         curr_inst.fake_class = "fixed_wing"
@@ -43,7 +43,7 @@ def currency(request):
         
     if Flight.objects.user(request.display_user)\
                      .pseudo_category("helicopter")\
-                     .agg('app') > 5:
+                     .agg('app', float=True) > 5:
                          
         curr_inst = FAA_Instrument(request.display_user)
         curr_inst.fake_class = "helicopter"
@@ -52,7 +52,7 @@ def currency(request):
     
     if Flight.objects.user(request.display_user)\
                      .pseudo_category("glider")\
-                     .agg('app') > 5:
+                     .agg('app', float=True) > 5:
                          
         curr_inst = FAA_Instrument(request.display_user)
         curr_inst.fake_class = "glider"
