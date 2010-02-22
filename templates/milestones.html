@@ -17,6 +17,9 @@
         <tr>
             <td>
                 {{ item.icon|safe }}
+            </td>
+            
+            <td>
                 {% if item.reg %}
                     {{ item.reg }}
                 {% endif %}
@@ -39,7 +42,7 @@
             {% else %}
             
                 <td colspan="2">
-                    {{ item.mine|join:', ' }}
+                    {{ item.mine|safe }}
                 </td>
             
             {% endif %}
@@ -50,10 +53,21 @@
 
 <br>
 <div class="instructions">
-1: Includes up to 25 hours for each night landing after 20 total. <em>§ 61.159(5)(b)</em><br>
-2: Includes up to 50 hours of instrument time in a Simulator/FTD/PCATD <em>§ 61.159(3)(i)</em><br>
-3: Total time for any flight that depicts a landing at more than one unique airport, regardless of length. (may not be logged as 'XC')<br>
-4: Total time for any flight that depicts a route of more than 50 NM (may not be logged as 'XC')
+* Don't worry, FlightLogg.in's method of finding these flights is not perfect.
+If you logged the flight in question across more than one entry, FlightLogg.in'
+will not recognize it and will display "Not Found".
+<br><br>
+** FlightLogg.in' has no way of knowing if you have this requirement met due
+to the limitations of the way flights are logged. This requirement is listed
+here for completeness.
+<br><br>
+{% if private.dual_60.valid %}
+*** You are good to go for 5 hours of dual for the next
+<strong>{{ private.dual_60.days }}</strong> days
+{% else %}
+*** You lost your 60 day dual currency
+<strong>{{ private.dual_60.days }}</strong> days ago
+{% endif %}
 </div>
 
 {% endblock %}

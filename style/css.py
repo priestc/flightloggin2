@@ -747,6 +747,9 @@ table.milestone_table td     {text-align: left; padding-left: 10px}
 
 /* already met */
 .v                           {color: green}
+
+/* don't know */
+.q                           {color: purple; font-weight: bold}
 """
 
 ###############################################################################

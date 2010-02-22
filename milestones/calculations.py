@@ -8,56 +8,12 @@ from logbook.models import Flight
 from logbook.constants import FIELD_TITLES
 from route.models import Route
         
-def figure_dual60(qs):
-    """
-    Determine on what date your 60 days will expire
-    (Used in all part 61 milestones) Also will get the total number of
-    dual hours you've logged in the past 60 days
-    """
-    
-    def get_date_of_5_hours(qs):
-        """
-        A seperate function so we can return out of the for loop
-        """
-        
-        total_dual = 0
-        for flight in qs:
-            total_dual += flight.dual_r
-            if total_dual > 5:
-                return flight.date
-    
-    # calculate 60 days ago from today
-    today = datetime.date.today()
-    sixty_days_ago = today - datetime.timedelta(days=60)
-    
-    #filter flights between today and 60 days ago, count dual_r hours
-    last_60_days = qs.filter(date__range=(sixty_days_ago, today)).agg('dual_r')
-    
-    
-    
-    # get the date of the 5th to last dual_r hour
-    dual = qs.dual_r().order_by('-date')
-    date = get_date_of_5_hours(dual)
-    
-    if not date:
-        return
-
-    remain = 60 - (datetime.date.today() - date).days
-
-    return SortedDict({
-                'dual_r':           last_60_days,
-                'goal_dual_r':      5,
-                'sixty_days_valid': remain > 0,
-                'days':             remain,
-                'overall':          V if remain > 0 else X,
-           })
-
-
 class Milestone(object):
     
     # checkmark and 'X' icons
     V = '<span class="v">&#10003;</span>'
     X = '<span class="x">&#10005;</span>'
+    Q = '<span class="q">?</span>'
 
     def __init__(self, user):
         
@@ -71,7 +27,11 @@ class Milestone(object):
         self.nosim = self.all.sim(False)
         self.onlysim = self.all.sim(True)
         
+        self.dual_60 = self.figure_dual_60()
+        
         self.result = self.determine(self.calculate())
+        
+        
         
         try:
             self.relevent()
@@ -111,15 +71,21 @@ class Milestone(object):
             # if the goal is a boolean, and my value matches, then use
             # values that will guarantee a pass in the next if block
             if isinstance(goal, bool) and bool(mine) == goal:
-                mine = 2
-                goal = 1
-                obj['bool'] = True
-            elif isinstance(goal, bool) and bool(mine) != goal:
-                mine = 0
-                goal = 1
+                obj['icon'] = self.V
+                obj['mine'] = " ".join(obj['mine'])
                 obj['bool'] = True
                 
-            if float(mine) >= float(goal):
+            elif isinstance(goal, bool) and bool(mine) != goal:
+                obj['icon'] = self.Q
+                obj['mine'] = "<em>Not Found</em> *"
+                obj['bool'] = True
+                
+            elif goal == "?":
+                obj['icon'] = self.Q
+                obj['mine'] = "<em>Unknown</em> **"
+                obj['bool'] = True
+                
+            elif float(mine) >= float(goal):
                 # the requirement is met
                 obj['icon'] = self.V
             else:
@@ -141,6 +107,51 @@ class Milestone(object):
         return result
 
 
+    def figure_dual_60(self):
+        """
+        Determine on what date your 60 days will expire
+        (Used in all part 61 milestones) Also will get the total number of
+        dual hours you've logged in the past 60 days
+        """
+        
+        qs = self.all
+        
+        def get_date_of_5_hours(qs):
+            """
+            A seperate function so we can return out of the for loop
+            """
+            
+            total_dual = 0
+            for flight in qs:
+                total_dual += flight.dual_r
+                if total_dual > 5:
+                    return flight.date
+        
+        # calculate 60 days ago from today
+        today = datetime.date.today()
+        sixty_days_ago = today - datetime.timedelta(days=60)
+        
+        #filter flights between today and 60 days ago, count dual_r hours
+        last_60_days = qs.filter(date__range=(sixty_days_ago, today)).agg('dual_r')
+        
+        
+        
+        # get the date of the 5th to last dual_r hour
+        dual = qs.dual_r().order_by('-date')
+        date = get_date_of_5_hours(dual)
+        
+        if not date:
+            return
+
+        remain = 60 - (datetime.date.today() - date).days
+
+        return {
+                    'dual_r':    last_60_days,
+                    'valid':     remain > 0,
+                    'days':      abs(remain),
+                    'overall':   self.V if remain > 0 else self.X,
+               }
+
 class Part61_Private(Milestone):
     
     top_title = "Part 61 Private Pilot Certificate"
@@ -159,7 +170,7 @@ class Part61_Private(Milestone):
                            .filter(c__gt=3)\
                            .order_by('-flight__date')[:1]
        
-        long_xc = ["%s - %s" % (format(x.flight.all()[0].date, "Y-m-d"),
+        long_xc = ["<b>%s</b> %s" % (format(x.flight.all()[0].date, "Y-M-d"),
                                  x.simple_rendered) for x in long_xc]
         
         #######
@@ -169,7 +180,7 @@ class Part61_Private(Milestone):
                            .filter(total_line_land__gte=100)\
                            .order_by('-flight__date')[:1]
        
-        night_xc = ["%s - %s" % (format(x.flight.all()[0].date, "Y-m-d"),
+        night_xc = ["<b>%s</b> %s" % (format(x.flight.all()[0].date, "Y-M-d"),
                                  x.simple_rendered) for x in night_xc] 
         
         ##################################################################
@@ -222,6 +233,13 @@ class Part61_Private(Milestone):
                                     display="Dual Instrument",
                                     reg="61.109(%s)(3)" % self.reg_letter
                                 )
+        
+        self.data["dual_60"] =  dict(
+                                    mine=self.dual_60['dual_r'],
+                                    goal=5,
+                                    display="Dual Last 60 days ***",
+                                    reg="61.109(%s)(4)" % self.reg_letter
+                                )
                                 
         self.data["solo"] =     dict(
                                     mine=qs.agg('solo'),
@@ -243,7 +261,13 @@ class Part61_Private(Milestone):
                                     display="Long Dual XC",
                                     reg="61.109(%s)(5)(ii)" % self.reg_letter
                                 )
- 
+                                
+        self.data["tower_l"] =  dict(
+                                    mine="?",
+                                    goal="?",
+                                    display="3 Fullstops at a Controlled Airfield",
+                                    reg="61.109(%s)(5)(iii)" % self.reg_letter
+                                )
         return self.data
 
 
@@ -483,16 +507,16 @@ class ATP(Milestone):
                                         reg="61.159(a)",
                                  )
                                 
-        self.data['night'] =     dict(
-                                        mine=disp_night,
-                                        goal=100,
-                                        reg="61.159(a)(2)",
-                                 )
-                                 
         self.data['atp_xc'] =    dict(
                                         mine=self.nosim.agg('atp_xc'),
                                         goal=500,
                                         reg="61.159(a)(1)",
+                                 )
+                                 
+        self.data['night'] =     dict(
+                                        mine=disp_night,
+                                        goal=100,
+                                        reg="61.159(a)(2)",
                                  )
                                         
         self.data['inst'] =      dict(
