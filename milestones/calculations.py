@@ -116,7 +116,7 @@ class Milestone(object):
         
         qs = self.all
         
-        def get_date_of_5_hours(qs):
+        def get_date_of_3_hours(qs):
             """
             A seperate function so we can return out of the for loop
             """
@@ -124,7 +124,7 @@ class Milestone(object):
             total_dual = 0
             for flight in qs:
                 total_dual += flight.dual_r
-                if total_dual > 5:
+                if total_dual > 3:
                     return flight.date
         
         # calculate 60 days ago from today
@@ -138,7 +138,7 @@ class Milestone(object):
         
         # get the date of the 5th to last dual_r hour
         dual = qs.dual_r().order_by('-date')
-        date = get_date_of_5_hours(dual)
+        date = get_date_of_3_hours(dual)
         
         if not date:
             return
@@ -236,7 +236,7 @@ class Part61_Private(Milestone):
         
         self.data["dual_60"] =  dict(
                                     mine=self.dual_60['dual_r'],
-                                    goal=5,
+                                    goal=3,
                                     display="Dual Last 60 days ***",
                                     reg="61.109(%s)(4)" % self.reg_letter
                                 )
