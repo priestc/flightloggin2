@@ -7,14 +7,14 @@ def milestones(request):
     from logbook.models import Flight
     from calculations import *
     
-    qs = Flight.objects.user(request.display_user)
+    user = request.display_user
     
-    part135 = part135ifr(qs)
-    part135v = part135vfr(qs)
-    atp = atp_calc(qs)
-    private = p61_private(qs)
-    
-    dual60 = figure_dual60(qs)
+    part135 =   Part135_IFR(user)
+    part135v =  Part135_VFR(user)
+    atp =       ATP(user)
+    private =   Part61_Private(user)
+
+    currencies = [private, part135v, part135, atp]
         
     
     return locals()
