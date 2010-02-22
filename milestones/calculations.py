@@ -117,7 +117,8 @@ class Milestone(object):
             elif isinstance(goal, bool) and bool(mine) != goal:
                 mine = 0
                 goal = 1
-
+                obj['bool'] = True
+                
             if float(mine) >= float(goal):
                 # the requirement is met
                 obj['icon'] = self.V
@@ -138,6 +139,112 @@ class Milestone(object):
             self.overall_icon = self.V
                     
         return result
+
+
+class Part61_Private(Milestone):
+    
+    top_title = "Part 61 Private Pilot Certificate"
+    reg_letter = "a"
+    
+    def calculate(self):
+        """
+        Determine Part 61.109 (private pilot) milestones
+        """
+        
+        # solo 3-point XC where max_width>50 and total dist is more than 150
+        long_xc = Route.objects.filter(flight__in=self.nosim.solo())\
+                           .filter(max_width_land__gte=49)\
+                           .filter(total_line_all__gte=150)\
+                           .annotate(c=Count('routebase__land'))\
+                           .filter(c__gt=3)\
+                           .order_by('-flight__date')[:1]
+       
+        long_xc = ["%s - %s" % (format(x.flight.all()[0].date, "Y-m-d"),
+                                 x.simple_rendered) for x in long_xc]
+        
+        #######
+        
+        # long dual night XC more than 100 miles
+        night_xc = Route.objects.filter(flight__in=self.nosim.dual_r().night())\
+                           .filter(total_line_land__gte=100)\
+                           .order_by('-flight__date')[:1]
+       
+        night_xc = ["%s - %s" % (format(x.flight.all()[0].date, "Y-m-d"),
+                                 x.simple_rendered) for x in night_xc] 
+        
+        ##################################################################
+        
+        qs = self.nosim
+        
+        self.data["total"] =    dict(
+                                    mine=qs.agg('total'),
+                                    goal=40,
+                                    reg="61.109(%s)" % self.reg_letter
+                                )
+                                
+        self.data["dual_r"] =   dict(
+                                    mine=qs.agg('dual_r'),
+                                    goal=20,
+                                    reg="61.109(%s)" % self.reg_letter
+                                )
+                                
+        self.data["xc"] =       dict(
+                                    mine=qs.dual_r().agg('p61_xc'),
+                                    goal=3,
+                                    display="Dual Part 61 XC",
+                                    reg="61.109(%s)(1)" % self.reg_letter
+                                )
+                                
+        self.data["night"] =    dict(
+                                    mine=qs.agg('night'),
+                                    goal=3,
+                                    display="",
+                                    reg="61.109(%s)(2)" % self.reg_letter
+                                )
+                                
+        self.data["night_xc"] = dict(
+                                     mine=night_xc,
+                                     goal=True,
+                                     display="100NM Night XC",
+                                     reg="61.109(%s)(2)(i)" % self.reg_letter
+                                )                        
+                                
+        self.data["night_l"] =  dict(
+                                    mine=qs.agg('night_l'),
+                                    goal=10,
+                                    display="",
+                                    reg="61.109(%s)(2)(ii)" % self.reg_letter
+                                )
+                                
+        self.data["inst"] =     dict(
+                                    mine=qs.dual_r().agg('inst'),
+                                    goal=3,
+                                    display="Dual Instrument",
+                                    reg="61.109(%s)(3)" % self.reg_letter
+                                )
+                                
+        self.data["solo"] =     dict(
+                                    mine=qs.agg('solo'),
+                                    goal=10,
+                                    display="",
+                                    reg="61.109(%s)(5)" % self.reg_letter
+                                )
+                                
+        self.data["solo_xc"] =  dict(
+                                    mine=qs.solo().agg('p61_xc'),
+                                    goal=5,
+                                    display="Solo Part 61 XC",
+                                    reg="61.109(%s)(5)(i)" % self.reg_letter
+                                )        
+                                    
+        self.data["long_xc"] =  dict(
+                                    mine=long_xc,
+                                    goal=True,
+                                    display="Long Dual XC",
+                                    reg="61.109(%s)(5)(ii)" % self.reg_letter
+                                )
+ 
+        return self.data
 
 
 class Part61_Commercial(Milestone):
@@ -245,6 +352,9 @@ class Part61_Commercial(Milestone):
         return self.data
 
 
+####################################################################
+####################################################################
+
 class Part135_IFR(Milestone):
     
     top_title = "Part 135 PIC"
@@ -297,112 +407,6 @@ class Part135_IFR(Milestone):
         return self.data
 
 
-class Part61_Private(Milestone):
-    
-    top_title = "Part 61 Private Pilot Certificate"
-    reg_letter = "a"
-    
-    def calculate(self):
-        """
-        Determine Part 61.109 (private pilot) milestones
-        """
-        
-        # solo 3-point XC where max_width>50 and total dist is more than 150
-        long_xc = Route.objects.filter(flight__in=self.nosim.solo())\
-                           .filter(max_width_land__gte=49)\
-                           .filter(total_line_all__gte=150)\
-                           .annotate(c=Count('routebase__land'))\
-                           .filter(c__gt=3)\
-                           .order_by('-flight__date')[:1]
-       
-        long_xc = ["%s - %s" % (format(x.flight.all()[0].date, "Y-m-d"),
-                                 x.simple_rendered) for x in long_xc]
-        
-        #######
-        
-        # long dual night XC more than 100 miles
-        night_xc = Route.objects.filter(flight__in=self.nosim.dual_r().night())\
-                           .filter(total_line_land__gte=100)\
-                           .order_by('-flight__date')[:1]
-       
-        night_xc = ["%s - %s" % (format(x.flight.all()[0].date, "Y-m-d"),
-                                 x.simple_rendered) for x in night_xc] 
-        
-        ##################################################################
-        
-        qs = self.nosim
-        
-        self.data["total"] =    dict(
-                                    mine=qs.agg('total'),
-                                    goal=40,
-                                    reg="61.109(%s)" % self.reg_letter
-                                )
-                                
-        self.data["dual_r"] =   dict(
-                                    mine=qs.agg('dual_r'),
-                                    goal=20,
-                                    reg="61.109(%s)" % self.reg_letter
-                                )
-                                
-        self.data["xc"] =       dict(
-                                    mine=qs.dual_r().agg('p61_xc'),
-                                    goal=3,
-                                    display="Dual Part 61 XC",
-                                    reg="61.109(%s)(1)" % self.reg_letter
-                                )
-                                
-        self.data["night"] =    dict(
-                                    mine=qs.agg('night'),
-                                    goal=3,
-                                    display="",
-                                    reg="61.109(%s)(2)" % self.reg_letter
-                                )
-                                
-        self.data["night_xc"] = dict(
-                                     mine=night_xc,
-                                     goal=True,
-                                     display="Night XC",
-                                     reg="61.109(%s)(2)(i)" % self.reg_letter
-                                )                        
-                                
-        self.data["night_l"] =  dict(
-                                    mine=qs.agg('night_l'),
-                                    goal=10,
-                                    display="",
-                                    reg="61.109(%s)(2)(ii)" % self.reg_letter
-                                )
-                                
-        self.data["inst"] =     dict(
-                                    mine=qs.dual_r().agg('inst'),
-                                    goal=3,
-                                    display="Dual Instrument",
-                                    reg="61.109(%s)(3)" % self.reg_letter
-                                )
-                                
-        self.data["solo"] =     dict(
-                                    mine=qs.agg('solo'),
-                                    goal=10,
-                                    display="",
-                                    reg="61.109(%s)(5)" % self.reg_letter
-                                )
-                                
-        self.data["solo_xc"] =  dict(
-                                    mine=qs.solo().agg('p61_xc'),
-                                    goal=5,
-                                    display="Solo Part 61 XC",
-                                    reg="61.109(%s)(5)(i)" % self.reg_letter
-                                )        
-                                    
-        self.data["long_xc"] =  dict(
-                                    mine=long_xc,
-                                    goal=True,
-                                    display="Long Dual XC",
-                                    reg="61.109(%s)(5)(ii)" % self.reg_letter
-                                )
- 
-        return self.data
-
-
 class Part135_VFR(Milestone):
     
     top_title = "Part 135 PIC (VFR Only)"
@@ -433,7 +437,8 @@ class Part135_VFR(Milestone):
         
         return self.data
 
-
+#####################################################################
+#####################################################################
 
 class ATP(Milestone):
     
