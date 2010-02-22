@@ -27,12 +27,14 @@ def currency(request):
         del cert_currbox
     
     ############################################ instrument below
+    # display inst currency after you have logged 5 approaches
     
-    inst_out = []
-    
-    
+    inst_out = []                   
+                     
     if Flight.objects.user(request.display_user)\
-                     .pseudo_category("fixed_wing").app().count() > 5:
+                     .pseudo_category("fixed_wing")
+                     .agg('app') > 5:
+
         curr_inst = FAA_Instrument(request.display_user)
         curr_inst.fake_class = "fixed_wing"
         cb = InstCurrBox(curr_inst, "Fixed Wing")
@@ -40,14 +42,18 @@ def currency(request):
         cb.render()
         
     if Flight.objects.user(request.display_user)\
-                     .pseudo_category("helicopter").app().count() > 5:
+                     .pseudo_category("helicopter")
+                     .agg('app') > 5:
+                         
         curr_inst = FAA_Instrument(request.display_user)
         curr_inst.fake_class = "helicopter"
         cb = InstCurrBox(curr_inst, "Helicopter")
         inst_out.append(cb)
     
     if Flight.objects.user(request.display_user)\
-                     .pseudo_category("glider").app().count() > 5:
+                     .pseudo_category("glider")\
+                     .agg('app') > 5:
+                         
         curr_inst = FAA_Instrument(request.display_user)
         curr_inst.fake_class = "glider"
         cb = InstCurrBox(curr_inst, "Glider")
@@ -60,6 +66,7 @@ def currency(request):
                        .exclude(cat_class=0)\
                        .values_list('cat_class', flat=True)\
                        .order_by().distinct()
+                       
     cat_classes_out = []
     for item in cat_classes:
         currbox = LandCurrBox(cat_class=item)
