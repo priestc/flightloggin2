@@ -32,7 +32,7 @@ def currency(request):
     inst_out = []                   
                      
     if Flight.objects.user(request.display_user)\
-                     .pseudo_category("fixed_wing")
+                     .pseudo_category("fixed_wing")\
                      .agg('app') > 5:
 
         curr_inst = FAA_Instrument(request.display_user)
@@ -42,7 +42,7 @@ def currency(request):
         cb.render()
         
     if Flight.objects.user(request.display_user)\
-                     .pseudo_category("helicopter")
+                     .pseudo_category("helicopter")\
                      .agg('app') > 5:
                          
         curr_inst = FAA_Instrument(request.display_user)
