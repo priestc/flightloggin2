@@ -13,8 +13,9 @@ def milestones(request):
     part135v =  Part135_VFR(u)
     atp =       ATP(u)
     private =   Part61_Private(u)
+    comm =      Part61_SE_Commercial(u)
 
-    currencies = [private, part135v, part135, atp]
+    currencies = [private, comm, part135v, part135, atp]
     
     del u   
     
