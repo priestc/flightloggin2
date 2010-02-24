@@ -317,7 +317,7 @@ class Part61_FixedWing_Commercial(Part61_Commercial):
         """
         
         # solo 3-point XC where max_width>50 and total dist is more than 300
-        long_solo_xc = Route.objects.filter(flight__in=self.all.dual_r())\
+        long_solo_xc = Route.objects.filter(flight__in=self.all.solo())\
                            .filter(max_width_land__gte=249)\
                            .filter(total_line_all__gte=300)\
                            .annotate(c=Count('routebase__land'))\
