@@ -117,6 +117,8 @@ class Currency(object):
         #if theres only one date, return it
         if len(dates) == 1:
             return dates[0]
+        elif len(dates) == 0:
+            return None
         
         #there are more than one date, return the highest
         return max(*dates)

@@ -36,7 +36,7 @@ class CurrBox(object):
             ret = "Last day of currency: <strong>%s</strong><br>(%s Days ago)</p>"
         
         elif status == "NEVER":
-            return "<p>You do not have 3 landings</p>"
+            return "<p>You do not have %s</p>" % self.bottom_message_text
         
         elif status in ("CURRENT", "ALERT"):
             ret = "Last day of currency: <strong>%s</strong><br>(%s Days remain)</p>"
@@ -60,6 +60,7 @@ class CurrBox(object):
 class LandCurrBox(CurrBox):
         
     top_message_text = "third-to-last landing"    
+    bottom_message_text = "3 landings"
     
     def render(self):  
         
@@ -167,7 +168,8 @@ class MediCurrBox(CurrBox):
 class CertsCurrBox(CurrBox):
     
     top_message_text = "renewal event"
-             
+    bottom_message_text = "any qualifying events"
+        
     def render(self):
         
         cfi_status = self.currency.cfi_status.lower()

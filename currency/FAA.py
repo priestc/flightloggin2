@@ -159,10 +159,23 @@ class FAA_Landing(FAACurrency):
 
 class FAA_Certs(FAACurrency):
     
+    def __init__(self, *args, **kwargs):
+        self.cfi_start = None
+        self.bfr_start = None
+        super(FAA_Certs, self).__init__(*args, **kwargs)
+    
     def eligible(self):
-        return True
+        """
+        Returns true if there is either a cfi event or a bfr event in the
+        user's logbook
+        """
+        return self.get_bfr() or self.get_cfi()
     
     def calculate(self):
+        if not self.cfi_start and self.bfr_start:
+            self.get_bfr()
+            self.get_cfi()
+        
         self.calc_bfr()
         self.calc_cfi()
 
@@ -194,6 +207,8 @@ class FAA_Certs(FAACurrency):
             pass
         
         self.cfi_start = self.latest(refresher_date, checkride_date)
+        
+        return self.cfi_start
 
     def get_bfr(self):
         
@@ -224,12 +239,10 @@ class FAA_Certs(FAACurrency):
             pass
             
         self.bfr_start = self.latest(event_date, flight_date)
+        
+        return self.bfr_start
 
     def calc_bfr(self):
-
-        self.get_bfr()
-
-        ############
 
         if not self.bfr_start:
             tup = ("NEVER", None)
@@ -239,12 +252,8 @@ class FAA_Certs(FAACurrency):
         self.bfr_status, self.bfr_end = tup
         
         self.days('bfr')
-
-    ###########################################################################
     
     def calc_cfi(self):
-
-        self.get_cfi()
 
         if not self.cfi_start:
             tup = ("NEVER", None)
@@ -255,13 +264,13 @@ class FAA_Certs(FAACurrency):
         
         self.days('cfi')
     
-    ###########################################################################
+###############################################################################
 
 class FAA_Instrument(FAACurrency):
     
     def __init__(self, *args, **kwargs):
         if 'fake_class' not in kwargs.keys():
-            raise RuntimeError('Instrument Currency class must be initialized with afake class')
+            raise RuntimeError('Instrument Currency class must be initialized with a fake class')
         
         self.fake_class = kwargs.pop('fake_class')
         super(FAA_Instrument, self).__init__(*args, **kwargs)
@@ -400,7 +409,7 @@ class FAA_Instrument(FAACurrency):
 class FAA_Medical(FAACurrency):
     
     def eligible(self):
-        return True
+        return self.get_last_medical()
     
     def calculate_over_40(self):
         from profile.models import Profile
@@ -430,9 +439,15 @@ class FAA_Medical(FAACurrency):
         except NonFlight.DoesNotExist:
             self.exam_class = None
             self.exam_date = None
+            
+        return self.exam_class
     
-    def calculate(self):         
-        self.get_last_medical()
+    def calculate(self):
+        
+        # don't want to calculate this twice
+        if not self.exam_class:
+            self.get_last_medical()
+            
         self.calculate_over_40()
         
         self.calc_first_class()
