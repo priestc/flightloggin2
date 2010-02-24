@@ -316,6 +316,11 @@ class Part61_FixedWing_Commercial(Part61_Commercial):
         certificate milestones
         """
         
+        self.cat_class_qs = self.all.filter(plane__cat_class__in=self.cat_class)
+        self.dual_60 = self.figure_dual_60(cat_class=self.cat_class)
+        
+        ######
+        
         # solo 3-point XC where max_width>50 and total dist is more than 300
         long_solo_xc = Route.objects.filter(flight__in=self.all.solo())\
                            .filter(max_width_land__gte=249)\
@@ -330,18 +335,18 @@ class Part61_FixedWing_Commercial(Part61_Commercial):
         
         #######
         
-#        # long dual night XC more than 100 miles
-#        night_xc = Route.objects.filter(flight__in=self.all.dual_r().night())\
-#                           .filter(total_line_land__gte=100)\
-#                           .order_by('-flight__date')[:1]
-#       
-#        # format the display of this requirement
-#        night_xc = ["%s - %s" % (format(x.flight.all()[0].date, "Y-m-d"),
-#                                 x.simple_rendered) for x in night_xc]
+        # long dual night XC more than 100 miles
+        f = self.cat_class_qs.dual_r().total(gt=2).night()
+        dual_night_xc = Route.objects.filter(flight__in=f)\
+                           .filter(total_line_land__gte=100)\
+                           .order_by('-flight__date')[:1]
+       
+        # format the display of this requirement
+        dual_night_xc = ["<b>%s</b> - %s" % (format(x.flight.all()[0].date, "Y-m-d"),
+                                 x.simple_rendered) for x in dual_night_xc]
         
         ##################################################################
-        self.cat_class_qs = self.all.filter(plane__cat_class__in=self.cat_class)
-        self.dual_60 = self.figure_dual_60(cat_class=self.cat_class)
+
         
         # get requirements from the parent classes
         data = self.base_requirements()
@@ -408,6 +413,13 @@ class Part61_FixedWing_Commercial(Part61_Commercial):
                         display="Dual Complex",
                         goal=10,
                         reg="61.129(%s)(3)(ii)" % self.reg_letter,
+                    ),
+                    
+                    dict(
+                        mine=dual_night_xc,
+                        display="Dual Long Night XC",
+                        goal=True,
+                        reg="61.129(%s)(3)(iv)" % self.reg_letter,
                     ),
                     
                     dict(
