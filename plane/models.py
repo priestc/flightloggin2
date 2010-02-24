@@ -43,6 +43,20 @@ class Plane(models.Model, GoonMixin):
     def reverse_plane_regex(cls):
         return '[^' + cls.plane_regex[1:]
     
+    @classmethod
+    def currency_types(cls, user):
+        return tuple(cls.objects.user(user)\
+                          .filter(
+                               models.Q(tags__icontains='tr') |
+                               models.Q(tags__icontains='type rating') |
+                               models.Q(tags__icontains='currency')
+                           )\
+                           .values_list('type', flat=True)\
+                           .order_by()\
+                           .distinct()
+                )
+        
+    
     def save(self, *args, **kwargs):
         """Automatically fill in make/models if they are not already supplied
            and then save the object to the database

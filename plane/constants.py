@@ -25,3 +25,22 @@ FAKE_CLASSES = (
     (20, "Tailwheel Single-Engine"),
     (21, "Tailwheel Multi-Engine"),
 )
+
+CURRENCIES = (
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    "1tw",
+    "2tw"
+)

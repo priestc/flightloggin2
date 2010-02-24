@@ -13,32 +13,24 @@
 
 {#################################################}
 
-{% for currbox in cat_classes_out %}
+{% for currbox in land_out %}
     {% if forloop.first %}
         <h2>Category/Class:</h2>
     {% endif %}
 
-    {{currbox.render}} 
+    {{currbox.render}}
+    
 {% endfor %}
 
 {#################################################}
 
-{% for currbox in tailwheels_out %}
-    {% if forloop.first %}
-        <h2>Tailwheel:</h2>
-    {% endif %}
-
-    {{currbox.render}} 
-{% endfor %}
-
-{#################################################}
-
-{% for currbox in types_out %}
+{% for currbox in type_out %}
     {% if forloop.first %}
         <h2>Types:</h2>
     {% endif %}
 
     {{currbox.render}} 
+    
 {% endfor %}
 
 {#################################################}
@@ -48,27 +40,32 @@
         <h2>Instrument:</h2>
     {% endif %}
 
-    {{currbox.render}} 
+    {{currbox.render}}
+    
 {% endfor %}
 
 {#################################################}
 
-{% if cert_currbox %}
+{% if cert_out %}
+
     <h2>Certificates:</h2>
-    {{cert_currbox.render}}
+    {{cert_out.0.render}}
+    
 {% endif %}
 
 {#################################################}
 
 
-{% if medi_currbox %}
+{% if medi_out %}
+
     <h2>Medical:</h2>
-    {{medi_currbox.render}}
+    {{ medi_out.0.render }}
+    
 {% endif %}
 
 {#################################################}
 
-{% if not types_out and not tailwheels_out and not cat_classes_out and not medi_currbox and not certs_out %}
+{% if not type_out and not land_out and not medi_out and not cert_out %}
 <div class="nothing">Nothing to show here, sorry.</div>
 {% endif %}
 

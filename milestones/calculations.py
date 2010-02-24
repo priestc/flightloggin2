@@ -143,6 +143,7 @@ class Milestone(object):
         date = get_date_of_3_hours(dual)
         
         if not date:
+            # logbook has no dual flights, return nothing
             return {}
 
         remain = 60 - (datetime.date.today() - date).days
@@ -359,6 +360,7 @@ class Part61_FixedWing_Commercial(Part61_Commercial):
                         goal=50,
                         reg="61.129(%s)(1)" % self.reg_letter,
                     ),
+                    
                     dict(
                         mine=self.all.agg('pic'),
                         goal=100,

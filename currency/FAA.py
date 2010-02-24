@@ -1,6 +1,5 @@
 import re
-from datetime import *
-from dateutil.relativedelta import *
+import datetime
 
 from django.db.models import Q
 
@@ -8,295 +7,302 @@ from plane.models import Plane
 from logbook.models import Flight
 from records.models import NonFlight
 
-def latest(*args):
-    """return the latest date"""
-    dates = []
-    for arg in args:
-        if arg: dates.append(arg)
-    
-    if len(dates) == 1:     #if theres only one date, return it
-        return dates[0]
-    
-    return max(*dates)      #there are more than one date, return the highest
+from currency import Currency
 
-def minus_alert(alert_time, expire):
-    try:
-        number, unit = re.match("^(\d+)([a-z]+)$", alert_time).groups()
-    except:
-        raise ValueError("FL: Invalid unit formatting")
-    
-    number = int(number)
-        
-    if unit == "d":
-        return expire - timedelta(days=number)
-    else:
-        raise NotImplementedError("FL: Not yet")
-        
-#######################################
-
-def get_date(expire_time, start):
-    try:
-        number, unit = re.match("^(\d+)([a-z]+)$", expire_time).groups()
-    except:
-        raise ValueError("FL: Invalid unit formatting")
-    
-    number = int(number)
-        
-    if unit == "d":
-        return timedelta(days=number) + start
-        
-    elif unit == "m":
-        return timedelta(months=number) + start
-
-    elif unit == "y":
-        return start + relativedelta(years=+number)
-
-    elif unit == "cm":  #calendar months
-        return (start + relativedelta(months=+number + 1))\
-                    .replace(day=1) + relativedelta(days=-1)
-        
-    else:
-        raise ValueError("FL: Invalid unit formatting")
-            
-########################################
-########################################
-
-class Currency(object):
-    
+class FAACurrency(Currency):
     CURRENCY_DATA = {
-                        "40":                  ("40y", "30d"),
-                        
-                        "flight_instructor":   ("24cm", "30d"),
-                        "landings":            ("90d", "10d"),
-                        "flight_review":       ("24cm", "30d"),
-                        
-                        "first_over":          ("6cm", "30d"),
-                        "second_over":         ("12cm", "30d"),
-                        "third_over":          ("24cm", "30d"),
-                        
-                        "instrument":          ("6cm", "30d"),
-                        "ipc":                 ("6cm", "30d"),
-             # time after instrument currency ends where an IPC is required
-                        "need_ipc":            ("6cm", "30d"),
-                        
-            # the time elapsed from the original exam
-            #date for each downgrade in calendar months
-                        "first_under":         ("12cm", "30d"),
-                        "second_under":        ("12cm", "30d"),
-                        "third_under":         ("60cm", "30d")
-                    }
-    
-    def __init__(self, user, today=None):
-        self.user=user
+        "40":                  ("40y", "30d"),
         
-        if not today:
-            self.TODAY = date.today()
-    
-    def _determine(self, method, start_date, as_of_date=None):
-        """determine if the current date is before, after,
-        or in the expire timeframe, or the alert timeframe."""
+        "flight_instructor":   ("24cm", "30d"),
+        "landings":            ("90d", "10d"),
+        "flight_review":       ("24cm", "30d"),
         
-        if not start_date:
-            return ("NEVER", None)
+        "instrument":          ("6cm", "30d"),
+        "ipc":                 ("6cm", "30d"),
         
-        #get the alert and expire times based on the master dict
-        expire_time   =   self.CURRENCY_DATA[method][0]
-        alert_time    =   self.CURRENCY_DATA[method][1]
+        # time after instrument currency ends where an IPC is required
+        "need_ipc":            ("6cm", "30d"),
         
-        expire_date = get_date(expire_time, start_date)
-        alert_date = minus_alert(alert_time, expire_date)
+        # the time elapsed from the original exam
+        #date for each downgrade in calendar months
+        "first_under":         ("12cm", "30d"),
+        "second_under":        ("12cm", "30d"),
+        "third_under":         ("60cm", "30d"),
         
-        if not as_of_date:
-            as_of_date = self.TODAY
+        "first_over":          ("6cm", "30d"),
+        "second_over":         ("12cm", "30d"),
+        "third_over":          ("24cm", "30d"),
+    }
 
-        #today is later than expire date, EXPIRED
-        if as_of_date > expire_date:
-            return ("EXPIRED", expire_date)
+class FAA_Landing(FAACurrency):
+
+    def __init__(self, *args, **kwargs):
+        self.item = kwargs.pop('item')
+        self.qs = None
+        self.tail = False
+        self.cat_class = None
+        super(FAA_Landing, self).__init__(*args, **kwargs)
+
+    def figure_from_item(self):
+        """
+        split up the string 'item' value into three variables:
+        type rating (bool), cat class (int), tailwheel (bool)
+        """
         
-        #today is later than alert, but not past expired date, ALERT
-        elif as_of_date <= expire_date and as_of_date >= alert_date:
-            return ("ALERT", expire_date)
+        if type(self.item) is type(1):
+            # its a category/class
+            self.cat_class = self.item
+            return None, self.item, False
         
-        #today is before expire date, and before alert date, CURRENT
-        elif as_of_date <= expire_date and as_of_date < alert_date:
-            return ("CURRENT", expire_date)
+        elif self.item.endswith('tw'):
+            # its a tailwheel
+            self.tail = True # for the currbox
+            self.cat_class = int(self.item[:-2])
+            return None, self.cat_class, True
         
         else:
-            assert False, "Greater than / less than signs off"
-
-class FAA_Landing(Currency):
+            # it must be a type
+            return self.item, None, None
     
-    # (name: duration, alert time) (24 calendar months, 30 days)
-
-    def landing(self, cat_class=0, tr=None, tail=False, night=False):
-        """Returns the date of the third to last day or night landing,
-        and whether or not it qualifies the user to be current"""
+    def eligible(self):
+        """
+        If the user has any flights in the type of plane, then return true
+        """
         
-        if tr:                  # filter by type only
-            if not night:
-                last_three = Flight.objects.user(self.user)\
-                    .filter(plane__type=tr)\
-                    .filter(Q(day_l__gte=1) | Q(night_l__gte=1))\
-                    .order_by('-date')\
-                    .values('date', 'day_l', 'night_l')[:3]
+        tr, cat_class, tail = self.figure_from_item()
+        
+        #starting queryset
+        qs = Flight.objects.user(self.user)
+
             
-            if night:
-                last_three = Flight.objects.user(self.user)\
-                    .filter(plane__type=tr, night_l__gte=1)\
-                    .order_by('-date')\
-                    .values('date', 'night_l')[:3]
-            
-        elif tail and cat_class > 0:  # filter by tailwheel and cat_class
-            plane = Plane.objects.filter(user=self.user,
-                                         cat_class=cat_class,
-                                         tags__icontains="TAILWHEEL")
-            
-            if not night:
-                last_three = Flight.objects.user(self.user)\
-                    .filter(plane__in=plane)\
-                    .filter(Q(day_l__gte=1) | Q(night_l__gte=1))\
-                    .order_by('-date')\
-                    .values('date', 'day_l', 'night_l')[:3]
-                
-            if night:
-                last_three = Flight.objects.user(self.user)\
-                    .filter(plane__in=plane, night_l__gte=1)\
-                    .order_by('-date')\
-                    .values('date', 'night_l')[:3]
-            
-        elif cat_class < 15:  #filter by just cat_class
-            if not night:
-                last_three = Flight.objects.user(self.user)\
-                    .filter(plane__cat_class=cat_class)\
-                    .filter(Q(day_l__gte=1) | Q(night_l__gte=1))\
-                    .order_by('-date')\
-                    .values('date', 'day_l', 'night_l')[:3]
-                
-            if night:
-                last_three = Flight.objects.user(self.user)\
-                    .filter(plane__cat_class=cat_class)\
-                    .filter(night_l__gte=1)\
-                    .order_by('-date')\
-                    .values('date', 'night_l')[:3]
-        else:
-            return "ERROR"
+        if cat_class:
+            # filter by plane cat/class
+            qs = qs.filter(plane__cat_class=cat_class)
+        
+        if tr:               
+            # filter by type rating 
+            qs = qs.filter(plane__type=tr)
+        
+        if tail:
+            qs = qs.filter(plane__tags__icontains="TAILWHEEL")
  
+        self.qs = qs.order_by('-date').values('date', 'day_l', 'night_l')
+        
+        return bool(self.qs)
+
+    def calculate(self):
+        """
+        Returns the date of the third to last day or night landing,
+        and whether or not it qualifies the user to be current
+        """
+        
+        if not self.qs:
+            self.eligible()
+ 
+        night = self.qs.filter(night_l__gte=1)
+        day = self.qs.filter(Q(day_l__gte=1) | Q(night_l__gte=1))
+        
+        self.calc_night(night)
+        self.calc_day(day)
+        
+        return "day: %s" % self.day_status, "night: %s" % self.night_status
+                
+    def calc_day(self, qs):
+        """
+        Calculate day currency by finding the third to last night landing.
+        """
+        
         total = 0
-        for flight in last_three:
+        for flight in qs[:3]:
             total += flight.get('night_l',0) + flight.get('day_l',0)
             if total >= 3:
-                start_date = flight['date']
-                break;
-                
+                self.day_start = flight['date']
+                break;               
+        
         if total < 3:
-            return ("NEVER", None, None)
-            
-        status, end_date = self._determine("landings", start_date)
+            self.day_status = 'NEVER'
+            self.day_end = None
+            self.day_start = None
+        else:
+            self.day_status, self.day_end = \
+                                self._determine("landings", self.day_start)    
+         
+        self.days('day')
         
-        return (status, start_date, end_date)
+        return "day: %s" % self.day_status
 
-class FAA_Certs(Currency):
-
-    has_bfr_event = False
-    has_cfi_event = False
-
-    def flight_review(self):
-
-        try: # get latest checkride or flight review
-            flight_date = Flight.objects\
-                .user(self.user)\
-                .filter(Q(pilot_checkride=True) | Q(flight_review=True))\
-                .values_list("date", flat=True)\
-                .latest()
-                
-            self.has_bfr_event = True
-            
-        except Flight.DoesNotExist:
-            flight_date = None
-            
-        try: ## try to get wings program
-            event_date = NonFlight.objects\
-                                  .filter(user=self.user, non_flying=6)\
-                                  .values_list("date", flat=True)\
-                                  .latest()
-                                      
-            self.pilot_event = True
-        except NonFlight.DoesNotExist:
-            event_date = None
-
-        ############
-
-        if not event_date and not flight_date:
-            return ("NEVER", None, None)
-        
-        start_date = latest(event_date, flight_date)
-        
-        status, end_date = self._determine("flight_review", start_date)
-        return (status, start_date, end_date)
-
-    ###########################################################################
     
-    def flight_instructor(self):
+    def calc_night(self, qs):
+        """
+        Calculate day currency by finding the third to last day or 
+        night landing.
+        """
+        
+        total = 0
+        for flight in qs[:3]:
+            total += flight.get('night_l',0)
+            if total >= 3:
+                self.night_start = flight['date']
+                break;   
+        
+        if total < 3:
+            self.night_status = 'NEVER'
+            self.night_end = None
+            self.night_start = None
+        else:
+            self.night_status, self.night_end = \
+                                self._determine("landings", self.night_start)
+                                
+        self.days('night')
+            
+        return "night: %s" % self.night_status
+
+class FAA_Certs(FAACurrency):
+    
+    def eligible(self):
+        return True
+    
+    def calculate(self):
+        self.calc_bfr()
+        self.calc_cfi()
+
+    def get_cfi(self):
+        
+        checkride_date = None
+        refresher_date = None
+        
         try:
             checkride_date = Flight.objects\
-                    .filter(user=self.user, cfi_checkride=True)\
+                    .user(self.user)\
+                    .filter(cfi_checkride=True)\
                     .values_list("date", flat=True)\
                     .latest()
-                    
-            self.has_cfi_event = True
             
         except Flight.DoesNotExist:
-            checkride_date = None
+            pass
         
         #############################
         
         try:
             refresher_date = NonFlight.objects\
-                    .filter(user=self.user, non_flying=4)\
+                    .user(self.user)\
+                    .filter(non_flying=4)\
                     .values_list("date", flat=True)\
                     .latest()
                     
-            self.cfi = True
         except NonFlight.DoesNotExist:
-            refresher_date = None
+            pass
+        
+        self.cfi_start = self.latest(refresher_date, checkride_date)
+
+    def get_bfr(self):
+        
+        event_date = None
+        flight_date = None
+        
+        try:
+            # get latest checkride or flight review
+            flight_date = Flight.objects\
+                                .user(self.user)\
+                                .filter(Q(pilot_checkride=True)
+                                      | Q(flight_review=True))\
+                                .values_list("date", flat=True)\
+                                .latest()
+            
+        except Flight.DoesNotExist:
+            pass
+            
+        try:
+            ## try to get wings program
+            event_date = NonFlight.objects\
+                                  .user(self.user)\
+                                  .filter(non_flying=6)\
+                                  .values_list("date", flat=True)\
+                                  .latest()
+
+        except NonFlight.DoesNotExist:
+            pass
+            
+        self.bfr_start = self.latest(event_date, flight_date)
+
+    def calc_bfr(self):
+
+        self.get_bfr()
 
         ############
 
-        if not refresher_date and not checkride_date:
-            # no checkrides nor flight reviews in database, return "never"
-            return ("NEVER", None, None)
+        if not self.bfr_start:
+            tup = ("NEVER", None)
+        else:
+            tup = self._determine("flight_review", self.bfr_start)
+        
+        self.bfr_status, self.bfr_end = tup
+        
+        self.days('bfr')
 
-        start_date = latest(refresher_date, checkride_date)
-        status, end_date = self._determine("flight_review", start_date)
-        return (status, start_date, end_date)
+    ###########################################################################
+    
+    def calc_cfi(self):
+
+        self.get_cfi()
+
+        if not self.cfi_start:
+            tup = ("NEVER", None)
+        else:
+            tup = self._determine("flight_review", self.cfi_start)
+        
+        self.cfi_status, self.cfi_end = tup
+        
+        self.days('cfi')
     
     ###########################################################################
 
-class FAA_Instrument(Currency):
+class FAA_Instrument(FAACurrency):
     
-    fake_class = "fixed_wing"
+    def __init__(self, *args, **kwargs):
+        if 'fake_class' not in kwargs.keys():
+            raise RuntimeError('Instrument Currency class must be initialized with afake class')
+        
+        self.fake_class = kwargs.pop('fake_class')
+        super(FAA_Instrument, self).__init__(*args, **kwargs)
     
-    def ipc(self):
+    def eligible(self):
+        """
+        Is the user eligible for this to be rendered? Do they have more than
+        5 total approaches logged?
+        """
+        
+        return Flight.objects.user(self.user)\
+                     .pseudo_category(self.fake_class)\
+                     .agg('app', float=True) > 5
+    
+    def calc_ipc(self):
         """
         Determine of the last IPC is still valid
         """
         
         try:
-            ipc_date = Flight.objects.user(self.user)\
-                                 .filter(ipc=True)\
-                                 .values_list("date", flat=True)\
-                                 .latest()    
+            self.ipc_start = Flight.objects\
+                                   .user(self.user)\
+                                   .filter(ipc=True)\
+                                   .values_list("date", flat=True)\
+                                   .latest()    
                                         
         except Flight.DoesNotExist:
-            ipc_date = None
+            self.ipc_start = None
+            
+        # no ipc's in database, return "never"
+        if not self.ipc_start:
+            self.ipc_status = "NEVER"
+            self.ipc_start = None
+            self.ipc_end = None
         
-        if not ipc_date:       # no ipc's in database, return "never"
-            return ("NEVER", None, None)
+        self.ipc_status, self.ipc_end =\
+                self._determine("ipc", self.ipc_start)
         
-        status, end_date = self._determine("ipc", ipc_date)
-        return (status, ipc_date, end_date)
+        self.days('ipc')
         
-    def six(self):
+    def calc_approaches(self):
         """
         Get the dates of the last 6 appoaches
         """
@@ -313,90 +319,90 @@ class FAA_Instrument(Currency):
         for flight in last_six:
             total += flight['app']
             if total >= 6:
-                app_date = flight['date']
+                self.app_start = flight['date']
                 break;
             
-        status, end = self._determine("instrument", app_date)
-        return status, app_date, end
+        self.app_status, self.app_end =\
+                self._determine("instrument", self.app_start)
+                
+        self.days('app')
     
-    def ht(self, ht):
+    def calc_ht(self):
         """
-        Get the dates of the last 'holding' or 'tracking'
+        Get the dates of the last 'holding' and 'tracking'
         """
-        kwarg = {ht: True}
         
-        try:
-            ht_date = Flight.objects\
-                     .user(self.user)\
-                     .pseudo_category(self.fake_class)\
-                     .filter(**kwarg)\
-                     .values_list('date', flat=True)\
-                     .latest()
+        for ht in ('holding', 'tracking'):
+            kwarg = {ht: True}
+            
+            try:
+                start = Flight.objects\
+                              .user(self.user)\
+                              .pseudo_category(self.fake_class)\
+                              .filter(**kwarg)\
+                              .values_list('date', flat=True)\
+                              .latest()
+            
+            except Flight.DoesNotExist:
+                start = None
+            
+            status, end = self._determine("instrument", start)
         
-        except Flight.DoesNotExist:
-            ht_date = None
+            letter = ht[0]
         
-        status, end = self._determine("instrument", ht_date)
-        return status, ht_date, end
+            setattr(self, "%s_status" % letter, status)
+            setattr(self, "%s_start" % letter, start)
+            setattr(self, "%s_end" % letter, end)
+            
+            self.days(letter)
         
-    def determine_overall_status(self):
-        self.ipc_status, self.ipc_start, self.ipc_end = self.ipc()
-        self.six_status, self.six_start, self.six_end = self.six()
-        self.h_status, self.h_start, self.h_end = self.ht('holding')
-        self.t_status, self.t_start, self.t_end = self.ht('tracking')
+    def calculate(self):
+        
+        self.calc_ipc()
+        self.calc_approaches()
+        self.calc_ht()
         
         alert = False; expired = False
-        for item in ("six", "h", "t"):
+        for item in ("app", "h", "t"):
+            
             st = getattr(self, "%s_status" % item)
+            
             if st == "ALERT":
                 alert = True
+                
             if st == 'EXPIRED' or st == 'NEVER':
                 expired = True
                
         if alert and not expired:
             #if any are alert and none are expired
-            self.overall_status = "ALERT"
+            self.status = "ALERT"
             
         elif not expired:
             # if any none are expired
-            self.overall_status = "CURRENT"
+            self.status = "CURRENT"
         else:
             # if at least one is expired
-            self.overall_status = "EXPIRED"
+            self.status = "EXPIRED"
             
         #ipc trumps all    
         if self.ipc_status == "CURRENT":
-            self.overall_status = "CURRENT"
+            self.status = "CURRENT"
             
         if self.ipc_status == "ALERT" and expired:
-            self.overall_status = "ALERT"
+            self.status = "ALERT"
             
         if self.ipc_status == "ALERT" and not expired:
-            self.overall_status = "CURRENT"
+            self.status = "CURRENT"
             
-        return self.overall_status
+        return self.status     
     
         
-class FAA_Medical(Currency):
+class FAA_Medical(FAACurrency):
     
-    medical_date = None
-    medical_class = None
+    def eligible(self):
+        return True
     
-    def _get_medical_info(self):
-        """Finds out whether the user is over 40 based on their profile,
-           also gets the last medical in their logbook by date and sets
-           some variables based on when that medical was made, and what
-           class it was
-        """
-        
-        try:
-            last_medical = NonFlight.objects\
-                            .filter(user=self.user, non_flying__in=[1,2,3])\
-                            .latest()
-                         
-        except NonFlight.DoesNotExist:
-            return None             #no medicals in logbook
-        
+    def calculate_over_40(self):
         from profile.models import Profile
         try:
             ## try to get the user's DOB from their profile, if no profile
@@ -404,70 +410,87 @@ class FAA_Medical(Currency):
             dob = Profile.get_for_user(self.user).dob
         except AttributeError, Profile.DoesNotExist:
             dob = datetime.date(1915,7,21)
-            
-        status, end_date = self._determine("40", dob, as_of_date=last_medical.date)
+        
+        # find if they are over 40 based on their DOB
+        status, end = self._determine("40", dob, as_of=self.exam_date)
         
         ## if this comes back expired, user is over 40
         self.over_40 = (status == "EXPIRED")
-        
-        ###############
-            
-        self.medical_date = last_medical.date
-        self.medical_class = last_medical.non_flying
-
-
-    def first_class(self):
     
-        if not self.medical_date:
-            self._get_medical_info()
-        
-        #if medical was not issued as a first, it can never be a first    
-        if not self.medical_class or not self.medical_class == 1:
-            return ("NEVER", None, None)
+    def get_last_medical(self):
+        try:
+            last = NonFlight.objects\
+                            .user(self.user)\
+                            .filter(non_flying__in=[1,2,3])\
+                            .latest()
+                                    
+            self.exam_class = last.non_flying
+            self.exam_date = last.date
             
+        except NonFlight.DoesNotExist:
+            self.exam_class = None
+            self.exam_date = None
+    
+    def calculate(self):         
+        self.get_last_medical()
+        self.calculate_over_40()
+        
+        self.calc_first_class()
+        self.calc_second_class()
+        self.calc_third_class()       
+
+
+    def calc_first_class(self):
+        
         if self.over_40:
             method = "first_over"
         else:
             method = "first_under"
             
+        #if medical was not issued as a first, it can never be a first    
+        if self.exam_class != 1:
+            tup = ("NEVER", None)
+        else:
+            tup = self._determine(method, self.exam_date)
             
-        status, end_date = self._determine(method, self.medical_date)
-        return (status, self.medical_date, end_date)
+        self.first_status, self.first_end = tup
+        
+        self.days("first")
 
-
-    def second_class(self):
-    
-        if not self.medical_date:
-            self._get_medical_info()
-
-        #if medical was issued as a third, it can never be a second
-        if not self.medical_class or self.medical_class == 3:
-            return ("NEVER", None, None)
-            
+    def calc_second_class(self):
+        
         if self.over_40:
             method = "second_over"
         else:
             method = "second_under"
-
-        status, end_date = self._determine(method, self.medical_date)
-        return (status, self.medical_date, end_date)
+            
+        #if medical was issued as a third, it can never be a second
+        if self.exam_class == 3:
+            tup = ("NEVER", None)
+        else:
+            tup = self._determine(method, self.exam_date)
+            
+        self.second_status, self.second_end = tup
+        
+        self.days("second")
     
     
-    def third_class(self):
-    
-        if not self.medical_date:
-            self._get_medical_info()
-
-        if not self.medical_class:
-            return ("NEVER", None, None)
+    def calc_third_class(self):
             
         if self.over_40:
             method = "third_over"
         else:
             method = "third_under"
+            
+        if not self.exam_class:
+            tup = ("NEVER", None)
+        else:   
+            tup = self._determine(method, self.exam_date)
+            
+        self.third_status, self.third_end = tup
 
-        status, end_date = self._determine(method, self.medical_date)
-        return (status, self.medical_date, end_date)     
+        self.days("third")
+
 
 
 

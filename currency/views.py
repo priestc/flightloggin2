@@ -1,13 +1,11 @@
 from annoying.decorators import render_to
-
-from django.db.models import Q
+from share.decorator import no_share
 
 from plane.models import Plane
+from plane.constants import CURRENCIES
 from logbook.models import Flight
-from currency.currbox import MediCurrBox, LandCurrBox, CertCurrBox, InstCurrBox
-from FAA import FAA_Landing, FAA_Medical, FAA_Instrument
-
-from share.decorator import no_share
+from currbox import MediCurrBox, LandCurrBox, CertsCurrBox, InstCurrBox
+from FAA import FAA_Landing, FAA_Medical, FAA_Instrument, FAA_Certs
 
 @no_share('other')
 @render_to('currency.html')
@@ -16,110 +14,46 @@ def currency(request):
     Prepare the currency page
     """
     
-    curr_land = FAA_Landing(request.display_user)
-    curr_med = FAA_Medical(request.display_user)
-
-    ############################################
-    
-    cert_currbox = CertCurrBox(request.display_user)
-    
-    if not (cert_currbox.do_bfr or cert_currbox.do_cfi):
-        del cert_currbox
-    
     ############################################ instrument below
-    # display inst currency after you have logged 5 approaches
     
     inst_out = []                   
-                     
-    if Flight.objects.user(request.display_user)\
-                     .pseudo_category("fixed_wing")\
-                     .agg('app', float=True) > 5:
-
-        curr_inst = FAA_Instrument(request.display_user)
-        curr_inst.fake_class = "fixed_wing"
-        cb = InstCurrBox(curr_inst, "Fixed Wing")
-        inst_out.append(cb)
-        cb.render()
-        
-    if Flight.objects.user(request.display_user)\
-                     .pseudo_category("helicopter")\
-                     .agg('app', float=True) > 5:
-                         
-        curr_inst = FAA_Instrument(request.display_user)
-        curr_inst.fake_class = "helicopter"
-        cb = InstCurrBox(curr_inst, "Helicopter")
-        inst_out.append(cb)
+    for fake_class in ("fixed_wing", "helicopter", "glider"):
+        inst = FAA_Instrument(request.display_user, fake_class=fake_class)
+        if inst.eligible():
+            inst.calculate()
+            cb = InstCurrBox(inst)
+            inst_out.append(cb)
     
-    if Flight.objects.user(request.display_user)\
-                     .pseudo_category("glider")\
-                     .agg('app', float=True) > 5:
-                         
-        curr_inst = FAA_Instrument(request.display_user)
-        curr_inst.fake_class = "glider"
-        cb = InstCurrBox(curr_inst, "Glider")
-        inst_out.append(cb)
+    land_out = []    
+    for curr in CURRENCIES:
+        land = FAA_Landing(request.display_user, item=curr)
+        if land.eligible():
+            land.calculate()
+            cb = LandCurrBox(land)
+            land_out.append(cb)
     
-    ############################################ landing below
+    types = Plane.currency_types(request.display_user)
+    type_out = []       
+    for curr in types:
+        land = FAA_Landing(request.display_user, item=curr)
+        if land.eligible():
+            land.calculate()
+            cb = LandCurrBox(land)
+            type_out.append(cb)
+            
+    medi = FAA_Medical(request.display_user)
+    medi_out = []
+    if medi.eligible():
+        medi.calculate()
+        cb = MediCurrBox(medi)
+        medi_out.append(cb)
         
-    cat_classes = Plane.objects\
-                       .user(request.display_user)\
-                       .exclude(cat_class=0)\
-                       .values_list('cat_class', flat=True)\
-                       .order_by().distinct()
-                       
-    cat_classes_out = []
-    for item in cat_classes:
-        currbox = LandCurrBox(cat_class=item)
-        
-        currbox.day = curr_land.landing(night=False, cat_class=item)
-        currbox.night = curr_land.landing(night=True, cat_class=item)
-        
-        cat_classes_out.append(currbox)
-    
-    ############################################ tailwheel below
-    
-    tailwheels = Plane.objects.user(request.display_user)\
-                              .tailwheel()\
-                              .exclude(cat_class=0)\
-                              .values_list('cat_class', flat=True)\
-                              .order_by().distinct()
-    tailwheels_out = []   
-    for item in tailwheels:
-        currbox = LandCurrBox(cat_class=item, tail=True)
-        
-        currbox.day = curr_land.landing(night=False, cat_class=item, tail=True)
-        currbox.night = curr_land.landing(night=True, cat_class=item, tail=True)
-        
-        tailwheels_out.append(currbox)
-        
-    ############################################ type ratings below
-    
-    type_ratings = Plane.objects.user(request.display_user)\
-                                .currency()\
-                                .exclude(cat_class=0)\
-                                .values_list('type', flat=True)\
-                                .order_by().distinct()
-    types_out = []
-    for item in type_ratings:
-        currbox = LandCurrBox(tr=item)
-        
-        currbox.day = curr_land.landing(night=False, tr=item)
-        currbox.night = curr_land.landing(night=True, tr=item)
-        
-        types_out.append(currbox)
-    
-    ########################################## medical below
-        
-    medi_currbox = MediCurrBox()
-    medi_currbox.first = curr_med.first_class()
-    medi_currbox.second = curr_med.second_class()
-    medi_currbox.third = curr_med.third_class()
-    medi_currbox.medi_issued = curr_med.medical_class
-    
-    if not curr_med.medical_class:
-        del medi_currbox                #if there are no medicals, then delete this box so it doesn't show up in the template
-        
-    ############################################
+    cert = FAA_Certs(request.display_user)
+    cert_out = []
+    if cert.eligible():
+        cert.calculate()
+        cb = CertsCurrBox(cert)
+        cert_out.append(cb)
 
     return locals()
 

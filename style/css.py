@@ -352,6 +352,7 @@ div.bfr             {float: left}
 div.cfi             {float: right}
 
 .expired            {background-color: %(expired)s}
+.never              {background-color: %(expired)s}
 .current            {background-color: %(current)s}
 .alert              {background-color: %(alert)s}
 
@@ -359,9 +360,13 @@ div.cfi             {float: right}
 
 
 
-table.currbox                 {width: 100%%; border: 1px solid black;
-                               text-align: center; font-size: xx-small;
-                               height: 100px; border-collapse: collapse;}
+table.currbox                 {width: 100%%;
+                               border: 1px solid black;
+                               text-align: center;
+                               font-size: xx-small;
+                               height: 100px;
+                               border-collapse: collapse;
+                               margin-bottom: 10px}
                                
 table.currbox strong          {font-size: small}
 table.currbox td              {border: 1px solid black; padding: 0px}

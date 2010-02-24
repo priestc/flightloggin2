@@ -1,12 +1,14 @@
 from django.utils.safestring import mark_safe
-from django.utils.dateformat import DateFormat
+
 from plane.constants import CATEGORY_CLASSES
 from datetime import *
 import math
 
 class CurrBox(object):
-    """takes the already calculated values of a currency state, and makes
-       it into an HTML box, no database calls nor calculations are made here"""
+    """
+    Takes the already calculated values of a currency state, and makes
+    it into an HTML box, no database calls nor calculations are made here
+    """
     
     date_format = "M d, Y"
     
@@ -14,61 +16,82 @@ class CurrBox(object):
     def set_date_format(cls, format):
         cls.date_format = format
         
+    def __init__(self, currency):
+        self.currency = currency
+        
+    def df(self, date):
+        """
+        Format all dates into one format as defined by the dateformat variable
+        """
+        from django.utils.dateformat import format
+        return format(date, self.date_format)
+    
+    def bottom_message(self, item):
+        
+        status = getattr(self.currency, "%s_status" % item)
+        days = getattr(self.currency, "%s_days" % item)
+        end = getattr(self.currency, "%s_end" % item)
+        
+        if status == "EXPIRED":
+            ret = "Last day of currency: <strong>%s</strong><br>(%s Days ago)</p>"
+        
+        elif status == "NEVER":
+            return "<p>You do not have 3 landings</p>"
+        
+        elif status in ("CURRENT", "ALERT"):
+            ret = "Last day of currency: <strong>%s</strong><br>(%s Days remain)</p>"
+        
+        return ret % (self.df(end), days)
+    
+    def top_message(self, item):
+        
+        status = getattr(self.currency, "%s_status" % item)
+        start = getattr(self.currency, "%s_start" % item)
+        
+        if status == "NEVER":
+            return ""
+        
+        return "<p>Date of %s: <strong>%s</strong><br>"\
+                     % (self.top_message_text, self.df(start))
+        
 ######################################
 ######################################
 
 class LandCurrBox(CurrBox):
-       
-    cat_class = 0
-   
-    day = False
-    night = False
+        
+    top_message_text = "third-to-last landing"    
     
-    def __init__(self, cat_class=0, tr=None, tail=False):
-    
-        self.cat_class = cat_class
-
-        self.title = ""        
-
-        if cat_class:
-            self.title = CATEGORY_CLASSES[self.cat_class][1]
+    def render(self):  
         
-        elif tr:
-            self.title = tr
-            
-        if tail:
-            self.title += " Tailwheel"
+        if self.currency.cat_class:
+            # get the name of the cat/class
+            title = CATEGORY_CLASSES[self.currency.cat_class][1]
+        else:
+            # the title will be the type (which is in the item variable)
+            title = self.currency.item
         
-    def render(self):
+        if self.currency.tail:
+            title += " Tailwheel"
         
-        lines = []
-        lines.append("<div class='currbox'>")
-            
-        for time in ["day", "night"]:
-            if not getattr(self, time)[0] == "NEVER":
-                days_ago = abs((date.today() - getattr(self, time)[2]).days)
-                current = bool(getattr(self, time)[0] == "ALERT" or getattr(self, time)[0] == "CURRENT")        # true if current
-                class_name = getattr(self, time)[0].lower()
-                start_date = DateFormat(getattr(self, time)[1]).format(self.date_format)
-                end_date = DateFormat(getattr(self, time)[2]).format(self.date_format)
+        day_status = self.currency.day_status.lower()
+        night_status = self.currency.night_status.lower()
+        
+        lines = [
+            "<div class='currbox'>",
+                "<div class='%s inner_currbox day'>" % day_status,
+                    "<h3>%s Day</h3>" % title,
+                    self.top_message('day'),
+                    self.bottom_message('day'),
+                "</div>",
                 
-                lines.append("<div class='%s inner_currbox %s'>" % (class_name, time) )
-                lines.append("<h3>%s %s</h3>" % (time.capitalize(), self.title) )
-                lines.append("<p>Date of third-to-last landing: <strong>%s</strong><br>" % start_date )
-                if current:
-                    lines.append("Last day of currency: <strong>%s</strong><br>(%s Days remain)</p>" % (end_date, days_ago) )
-                else:
-                    lines.append("Last day of currency: <strong>%s</strong><br>(%s Days ago)</p>" % (end_date, days_ago) )
-                
-                lines.append("</div>")
-            else:
-            
-                lines.append("<div class='expired inner_currbox %s'>" % time)
-                lines.append("<h3>%s %s</h3>" % (time.capitalize(), self.title) )
-                lines.append("<p>You do not have 3 landings</p>")
-                lines.append("</div>")
-                
-        lines.append("</div>")         
+                "<div class='%s inner_currbox night'>" % night_status,
+                    "<h3>%s Night</h3>" % title,
+                    self.top_message('night'),
+                    self.bottom_message('night'),
+                "</div>",
+            "</div>"
+        ]
+        
         return mark_safe(" ".join(lines))
     
 #################################################################
@@ -76,118 +99,97 @@ class LandCurrBox(CurrBox):
 #################################################################
 
 class MediCurrBox(CurrBox):
-
-    first = None
-    second = None
-    third = None
     
-    medi_issued = None
-
+    def message(self, c):
+        
+        status = getattr(self.currency, "%s_status" % c)
+        end = getattr(self.currency, "%s_end" % c)
+        days = getattr(self.currency, "%s_days" % c)
+        
+        if status == 'NEVER':
+            ## return two breaks to line the header up with the rest
+            return "<br><br>"
+        
+        m = "Last day of privileges: %s" % self.df(end)
+        
+        if status in ('CURRENT', 'ALERT'):
+            return m + "<br>(%s Days Remain)" % days
+        else:
+            return m + "<br>(%s Days Ago)" % days
+    
+    def date_of_exam(self, c):
+        """
+        If the medical was issued as the passed in class, then return a message
+        saying when the medical exam took place.
+        """
+        
+        if self.currency.exam_class == c:
+            return "Date of exam: %s" % self.df(self.currency.exam_date)
+    
+        return ""
+    
     def render(self):
-        lines = []
-        lines.append("<table class='currbox medical'>")
-        
-        word={1: "first", 2: "second", 3: "third"}
-        
-        for clas in [1, 2, 3]:
-            ordinal = word[clas]
-            if not getattr(self, ordinal)[0] == "NEVER":
+        lines = [
+            "<table class='currbox medical'>",
+                "<tr>",
                 
-                class_name = getattr(self, ordinal)[0].lower()
-                start_date = DateFormat(getattr(self, ordinal)[1]).format(self.date_format)
-                end_date =   DateFormat(getattr(self, ordinal)[2]).format(self.date_format)
-                current = bool(getattr(self, ordinal)[0] == "ALERT" or getattr(self, ordinal)[0] == "CURRENT")
-                days_ago = abs((date.today() - getattr(self, ordinal)[2]).days)
-                
-                lines.append("<td class='%s'>" % class_name)
-                lines.append("<h3>%s Class</h3>" % ordinal.capitalize() )
-                
-                if clas == self.medi_issued:
-                    lines.append("Date of exam: %s<br>" % start_date)
-                else:
-                    lines.append("<br>")
-                
-                verbiage = "Ago"
-                if current:
-                    verbiage = "Remain"
+                    "<td class='%s'>" % self.currency.first_status.lower(),
+                        "<h3>First Class</h3>",
+                        self.date_of_exam(1),
+                        "<br>",
+                        self.message("first"),
+                    "</td>",
                     
-                lines.append("Last day of privileges: %s<br>" % end_date)
-                lines.append("(%s Days %s)<br>" % (days_ago, verbiage) )
-                lines.append("</td>")
-                
-            else:
-            
-                lines.append("<td class='expired'>")
-                lines.append("<h3>%s Class</h3>" % ordinal.capitalize() )
-                lines.append("<br><br><br>")
-                lines.append("</td>")
+                    "<td class='%s'>" % self.currency.second_status.lower(),
+                        "<h3>Second Class</h3>",
+                        self.date_of_exam(2),
+                        "<br>",
+                        self.message("second"),
+                    "</td>",
+                    
+                    "<td class='%s'>" % self.currency.third_status.lower(),
+                        "<h3>Third Class</h3>",
+                        self.date_of_exam(3),
+                        "<br>",
+                        self.message("third"),
+                    "</td>",
+                    
+                "</tr>",
+            "</table>",
+        ]
         
-        lines.append("</table>")
         return mark_safe(" ".join(lines))
 
 #################################################################
 #################################################################
 #################################################################
 
-class CertCurrBox(CurrBox):
-
-    cfi = False
-    bfr = False
+class CertsCurrBox(CurrBox):
     
-    do_cfi = True
-    do_bfr = True
-        
-    def __init__(self, user):
-        
-        from FAA import FAA_Certs
-        
-        cert_object = FAA_Certs(user)
-        
-        self.cfi = cert_object.flight_instructor()
-        self.bfr = cert_object.flight_review()
-        
-        
-        if self.cfi[0] == "NEVER":
-            self.do_cfi = False
-            
-        if self.bfr[0] == "NEVER":
-            self.do_bfr = False
-
+    top_message_text = "renewal event"
+             
     def render(self):
         
-        lines = []
-        lines.append("<div class='currbox'>")
+        cfi_status = self.currency.cfi_status.lower()
+        bfr_status = self.currency.bfr_status.lower()
         
-        title = {'cfi': "Flight Instructor", 'bfr': "Flight Review"}
-        eq = {'cfi': "Flight Instructor Renewal", 'bfr': "Flight Review qualifying event"}
-            
-        for time in ["cfi", "bfr"]:
-            if not getattr(self, time)[0] == "NEVER":
-                days_ago = abs((date.today() - getattr(self, time)[2]).days)
-                current = bool(getattr(self, time)[0] == "ALERT" or getattr(self, time)[0] == "CURRENT")        # true if current
-                class_name = getattr(self, time)[0].lower()
-                start_date = DateFormat(getattr(self, time)[1]).format(self.date_format)
-                end_date =   DateFormat(getattr(self, time)[2]).format(self.date_format)
+        lines = [
+            "<div class='currbox'>",
+                "<div class='%s inner_currbox day'>" % bfr_status,
+                    "<h3>Flight Review</h3>",
+                    self.top_message('bfr'),
+                    self.bottom_message('bfr'),
+                "</div>",
                 
-                lines.append("<div class='%s inner_currbox %s'>" % (class_name, time) )
-                lines.append("<h3>%s</h3>" % title[time] )
-                lines.append("<p>Date of last %s: <strong>%s</strong><br>" % (eq[time], start_date) )
-                
-                if current:
-                    lines.append("Last day of privileges: <strong>%s</strong><br>(%s Days remain)</p>" % (end_date, days_ago) )
-                else:
-                    lines.append("Last day of privileges: <strong>%s</strong><br>(%s Days ago)</p>" % (end_date, days_ago) )
-                
-                lines.append("</div>")
-            else:
-            
-                lines.append("<div class='expired inner_currbox %s'>" % time)
-                lines.append("<h3>%s</h3>" % title[time] )
-                lines.append("<p>&nbsp;</p>")
-                lines.append("</div>")
-                
-        lines.append("</div>")         
-        return mark_safe(" ".join(lines)) 
+                "<div class='%s inner_currbox night'>" % cfi_status,
+                    "<h3>Instructor Certificate</h3>",
+                    self.top_message('cfi'),
+                    self.bottom_message('cfi'),
+                "</div>",
+            "</div>"
+        ]
+        
+        return mark_safe(" ".join(lines))
 
 #################################################################
 #################################################################
@@ -195,169 +197,156 @@ class CertCurrBox(CurrBox):
 
 class InstCurrBox(CurrBox):
     
-    def __init__(self, ci, fake_class):
-        self.cat = fake_class
-        self.status = ci.determine_overall_status()
+    def format_app(self):
+        """
+        Format all the approach display variables
+        """
         
-        ##################################################
+        status = self.currency.app_status
+        end = self.currency.app_end
+        start = self.currency.app_start
+        days = self.currency.app_days
         
-        self.six_start_date = ci.six_start
-        self.six_end_date = ci.six_end
-        self.six_status = ci.six_status
-        
-        if not self.six_status == "NEVER":
-            six_days_ago = str(abs(date.today() - self.six_end_date).days)
-            ed = DateFormat(self.six_end_date)\
-                                        .format(self.date_format)
-                                        
-        if self.six_status == "EXPIRED":
-            self.six_message = "Expired %s<br>(%s Days Ago)" % (ed, six_days_ago)
-            self.six_class = self.six_status.lower()
-            self.six_disp_date = DateFormat(self.six_start_date)\
-                                        .format(self.date_format)
-                                        
-        elif self.six_status == "CURRENT" or self.six_status == "ALERT":
-            self.six_message = "Last day of currency: %s<br>(%s Days Remain)" % (ed, six_days_ago)
-            self.six_class = self.six_status.lower()
-            self.six_disp_date = DateFormat(self.six_start_date)\
-                                        .format(self.date_format)
+        if status == "EXPIRED":
+            self.app_disp_date = self.df(start)
+            self.app_message = "Expired %s<br>(%s Days Ago)"\
+                    % (self.df(end), days)
+                           
+        elif status == "CURRENT" or status == "ALERT":
+            self.app_disp_date = self.df(start)
+            self.app_message = "Last day of currency: %s<br>(%s Days Remain)"\
+                    % (self.df(end), days)
         else:
-            self.six_message = "Never<br><br>"
-            self.six_disp_date = ""
-            self.six_class = "expired"
-            self.six_end_date = date(3000, 4, 4)
-        
-        ###############################################
+            self.app_message = "Never<br><br>"
+            self.app_disp_date = ""
+
+    def format_ipc(self):
+        """
+        Format all the ipc display variables
+        """
     
-        self.ipc_start_date = ci.ipc_start
-        self.ipc_end_date = ci.ipc_end
-        self.ipc_status = ci.ipc_status
+        start = self.currency.ipc_start
+        end = self.currency.ipc_end
+        status = self.currency.ipc_status
+        days = self.currency.ipc_days
         
-        if not self.ipc_status == "NEVER":
-            ipc_days_ago = str(abs(date.today() - self.ipc_end_date).days)
-            ed = DateFormat(self.ipc_end_date)\
-                                        .format(self.date_format)
+        if status == "EXPIRED":
+            self.ipc_disp_date = self.df(start)
+            self.ipc_message = "Expired %s<br>(%s Days Ago)"\
+                                    % (self.df(end), days)
                                         
-        if self.ipc_status == "EXPIRED":
-            self.ipc_message = "Expired %s<br>(%s Days Ago)" % (ed, ipc_days_ago)
-            self.ipc_class = self.ipc_status.lower()
-            self.ipc_disp_date = DateFormat(self.ipc_start_date)\
-                                        .format(self.date_format)
-                                        
-        elif self.ipc_status == "CURRENT" or self.ipc_status == "ALERT":
-            self.ipc_message = "Last day of currency: %s<br>(%s Days Remain)" % (ed, ipc_days_ago)   
-            self.ipc_class = self.ipc_status.lower()
-            self.ipc_disp_date = DateFormat(self.ipc_start_date)\
-                                        .format(self.date_format)
+        elif status == "CURRENT" or status == "ALERT":
+            self.ipc_disp_date = self.df(start)
+            self.ipc_message = "Last day of currency: %s<br>(%s Days Remain)"\
+                                % (self.df(end), days)   
         else:
             self.ipc_message = "Never<br><br>"
             self.ipc_disp_date = ""
-            self.ipc_class = "expired"
-            self.ipc_end_date = date(3000, 4, 4)
-                                        
-        ###############################################
+    
+    def format_h(self):
+        """
+        Format all the h display variables
+        """
+    
+        start = self.currency.h_start
+        end = self.currency.h_end
+        status = self.currency.h_status
+        days = self.currency.h_days
         
-        self.h_start_date = ci.h_start
-        self.h_end_date = ci.h_end
-        self.h_status = ci.h_status
-        
-        if not self.h_status == "NEVER":
-            h_days_ago = str(abs(date.today() - self.h_end_date).days)
-            ed = DateFormat(self.h_end_date)\
-                                        .format(self.date_format)
+        if status == "EXPIRED":
+            self.h_disp_date = self.df(start)
+            self.h_message = "Expired %s<br>(%s Days Ago)"\
+                                 % (self.df(end), days)
                                         
-        if self.h_status == "EXPIRED":
-            self.h_message = "Expired %s<br>(%s Days Ago)" % (ed, h_days_ago)
-            self.h_class = self.h_status.lower()
-            self.h_disp_date = DateFormat(self.h_start_date)\
-                                        .format(self.date_format)
-                                        
-        elif self.h_status == "CURRENT" or self.h_status == "ALERT":
-            self.h_message = "Last day of currency: %s<br>(%s Days Remain)" % (ed, h_days_ago)    
-            self.h_class = self.h_status.lower()
-            self.h_disp_date = DateFormat(self.h_start_date)\
-                                        .format(self.date_format)
+        elif status == "CURRENT" or status == "ALERT":
+            self.h_disp_date = self.df(start)
+            self.h_message = "Last day of currency: %s<br>(%s Days Remain)"\
+                                % (self.df(end), days)   
         else:
             self.h_message = "Never<br><br>"
             self.h_disp_date = ""
-            self.h_class = "expired"
-            self.h_end_date = date(3000, 4, 4)
-            
-        ###############################################
     
-        self.t_start_date = ci.t_start
-        self.t_end_date = ci.t_end
-        self.t_status = ci.t_status
+    def format_t(self):
+        """
+        Format all the t display variables
+        """
+    
+        start = self.currency.t_start
+        end = self.currency.t_end
+        status = self.currency.t_status
+        days = self.currency.t_days
         
-        if not self.t_status == "NEVER":
-            t_days_ago = str(abs(date.today() - self.t_end_date).days)
-            ed = DateFormat(self.t_end_date)\
-                                        .format(self.date_format)
-        if self.t_status == "EXPIRED":
-            self.t_message = "Expired %s<br>(%s Days Ago)" % (ed, t_days_ago)
-            self.t_class = self.t_status.lower()
-            self.t_disp_date = DateFormat(self.t_start_date)\
-                                        .format(self.date_format)
+        if status == "EXPIRED":
+            self.t_disp_date = self.df(start)
+            self.t_message = "Expired %s<br>(%s Days Ago)"\
+                                % (self.df(end), days)
                                         
-        elif self.t_status == "CURRENT" or self.t_status == "ALERT":
-            self.t_message = "Last day of currency: %s<br>(%s Days Remain)" % (ed, t_days_ago)
-            self.t_class = self.t_status.lower()
-            self.t_disp_date = DateFormat(self.t_start_date)\
-                                        .format(self.date_format)
+        elif status == "CURRENT" or status == "ALERT":
+            self.t_disp_date = self.df(start)
+            self.t_message = "Last day of currency: %s<br>(%s Days Remain)"\
+                                % (self.df(end), days)   
         else:
             self.t_message = "Never<br><br>"
             self.t_disp_date = ""
-            self.t_class = "expired"        
-            self.t_end_date = date(3000, 4, 4)
-            
-        ###############################################
-        
-#        first_end_date = min(self.h_end_date,
-#                                    self.t_end_date, self.six_end_date,)
-#        
-#        self.days_ago = abs(date.today() - first_end_date).days
         
     def render(self):
-        lines = []
-        lines.append("<table class='currbox instrument'>")
         
-        lines.append("<tr class='full_bar %s'>" % self.status.lower())
-        lines.append("<td colspan='4'><strong>%s Instrument</strong></td>" % self.cat)
-        lines.append("</td>")
-        lines.append("</tr>")
+        self.format_app()
+        self.format_h()
+        self.format_t()
+        self.format_ipc()
         
-        lines.append("<tr>")
+        import string
+        cat = string.capwords(self.currency.fake_class.replace('_', ' '))
         
-        lines.append("<td class='%s'>" % self.six_class)
-        lines.append("<strong>Sixth to last Approach:</strong><br>")
-        lines.append(self.six_disp_date + "<br>")
-        lines.append(self.six_message)
-        lines.append("</td>")
+        lines = [
+            "<table class='currbox instrument'>",
+            
+                "<tr class='full_bar %s'>" % self.currency.status.lower(),
+                    "<td colspan='4'>",
+                        "<strong>%s Instrument</strong>" % cat,
+                    "</td>"
+                "</tr>",
+            
+                "<tr>",
+            
+                    "<td class='%s'>" % self.currency.app_status.lower(),
+                        "<strong>Sixth to last Approach:</strong>",
+                        "<br>",
+                        self.app_disp_date,
+                        "<br>",
+                        self.app_message,
+                    "</td>",
+            
+                    "<td class='%s'>" % self.currency.h_status.lower(),
+                        "<strong>Last Hold:</strong>",
+                        "<br>",
+                        self.h_disp_date,
+                        "<br>",
+                        self.h_message,
+                    "</td>",
+            
+                    "<td class='%s'>" % self.currency.t_status.lower(),
+                        "<strong>Last Tracking:</strong>",
+                        "<br>",
+                        self.t_disp_date,
+                        "<br>",
+                        self.t_message,
+                    "</td>",
+            
+                    "<td class='%s'>" % self.currency.ipc_status.lower(),
+                        "<strong>Last IPC:</strong>",
+                        "<br>",
+                        self.ipc_disp_date,
+                        "<br>",
+                        self.ipc_message,
+                    "</td>",
+            
+                "</tr>",
+            "</table>"
+        ]
         
-        lines.append("<td class='%s'>" % self.h_class)
-        lines.append("<strong>Last Hold:</strong><br>")
-        lines.append(self.h_disp_date + "<br>")
-        lines.append(self.h_message)
-        lines.append("</td>")
-        
-        lines.append("<td class='%s'>" % self.t_class)
-        lines.append("<strong>Last Tracking:</strong><br>")
-        lines.append(self.t_disp_date + "<br>")
-        lines.append(self.t_message)
-        lines.append("</td>")
-        
-        lines.append("<td class='%s'>" % self.ipc_class)
-        lines.append("<strong>Last IPC:</strong><br>")
-        lines.append(self.ipc_disp_date + "<br>")
-        lines.append(self.ipc_message)
-        
-        lines.append("</tr>")
-        
-        
-        
-        lines.append("</table>")
-        
-        return mark_safe(" ".join(lines))         
+        return mark_safe(" ".join(lines))          
 
 
 
