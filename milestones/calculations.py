@@ -325,7 +325,7 @@ class Part61_FixedWing_Commercial(Part61_Commercial):
                            .order_by('-flight__date')[:1]
                            
         # format the display of this requirement
-        long_solo_xc = ["%s - %s" % (format(x.flight.all()[0].date, "Y-m-d"),
+        long_solo_xc = ["<b>%s</b> - %s" % (format(x.flight.all()[0].date, "Y-m-d"),
                                  x.simple_rendered) for x in long_solo_xc]
         
         #######
@@ -432,7 +432,7 @@ class Part61_FixedWing_Commercial(Part61_Commercial):
                     ),
                     
                     dict(
-                        mine=self.all.night().agg('total'),
+                        mine=self.all.solo().act_inst(False).agg('night'),
                         display="Solo VFR Night",
                         goal=5,
                         reg="61.129(%s)(4)(ii)" % self.reg_letter,
