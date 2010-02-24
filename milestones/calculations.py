@@ -168,15 +168,15 @@ class Part61_Private(Milestone):
         self.dual_60 = self.figure_dual_60()
         
         # solo 3-point XC where max_width>50 and total dist is more than 150
-        long_xc = Route.objects.filter(flight__in=self.nosim.solo())\
+        long_solo_xc = Route.objects.filter(flight__in=self.nosim.solo())\
                            .filter(max_width_land__gte=49)\
                            .filter(total_line_all__gte=150)\
                            .annotate(c=Count('routebase__land'))\
                            .filter(c__gt=3)\
                            .order_by('-flight__date')[:1]
        
-        long_xc = ["<b>%s</b> %s" % (format(x.flight.all()[0].date, "Y-M-d"),
-                                 x.simple_rendered) for x in long_xc]
+        long_solo_xc = ["<b>%s</b> %s" % (format(x.flight.all()[0].date, "Y-M-d"),
+                                 x.simple_rendered) for x in long_solo_xc]
         
         #######
         
@@ -264,9 +264,9 @@ class Part61_Private(Milestone):
                     ),       
                         
                     dict(
-                        mine=long_xc,
+                        mine=long_solo_xc,
                         goal=True,
-                        display="Long Dual XC",
+                        display="Long Solo XC",
                         reg="61.109(%s)(5)(ii)" % self.reg_letter
                     ),
 
@@ -316,31 +316,31 @@ class Part61_FixedWing_Commercial(Part61_Commercial):
         certificate milestones
         """
         
-        # solo 3-point XC where max_width>50 and total dist is more than 150
-        long_xc = Route.objects.filter(flight__in=self.all.solo())\
-                           .filter(max_width_land__gte=49)\
-                           .filter(total_line_all__gte=150)\
+        # solo 3-point XC where max_width>50 and total dist is more than 300
+        long_solo_xc = Route.objects.filter(flight__in=self.all.dual_r())\
+                           .filter(max_width_land__gte=249)\
+                           .filter(total_line_all__gte=300)\
                            .annotate(c=Count('routebase__land'))\
                            .filter(c__gt=3)\
                            .order_by('-flight__date')[:1]
                            
         # format the display of this requirement
-        long_xc = ["%s - %s" % (format(x.flight.all()[0].date, "Y-m-d"),
-                                 x.simple_rendered) for x in long_xc]
+        long_solo_xc = ["%s - %s" % (format(x.flight.all()[0].date, "Y-m-d"),
+                                 x.simple_rendered) for x in long_solo_xc]
         
         #######
         
-        # long dual night XC more than 100 miles
-        night_xc = Route.objects.filter(flight__in=self.all.dual_r().night())\
-                           .filter(total_line_land__gte=100)\
-                           .order_by('-flight__date')[:1]
-       
-        # format the display of this requirement
-        night_xc = ["%s - %s" % (format(x.flight.all()[0].date, "Y-m-d"),
-                                 x.simple_rendered) for x in night_xc]
+#        # long dual night XC more than 100 miles
+#        night_xc = Route.objects.filter(flight__in=self.all.dual_r().night())\
+#                           .filter(total_line_land__gte=100)\
+#                           .order_by('-flight__date')[:1]
+#       
+#        # format the display of this requirement
+#        night_xc = ["%s - %s" % (format(x.flight.all()[0].date, "Y-m-d"),
+#                                 x.simple_rendered) for x in night_xc]
         
         ##################################################################
-        
+        self.cat_class_qs = self.all.filter(plane__cat_class__in=self.cat_class)
         self.dual_60 = self.figure_dual_60(cat_class=self.cat_class)
         
         # get requirements from the parent classes
@@ -397,8 +397,7 @@ class Part61_FixedWing_Commercial(Part61_Commercial):
                     ),
                     
                     dict(
-                        mine=self.all.filter(plane__cat_class__in=self.cat_class)
-                                 .dual_r().agg('inst'),
+                        mine=self.cat_class_qs.dual_r().agg('inst'),
                         display="Instrument Dual %s" % self.cat_class_disp,
                         goal=5,
                         reg="61.129(%s)(3)(i)" % self.reg_letter,
@@ -417,7 +416,35 @@ class Part61_FixedWing_Commercial(Part61_Commercial):
                         goal=3,
                         reg="61.129(%s)(3)(v)" % self.reg_letter,
                     ),
-               ]
+                    
+                    dict(
+                        mine=self.cat_class_qs.agg('solo'),
+                        display="%s Solo" % self.cat_class_disp,
+                        goal=10,
+                        reg="61.129(%s)(4)" % self.reg_letter,
+                    ),
+                    
+                    dict(
+                        mine=long_solo_xc,
+                        display="Long Solo XC",
+                        goal=True,
+                        reg="61.129(%s)(4)(i)" % self.reg_letter,
+                    ),
+                    
+                    dict(
+                        mine=self.all.night().agg('total'),
+                        display="Solo VFR Night",
+                        goal=5,
+                        reg="61.129(%s)(4)(ii)" % self.reg_letter,
+                    ),
+                    
+                    dict(
+                        mine="?",
+                        display="10 Landings at a Controlled Airfield",
+                        goal="?",
+                        reg="61.129(%s)(4)(ii)" % self.reg_letter,
+                    ),
+                ]
                 
         return data
 
