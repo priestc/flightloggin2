@@ -7,7 +7,7 @@ TEMPLATE_DEBUG = DEBUG
 AUTH_PROFILE_MODULE = 'profile.profile'
 
 ## gravatar settings
-GRAVATAR_DEFAULT_IMAGE = "monsterid"
+GRAVATAR_DEFAULT_IMAGE = "404"
 
 ## postgis setting for testing
 TEST_RUNNER='django.contrib.gis.tests.run_tests'
@@ -92,6 +92,13 @@ INSTALLED_APPS += (
     'realtime',
     'backup',
     'maps',
+    'realtime',
+    'graphs',
+    'currency',
+    'auto8710',
+    'sigs',
+    'milestones',
+    'manage',
     
     'tagging',
     'forum',

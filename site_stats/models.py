@@ -186,6 +186,7 @@ class Stat(object):
         
         return User.objects.filter(flight__date__gte=self.sda,
                                    flight__date__lte=self.today)\
+                   .values('id')\
                    .distinct()\
                    .count()
     
