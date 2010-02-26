@@ -7,7 +7,7 @@ TEMPLATE_DEBUG = DEBUG
 AUTH_PROFILE_MODULE = 'profile.profile'
 
 ## gravatar settings
-GRAVATAR_DEFAULT_IMAGE = "http://flightlogg.in/fl-media/images/empty.png"
+GRAVATAR_DEFAULT_IMAGE = "monsterid" #"http://flightlogg.in/fl-media/images/empty.png"
 
 ## postgis setting for testing
 TEST_RUNNER='django.contrib.gis.tests.run_tests'
