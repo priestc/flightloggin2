@@ -121,6 +121,8 @@ class Profile(models.Model, GoonMixin):
             p,c = Profile.objects.get_or_create(user=user)
             return p
         
+        return cls()
+        
     def get_num_format(self):
         if self.minutes:
             return "minutes"
