@@ -95,7 +95,7 @@ def routes_tailnumber_kml(request, tn):
 #------------------------------------------------------------------------------
 ## soon to be deprecated functions below
 
-
+@cache_page(60 * 5)
 def single_user(request, uname):
     """
     Returns a combined KML file with both the routes and airports a single user
