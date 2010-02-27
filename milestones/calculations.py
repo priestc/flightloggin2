@@ -594,11 +594,12 @@ class ATP(Milestone):
         # one hour for each night landings after 20, no more than 25 total
         extra_night=0
         night_l = self.nosim.agg('night_l', float=True)
+        
         if night_l > 20:
-            if night_l > 45:
-                extra_night = 25
-            else:
-                extra_night = night_l
+            extra_night = night_l - 20  #only the ones after 20
+
+            if extra_night > 25
+                extra_night = 25  # limit extra night to 25
         
         night = self.nosim.agg('night', float=True)
         disp_night = "%.1f" % float(night+extra_night)
