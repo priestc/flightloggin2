@@ -23,7 +23,7 @@ $(document).ready(function() {
 	
 	initialize();
 	
-	var kml = new GGeoXml(routes_kml_url, function(){
+	var kml = new GGeoXml(kml_url, function(){
 	
 		if (kml.loadedCorrectly())
 		{
