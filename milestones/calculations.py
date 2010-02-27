@@ -598,7 +598,7 @@ class ATP(Milestone):
         if night_l > 20:
             extra_night = night_l - 20  #only the ones after 20
 
-            if extra_night > 25
+            if extra_night > 25:
                 extra_night = 25  # limit extra night to 25
         
         night = self.nosim.agg('night', float=True)
