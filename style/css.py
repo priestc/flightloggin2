@@ -376,6 +376,50 @@ tr.full_bar td                {text-align: center}
 table.instrument td           {width: 25%%}
 table.medical td              {width: 33%%}
 """
+###############################################################################
+
+custom_view = """
+#filter_box                             {width: 100%%;
+                                         background: %(filter_bg)s;
+                                         border: %(filter_border)s;
+                                         margin-top: 10px}
+
+/* all non time boxes (the longer ones) */
+#filter_box select[class*='__'],
+#filter_box input[class*='__']          {width: 100px}
+
+#filter_box td                          {width: 20%%;
+                                         text-align: center;
+                                         border: 0px solid black;
+                                         padding: 3px}
+
+#center_filter_table                    {margin: 0 auto 0 auto}
+#center_filter_table td                 {width: 33%% !important;
+                                         text-align: right}
+
+/* middle pane is a little bit wider */
+#filter_box td:nth-child(2)             {width: 60%%}
+
+/* the little boxes and dropdowns in the middle pane*/
+.small_picker                           {width: 3em}
+.op_select                              {width: 4em; margin: 3px}
+
+/**/
+table#text_filters                      {margin: 0 auto 0 auto}
+table#text_filters td                   {text-align: right !important}
+table#text_filters td:last-child        {text-align: left !important}
+
+/* the start/end date box */
+td#date_filter_pane table               {margin: 0 auto 0 auto}
+td#date_filter_pane table td            {text-align: right !important}
+td#date_filter_pane table td:last-child {text-align: left !important}
+.date_align                             {width: 4em; border: 1px solid red; float: left}
+.date_picker                            {width: 8em; margin-top: 2px}
+
+/* the last panel (plane filters) */
+td#plane_filter_pane input,
+td#plane_filter_pane select                {width: 150px}
+"""
 
 ###############################################################################
 
@@ -500,8 +544,98 @@ textarea, select                            {width: 145px}
 
 ###############################################################################
 
+gmaps = """
+div#gmap                        {width: 100%%;
+                                 margin: 10px auto 0px auto;
+                                 background: green;}
+                                 
+div#gmap.short                  {height: 25em;}
+div#gmap.tall                   {height: 50em;}
+
+div#view_in_googleearth         {font-size: x-small;
+                                 text-align: left;
+                                 margin-bottom: -5px}
+"""
+
+###############################################################################
+
 help = """
 #canvas     {text-align: left}
+"""
+
+###############################################################################
+
+import__ = """
+.flying_event                   {color: darkred; font-weight: bold}
+#canvas                         {max-width: 100%% !important}
+
+.preview                        {border-collapse: collapse; border: 1px solid gray; margin: 10px auto auto auto}
+.preview td                     {font-size: x-small; border: 1px solid gray}
+
+tr.bad td                       {background: pink}
+tr.good td                      {background: #A2E4A7}
+tr.header td                    {background: #C7A16E}
+
+div#progress                    {font-size: large; margin: 10px;
+                                 background: #EEEEEE;
+                                 border: 1px solid gray}
+                                 
+table#import_form               {margin: 10px auto 10px auto; background: #EDEDED;
+                                 border: 1px solid black}
+                                 
+table#import_form td            {padding: 10px; border: 1px ridge gray}
+
+table#import_form input         {border: default; background: default}
+"""
+
+###############################################################################
+
+item_profile = """
+
+a.noshare                       {color: gray}
+
+#route_table                    {border: 1px solid gray;
+                                 max_width: 160em;
+                                 margin: 10px auto 0 auto}
+                                 
+#route_table td                 {padding: 3px;
+                                 text-align: left;
+                                 background: #DFDFDF}
+                                
+#route_table tr:last-child td   {text-align: center}
+
+table.main                      {width: 100%%;
+                                 background: #DDDDDD;
+                                 margin-top: 20px;
+                                 border-collapse: collapse}
+
+table.main td,
+table.main th                   {text-align: left;
+                                 border: 1px solid gray;
+                                 padding: 3px}
+
+table.main th                   {width: 30%%;}
+
+
+h1                              {margin-bottom: 0px}
+"""
+
+###############################################################################
+
+item_search = """
+#results_table              {margin: 0 auto 0 auto;
+                             min-width: 50%%;
+                             margin-top: 10px;
+                             border: 1px solid black}
+#results_table td,
+#results_table th           {text-align: left}
+
+#results_table th           {background: #DDDDDD}
+
+p#count                     {font-weight: bold}
+p.pagination                {margin: 5px}
+
+#results_table tr:nth-child(odd)      {background: %(logbook_strip1)s;)
 """
 
 ###############################################################################
@@ -576,107 +710,6 @@ td.empty_logbook                             {font-size: x-large; padding: 10px 
                                               padding: 3px;
                                               font-size: x-small;
                                               border: 1px solid black;}
-"""
-
-###############################################################################
-
-import__ = """
-.flying_event                   {color: darkred; font-weight: bold}
-#canvas                         {max-width: 100%% !important}
-
-.preview                        {border-collapse: collapse; border: 1px solid gray; margin: 10px auto auto auto}
-.preview td                     {font-size: x-small; border: 1px solid gray}
-
-tr.bad td                       {background: pink}
-tr.good td                      {background: #A2E4A7}
-tr.header td                    {background: #C7A16E}
-
-div#progress                    {font-size: large; margin: 10px;
-                                 background: #EEEEEE;
-                                 border: 1px solid gray}
-                                 
-table#import_form               {margin: 10px auto 10px auto; background: #EDEDED;
-                                 border: 1px solid black}
-                                 
-table#import_form td            {padding: 10px; border: 1px ridge gray}
-
-table#import_form input         {border: default; background: default}
-"""
-
-###############################################################################
-
-item_search = """
-#results_table              {margin: 0 auto 0 auto;
-                             min-width: 50%%;
-                             margin-top: 10px;
-                             border: 1px solid black}
-#results_table td,
-#results_table th           {text-align: left}
-
-#results_table th           {background: #DDDDDD}
-
-p#count                     {font-weight: bold}
-p.pagination                {margin: 5px}
-
-#results_table tr:nth-child(odd)      {background: %(logbook_strip1)s;)
-"""
-
-###############################################################################
-
-route = """
-span.land                                    {text-decoration: underline}
-span.noland                                  {text-decoration: none}
-
-span.found_airport                           {color: MediumSlateBlue}
-span.found_navaid                            {color: SeaGreen}
-span.found_custom                            {color: Navy}                                             
-span.not_found                               {color: gray}
-span.local                                   {color: gray}
-"""
-
-###############################################################################
-
-custom_view = """
-#filter_box                             {width: 100%%;
-                                         background: %(filter_bg)s;
-                                         border: %(filter_border)s;
-                                         margin-top: 10px}
-
-/* all non time boxes (the longer ones) */
-#filter_box select[class*='__'],
-#filter_box input[class*='__']          {width: 100px}
-
-#filter_box td                          {width: 20%%;
-                                         text-align: center;
-                                         border: 0px solid black;
-                                         padding: 3px}
-
-#center_filter_table                    {margin: 0 auto 0 auto}
-#center_filter_table td                 {width: 33%% !important;
-                                         text-align: right}
-
-/* middle pane is a little bit wider */
-#filter_box td:nth-child(2)             {width: 60%%}
-
-/* the little boxes and dropdowns in the middle pane*/
-.small_picker                           {width: 3em}
-.op_select                              {width: 4em; margin: 3px}
-
-/**/
-table#text_filters                      {margin: 0 auto 0 auto}
-table#text_filters td                   {text-align: right !important}
-table#text_filters td:last-child        {text-align: left !important}
-
-/* the start/end date box */
-td#date_filter_pane table               {margin: 0 auto 0 auto}
-td#date_filter_pane table td            {text-align: right !important}
-td#date_filter_pane table td:last-child {text-align: left !important}
-.date_align                             {width: 4em; border: 1px solid red; float: left}
-.date_picker                            {width: 8em; margin-top: 2px}
-
-/* the last panel (plane filters) */
-td#plane_filter_pane input,
-td#plane_filter_pane select                {width: 150px}
 """
 
 ###############################################################################
@@ -896,6 +929,19 @@ textarea                        {width: 800px; height: 400px}
 
 ###############################################################################
 
+route = """
+span.land                                    {text-decoration: underline}
+span.noland                                  {text-decoration: none}
+
+span.found_airport                           {color: MediumSlateBlue}
+span.found_navaid                            {color: SeaGreen}
+span.found_custom                            {color: Navy}                                             
+span.not_found                               {color: gray}
+span.local                                   {color: gray}
+"""
+
+###############################################################################
+
 sigs = """
 #checktable, #radiotable        {margin-left: auto; margin-right: auto}
 #checktable td, #radiotable td  {text-align: left}
@@ -964,47 +1010,6 @@ a.x                             {background: white;
                                  padding: 0 2px 0 2px;
                                  text-decoration: none;
                                  border: 1px solid black}
-"""
-
-###############################################################################
-
-item_profile = """
-
-div#top_link                    {font-size: x-small;
-                                 text-align: left;
-                                 margin-bottom: -5px}
-
-div#gmap                        {width: 100%%;
-                                 margin: 10px auto 0px auto;
-                                 height: 25em;
-                                 background: green;}
-
-a.noshare                       {color: gray}
-
-#route_table                    {border: 1px solid gray;
-                                 max_width: 160em;
-                                 margin: 10px auto 0 auto}
-                                 
-#route_table td                 {padding: 3px;
-                                 text-align: left;
-                                 background: #DFDFDF}
-                                
-#route_table tr:last-child td   {text-align: center}
-
-table.main                      {width: 100%%;
-                                 background: #DDDDDD;
-                                 margin-top: 20px;
-                                 border-collapse: collapse}
-
-table.main td,
-table.main th                   {text-align: left;
-                                 border: 1px solid gray;
-                                 padding: 3px}
-
-table.main th                   {width: 30%%;}
-
-
-h1                              {margin-bottom: 0px}
 """
 
 ###############################################################################
@@ -1117,7 +1122,7 @@ if __name__ == "__main__":
                  'mass_planes', 'milestones', 'news', 'planes', 'popup',
                  'preferences', 'realtime', 'records', 'sigs', 'site_stats',
                  'custom_view', 'route', 'item_profile', 'forum',
-                 'item_search')
+                 'item_search', 'gmaps')
         
         if not os.path.isdir(full_directory):
             os.makedirs(full_directory)

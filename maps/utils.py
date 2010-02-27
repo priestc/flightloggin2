@@ -114,7 +114,7 @@ def folders_to_kmz_response(folders, title=None,
     kml = kml.encode('utf-8')
     
     if not compression:
-        return HttpResponse(kml, mimetype="text/plain") #application/vnd.google-earth.kml+xml")
+        return HttpResponse(kml, mimetype="text/plain")
     
     #################################
      
@@ -208,9 +208,11 @@ def qs_to_time_kmz(qs, big_points=None):
         )
 
     if big_points:
+        title = big_points[0]
+        points = big_points[1]
         add_icon=True
         folders.append(
-            AirportFolder(name=big_points[0].identifier, qs=big_points)
+            AirportFolder(name=title, qs=points)
         )
 
     return folders_to_kmz_response(folders, title, add_icon=add_icon)
@@ -218,8 +220,9 @@ def qs_to_time_kmz(qs, big_points=None):
 
 
 def qs_to_catclass_kmz(qs):
-    """ From a routes queryset, return a folder'd up kmz file split up
-        by categoty class of the plane. single multi, helicopter, etc
+    """
+    From a routes queryset, return a folder'd up kmz file split up
+    by categoty class of the plane. single multi, helicopter, etc
     """
     
     title = "Routes by Multi/Single Engine"

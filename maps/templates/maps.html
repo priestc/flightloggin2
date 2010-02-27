@@ -4,7 +4,16 @@
 
 {% block javascript %}
 	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/maps.css">
-	<script type="text/javascript">NAVBAR_HIGHLIGHT = "maps-sel";</script>
+	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/gmaps.css">
+	<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/item_profile.js"></script>
+	<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key={{ GOOGLE_MAPS_KEY }}"></script>
+	<script type="text/javascript">
+	NAVBAR_HIGHLIGHT = "maps-sel";
+	
+    {% url user-kml request.display_user as url %}
+    var kml_url = "http://flightlogg.in{{ url }}"
+    
+</script>
 {% endblock %}
 
 {% block title %}Maps{% endblock %}
@@ -12,20 +21,11 @@
 
 {% block canvas %}
 
-<h2>Airports</h2>
-
-<table class="maps_table">
-    <tr>
-        <td>All Airports:</td>
-        <td>{% url kml-airport request.display_user "all" as all_points_url %}
-            <a href="{{ all_points_url }}">Earth</a>&nbsp;&nbsp;
-            <a href="http://maps.google.com?q={{ SITE_URL }}{{ all_points_url|urlencode }}" target="_blank">Maps</a>
-        </td>
-        
-    </tr>
-</table>
-
-<h2>Images</h2>
+{% url kml-airport request.display_user "all" as url %}
+<div id="view_in_googleearth">
+    <a href="{{ url }}">View in Google Earth</a>
+</div>
+<div id="gmap" class="tall"></div>
 
 <table id="images_table">
     <tr>

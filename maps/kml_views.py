@@ -34,6 +34,7 @@ def single_route_kml(request, pk, f=False):
 def single_location_kml(request, ident):
     """
     Return a KMZ file representing a single location. Passed in is the ident.
+    (as opposed to the pk)
     """
 
     l = Location.objects.filter(identifier=ident).filter(loc_class=1)\
@@ -62,7 +63,7 @@ def routes_location_kml(request, ident):
               
     l = Location.objects.filter(identifier=ident).filter(loc_class=1)\
     
-    return qs_to_time_kmz(qs, big_points=l)
+    return qs_to_time_kmz(qs, big_points=(l[0].identifier, l))
 
 #------------------------------------------------------------------------------
 
@@ -94,6 +95,20 @@ def routes_tailnumber_kml(request, tn):
 #------------------------------------------------------------------------------
 ## soon to be deprecated functions below
 
+
+def single_user(request, uname):
+    """
+    Returns a combined KML file with both the routes and airports a single user
+    has flown to
+    """
+    
+    qs = Route.objects.filter(flight__user__username=uname)
+    
+    points = Location.objects\
+                     .filter(routebase__route__in=qs)\
+                     .filter(loc_class=1)\
+    
+    return qs_to_time_kmz(qs, big_points=('Airports', points))
 
 @no_share('other')
 def airports_kml(request, type_):

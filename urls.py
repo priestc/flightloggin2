@@ -349,20 +349,6 @@ urlpatterns += patterns('',
     #--------------------------------------------------------------------------
     
     url(
-        r'^(?P<username>\w+)/airports-(?P<type_>\w+)\.kmz$',
-        "maps.kml_views.airports_kml",
-                                                            name="kml-airport",
-    ),
-    
-    url(
-        r'^(?P<username>\w+)/routes-(?P<type_>\w+)\.kmz$',
-        "maps.kml_views.routes_kml",
-                                                              name="kml-route",
-    ),
-    
-    #--------------------------------------------------------------------------
-    
-    url(
         r'^(?P<username>\w+)/8710\.html$',
         "auto8710.views.auto8710",
                                                                     name="est",
