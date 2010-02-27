@@ -21,7 +21,7 @@
 
 {% block canvas %}
 
-{% url kml-airport request.display_user "all" as url %}
+{% url user-kml request.display_user as url %}
 <div id="view_in_googleearth">
     <a href="{{ url }}">View in Google Earth</a>
 </div>
