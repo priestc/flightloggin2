@@ -104,15 +104,14 @@ class TextPlaneField(ModelChoiceField):
             from django.conf import settings
             return Plane.objects.get(pk=settings.UNKNOWN_PLANE_ID)
         
-        try:
-            ## self.user is set from the form __init__ function which is called
-            ## after this field instance is created
-            return Plane.objects.filter(tailnumber=val, user=self.user)[0]
-        except IndexError:
-            # it returned zero planes, no match, create the plane
-            return Plane.objects.create(tailnumber=val, user=self.user)
-
-        assert False, "text plane field not returning anything"
+        elif " " in val:
+            tn, ty = val.split(' ')[:2]
+            kwarg = {"tailnumber": tn, "user": self.user}
+        else:
+            tn = val
+            kwarg = {"tailnumber": tn, "user": self.user, "type": ty}
+        
+        return Plane.objects.get_or_create(**kwarg)[0]
         
 ###############################################################################
 
@@ -181,8 +180,8 @@ class PopupFlightForm(ModelForm):
         
         return value
         
-
-
+class PopupFlightFormText(PopupFlightForm):
+    plane = text_plane_field
         
 ###############################################################################
 

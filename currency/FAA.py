@@ -9,33 +9,12 @@ from records.models import NonFlight
 
 from currency import Currency
 
-class FAACurrency(Currency):
+class FAA_Landing(Currency):
+    
     CURRENCY_DATA = {
-        "40":                  ("40y", "30d"),
-        
-        "flight_instructor":   ("24cm", "30d"),
         "landings":            ("90d", "10d"),
-        "flight_review":       ("24cm", "30d"),
-        
-        "instrument":          ("6cm", "30d"),
-        "ipc":                 ("6cm", "30d"),
-        
-        # time after instrument currency ends where an IPC is required
-        "need_ipc":            ("6cm", "30d"),
-        
-        # the time elapsed from the original exam
-        #date for each downgrade in calendar months
-        "first_under":         ("12cm", "30d"),
-        "second_under":        ("12cm", "30d"),
-        "third_under":         ("60cm", "30d"),
-        
-        "first_over":          ("6cm", "30d"),
-        "second_over":         ("12cm", "30d"),
-        "third_over":          ("24cm", "30d"),
     }
-
-class FAA_Landing(FAACurrency):
-
+    
     def __init__(self, *args, **kwargs):
         self.item = kwargs.pop('item')
         self.qs = None
@@ -157,7 +136,12 @@ class FAA_Landing(FAACurrency):
             
         return "night: %s" % self.night_status
 
-class FAA_Certs(FAACurrency):
+class FAA_Certs(Currency):
+    
+    CURRENCY_DATA = {
+        "flight_instructor":   ("24cm", "30d"),
+        "flight_review":       ("24cm", "30d"),
+    }
     
     def __init__(self, *args, **kwargs):
         self.cfi_start = None
@@ -266,7 +250,13 @@ class FAA_Certs(FAACurrency):
     
 ###############################################################################
 
-class FAA_Instrument(FAACurrency):
+class FAA_Instrument(Currency):
+    
+    CURRENCY_DATA = {
+        "instrument":          ("6cm", "30d"),
+        "ipc":                 ("6cm", "30d"),
+        "need_ipc":            ("6cm", "30d"),
+    }
     
     def __init__(self, *args, **kwargs):
         if 'fake_class' not in kwargs.keys():
@@ -406,7 +396,21 @@ class FAA_Instrument(FAACurrency):
         return self.status     
     
         
-class FAA_Medical(FAACurrency):
+class FAA_Medical(Currency):
+
+    CURRENCY_DATA = {
+        "40":                  ("40y", "30d"),
+
+        # the time elapsed from the original exam
+        # date for each downgrade in calendar months
+        "first_under":         ("12cm", "30d"),
+        "second_under":        ("12cm", "30d"),
+        "third_under":         ("60cm", "30d"),
+        
+        "first_over":          ("6cm", "30d"),
+        "second_over":         ("12cm", "30d"),
+        "third_over":          ("24cm", "30d"),
+    }
     
     def eligible(self):
         return self.get_last_medical()

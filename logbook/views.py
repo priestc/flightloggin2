@@ -22,7 +22,6 @@ from django.views.decorators.cache import cache_page
 def root_logbook(request):
     """
     Find the last page in the user's logbook, then redirect to that page
-    
     """
     
     from django.core.urlresolvers import reverse
@@ -100,7 +99,7 @@ def new_flight(request, page):
     
     profile,c = Profile.objects.get_or_create(user=request.display_user)
     PopupFlightForm = proper_flight_form(profile)
-
+    print PopupFlightForm
     flight = Flight(user=request.display_user)
     
     form = PopupFlightForm(request.POST,
@@ -188,8 +187,9 @@ def logbook(request, page=0, form=None, fail=None):
     do_pagination = page_of_flights.paginator.num_pages > 1
     
     if not form:
-        PopupFlightForm = proper_flight_form(profile)
+        PopupFlightForm = proper_flight_form(profile)       
         form = PopupFlightForm(prefix="new")
+        
     else:
         ## set this variable so we know which popup to prepare to enter the
         ## failed form data

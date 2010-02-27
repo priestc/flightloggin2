@@ -113,17 +113,13 @@ class Profile(models.Model, GoonMixin):
     @classmethod
     def get_for_user(cls, user):
         
-        if user.is_authenticated():
-            try:
-                return cls.objects.get(user=user)
-            
-            except cls.DoesNotExist:
-                p = cls(user=user)
-                p.save()
-                return p
-            
-        else:
-            return cls()
+        if type(user) is type(""):
+            p,c = Profile.objects.get_or_create(user__username=user)
+            return p
+        
+        if user.is_authenticated():     
+            p,c = Profile.objects.get_or_create(user=user)
+            return p
         
     def get_num_format(self):
         if self.minutes:

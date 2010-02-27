@@ -151,13 +151,11 @@ def proper_flight_form(profile):
     widget to be rendered as.
     """
     
-    from logbook.forms import PopupFlightForm, text_plane_field
+    from logbook.forms import PopupFlightForm, PopupFlightFormText
     
     if profile.text_plane:
-        # if the user wants a text field fo the plane, then swap in this field
-        # instead
-        PopupFlightForm.base_fields['plane'] = text_plane_field
-
+        return PopupFlightFormText
+    
     return PopupFlightForm
 
 
