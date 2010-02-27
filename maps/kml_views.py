@@ -107,6 +107,7 @@ def single_user(request, uname):
     points = Location.objects\
                      .filter(routebase__route__in=qs)\
                      .filter(loc_class=1)\
+                     .distinct()
     
     return qs_to_time_kmz(qs, big_points=('Airports', points))
 
