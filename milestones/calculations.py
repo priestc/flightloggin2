@@ -590,8 +590,8 @@ class ATP(Milestone):
         inst = simulator_inst + plane_inst
         
         ################
-        
         # one hour for each night landings after 20, no more than 25 total
+        
         extra_night=0
         night_l = self.nosim.agg('night_l', float=True)
         

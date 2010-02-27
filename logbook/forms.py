@@ -106,10 +106,11 @@ class TextPlaneField(ModelChoiceField):
         
         elif " " in val:
             tn, ty = val.split(' ')[:2]
-            kwarg = {"tailnumber": tn, "user": self.user}
+            ty = ty.upper()
+            kwarg = {"tailnumber": tn, "user": self.user, "type": ty}
         else:
             tn = val
-            kwarg = {"tailnumber": tn, "user": self.user, "type": ty}
+            kwarg = {"tailnumber": tn, "user": self.user}
         
         return Plane.objects.get_or_create(**kwarg)[0]
         

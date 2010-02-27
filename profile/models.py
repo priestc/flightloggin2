@@ -160,7 +160,6 @@ class Profile(models.Model, GoonMixin):
             self.secret_key = self.calc_secret_key()
         super(Profile, self).save(*args, **kwargs)
        
-        
     def get_email(self):
         if not self.user.email:
             return self.backup_email
