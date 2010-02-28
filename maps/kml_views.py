@@ -92,9 +92,6 @@ def routes_tailnumber_kml(request, tn):
     qs = Route.objects.filter(flight__plane__tailnumber=tn)
     return qs_to_time_kmz(qs)
 
-#------------------------------------------------------------------------------
-## soon to be deprecated functions below
-
 @cache_page(60 * 5)
 def single_user(request, uname):
     """
@@ -110,51 +107,3 @@ def single_user(request, uname):
                      .distinct()
     
     return qs_to_time_kmz(qs, big_points=('Airports', points))
-
-@no_share('other')
-def airports_kml(request, type_):
-    from django.conf import settings
-    
-    if type_=="all":
-        title = "All Airports"
-        points = Location.objects\
-                         .user(request.display_user)\
-                         .filter(loc_class=1)\
-                         .distinct()
-                         
-        custom = Location.objects\
-                         .user(request.display_user)\
-                         .filter(loc_class=3)\
-                         .distinct()
-                    
-        folders = []
-        if points:
-            folders.append(AirportFolder(name="All Airports", qs=points))
-            
-        if custom:
-            folders.append(AirportFolder(name="All Custom Locations", qs=custom))
-    
-    return folders_to_kmz_response(folders, title, add_icon=True)
-
-@no_share('other')   
-def routes_kml(request, type_):
-    
-    qs = Route.objects.user(request.display_user)
-    
-    if type_== "all":
-        title = "All Routes"
-        all_r = qs.values('kml_rendered', 'simple_rendered')\
-                  .order_by()\
-                  .distinct()
-
-        folders=[]
-        if all_r:
-            folders.append(RouteFolder(name="All Routes", qs=all_r))
-        
-        return folders_to_kmz_response(folders, title)
-        
-    elif type_== "cat_class":
-        return qs_to_catclass_kmz(qs)
-            
-    elif type_ == "flight_time":
-        return qs_to_time_kmz(qs)

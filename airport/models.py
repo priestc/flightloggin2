@@ -59,7 +59,27 @@ class Location(models.Model, GoonMixin):
                       .values('user__username', 'user__id', 'logbook_share')\
                       .order_by('user__username')\
                       .distinct()
+    
+    def kml_icon(self):
+        """
+        Returns the proper KML icon class based on the loc_type attribute
+        for use in the KML files
+        """
         
+        icons = {
+                    0: "#white",     #unknown
+                    1: "#yellow",    #small
+                    2: "#orange",    #medium
+                    3: "#red",       #large
+                    4: "#magenta",   #closed
+                    5: "#purple",    #heliport
+                    6: "#teal",      #seaport
+                    8: "#green",     #off airport
+                }
+                        
+        return icons[self.loc_type]
+    
+       
     def region_name(self):
         if self.region:
             return self.region.name

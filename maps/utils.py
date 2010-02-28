@@ -29,7 +29,7 @@ class RouteFolder(BaseFolder):
             
         self.figure_qs()
     
-    def __str__(self):
+    def __unicode__(self):
         return "<RouteFolder: %s routes>" % len(self.rendered_routes)
 
     def figure_qs(self):
@@ -60,6 +60,7 @@ class RenderedAirport(object):
         self.name = destination.name
         self.ls = destination.location_summary()
         self.identifier = destination.identifier
+        self.icon = destination.kml_icon()
     
 class AirportFolder(BaseFolder):
     name = ""
@@ -77,7 +78,7 @@ class AirportFolder(BaseFolder):
             
         self.figure_qs()
 
-    def __str__(self):
+    def __unicode__(self):
         return "<AirportFolder: %s points>" % len(self.rendered_airports)
 
     def figure_qs(self):
@@ -125,17 +126,43 @@ def folders_to_kmz_response(folders, title=None,
     
     if add_icon:
         from django.conf import settings
-        icon = "%s/icons/big/white_pad.png" % settings.MEDIA_ROOT
-        z.write(icon, "files/icon.png")
+        icon = "{0}/icons/white_pad.png".format(settings.MEDIA_ROOT)
+        z.write(icon, "files/icon_unknown.png")
         
-    z.close()
+        ############################################
+        
+        icon = "{0}/icons/magenta_pad.png".format(settings.MEDIA_ROOT)
+        z.write(icon, "files/magenta.png")
+
+        icon = "{0}/icons/yellow_pad.png".format(settings.MEDIA_ROOT)
+        z.write(icon, "files/yellow.png")
+
+        icon = "{0}/icons/red_pad.png".format(settings.MEDIA_ROOT)
+        z.write(icon, "files/red.png")
+        
+        icon = "{0}/icons/teal_pad.png".format(settings.MEDIA_ROOT)
+        z.write(icon, "files/teal.png")
+
+        icon = "{0}/icons/white_pad.png".format(settings.MEDIA_ROOT)
+        z.write(icon, "files/white.png")
+        
+        icon = "{0}/icons/orange_pad.png".format(settings.MEDIA_ROOT)
+        z.write(icon, "files/orange.png")
+
+        icon = "{0}/icons/green_pad.png".format(settings.MEDIA_ROOT)
+        z.write(icon, "files/green.png")
+        
+        icon = "{0}/icons/purple_pad.png".format(settings.MEDIA_ROOT)
+        z.write(icon, "files/purple.png")
+        
+        z.close()
     
     return HttpResponse(sio.getvalue(),
                         mimetype="application/vnd.google-earth.kmz")
 
 ###############################################################################
 
-def qs_to_time_kmz(qs, big_points=None):
+def qs_to_time_kmz(qs, big_points=None, **kwargs):
     """
     From a routes queryset, return a folder'd up kmz file split up
     by type of flight time. pic, sic, dual received, etc
@@ -210,12 +237,12 @@ def qs_to_time_kmz(qs, big_points=None):
     if big_points:
         title = big_points[0]
         points = big_points[1]
-        add_icon=True
+        kwargs['add_icon']=True
         folders.append(
             AirportFolder(name=title, qs=points)
         )
 
-    return folders_to_kmz_response(folders, title, add_icon=add_icon)
+    return folders_to_kmz_response(folders, title, **kwargs)
 
 
 

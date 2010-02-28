@@ -38,17 +38,70 @@
 		</LineStyle>
 	</Style>
 	
-	<Style id="icon">
+	{##########################################}
+	
+	<Style id="teal">
 		<IconStyle>
-		    <color>ff0000ff</color>
 			<scale>1.0</scale>
 			<Icon>
-				<href>files/icon.png</href>
+				<href>files/teal.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+	
+	<Style id="orange">
+		<IconStyle>
+			<scale>1.0</scale>
+			<Icon>
+				<href>files/orange.png</href>
 			</Icon>
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
 	</Style>
 
+	<Style id="white">
+		<IconStyle>
+			<scale>1.0</scale>
+			<Icon>
+				<href>files/white.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+
+	<Style id="red">
+		<IconStyle>
+			<scale>1.0</scale>
+			<Icon>
+				<href>files/red.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+	
+	<Style id="yellow">
+		<IconStyle>
+			<scale>1.0</scale>
+			<Icon>
+				<href>files/yellow.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+
+	<Style id="purple">
+		<IconStyle>
+			<scale>1.0</scale>
+			<Icon>
+				<href>files/purple.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+    
+    {##########################################}
+		
 {% for folder in folders %}	
 
     {% if folder.has_routes %}
@@ -82,7 +135,7 @@
         {% for point in folder %}
 	    <Placemark>
 		    <name>{{point.identifier}}</name>
-		    <styleUrl>#icon</styleUrl>
+		    <styleUrl>{{ point.icon }}</styleUrl>
 		    {% url profile-location point.identifier as url %}
 		    <description>
 		        <![CDATA[<b><a href="http://flightlogg.in{{ url }}">
