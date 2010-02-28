@@ -59,7 +59,11 @@
 		        <name>{{route.name}}</name>
 		        <styleUrl>{{folder.style}}</styleUrl>
 		        <description>
-		        <![CDATA[<a href="http://flightlogg.in{% url profile-route route.name as url %}{{ url }}">See who has flown this route</a>]]>
+		        {% url profile-route route.name as url %}
+		        <![CDATA[<a href="http://flightlogg.in{{ url }}">
+		                 See who has flown this route
+		                 </a>
+		                 ]]>
             </description>
 		        <LineString>
 			        <tessellate>1</tessellate>		
@@ -79,8 +83,12 @@
 	    <Placemark>
 		    <name>{{point.identifier}}</name>
 		    <styleUrl>#icon</styleUrl>
+		    {% url profile-location point.identifier as url %}
 		    <description>
-		        <![CDATA[<b>{{point.name}}</b> <br>{{point.ls}}]]>
+		        <![CDATA[<b><a href="http://flightlogg.in{{ url }}">
+		        {{ point.name }}</a></b>
+		        <br>{{point.ls}}
+		        ]]>
             </description>
 		    <Point>
 			    <coordinates>{{point.kml}}</coordinates>
