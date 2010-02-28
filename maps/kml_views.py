@@ -57,13 +57,12 @@ def routes_location_kml(request, ident):
     qs = Route.objects\
               .filter(routebase__location__identifier=ident.upper())\
               .values('kml_rendered', 'simple_rendered')\
-              .distinct()\
-              #.annotate(id=Max('id')) # clever way to get around
-                                      # id without screwing up distinct()
+              .distinct()
               
-    l = Location.objects.filter(identifier=ident).filter(loc_class=1)\
+    l = Location.objects.filter(identifier=ident).filter(loc_class=1)
+    name = l[0].identifier
     
-    return qs_to_time_kmz(qs, big_points=(l[0].identifier, l))
+    return qs_to_time_kmz(qs, big_points=(name, l))
 
 #------------------------------------------------------------------------------
 
@@ -90,6 +89,7 @@ def routes_tailnumber_kml(request, tn):
     "Returns a KMZ of all routes flown by the passed tailnumber"
     
     qs = Route.objects.filter(flight__plane__tailnumber=tn)
+    
     return qs_to_time_kmz(qs)
 
 @cache_page(60 * 5)

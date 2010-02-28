@@ -155,21 +155,20 @@ def folders_to_kmz_response(folders, title=None,
         icon = "{0}/icons/purple_pad.png".format(settings.MEDIA_ROOT)
         z.write(icon, "files/purple.png")
         
-        z.close()
+    z.close()
     
     return HttpResponse(sio.getvalue(),
                         mimetype="application/vnd.google-earth.kmz")
 
 ###############################################################################
 
-def qs_to_time_kmz(qs, big_points=None, **kwargs):
+def qs_to_time_kmz(qs, **kwargs):
     """
     From a routes queryset, return a folder'd up kmz file split up
     by type of flight time. pic, sic, dual received, etc
     """
     
     title = "Routes by type of flight time"
-    add_icon = False
     
     dual_g = qs.filter(flight__dual_g__gt=0)\
                .values('kml_rendered', 'simple_rendered')\
@@ -234,10 +233,12 @@ def qs_to_time_kmz(qs, big_points=None, **kwargs):
             RouteFolder(name="Actual Instrument", qs=inst, style="#green_line")
         )
 
-    if big_points:
-        title = big_points[0]
-        points = big_points[1]
-        kwargs['add_icon']=True
+    kwargs['add_icon'] = False
+
+    if 'big_points' in kwargs.keys():
+        title = kwargs['big_points'][0]
+        points = kwargs['big_points'][1]
+        kwargs['add_icon'] = True
         folders.append(
             AirportFolder(name=title, qs=points)
         )
