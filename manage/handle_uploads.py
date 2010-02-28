@@ -33,7 +33,7 @@ def get_last(uid):
                 modified = new_modified
                 our_file = full_fn
                 
-        f = open(our_file)
+        f = open(our_file, 'rU')
             
     size = "%.2f" % (os.path.getsize(our_file) / 1024.0)
     ago = str(datetime.datetime.now() -\

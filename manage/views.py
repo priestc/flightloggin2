@@ -19,6 +19,7 @@ def import_v(request):
 
     fileform = ImportForm()
     
+    ## get the previous uploaded file
     ## p=file, previous=dict with some metadata
     p, previous = get_last(request.display_user.id)
     
@@ -84,9 +85,11 @@ def import_v(request):
     
     
 def do_import(preview, user, force_tsv):
-    """ An auxiliary view function. Returns variables that will be added to the
-        template context, but this function does not take a request object
-    """   
+    """
+    An auxiliary view function. Returns variables that will be added to the
+    template context, but this function does not take a request object
+    """
+    
     f, previous = get_last(user.id)
     
     #######################################################
