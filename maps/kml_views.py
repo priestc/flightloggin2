@@ -62,7 +62,7 @@ def routes_location_kml(request, ident):
     l = Location.objects.filter(identifier=ident).filter(loc_class=1)
     name = l[0].identifier
     
-    return qs_to_time_kmz(qs, big_points=(name, l))
+    return qs_to_time_kmz(qs, points=(name, l))
 
 #------------------------------------------------------------------------------
 
