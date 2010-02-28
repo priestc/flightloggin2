@@ -31,10 +31,7 @@ def pdf(request):
                             title="FlightLogg.in Logbook",
                             author="FlightLogg.in")
      
-    try:
-        name = request.display_user.get_profile().username
-    except:
-        name = request.display_user
+    name = request.display_user
 
     elements.append(Paragraph("%s's Logbook" % name, styles['Heading1']))
     elements.append(Paragraph(f_date, styles['Normal']))
@@ -43,7 +40,11 @@ def pdf(request):
                     'act_inst', 'sim_inst', 'act_inst','xc','night','day_l',
                     'night_l','person', 'r_remarks')
                     
-    flights = Flight.objects.filter(user=request.display_user).select_related()
+    flights = Flight.objects\
+                    .user(request.display_user)\
+                    .order_by('date')\
+                    .select_related()
+                    
     rows = flights.count() + 1  #+1 because of the header
     header = [FIELD_ABBV[f] for f in print_fields]
     data = [header,]
