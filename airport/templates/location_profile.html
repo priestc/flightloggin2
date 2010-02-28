@@ -6,7 +6,7 @@
 
 {% block javascript %}
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/item_profile.css">
-<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/gmap.css">
+<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/gmaps.css">
 <script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key={{ GOOGLE_MAPS_KEY }}"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/item_profile.js"></script>
 <script type="text/javascript">
@@ -25,7 +25,8 @@
 <div id="view_in_googleearth">
     <a href="{% url routes_for_location-kml loc.identifier as url %}{{ url }}">View in Google Earth</a>
 </div>
-<div id="gmap">
+
+<div id="gmap" class="short">
 </div>
 
 {% cache 10800 loc_profile ident %}

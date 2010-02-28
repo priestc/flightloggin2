@@ -24,7 +24,7 @@
 <div id="view_in_googleearth">
     <a href="{% url routes_for_tailnumber-kml tn as url %}{{ url }}">View in Google Earth</a>
 </div>
-<div id="gmap">
+<div id="gmap" class="short">
 </div>
 
 {% cache 10800 tn_profile tn %}

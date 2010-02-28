@@ -25,7 +25,7 @@
 <div id="view_in_googleearth">
     <a href="{% url routes_for_model-kml model as url %}{{ url }}">View in Google Earth</a>
 </div>
-<div id="gmap">
+<div id="gmap" class="short">
 </div>
 
 {% cache 10800 model_profile model %}
