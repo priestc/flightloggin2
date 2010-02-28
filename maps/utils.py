@@ -234,10 +234,11 @@ def qs_to_time_kmz(qs, **kwargs):
         )
 
     kwargs['add_icon'] = False
-
-    if 'big_points' in kwargs.keys():
-        title = kwargs['big_points'][0]
-        points = kwargs['big_points'][1]
+    
+    if 'points' in kwargs.keys():
+        k=kwargs.pop('points')
+        title = k[0]
+        points = k[1]
         kwargs['add_icon'] = True
         folders.append(
             AirportFolder(name=title, qs=points)

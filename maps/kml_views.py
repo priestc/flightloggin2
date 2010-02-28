@@ -106,4 +106,4 @@ def single_user(request, uname):
                      .filter(loc_class=1)\
                      .distinct()
     
-    return qs_to_time_kmz(qs, big_points=('Airports', points))
+    return qs_to_time_kmz(qs, points=('Airports', points))
