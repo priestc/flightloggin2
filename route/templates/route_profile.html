@@ -4,10 +4,12 @@
 
 {% block javascript %}
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/item_profile.css">
+<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/gmaps.css">
 <script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key={{ GOOGLE_MAPS_KEY }}"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/item_profile.js"></script>
 <script>
-    var routes_kml_url = "http://flightlogg.in{% url single_route-kml route.pk "r" as url %}{{ url }}"
+    {% url single_route-kml route.pk "r" as url %}
+    var kml_url = "http://flightlogg.in{{ url }}"
 </script>
 {% endblock %}
 
@@ -17,8 +19,9 @@
 {% block canvas %}
 
 <h1>{{ r|upper }}</h1>
-<div id="top_link">
-    <a href="{% url single_route-kml route.pk "r" as url %}{{ url }}">View in Google Earth</a>
+<div id="view_in_googleearth">
+    {% url single_route-kml route.pk "r" as url %}
+    <a href="{{ url }}">View in Google Earth</a>
 </div>
 <div id="gmap">
 </div>

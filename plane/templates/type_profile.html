@@ -22,7 +22,8 @@
 <h1>{{ ty|upper }}</h1>
 
 <div id="view_in_googleearth">
-    <a href="{% url routes_for_tailnumber-kml tn as url %}{{ url }}">View in Google Earth</a>
+    {% url routes_for_tailnumber-kml tn as url %}
+    <a href="{{ url }}">View in Google Earth</a>
 </div>
 <div id="gmap">
 </div>
