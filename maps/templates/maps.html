@@ -3,29 +3,18 @@
 {% block description %}{{ request.display_user.username }}'s maps{% endblock%}
 
 {% block javascript %}
-	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/maps.css">
-	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/gmaps.css">
-	<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/item_profile.js"></script>
-	<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key={{ GOOGLE_MAPS_KEY }}"></script>
-	<script type="text/javascript">
-	NAVBAR_HIGHLIGHT = "maps-sel";
-	
-    {% url user-kml request.display_user as url %}
-    var kml_url = "http://flightlogg.in{{ url }}"
-    
+<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/maps.css">
+<script type="text/javascript">
+NAVBAR_HIGHLIGHT = "maps-sel";
 </script>
 {% endblock %}
 
 {% block title %}Maps{% endblock %}
 
-
 {% block canvas %}
 
-{% url user-kml request.display_user as url %}
-<div id="view_in_googleearth">
-    <a href="{{ url }}">View in Google Earth</a>
-</div>
-<div id="gmap" class="tall"></div>
+{% url user-kml request.display_user as kml_url %}
+{% include "gmaps.html" %}
 
 <table id="images_table">
     <tr>

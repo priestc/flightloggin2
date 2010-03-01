@@ -555,6 +555,17 @@ div#gmap.tall                   {height: 50em;}
 div#view_in_googleearth         {font-size: x-small;
                                  text-align: left;
                                  margin-bottom: -5px}
+
+div#toggle                      {text-align: left;
+                                 font-size: x-small}
+
+div#key                         {overflow: hidden; display: none}
+
+table#line                      {float: left}
+table#icon                      {float: right}
+
+table img                       {vertical-align: middle}
+table td                        {vertical-align: top; width: 5em}
 """
 
 ###############################################################################

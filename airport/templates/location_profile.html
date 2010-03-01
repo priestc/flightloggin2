@@ -6,13 +6,6 @@
 
 {% block javascript %}
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/item_profile.css">
-<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/gmaps.css">
-<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key={{ GOOGLE_MAPS_KEY }}"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/item_profile.js"></script>
-<script type="text/javascript">
-    {% url routes_for_location-kml loc.identifier as url %}
-    var kml_url = "http://flightlogg.in{{ url }}"
-</script>
 {% endblock %}
 
 {% block title %}{{ lc|capfirst }} Profile - {{ ident|upper }}{% endblock %}
@@ -22,12 +15,8 @@
 <h1>{{ ident|upper }}</h1>
 <strong>{{ loc.name }} - {{ loc.location_summary }}</strong>
 
-<div id="view_in_googleearth">
-    <a href="{% url routes_for_location-kml loc.identifier as url %}{{ url }}">View in Google Earth</a>
-</div>
-
-<div id="gmap" class="short">
-</div>
+{% url routes_for_location-kml loc.identifier as kml_url %}
+{% include "gmaps.html" %}
 
 {% cache 10800 loc_profile ident %}
 <table class="main">
