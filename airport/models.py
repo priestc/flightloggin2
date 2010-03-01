@@ -74,6 +74,7 @@ class Location(models.Model, GoonMixin):
                     4: "#magenta",   #closed
                     5: "#purple",    #heliport
                     6: "#teal",      #seaport
+                    7: "#purple",    #baloon port
                     8: "#green",     #off airport
                 }
                         
