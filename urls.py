@@ -220,11 +220,6 @@ urlpatterns += patterns('',
         "route.views.del_routes",
     ),
     
-    (
-        r'^recalc-images\.py$',
-        "maps.states_views.render_all",
-    ),
-    
     url(
         r'^schedule-(?P<schedule>\w+).py$',
         "backup.views.schedule",
@@ -418,12 +413,6 @@ urlpatterns += patterns('',
         r'^(?P<username>\w+)/states-(?P<type_>[\w\-]+)\.(?P<ext>(png|svg))$',
         "maps.states_views.render_image",
                                                               name="state-map",
-    ),
-    
-    url(
-        r'^(?P<username>\w+)/recalc-mine\.py$',
-        "maps.states_views.render_me",
-                                                              name="render-me",
     ),
     
     url(

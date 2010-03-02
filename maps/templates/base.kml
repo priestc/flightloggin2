@@ -99,6 +99,26 @@
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
 	</Style>
+	
+	<Style id="gray">
+		<IconStyle>
+			<scale>1.0</scale>
+			<Icon>
+				<href>files/gray.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+	
+	<Style id="cyan">
+		<IconStyle>
+			<scale>1.0</scale>
+			<Icon>
+				<href>files/cyan.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
     
     {##########################################}
 		

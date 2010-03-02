@@ -93,13 +93,13 @@ def routes_tailnumber_kml(request, tn):
     return qs_to_time_kmz(qs)
 
 @cache_page(60 * 5)
-def single_user(request, uname):
+def single_user(request):
     """
     Returns a combined KML file with both the routes and airports a single user
     has flown to
     """
-    
-    qs = Route.objects.filter(flight__user__username=uname)
+        
+    qs = Route.objects.user(request.display_user)
     
     points = Location.objects\
                      .filter(routebase__route__in=qs)\

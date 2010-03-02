@@ -4,14 +4,10 @@ from django.contrib.auth.models import User
 from django.conf import settings
 
 class UserMixin(object):
-
-    # the field where the user is linked to, this may be overwritten
-    # by the classes that use this mixin
-    
-
-    ## the join path to the routebase table. This table needs to be filtered
-    ## even with the ALL user.
-    routebase_join = None 
+    """
+    Adds a user() method to the queryset object. Takes either a user instance,
+    or a username string.
+    """
     
     def user(self, u, disable_future=False):
         
@@ -30,12 +26,14 @@ class UserMixin(object):
             
         elif class_name == "FlightQuerySet":
             flight_date_field = "date"
+            #routebase_join = "route__routebase"
             
         elif class_name == "LocationQuerySet":
             user_field = "routebase__route__flight__user"
             
         elif class_name == "CountryRegionQuerySet":
             user_field = "location__routebase__route__flight__user"
+            routebase_join = "location__routebase"
             
         #------------- filter by everyone ------------------#
         
@@ -48,10 +46,10 @@ class UserMixin(object):
             ## to be done...
             if routebase_join:
                 kwarg = {"%s__isnull" % routebase_join: False}
-                return self.filter(**kwarg) ## distinct also should be added...
+                return self.filter(**kwarg)
             
             # don't filter anything for the 'ALL' user,
-            # except for the demo user
+            # except exclude the demo user
             kwarg = {user_field + "__id": settings.DEMO_USER_ID}
             ret = self.exclude(**kwarg)
             

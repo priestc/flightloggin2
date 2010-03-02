@@ -39,10 +39,8 @@ urlpatterns = patterns('maps.kml_views',
     ),
     
     url(
-        r'(?P<uname>\w+)\.kmz$',
+        r'(?P<username>\w+)\.kmz$',
         "single_user",
                                                                name="user-kml",
     ),
-    
-
 )

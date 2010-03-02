@@ -131,8 +131,11 @@ def folders_to_kmz_response(folders, title=None,
         
         ############################################
         
-        icon = "{0}/icons/magenta_pad.png".format(settings.MEDIA_ROOT)
-        z.write(icon, "files/magenta.png")
+        icon = "{0}/icons/cyan_pad.png".format(settings.MEDIA_ROOT)
+        z.write(icon, "files/cyan.png")
+
+        icon = "{0}/icons/gray_pad.png".format(settings.MEDIA_ROOT)
+        z.write(icon, "files/gray.png")
 
         icon = "{0}/icons/yellow_pad.png".format(settings.MEDIA_ROOT)
         z.write(icon, "files/yellow.png")

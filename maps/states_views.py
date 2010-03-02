@@ -29,18 +29,6 @@ def image_redirect(request, type_):
     
     return HttpResponseRedirect("%s/states-%s.png" % (path, type_))
 
-@secret_key
-def render_all(request):
-    from django.contrib.auth.models import User
-    
-    users = User.objects.order_by('id')
-    
-    for user in users:
-        render_for_user(user)
-        
-    return HttpResponse('done!', mimetype="text/plain")
-
-
 @no_share('NEVER')
 @login_required
 def render_me(request):
