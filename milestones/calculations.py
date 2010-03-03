@@ -131,22 +131,19 @@ class Milestone(object):
         
         # calculate 60 days ago from today
         today = datetime.date.today()
-        sda = today - datetime.timedelta(days=60)
+        sixtydaysago = today - datetime.timedelta(days=60)
         
         #filter flights between today and 60 days ago, count dual_r hours
-        last_60_days = qs.filter(date__range=(sda, today)).agg('dual_r')
-        
-        
+        last_60_days = qs.filter(date__range=(sixtydaysago, today)).agg('dual_r')
         
         # get the date of the 5th to last dual_r hour
         dual = qs.dual_r().order_by('-date')
         date = get_date_of_3_hours(dual)
         
-        if not date:
-            # logbook has no dual flights, return nothing
-            return {}
-
-        remain = 60 - (datetime.date.today() - date).days
+        if date:
+            remain = 60 - (datetime.date.today() - date).days
+        else:
+            remain = 0
 
         return {
                     'dual_r':    last_60_days,
@@ -191,6 +188,8 @@ class Part61_Private(Milestone):
         ##################################################################
         
         qs = self.nosim
+        
+        print self.figure_dual_60()
         
         data = [
                     dict(
