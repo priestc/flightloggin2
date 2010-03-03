@@ -15,7 +15,7 @@
 
 <h1>{{ model }}</h1>
 
-{% url routes_for_model-kml model as kml_url %}
+{% url routes_for_model-kml url_model as kml_url %}
 {% include "gmaps.html" %}
 
 {% cache 10800 model_profile model %}
