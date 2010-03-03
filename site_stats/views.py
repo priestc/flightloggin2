@@ -4,6 +4,58 @@ from models import Stat
 from share.decorator import secret_key
 from django.core.urlresolvers import reverse
 
+def link_airports(lines):
+    from airport.models import Location
+    
+    tem = '{number} <a title="{title}" href="{url}">{ident}</a> {value}\n'
+    
+    out = ""
+    for line in lines[:-1]:
+        s = line.split(" ")
+        ident = s[1]
+        
+        title = Location.objects\
+                        .get(identifier=ident, loc_class=1)\
+                        .location_summary()
+                        
+        url = reverse('profile-airport', kwargs={"ident": ident})
+
+        out += tem.format(number=s[0],
+                         title=title,
+                         url=url,
+                         ident=ident,
+                         value=s[2])
+    
+    return out
+
+def link_tails(lines):
+    
+    tem = '{number} <a href="{url}">{tail}</a> {value}\n'
+    
+    out = ""
+    for line in lines[:-1]:  ## the last one will be an empty string
+        s = line.split(" ")
+        tn = s[1]
+        url = reverse('profile-tailnumber', kwargs={"tn": tn})
+        out += tem.format(number=s[0], url=url, tail=tn, value=s[2])
+        
+    return out
+
+def link_models(lines):
+    
+    tem = '{number} <a href="{url}">{model}</a> {value}\n'
+    
+    out = ""
+    for line in lines[:-1]:
+        s = line.split(" ")
+        model = s[1]
+        url = reverse('profile-model', kwargs={"model": model})
+        # put the space back in instead of the underscore
+        model = model.replace('_', ' ')
+        out += tem.format(number=s[0], url=url, model=model, value=s[2])
+    
+    return out
+
 @render_to('site_stats.html')
 def site_stats(request):
     
@@ -16,33 +68,13 @@ def site_stats(request):
     cs = StatDB.objects.latest()
     
     tails = cs.most_common_tail.split("\n")
-    linked_tail = ""
-    for line in tails[:-1]:  ## the last one will be an empty string
-        l = line.split(" ")
-        tn = l[1]
-        url = reverse('profile-tailnumber', kwargs={"tn": tn})
-        linked_tail += "%s <a href=\"%s\">%s</a> %s\n" % (l[0], url, tn, l[2])
+    linked_tail = link_tails(tails)
         
     idents = cs.auv.split("\n")
-    linked_airports = ""
-    for line in idents[:-1]:
-        l = line.split(" ")
-        ident = l[1]
-        url = reverse('profile-airport', kwargs={"ident": ident})
-
-        linked_airports += "%s <a href=\"%s\">%s</a> %s\n" % (l[0], url, ident, l[2])
+    linked_airports = link_airports(idents)
     
-    ## XXX: this is no longer types, now models, the db columns need to
-    # be renamed to 'models' at some point
     models = cs.most_common_type.split("\n")
-    linked_mct = ""
-    for line in models[:-1]:
-        l = line.split(" ")
-        model = l[1]
-        url = reverse('profile-model', kwargs={"model": model})
-        # put the space back in instead of the underscore
-        model = model.replace('_', ' ')
-        linked_mct += "%s <a href=\"%s\">%s</a> %s\n" % (l[0], url, model, l[2])
+    linked_mct = link_models(models)
     
     return locals()
 

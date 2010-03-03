@@ -39,9 +39,12 @@ class PHPBackup(object):
             raise InvalidURL
         
         import re
-        t = m=re.search('token=[A-za-z0-9]+', url).group()
-        u = m=re.search('share=[\d]+&', url).group()
-        
+        try:
+            t = re.search('token=[A-za-z0-9]+', url).group()
+            u = re.search('share=[\d]+&', url).group()
+        except:
+            raise InvalidURL
+
         token = t[6:]
         uid = u[6:][:-1]
         
