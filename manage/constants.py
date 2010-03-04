@@ -139,7 +139,7 @@ CSV_FIELDS = (
 
 # fields that are displayed in the import preview page
 PREVIEW_FIELDS = [
-        'date', 'tailnumber', 'type', 'route',
+        'date', 'tailnumber', 'type', 'route_string',
         'total', 'sim', 'pic', 'solo', 'sic', 'night', 'dual_r','dual_g',
         'xc','act_inst', 'sim_inst', 'night_l', 'day_l', 'app',
         'person', 'remarks',

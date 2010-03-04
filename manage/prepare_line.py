@@ -361,7 +361,7 @@ class FlightFixer(Fixer):
                     "date":            self.proper_mapper('date'),
                     "tailnumber":      self.processor('tailnumber'),
                     "type":            self.processor('type'),
-                    "route":           self.processor('route'),
+                    "route_string":    self.processor('route'),
                     
                     "total":           self.processor('total'),
                     "sim":             self.proper_mapper('sim'),

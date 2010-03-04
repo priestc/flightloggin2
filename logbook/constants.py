@@ -106,6 +106,7 @@ FIELD_TITLES = {
     "f_route": "Route (Fancy)",
     "r_route": "Route (Raw)",
     "route": "Route", #for the backup file (so the header doesn't print '(Raw)'
+    "route_string": "Route",
      
     "total_s": "Total (with Sim)",
     "total": "Total",
@@ -181,6 +182,7 @@ FIELD_ABBV = {
     "f_route": "Route",
     "r_route": "Route",
     "route": "Route",
+    "route_string": "Route",
     
     "total_s": "Total",
     "total": "Total",
