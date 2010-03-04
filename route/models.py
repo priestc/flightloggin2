@@ -5,7 +5,6 @@ from django.db.models import Q
 
 from share.middleware import share
 from airport.models import Location, HistoricalIdent
-from make_route import MakeRoute
 
 ###############################################################################
 
@@ -240,7 +239,7 @@ class Route(models.Model):
         """
         Create a route object from a waw string
         """
-        
+        from make_route import MakeRoute
         # so we know which user to make the custom points from
         # if no user explicitly given, try to get the currently logged in user
         if not user:
@@ -449,6 +448,8 @@ class Route(models.Model):
         redo all the routebases after the navaid/airport database has been
         updated and all the primary keys are changed.
         """
+        
+        from make_route import MakeRoute
         
         if not flight_id:
             try:

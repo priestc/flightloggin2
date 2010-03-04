@@ -1,6 +1,6 @@
 from airport.models import Location, HistoricalIdent
 
-from django.db import models
+from models import RouteBase, Route
 
 class MakeRoute(object):
     """
@@ -11,8 +11,6 @@ class MakeRoute(object):
     
     def __init__(self, fallback_string, user, date=None):
         self.user = user
-        
-        Route = models.get_model('route','Route')
         
         # the date of this route, so we know which identifiers to look for
         self.date = date
@@ -138,7 +136,6 @@ class MakeRoute(object):
                                     identifier="K%s" % ident)
 
         if airport:
-            RouteBase = models.get_model('route','RouteBase')
             return RouteBase(location=airport, sequence=i)
         
         return None
@@ -148,9 +145,6 @@ class MakeRoute(object):
         returns a list of RouteBase objects according to the fallback_string,
         basically hard_render()
         """
-        
-        #ugly hack because you can't import this model directly
-        RouteBase = models.get_model('route','RouteBase')
         
         fbs = self.normalize(route.fallback_string)
         points = fbs.split()     # MER-VGA -> ['MER', 'VGA']
