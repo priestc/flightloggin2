@@ -99,7 +99,7 @@ class Fixer(object):
         mapper = getattr(self, "mapper", False)
         
         if mapper and real_column in mapper.keys():
-            return self.line.get(self.mapper[real_column])
+            return self.line.get(self.mapper[real_column], "")
         else:
             return self.line.get(real_column, "")
         
