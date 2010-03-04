@@ -12,6 +12,8 @@ class MakeRoute(object):
     def __init__(self, fallback_string, user, date=None):
         self.user = user
         
+        Route = models.get_model('route','Route')
+        
         # the date of this route, so we know which identifiers to look for
         self.date = date
        
@@ -19,8 +21,6 @@ class MakeRoute(object):
             self.route = Route()
             self.route.save()
             return None
-        
-        Route = models.get_model('route','Route')
         
         route = Route(fallback_string=fallback_string, p2p=False)
         route.save()

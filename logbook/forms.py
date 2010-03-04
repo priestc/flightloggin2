@@ -122,7 +122,7 @@ text_plane_field = \
 
 class PopupFlightForm(ModelForm):
     
-    route_string = forms.CharField(label="Route", widget=TextInput())
+    route_string = forms.CharField(label="Route", widget=TextInput(), required=False)
     
     total =    BlankDecimalField(label="Total Time")
     pic =      BlankDecimalField(label="PIC")
