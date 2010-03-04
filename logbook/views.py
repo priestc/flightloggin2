@@ -24,6 +24,7 @@ def root_logbook(request):
     Find the last page in the user's logbook, then redirect to that page
     """
     
+    from django.shortcuts import redirect
     from django.core.urlresolvers import reverse
     import math
     
@@ -41,7 +42,7 @@ def root_logbook(request):
     url = reverse("logbook-page", kwargs={"page": last_page,
                                           "username": request.display_user})
     
-    return HttpResponseRedirect(url)
+    return redirect(url)
 
 ###############################################################################
 
