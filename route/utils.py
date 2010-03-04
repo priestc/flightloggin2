@@ -1,11 +1,14 @@
 import math
 
 def coord_dist(p1, p2):
-    """From http://www.johndcook.com/python_longitude_latitude.html
+    """
+    Calculate distance between two coordinates
+    
+    From http://www.johndcook.com/python_longitude_latitude.html
     
     ksea-klga:
     
-    gcm = 2097 nm
+    great circle mapper = 2097 nm
     airnav = 2089.7
     postgis = 2090.999
     this = 2093.347

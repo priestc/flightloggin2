@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 
 from share.decorator import secret_key
 from annoying.decorators import render_to
-from models import Location
+from models import Location, HistoricalIdent
 
 ################################
                         
@@ -75,6 +75,9 @@ def airport_profile(request, navaid, ident):
                       .count()
                       
     lc = loc.get_loc_class_display().lower()
+    
+    previous_identifiers = HistoricalIdent.objects\
+                               .filter(current_location=loc)
     
     return locals()
     

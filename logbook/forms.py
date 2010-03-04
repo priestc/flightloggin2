@@ -7,7 +7,6 @@ from django.forms.widgets import TextInput, HiddenInput
 from django.forms.util import ValidationError
 
 from models import *
-from route.forms import RouteField, RouteWidget
 from logbook.utils import from_minutes
 from plane.models import Plane
 
@@ -123,10 +122,7 @@ text_plane_field = \
 
 class PopupFlightForm(ModelForm):
     
-    route =    RouteField(
-                   required=False,
-                   queryset=Route.objects.get_empty_query_set()
-               )
+    route_string = forms.CharField(label="Route", widget=TextInput())
     
     total =    BlankDecimalField(label="Total Time")
     pic =      BlankDecimalField(label="PIC")
@@ -142,7 +138,6 @@ class PopupFlightForm(ModelForm):
     day_l =    BlankIntField(label="Day Landings")
     night_l =  BlankIntField(label="Night Landings")
     app =      BlankIntField(label="Approaches")
-    
     
     def __init__(self, *args, **kwargs):
         
@@ -167,7 +162,7 @@ class PopupFlightForm(ModelForm):
 
     class Meta:
         model = Flight
-        exclude = ('user', 'speed', 'gallons', 'gph', 'mpg')
+        exclude = ('user', 'speed', 'gallons', 'gph', 'mpg', 'route')
         
     def clean_fuel_burn(self):
         from utils import handle_fuel_burn
@@ -200,10 +195,6 @@ class FormsetFlightForm(PopupFlightForm):
                 widget=forms.TextInput(attrs={"class": "person_line",
                                               "maxlength": 60}),
                 required=False)
-                
-    route = RouteField(
-                queryset=Route.objects.get_empty_query_set(),
-                widget=RouteWidget)
         
 from django.forms.models import BaseModelFormSet
 class FixedPlaneModelFormset(BaseModelFormSet):

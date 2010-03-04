@@ -19,7 +19,7 @@ function fill_in_flight(dom_id) {
     }
 	
 	var route = $("#f" + id + " span.data_route").text();
-	$("#id_new-route").val(route);
+	$("#id_new-route_string").val(route);
 	
 	var fuel_burn = $("#f" + id + " span.data_fuel_burn").text();
 	$("#id_new-fuel_burn").val(fuel_burn);

@@ -46,28 +46,28 @@
 {% for form in formset.forms %}
 <tr>
     {% if edit %}
-    <td>{{form.DELETE}}{{form.id}}</td>
+    <td>{{ form.DELETE }}{{ form.id }}</td>
     {% endif %}
     
-    <td class="date_cell">{{form.date}}</td>
-    <td>{{form.plane}}</td>
-    <td>{{form.route}}</td>
-    <td>{{form.total}}</td>
-    <td>{{form.pic}}</td>
-    <td>{{form.sic}}</td>
-    <td>{{form.solo}}</td>
-    <td>{{form.night}}</td>
-    <td>{{form.dual_r}}</td>
-    <td>{{form.dual_g}}</td>
-    <td>{{form.xc}}</td>
-    <td>{{form.act_inst}}</td>
-    <td>{{form.sim_inst}}</td>
-    <td>{{form.night_l}}</td>
-    <td>{{form.day_l}}</td>
-    <td>{{form.app}}</td>
-    <td>{{form.fuel_burn}}</td>
-    <td>{{form.person}}</td>
-    <td>{{form.remarks}}</td>
+    <td class="date_cell">{{ form.date }}</td>
+    <td>{{ form.plane }}</td>
+    <td>{{ form.route_string }}</td>
+    <td>{{ form.total }}</td>
+    <td>{{ form.pic }}</td>
+    <td>{{ form.sic }}</td>
+    <td>{{ form.solo }}</td>
+    <td>{{ form.night }}</td>
+    <td>{{ form.dual_r }}</td>
+    <td>{{ form.dual_g }}</td>
+    <td>{{ form.xc }}</td>
+    <td>{{ form.act_inst }}</td>
+    <td>{{ form.sim_inst }}</td>
+    <td>{{ form.night_l }}</td>
+    <td>{{ form.day_l }}</td>
+    <td>{{ form.app }}</td>
+    <td>{{ form.fuel_burn }}</td>
+    <td>{{ form.person }}</td>
+    <td>{{ form.remarks }}</td>
 </tr>
 {% if form.errors %}
 <tr>

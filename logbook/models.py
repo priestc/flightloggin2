@@ -23,6 +23,8 @@ class Flight(models.Model, GoonMixin):
     remarks =  models.TextField(blank=True)
 
     plane =    models.ForeignKey(Plane, default=settings.UNKNOWN_PLANE_ID)
+    
+    route_string = models.TextField(blank=True, null=True)
     route =    models.ForeignKey(Route, related_name="flight")
 
     total =    models.FloatField("Total Time",            default=0)
@@ -83,6 +85,18 @@ class Flight(models.Model, GoonMixin):
             self.user = share.get_display_user()
         
         super(Flight,self).save(*args, **kwargs)
+    
+    def render_route(self):
+        self.route = Route.from_string(self.route_string,
+                                       user=self.user,
+                                       date=self.date)
+        self.save()
+        
+    def route_is_rendered(self):
+        try:
+            return self.route
+        except:
+            return False
         
     def conditions_of_flight(self):
         fields = ['pic', 'act_inst', 'sic', 'dual_g', 'dual_r', 'night']
@@ -162,19 +176,19 @@ class Flight(models.Model, GoonMixin):
                 # mark_safe because theres HTML code within
                 return mark_safe(self.route.fancy_rendered)
             else:
-                return self.route.fallback_string or ""
+                return self.route_string
             
         elif cn == "s_route":
             if self.route.simple_rendered:
                 return self.route.simple_rendered or ""
             else:
-                return self.route.fallback_string or ""
+                return self.route_string
                 
         elif cn == "r_route":
-            return self.route.fallback_string or ""
+            return self.route_string
         
         elif cn == "route":
-            return self.route.fallback_string or ""
+            return self.route_string
         
         ########
         
@@ -414,14 +428,14 @@ class Columns(models.Model):
     plane =     models.BooleanField(FIELD_TITLES['plane'],  default=True,
                     help_text="Plane's tailnumber and type.")
     reg =       models.BooleanField(FIELD_TITLES['reg'],  default=False,
-                    help_text='Just the plane\'s registration (tailnumber)')
+                    help_text="Just the plane's registration (tailnumber)")
     
     f_route =   models.BooleanField(FIELD_TITLES['f_route'],  default=True,
                     help_text='Route with coloration and extra info on mouseover')
     s_route =   models.BooleanField(FIELD_TITLES['s_route'],  default=False,
                     help_text='Route cleaned up')
     r_route =   models.BooleanField(FIELD_TITLES['r_route'],  default=False,
-                    help_text='Route exactly as it\'s entered')
+                    help_text="Route exactly as it's entered")
     
     total_s =   models.BooleanField(FIELD_TITLES['total_s'],  default=True,
                     help_text='Total time in aircraft, with total time in simulators in parenthesis')
@@ -590,12 +604,16 @@ class Columns(models.Model):
 ## SIGNALS BELOW ##
 ###################
 
-def connect_route(sender, **kwargs):
+def render_route(sender, **kwargs):
     """
     Fill in the speed and fuel burn columns
     """
     
     flight = kwargs['instance']
+    
+    if not flight.route_is_rendered():
+        flight.render_route()
+    
     route = flight.route
     
     #####
@@ -618,7 +636,7 @@ def connect_route(sender, **kwargs):
         if distance > 0 and flight.gallons > 0:
             flight.mpg = distance / flight.gallons
 
-models.signals.pre_save.connect(connect_route, sender=Flight)
+models.signals.pre_save.connect(render_route, sender=Flight)
 
 ###############################################################################
 

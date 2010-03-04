@@ -53,7 +53,7 @@ class SmallProgressBar(object):
         return im
     
     def as_png(self):
-        """ Returns the PNG as a django response object"""
+        """Returns the PNG as a django response object"""
         
         from django.http import HttpResponse
         response = HttpResponse(mimetype="image/png")

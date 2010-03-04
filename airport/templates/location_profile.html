@@ -15,6 +15,17 @@
 <h1>{{ ident|upper }}</h1>
 <strong>{{ loc.name }} - {{ loc.location_summary }}</strong>
 
+{% for hi in previous_identifiers %}
+
+    {% if forloop.first %}
+    <br><br>Previous identifiers for this airport:<br>
+    {% endif %}
+    
+    {{ hi.start }} - {{ hi.end }}: <b>{{ hi.identifier }}</b><br>
+
+{% endfor %}
+
+
 {% url routes_for_location-kml loc.identifier as kml_url %}
 {% include "gmaps.html" %}
 

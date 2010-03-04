@@ -176,7 +176,22 @@ class Location(models.Model, GoonMixin):
         return super(Location, self).save(*args, **kwargs)
     
 ###############################################################################
+
+class HistoricalIdent(models.Model, GoonMixin):
+    start = models.DateField()
+    end = models.DateField()
     
+    identifier = models.CharField(max_length=8)
+    
+    current_location = models.ForeignKey(Location)
+    
+    def __unicode__(self):
+        return "{old} -> {new}".format(old=self.identifier,
+                                       new=self.current_location)
+
+
+###############################################################################
+  
 class Region(models.Model, GoonMixin):
     
     ## add custom filters to custom manager
