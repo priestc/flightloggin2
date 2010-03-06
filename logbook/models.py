@@ -42,7 +42,7 @@ class Flight(models.Model, GoonMixin):
     day_l =    models.PositiveIntegerField("Day Landings",   default=0, null=False)
     app =      models.PositiveIntegerField("Approaches",     default=0, null=False)
     
-    fuel_burn =         models.CharField("Fuel Burn", max_length=10, blank=True)
+    fuel_burn =         models.CharField("Fuel Burn", max_length=10, blank=True, null=True)
 
     holding =           models.BooleanField(                           default=False)
     tracking =          models.BooleanField("Intercepting & Tracking", default=False)

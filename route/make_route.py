@@ -1,5 +1,4 @@
 from airport.models import Location, HistoricalIdent
-
 from models import RouteBase, Route
 
 class MakeRoute(object):
@@ -110,7 +109,6 @@ class MakeRoute(object):
                                identifier=ident)
 
         if cu:
-            from models import RouteBase
             return RouteBase(location=cu, sequence=i)
         else:
             return None
@@ -194,7 +192,6 @@ class MakeRoute(object):
            
             # no routebase? must be unknown
             if not routebase:
-                from models import RouteBase
                 routebase = RouteBase(unknown=ident, sequence=i)
             
             routebase.land = land

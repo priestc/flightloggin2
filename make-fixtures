@@ -6,9 +6,6 @@ echo "contenttypes";
 echo "auth";
 /srv/flightloggin/manage.py dumpdata auth | bzip2 > /srv/flightloggin/fixtures/auth.json.bz2;
 
-echo "plane";
-/srv/flightloggin/manage.py dumpdata plane | bzip2 > /srv/flightloggin/fixtures/plane.json.bz2;
-
 echo "records";
 /srv/flightloggin/manage.py dumpdata records | bzip2 > /srv/flightloggin/fixtures/records.json.bz2;
 
@@ -18,32 +15,13 @@ echo "profiles";
 echo "stats";
 /srv/flightloggin/manage.py dumpdata site_stats | bzip2 > /srv/flightloggin/fixtures/stats.json.bz2;
 
-echo "columns";
-/srv/flightloggin/manage.py dumpdata logbook.columns | bzip2 > /srv/flightloggin/fixtures/columns.json.bz2;
-
 echo "news";
 /srv/flightloggin/manage.py dumpdata main.newsitem | bzip2 > /srv/flightloggin/fixtures/news.json.bz2;
 
 echo "openid";
 /srv/flightloggin/manage.py dumpdata django_openid_auth | bzip2 > /srv/flightloggin/fixtures/openid.json.bz2;
 
-
-echo "countries and regions";
-/srv/flightloggin/manage.py dumpdata airport.country airport.region | bzip2 > /srv/flightloggin/fixtures/c_r.json.bz2;
-
-echo "locations"
-pg_dump -U django logbook --table=airport_location | bzip2 > /srv/flightloggin/fixtures/locations.sql.bz2
-
-echo "all borders"
-pg_dump -U django logbook --table=airport_usstates --table=airport_worldborders | bzip2 > /srv/flightloggin/fixtures/borders.sql.bz2
-
-echo "routebases"
-pg_dump -U django logbook --table=route_routebase | bzip2 > /srv/flightloggin/fixtures/rb.sql.bz2
-
-echo "routes"
-pg_dump -U django logbook --table=route_route | bzip2 > /srv/flightloggin/fixtures/routes.sql.bz2
-
-echo "flights"
-pg_dump -U django logbook --table=logbook_flight | bzip2 > /srv/flightloggin/fixtures/flights.sql.bz2
+echo "dumping postgres";
+pg_dump -U django logbook --format=c --compress=5 --table='(tagging|profile|airport|route|logbook|plane)_*' > /srv/flightloggin/fixtures/dump.sql
 
 exit

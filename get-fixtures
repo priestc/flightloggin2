@@ -6,10 +6,11 @@ myfilename="mysql-${date}.sql.bz2"
 echo "lets do this";
 
 # clean up the database, and create the backup file
-ssh chris@flightlogg.in "~/bin/mysql-clean; ~/bin/mysql-backup; /srv/flightloggin/make-fixtures";
+# ~/bin/mysql-clean; ~/bin/mysql-backup; 
+ssh chris@flightlogg.in "/srv/flightloggin/make-fixtures";
 
 # copy mysql backup file to local machine
-scp chris@flightlogg.in:~/backups/${myfilename} /storage/mysql;
+#scp chris@flightlogg.in:~/backups/${myfilename} /storage/mysql;
 
 # copy flightloggin django fixtures and sql files to the local project dir
 scp chris@flightlogg.in:/srv/flightloggin/fixtures/* /srv/flightloggin/fixtures;
