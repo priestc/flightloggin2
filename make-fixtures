@@ -1,27 +1,5 @@
 #! /bin/bash
 
-echo "contenttypes";
-/srv/flightloggin/manage.py dumpdata contenttypes | bzip2 > /srv/flightloggin/fixtures/ct.json.bz2;
-
-echo "auth";
-/srv/flightloggin/manage.py dumpdata auth | bzip2 > /srv/flightloggin/fixtures/auth.json.bz2;
-
-echo "records";
-/srv/flightloggin/manage.py dumpdata records | bzip2 > /srv/flightloggin/fixtures/records.json.bz2;
-
-echo "profiles";
-/srv/flightloggin/manage.py dumpdata profile | bzip2 > /srv/flightloggin/fixtures/profile.json.bz2;
-
-echo "stats";
-/srv/flightloggin/manage.py dumpdata site_stats | bzip2 > /srv/flightloggin/fixtures/stats.json.bz2;
-
-echo "news";
-/srv/flightloggin/manage.py dumpdata main.newsitem | bzip2 > /srv/flightloggin/fixtures/news.json.bz2;
-
-echo "openid";
-/srv/flightloggin/manage.py dumpdata django_openid_auth | bzip2 > /srv/flightloggin/fixtures/openid.json.bz2;
-
-echo "dumping postgres";
-pg_dump -U django logbook --format=c --compress=5 --table='(tagging|profile|airport|route|logbook|plane)_*' > /srv/flightloggin/fixtures/dump.sql
+pg_dump -C -Fp -U postgres logbook | bzip2 > master_dump.sql.bz2
 
 exit
