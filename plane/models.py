@@ -11,28 +11,21 @@ from tagging.models import Tag
 from main.mixins import GoonMixin
 from constants import *
 
-class QuerySetManager(models.Manager):
-    def get_query_set(self):
-        return self.model.QuerySet(self.model)
-    
-    def __getattr__(self, name):
-        return getattr(self.get_query_set(), name)
+from utils import PlaneQuerySet
+from main.enhanced_model import QuerySetManager, EnhancedModel
 
-class Plane(models.Model, GoonMixin):
-    
-    ## add custom filters to custom manager
-    from utils import PlaneQuerySet as QuerySet
-    
-    objects =  QuerySetManager()        ## add custom filterset manager
+class Plane(EnhancedModel):
 
-    tailnumber =     models.CharField(                          max_length=32, help_text="e.g. N12345")
-    user =           models.ForeignKey(                         User, blank=True, null=True)
+    objects =        QuerySetManager(PlaneQuerySet)
 
-    type =           models.CharField(    "Type Designator",    max_length=32, blank=True, help_text="e.g. C-152, BE-76")
-    model =          models.CharField(    "Model Name",         max_length=32, blank=True, help_text="e.g. Skyhawk, Duchess")
-    manufacturer =   models.CharField(                          max_length=32, blank=True, help_text="e.g. Cessna, Boeing")
-    cat_class =      models.IntegerField( "Category/Class",     choices=CATEGORY_CLASSES, null=False, default=0)
-    description =    models.TextField(                          blank=True)
+    tailnumber =     models.CharField(                        max_length=32, help_text="e.g. N12345")
+    user =           models.ForeignKey(                       User, blank=True, null=True)
+
+    type =           models.CharField(    "Type Designator",  max_length=32, blank=True, help_text="e.g. C-152, BE-76")
+    model =          models.CharField(    "Model Name",       max_length=32, blank=True, help_text="e.g. Skyhawk, Duchess")
+    manufacturer =   models.CharField(                        max_length=32, blank=True, help_text="e.g. Cessna, Boeing")
+    cat_class =      models.IntegerField( "Category/Class",   choices=CATEGORY_CLASSES, null=False, default=0)
+    description =    models.TextField(                        blank=True)
 
     tags =           TagField()
     
@@ -45,21 +38,26 @@ class Plane(models.Model, GoonMixin):
     
     @classmethod
     def currency_types(cls, user):
+        """
+        Returns all types in the user's logbook that are tagged as being fair
+        game for the type currency section
+        """
+        
+        curr_q = (models.Q(tags__icontains='tr') |
+                  models.Q(tags__icontains='type rating') |
+                  models.Q(tags__icontains='currency'))
+        
         return tuple(cls.objects.user(user)\
-                          .filter(
-                               models.Q(tags__icontains='tr') |
-                               models.Q(tags__icontains='type rating') |
-                               models.Q(tags__icontains='currency')
-                           )\
-                           .values_list('type', flat=True)\
-                           .order_by()\
-                           .distinct()
-                )
+                                .filter(curr_q)\
+                                .values_list('type', flat=True)\
+                                .order_by()\
+                                .distinct())
         
     
     def save(self, *args, **kwargs):
-        """Automatically fill in make/models if they are not already supplied
-           and then save the object to the database
+        """
+        Automatically fill in make/models if they are not already supplied
+        and then save the object to the database
         """
         if (not self.manufacturer and
             not self.model and

@@ -7,16 +7,14 @@ from plane.models import Plane
 from route.models import Route
 from constants import *
 from utils import to_minutes
-from main.queryset_manager import QuerySetManager
 
-from main.mixins import GoonMixin
+from main.enhanced_model import QuerySetManager, EnhancedModel
+from queryset_manager import FlightQuerySet
 
-class Flight(models.Model, GoonMixin):
 
-    ## add custom filters to custom manager
-    from queryset_manager import FlightQuerySet as QuerySet
-    
-    objects =  QuerySetManager()        ## add custom filterset manager
+class Flight(EnhancedModel):
+
+    objects =  QuerySetManager(FlightQuerySet)
 
     date =     models.DateField()
     user =     models.ForeignKey(User, blank=False, editable=False)

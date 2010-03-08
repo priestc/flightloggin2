@@ -6,6 +6,8 @@ from django.db.models import Q
 from share.middleware import share
 from airport.models import Location, HistoricalIdent
 
+from main.enhanced_model import QuerySetManager, EnhancedModel
+
 ###############################################################################
 
 class RouteBase(models.Model):
@@ -57,7 +59,7 @@ class RouteBase(models.Model):
     @property
     def loc_class(self):
         """
-        return the type of location, zero if it has no location
+        Return the type of location, zero if it has no location
         """
         
         return getattr(self.destination(), "loc_class", 0)
@@ -80,16 +82,12 @@ class RouteBase(models.Model):
     
 ###############################################################################
 
-from main.queryset_manager import QuerySetManager
-
-class Route(models.Model):
+class Route(EnhancedModel):
     """
     Represents a route the user went on for the flight
     """
     
-    ## add custom filters to custom manager
-    from queryset_manager import RouteQuerySet as QuerySet
-    objects = QuerySetManager()        ## add custom filterset manager
+    objects =  QuerySetManager(name="RouteQuerySet")
 
     fancy_rendered =  models.TextField(blank=True, null=True)
     fallback_string = models.TextField(blank=True, null=True)

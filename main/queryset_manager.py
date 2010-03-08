@@ -13,4 +13,3 @@ class QuerySetManager(QuerySetMixin, Manager):
 
 class GeoQuerySetManager(QuerySetMixin, GeoManager):
     pass
-

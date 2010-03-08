@@ -12,6 +12,7 @@ class UserMixin(object):
     def user(self, u, disable_future=False):
         
         class_name = self.__class__.__name__
+        alt_name = getattr(self, "qs_name", None)
         
         user_field = "user"
         routebase_join = None

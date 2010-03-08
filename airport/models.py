@@ -6,17 +6,13 @@ from django.contrib.auth.models import User
 from django.db.models import Count
 
 from constants import LOCATION_TYPE, LOCATION_CLASS
-from main.queryset_manager import GeoQuerySetManager
 
-from main.mixins import GoonMixin
+from main.enhanced_model import GeoQuerySetManager, EnhancedModel
+from queryset_manager import * 
 
-class Location(models.Model, GoonMixin):
-
-    ## add custom filters to custom manager
-    from queryset_manager import LocationQuerySet as QuerySet
+class Location(EnhancedModel):
     
-    ## add custom filterset manager
-    objects = GeoQuerySetManager()    
+    objects = GeoQuerySetManager(LocationQuerySet)    
     
     ## -----------------------------------------------------------------------
     
@@ -177,7 +173,7 @@ class Location(models.Model, GoonMixin):
     
 ###############################################################################
 
-class HistoricalIdent(models.Model, GoonMixin):
+class HistoricalIdent(EnhancedModel):
     start = models.DateField()
     end = models.DateField()
     
@@ -192,13 +188,10 @@ class HistoricalIdent(models.Model, GoonMixin):
 
 ###############################################################################
   
-class Region(models.Model, GoonMixin):
-    
-    ## add custom filters to custom manager
-    from queryset_manager import CountryRegionQuerySet as QuerySet
+class Region(EnhancedModel):
     
     ## add custom filterset manager
-    objects = GeoQuerySetManager()
+    objects = GeoQuerySetManager(CountryRegionQuerySet)
     
     code = models.CharField(max_length=48)
     country = models.CharField(max_length=2)
@@ -218,11 +211,8 @@ class Region(models.Model, GoonMixin):
 ##############################################################################
 
 class Country(models.Model):
-    ## add custom filters to custom manager
-    from queryset_manager import CountryRegionQuerySet as QuerySet
-    
-    ## add custom filterset manager
-    objects = GeoQuerySetManager()
+
+    objects = GeoQuerySetManager(CountryRegionQuerySet)
     
     name = models.CharField(max_length=48)
     code = models.CharField(max_length=2, primary_key=True)
@@ -238,7 +228,7 @@ class Country(models.Model):
 ##############################################################################    
     
     
-class WorldBorders(models.Model):
+class WorldBorders(EnhancedModel):
     name = models.CharField(max_length=50)
     area = models.IntegerField()
     pop2005 = models.IntegerField('Population 2005')
@@ -260,11 +250,6 @@ class WorldBorders(models.Model):
 
     def __unicode__(self):
         return self.name
-    
-    @classmethod
-    def goon(cls, *args, **kwargs):
-        from annoying.functions import get_object_or_None
-        return get_object_or_None(cls,  *args, **kwargs)
 
 worldborders_mapping = {
     'fips' : 'FIPS',
