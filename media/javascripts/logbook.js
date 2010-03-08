@@ -12,7 +12,7 @@ function fill_in_flight(dom_id) {
 	    // to fill in the plane
     	$("#id_new-plane option:contains(" + plane + ")").attr("selected", "selected");
     } else {
-        // othewrwise, use this other method, because the plane field is
+        // otherwise, use this other method, because the plane field is
         // a textbox
         plane = plane.split(' ')[0]
         $("#id_new-plane").val(plane);

@@ -211,26 +211,6 @@ class Route(EnhancedModel):
             r.hard_render(user=user, flight_id=r.fid)
             
         return qs.count()
-    
-    @classmethod
-    def hard_render_unknowns(cls):
-        routes = cls.objects.filter(routebase__unknown__isnull=False)
-        
-        print "routes with unknowns before:", routes.count()
-        
-        import datetime
-        now = datetime.datetime.now()
-        for r in routes.iterator():
-            r.hard_render()
-            
-        # now remove all orphaned routes
-        cls.objects.filter(flight__id=None).delete()
-        
-        now2 = datetime.datetime.now()
-        
-        print "routes with unknowns after:", routes.count()
-        
-        return now2-now
         
     @classmethod
     def from_string(cls, raw_route_string, user=None, date=None):
@@ -468,7 +448,7 @@ class Route(EnhancedModel):
         if not user and not username:
             user = share.get_display_user()
         
-        new_route = MakeRoute(self.fallback_string, user).get_route()
+        new_route = MakeRoute(self.fallback_string, user, date=f.date).get_route()
         
         if flight_id:
             from logbook.models import Flight

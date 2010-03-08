@@ -206,16 +206,6 @@ urlpatterns += patterns('',
     ),
     
     (
-        r'^easy-recalc-routes\.py$',
-        "route.views.easy_recalc_routes"
-    ),
-    
-    (
-        r'^hard-recalc-routes\.py$',
-        "route.views.hard_recalc_routes",
-    ),
-    
-    (
         r'^del-routes\.py$',
         "route.views.del_routes",
     ),

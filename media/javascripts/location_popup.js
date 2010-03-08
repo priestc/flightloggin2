@@ -6,7 +6,11 @@ function fill_in_custom(dom_id) {
 	$("#id_identifier").val(trim($("#p" + id + "_identifier").text()));
 	$("#id_name").val(trim($("#p" + id + "_name").text()));
 	$("#id_coordinates").val(trim($("#p" + id + "_coordinates").text()));
-	$("#id_type").val(trim($("#p" + id + "_type").text()));
+	
+	
+	var ty = $("#p" + id + "_type").text();
+    $("#id_loc_type option:contains(" + ty + ")").attr("selected", "selected");
+	
 	$("#id_country").val(trim($("#p" + id + "_country").text()));
 	$("#id_municipality").val(trim($("#p" + id + "_municipality").text()));
 }

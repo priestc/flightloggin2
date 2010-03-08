@@ -120,10 +120,12 @@ class MakeRoute(object):
         
         date = self.date
         
-        #first try to get historical ident
-        hi = HistoricalIdent.goon(start__lte=date,
-                                  end__gte=date,
-                                  identifier=ident)
+        hi = None
+        if date:
+            #first try to get historical ident
+            hi = HistoricalIdent.goon(start__lte=date,
+                                      end__gte=date,
+                                      identifier=ident)
         
         if hi:
             airport = Location.goon(identifier=hi.current_location)
@@ -142,7 +144,7 @@ class MakeRoute(object):
 
     def make_routebases_from_fallback_string(self, route):
         """
-        returns a list of RouteBase objects according to the fallback_string,
+        Returns a list of RouteBase objects according to the fallback_string,
         basically hard_render()
         """
         
