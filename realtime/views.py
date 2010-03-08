@@ -52,6 +52,28 @@ def realtime2(request):
 
 ###############################################################################
 
+
+def latest_duty_as_json(request):
+    """
+    Return the latest duty instance and serialize it for display in the page
+    """
+    
+    duty = Duty.latest_open(user=request.display_user)
+    
+    json = dict(
+                    start=duty.start,
+                )
+
+
+
+
+
+
+
+
+
+###############################################################################
+
 from main.utils import ajax_timestamp_to_datetime as atd
 
 @json_view

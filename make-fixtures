@@ -1,5 +1,7 @@
 #! /bin/bash
 
-pg_dump -C -Fp -U postgres logbook | bzip2 > master_dump.sql.bz2
+cd /srv/flightlogg.in
+
+pg_dump --clean --format=c -U postgres logbook > dump
 
 exit

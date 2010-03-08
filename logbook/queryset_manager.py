@@ -1,10 +1,10 @@
 from django.db.models import Q
-from django.db.models.query import QuerySet
 from django.db.models import Sum
 from constants import AGG_FIELDS, EXTRA_AGG, DB_FIELDS
-from main.mixins import UserMixin
 
-class FlightQuerySet(QuerySet, UserMixin):
+from main.enhanced_model import EnhancedQuerySet
+
+class FlightQuerySet(EnhancedQuerySet):
         
     ### by aircraft tags
     

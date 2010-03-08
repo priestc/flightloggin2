@@ -15,7 +15,7 @@ ssh chris@flightlogg.in "/srv/flightloggin/make-fixtures";
 #scp chris@flightlogg.in:~/backups/${myfilename} /storage/mysql;
 
 # copy flightloggin django fixtures and sql files to the local project dir
-scp chris@flightlogg.in:/srv/flightloggin/master_dump.sql.bz2 .;
+scp chris@flightlogg.in:/srv/flightloggin/dump .;
 
 # delete the mysql backup file from the remote server (to save space)
 #ssh chris@flightlogg.in "rm ~/backups/${myfilename}";

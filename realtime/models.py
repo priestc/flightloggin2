@@ -1,10 +1,10 @@
 import datetime
 
 from django.db import models
-from django.contrib.auth.models import User
+from main.mixins import UserMixin
 
-class Duty(models.Model):
-    user = models.ForeignKey(User)
+class Duty(models.Model, UserMixin):
+    user = models.ForeignKey('auth.User')
     start = models.DateTimeField()
     end = models.DateTimeField(null=True, blank=True)
     
@@ -14,7 +14,7 @@ class Duty(models.Model):
     @classmethod
     def latest_open(cls, user):
         try:
-            return cls.objects.filter(user=user, end=None).latest()
+            return cls.objects.user(user).filter(end=None).latest()
             
         except Duty.DoesNotExist:
             return None
@@ -127,9 +127,14 @@ class Duty(models.Model):
         (basically convert the datetime's to strings)
         """
         
+        blocks = []
+        for block in self.block_set.all():
+            blocks.append(block.as_json_dict())
+        
         return {"start": str(self.start),
                 "end": str(self.end),
-                "id": self.id}
+                "id": self.id,
+                "blocks": blocks}
             
     
 #------------------------------------------------------------------------------

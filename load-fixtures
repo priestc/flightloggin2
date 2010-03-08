@@ -9,8 +9,6 @@ then
     exit
 fi
 
-bunzip2 master_dump.sql.bz2
-echo "unzip complete"
-psql -U postgres < master_dump.sql
+pg_restore dump --clean -U postgres -d logbook
 
 exit
