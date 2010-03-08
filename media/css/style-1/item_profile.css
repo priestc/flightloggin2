@@ -3,14 +3,16 @@
 a.noshare                       {color: gray}
 
 #route_table                    {border: 1px solid gray;
-                                 max_width: 160em;
+                                 width: 50%;
                                  margin: 10px auto 0 auto}
                                  
-#route_table td                 {padding: 3px;
+#route_table td,
+#route_table th                 {padding: 3px;
                                  text-align: left;
                                  background: #DFDFDF}
-                                
-#route_table tr:last-child td   {text-align: center}
+                                 
+#route_table th                 {text-align: center;
+                                 width: 3em}
 
 table.main                      {width: 100%;
                                  background: #DDDDDD;

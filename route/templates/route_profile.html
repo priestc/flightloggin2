@@ -4,13 +4,6 @@
 
 {% block javascript %}
 <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/item_profile.css">
-<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/gmaps.css">
-<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key={{ GOOGLE_MAPS_KEY }}"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/item_profile.js"></script>
-<script>
-    {% url single_route-kml route.pk "r" as url %}
-    var kml_url = "http://flightlogg.in{{ url }}"
-</script>
 {% endblock %}
 
 {% block title %}Route Profile - {{ r|upper }}{% endblock %}
@@ -19,13 +12,10 @@
 {% block canvas %}
 
 <h1>{{ r|upper }}</h1>
-<div id="view_in_googleearth">
-    {% url single_route-kml route.pk "r" as url %}
-    <a href="{{ url }}">View in Google Earth</a>
-</div>
 
-<div id="gmap" class="short">
-</div>
+{% url single_route-kml route.pk "r" as kml_url %}
+{% include "gmaps.html" %}
+
 
 <table id="route_table">
 {% for rb in rbs %}
@@ -34,7 +24,7 @@
     </tr>
 {% endfor %}
     <tr>
-        <td colspan="2">Total distance: {{ route.total_line_all|floatformat:1 }} NM</td>
+        <th colspan="2">Total distance: {{ route.total_line_all|floatformat:1 }} NM</th>
     </tr>
 </table>
 

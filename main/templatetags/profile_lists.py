@@ -144,7 +144,7 @@ def routebase_row(rb):
     ident = getattr(dest, "identifier", dest)
     
     if not rb.location or rb.custom():
-        return mark_safe("<td>%s</td><td>&nbsp;</td>" % ident)
+        return mark_safe("<th>{0}</th><td>&nbsp;</td>".format(ident))
         
     if rb.location.loc_class == 1:   # airport
         view = "profile-airport"
@@ -156,7 +156,7 @@ def routebase_row(rb):
         right = "<td>%s</td>" % rb.location.location_summary()
     
     url = reverse(view, kwargs={"ident": ident})
-    out = "<td><a href=\"%s\">%s</a></td>\n" % (url, ident)
+    out = '<th><a href="{url}">{ident}</a></th>\n'.format(url=url, ident=ident)
     out += right
     
     return mark_safe(out)
