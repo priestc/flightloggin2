@@ -23,18 +23,29 @@ def single_route_kml(request, pk, f=False):
     else:
         kwarg = {"pk": pk}
     
-    r = Route.objects.filter(**kwarg)\
-                     .values('kml_rendered', 'simple_rendered')\
-                  
+    # the actual route object in queryset form
+    route = Route.objects.filter(**kwarg)
+    
+    #get distinct routebases to make icons with
+    rbs = route[0].routebase_set.distinct()
+    
+    # convert routebases into locations
+    l = Location.objects.filter(routebase__in=rbs)
+    
+    # just the relevent bits
+    r = route.values('kml_rendered', 'simple_rendered')
+    
+    # make the folders
     f = RouteFolder(name="Route", qs=r, style="#red_line")
+    a = AirportFolder(name='Points', qs=l)
 
-    return folders_to_kmz_response([f])
+    return folders_to_kmz_response([f,a], add_icon=True)
 
 @cache_page(60 * 60 * 900)
 def single_location_kml(request, ident):
     """
     Return a KMZ file representing a single location. Passed in is the ident.
-    (as opposed to the pk)
+    (as opposed to the pk). No routes!
     """
 
     l = Location.objects.filter(identifier=ident).filter(loc_class=1)\
