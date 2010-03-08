@@ -27,10 +27,10 @@ def single_route_kml(request, pk, f=False):
     route = Route.objects.filter(**kwarg)
     
     #get distinct routebases to make icons with
-    rbs = route[0].routebase_set.distinct()
+    rbs = route[0].routebase_set.all()
     
     # convert routebases into locations
-    l = Location.objects.filter(routebase__in=rbs)
+    l = Location.objects.filter(routebase__in=rbs).distinct()
     
     # just the relevent bits
     r = route.values('kml_rendered', 'simple_rendered')
