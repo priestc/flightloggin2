@@ -71,11 +71,10 @@ def routes_location_kml(request, ident):
               .filter(routebase__location__identifier=ident.upper())\
               .values('kml_rendered', 'simple_rendered')\
               .distinct()
-              
     
-    name = l[0].identifier
+    name = l.identifier
     
-    return qs_to_time_kmz(qs, points=(name, l))
+    return qs_to_time_kmz(qs, points=(name, [l]))
 
 #------------------------------------------------------------------------------
 
