@@ -49,9 +49,9 @@ def single_location_kml(request, ident):
     (as opposed to the pk). No routes!
     """
 
-    l = Location.objects.filter(identifier=ident).filter(loc_class=1)\
+    l = Location.goof(identifier=ident, loc_class=1)
                      
-    f = AirportFolder(name=ident, qs=l)
+    f = AirportFolder(name=ident, qs=[l])
 
     return folders_to_kmz_response([f], add_icon=True)
 
@@ -64,14 +64,15 @@ def routes_location_kml(request, ident):
     also adds a point over the passed identifier
     """
     
-    #from django.db.models import Max
+    #raises 404 if no location is found
+    l = Location.goof(identifier=ident, loc_class=1)
     
     qs = Route.objects\
               .filter(routebase__location__identifier=ident.upper())\
               .values('kml_rendered', 'simple_rendered')\
               .distinct()
               
-    l = Location.objects.filter(identifier=ident).filter(loc_class=1)
+    
     name = l[0].identifier
     
     return qs_to_time_kmz(qs, points=(name, l))
@@ -101,7 +102,6 @@ def routes_tailnumber_kml(request, tn):
     "Returns a KMZ of all routes flown by the passed tailnumber"
     
     qs = Route.objects.filter(flight__plane__tailnumber=tn)
-    
     return qs_to_time_kmz(qs)
 
 @cache_page(60 * 5)
