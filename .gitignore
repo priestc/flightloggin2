@@ -5,5 +5,6 @@ manage.py
 *.swp
 *.json.bz2
 fixtures
+dump
 uploads
 *~

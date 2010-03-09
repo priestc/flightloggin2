@@ -197,17 +197,20 @@ class Stat(object):
         return self.fsd.exclude(total__gte=24).aggregate(s=Sum('total'))['s'] 
                           
     def calc_auv(self):
-        qs = Location.objects\
-                     .annotate(u=Count('routebase__route__flight__user',
-                               distinct=True))\
-                     .order_by('-u')\
-                     .values('identifier', 'u')[:10]
+        """
+        Airport with the most unique visitors
+        """
+        
+        qs = RouteBase.objects\
+                      .filter(unknown__isnull=True)\
+                      .values('location__identifier')\
+                      .annotate(u=Count('route__flight__user', distinct=True))\
+                      .order_by('-u')[:10]
         
         foo = ""
+        s = "{place}. {ident} ({val})\n"
         for i,item in enumerate(qs):
-            ident = item['identifier']
-            count = item['u']
-            foo += "%s. %s (%s)\n" % (i+1, ident, count)
+            foo += s.format(place=i+1, ident=item['identifier'], val=item['u'])
         
         return foo
 
