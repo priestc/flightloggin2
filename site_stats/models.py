@@ -210,7 +210,8 @@ class Stat(object):
         foo = ""
         s = "{place}. {ident} ({val})\n"
         for i,item in enumerate(qs):
-            foo += s.format(place=i+1, ident=item['identifier'], val=item['u'])
+            ident = item['location__identifier']
+            foo += s.format(place=i+1, ident=ident, val=item['u'])
         
         return foo
 
