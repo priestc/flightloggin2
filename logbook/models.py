@@ -84,6 +84,12 @@ class Flight(EnhancedModel):
         
         super(Flight,self).save(*args, **kwargs)
     
+    @classmethod
+    def render_airport(cls, ident):
+        for f in cls.objects.filter(route_string__icontains=ident).iterator():
+            print('rendering: {0}'.format(f.date))
+            f.render_route()
+    
     def render_route(self):
         self.route = Route.from_string(self.route_string,
                                        user=self.user,
