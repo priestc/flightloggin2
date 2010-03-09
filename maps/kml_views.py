@@ -102,7 +102,12 @@ def routes_tailnumber_kml(request, tn):
     "Returns a KMZ of all routes flown by the passed tailnumber"
     
     qs = Route.objects.filter(flight__plane__tailnumber=tn)
-    return qs_to_time_kmz(qs)
+    
+    l = Location.objects\
+                .filter(routebase__route__in=qs, loc_class=1)\
+                .distinct()
+                
+    return qs_to_time_kmz(qs, points=("Airports", l))
 
 @cache_page(60 * 5)
 def single_user(request):
