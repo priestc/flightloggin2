@@ -23,20 +23,21 @@ def single_route_kml(request, pk, f=False):
     else:
         kwarg = {"pk": pk}
     
-    # the actual route object in queryset form
-    route = Route.objects.filter(**kwarg)
+    # the actual route object
+    route = Route.goof(**kwarg)
     
     #get distinct routebases to make icons with
-    rbs = route[0].routebase_set.all()
+    rbs = route.routebase_set.all()
     
     # convert routebases into locations
     l = Location.objects.filter(routebase__in=rbs).distinct()
     
-    # just the relevent bits
-    r = route.values('kml_rendered', 'simple_rendered')
+    # convert back to dict and just the relevent bits
+    r = dict(kml_rendered=route.kml_rendered,
+             simple_rendered=route.simple_rendered)
     
     # make the folders
-    f = RouteFolder(name="Route", qs=r, style="#red_line")
+    f = RouteFolder(name="Route", qs=[r], style="#red_line")
     a = AirportFolder(name='Points', qs=l)
 
     return folders_to_kmz_response([f,a], add_icon=True)
