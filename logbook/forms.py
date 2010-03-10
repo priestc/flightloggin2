@@ -64,7 +64,9 @@ class BlankHourField(forms.Field):
         if not value:
             return 0
         
-        match = re.match("^([0-9]{1,3}):([0-9]{2})$", value)
+        value = value.replace(',','.')
+        
+        match = re.match("^([0-9]{1,5}):([0-9]{2})$", value)
         if match:
             dec = str(from_minutes(value))
         else:
