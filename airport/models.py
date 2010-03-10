@@ -182,8 +182,11 @@ class HistoricalIdent(EnhancedModel):
     current_location = models.ForeignKey(Location)
     
     def __unicode__(self):
-        return "{old} -> {new}".format(old=self.identifier,
-                                       new=self.current_location)
+        s = "{old} -> {new} -- {begin} - {end}"
+        return s.format(old=self.identifier,
+                        new=self.current_location,
+                        begin=self.start,
+                        end=self.end)
 
 
 ###############################################################################

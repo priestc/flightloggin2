@@ -161,10 +161,10 @@ class Profile(models.Model, GoonMixin):
         super(Profile, self).save(*args, **kwargs)
        
     def get_email(self):
+        truncate = 25
         if not self.user.email:
-            return self.backup_email
-        
-        return self.user.email
+            return self.backup_email[:truncate]
+        return self.user.email[:truncate]
     get_email.short_description="Email"
         
     def adminlink(self):

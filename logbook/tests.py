@@ -34,7 +34,6 @@ class ColumnsTest(TestCase):
         self.less50nm_route = Route.from_string('kvta kcmh')
         self.no_land_less50nm_route = Route.from_string('kvta @kcmh kvta')
         
-        
         self.f = Flight(total=11.0,
                         pic=10.0,
                         date=today,
