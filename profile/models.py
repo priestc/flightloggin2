@@ -134,6 +134,8 @@ class Profile(models.Model, GoonMixin):
             return self.date_format
         else:
             return "Y-m-d"
+    get_date_format.short_description = 'DF'
+    get_date_format.admin_order_field = 'date_format'
     
     def calc_secret_key(self):
         """
@@ -173,6 +175,7 @@ class Profile(models.Model, GoonMixin):
         return "<a target='_blank' href='http://beta.flightlogg.in%s'>Link</a>"\
                     % self.get_absolute_url()
     adminlink.allow_tags = True
+    adminlink.short_description="Link"
     
     def date_registered(self):
         "Used in the admin interface to see when a user registered"
