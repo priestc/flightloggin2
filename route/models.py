@@ -278,7 +278,7 @@ class Route(EnhancedModel):
     
     def calc_max_width(self, a=None):
         """
-        returns the max distance between any two points in the route
+        Returns the max distance between any two points in the route
         """
         
         if not a:
@@ -289,7 +289,7 @@ class Route(EnhancedModel):
         
         dist = []
         from utils import coord_dist
-        for i,po in enumerate(mp): 
+        for i,po in enumerate(mp):
             dist.append(coord_dist(po, ct))
         
         #since we're measuring from the center, multiply by 2    

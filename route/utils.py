@@ -45,7 +45,7 @@ def coord_dist(p1, p2):
     try:
         arc = math.acos( cos )
     except ValueError:
-        return None
+        return 0
 
     # Remember to multiply arc by the radius of the earth 
     # in your favorite set of units to get length.

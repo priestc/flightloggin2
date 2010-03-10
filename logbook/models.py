@@ -86,7 +86,18 @@ class Flight(EnhancedModel):
     
     @classmethod
     def render_airport(cls, ident):
-        for f in cls.objects.filter(route_string__icontains=ident).iterator():
+        """
+        Grab all flights to the passed in airport, and re-render them.
+        This function is used to update routes when an identifier profile
+        has changed.
+        """
+        
+        flights = cls.objects\
+                     .filter(route_string__icontains=ident)\
+                     .order_by('-date')\
+                     .iterator()
+                     
+        for f in flights:
             print('rendering: {0}'.format(f.date))
             f.render_route()
     
