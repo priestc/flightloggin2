@@ -63,7 +63,11 @@ class BaseImport(object):
         except TypeError:
             raise RuntimeError, "Not a valid CSV file"
         
-        titles = reader.next()
+        try:
+            titles = reader.next()
+        except:
+            raise self.InvalidCSVError
+        
         titles = self.swap_out_flight_titles(titles)
         
         self.dr = csv.DictReader(self.file, titles, dialect=dialect)

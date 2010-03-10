@@ -285,12 +285,12 @@ class Route(EnhancedModel):
             a = self._get_AllPoints()
         
         mp = a.collect()
-        ct = mp.envelope.centroid
+        centroid = mp.envelope.centroid
         
         dist = []
         from utils import coord_dist
-        for i,po in enumerate(mp):
-            dist.append(coord_dist(po, ct))
+        for i,point in enumerate(mp):
+            dist.append(coord_dist(point, centroid))
         
         #since we're measuring from the center, multiply by 2    
         diameter = max(dist) * 2
