@@ -62,7 +62,13 @@ class Location(EnhancedModel):
         for use in the KML files
         """
         
-        icons = {
+        from collections import defaultdict
+        from itertools import repeat
+
+        # a function that always returns a constant
+        l = lambda value: repeat(value).next
+
+        icons = defaultdict(l('#navaid'), {
                     0: "#white",     #unknown
                     1: "#yellow",    #small
                     2: "#orange",    #medium
@@ -72,7 +78,7 @@ class Location(EnhancedModel):
                     6: "#cyan",      #seaport
                     7: "#purple",    #baloon port
                     8: "#green",     #off airport
-                }
+                })
                         
         return icons[self.loc_type]
     
