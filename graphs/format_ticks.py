@@ -43,8 +43,11 @@ def format_line_ticks(ax, year_range):
             tick.label1.set_horizontalalignment('center')
             
         print "ft: 3; %s" % year_range
-        
-    elif 0.45 < year_range < 0.8:
+    
+    #between 5.4 months and 9.7 months
+    elif 0.45 < year_range < 0.801:
+        #   |         |         |         |
+        #     Oct '09   Dec '09   Jan '10
         ax.xaxis.set_major_locator(mdates.MonthLocator())
         ax.xaxis.set_minor_locator(mdates.MonthLocator(bymonthday=15))
 
@@ -57,22 +60,9 @@ def format_line_ticks(ax, year_range):
             tick.label1.set_horizontalalignment('center')
             
         print "ft: 4; %s" % year_range
-        
-    elif 0.8 < year_range < 1.1:
-        ax.xaxis.set_major_locator(mdates.MonthLocator(bymonth=(1,4,7,10)))
-        ax.xaxis.set_minor_locator(mdates.MonthLocator())
-
-        ax.xaxis.set_major_formatter(mdates.DateFormatter("%b %d"))
-        ax.xaxis.set_minor_formatter(ticker.NullFormatter())
-
-        for tick in ax.xaxis.get_minor_ticks():
-            tick.tick1line.set_markersize(0)
-            tick.tick2line.set_markersize(0)
-            tick.label1.set_horizontalalignment('center')
-            
-        print "ft: 5; %s" % year_range
     
-    elif 1.1 < year_range < 2.2:
+    #between 9.7 months and 2.2 years
+    elif 0.801 < year_range < 2.201:
         ##       |   .   .   |   .   .   |   .   .   |
         ##    Oct '08     Jan '09     Apr '09     Jul '09
         ax.xaxis.set_major_locator(mdates.MonthLocator(bymonth=(1,4,7,10)))
@@ -81,18 +71,22 @@ def format_line_ticks(ax, year_range):
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%b '%y"))
         ax.xaxis.set_minor_formatter(ticker.NullFormatter())
         
-        print "ft: 6; %s" % year_range
+        print "ft: 5; %s" % year_range
         
-    elif year_range < 3.0:
+    elif 2.201 < year_range < 3.001:
+        #   . . | . . . . . | . . . . . | . . . . . | . .
+        #    Jan 2008    Jul 2008    Jan 2009    Jul 2009
         ax.xaxis.set_major_locator(mdates.MonthLocator(bymonth=(1,7)))
         ax.xaxis.set_minor_locator(mdates.MonthLocator())
 
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%b '%Y"))
         ax.xaxis.set_minor_formatter(ticker.NullFormatter())
         
-        print "ft: 7; %s" % year_range
+        print "ft: 6; %s" % year_range
 
-    elif year_range < 18.3:
+    elif 3.001 < year_range < 18.301:
+        #   |       |       |       |
+        #       08      09      10
         ax.xaxis.set_major_locator(mdates.YearLocator())
         ax.xaxis.set_minor_locator(mdates.YearLocator(month=7))
 
@@ -104,12 +98,14 @@ def format_line_ticks(ax, year_range):
             tick.tick2line.set_markersize(0)
             tick.label1.set_horizontalalignment('center')
         
-        print "ft: 8; %s" % year_range
+        print "ft: 7; %s" % year_range
             
     else:
+        #    |          |          |
+        #  1980       1990       2000
         ax.xaxis.set_major_locator(mdates.YearLocator(10))
-        ax.xaxis.set_minor_locator(mdates.YearLocator(10))
+        ax.xaxis.set_minor_locator(mdates.YearLocator())
 
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
     
-        print "ft: 9; %s" % year_range
+        print "ft: 8; %s" % year_range
