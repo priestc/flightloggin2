@@ -116,24 +116,70 @@ class MakeRoute(object):
     ###########################################################################
 
     def find_airport(self, ident, i):
-        from models import RouteBase
+        """
+        EX = current exact identifier
+        vHI = valid historical record based on date
+        iHI = invalid historical record based on date
+        --------------------------            
+        only iHI and no EX:
+            use iHI
+            
+        vHI and no EX:
+            use vHI
+            
+        No HI no EX:
+            use unknown routebase
+            
+        no HI one EX:
+            use the EX
+        """
         
         date = self.date
         
-        hi = None
-        if date:
-            #first try to get historical ident
-            try:
-                hi = HistoricalIdent.goon(identifier__endswith=ident)
-            except HistoricalIdent.MultipleObjectsReturned:
-                hi = HistoricalIdent.goon(identifier__endswith=ident,
-                                          start__lte=date,
-                                          end__gte=date)
+        hi = HistoricalIdent.objects.filter(identifier__endswith=ident)
+        ex = Location.goon(loc_class=1, identifier=ident)
         
-        if hi:              ## XXX remove str() after switching to django 1.2
-            airport = Location.goon(loc_class=1, identifier=str(hi.current_location))
+        valid_hi = None
+        invalid_hi = None
+        airport_ident = None
+        airport = None
+        
+        if hi.count() > 0:
+            try:
+                valid_hi = hi.get(start__lte=date, end__gte=date)
+                invalid_hi = None
+            except HistoricalIdent.DoesNotExist:
+                valid_hi = None
+                invalid_hi = hi.latest('end')
+        
+        ##############
+        
+        if invalid_hi and not valid_hi and not ex:
+            #we dont have anything but an expired HI, just use it
+            airport_ident = invalid_hi.current_location
+        
+        elif invalid_hi and not valid_hi and ex:
+            # an ex trumps an invalid HI
+            airport = ex
+            
+        elif valid_hi:
+            # we have a valid HI, use it no matter what!
+            airport_ident = valid_hi.current_location
+        
+        elif not valid_hi and not invalid_hi and not ex:
+            #we have nothing :(
+            airport = None
+        
+        elif not valid_hi and not invalid_hi and ex:
+            airport = ex
+            
         else:
-            airport = Location.goon(loc_class=1, identifier=ident)
+            assert False, "Some weird corner case"
+        
+        ################
+        
+        if airport_ident and not airport:
+            airport = Location.goon(identifier=str(airport_ident))
             
         if not airport and len(ident) == 3:
             # if the ident is 3 letters and no hit, try again with an added 'K'
