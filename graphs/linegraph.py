@@ -75,12 +75,20 @@ class ProgressGraph(NothingHereMixin):
         from format_ticks import format_line_ticks    
         format_line_ticks(ax, self.year_range)
         ax.grid(True)
-            
-    def as_png(self):
-        return plot_png(self.output)()
     
+    @plot_png
+    def as_png(self):
+        try:
+            return self.output()
+        except self.EmptyLogbook:
+            return self.NothingHereGraph
+    
+    @plot_png
     def as_svg(self):
-        return plot_svg(self.output)()    
+        try:
+            return self.output()
+        except self.EmptyLogbook:
+            return self.NothingHereGraph
 
 ###############################################################################
 
@@ -167,6 +175,9 @@ class LogbookProgressGraph(ProgressGraph):
         qs = self.start_qs.filter_by_column(column)
         db_column = self.get_annotate_field(column)
         
+        if qs.count() < 1:
+            raise self.EmptyLogbook
+            
         before_graph = None
         if not (self.start and self.end):
             # start and end have not been passed in manually
@@ -183,8 +194,7 @@ class LogbookProgressGraph(ProgressGraph):
 
         data = list(qs)
         
-        if len(data) < 1:
-            raise self.EmptyLogbook
+        
         
         if before_graph:
             # add the before graph value to the beginning of the interval data
