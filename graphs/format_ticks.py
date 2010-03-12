@@ -46,8 +46,8 @@ def format_line_ticks(ax, year_range):
     
     #between 5.4 months and 9.7 months
     elif 0.45 < year_range < 0.801:
-        #   |         |         |         |
-        #     Oct '09   Dec '09   Jan '10
+        #   |           |           |           |
+        #      Oct '09     Dec '09     Jan '10  
         ax.xaxis.set_major_locator(mdates.MonthLocator())
         ax.xaxis.set_minor_locator(mdates.MonthLocator(bymonthday=15))
 
@@ -101,7 +101,7 @@ def format_line_ticks(ax, year_range):
         print "ft: 7; %s" % year_range
             
     else:
-        #    |          |          |
+        # ...|..........|..........|...
         #  1980       1990       2000
         ax.xaxis.set_major_locator(mdates.YearLocator(10))
         ax.xaxis.set_minor_locator(mdates.YearLocator())

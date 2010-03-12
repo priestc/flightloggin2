@@ -123,9 +123,12 @@ class MakeRoute(object):
         hi = None
         if date:
             #first try to get historical ident
-            hi = HistoricalIdent.goon(start__lte=date,
-                                      end__gte=date,
-                                      identifier=ident)
+            try:
+                hi = HistoricalIdent.goon(identifier__endswith=ident)
+            except HistoricalIdent.MultipleObjectsReturned:
+                hi = HistoricalIdent.goon(identifier__endswith=ident,
+                                          start__lte=date,
+                                          end__gte=date)
         
         if hi:              ## XXX remove str() after switching to django 1.2
             airport = Location.goon(loc_class=1, identifier=str(hi.current_location))
@@ -149,7 +152,7 @@ class MakeRoute(object):
         """
         
         fbs = self.normalize(route.fallback_string)
-        points = fbs.split()     # MER-VGA -> ['MER', 'VGA']
+        points = fbs.split()     # 'MER / VGA - mer' -> ['MER', 'VGA', 'MER']
         unknown = False
         p2p = []
         routebases = []

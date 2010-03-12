@@ -20,9 +20,13 @@ def linegraph_image(request, columns, dates=None, ext='png',
     elif spikes == '-nospikes':
         spikes = False
         
-    from linegraph import ProgressGraph
+    from linegraph import LogbookProgressGraph
         
-    pg = ProgressGraph(request.display_user, columns, dates, rate, spikes)
+    pg = LogbookProgressGraph(user=request.display_user,
+                       columns=columns,
+                       range=dates,
+                       rate=rate,
+                       spikes=spikes)
     
     if ext == 'png':
         return pg.as_png()
