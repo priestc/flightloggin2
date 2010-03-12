@@ -128,7 +128,7 @@ class MakeRoute(object):
                                       identifier=ident)
         
         if hi:              ## XXX remove str() after switching to django 1.2
-            airport = Location.goon(identifier=str(hi.current_location))
+            airport = Location.goon(loc_class=1, identifier=str(hi.current_location))
         else:
             airport = Location.goon(loc_class=1, identifier=ident)
             
