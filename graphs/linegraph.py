@@ -83,7 +83,7 @@ class ProgressGraph(NothingHereMixin):
         except self.EmptyLogbook:
             return self.NothingHereGraph
     
-    @plot_png
+    @plot_svg
     def as_svg(self):
         try:
             return self.output()
@@ -263,7 +263,7 @@ class Plot(object):
         self.kwargs['lw'] = 2
         
         self.unit = "Accumulated Flight Hours"
-        self.rate_unit = "30 Day Moving Average"
+        self.rate_unit = "30 Day Moving Total"
         
         # must remove all kwargs that matplotlib won't accept
         
