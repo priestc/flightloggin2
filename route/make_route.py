@@ -179,7 +179,7 @@ class MakeRoute(object):
         ################
         
         if airport_ident and not airport:
-            airport = Location.goon(identifier=str(airport_ident))
+            airport = Location.goon(loc_class=1, identifier=str(airport_ident))
             
         if not airport and len(ident) == 3:
             # if the ident is 3 letters and no hit, try again with an added 'K'
