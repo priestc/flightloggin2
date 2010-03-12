@@ -37,6 +37,11 @@
     </tr>
     
     <tr>
+        <td>Date when total flights is projected to reach one million</td>
+        <td>{{ date_million }} ({{ days_million|floatformat:0 }} days)</td>
+    </tr>
+    
+    <tr>
         <td>{{ t.avg_duration.0 }}</td>
         <td><a href="" class="graph_popup" id="avg_duration"><img src="{{ MEDIA_URL }}/icons/graph.png" alt="Click to see graph"></a>
         {{ cs.avg_duration|floatformat:2 }}</td>

@@ -103,6 +103,35 @@ class StatDB(models.Model):
     
     class Meta:
         get_latest_by = 'dt'
+    
+    @classmethod
+    def get_object_ago(cls, unit):
+        if unit.endswith("d"):
+            num = int(unit[:-1])
+            dt = datetime.datetime.now() - datetime.timedelta(days=num)
+            y=dt.year
+            m=dt.month
+            d=dt.day
+            return cls.objects.filter(dt__year=y, dt__month=m, dt__day=d).latest()
+    
+    def days_until_million(self):
+        """
+        Calculate the rate of flights being added by calculating the average
+        flights per day based on the past 60 days. The project how long it will
+        be until the total there are a million flights.
+        """
+        
+        now = self.total_logged
+        sixty = StatDB.get_object_ago('60d').total_logged
+        
+        rate = float((now - sixty) / 60)
+        million_to_go = 1000000 - now
+        
+        print "now: {now}, sixty_ago: {sixty}, rate: {rate}".format(**locals())
+        
+        return million_to_go / rate
+        
+    
 
 class Stat(object):
 
