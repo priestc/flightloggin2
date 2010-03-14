@@ -1,5 +1,6 @@
 BAR_AGG_FIELDS = ('By Person',
                   'By Instructor',
+                  'By Student',
                   'By Captain',
                   'By First Officer',
                   'By Tailnumber',
