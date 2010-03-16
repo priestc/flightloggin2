@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load cache %}
 
-{% block description %}{{ request.display_user.username }}'s electronic pilot logbook application{% endblock%}
+{% block description %}{{ request.display_user.username|default:"Pilot" }}'s electronic logbook application{% endblock%}
 
 {% block javascript %}
     <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/news.css">
