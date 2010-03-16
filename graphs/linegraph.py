@@ -1,53 +1,74 @@
 import datetime
+import numpy
+from collections import deque
 
-from django.utils.dateformat import format as dj_date_format
+from django.utils.dateformat import format
+from django.db.models import Sum
+        
+from matplotlib.figure import Figure
 
-from image_formats import plot_png, plot_svg, plot_png2, plot_svg2
-from logbook.constants import FIELD_TITLES
-
+from logbook.constants import FIELD_TITLES, DB_FIELDS
+from logbook.models import Flight
 from main.mixins import NothingHereMixin
 
-class ProgressGraph(NothingHereMixin):
+from utils import datetimeRange
+from image_formats import plot_png, plot_svg, plot_png2, plot_svg2
 
+
+class EmptyGraph(Exception):
+        pass
+
+class ProgressGraph(NothingHereMixin):
+    """
+    Given a list of plot objects, return a Matplotlib line graph.
+    """
+    
     # the date format of the subtitle
     df = "F jS, Y"
-    
-    # the window for rate calculations
-    r = 30
 
-    def __init__(self, *args, **kwargs):
-        from matplotlib.figure import Figure
+    def __init__(self, plots):
+        
         self.fig = Figure()
-        self.rate = kwargs.pop('rate', False)
+        self.plots = plots
         
-        r = kwargs.pop('range', False)
+        self.ax2 = None
         
-        if r:
-            self.split_dates(r)
+        overall_range = self.overall_range(plots)
+        
+        if not overall_range:
+            self.start, self.end, self.year_range = (None,) * 3
         else:
-            self.end, self.start, self.year_range = (None,) * 3
-            
-    def split_dates(self, date_range):
-        dates = date_range.split('-')
-        s = dates[0]
-        e = dates[1]
+            self.start, self.end, self.year_range = overall_range
+    
+    def overall_range(self, plots):
+        """
+        Go through each plot object and determine the overall range
+        across all of them
+        """
         
-        # turn "2007.5.14" to "datetime.date(2007, 5, 14)"
-        self.start = datetime.date(*[int(x) for x in s.split('.')])
-        self.end   = datetime.date(*[int(x) for x in e.split('.')])
-        self.year_range = (self.end-self.start).days / 365.0
+        starts = []
+        ends = []
+        for plot in plots:
+            starts.append(plot.start)
+            ends.append(plot.end)
         
-        self.interval_start = self.start - datetime.timedelta(days=self.r)   
+        overall_e = max(ends)
+        overall_s = min(starts)
+        overall_y = (overall_e - overall_s).days / 365.0
+        
+        return (overall_s, overall_e, overall_y)
     
     def set_titles(self, title, subtitle):
+        """
+        Set the title and subtitle of the graph
+        """
+        
         self.fig.text(.5,.94,title, fontsize=18, ha='center')
         self.fig.text(.5,.91,subtitle,fontsize=10,ha='center')
     
     def output(self):
-        plots = self.get_plots()
 
-        #add each plot to the figure
-        for plot in plots:
+        for plot in self.plots:
             self.add_plot(plot)
             
         self.fig.gca().set_xlim(self.start, self.end)
@@ -55,21 +76,20 @@ class ProgressGraph(NothingHereMixin):
         return self.fig
     
     def add_plot(self, plot):
-        c = plot.kwargs['color']
         ax = self.fig.add_subplot(111)
         ax.plot(plot.x, plot.y, **plot.kwargs)
-        ax.set_ylabel(plot.unit, color=c)
-        
-        for tl in ax.get_yticklabels():
-                tl.set_color(c)
+        ax.set_ylabel(plot.unit)
         
         if plot.do_rate:
             c = plot.rate_kwargs['color']
-            ax2 = ax.twinx()
-            ax2.plot(plot.rx, plot.ry, **plot.rate_kwargs)
-            ax2.set_ylabel(plot.rate_unit, color=c)
+            if not self.ax2:
+                # add all rate graphs to the same axis
+                self.ax2 = ax.twinx()
+                
+            self.ax2.plot(plot.rx, plot.ry, **plot.rate_kwargs)
+            self.ax2.set_ylabel(plot.rate_unit, color=c)
             
-            for tl in ax2.get_yticklabels():
+            for tl in self.ax2.get_yticklabels():
                 tl.set_color(c)
         
         from format_ticks import format_line_ticks    
@@ -80,167 +100,39 @@ class ProgressGraph(NothingHereMixin):
     def as_png(self):
         try:
             return self.output()
-        except self.EmptyLogbook:
+        except EmptyGraph:
             return self.NothingHereGraph
     
     @plot_svg
     def as_svg(self):
         try:
             return self.output()
-        except self.EmptyLogbook:
+        except EmptyGraph:
             return self.NothingHereGraph
 
 ###############################################################################
 
 class LogbookProgressGraph(ProgressGraph):
     
-    class EmptyLogbook(Exception):
-        pass
-    
     # fields that are their own unit
     INT_TITLES = ('day_l', 'night_l', 'app')
     
     DATE_FORMAT = "F jS, Y"
-    
-    def __init__(self, columns, *args, **kwargs):
-        super(LogbookProgressGraph, self).__init__(*args, **kwargs)
-        #####
-        
-        self.user = kwargs.pop('user') if 'user' in kwargs else None
-        self.spikes = kwargs.pop('spikes') if 'spikes' in kwargs else None
-        
-        # split up columns and remove duplicates
-        self.columns = set(columns.split('-'))
-        
-        from logbook.models import Flight
-        self.start_qs = Flight.objects.user(self.user)
-        
-        self.filter_spikes()
-    
-    def get_annotate_field(self, column):
-        from logbook.constants import DB_FIELDS
-        
-        if column == 'line_dist':
-            return "route__total_line_all"
-        
-        if column in DB_FIELDS:
-            return column
-        elif column.endswith('pic'):
-            return 'pic'
-        else:
-            return 'total'
-        
-    def filter_spikes(self):
-        """
-        Filter out spikes so it makes a smooth line
-        """
-        
-        if self.spikes:
-            return
-        self.start_qs = self.start_qs.exclude(total__gte=24)
-    
-    def figure_start_and_end(self, qs):
-        """
-        Get the dates that the graph starts and ends. This function is for when
-        a date range is not manually passed into the class
-        """
-        
-        self.end = qs.values('date').latest()['date']
-        self.start = qs.values('date').order_by('date')[0]['date']
-        self.interval_start = self.start - datetime.timedelta(days=self.r)
-        self.year_range = (self.end-self.start).days / 365.0
-    
-    def get_plots(self):
-        """
-        Returns a list of plot objects, one for each column
-        """
-        
-        plots = []
-        for column in self.columns:
-            data = self.get_data_for_column(column)
-            plots.append(self.construct_plot(data))
-        
-        return plots
-    
-       
-    def get_data_for_column(self, column=None):
-        """
-        Returns a list of values and dates that will be plotted
-        If a date range is manually specified, we must calculate the
-        totals up to that date so the graph doesn't start on zero.
-        """
-        
-        from django.db.models import Sum
-        
-        qs = self.start_qs.filter_by_column(column)
-        db_column = self.get_annotate_field(column)
-        
-        if qs.count() < 1:
-            raise self.EmptyLogbook
-            
-        before_graph = None
-        if not (self.start and self.end):
-            # start and end have not been passed in manually
-            self.figure_start_and_end(qs)
-        else:
-            before_graph = qs.filter(date__lt=self.interval_start)\
-                             .agg(column, float=True)
-            qs = qs.filter(date__range=(self.interval_start,self.end))
-        
-        
-        qs = qs.values('date')\
-               .annotate(value=Sum(db_column))\
-               .order_by('date')
-
-        data = list(qs)
-        
-        
-        
-        if before_graph:
-            # add the before graph value to the beginning of the interval data
-            data.insert(0, {"date": self.interval_start-datetime.timedelta(days=1), 
-                            "value": before_graph})
-
-        return data
-
-
-    def construct_plot(self, data):
-        """
-        Transform the raw data into plot ready lists and then construct a
-        plot object
-        """
-        
-        from utils import datetimeRange
-        import numpy
-        
-        values = []
-        dates = []
-        d={}
-        for item in data:
-            values.append(item['value'])
-            dates.append(item['date'])
-            d.update({item['date']: item['value']})
-            
-        accumulation = numpy.cumsum(values)
-        
-        padx, pady = (None, ) * 2
-        if self.rate:
-            padx = list(datetimeRange(self.interval_start, self.end))
-            pady = [d.get(day, 0) for day in padx]
-            
-        plot = Plot(dates, accumulation, padx=padx, pady=pady, rate=self.rate, color='b')
-        return plot
-    
+      
     def output(self):
         
         ret = super(LogbookProgressGraph, self).output()
         
-        from django.utils.dateformat import format
         s = format(self.start, self.DATE_FORMAT)
         e = format(self.end, self.DATE_FORMAT)
         
         subtitle = "From {0} to {1}".format(s, e)
-        title = "{0} Progression".format(FIELD_TITLES[list(self.columns)[0]])
+        
+        title = []
+        for plot in self.plots:
+            title.append(plot.title)
+        
+        title = "{0} Progression".format(", ".join(title))
         
         self.set_titles(title, subtitle)
         
@@ -252,11 +144,13 @@ class Plot(object):
     
     interval = 30
     
-    def __init__(self, x, y, padx=None, pady=None, **kwargs):
-        self.x = x
-        self.y = y
+    def __init__(self, data, rate=False, **kwargs):
+        """
+        All subclasses need to first determine self.start and self.end, and
+        self.title before this constructor can be called with super()
+        """
         
-        assert len(x) == len(y), "%s %s" % (len(x), len(y))
+        self.x, self.y, padx, pady = self.construct_plot_lists(data, rate)
 
         self.kwargs = kwargs
         self.kwargs['drawstyle'] = 'steps-post'
@@ -265,22 +159,19 @@ class Plot(object):
         self.unit = "Accumulated Flight Hours"
         self.rate_unit = "30 Day Moving Total"
         
-        # must remove all kwargs that matplotlib won't accept
-        
         self.do_rate = False
-        if self.kwargs.pop('rate', False) and padx:
+        if rate:
             self.do_rate = True
             self.rx = padx
-            self.ry = self.moving_average(pady, self.interval)
+            self.ry = self.moving_average(pady)
             
-    def moving_average(self, iterable, n=5):
+    def moving_average(self, iterable):
         """
-        Calculate the moving average with a subclassed deque
+        Calculate the moving average with a deque
         http://en.wikipedia.org/wiki/Moving_average
         """
         
-        from collections import deque
-        d = deque([], n)
+        d = deque([], self.interval)
         
         avg = []
         for elem in iterable:
@@ -288,6 +179,47 @@ class Plot(object):
             avg.append(sum(d))
             
         return avg
+
+    def construct_plot_lists(self, data, rate):
+        """
+        Transform the raw data into plot ready lists: x, y.
+        And for the rate: padx, pady
+        """
+        
+        values = []
+        dates = []
+        d={}
+        for item in data:
+            values.append(item['value'])
+            dates.append(item['date'])
+            d.update({item['date']: item['value']})
+            
+        accumulation = numpy.cumsum(values)
+        
+        if rate:
+            padx = list(datetimeRange(self.interval_start, self.end))
+            pady = [d.get(day, 0) for day in padx]
+        else:
+            padx = None
+            pady = None
+        
+        return dates, accumulation, padx, pady
+    
+    def split_dates(self, date_range):
+        """
+        Split up the date in url form and return them as
+        datetime objects
+        """
+        
+        dates = date_range.split('-')
+        s = dates[0]
+        e = dates[1]
+        
+        # turn "2007.5.14" to "datetime.date(2007, 5, 14)"
+        start = datetime.date(*[int(x) for x in s.split('.')])
+        end   = datetime.date(*[int(x) for x in e.split('.')])
+        
+        return (start, end)
     
     @property
     def rate_kwargs(self):
@@ -302,3 +234,121 @@ class Plot(object):
         kwargs['drawstyle'] = 'default'
         
         return kwargs
+
+##############################################################################
+
+class LogbookPlot(Plot):
+    
+    def __init__(self, user, column, range=None, rate=False, spikes=True, **kwargs):
+        """
+        Turns a username, column name and a date range into a big single
+        list data from the database. self.interval_start is used internally
+        to help
+        """
+        
+        self.start_qs = Flight.objects.user(user).filter_by_column(column)
+        
+        self.title = FIELD_TITLES[column]
+        
+        if not spikes:
+            self.filter_spikes()
+            
+        if range:
+            # range is the date range of the visible plot. Here we convert
+            # those dates from a string to a datetime object
+            self.start, self.end = self.split_dates(range)
+        else:
+            # Determine the start and end of the graph based on
+            # some extra database queries.
+            self.start, self.end = self.figure_start_and_end(self.start_qs)
+            
+        self.interval_start = self.start
+        if rate:
+            #go back another [interval] days if we're making a rate graph
+            #this is so the rate line is fully accurate when the plot starts 
+            self.interval_start -= datetime.timedelta(days=self.interval)
+        
+        data = self.get_data(column)
+            
+        super(LogbookPlot, self).__init__(data, rate, **kwargs)
+
+    def figure_start_and_end(self, qs):
+        """
+        Get the dates that the graph starts and ends. This function is for when
+        a date range is not manually passed into the class
+        """
+        try:
+            end = qs.values('date').latest()['date']
+            start = qs.values('date').order_by('date')[0]['date']
+        except Flight.DoesNotExist:
+            raise EmptyGraph
+
+        return (start, end)
+
+    def get_annotate_field(self, column):
+        """
+        Returns a db field name for use in the annotate function
+        """
+        
+        if column == 'line_dist':
+            return "route__total_line_all"
+        
+        if column in DB_FIELDS:
+            return column
+        elif column.endswith('pic'):
+            return 'pic'
+        else:
+            return 'total'
+
+    def filter_spikes(self):
+        """
+        Filter out spikes so it makes a smooth line
+        """
+        
+        self.start_qs = self.start_qs.exclude(total__gte=24)
+    
+    def get_data(self, column):
+        """
+        Returns a list of dicts containing values and dates
+        which will be sent off to more processing. This data is
+        filtered to the appropriate date range.
+        """
+        
+        qs = self.start_qs
+        db_column = self.get_annotate_field(column)
+        
+        if qs.count() < 1:
+            raise self.EmptyLogbook
+            
+        before_graph = qs.filter(date__lt=self.interval_start)\
+                         .agg(column, float=True)
+                         
+        qs = qs.filter(date__range=(self.interval_start,self.end))\
+               .values('date')\
+               .annotate(value=Sum(db_column))\
+               .order_by('date')
+
+        data = list(qs)
+        
+        # add the before graph value to the beginning of the interval data
+        data.insert(0, {"date": self.interval_start-datetime.timedelta(days=1), 
+                        "value": before_graph})
+
+        return data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

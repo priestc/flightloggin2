@@ -12,7 +12,7 @@ from queryset_manager import *
 
 class Location(EnhancedModel):
     
-    objects = GeoQuerySetManager(LocationQuerySet)    
+    objects = GeoQuerySetManager(LocationQuerySet)
     
     ## -----------------------------------------------------------------------
     

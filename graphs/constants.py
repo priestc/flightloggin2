@@ -21,3 +21,14 @@ BAR_FIELDS = ['total',
               'mpg',
               'gph',
               ] + AGG_FIELDS
+              
+    
+PLOT_COLORS = {
+                    "total": "black",
+                    "pic": "red",
+                    "sic": "purple",
+                    "dual_r": "blue",
+                    "dual_g": "orange",
+                    "act_inst": "green",
+                    "sim_inst": "lime",
+               }

@@ -1,8 +1,10 @@
 from django.utils.safestring import mark_safe
-
-from logbook.constants import GRAPH_FIELDS, AGG_FIELDS, FIELD_TITLES
 from annoying.decorators import render_to
 from share.decorator import no_share
+
+from logbook.constants import GRAPH_FIELDS, AGG_FIELDS, FIELD_TITLES
+from constants import PLOT_COLORS
+from linegraph import LogbookProgressGraph, LogbookPlot
 
 @no_share('other')
 def linegraph_image(request, columns, dates=None, ext='png',
@@ -19,19 +21,35 @@ def linegraph_image(request, columns, dates=None, ext='png',
         
     elif spikes == '-nospikes':
         spikes = False
+    
+    plots = []
+    columns = columns.split('-')
+    for column in columns:
         
-    from linegraph import LogbookProgressGraph
+        if len(columns) > 1:
+            color = PLOT_COLORS[column]
+        else:
+            color = 'blue'
         
-    pg = LogbookProgressGraph(user=request.display_user,
-                       columns=columns,
-                       range=dates,
-                       rate=rate,
-                       spikes=spikes)
+        p = LogbookPlot(
+                user=request.display_user,
+                column=column,
+                range=dates,
+                rate=rate,
+                spikes=spikes,
+                color=color,
+            )
+                       
+        plots.append(p)
+    
+    pg = LogbookProgressGraph(plots)
     
     if ext == 'png':
         return pg.as_png()
-    else:
+    elif ext == 'svg':
         return pg.as_svg()
+    else:
+        assert False
 
 ##############################################################################
 
