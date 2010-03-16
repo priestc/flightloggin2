@@ -180,7 +180,7 @@ class Location(EnhancedModel):
 ###############################################################################
 
 class HistoricalIdent(EnhancedModel):
-    start = models.DateField()
+    start = models.DateField(default='1900-01-01')
     end = models.DateField()
     
     identifier = models.CharField(max_length=8)
