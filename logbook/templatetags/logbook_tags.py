@@ -37,7 +37,7 @@ class DateCell(template.Node):
         
         spans = ""
         for data_column in DB_FIELDS:
-            data = row.column(data_column)
+            data = row.column(data_column, profile.get_num_format())
             spans += '\n<span class="data_%s">%s</span>' % (data_column, data)
         
         return self.td_template % (a_date + spans + "</a>")
