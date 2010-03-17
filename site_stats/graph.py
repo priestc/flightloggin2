@@ -1,63 +1,72 @@
-import datetime
-import numpy as np
+from collections import deque
 
-from django.utils.dateformat import format as dj_date_format
+from graphs.linegraph import ProgressGraph, Plot
+from models import StatDB
+from constants import STATS_TITLES
+from django.db.models import Max
 
-from graphs.image_formats import plot_png, plot_svg
+class StatsGraph(ProgressGraph):
 
-class StatsGraph(object):
+    def output(self):
+        ret = super(StatsGraph, self).output()
+        
+        title = STATS_TITLES[self.title][0]
+        #unit = STATS_TITLES[self.title][1]
+        
+        #print title
+        
+        self.set_title(title)
+        
+        return ret
+
+class SiteStatsPlot(Plot):
     
-    def __init__(self, val, rate=True):
-        
-        #create the figure instance
-        from matplotlib.figure import Figure
-        self.fig = Figure()
-        
-        from models import StatDB
-        self.title = val
-        kwarg = {str(val): 0}
+    def __init__(self, val, rate=False, **kwargs):
 
-        self.qs = StatDB.objects.exclude(**kwarg)      
+        val = str(val)
+        
+        #exclude zero values (before the routine recorded any data)
+        kwarg = {val: 0}
+        qs = StatDB.objects.exclude(**kwarg).order_by('dt') 
                                     
-        if self.title.endswith("_7_days"):
+        if val.endswith("_7_days"):
             ## filter queryset to only show one data point per day
             ## this is because the 7 days graphs data is only precise to the
             ## day. Below the queryset is limited to only items that are
             ## taken at the 9 PM data poll.
-            self.qs = self.qs.extra(where=['EXTRACT (HOUR FROM dt) = 18'])
+            qs = qs.extra(where=['EXTRACT (HOUR FROM dt) = 18'])
         
-        self.y = self.qs.values_list(val, flat=True).order_by('-dt')
-        self.x = self.qs.values_list('dt', flat=True).order_by('-dt')
+        qs = qs.annotate(date=Max('dt'), value=Max(val))\
+               .values('date', 'value')
         
-    def output(self):
-        ax = self.fig.add_subplot(111)
-        ax.plot(self.x,
-                self.y,
-                'red',
-                lw=2)
-                
-        import time        
-        from graphs.format_ticks import format_line_ticks
-        from constants import STATS_TITLES
+        data = list(qs)
+ 
+        self.start = data[0]['date']
+        self.end = data[-1]['date']
         
-        x = list(self.x)
-        start = time.mktime(x[-1].timetuple())
-        end = time.mktime(x[0].timetuple())
-        range_ = (end - start) / (60.0 * 60.0 * 24 * 365)
+        self.interval_start = self.start # no need to use a pre-interval
+        
+        super(SiteStatsPlot, self).__init__(data, rate, **kwargs)
+        
+    def moving_value(self, iterable):
+        """
+        Calculate the moving total with a deque
+        slightly modified because
+        """
+        
+        d = deque([], self.interval)
+        
+        data = []
+        for elem in iterable:
+            d.append(elem)
+            data.append((abs(sum(d)-elem*len(d)) / len(d)) * self.interval)
+            
+        return data
 
-        format_line_ticks(ax, range_)
-        
-        title = STATS_TITLES[self.title][0]
-        unit = STATS_TITLES[self.title][1]
-        
-        self.fig.text(.5,.94, title, fontsize=18, ha='center')
-        ax.set_ylabel(unit)
-        ax.grid(True)
-        
-        return self.fig
     
-    def as_png(self):
-        return plot_png(self.output)()
     
-    def as_svg(self):
-        return plot_svg(self.output)()
+#auv, avg_duration, avg_per_active, day_wmh, day_wmu, dt, id, most_common_manu,
+#most_common_tail, most_common_type, non_empty_users, num_7_days, pwm_count,
+#pwm_hours, route_earths, time_7_days, total_dist, total_hours, total_logged,
+#unique_airports, unique_countries, unique_tn, user_7_days, users
+

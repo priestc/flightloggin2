@@ -24,14 +24,18 @@ class ProgressGraph(NothingHereMixin):
     """
     
     # the date format of the subtitle
-    df = "F jS, Y"
+    DATE_FORMAT = "F jS, Y"
 
-    def __init__(self, plots):
+    def __init__(self, plots, title=None, plot_unit="", rate_unit=""):
         
         self.fig = Figure()
         self.plots = plots
+        self.title = title
         
         self.ax2 = None
+        
+        self.rate_unit = rate_unit
+        self.plot_unit = plot_unit
         
         overall_range = self.overall_range(plots)
         
@@ -58,10 +62,15 @@ class ProgressGraph(NothingHereMixin):
         
         return (overall_s, overall_e, overall_y)
     
-    def set_titles(self, title, subtitle):
+    def set_title(self, title):
         """
         Set the title and subtitle of the graph
         """
+        
+        s = format(self.start, self.DATE_FORMAT)
+        e = format(self.end, self.DATE_FORMAT)
+        
+        subtitle = "From {0} to {1}".format(s, e)
         
         self.fig.text(.5,.94,title, fontsize=18, ha='center')
         self.fig.text(.5,.91,subtitle,fontsize=10,ha='center')
@@ -78,7 +87,7 @@ class ProgressGraph(NothingHereMixin):
     def add_plot(self, plot):
         ax = self.fig.add_subplot(111)
         ax.plot(plot.x, plot.y, **plot.kwargs)
-        ax.set_ylabel(plot.unit)
+        ax.set_ylabel(self.plot_unit)
         
         if plot.do_rate:
             c = plot.rate_kwargs['color']
@@ -87,7 +96,7 @@ class ProgressGraph(NothingHereMixin):
                 self.ax2 = ax.twinx()
                 
             self.ax2.plot(plot.rx, plot.ry, **plot.rate_kwargs)
-            self.ax2.set_ylabel(plot.rate_unit, color=c)
+            self.ax2.set_ylabel(self.rate_unit, color=c)
             
             for tl in self.ax2.get_yticklabels():
                 tl.set_color(c)
@@ -113,20 +122,10 @@ class ProgressGraph(NothingHereMixin):
 ###############################################################################
 
 class LogbookProgressGraph(ProgressGraph):
-    
-    # fields that are their own unit
-    INT_TITLES = ('day_l', 'night_l', 'app')
-    
-    DATE_FORMAT = "F jS, Y"
-      
+
     def output(self):
         
         ret = super(LogbookProgressGraph, self).output()
-        
-        s = format(self.start, self.DATE_FORMAT)
-        e = format(self.end, self.DATE_FORMAT)
-        
-        subtitle = "From {0} to {1}".format(s, e)
         
         title = []
         for plot in self.plots:
@@ -134,7 +133,7 @@ class LogbookProgressGraph(ProgressGraph):
         
         title = "{0} Progression".format(", ".join(title))
         
-        self.set_titles(title, subtitle)
+        self.set_title(title)
         
         return ret
 
@@ -144,13 +143,19 @@ class Plot(object):
     
     interval = 30
     
-    def __init__(self, data, rate=False, **kwargs):
+    def __init__(self, data, rate=False, pad=True, **kwargs):
         """
         All subclasses need to first determine self.start and self.end, and
         self.title before this constructor can be called with super()
+        data needs to be a list of dicts:
+            [{'value': 34, 'date': datetime.date(207, 4, 2)}, { ... } ]
         """
         
-        self.x, self.y, padx, pady = self.construct_plot_lists(data, rate)
+        self.x, self.rawy, self.y, padx, pady = \
+                self.construct_plot_lists(data, rate, pad)
+                
+        if kwargs.pop('no_acc', False):
+            self.y = self.rawy
 
         self.kwargs = kwargs
         self.kwargs['drawstyle'] = 'steps-post'
@@ -162,25 +167,31 @@ class Plot(object):
         self.do_rate = False
         if rate:
             self.do_rate = True
-            self.rx = padx
-            self.ry = self.moving_average(pady)
+            if pad:
+                self.rx = padx
+                self.ry = self.moving_value(pady)
+            else:
+                self.rx = self.x
+                self.ry = self.moving_value(self.y)
             
-    def moving_average(self, iterable):
+            
+            
+    def moving_value(self, iterable):
         """
-        Calculate the moving average with a deque
+        Calculate the moving total with a deque
         http://en.wikipedia.org/wiki/Moving_average
         """
         
         d = deque([], self.interval)
         
-        avg = []
+        data = []
         for elem in iterable:
             d.append(elem)
-            avg.append(sum(d))
+            data.append(sum(d))
             
-        return avg
+        return data
 
-    def construct_plot_lists(self, data, rate):
+    def construct_plot_lists(self, data, rate, pad):
         """
         Transform the raw data into plot ready lists: x, y.
         And for the rate: padx, pady
@@ -196,14 +207,14 @@ class Plot(object):
             
         accumulation = numpy.cumsum(values)
         
-        if rate:
+        if rate and pad:
             padx = list(datetimeRange(self.interval_start, self.end))
             pady = [d.get(day, 0) for day in padx]
         else:
             padx = None
             pady = None
         
-        return dates, accumulation, padx, pady
+        return dates, values, accumulation, padx, pady
     
     def split_dates(self, date_range):
         """
@@ -243,7 +254,7 @@ class LogbookPlot(Plot):
         """
         Turns a username, column name and a date range into a big single
         list data from the database. self.interval_start is used internally
-        to help
+        to ensure rate plots are accurate
         """
         
         self.start_qs = Flight.objects.user(user).filter_by_column(column)

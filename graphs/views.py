@@ -39,10 +39,18 @@ def linegraph_image(request, columns, dates=None, ext='png',
                 spikes=spikes,
                 color=color,
             )
+        
+        if column == 'app':
+            pu = 'Approaches'
+        elif column in ('night_l', 'day_l'):
+            pu = "Landings"
+        else:
+            pu = "Accumulated Flight Hours"
                        
         plots.append(p)
     
-    pg = LogbookProgressGraph(plots)
+    ru = "Rate of accumulation over the past 30 days"
+    pg = LogbookProgressGraph(plots, plot_unit=pu, rate_unit=ru)
     
     if ext == 'png':
         return pg.as_png()

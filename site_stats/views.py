@@ -2,9 +2,12 @@ import datetime
 
 from django.views.decorators.cache import cache_page
 from annoying.decorators import render_to
+
 from models import Stat
 from share.decorator import secret_key
+
 from utils import *
+from constants import STATS_TITLES
 
 @render_to('site_stats.html')
 def site_stats(request):
@@ -36,7 +39,7 @@ def site_stats(request):
 
 @secret_key
 def save_to_db(request):
-    import datetime
+
     start = datetime.datetime.now()
     ss = Stat()
     ss.save_to_db()
@@ -47,13 +50,10 @@ def save_to_db(request):
 
 @cache_page(60 * 60 * 3)
 def stats_graph(request, item, ext):
-    from graph import StatsGraph
+    from graph import StatsGraph, SiteStatsPlot
     
-    try:
-        g = StatsGraph(item)
-    except Exception, e:
-        from django.http import Http404
-        raise Http404(e)
+    plots = [SiteStatsPlot(item, no_acc=True)]
+    g = StatsGraph(plots, title=item, plot_unit=STATS_TITLES[item][1], rate_unit='rr')
     
     if ext == 'png':
         return g.as_png()
