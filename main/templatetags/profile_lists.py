@@ -73,8 +73,11 @@ def list_airports(tailnumbers):
                          .replace('\\','')\
                          .replace('/','')\
                          .replace(',','') or "None"
-                         
-        url  = reverse('profile-tailnumber', kwargs={"tn": tn_spaceless})
+        try:                
+            url  = reverse('profile-tailnumber', kwargs={"tn": tn_spaceless})
+        except:
+            url = ""
+            
         out += "<a href=\"%s\">%s</a>, " % (url, tn)
         
     ## remove the last trailing ", "
@@ -99,8 +102,11 @@ def list_types(types):
                          .replace('_','')\
                          .replace('/','')\
                          .replace(',','') or "None"
-                        
-        url  = reverse('profile-type', kwargs={"ty": ty_spaceless})
+        try:
+            url  = reverse('profile-type', kwargs={"ty": ty_spaceless})
+        except:
+            url = ""
+            
         out += "<a href=\"%s\">%s</a>, " % (url, ty)
         
     ## remove the last trailing ", "
