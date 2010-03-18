@@ -547,7 +547,7 @@ textarea, select                            {width: 145px}
 gmaps = """
 div#gmap                        {width: 100%%;
                                  margin: 10px auto 0px auto;
-                                 background: green;}
+                                 background: #E5E3DF;}
                                  
 div#gmap.short                  {height: 25em;}
 div#gmap.tall                   {height: 50em;}
