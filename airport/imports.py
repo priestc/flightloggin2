@@ -1,9 +1,21 @@
-#!/home/chris/.virtualenvs/flightloggin/bin/python
+#!/srv/flightloggin/env/bin/python
 
 import os, sys
 import csv, re
 from psycopg2 import IntegrityError
+
+from django.core.management import setup_environ
+
+sys.path = ['/srv/', '/srv/flightloggin/'] + sys.path
+from flightloggin import settings
+
+setup_environ(settings)
+
+######################################################
+
 from airport.models import Location, Region, Country
+from logbook.models import Flight
+
 from django.conf import settings
 PROJECT_PATH = settings.PROJECT_PATH
 
@@ -24,11 +36,8 @@ def latlng_match(old_lat, new_lat, old_lng, new_lng):
     return lat_match and lng_match
 
 def re_render_all():
-    
-    routes = Route.objects.all()
-    
-    for r in routes:
-        r.easy
+    for r in Route.objects.iterator():
+        r.easy_render()
     
 
 def airports():   #import airport
@@ -37,15 +46,12 @@ def airports():   #import airport
     continent	iso_country	iso_region	municipality	scheduled_service
     gps_code	iata_code	local_code	home_link	wikipedia_link	keywords
     """
+    
     path = os.path.join(PROJECT_PATH, 'airport', 'csv', 'airports.csv')
     f = open(path, 'rb')
     reader = csv.reader(f, "excel")
     titles = reader.next()
     reader = csv.DictReader(f, titles)
-
-    count=0
-    count2=0
-    count_to = 0
 
     types = {
                '': 0,
@@ -58,10 +64,11 @@ def airports():   #import airport
                'small_airport': 1,
             }
 
-    for line in reader:
+    # a list of idents that have changed, so they require all routes associated
+    # with them to be re-rendered
+    render_idents = []
 
-        throw_out = False
-        count += 1
+    for count, line in enumerate(reader):
         
         ##########################
 
@@ -70,7 +77,7 @@ def airports():   #import airport
         elev =   line["elevation_ft"]
         type_ =  line["type"]
         local =  line["local_code"]
-        ident =  line['ident'].upper()
+        ident =  line['ident'].upper() #.replace('-', '')
         name =   line["name"]
         country= line["iso_country"].upper()
         city =   line["municipality"]
@@ -78,15 +85,12 @@ def airports():   #import airport
         idd =    line['id']
         gps =    line['gps_code']
         
+        loc_wkt = "POINT ({0} {1})".format(float(lng), float(lat))
+        
         if elev == "":
-            elev=None
+            elev = None
 
         ##########################
-
-        ## throw out all closed airports with "X" identifiers
-        if ident[:2].upper() == "X-":
-            throw_out = True
-
                                            
         if country == "US":
             if (ident.startswith("K")
@@ -97,7 +101,7 @@ def airports():   #import airport
                 # ourairports has a problem where non-icao identifiers in the
                 # US are prefixed with a 'K' when they shouldn't be.
                 
-                ident = ident[1:]
+                ident = ident[1:] # remove the 'K'
                 
             if (not ident.startswith("K")
                 and len(ident) == 3
@@ -114,37 +118,49 @@ def airports():   #import airport
             if local:
                 ident = local
             else:
-                ident = ident[3:]                ## get rid of the "US-" part
+                ident = ident[3:]        ## get rid of the "US-" part
 
+        ##########################
 
-        if not throw_out:
-            l,c = Location.objects.get_or_create(pk=idd)
+        l,c = Location.objects.get_or_create(pk=idd,
+                                             user=ALL_USER,
+                                             loc_class=1)
+        
+        if c:
+            print "new airport:", ident
+        else:    
+            if not l.identifier == ident:
+                print "changed identitifer!: {0}".format(ident) #do_hist(ident)
+                Flight.render_airport(ident)
             
-            l.user = ALL_USER
-            l.loc_class = 1
-            l.identifier = ident
-            l.name = name
-            l.region = Region.goon(code=region, country=country)
-            l.municipality = city
-            l.country = Country.objects.get(code=country)
-            l.elevation = elev
-            l.location = "POINT (%s %s)" % (float(lng), float(lat))
-            l.loc_type = types[type_]
+            elif not l.name == name:
+                print "changed name!: {0}".format(name)
+                Flight.render_airport(ident)
             
-            if c:
-                print "new airport:", ident
-                
-            try:
-                l.save()
-            except Exception, e:
-                print identifier, e
+            elif not l.municipality == city:
+                print "changed municipality!: {0}".format(city)
+                Flight.render_airport(ident)
+        
+        l.municipality = city
+        l.country = Country.objects.get(code=country)
+        l.elevation = elev
+        l.location = loc_wkt
+        l.loc_type = types[type_]
+        l.identifier = ident
+        l.name = name
+        l.region = Region.goon(code=region, country=country)
+            
+        try:
+            l.save()
+        except Exception, e:
+            print identifier, e
+            
+        if (count % 500) == 0:
+            #update user on status
+            print "\n\n{0}\n\n".format(count)
 
-        else:
-            count_to += 1
-
-    print "total:      " + str(count)
-    print "success:    " + str(count2)
-    print "thrown out: " + str(count_to)
+    print "airports: {0}".format(count)
+    return render_idents
 
 ###############################################################################
 
@@ -163,8 +179,6 @@ def navaids():
     reader = csv.reader(f, "excel")
     titles = reader.next()
     reader = csv.DictReader(f, titles)
-
-    count=0
     
     nav_types = {   '': 0,
                     'NDB': 9,
@@ -176,13 +190,12 @@ def navaids():
                     'DME': 15,
     }
 
-    for line in reader:
-        count += 1
+    for count, line in enumerate(reader):
         
         ident = line["ident"]
         lat = line["latitude_deg"]
         lng = line["longitude_deg"]
-        type = line["type"]
+        type_ = line["type"]
         name = line["name"]
         
         #to avoid collisions with airport pk's
@@ -199,7 +212,7 @@ def navaids():
         l.identifier = ident
         l.name = name
         l.location = 'POINT (%s %s)' % (lng, lat)
-        l.loc_type = nav_types[type]
+        l.loc_type = nav_types[type_]
         l.user = ALL_USER
         
         if not skip_find_region:
@@ -212,6 +225,8 @@ def navaids():
             l.save(skip_find_region=skip_find_region)
         except Exception, e:
             print "error:", ident, e
+            
+    print "navaids: {0}".format(count)
 
 ###############################################################################
 
@@ -227,23 +242,21 @@ def regions():   #import region
     reader = csv.reader(f, "excel")
     titles = reader.next()
     reader = csv.DictReader(f, titles)
-    count=0
 
-    for line in reader:
-        count += 1
+    for count, line in enumerate(reader):
 
         code = line["code"].upper()
         name = line["name"]
         country = line["iso_country"].upper()
 
-        try:
-            Region.objects.get_or_create(name=name,
-                                         code=code,
-                                         country=country)
-        except:
-            print code
+        r,c = Region.objects.get_or_create(code=code)
+        r.name = name
+        r.country = country
+            
+        if c:
+            print "new region: " + code
 
-    print "total lines: " + str(count)
+    print "regions: {0}".format(count)
 
 ###############################################################################
 
@@ -259,22 +272,26 @@ def countries():   #import country
     titles = reader.next()
     reader = csv.DictReader(f, titles)
 
-    count=0
-    for line in reader:
-
-        count += 1
-
-        ##########################
+    for count, line in enumerate(reader):
 
         code = line["code"].upper()
         name = line["name"]
         continent = line["continent"].upper()
 
-        try:
-            Country.objects.get_or_create(name=name,
-                                          code=code,
-                                          continent=continent)
-        except:
+        obj, c = Country.objects.get_or_create(code=code)
+        obj.continent = continent
+        obj.name = name
+        obj.save()
+        
+        if c:
             print "error: " + code
 
-    print "lines: " + str(count)
+    print "countries: {0}".format(count)
+
+
+if __name__ == "__main__":
+    countries()
+    regions()
+    airports()
+    navaids()
+
