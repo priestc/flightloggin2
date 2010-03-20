@@ -13,7 +13,7 @@ def format_line_ticks(ax, year_range):
 
         ax.xaxis.set_major_formatter(mdates.DateFormatter('%d'))
         
-        print "ft: 1; %s" % year_range
+        #print "ft: 1; %s" % year_range
     
     # between 18.25 days and 2.2 months
     # each week is major ticked, each day is minor ticked
@@ -25,7 +25,7 @@ def format_line_ticks(ax, year_range):
 
         ax.xaxis.set_major_formatter(mdates.DateFormatter('%d'))
         
-        print "ft: 2; %s" % year_range
+        #print "ft: 2; %s" % year_range
 
     #between 2.2 months (65.7 days) and 5.4 months (164.25 days)
     elif 0.18 < year_range < 0.45:
@@ -42,7 +42,7 @@ def format_line_ticks(ax, year_range):
             tick.tick2line.set_markersize(0)
             tick.label1.set_horizontalalignment('center')
             
-        print "ft: 3; %s" % year_range
+        #print "ft: 3; %s" % year_range
     
     #between 5.4 months and 9.7 months
     elif 0.45 < year_range < 0.801:
@@ -59,7 +59,7 @@ def format_line_ticks(ax, year_range):
             tick.tick2line.set_markersize(0)
             tick.label1.set_horizontalalignment('center')
             
-        print "ft: 4; %s" % year_range
+        #print "ft: 4; %s" % year_range
     
     #between 9.7 months and 2.2 years
     elif 0.801 < year_range < 2.201:
@@ -71,7 +71,7 @@ def format_line_ticks(ax, year_range):
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%b '%y"))
         ax.xaxis.set_minor_formatter(ticker.NullFormatter())
         
-        print "ft: 5; %s" % year_range
+        #print "ft: 5; %s" % year_range
         
     elif 2.201 < year_range < 3.001:
         #   . . | . . . . . | . . . . . | . . . . . | . .
@@ -82,7 +82,7 @@ def format_line_ticks(ax, year_range):
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%b '%Y"))
         ax.xaxis.set_minor_formatter(ticker.NullFormatter())
         
-        print "ft: 6; %s" % year_range
+        #print "ft: 6; %s" % year_range
 
     elif 3.001 < year_range < 18.301:
         #   |       |       |       |
@@ -98,7 +98,7 @@ def format_line_ticks(ax, year_range):
             tick.tick2line.set_markersize(0)
             tick.label1.set_horizontalalignment('center')
         
-        print "ft: 7; %s" % year_range
+        #print "ft: 7; %s" % year_range
             
     else:
         # ...|..........|..........|...
@@ -108,4 +108,4 @@ def format_line_ticks(ax, year_range):
 
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
     
-        print "ft: 8; %s" % year_range
+        #print "ft: 8; %s" % year_range

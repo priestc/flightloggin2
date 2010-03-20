@@ -36,13 +36,6 @@ class ProgressGraph(NothingHereMixin):
         
         self.rate_unit = rate_unit
         self.plot_unit = plot_unit
-        
-        overall_range = self.overall_range(plots)
-        
-        if not overall_range:
-            self.start, self.end, self.year_range = (None,) * 3
-        else:
-            self.start, self.end, self.year_range = overall_range
     
     def overall_range(self, plots):
         """
@@ -76,6 +69,16 @@ class ProgressGraph(NothingHereMixin):
         self.fig.text(.5,.91,subtitle,fontsize=10,ha='center')
     
     def output(self):
+        
+        for plot in self.plots:
+            plot.calculate()
+        
+        overall_range = self.overall_range(self.plots)
+        
+        if not overall_range:
+            self.start, self.end, self.year_range = (None,) * 3
+        else:
+            self.start, self.end, self.year_range = overall_range
 
         for plot in self.plots:
             self.add_plot(plot)
@@ -143,7 +146,7 @@ class Plot(object):
     
     interval = 30
     
-    def __init__(self, data, rate=False, pad=True, **kwargs):
+    def __init__(self, rate=None, pad=True, **kwargs):
         """
         All subclasses need to first determine self.start and self.end, and
         self.title before this constructor can be called with super()
@@ -151,32 +154,20 @@ class Plot(object):
             [{'value': 34, 'date': datetime.date(207, 4, 2)}, { ... } ]
         """
         
-        self.x, self.rawy, self.y, padx, pady = \
-                self.construct_plot_lists(data, rate, pad)
-                
-        if kwargs.pop('no_acc', False):
-            self.y = self.rawy
-
+        self.pad = pad
+        self.rate = rate
         self.kwargs = kwargs
-        self.kwargs['drawstyle'] = 'steps-post'
-        self.kwargs['lw'] = 2
+        
+        if not 'drawstyle' in kwargs.keys():
+            self.kwargs['drawstyle'] = 'steps-post'
+        
+        if not 'lw' in kwargs.keys():
+            self.kwargs['lw'] = 2
         
         self.unit = "Accumulated Flight Hours"
         self.rate_unit = "30 Day Moving Total"
-        
-        self.do_rate = False
-        if rate:
-            self.do_rate = True
-            if pad:
-                self.rx = padx
-                self.ry = self.moving_value(pady)
-            else:
-                self.rx = self.x
-                self.ry = self.moving_value(self.y)
             
-            
-            
-    def moving_value(self, iterable):
+    def _moving_value(self, iterable):
         """
         Calculate the moving total with a deque
         http://en.wikipedia.org/wiki/Moving_average
@@ -191,7 +182,7 @@ class Plot(object):
             
         return data
 
-    def construct_plot_lists(self, data, rate, pad):
+    def _construct_plot_lists(self, data, rate, pad):
         """
         Transform the raw data into plot ready lists: x, y.
         And for the rate: padx, pady
@@ -216,7 +207,7 @@ class Plot(object):
         
         return dates, values, accumulation, padx, pady
     
-    def split_dates(self, date_range):
+    def _split_dates(self, date_range):
         """
         Split up the date in url form and return them as
         datetime objects
@@ -231,6 +222,26 @@ class Plot(object):
         end   = datetime.date(*[int(x) for x in e.split('.')])
         
         return (start, end)
+    
+    def calculate(self):
+    
+        data = self.get_data()
+    
+        if self.kwargs.pop('no_acc', False):
+            self.y = self.rawy
+            
+        self.x, self.rawy, self.y, padx, pady = \
+                self._construct_plot_lists(data, self.rate, self.pad)
+        
+        self.do_rate = False
+        if self.rate:
+            self.do_rate = True
+            if self.pad:
+                self.rx = padx
+                self.ry = self._moving_value(pady)
+            else:
+                self.rx = self.x
+                self.ry = self._moving_value(self.y)
     
     @property
     def rate_kwargs(self):
@@ -264,24 +275,17 @@ class LogbookPlot(Plot):
         if not spikes:
             self.filter_spikes()
             
+        self.column = column
+            
         if range:
             # range is the date range of the visible plot. Here we convert
             # those dates from a string to a datetime object
-            self.start, self.end = self.split_dates(range)
+            self.start, self.end = self._split_dates(range)
         else:
-            # Determine the start and end of the graph based on
-            # some extra database queries.
-            self.start, self.end = self.figure_start_and_end(self.start_qs)
-            
-        self.interval_start = self.start
-        if rate:
-            #go back another [interval] days if we're making a rate graph
-            #this is so the rate line is fully accurate when the plot starts 
-            self.interval_start -= datetime.timedelta(days=self.interval)
+            self.start, self.end = None, None
         
-        data = self.get_data(column)
-            
-        super(LogbookPlot, self).__init__(data, rate, **kwargs)
+        # pad=True because of how logbook data is retrieved from the database
+        super(LogbookPlot, self).__init__(rate=rate, pad=True, **kwargs)
 
     def figure_start_and_end(self, qs):
         """
@@ -318,18 +322,33 @@ class LogbookPlot(Plot):
         
         self.start_qs = self.start_qs.exclude(total__gte=24)
     
-    def get_data(self, column):
+    def get_data(self):
         """
         Returns a list of dicts containing values and dates
         which will be sent off to more processing. This data is
         filtered to the appropriate date range.
         """
         
+        column = self.column
+        
+        if not self.start and not self.end:
+            # Determine the start and end of the graph based on
+            # some extra database queries.
+            self.start, self.end = self.figure_start_and_end(self.start_qs)
+            
+        self.interval_start = self.start
+        
+        if self.rate:
+            #go back another [interval] days if we're making a rate graph
+            #this is so the rate line is fully accurate when the plot starts 
+            self.interval_start -= datetime.timedelta(days=self.interval)
+        
+        
         qs = self.start_qs
         db_column = self.get_annotate_field(column)
         
         if qs.count() < 1:
-            raise self.EmptyLogbook
+            return {}
             
         before_graph = qs.filter(date__lt=self.interval_start)\
                          .agg(column, float=True)
@@ -346,20 +365,3 @@ class LogbookPlot(Plot):
                         "value": before_graph})
 
         return data
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
