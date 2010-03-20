@@ -1,0 +1,2 @@
+linpng12-dev
+libfreetype6-dev
