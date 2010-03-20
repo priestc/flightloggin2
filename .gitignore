@@ -1,5 +1,6 @@
 settings_local.py
 manage.py
+env
 *.bak
 *.pyc
 *.swp
