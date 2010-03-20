@@ -23,9 +23,16 @@ class SiteStatsPlot(Plot):
     
     def __init__(self, val, rate=False, **kwargs):
 
-        val = str(val)
+        self.val = str(val)
         
         #exclude zero values (before the routine recorded any data)
+
+        
+        super(SiteStatsPlot, self).__init__(rate=rate, **kwargs)
+    
+    def get_data(self):
+        val = self.val
+        
         kwarg = {val: 0}
         qs = StatDB.objects.exclude(**kwarg).order_by('dt') 
                                     
@@ -46,9 +53,9 @@ class SiteStatsPlot(Plot):
         
         self.interval_start = self.start # no need to use a pre-interval
         
-        super(SiteStatsPlot, self).__init__(data, rate, **kwargs)
-        
-    def moving_value(self, iterable):
+        return data
+    
+    def _moving_value(self, iterable):
         """
         Calculate the moving total with a deque
         slightly modified because

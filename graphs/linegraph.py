@@ -226,13 +226,13 @@ class Plot(object):
     def calculate(self):
     
         data = self.get_data()
-    
+     
+        self.x, self.rawy, self.y, padx, pady = \
+                self._construct_plot_lists(data, self.rate, self.pad)
+                
         if self.kwargs.pop('no_acc', False):
             self.y = self.rawy
             
-        self.x, self.rawy, self.y, padx, pady = \
-                self._construct_plot_lists(data, self.rate, self.pad)
-        
         self.do_rate = False
         if self.rate:
             self.do_rate = True

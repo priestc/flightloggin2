@@ -53,7 +53,7 @@ def stats_graph(request, item, ext):
     from graph import StatsGraph, SiteStatsPlot
     
     plots = [SiteStatsPlot(item, no_acc=True)]
-    g = StatsGraph(plots, title=item, plot_unit=STATS_TITLES[item][1], rate_unit='rr')
+    g = StatsGraph(plots, title=item, plot_unit=STATS_TITLES[item][1])
     
     if ext == 'png':
         return g.as_png()
