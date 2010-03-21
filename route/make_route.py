@@ -146,7 +146,7 @@ class MakeRoute(object):
             print ident + ' removing "K"'
             airport = self.search_airport(ident[1:], date)
         
-        if not airport and 'O' in ident or '0' in ident:
+        if not airport and ('O' in ident or '0' in ident):
             print ident + ' swapping 0 and O'
             new = ident.replace('O', '&').replace('0', '$')
             ident = new.replace('&', '0').replace('$', 'O')
@@ -159,6 +159,7 @@ class MakeRoute(object):
     def search_airport(self, ident, date):
         hi = HistoricalIdent.objects.filter(identifier=ident)
         ex = Location.goon(loc_class=1, identifier=ident)
+        
         
         valid_hi = None
         invalid_hi = None
@@ -173,6 +174,7 @@ class MakeRoute(object):
                 valid_hi = None
                 invalid_hi = hi.latest('end')
         elif ex:
+            print "found it! ex ", ex
             return ex
         
         ##############
