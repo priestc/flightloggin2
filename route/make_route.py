@@ -152,8 +152,9 @@ class MakeRoute(object):
             #print ident + ' removing "K"'
             ident = ident[1:]
         
-        #try again with fixed identifier    
-        airport = self.search_airport(ident, date)
+        if not airport:
+            #try again with fixed identifier
+            airport = self.search_airport(ident, date)
         
         if not airport and ('O' in ident or '0' in ident) and not ident.startswith('K'):
             #print ident + ' swapping 0 and O'
