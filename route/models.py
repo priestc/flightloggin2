@@ -361,8 +361,7 @@ class Route(EnhancedModel):
         """
         Rerenders the HTML for displaying the route. Takes info from the
         already defines routebases. For rerendering after updating Airport
-        info, use hard_render() 120414 210991
-        problem: 169668
+        info, use hard_render()
         """
         
         fancy = []
@@ -424,7 +423,7 @@ class Route(EnhancedModel):
         connects it to the flight that the old route was connected to.
         Then returns the newly created Route instance. This is used to
         redo all the routebases after the navaid/airport database has been
-        updated and all the primary keys are changed.
+        updated and new identifiers are present.
         """
         
         from make_route import MakeRoute
@@ -435,12 +434,13 @@ class Route(EnhancedModel):
                 
             except IndexError:  
                 # no flight associated with this route
-                pass
+                date = None
             
             else:
                 flight_id = f.id
                 user = f.user
-            
+                date = f.date
+                
         if (not user) and username:
             from django.contrib.auth.models import User
             user = User.objects.get(username=username)
@@ -448,7 +448,7 @@ class Route(EnhancedModel):
         if not user and not username:
             user = share.get_display_user()
         
-        new_route = MakeRoute(self.fallback_string, user, date=f.date).get_route()
+        new_route = MakeRoute(self.fallback_string, user, date=date).get_route()
         
         if flight_id:
             from logbook.models import Flight

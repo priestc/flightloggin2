@@ -1,3 +1,5 @@
+import re
+
 from airport.models import Location, HistoricalIdent
 from models import RouteBase, Route
 
@@ -117,26 +119,45 @@ class MakeRoute(object):
 
     def find_airport(self, ident, i):
         """
-        EX = current exact identifier
-        vHI = valid historical record based on date
-        iHI = invalid historical record based on date
-        --------------------------            
-        only iHI and no EX:
-            use iHI
-            
-        vHI and no EX:
-            use vHI
-            
-        No HI no EX:
-            use unknown routebase
-            
-        no HI one EX:
-            use the EX
+        i = sequence of the airport in the route
+        ident = identifier, always uppercase
+        
+        Uses the search_airport method to find the airport, then returns it as
+        a routebase
         """
         
+        if ident == '':
+            return None
+        
+        numeric = re.search(r'[0-9]', ident)
         date = self.date
         
-        hi = HistoricalIdent.objects.filter(identifier__endswith=ident)
+        airport = self.search_airport(ident, date)
+        
+        if not airport and len(ident) == 3 and not numeric:
+            # if the ident is 3 letters and no hit, try again with an added 'K'
+            print ident + ' adding "K"'
+            airport = self.search_airport("K" + ident, date)
+        
+        if not airport and len(ident) == 4 and ident.startswith('k') and \
+                numeric:
+            # if the ident is 4 letters and starts with a 'K it's
+            # possible that the user has erroneously put it there, remove it
+            print ident + ' removing "K"'
+            airport = self.search_airport(ident[1:], date)
+        
+        if not airport and 'O' in ident or '0' in ident:
+            print ident + ' swapping 0 and O'
+            new = ident.replace('O', '&').replace('0', '$')
+            ident = new.replace('&', '0').replace('$', 'O')
+            airport = self.search_airport(ident, date)
+        
+        if airport:
+            return RouteBase(location=airport, sequence=i)
+        
+        
+    def search_airport(self, ident, date):
+        hi = HistoricalIdent.objects.filter(identifier=ident)
         ex = Location.goon(loc_class=1, identifier=ident)
         
         valid_hi = None
@@ -151,45 +172,29 @@ class MakeRoute(object):
             except HistoricalIdent.DoesNotExist:
                 valid_hi = None
                 invalid_hi = hi.latest('end')
+        elif ex:
+            return ex
         
         ##############
         
         if invalid_hi and not valid_hi and not ex:
             #we dont have anything but an expired HI, just use it
-            airport_ident = invalid_hi.current_location
+            return invalid_hi.current_location
         
         elif invalid_hi and not valid_hi and ex:
             # an ex trumps an invalid HI
-            airport = ex
+            return ex
             
         elif valid_hi:
             # we have a valid HI, use it no matter what!
-            airport_ident = valid_hi.current_location
+            return valid_hi.current_location
         
         elif not valid_hi and not invalid_hi and not ex:
             #we have nothing :(
-            airport = None
-        
-        elif not valid_hi and not invalid_hi and ex:
-            airport = ex
+            return None
             
         else:
             assert False, "Some weird corner case"
-        
-        ################
-        
-        if airport_ident and not airport:
-            airport = Location.goon(loc_class=1, identifier=str(airport_ident))
-            
-        if not airport and len(ident) == 3:
-            # if the ident is 3 letters and no hit, try again with an added 'K'
-            airport = Location.goon(loc_class=1,
-                                    identifier="K%s" % ident)
-
-        if airport:
-            return RouteBase(location=airport, sequence=i)
-        
-        return None
 
     def make_routebases_from_fallback_string(self, route):
         """
@@ -234,6 +239,7 @@ class MakeRoute(object):
                 
             else:                  #must be an airport  
                 routebase = self.find_airport(ident, i)
+                
                 if not routebase:
                     # if the airport can't be found, see if theres a 'custom'
                     # by the same identifier

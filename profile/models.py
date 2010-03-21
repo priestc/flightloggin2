@@ -46,7 +46,7 @@ class Profile(models.Model, GoonMixin):
     backup_freq =    models.IntegerField(
                          "Backup Frequency",
                          choices=BACKUP_FREQUENCY,
-                         default=0,
+                         default=4,
                      )
                      
     minutes =        models.BooleanField(
