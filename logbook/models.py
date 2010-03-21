@@ -85,7 +85,7 @@ class Flight(EnhancedModel):
         super(Flight,self).save(*args, **kwargs)
     
     @classmethod
-    def render_airport(cls, ident):
+    def render_airport(cls, airport=None, **filters):
         """
         Grab all flights to the passed in airport, and re-render them.
         This function is used to update routes when an identifier profile
@@ -94,14 +94,15 @@ class Flight(EnhancedModel):
         
         from termcolor import colored
         
-        flights = cls.objects\
-                     .filter(route_string__icontains=ident)\
-                     .order_by('-date')
+        if not airport:
+            flights = cls.objects.filter(route_string__icontains=airport)
+        else:
+            flights = cls.objects.filter(**filters)
                      
-        for f in flights.iterator():
+        for f in flights.order_by('-date').iterator():
             date = colored(f.date, 'blue')
             route = colored(f.route_string, 'blue', attrs=['bold'])
-            print('rendering: {0} {1}'.format(date, route))
+            print('{2}: {0} {1}'.format(date, route, f.user))
             f.render_route()
     
     def render_route(self):
