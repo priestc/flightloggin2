@@ -1,10 +1,17 @@
 #!/srv/flightloggin/env/bin/python
 
-import os, sys
-import csv, re
+import csv
+import datetime
+import os
+import re
+import sys
+
 from psycopg2 import IntegrityError
+from termcolor import colored
 
 from django.core.management import setup_environ
+from django.conf import settings
+PROJECT_PATH = settings.PROJECT_PATH
 
 sys.path = ['/srv/', '/srv/flightloggin/'] + sys.path
 from flightloggin import settings
@@ -13,11 +20,8 @@ setup_environ(settings)
 
 ######################################################
 
-from airport.models import Location, Region, Country
+from airport.models import Location, Region, Country, HistoricalIdent
 from logbook.models import Flight
-
-from django.conf import settings
-PROJECT_PATH = settings.PROJECT_PATH
 
 from django.contrib.auth.models import User
 ALL_USER = User(pk=1)
@@ -64,9 +68,8 @@ def airports():   #import airport
                'small_airport': 1,
             }
 
-    # a list of idents that have changed, so they require all routes associated
-    # with them to be re-rendered
-    render_idents = []
+    # a list of idents that have changed, and therefore get HistoricalIdents
+    hists = []
 
     for count, line in enumerate(reader):
         
@@ -130,15 +133,18 @@ def airports():   #import airport
             print "new airport:", ident
         else:    
             if not l.identifier == ident:
-                print "changed identitifer!: {0}".format(ident) #do_hist(ident)
+                print colored("changed ident!: {0}".format(ident), 'cyan')
                 Flight.render_airport(ident)
+                hists.append(make_historical_ident(l))
             
             elif not l.name == name:
-                print "changed name!: {0}".format(name)
+                a = [ident, colored(l.name, 'red'), colored(name, 'green')]
+                print "changed name!:  {0} {1} -> {2}".format(*a)
                 Flight.render_airport(ident)
             
             elif not l.municipality == city:
-                print "changed municipality!: {0}".format(city)
+                a = [ident, colored(l.municipality, 'red'), colored(city, 'green')]
+                print "changed city!:  {0} {1} -> {2}".format(*a)
                 Flight.render_airport(ident)
         
         l.municipality = city
@@ -160,7 +166,18 @@ def airports():   #import airport
             print "\n\n{0}\n\n".format(count)
 
     print "airports: {0}".format(count)
-    return render_idents
+    print "hists:    {0}".format(hists)
+    
+def make_historical_ident(old_loc):
+    """
+    Make an HistoricalIdent out of this airport because it's identifier is
+    about to change.
+    """
+    
+    today = datetime.date.today()
+    hi = HistoricalIdent(end=today, identifier=loc.identifier, current_location=loc)
+    hi.save()
+    return hi
 
 ###############################################################################
 
@@ -271,6 +288,7 @@ def countries():   #import country
     reader = csv.reader(f, "excel")
     titles = reader.next()
     reader = csv.DictReader(f, titles)
+
 
     for count, line in enumerate(reader):
 

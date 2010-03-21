@@ -92,13 +92,16 @@ class Flight(EnhancedModel):
         has changed.
         """
         
+        from termcolor import colored
+        
         flights = cls.objects\
                      .filter(route_string__icontains=ident)\
-                     .order_by('-date')\
-                     .iterator()
+                     .order_by('-date')
                      
-        for f in flights:
-            print('rendering: {0}'.format(f.date))
+        for f in flights.iterator():
+            date = colored(f.date, 'blue')
+            route = colored(f.route_string, 'blue', attrs=['bold'])
+            print('rendering: {0} {1}'.format(date, route))
             f.render_route()
     
     def render_route(self):
