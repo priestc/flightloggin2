@@ -126,6 +126,12 @@ class MakeRoute(object):
         a routebase
         """
         
+        def swap(ident):
+            "Swaps zero's and o's"
+            
+            new = ident.replace('O', '&').replace('0', '$')
+            return new.replace('&', '0').replace('$', 'O')
+        
         if ident == '':
             return None
         
@@ -137,19 +143,21 @@ class MakeRoute(object):
         if not airport and len(ident) == 3 and not numeric:
             # if the ident is 3 letters and no hit, try again with an added 'K'
             print ident + ' adding "K"'
-            airport = self.search_airport("K" + ident, date)
+            ident = "K" + ident
         
-        if not airport and len(ident) == 4 and ident.startswith('k') and \
+        elif not airport and len(ident) == 4 and ident.startswith('K') and \
                 numeric:
             # if the ident is 4 letters and starts with a 'K it's
             # possible that the user has erroneously put it there, remove it
-            print ident + ' removing "K"'
-            airport = self.search_airport(ident[1:], date)
+            #print ident + ' removing "K"'
+            ident = ident[1:]
         
-        if not airport and ('O' in ident or '0' in ident):
-            print ident + ' swapping 0 and O'
-            new = ident.replace('O', '&').replace('0', '$')
-            ident = new.replace('&', '0').replace('$', 'O')
+        #try again with fixed identifier    
+        airport = self.search_airport(ident, date)
+        
+        if not airport and ('O' in ident or '0' in ident) and not ident.startswith('K'):
+            #print ident + ' swapping 0 and O'
+            ident = swap(ident)
             airport = self.search_airport(ident, date)
         
         if airport:
