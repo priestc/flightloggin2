@@ -94,7 +94,7 @@ class Flight(EnhancedModel):
         
         from termcolor import colored
         
-        if not airport:
+        if airport:
             flights = cls.objects.filter(route_string__icontains=airport)
         else:
             flights = cls.objects.filter(**filters)
