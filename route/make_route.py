@@ -138,42 +138,42 @@ class MakeRoute(object):
         numeric = re.search(r'[0-9]', ident)
         date = self.date
         
+        retry = False
         airport = self.search_airport(ident, date)
         
         if not airport and len(ident) == 3 and not numeric:
             # if the ident is 3 letters and no hit, try again with an added 'K'
-            print ident + ' adding "K"'
+            retry = True
             ident = "K" + ident
         
         elif not airport and len(ident) == 4 and ident.startswith('K') and \
                 numeric:
             # if the ident is 4 letters and starts with a 'K it's
             # possible that the user has erroneously put it there, remove it
-            #print ident + ' removing "K"'
+            retry = True
             ident = ident[1:]
         
-        if not airport:
+        if not airport and retry:
             #try again with fixed identifier
             airport = self.search_airport(ident, date)
         
         if not airport and ('O' in ident or '0' in ident) and not ident.startswith('K'):
-            #print ident + ' swapping 0 and O'
             ident = swap(ident)
             airport = self.search_airport(ident, date)
         
         if airport:
             return RouteBase(location=airport, sequence=i)
         
-        
     def search_airport(self, ident, date):
         hi = HistoricalIdent.objects.filter(identifier=ident)
         ex = Location.goon(loc_class=1, identifier=ident)
-        
         
         valid_hi = None
         invalid_hi = None
         airport_ident = None
         airport = None
+        
+        print "trying " + ident,
         
         if hi.count() > 0:
             try:
@@ -183,7 +183,7 @@ class MakeRoute(object):
                 valid_hi = None
                 invalid_hi = hi.latest('end')
         elif ex:
-            print "found it! ex ", ex
+            print "found it!"
             return ex
         
         ##############
@@ -202,6 +202,7 @@ class MakeRoute(object):
         
         elif not valid_hi and not invalid_hi and not ex:
             #we have nothing :(
+            print "not found"
             return None
             
         else:
