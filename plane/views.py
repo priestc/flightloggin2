@@ -91,6 +91,7 @@ from django.db.models import Sum, Avg, Max
 def tailnumber_profile(request, tn):
     
     types = Plane.objects\
+                 .filter(hidden=False)\
                  .filter(tailnumber__iexact=tn)\
                  .values_list('type', flat=True)\
                  .exclude(type="")\
@@ -98,6 +99,7 @@ def tailnumber_profile(request, tn):
                  .distinct()
                  
     models = Plane.objects\
+                 .filter(hidden=False)\
                  .filter(tailnumber__iexact=tn)\
                  .values_list('model', flat=True)\
                  .exclude(model="")\
@@ -106,13 +108,15 @@ def tailnumber_profile(request, tn):
     
     users = Plane.get_profiles(tailnumber=tn)
     
-    t_hours = Flight.objects\
-                    .filter(plane__tailnumber__iexact=tn)\
-                    .aggregate(s=Sum('total'))['s']
+    t = Flight.objects\
+              .filter(plane__tailnumber__iexact=tn)\
+              .filter(plane__hidden=False)\
                     
-    t_flights = Flight.objects.filter(plane__tailnumber__iexact=tn).count()
+    t_hours = t.aggregate(s=Sum('total'))['s']             
+    t_flights = t.count()
     
-    routes = Route.objects.filter(flight__plane__tailnumber=tn)
+    routes = Route.objects.filter(flight__plane__tailnumber=tn,
+                                  flight__plane__hidden=False)
     
     return locals()
 

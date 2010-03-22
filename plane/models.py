@@ -107,7 +107,8 @@ class Plane(EnhancedModel):
         field = kwarg.keys()[0]
         val = kwarg.values()[0]
         
-        kwarg = {"user__flight__plane__%s__iexact" % field: val}
+        kwarg = {"user__flight__plane__%s__iexact" % field: val,
+                 "user__flight__plane__hidden": False}
         
         from profile.models import Profile
         return Profile.objects\
