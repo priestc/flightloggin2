@@ -113,7 +113,11 @@ class TextPlaneField(ModelChoiceField):
             tn = val
             kwarg = {"tailnumber": tn, "user": self.user}
         
-        return Plane.objects.get_or_create(**kwarg)[0]
+        try:
+            p = Plane.objects.filter(retired=False, **kwarg)[0]
+        except IndexError:
+            # couldn't find airplane, it either doesn't exist, or it's retired
+            return Plane.objects.create(**kwarg)
         
 ###############################################################################
 
@@ -157,6 +161,7 @@ class PopupFlightForm(ModelForm):
         self.fields['plane'].queryset = \
                  Plane.objects\
                       .user_common(self.user)\
+                      .exclude(retired=True)\
                       .annotate(fd=Max('flight__date'))\
                       .order_by('-fd')
         
