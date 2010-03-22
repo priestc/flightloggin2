@@ -162,7 +162,7 @@ class Stat(object):
                   "unique_countries", "total_dist", "route_earths",
                   "most_common_tail", "most_common_type", "most_common_manu",
                   "auv", "time_7_days", "num_7_days", "user_7_days",
-                  "pwm_hours", "pwm_count", "unique_tn", 'day_wmh', 'day_wmu')
+                  "unique_tn", 'day_wmh', 'day_wmu')
           
         kwargs = {"dt": datetime.datetime.now()}
         
