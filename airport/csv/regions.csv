@@ -15,39 +15,41 @@
 14,"AE-SH","SH","Sharjah Emirate","AS","AE","http://en.wikipedia.org/wiki/Sharjah_(emirate)","Ash Shāriqah"
 15,"AE-U-A","U-A","(unassigned)","AS","AE",,
 16,"AE-UQ","UQ","Umm al-Quwain Emirate","AS","AE","http://en.wikipedia.org/wiki/Umm_al-Quwain",
-17,"AF-BAL","BAL","Balkh","AS","AF","http://en.wikipedia.org/wiki/Balkh",
-18,"AF-BAM","BAM","Bamian","AS","AF","http://en.wikipedia.org/wiki/Bamian",
-19,"AF-BDG","BDG","Badghis","AS","AF","http://en.wikipedia.org/wiki/Badghis",
-20,"AF-BDS","BDS","Badakhshan","AS","AF","http://en.wikipedia.org/wiki/Badakhshan",
-21,"AF-BGL","BGL","Baghlan","AS","AF","http://en.wikipedia.org/wiki/Baghlan",
-22,"AF-FRA","FRA","Farah","AS","AF","http://en.wikipedia.org/wiki/Farah",
-23,"AF-FYB","FYB","Faryab","AS","AF","http://en.wikipedia.org/wiki/Faryab",
-24,"AF-GHA","GHA","Ghazni","AS","AF","http://en.wikipedia.org/wiki/Ghazni",
-25,"AF-GHO","GHO","Ghowr","AS","AF","http://en.wikipedia.org/wiki/Ghowr",
-26,"AF-HEL","HEL","Helmand","AS","AF","http://en.wikipedia.org/wiki/Helmand",
-27,"AF-HER","HER","Herat","AS","AF","http://en.wikipedia.org/wiki/Herat",
-28,"AF-JOW","JOW","Jowzjan","AS","AF","http://en.wikipedia.org/wiki/Jowzjan",
-29,"AF-KAB","KAB","Kabul","AS","AF","http://en.wikipedia.org/wiki/Kabul",
-30,"AF-KAN","KAN","Kandahar","AS","AF","http://en.wikipedia.org/wiki/Kandahar",
-31,"AF-KAP","KAP","Kapisa","AS","AF","http://en.wikipedia.org/wiki/Kapisa",
-32,"AF-KDZ","KDZ","Kondoz","AS","AF","http://en.wikipedia.org/wiki/Kondoz",
-33,"AF-KHO","KHO","Khowst","AS","AF","http://en.wikipedia.org/wiki/Khowst",
-34,"AF-KNR","KNR","Konar","AS","AF","http://en.wikipedia.org/wiki/Konar",
-35,"AF-LAG","LAG","Laghman","AS","AF","http://en.wikipedia.org/wiki/Laghman",
-36,"AF-LOW","LOW","Lowgar","AS","AF","http://en.wikipedia.org/wiki/Lowgar",
-37,"AF-NAN","NAN","Nangrahar","AS","AF","http://en.wikipedia.org/wiki/Nangrahar",
-38,"AF-NIM","NIM","Nimruz","AS","AF","http://en.wikipedia.org/wiki/Nimruz",
-39,"AF-NUR","NUR","Nurestan","AS","AF","http://en.wikipedia.org/wiki/Nurestan",
-40,"AF-ORU","ORU","Oruzgan","AS","AF","http://en.wikipedia.org/wiki/Oruzgan",
-41,"AF-PAR","PAR","Parwan","AS","AF","http://en.wikipedia.org/wiki/Parwan",
-42,"AF-PIA","PIA","Paktia","AS","AF","http://en.wikipedia.org/wiki/Paktia",
-43,"AF-PKA","PKA","Paktika","AS","AF","http://en.wikipedia.org/wiki/Paktika",
-44,"AF-SAM","SAM","Samangan","AS","AF","http://en.wikipedia.org/wiki/Samangan",
-45,"AF-SAR","SAR","Sar-e Pol","AS","AF","http://en.wikipedia.org/wiki/Sar-e_Pol",
-46,"AF-TAK","TAK","Takhar","AS","AF","http://en.wikipedia.org/wiki/Takhar",
+17,"AF-BAL","BAL","Balkh Province","AS","AF","http://en.wikipedia.org/wiki/Balkh_Province",
+18,"AF-BAM","BAM","Bamiyan Province","AS","AF","http://en.wikipedia.org/wiki/Bamyian_Province",
+19,"AF-BDG","BDG","Badghis Province","AS","AF","http://en.wikipedia.org/wiki/Badghis_Province",
+20,"AF-BDS","BDS","Badakhshan Province","AS","AF","http://en.wikipedia.org/wiki/Badakhshan_Province",
+21,"AF-BGL","BGL","Baghlan Province","AS","AF","http://en.wikipedia.org/wiki/Baghlan_Province",
+4898,"AF-DAY","DAY","Daykundi Province","AS","AF","http://en.wikipedia.org/wiki/Daykundi_Province",
+22,"AF-FRA","FRA","Farah Province","AS","AF","http://en.wikipedia.org/wiki/Farah_Province",
+23,"AF-FYB","FYB","Faryab Province","AS","AF","http://en.wikipedia.org/wiki/Faryab_Province",
+24,"AF-GHA","GHA","Ghazni Province","AS","AF","http://en.wikipedia.org/wiki/Ghazni_Province",
+25,"AF-GHO","GHO","Ghōr Province","AS","AF","http://en.wikipedia.org/wiki/Gh%C5%8Dr_Province",
+26,"AF-HEL","HEL","Helmand Province","AS","AF","http://en.wikipedia.org/wiki/Helmand_Province",
+27,"AF-HER","HER","Herat Province","AS","AF","http://en.wikipedia.org/wiki/Herat_Province",
+28,"AF-JOW","JOW","Jowzjan Province","AS","AF","http://en.wikipedia.org/wiki/Jowzjan_Province",
+29,"AF-KAB","KAB","Kabul Province","AS","AF","http://en.wikipedia.org/wiki/Kabul_Province",
+30,"AF-KAN","KAN","Kandahar Province","AS","AF","http://en.wikipedia.org/wiki/Kandahar_Province",
+31,"AF-KAP","KAP","Kapisa Province","AS","AF","http://en.wikipedia.org/wiki/Kapisa_Province",
+32,"AF-KDZ","KDZ","Kunduz Province","AS","AF","http://en.wikipedia.org/wiki/Kunduz_Province",
+33,"AF-KHO","KHO","Khost Province","AS","AF","http://en.wikipedia.org/wiki/Khost_Province",
+34,"AF-KNR","KNR","Kunar Province","AS","AF","http://en.wikipedia.org/wiki/Kunar_Province",
+35,"AF-LAG","LAG","Laghman Province","AS","AF","http://en.wikipedia.org/wiki/Laghman_Province",
+36,"AF-LOW","LOW","Logar Province","AS","AF","http://en.wikipedia.org/wiki/Logar_Province",
+37,"AF-NAN","NAN","Nangarhar Province","AS","AF","http://en.wikipedia.org/wiki/Nangarhar_Province",
+38,"AF-NIM","NIM","Nimruz Province","AS","AF","http://en.wikipedia.org/wiki/Nimruz_Province",
+39,"AF-NUR","NUR","Nurestan Province","AS","AF","http://en.wikipedia.org/wiki/Nurestan_Province",
+40,"AF-ORU","ORU","Orūzgān Province","AS","AF","http://en.wikipedia.org/wiki/Or%C5%ABzg%C4%81n_Province",
+4899,"AF-PAN","PAN","Panjshir Province","AS","AF","http://en.wikipedia.org/wiki/Panjshir_Province",
+41,"AF-PAR","PAR","Parwan Province","AS","AF","http://en.wikipedia.org/wiki/Parwan_Province",
+42,"AF-PIA","PIA","Paktia Province","AS","AF","http://en.wikipedia.org/wiki/Paktia_Province",
+43,"AF-PKA","PKA","Paktika Province","AS","AF","http://en.wikipedia.org/wiki/Paktika_Province",
+44,"AF-SAM","SAM","Samangan Province","AS","AF","http://en.wikipedia.org/wiki/Samangan_Province",
+45,"AF-SAR","SAR","Sar-e Pol Province","AS","AF","http://en.wikipedia.org/wiki/Sar-e_Pol_Province",
+46,"AF-TAK","TAK","Takhar Province","AS","AF","http://en.wikipedia.org/wiki/Takhar_Province",
 47,"AF-U-A","U-A","(unassigned)","AS","AF",,
-48,"AF-WAR","WAR","Wardak","AS","AF","http://en.wikipedia.org/wiki/Wardak",
-49,"AF-ZAB","ZAB","Zabol","AS","AF","http://en.wikipedia.org/wiki/Zabol",
+48,"AF-WAR","WAR","Wardak Province","AS","AF","http://en.wikipedia.org/wiki/Wardak_Province",
+49,"AF-ZAB","ZAB","Zabul Province","AS","AF","http://en.wikipedia.org/wiki/Zabul_Province",
 4769,"AG-03",03,"Saint George","NA","AG","http://en.wikipedia.org/wiki/Saint_George_Parish_(Antigua_and_Barbuda)",
 4770,"AG-04",04,"Saint John","NA","AG","http://en.wikipedia.org/wiki/Saint_John_Parish_(Antigua_and_Barbuda)",
 4771,"AG-05",05,"Saint Mary","NA","AG","http://en.wikipedia.org/wiki/Saint_Mary_Parish_(Antigua_and_Barbuda)",
@@ -94,18 +96,18 @@
 86,"AL-TR","TR","Tiranë","EU","AL","http://en.wikipedia.org/wiki/Tiranë",
 87,"AL-U-A","U-A","(unassigned)","EU","AL",,
 88,"AL-VL","VL","Vlorë","EU","AL","http://en.wikipedia.org/wiki/Vlorë",
-89,"AM-AG","AG","Aragacotn","AS","AM","http://en.wikipedia.org/wiki/Aragacotn",
-90,"AM-AR","AR","Ararat","AS","AM","http://en.wikipedia.org/wiki/Ararat",
-91,"AM-AV","AV","Armavir","AS","AM","http://en.wikipedia.org/wiki/Armavir",
-92,"AM-ER","ER","Erevan","AS","AM","http://en.wikipedia.org/wiki/Erevan",
-93,"AM-GR","GR","Gegarkunik'","AS","AM","http://en.wikipedia.org/wiki/Gegarkunik'",
-94,"AM-KT","KT","Kotayk'","AS","AM","http://en.wikipedia.org/wiki/Kotayk'",
-95,"AM-LO","LO","Lory","AS","AM","http://en.wikipedia.org/wiki/Lory",
-96,"AM-SH","SH","Sirak","AS","AM","http://en.wikipedia.org/wiki/Sirak",
-97,"AM-SU","SU","Syunik'","AS","AM","http://en.wikipedia.org/wiki/Syunik'",
-98,"AM-TV","TV","Tavus","AS","AM","http://en.wikipedia.org/wiki/Tavus",
+89,"AM-AG","AG","Aragatsotn Province","AS","AM","http://en.wikipedia.org/wiki/Aragatsotn_Province","Aragacotn, Արագածոտն"
+90,"AM-AR","AR","Ararat Province","AS","AM","http://en.wikipedia.org/wiki/Ararat_Province","Արարատ"
+91,"AM-AV","AV","Armavir Province","AS","AM","http://en.wikipedia.org/wiki/Armavir_Province","Արմավիր"
+92,"AM-ER","ER","Yerevan (capital district)","AS","AM","http://en.wikipedia.org/wiki/Yerevan","Erevan"
+93,"AM-GR","GR","Gegharkunik Province","AS","AM","http://en.wikipedia.org/wiki/Gegharkunik_Province","Գեղարքունիք"
+94,"AM-KT","KT","Kotayk Province","AS","AM","http://en.wikipedia.org/wiki/Kotayk_Province","Kotayk', Կոտայք"
+95,"AM-LO","LO","Lori Province","AS","AM","http://en.wikipedia.org/wiki/Lori_Province","Lory, Լոռի"
+96,"AM-SH","SH","Shirak Province","AS","AM","http://en.wikipedia.org/wiki/Shirak_Province","Sirak, Շիրակ"
+97,"AM-SU","SU","Syunik Province","AS","AM","http://en.wikipedia.org/wiki/Syunik_Province","Syunik'"
+98,"AM-TV","TV","Tavush Province","AS","AM","http://en.wikipedia.org/wiki/Tavush_Province","Tavus, Տավուշ"
 99,"AM-U-A","U-A","(unassigned)","AS","AM",,
-100,"AM-VD","VD","Vayoc Jor","AS","AM","http://en.wikipedia.org/wiki/Vayoc_Jor",
+100,"AM-VD","VD","Vayots Dzor Province","AS","AM","http://en.wikipedia.org/wiki/Vayots_Dzor_Province","Vayoc Jor, Վայոց Ձոր"
 101,"AN-U-A","U-A","(unassigned)","NA","AN",,
 102,"AO-BGO","BGO","Bengo Province","AF","AO","http://en.wikipedia.org/wiki/Bengo_Province",
 103,"AO-BGU","BGU","Benguela Province","AF","AO","http://en.wikipedia.org/wiki/Benguela_ Province",
@@ -1475,25 +1477,25 @@
 1831,"IN-UP","UP","Uttar Pradesh","AS","IN","http://en.wikipedia.org/wiki/Uttar_Pradesh",
 1832,"IN-WB","WB","West Bengal","AS","IN","http://en.wikipedia.org/wiki/West_Bengal",
 1833,"IO-U-A","U-A","(unassigned)","AS","IO",,
-1834,"IQ-AN","AN","Al-Anbar","AS","IQ","http://en.wikipedia.org/wiki/Al-Anbar","الأنبار"
-1835,"IQ-AR","AR","Arbil","AS","IQ","http://en.wikipedia.org/wiki/Arbil","أربيل"
-1836,"IQ-BA","BA","Al-Basrah","AS","IQ","http://en.wikipedia.org/wiki/Al-Basrah","البصرة"
-1837,"IQ-BB","BB","Bābil","AS","IQ","http://en.wikipedia.org/wiki/Bābil","بابل"
-1838,"IQ-BG","BG","Baghdād","AS","IQ","http://en.wikipedia.org/wiki/Baghdād","بغداد"
-1839,"IQ-DA","DA","Dahūk","AS","IQ","http://en.wikipedia.org/wiki/Dahūk","دهوك"
-1840,"IQ-DI","DI","Diyālā","AS","IQ","http://en.wikipedia.org/wiki/Diyālā","ديالى"
-1841,"IQ-DQ","DQ","Dhī Qār","AS","IQ","http://en.wikipedia.org/wiki/Dhī_Qār","ذي قار"
-1842,"IQ-KA","KA","Al-Karbalā'","AS","IQ","http://en.wikipedia.org/wiki/Al-Karbalā'","كربلاء"
-1843,"IQ-MA","MA","Maysān","AS","IQ","http://en.wikipedia.org/wiki/Maysān","ميسان"
-1844,"IQ-MU","MU","Al-Muthannā","AS","IQ","http://en.wikipedia.org/wiki/Al-Muthannā","المثنى"
-1845,"IQ-NA","NA","An-Najaf","AS","IQ","http://en.wikipedia.org/wiki/An-Najaf","An Najef, النجف"
-1846,"IQ-NI","NI","Nīnawā","AS","IQ","http://en.wikipedia.org/wiki/Nīnawā","نينوى"
-1847,"IQ-QA","QA","Al-Qādisiyyah","AS","IQ","http://en.wikipedia.org/wiki/Al-Qādisiyyah","القادسية"
-1848,"IQ-SD","SD","Salāh ad-Dīn","AS","IQ","http://en.wikipedia.org/wiki/Salāh_ad-Dīn","صلاح الدين"
-1849,"IQ-SW","SW","As-Sulaymāniyyah","AS","IQ","http://en.wikipedia.org/wiki/As-Sulaymāniyyah","السليمانية"
-1850,"IQ-TS","TS","Kirkuk","AS","IQ","http://en.wikipedia.org/wiki/Kirkuk","At-Ta'mim, السليمانية"
+1834,"IQ-AN","AN","Al-Anbar Governorate","AS","IQ","http://en.wikipedia.org/wiki/Al_Anbar_Governorate","الأنبار"
+1835,"IQ-AR","AR","Arbil Governorate","AS","IQ","http://en.wikipedia.org/wiki/Arbil_Governorate","أربيل"
+1836,"IQ-BA","BA","Basra Governorate","AS","IQ","http://en.wikipedia.org/wiki/Basra_Governorate","البصرة"
+1837,"IQ-BB","BB","Babil Governorate","AS","IQ","http://en.wikipedia.org/wiki/Babil_Governorate","بابل"
+1838,"IQ-BG","BG","Baghdad Governorate","AS","IQ","http://en.wikipedia.org/wiki/Baghdad_Governorate","بغداد"
+1839,"IQ-DA","DA","Duhok Governorate","AS","IQ","http://en.wikipedia.org/wiki/Duhok_Governorate","دهوك,Dahuk"
+1840,"IQ-DI","DI","Diyala Governorate","AS","IQ","http://en.wikipedia.org/wiki/Diyala_Governorate","ديالى"
+1841,"IQ-DQ","DQ","Dhi Qar Governorate","AS","IQ","http://en.wikipedia.org/wiki/Dhi_Qar_Governorate","ذي قار"
+1842,"IQ-KA","KA","Karbala Governorate","AS","IQ","http://en.wikipedia.org/wiki/Karbala_Governorate","كربلاء"
+1843,"IQ-MA","MA","Maysan Governorate","AS","IQ","http://en.wikipedia.org/wiki/Maysan_Governorate","ميسان"
+1844,"IQ-MU","MU","Al-Muthanna Governorate","AS","IQ","http://en.wikipedia.org/wiki/Al_Muthanna_Governorate","المثنى"
+1845,"IQ-NA","NA","Najaf Governorate","AS","IQ","http://en.wikipedia.org/wiki/Najaf_Governorate","An Najef, النجف"
+1846,"IQ-NI","NI","Ninawa Governorate","AS","IQ","http://en.wikipedia.org/wiki/Ninawa_Governorate","نينوى"
+1847,"IQ-QA","QA","Al-Qadisiyyah Governorate","AS","IQ","http://en.wikipedia.org/wiki/Al-Q%C4%81disiyyah_Governorate","القادسية"
+1848,"IQ-SD","SD","Salah ad Din Governorate","AS","IQ","http://en.wikipedia.org/wiki/Salah_ad_Din_Governorate","صلاح الدين"
+1849,"IQ-SW","SW","As-Sulaymaniyyah Governorate","AS","IQ","http://en.wikipedia.org/wiki/As_Sulaymaniyah_Governorate","السليمانية"
+1850,"IQ-TS","TS","Kirkuk Governorate","AS","IQ","http://en.wikipedia.org/wiki/At-Ta%27mim_Governorate","At-Ta'mim, السليمانية"
 1851,"IQ-U-A","U-A","(unassigned)","AS","IQ",,
-1852,"IQ-WA","WA","Wāsit","AS","IQ","http://en.wikipedia.org/wiki/Wāsit","واسط"
+1852,"IQ-WA","WA","Wasit Governorate","AS","IQ","http://en.wikipedia.org/wiki/Wasit_Governorate","واسط"
 1853,"IR-01",01,"Azarbayjan-e Sharqi Province","AS","IR","http://en.wikipedia.org/wiki/Azarbayjan-e_Sharqi_Province",
 1854,"IR-02",02,"Azarbayjan-e Gharbi Province","AS","IR","http://en.wikipedia.org/wiki/Azarbayjan-e_Gharbi_Province",
 1855,"IR-03",03,"Ardabil Province","AS","IR","http://en.wikipedia.org/wiki/Ardabil_Province",

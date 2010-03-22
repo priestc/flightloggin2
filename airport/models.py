@@ -211,11 +211,6 @@ class Region(EnhancedModel):
     
     class Meta:
         ordering = ('name', )
-        
-    @classmethod
-    def goon(cls, *args, **kwargs):
-        from annoying.functions import get_object_or_None
-        return get_object_or_None(cls,  *args, **kwargs)
     
     def country_name(self):
         return Country.objects.get(code=self.country)

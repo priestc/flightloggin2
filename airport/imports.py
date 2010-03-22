@@ -9,19 +9,23 @@ import sys
 from psycopg2 import IntegrityError
 from termcolor import colored
 
-from django.core.management import setup_environ
-from django.conf import settings
-PROJECT_PATH = settings.PROJECT_PATH
+
+
 
 sys.path = ['/srv/', '/srv/flightloggin/'] + sys.path
 from flightloggin import settings
 
+from django.core.management import setup_environ
 setup_environ(settings)
 
+
+from django.conf import settings
+PROJECT_PATH = settings.PROJECT_PATH
 ######################################################
 
 from airport.models import Location, Region, Country, HistoricalIdent
 from logbook.models import Flight
+from route.models import RouteBase
 
 from django.contrib.auth.models import User
 ALL_USER = User(pk=1)
@@ -42,7 +46,8 @@ def latlng_match(old_lat, new_lat, old_lng, new_lng):
 def re_render_all():
     for r in Route.objects.iterator():
         r.easy_render()
-    
+
+BANNED = ('46307', )   
 
 def airports():   #import airport
     """
@@ -73,6 +78,8 @@ def airports():   #import airport
 
     for count, line in enumerate(reader):
         
+        redo_after_save = False
+        
         ##########################
 
         lat =    line["latitude_deg"]
@@ -80,19 +87,24 @@ def airports():   #import airport
         elev =   line["elevation_ft"]
         type_ =  line["type"]
         local =  line["local_code"]
-        ident =  line['ident'].upper() #.replace('-', '')
-        name =   line["name"]
+        fback =  line['ident'].upper().replace('-', '')
+        name =   line["name"].decode('utf-8')
         country= line["iso_country"].upper()
-        city =   line["municipality"]
+        city =   line["municipality"].decode('utf-8')
         region = line["iso_region"].upper()
         idd =    line['id']
-        gps =    line['gps_code']
+        ident =  line['gps_code'].upper().replace('-', '')
         
         loc_wkt = "POINT ({0} {1})".format(float(lng), float(lat))
         
         if elev == "":
             elev = None
 
+        if not ident or type_ == 'closed':
+            # closed airports should use the ID ident, to avoid unique
+            # name collisions
+            ident = fback
+            
         ##########################
                                            
         if country == "US":
@@ -117,34 +129,40 @@ def airports():   #import airport
                 ident = "K" + ident
                 
                 
-        if ident.startswith("US-"):
+        if ident.startswith("US"):
             if local:
                 ident = local
-            else:
-                ident = ident[3:]        ## get rid of the "US-" part
 
         ##########################
-
-        l,c = Location.objects.get_or_create(pk=idd,
+        
+        if idd not in BANNED:
+            l,c = Location.objects.get_or_create(pk=idd,
                                              user=ALL_USER,
                                              loc_class=1)
+        else:
+            l = Location(id=idd)
         
         if c:
             print "new airport:", ident
-        else:    
+        
+        elif idd in BANNED:
+            print "BANNED: " + ident
+            
+        else:
             if not l.identifier == ident:
-                print colored("changed ident!: {0}".format(ident), 'cyan')
-                Flight.render_airport(ident)
-                hists.append(make_historical_ident(l))
+                a =  [colored(l.identifier, 'red'), colored(ident, 'green')]
+                print u"changed ident!: {0} -> {1}".format(*a)
+                hists.append(make_historical_ident(l, ident))
+                redo_after_save = True
             
             elif not l.name == name:
                 a = [ident, colored(l.name, 'red'), colored(name, 'green')]
-                print "changed name!:  {0} {1} -> {2}".format(*a)
+                print u"changed name!:  {0} {1} -> {2}".format(*a)
                 Flight.render_airport(ident)
             
             elif not l.municipality == city:
                 a = [ident, colored(l.municipality, 'red'), colored(city, 'green')]
-                print "changed city!:  {0} {1} -> {2}".format(*a)
+                print u"changed city!:  {0} {1} -> {2}".format(*a)
                 Flight.render_airport(ident)
         
         l.municipality = city
@@ -157,27 +175,41 @@ def airports():   #import airport
         l.region = Region.goon(code=region, country=country)
             
         try:
-            l.save()
+            if l.id not in BANNED:
+                l.save()
+            
+            if redo_after_save:
+                ## iff the ident has changed, we need to wait until the new
+                ## location is saved before we re-render
+                Flight.render_airport(ident)
+                
+            
         except Exception, e:
-            print identifier, e
+            print ident, e
             
         if (count % 500) == 0:
             #update user on status
-            print "\n\n{0}\n\n".format(count)
+            print colored("\n{0}\n".format(count), 'cyan')
 
     print "airports: {0}".format(count)
-    print "hists:    {0}".format(hists)
+    print "hists:    {0}".format("\n".join([str(h) for h in hists if h]))
     
-def make_historical_ident(old_loc):
+def make_historical_ident(l, new_ident):
     """
     Make an HistoricalIdent out of this airport because it's identifier is
     about to change.
     """
     
-    today = datetime.date.today()
-    hi = HistoricalIdent(end=today, identifier=loc.identifier, current_location=loc)
-    hi.save()
-    return hi
+    used = RouteBase.objects.filter(location=l)[:1].count()
+    print "used: " + str(used)
+
+    if used > 0:
+        msg = "Creating HistoricalIdent {0} -> {0}".format(l.identifier, new_ident)
+        print colored(msg, 'yellow', attrs=['bold'])
+        today = datetime.date.today()
+        hi = HistoricalIdent(end=today, identifier=l.identifier, current_location=l)
+        hi.save()
+        return hi
 
 ###############################################################################
 
@@ -263,10 +295,15 @@ def regions():   #import region
     for count, line in enumerate(reader):
 
         code = line["code"].upper()
-        name = line["name"]
+        name = line["name"].decode('utf-8')
         country = line["iso_country"].upper()
 
         r,c = Region.objects.get_or_create(code=code)
+        
+        if name != r.name:
+            a =  [colored(r.name, 'red'), colored(name, 'green')]
+            print u"changed region name!: {0} -> {1}".format(*a)
+        
         r.name = name
         r.country = country
             
@@ -293,10 +330,15 @@ def countries():   #import country
     for count, line in enumerate(reader):
 
         code = line["code"].upper()
-        name = line["name"]
+        name = line["name"].decode('utf-8')
         continent = line["continent"].upper()
 
         obj, c = Country.objects.get_or_create(code=code)
+        
+        if name != obj.name:
+            a =  [colored(obj.name, 'red'), colored(name, 'green')]
+            print u"changed country name!: {0} -> {1}".format(*a)
+        
         obj.continent = continent
         obj.name = name
         obj.save()
@@ -308,8 +350,12 @@ def countries():   #import country
 
 
 if __name__ == "__main__":
+    start = datetime.datetime.now()
+    
     countries()
     regions()
     airports()
-    navaids()
+    #navaids()
+    
+    print "total time: {0}".format(datetime.datetime.now() - start)
 
