@@ -64,7 +64,6 @@ urlpatterns = patterns('django_openid_auth.views',
 
 urlpatterns += patterns('',
 
-    (r'^newforum/', include('forum.urls')),
     (r'^histogram/', include('histogram.urls')),
     (r'^kml/', include('maps.kml_urls')),
     (r'^facebook', include('facebook_app.urls')),

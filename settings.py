@@ -101,7 +101,6 @@ INSTALLED_APPS += (
     'manage',
     
     'tagging',
-    'forum',
     'pagination',
     'gravatar',
     
