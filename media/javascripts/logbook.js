@@ -90,7 +90,7 @@ function fill_in_flight(dom_id) {
 	var clone = $("#f" + id + " span.data_remarks");
 	$("span.flying_event", clone).remove();
 	var remarks = clone.text();
-	$("#id_new-remarks").val(trim(remarks));	
+	$("#id_new-remarks").val(trim(remarks));
 		
 	return
 }
@@ -99,12 +99,15 @@ function fill_in_flight(dom_id) {
 function page_totals(columns){
     COLON=false
     for(i=0;i<columns.length;i++) {
+        // go through each column
         column = columns[i]
         count = 0;
 	    $("td." + column + "_col").each(function(){
+	        // go through each cell in this column
             val = $(this).text();
 
             if(val.indexOf(":") > 0){
+                // this cell is formatted with a colon, calculate numbers accordingly
                 COLON = true
                 list=val.split(":");
                 hour=list[0];
@@ -114,12 +117,21 @@ function page_totals(columns){
             else
         	    val=parseFloat(val);
         	   
-	        if(!isNaN(val))  
-	          count = count + val;
+	        if(!isNaN(val)) {
+	            // add to count only if there is a value there  
+	            count = count + val;
+	        }
         });
-
+        
+        // now that we have the totals, format them correctly
+        
         if( column == 'app' || column == 'day_l' || column == 'night_l')
             result = count;
+            
+        else if (column == 'line_dist' || column == 'gallons') {
+            result = sprintf("%02.1f", parseFloat(count));
+        }
+        
         else {
             if(COLON) {
                 if(count == 0)

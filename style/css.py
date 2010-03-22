@@ -849,6 +849,8 @@ select, textarea	        {width: 200px; font-size: small !important}
 
 textarea                    {height: 50px}
 
+.remarks_tag                {%(remarks_event)s}
+
 /* instructions for each field on the popup*/
 span.help_text              {color: gray;
                              font-size: x-small;

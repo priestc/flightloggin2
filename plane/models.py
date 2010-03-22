@@ -3,6 +3,7 @@ import re
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.utils.safestring import mark_safe
 
 from tagging.fields import TagField
 import tagging
@@ -26,7 +27,8 @@ class Plane(EnhancedModel):
     manufacturer =   models.CharField(                        max_length=32, blank=True, help_text="e.g. Cessna, Boeing")
     cat_class =      models.IntegerField( "Category/Class",   choices=CATEGORY_CLASSES, null=False, default=0)
     description =    models.TextField(                        blank=True)
-
+    hidden =         models.BooleanField(default=False)
+    retired =        models.BooleanField(default=False)
     tags =           TagField()
     
     #regex that matches all tailnumbers and types
@@ -118,6 +120,18 @@ class Plane(EnhancedModel):
     @classmethod
     def regex_tail_type(cls, s):        
         return re.sub(cls.reverse_plane_regex(), '', s or "")
+    
+    def hidden_tag(self):
+        if self.hidden:
+            return mark_safe("<span class='remarks_tag'>[Hidden]</span>")
+        else:
+            return ""
+
+    def retired_tag(self):
+        if self.retired:
+            return mark_safe("<span class='remarks_tag'>[Retired]</span>")
+        else:
+            return ""
                    
     def clean_tailnumber(self):
         """

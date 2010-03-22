@@ -302,7 +302,7 @@ def regions():   #import region
         
         if name != r.name:
             a =  [colored(r.name, 'red'), colored(name, 'green')]
-            print u"changed region name!: {0} -> {1}".format(*a)
+            print u"Changed region name!: {0} -> {1}".format(*a)
         
         r.name = name
         r.country = country
@@ -310,7 +310,7 @@ def regions():   #import region
         if c:
             print "new region: " + code
 
-    print "regions: {0}".format(count)
+    print "Regions: {0}".format(count)
 
 ###############################################################################
 
@@ -337,7 +337,7 @@ def countries():   #import country
         
         if name != obj.name:
             a =  [colored(obj.name, 'red'), colored(name, 'green')]
-            print u"changed country name!: {0} -> {1}".format(*a)
+            print u"Changed country name!: {0} -> {1}".format(*a)
         
         obj.continent = continent
         obj.name = name
@@ -346,7 +346,7 @@ def countries():   #import country
         if c:
             print "error: " + code
 
-    print "countries: {0}".format(count)
+    print "Countries: {0}".format(count)
 
 
 if __name__ == "__main__":

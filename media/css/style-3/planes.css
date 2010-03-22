@@ -14,6 +14,8 @@ select, textarea	        {width: 200px; font-size: small !important}
 
 textarea                    {height: 50px}
 
+.remarks_tag                {color: navy; font-weight: bold}
+
 /* instructions for each field on the popup*/
 span.help_text              {color: gray;
                              font-size: x-small;

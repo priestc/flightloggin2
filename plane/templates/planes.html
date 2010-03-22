@@ -35,17 +35,17 @@
 		    <tr>
 			    <td id="p{{ plane.id }}_tailnumber" title="Tailnumber (click to edit)">
 			    <a href="" id="p{{ plane.id }}" class="popup_link">
-			    {%if not plane.tailnumber%}
+			    {% if not plane.tailnumber %}
 			    &nbsp;&nbsp;
-			    {%else%}
+			    {% else %}
 			    {{ plane.tailnumber }}
-			    {%endif%}</a></td>
+			    {% endif %}</a></td>
 			    <td id="p{{ plane.id }}_manufacturer">{{ plane.manufacturer }}</td>
 			    <td id="p{{ plane.id }}_type">{{ plane.type }}</td>
 			    <td id="p{{ plane.id }}_model">{{ plane.model }}</td>
 			    <td id="p{{ plane.id }}_cat_class">{{ plane.get_cat_class_display }}</td>
 			    <td id="p{{ plane.id }}_tags">{{ plane.get_tags_quote|join:", " }}</td>
-			    <td id="p{{ plane.id }}_description">{{ plane.description }}</td>
+			    <td id="p{{ plane.id }}_description">{{ plane.hidden_tag }}{{ plane.retired_tag }}{{ plane.description }}</td>
 		    </tr>		
 	    {% empty %}
 	        <tr>
@@ -86,6 +86,12 @@
 				        {{ form.non_field_errors }}
 				    </td>
 				</tr>
+				
+				<tr>
+					<td></td>
+					<td>{{ form.hidden.label_tag }}{{ form.hidden }} {{ form.retired.label_tag }}{{ form.retired }}</td>
+				</tr>
+				
 				<tr>
 					<td>{{ form.tailnumber.label_tag }}<br>&nbsp;</td>
 					<td>{{ form.tailnumber }}{{ form.tailnumber.errors|default:"<br>" }}
@@ -128,7 +134,7 @@
 		</table>
 		
 		<div id="tags_window">
-			{% tag_cloud_for_model plane.Plane as cloud with distribution=log min_count=20 steps=5 %}
+			{% tag_cloud_for_model plane.Plane as cloud with distribution=log min_count=30 steps=5 %}
 			
 			{% for tag in cloud %}
             <a href="" title="Add this tag" class="tag{{tag.font_size}}">{{ tag }}</a>
