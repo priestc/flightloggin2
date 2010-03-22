@@ -29,6 +29,9 @@ def site_stats(request):
     models = cs.most_common_type.split("\n")
     linked_mct = link_models(models)
     
+    traveled_tails = cs.most_traveled_tail.split("\n")
+    linked_travel_tail = link_tails(traveled_tails)
+    
     days_million = cs.days_until_million()
     date_million = datetime.date.today() + datetime.timedelta(days=days_million)
     

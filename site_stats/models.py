@@ -64,6 +64,18 @@ class MostCommonTail(MostCommonPlane):
                       .distinct()\
                       .annotate(c=Count('id'))\
                       .order_by('-c')[:10]
+                      
+class MostTraveledTail(MostCommonPlane):
+    title = "tailnumber"
+    count = "c"
+    def __init__(self):                      
+        self.p = Plane.objects\
+             .filter(hidden=False)\
+             .exclude(tailnumber__in=('UNKNOWN',""))\
+             .values('tailnumber')\
+             .distinct()\
+             .annotate(c=Count('flight__route__routebase__location__id', distinct=True))\
+             .order_by('-c')[:10]
 
 class StatDB(models.Model):
     dt =               models.DateTimeField()
@@ -86,6 +98,7 @@ class StatDB(models.Model):
     most_common_tail = models.TextField()
     most_common_type = models.TextField()
     most_common_manu = models.TextField()
+    most_traveled_tail=models.TextField()
     
     user_7_days =      models.PositiveIntegerField(default=0, null=False)
     num_7_days =       models.PositiveIntegerField(default=0, null=False)
@@ -93,9 +106,6 @@ class StatDB(models.Model):
     
     #airport unique visitors
     auv =              models.TextField(null=False)    
-    
-    pwm_count =        models.PositiveIntegerField(default=0, null=False)
-    pwm_hours =        models.FloatField(default=0, null=False)
     
     unique_tn =        models.PositiveIntegerField(default=0, null=False)
     day_wmu =          models.CharField(max_length=25, blank=True, null=True)
@@ -106,6 +116,10 @@ class StatDB(models.Model):
     
     @classmethod
     def get_object_ago(cls, unit):
+        """
+        Get stats object nearest to the passed in unit of time.
+        """
+        
         if unit.endswith("d"):
             num = int(unit[:-1])
             dt = datetime.datetime.now() - datetime.timedelta(days=num)
@@ -162,7 +176,7 @@ class Stat(object):
                   "unique_countries", "total_dist", "route_earths",
                   "most_common_tail", "most_common_type", "most_common_manu",
                   "auv", "time_7_days", "num_7_days", "user_7_days",
-                  "unique_tn", 'day_wmh', 'day_wmu')
+                  "most_traveled_tail", "unique_tn", 'day_wmh', 'day_wmu')
           
         kwargs = {"dt": datetime.datetime.now()}
         
@@ -200,12 +214,6 @@ class Stat(object):
     
     def calc_unique_tn(self):
         return Plane.objects.values('tailnumber').distinct().count()
-    
-    def calc_pwm_hours(self):
-        return self.pwm.order_by('-s').values('s')[:1][0]['s']
-    
-    def calc_pwm_count(self):
-        return self.pwm.order_by('-c').values('c')[:1][0]['c']
         
     def calc_user_7_days(self):
         """
@@ -248,6 +256,7 @@ class Stat(object):
     calc_most_common_manu = MostCommonManu()
     calc_most_common_type = MostCommonModel()
     calc_most_common_tail = MostCommonTail()
+    calc_most_traveled_tail = MostTraveledTail()
     
     def calc_route_earths(self):
         """Must be called after calc_total_dist"""

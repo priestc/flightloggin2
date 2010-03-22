@@ -19,6 +19,7 @@ STATS_TITLES = {
     "unique_tn":       ("Total unique tailnumbers from all users", "Unique Tailnumbers"),
     "most_common_airports": ("Airports visited by the most users", "NA"),
     "most_common_tails": ("Tailnumbers flown by the most users", "NA"),
+    "most_traveled_tails": ("Tailnumbers that have visited the most unique airports", "NA"),
     "most_common_types": ("Most common aircraft models", "NA"),
     "most_common_manu": ("Most common aircraft manufacturers", "NA"),
 }
