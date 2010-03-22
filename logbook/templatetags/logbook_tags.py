@@ -16,7 +16,10 @@ def make_date_cell(parser, token):
 
 
 class DateCell(template.Node):
-
+    """
+    Creates the date column, as well as the Data cells for the popup window
+    """
+    
     a_title = 'title="Date (click to so see more options)"'
     td_template = '<td title="Date" class="date_col">%s</td>'
     
@@ -38,7 +41,19 @@ class DateCell(template.Node):
         spans = ""
         for data_column in DB_FIELDS:
             data = row.column(data_column, profile.get_num_format())
-            spans += '\n<span class="data_%s">%s</span>' % (data_column, data)
+            
+            if data_column == 'plane':
+                # special case when plane is retired, we can't show it's
+                # tailnumber because there may be another one.
+                if row.plane.retired:
+                    p = "pk:%s" % row.plane.pk
+                else:
+                    p = data
+                    
+                spans += '\n<span class="data_plane">%s</span>' % p
+            else:
+                # all other data columns
+                spans += '\n<span class="data_%s">%s</span>' % (data_column, data)
         
         return self.td_template % (a_date + spans + "</a>")
 

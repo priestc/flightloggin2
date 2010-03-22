@@ -1,6 +1,7 @@
 import re
 
 from django import forms
+from django.conf import settings
 from django.forms import ModelForm, ModelChoiceField
 from django.contrib.admin import widgets
 from django.forms.widgets import TextInput, HiddenInput
@@ -100,9 +101,16 @@ class TextPlaneField(ModelChoiceField):
     
     def clean(self, val):
         
+        if val.startswith("pk:"):
+            pk = val[3:]
+            p = Plane.goon(pk=pk, user=self.user)
+            if p:
+                return p
+            else:
+                return Plane.objects.get(pk=settings.UNKNOWN_PLANE_ID)  
+        
         if val == '':
             ## if the thing was blank, get and return the global unknown plane
-            from django.conf import settings
             return Plane.objects.get(pk=settings.UNKNOWN_PLANE_ID)
         
         elif " " in val:
