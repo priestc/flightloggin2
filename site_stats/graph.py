@@ -9,14 +9,8 @@ class StatsGraph(ProgressGraph):
 
     def output(self):
         ret = super(StatsGraph, self).output()
-        
-        title = STATS_TITLES[self.title][0]
-        #unit = STATS_TITLES[self.title][1]
-        
-        #print title
-        
+        title = STATS_TITLES[self.title][0]       
         self.set_title(title)
-        
         return ret
 
 class SiteStatsPlot(Plot):
@@ -24,10 +18,7 @@ class SiteStatsPlot(Plot):
     def __init__(self, val, rate=False, **kwargs):
 
         self.val = str(val)
-        
-        #exclude zero values (before the routine recorded any data)
 
-        
         super(SiteStatsPlot, self).__init__(rate=rate, **kwargs)
     
     def get_data(self):
@@ -58,7 +49,7 @@ class SiteStatsPlot(Plot):
     def _moving_value(self, iterable):
         """
         Calculate the moving total with a deque
-        slightly modified because
+        slightly modified because we're calculating already-summed data
         """
         
         d = deque([], self.interval)
@@ -69,11 +60,3 @@ class SiteStatsPlot(Plot):
             data.append((abs(sum(d)-elem*len(d)) / len(d)) * self.interval)
             
         return data
-
-    
-    
-#auv, avg_duration, avg_per_active, day_wmh, day_wmu, dt, id, most_common_manu,
-#most_common_tail, most_common_type, non_empty_users, num_7_days, pwm_count,
-#pwm_hours, route_earths, time_7_days, total_dist, total_hours, total_logged,
-#unique_airports, unique_countries, unique_tn, user_7_days, users
-

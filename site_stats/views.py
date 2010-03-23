@@ -55,7 +55,12 @@ def save_to_db(request):
 def stats_graph(request, item, ext):
     from graph import StatsGraph, SiteStatsPlot
     
-    plots = [SiteStatsPlot(item, no_acc=True)]
+    if item.endswith("_7_days"):
+        kwarg = {'drawstyle': "default"}
+    else:
+        kwarg = {}
+    
+    plots = [SiteStatsPlot(item, no_acc=True, **kwarg)]
     g = StatsGraph(plots, title=item, plot_unit=STATS_TITLES[item][1])
     
     if ext == 'png':
