@@ -22,6 +22,8 @@ class RegionAdmin(admin.OSMGeoAdmin):
     
 class HistoricalIdentAdmin(admin.OSMGeoAdmin):
     raw_id_fields = ('current_location', )
+    search_fields = ('identifier', 'current_location__identifier')
+    list_display = ('identifier', 'current_location', 'curr_name', 'start', 'end')
 
 admin.site.register(Location, LocationAdmin)
 admin.site.register(WorldBorders, WorldBordersAdmin)

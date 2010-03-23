@@ -193,7 +193,10 @@ class HistoricalIdent(EnhancedModel):
                         new=self.current_location,
                         begin=self.start,
                         end=self.end)
-
+    
+    def curr_name(self):
+        return "{0} - {1}".format(self.current_location.name,
+                                  self.current_location.location_summary())
 
 ###############################################################################
   
