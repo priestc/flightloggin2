@@ -101,8 +101,6 @@ class TextPlaneField(ModelChoiceField):
     
     def clean(self, val):
         
-        
-        
         if val.startswith("pk:"):
             pk = val[3:]
             p = Plane.goon(pk=pk, user=self.user)
@@ -122,8 +120,6 @@ class TextPlaneField(ModelChoiceField):
         else:
             tn = val
             kwarg = {"tailnumber": tn, "user": self.user}
-        
-        print "FDGDFGDFGDFGDFG"
         
         try:
             return Plane.objects.filter(retired=False, **kwarg)[0]
