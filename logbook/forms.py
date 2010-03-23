@@ -101,6 +101,8 @@ class TextPlaneField(ModelChoiceField):
     
     def clean(self, val):
         
+        
+        
         if val.startswith("pk:"):
             pk = val[3:]
             p = Plane.goon(pk=pk, user=self.user)
@@ -121,8 +123,10 @@ class TextPlaneField(ModelChoiceField):
             tn = val
             kwarg = {"tailnumber": tn, "user": self.user}
         
+        print "FDGDFGDFGDFGDFG"
+        
         try:
-            p = Plane.objects.filter(retired=False, **kwarg)[0]
+            return Plane.objects.filter(retired=False, **kwarg)[0]
         except IndexError:
             # couldn't find airplane, it either doesn't exist, or it's retired
             return Plane.objects.create(**kwarg)
