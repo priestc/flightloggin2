@@ -82,7 +82,7 @@ def routes_location_kml(request, ident):
 def routes_model_kml(request, model):
     "Returns a KMZ of all routes flown by the passed aircraft model"
     
-    qs = Route.objects.filter(flight__plane__model=model)
+    qs = Route.objects.filter(flight__plane__model=model.replace('_',' '))
     return qs_to_time_kmz(qs)
 
 #------------------------------------------------------------------------------
