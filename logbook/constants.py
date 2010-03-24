@@ -53,11 +53,11 @@ DB_FIELDS = [
           ]
           
 # for the logbook filter box, all fields that are numerical, but arent based
-# on plane category
+# on plane category, ** must also add to logbook.js **
 FILTER_FIELDS = [
           'total', 'pic', 'sic', 'solo', 'night', 'dual_r','dual_g', 'xc',
           'act_inst', 'sim_inst', 'night_l','day_l', 'app', 'p2p',
-          'line_dist','max_width',
+          'line_dist','max_width','gallons', 'speed'
           ]
 
 # fields to be fair game for the line graphing function and the sigs

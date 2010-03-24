@@ -73,7 +73,7 @@ def handle_fuel_burn(val, time):
     if num == 0:
         return (0,0)
     
-    ####################### user entered pounds LL/pounds JetA per hour
+    ####################### user entered pounds LL/pounds JetA *per hour*
     
     if unit == 'pphll':
         gph = num / 6
@@ -116,7 +116,7 @@ def handle_fuel_burn(val, time):
         else:
             gph = 0
                 
-    ####################### user entered gallons/liters per hour
+    ####################### user entered gallons/liters *per hour*
         
     elif unit == 'lph':
         gph = num / 3.78541178
