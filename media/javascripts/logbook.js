@@ -164,9 +164,10 @@ function cleanup_filter_get() {
     numeric_fields = ['pic', 'sic', 'dual_g', 'dual_r',
                        'xc', 'total', 'line_dist', 'p2p',
                        'max_width', 'app', 'day_l', 'night_l',
-                       'sim_inst','act_inst','night','solo'];
+                       'sim_inst','act_inst','night','solo',
+                       'gallons','speed'];
     
-    for(var a=0; a < 16; a++) {
+    for(var a=0; a < 18; a++) {
         
         field = numeric_fields[a];
         
