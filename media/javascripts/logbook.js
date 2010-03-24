@@ -135,7 +135,7 @@ function page_totals(columns){
         else {
             if(COLON) {
                 if(count == 0)
-                    result = "00:00";
+                    result = "0:00";
                 else {
                     str=count.toString();
                     list=str.split(".");

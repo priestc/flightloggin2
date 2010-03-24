@@ -39,10 +39,13 @@ def proper_format(val, field, format):
     Returns the value formatted appropriately based on whether it needs
     a decimal, needs to be HH:MM or needs to be an integer
     """
+    
     if field in ('day_l', 'night_l', 'app'):
+        #always an int; never a decimal, never hh:mm
         return str(int(val))
     
-    if field in ('line_dist', 'max_width'):
+    if field in ('line_dist', 'max_width', 'gallons'):
+        # always a decimal, never hh:mm
         return "%.1f" % val
             
     if format == 'decimal':
