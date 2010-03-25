@@ -284,23 +284,55 @@ class Flight(EnhancedModel):
                 return ""
             return ret
         
+        elif cn == 'km_line_dist':
+            ret = "%.1f" % (self.route.total_line_all * 1.85200)
+            if ret == "0.0":
+                return ""
+            return ret
+        
+        ##########
+        
         elif cn == 'max_width' and self.route:
             ret = "%.1f" % self.route.max_width_all
             if ret == "0.0":
                 return ""
             return ret
         
+        elif cn == 'km_max_width' and self.route:
+            ret = "%.1f" % (self.route.max_width_all * 1.85200)
+            if ret == "0.0":
+                return ""
+            return ret
+            
+        ##########
+        
         elif cn == 'speed':
             if self.speed:
                 return "%.1f" % self.speed
             else:
                 return ""
+
+        elif cn == 'kmh_speed':
+            if self.speed:
+                return "%.1f" % (self.speed * 1.85200)
+            else:
+                return ""
+
+        #########
             
         elif cn == 'gallons':
             if self.gallons:
                 return "%.1f" % self.gallons
             else:
                 return ""
+            
+        elif cn == 'liters':
+            if self.gallons:
+                return "%.1f" % (self.gallons * 3.78541178)
+            else:
+                return ""
+    
+        #########
         
         elif cn == 'gph':
             if self.gph:
