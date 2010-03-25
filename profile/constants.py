@@ -1,5 +1,5 @@
 STYLES = (
-    (1, "Green/Navy"),
+    (1, "Green/Gold"),
     (2, "Blue/Brown (Default)"),
     (3, "Pink/Orange"),
 )
