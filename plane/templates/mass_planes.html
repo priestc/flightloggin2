@@ -6,7 +6,6 @@
 {% block title %}Mass Edit Planes{% endblock %}
 
 {% block canvas %}
-<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/mass_planes.css">
 <form action="{% url mass-planes request.display_user.username %}" method="post">
 <div>{{ formset.management_form }}</div>
 <table class="mass_table minor_table">

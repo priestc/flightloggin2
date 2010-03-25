@@ -9,3 +9,4 @@ fixtures
 dump
 uploads
 *~
+.sass-cache

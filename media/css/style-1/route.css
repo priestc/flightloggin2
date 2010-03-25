@@ -1,9 +1,0 @@
-
-span.land                                    {text-decoration: underline}
-span.noland                                  {text-decoration: none}
-
-span.found_airport                           {color: MediumSlateBlue}
-span.found_navaid                            {color: SeaGreen}
-span.found_custom                            {color: Navy}                                             
-span.not_found                               {color: gray}
-span.local                                   {color: gray}

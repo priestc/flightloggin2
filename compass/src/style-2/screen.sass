@@ -1,0 +1,89 @@
+/*
+  Welcome to Compass.
+  In this file you should write your main styles. (or centralize your imports)
+  Import this file using the following HTML or equivalent:
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+//@import compass/reset.sass
+
+/*
+  The *:focus rule is reset and suppresses link outlining.
+  You _must_ remember to redefine your own outline, as it’s an important accessibility aid. E.g.
+  *:focus
+    outline: #ccc dotted medium
+
+// blue background
+!raw_text = black
+!bg = #CCE4EB
+!h1 = blue
+!h2 = #3899C2
+
+!navbar = #665B1E
+!navbar_text = white
+!navbar_dot = white
+!navbar_current = #5DC7E9
+!navbar_border = "none"
+
+// canvas
+!canvas = white
+!canvas_text = black
+!canvas_link = #001147
+
+// logbook
+!remarks_tag = "darkred"
+!logbook_header = #E0FFFF
+!logbook_header_text = black
+!logbook_strip1 = white
+!logbook_strip2 = #E2EEEE
+!logbook_border = "1px solid #c3c3c3"
+
+// popup
+!popup_bg = #E8F8FF
+!popup_header = !navbar
+!popup_header_text = white
+!popup_footer = !navbar
+
+// minor table
+!minor_strip1 = #DFDFDF
+!minor_strip2 = #E2EEEE
+!minor_text = black
+!minor_header_text = white
+
+// filter
+!filter = white
+
+//currency
+!currency_current = #E1B053
+!currency_alert = #AE345E
+!currency_expired = #555
+
+///////////////////////////////////////////
+
+@import base.sass
+@import navbar.sass
+@import news.sass
+
+@import gmaps.sass
+@import item_profile.sass
+@import minor_table.sass
+@import site_stats
+
+@import popup.sass
+@import flight_popup.sass
+
+@import logbook.sass
+@import mass_entry.sass
+@import fancy_route.sass
+@import filter_table.sass
+@import planes.sass
+@import events.sass
+@import records.sass
+@import locations.sass
+
+@import maps.sass
+@import currency.sass
+@import est.sass
+@import milestones.sass
+@import sigs.sass
+@import preferences.sass
+@import import.sass

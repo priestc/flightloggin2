@@ -10,15 +10,15 @@
 {% block canvas %}
 
 Download zipped CSV file:<br>
-    <button onclick="window.location = '{% url backup request.display_user %}'; return false;">CSV</button>
+<button onclick="window.location = '{% url backup request.display_user %}'; return false;">CSV</button>
 <hr>
 
 Email me a zipped CSV file:<br>
-    <button onclick="window.open('{% url email-backup request.display_user %}');">Send Email</button>
+<button onclick="window.open('{% url email-backup request.display_user %}');">Send Email</button>
 
 <hr>
 
 Export flights as PDF:<br>
-    <button onclick="window.location = '{% url pdf request.display_user %}'; return false;">PDF</button>
+<button onclick="window.location = '{% url pdf request.display_user %}'; return false;">PDF</button>
     
 {% endblock %}

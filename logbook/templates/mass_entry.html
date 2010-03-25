@@ -11,16 +11,16 @@
 	        $(".vDateField").datepicker({
 			        dateFormat: "yy-mm-dd",
 			        yearRange: "-10:+1", 
-			        //showOn: "button", 
-			        //buttonImage: "{{ MEDIA_URL }}/images/calendar.gif", 
-			        //buttonImageOnly: true,
 			        changeYear: true
-	        }); //.addClass("embed");
+	        });
 	    });
 	    
 	    var NAVBAR_HIGHLIGHT = "mass-sel";
 	</script>
-	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/mass_entry.css">
+	
+	<style type="text/css">
+    div#canvas {width: 98%; max-width: 98%}
+    </style>
 {% endblock %}
 
 {% block title %}{% if edit %}Mass Edit{% else %}Mass Entry{% endif %}{% endblock %}

@@ -1,0 +1,33 @@
+table.mass_table
+    border-collapse: collapse
+    margin: 0 auto 0 auto
+    background: white
+    border-collapse: collapse
+    overflow: visible
+
+    input
+        font-size: small
+
+    tr.header_row td
+        font-size: x-small
+        background: white
+        padding: 0
+
+    tr:nth-child(even)
+        background: #DDDDDD
+
+    input
+        margin: 0
+        
+        &.route_line, &.person_line
+            width: 8em
+
+        &[id$=fuel_burn]
+            width: 3em
+
+        &.vDateField
+            width: 6.5em
+
+        &.float_line
+            width: 2.4em
+            margin: 1px

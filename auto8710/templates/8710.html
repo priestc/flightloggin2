@@ -5,15 +5,7 @@
 
 {% block title %}8710{% endblock %}
 
-
 {% block javascript %}
-<style type="text/css">
-    table#est td.greyed      {background: #CCCCCC}
-    table#est                {border: 1px solid black; font-size: x-small}
-    table#est td             {border: 1px solid gray}
-    div#instruction ul       {text-align: left}
-    div#instruction li       {margin: 8px}
-</style>
 <script type="text/javascript">NAVBAR_HIGHLIGHT = "est-sel";</script>
 {% endblock %}
 
@@ -23,30 +15,30 @@
 	<thead>
 		<tr>
 
-			<td>&nbsp;</td>
-			<td>Total</td>
-			<td>Instruction Received</td>
-			<td>Solo</td>
-			<td>Pilot in Command (PIC)</td>
-			<td>Cross Country Instruction Recieved</td>
-			<td>Cross Country Solo</td>
-			<td>Cross Country PIC</td>
-			<td>Instrument</td>
-			<td>Night Instruction Received</td>
-			<td>Night Take-off/<br />Landings</td>
-			<td>Night PIC</td>
-			<td>Night Take-off/<br />Landings PIC</td>
-			<td>Number of Flights</td>
-			<td>Number of Aero-Tows</td>
-			<td>Number of Ground Launches</td>
-			<td>Number of Powered Launches</td>
+			<th>&nbsp;</th>
+			<th>Total</th>
+			<th>Instruction Received</th>
+			<th>Solo</th>
+			<th>Pilot in Command (PIC)</th>
+			<th>Cross Country Instruction Recieved</th>
+			<th>Cross Country Solo</th>
+			<th>Cross Country PIC</th>
+			<th>Instrument</th>
+			<th>Night Instruction Received</th>
+			<th>Night Take-off/<br />Landings</th>
+			<th>Night PIC</th>
+			<th>Night Take-off/<br />Landings PIC</th>
+			<th>Number of Flights</th>
+			<th>Number of Aero-Tows</th>
+			<th>Number of Ground Launches</th>
+			<th>Number of Powered Launches</th>
 		</tr>
 
 	</thead>
 
 	<tbody>                                             {# AIRPLANE ROW #}
 		<tr>
-			<td rowspan="2">Airplanes</td>
+			<th rowspan="2">Airplanes</th>
 			<td rowspan="2">{{ airplane.total|floatformat:1|intcomma|default:"&nbsp;"|safe }}</td>
 			<td rowspan="2">{{ airplane.dual_r|floatformat:1|intcomma|default:"&nbsp;"|safe }}</td>
 			<td rowspan="2">{{ airplane.solo|floatformat:1|intcomma|default:"&nbsp;"|safe }}</td>
@@ -74,7 +66,7 @@
                                                         {# ROTORCRAFT ROW #}
 
 		<tr>
-			<td rowspan="2">Rotor-<br>craft</td>
+			<th rowspan="2">Rotor-<br>craft</th>
 			<td rowspan="2">{{ rotorcraft.total|floatformat:1|intcomma|default:"&nbsp;"|safe }}</td>
 			<td rowspan="2">{{ rotorcraft.dual_r|floatformat:1|intcomma|default:"&nbsp;"|safe }}</td>
 			<td rowspan="2">{{ rotorcraft.solo|floatformat:1|intcomma|default:"&nbsp;"|safe }}</td>
@@ -102,7 +94,7 @@
 		                                                {# POWERED LIFT ROW #}
 		
 		<tr>
-			<td rowspan="2">Powered<br />Lift</td>
+			<th rowspan="2">Powered<br />Lift</th>
 			<td rowspan="2">{{ pl.total }}</td>
 			<td rowspan="2">{{ pl.dual_r }}</td>
 			<td rowspan="2">{{ pl.solo }}</td>
@@ -129,7 +121,7 @@
 		                                                {# GLIDER ROW #}
 
 		<tr>
-			<td rowspan="2">Gliders</td>
+			<th rowspan="2">Gliders</th>
 			<td rowspan="2">{{ glider.total|floatformat:1|intcomma|default:"&nbsp;"|safe }}</td>
 			<td rowspan="2">{{ glider.dual_r|floatformat:1|intcomma|default:"&nbsp;"|safe }}</td>
 			<td rowspan="2">{{ glider.solo|floatformat:1|intcomma|default:"&nbsp;"|safe }}</td>
@@ -154,7 +146,7 @@
 		                                             {# LIGHTER THAN AIR ROW #}
 		
 		<tr>
-			<td rowspan="2">Lighter Than Air</td>
+			<th rowspan="2">Lighter Than Air</th>
 			<td rowspan="2">{{ lta.total }}</td>
 			<td rowspan="2">{{ lta.dual_r }}</td>
 			<td rowspan="2">{{ lta.solo }}</td>
@@ -179,7 +171,7 @@
 		                                                {# SIMULATOR TRI-ROW #}
 
 		<tr>
-			<td rowspan="1">Simulator</td>
+			<th rowspan="1">Simulator</th>
 			<td rowspan="3" class="greyed">&nbsp;</td>
 			<td rowspan="1">{{ sim.dual_r|floatformat:1|intcomma|default:"&nbsp;"|safe }}</td>
 			<td rowspan="3" class="greyed">&nbsp;</td>
@@ -198,12 +190,12 @@
 			<td rowspan="3" class="greyed">&nbsp;</td>
 		</tr>
 		<tr>
-			<td rowspan="1">FTD</td>
+			<th rowspan="1">FTD</th>
 			<td rowspan="1">{{ ftd.dual_r|floatformat:1|intcomma|default:"&nbsp;"|safe }}</td>
 			<td rowspan="1">{{ ftd.inst|floatformat:1|intcomma|default:"&nbsp;"|safe }}</td>
 		</tr>
 		<tr>
-			<td rowspan="1">PCATD</td>
+			<th rowspan="1">PCATD</th>
 			<td rowspan="1">{{ pcatd.dual_r|floatformat:1|intcomma|default:"&nbsp;"|safe }}</td>
 			<td rowspan="1">{{ pcatd.inst|floatformat:1|intcomma|default:"&nbsp;"|safe }}</td>
 

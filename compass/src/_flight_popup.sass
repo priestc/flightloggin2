@@ -1,0 +1,101 @@
+#popup
+    width: 480px
+    
+    table
+        border-collapse: collapse
+
+    #new_entry_popup td
+        padding: 0
+
+
+    #flying_div
+        padding: 5px
+
+
+    #table_holder
+        overflow: hidden
+        width: 100%
+
+
+    #flight_left_table
+        width: 53%
+        border: 0px solid black
+        float: left
+        margin-right: -10px
+
+    input
+        margin: 0
+
+    input[type=text]
+        width: 145px
+
+
+    textarea, select
+        width: 145px
+
+
+    #flight_left_table
+        textarea
+            height: 5.5em
+
+        tr td
+            &:first-child
+                text-align: right
+                padding-right: 5px
+
+            &:last-child
+                text-align: left
+
+
+    #flight_right_table
+        width: 48%
+        border: 0px solid black
+        float: right
+
+        input
+            &[type=text]
+                width: 2.9em
+
+            &[type=button]
+                margin: 0
+                margin-left: 5px
+
+        tr td
+            &:last-child
+                text-align: left
+                padding-left: 5px
+                margin-top: 0px
+
+            &:first-child
+                text-align: right
+
+
+    #landings_table
+        width: 100%
+        margin-top: 5px
+        margin-bottom: 5px
+
+        input[type=text]
+            width: 2em
+
+
+    #flight_events_table
+        width: 99%
+        border: 1px solid black
+        margin-left: auto
+        margin-right: auto
+        margin-bottom: 5px
+        background= !popup_footer
+        color= !popup_header_text
+        
+        td
+            text-align: left
+
+
+    #flight_buttons
+        width: 100%
+        float: left
+
+
+    #flight_left_table tr:first-child
+        display: none

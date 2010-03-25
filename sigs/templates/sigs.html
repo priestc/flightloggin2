@@ -4,14 +4,14 @@
 
 {% block javascript %}
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/sprintf.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/sigs.js?b"></script>
-<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/sigs.css">
+<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/sigs.js"></script>
 <script type="text/javascript">NAVBAR_HIGHLIGHT = "sigs-sel";</script>
 {% endblock %}
 
 {% block title %}Sigs{% endblock %}
 
 {% block canvas %}
+<div id="sigs_canvas_wrapper">
     <p class="instructions">
     Create a small image that always displays the totals of various times in your
     logbook. Select the columns you want shown, then click the generate button.
@@ -52,5 +52,5 @@
     <div id="image_div">
         <img src="sigs/pic.png" id="sig_image">
     </div>
-    
+</div>
 {% endblock %}

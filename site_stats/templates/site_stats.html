@@ -4,7 +4,6 @@
 {% block description %}FlightLogg.in' overall stats page{% endblock%}
 
 {% block javascript %}
-    <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/site_stats.css"> 
     <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/site_stats.js"></script>
 {% endblock %}
 
@@ -134,36 +133,38 @@
         <td>{{ t.most_common_manu.0 }}</td>
         <td>{{ cs.most_common_manu|linebreaksbr }}</td>
     </tr>
-</table>
-<hr>
-<table id="openid"> 
-    <tr>  
-        <th colspan="3">Openid Providers:</th>
-    </tr>
     
     <tr>
-        <td>Google</td>
-        <td>{{ ss.google }} </td><td> {{ ss.g_p|floatformat:1 }}%</td>
+        <td>Openid Providers</td>
+        <td>
+            <table id="openid">
+                <tr>
+                    <td>Google</td>
+                    <td>{{ ss.google }} </td><td> {{ ss.g_p|floatformat:1 }}%</td>
+                </tr>
+                <tr>
+                    <td>Yahoo</td>
+                    <td>{{ ss.yahoo }} </td><td> {{ ss.y_p|floatformat:1 }}%</td>
+                </tr>
+                <tr>    
+                    <td>AOL</td>
+                    <td>{{ ss.aol }} </td><td> {{ ss.a_p|floatformat:1 }}%</td>
+                </tr>
+                <tr>
+                     <td>MyOpenID</td>
+                     <td>{{ ss.my }} </td><td> {{ ss.m_p|floatformat:1 }}%</td>
+                </tr>
+                <tr>
+                     <td>Others</td>
+                     <td>{{ ss.others }} </td><td> {{ ss.o_p|floatformat:1 }}%</td>
+                </tr>
+            </table>
+        </td>
     </tr>
-    <tr>
-        <td>Yahoo</td>
-        <td>{{ ss.yahoo }} </td><td> {{ ss.y_p|floatformat:1 }}%</td>
-    </tr>
-    <tr>    
-        <td>AOL</td>
-        <td>{{ ss.aol }} </td><td> {{ ss.a_p|floatformat:1 }}%</td>
-    </tr>
-    <tr>
-         <td>MyOpenID</td>
-         <td>{{ ss.my }} </td><td> {{ ss.m_p|floatformat:1 }}%</td>
-    </tr>
-    <tr>
-         <td>Others</td>
-         <td>{{ ss.others }} </td><td> {{ ss.o_p|floatformat:1 }}%</td>
-    </tr>
+    
 </table>
 
-<div id="popup_div"><div class="x"><a href="" title="close this popup" class="x">X</a></div><img src="dummy"></div>
+<div style="display:none" id="popup_div"><div class="x"><a href="" title="close this popup" class="x">X</a></div><img src="dummy"></div>
 
 <img src="{% url histogram-user_totals %}" alt="Distribution of Logbook Totals amoung users">
 

@@ -6,9 +6,6 @@
 {% block javascript %}
     <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/plane_popup.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/popup.js"></script>
-	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/popup.css">
-	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/planes.css">
-	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/minor_table.css">
     <script type="text/javascript">NAVBAR_HIGHLIGHT = "planes-sel";</script>
 {% endblock %}
 
@@ -63,7 +60,7 @@
         {% endif %}
     </div>
 
-<div id="popup" title="New Entry">
+<div id="popup" class="plane" title="New Entry">
 	<table id="dragbar">
 		<tr>
 			<td><span id="titlebar">New Plane</span></td>
@@ -72,7 +69,7 @@
 	</table>
 	
 	<form id="new_plane_form" action="{% url planes request.display_user.username %}" method="post">
-		<table>
+		<table class="single_column">
 			<tbody>
 				<tr>
 					<td>
@@ -89,45 +86,45 @@
 				</tr>
 				
 				<tr>
-					<td></td>
-					<td>{{ form.hidden.label_tag }}{{ form.hidden }} {{ form.retired.label_tag }}{{ form.retired }}</td>
+					<th></th>
+					<td>{{ form.hidden.label_tag }}{{ form.hidden }} &nbsp; {{ form.retired.label_tag }}{{ form.retired }}</td>
 				</tr>
 				
 				<tr>
-					<td>{{ form.tailnumber.label_tag }}<br>&nbsp;</td>
+					<th>{{ form.tailnumber.label_tag }}<br>&nbsp;</th>
 					<td>{{ form.tailnumber }}{{ form.tailnumber.errors|default:"<br>" }}
 					<span class="help_text">{{form.tailnumber.help_text}}</span></td>
 				</tr>
 				<tr>
-					<td>{{ form.manufacturer.label_tag }}<br>&nbsp;</td>
+					<th>{{ form.manufacturer.label_tag }}<br>&nbsp;</th>
 					<td>{{ form.manufacturer }}{{ form.manufacturer.errors|default:"<br>" }}
 					<span class="help_text">{{form.manufacturer.help_text}}</span></td>
 				</tr>
 			
 				<tr>
-					<td>{{ form.type.label_tag }}<br>&nbsp;</td>
+					<th>{{ form.type.label_tag }}<br>&nbsp;</th>
 					<td>{{ form.type }}{{ form.type.errors|default:"<br>" }}
 					<span class="help_text">{{form.type.help_text}}</span></td>
 				</tr>
 				
 				<tr>
-					<td>{{ form.model.label_tag }}<br>&nbsp;</td>
+					<th>{{ form.model.label_tag }}<br>&nbsp;</th>
 					<td>{{ form.model }}{{ form.model.errors|default:"<br>" }}
 					<span class="help_text">{{form.model.help_text}}</span></td>
 				</tr>
 				
 				<tr>
-					<td>{{ form.cat_class.label_tag }}</td>
+					<th>{{ form.cat_class.label_tag }}</th>
 					<td>{{ form.cat_class }}</td>
 				</tr>
 				
 				<tr>
-					<td>Tags</td>
+					<th>Tags</th>
 					<td>{{ form.tags }}</td>
 				</tr>
 				
 				<tr>
-					<td>{{ form.description.label_tag }}</td>
+					<th>{{ form.description.label_tag }}</th>
 					<td>{{ form.description }}</td>
 				</tr>
 				

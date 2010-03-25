@@ -4,7 +4,6 @@
 
 {% block javascript %}
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/preferences.js"></script>
-<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/preferences.css">
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/jquery/css/black-tie/jquery-ui-1.7.1.custom.css">
 <script type="text/javascript">NAVBAR_HIGHLIGHT = "profile-sel";</script>
 {% endblock %}
@@ -22,41 +21,40 @@
 	
 		<table class="prefs_table">
 		    <tr>
-				<td>{{ user_form.username.label_tag }}</td>
-				<td colspan="2">{{ user_form.username }}</td>
+				<th>{{ user_form.username.label_tag }}</th>
+				<td>{{ user_form.username }}</td>
 				<td>{{ user_form.username.errors }}</td>
 			</tr>
 			
 			<tr>
-				<td>{{ user_form.email.label_tag }}</td>
-				<td colspan="2">{{ user_form.email }}</td>
+				<th>{{ user_form.email.label_tag }}</th>
+				<td>{{ user_form.email }}</td>
 				<td>{{ user_form.email.errors }}
 				Note: this email address is completely unrelated to the OpenID account
 				you use to log in with.</td>
 			</tr>
 			
 			<tr>
-				<td>{{ profile_form.real_name.label_tag }}</td>
-				<td colspan="2">{{ profile_form.real_name }}</td>
+				<th>{{ profile_form.real_name.label_tag }}</th>
+				<td>{{ profile_form.real_name }}</td>
 				<td>{{ profile_form.real_name.errors }}</td>
 			</tr>
 			
 			<tr>
-				<td>{{ profile_form.dob.label_tag }}</td>
-				<td colspan="2">{{ profile_form.dob }}</td>
+				<th>{{ profile_form.dob.label_tag }}</th>
+				<td>{{ profile_form.dob }}</td>
 				<td>{{ profile_form.date.errors }}</td>
 			</tr>
 			
 			<tr>
-				<td>{{ profile_form.style.label_tag }}</td>
-				<td colspan="2">{{ profile_form.style }}</td>
+				<th>{{ profile_form.style.label_tag }}</th>
+				<td>{{ profile_form.style }}</td>
 				<td></td>
 			</tr>
 
 			<tr>
-				<td>Your secret key</td>
+				<th>Your secret key</th>
 				<td>{{ profile_form.instance.secret_key }}</td>
-				<td></td>
 				<td></td>
 			</tr>
 			
@@ -69,36 +67,36 @@
 	
 		<table class="prefs_table">
 		<tr>
-				<td>{{ profile_form.logbook_share.label_tag }}</td>
-				<td colspan="2">{{ profile_form.logbook_share }}</td>
+				<th>{{ profile_form.logbook_share.label_tag }}</th>
+				<td>{{ profile_form.logbook_share }}</td>
 				<td>{{ profile_form.logbook_share.errors }}
 				{{ profile_form.logbook_share.help_text }}</td>
 			</tr>
 			
 			<tr>
-				<td>{{ profile_form.records_share.label_tag }}</td>
-				<td colspan="2">{{ profile_form.records_share }}</td>
+				<th>{{ profile_form.records_share.label_tag }}</th>
+				<td>{{ profile_form.records_share }}</td>
 				<td>{{ profile_form.records_share.errors }}
 				{{ profile_form.records_share.help_text }}</td>
 			</tr>
 			
 			<tr>
-				<td>{{ profile_form.events_share.label_tag }}</td>
-				<td colspan="2">{{ profile_form.events_share }}</td>
+				<th>{{ profile_form.events_share.label_tag }}</th>
+				<td>{{ profile_form.events_share }}</td>
 				<td>{{ profile_form.events_share.errors }}
 				{{ profile_form.events_share.help_text }}</td>
 			</tr>
 			
 			<tr>
-				<td>{{ profile_form.other_share.label_tag }}</td>
-				<td colspan="2">{{ profile_form.other_share }}</td>
+				<th>{{ profile_form.other_share.label_tag }}</th>
+				<td>{{ profile_form.other_share }}</td>
 				<td>{{ profile_form.other_share.help_text }}
 				{{ profile_form.other_share.errors }}</td>
 			</tr>
 			
 			<tr>
-				<td>{{ profile_form.social.label_tag }}</td>
-				<td colspan="2">{{ profile_form.social }}</td>
+				<th>{{ profile_form.social.label_tag }}</th>
+				<td>{{ profile_form.social }}</td>
 				<td>{{ profile_form.social.help_text }}
 				{{ profile_form.social.errors }}</td>
 			</tr>
@@ -114,11 +112,14 @@
 			<tr>
 				<td colspan="4">
 					<table id="columns_table">
+					    <thead>
 						<tr>	
-							<td>Auto Button</td>
-							<td>Display Column</td>
+							<td>Auto<br>Button</td>
+							<td>Display<br>Column</td>
+							<td></td>
 							<td></td>
 						</tr>
+						</thead>
 {% for field in bool_fields %}
 {{field|safe}}
 {% endfor %}
@@ -127,36 +128,29 @@
 			</tr>
 			
 			<tr>
-				<td>{{ profile_form.per_page.label_tag }}</td>
-				<td colspan="2">{{ profile_form.per_page }}</td>
+				<th>{{ profile_form.per_page.label_tag }}</th>
+				<td>{{ profile_form.per_page }}</td>
 				<td>{{ profile_form.per_page.errors }}</td>
 			</tr>
 			
 			<tr>
-				<td>{{ profile_form.minutes.label_tag }}</td>
-				<td colspan="2">{{ profile_form.minutes }}</td>
+				<th>{{ profile_form.minutes.label_tag }}</th>
+				<td>{{ profile_form.minutes }}</td>
 				<td>{{ profile_form.minutes.errors }}</td>
 			</tr>
 			
 			<tr>
-				<td>{{ profile_form.text_plane.label_tag }}</td>
-				<td colspan="2">{{ profile_form.text_plane }}</td>
+				<th>{{ profile_form.text_plane.label_tag }}</th>
+				<td>{{ profile_form.text_plane }}</td>
 				<td>{{ profile_form.text_plane.errors }}</td>
 			</tr>
 			
 			<tr>
-				<td>{{ profile_form.date_format.label_tag }}</td>
-				<td colspan="2">{{ profile_form.date_format }}</td>
+				<th>{{ profile_form.date_format.label_tag }}</th>
+				<td>{{ profile_form.date_format }}</td>
 				<td>{{ profile_form.date_format.errors }}<br>
 				    Default: "Y-m-d" For a guide to date formatting, <a target="_blank" href="http://us3.php.net/manual/en/function.date.php">click here</a>
 				</td>
-			</tr>
-			
-			<tr>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
 			</tr>
 		
 		</table>
@@ -169,21 +163,20 @@
 		
 		<table class="prefs_table">
 			<tr>
-				<td>{{ profile_form.backup_email.label_tag }}</td>
-				<td colspan="2">{{ profile_form.backup_email }}</td>
+				<th>{{ profile_form.backup_email.label_tag }}</th>
+				<td>{{ profile_form.backup_email }}</td>
 				<td>{{ profile_form.backup_email.errors }}{{ profile_form.backup_email.help_text }}</td>
 			</tr>
 			
 			<tr>
-				<td>{{ profile_form.backup_freq.label_tag }}</td>
-				<td colspan="2">{{ profile_form.backup_freq }}</td>
+				<th>{{ profile_form.backup_freq.label_tag }}</th>
+				<td>{{ profile_form.backup_freq }}</td>
 				<td>{{ profile_form.backup_freq.errors }}</td>
 			</tr>
 			
 			<tr>
-				<td>Send Backup Now</td>
+				<th>Send Backup Now</th>
 				<td><input type="button" value="Send Email" style="width: auto" onclick="window.open('/{{ request.display_user }}/email-backup.html');"></td>
-				<td></td>
 				<td>If you do not receive an email, it is most likely because your ISP thinks FlightLogg.in' is sending spam. For best results, use a GMail or Yahoo account.</td>
 			</tr>
 		</table>

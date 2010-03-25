@@ -163,7 +163,7 @@ class Flight(EnhancedModel):
         if not ret:
             return ""
         else:    
-            return mark_safe('<span class="flying_event">%s</span> ' % ret)
+            return mark_safe('<span class="remarks_tag">%s</span> ' % ret)
 
     def column(self, cn, format="decimal", ret=0.0):
         """Returns a string that represents the column being passed

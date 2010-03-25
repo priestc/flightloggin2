@@ -4,10 +4,6 @@
 
 {% block description %}{{ tn|upper }} tailnumber profile{% endblock%}
 
-{% block javascript %}
-<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/item_profile.css">
-{% endblock %}
-
 {% block title %}Tailnumber Profile - {{ tn|upper }}{% endblock %}
 
 {% block canvas %}
@@ -18,7 +14,7 @@
 {% include "gmaps.html" %}
 
 {% cache 10800 tn_profile tn %}
-<table class="main">
+<table id="item_profile">
     <tr>
         <th>Users who have flown an aircraft with this tailnumber</th>
         <td>{{ users|list_users }}</td>

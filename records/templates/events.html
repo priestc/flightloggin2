@@ -5,9 +5,6 @@
 {% block javascript %}
     <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/popup.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/event_popup.js"></script>
-	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/popup.css">
-	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/events.css">
-	<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/minor_table.css">
 	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/jquery/css/black-tie/jquery-ui-1.7.1.custom.css">
 	<script type="text/javascript">NAVBAR_HIGHLIGHT = "events-sel";</script>
 {% endblock %}
@@ -44,7 +41,7 @@
     {% endfor %}    
     </table>
 
-<div id="popup" title="New Event">
+<div id="popup" class="event" title="New Event">
 	<table id="dragbar">
 		<tr>
 			<td><span id="titlebar">New Event</span></td>
@@ -53,7 +50,7 @@
 	</table>
 	
 	<form id="new_plane_form" action="{% url events request.display_user.username %}" method="post">
-		<table>
+		<table class="single_column">
 			<tbody>
 				<tr>
 					<td>		
@@ -62,16 +59,16 @@
 					</td>
 				</tr>
 				<tr>
-					<td>{{ form.date.label_tag }}</td>
+					<th>{{ form.date.label_tag }}</th>
 					<td>{{ form.date }}<br><span class="help_text">{{form.date.help_text}}</span></td>
 				</tr>
 				<tr>
-					<td>Event</td>
+					<th>Event</th>
 					<td>{{ form.non_flying }}<br><span class="help_text">{{form.non_flying.help_text}}</span></td>
 				</tr>
 			
 				<tr>
-					<td>{{ form.remarks.label_tag }}</td>
+					<th>{{ form.remarks.label_tag }}</th>
 					<td>{{ form.remarks }}<br><span class="help_text">{{form.remarks.help_text}}</span></td>
 				</tr>
 			</tbody>

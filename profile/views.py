@@ -80,21 +80,35 @@ def profile(request):
         column_form = ColumnsForm(prefix="column", instance=column)
         auto_form = AutoForm(prefix="auto", instance=auto)
     
+    
+    f1 = '<td class="{cls}">{checkbox}</td>'
+    f2 = '<td class="title">{title}</td><td class="description">{desc}</td>\n'
+    
+    
     bool_fields = []
-    for field in OPTION_FIELDS:         ## mix the auto button and the columns fields into the same html table
+    ## mix the auto button and the columns fields into the same html table
+    for field in OPTION_FIELDS:
         row = []
         
         row.append("<tr>\n")
         
         if auto_form.fields.get(field):
-            row.append("<td>" + str(auto_form[field]) + "</td>\n")
+            checkbox = str(auto_form[field])
         else:
-            row.append("<td><input type='checkbox' style='visibility: hidden'></td>")
+            checkbox = "<input type='checkbox' style='visibility: hidden'>"
+        
+        row.append(f1.format(checkbox=checkbox, cls="aauto"))
             
         if column_form.fields.get(field):
-            row.append("<td>" + str(column_form[field]) + "</td>\n")
+            formatted = f1.format(checkbox=str(column_form[field]), cls="column")
+            row.append(formatted)
+        else:
+            row.append('<td class="column"></td>')
         
-        row.append("<td>%s</td><td>%s</td>\n" % (FIELD_TITLES[field], column_form[field].help_text))
+        formatted = f2.format(title=FIELD_TITLES[field], desc=column_form[field].help_text)
+        
+        row.append(formatted)
+                            
         row.append("</tr>\n")
         bool_fields.append("".join(row))
 

@@ -1,66 +1,58 @@
 <form method="get" action="{% url logbook-page request.display_user 1 %}" id="filterform">
-<table id="filter_box">
-    <tr>
-        <td id="date_filter_pane">
-
-                {#<input type="hidden" name="c" value="t">#}
-                {{ ff.start_date.label_tag }} {{ ff.start_date }}
-                <br><br>
-                {{ ff.end_date.label_tag }} {{ ff.end_date }}
-
-
-        </td>
-        
-        <td id="time_filter_pane">
-            {# produces a table with id='center_filter_table' #}
-            {{ ff.render_table }}
-            
-            <br>
-            
-            <table id="text_filters">
+    <div id="filter_box">
+        <div id="filter_right">
+            <table>
                 <tr>
-                    <td>{{ ff.person.label_tag }}</td><td>{{ ff.person }}</td>
+                    <th>{{ ff.start_date.label_tag }}</th>
+                    <td>{{ ff.start_date }}</td>
                 </tr>
                 <tr>
-                    <td>{{ ff.remarks.label_tag }}</td><td>{{ ff.remarks }}</td>
+                    <th>{{ ff.end_date.label_tag }}</th>
+                    <td>{{ ff.end_date }}</td>
                 </tr>
                 <tr>
-                    <td>{{ ff.route__fancy_rendered.label_tag }}</td><td>{{ ff.route__fancy_rendered }}</td>
+                    <th>By Plane Tags</th>
+                    <td>{{ ff.plane__tags }}</td>
+                </tr>
+                <tr>
+                    <th>By Plane Type</th>
+                    <td>{{ ff.plane__type }}</td>
+                </tr>
+                <tr>
+                    <th>By Tailnumber</th>
+                    <td>{{ ff.plane__tailnumber }}</td>
+                </tr>
+                <tr>
+                    <th>By Category/Class</th>
+                    <td>{{ ff.plane__cat_class }}</td>
+                </tr>
+                <tr>
+                    <th>{{ ff.person.label_tag }}</th>
+                    <td>{{ ff.person }}</td>
+                </tr>
+                <tr>
+                    <th>{{ ff.remarks.label_tag }}</th>
+                    <td>{{ ff.remarks }}</td>
+                </tr>
+                <tr>
+                    <th>{{ ff.route__fancy_rendered.label_tag }}</th>
+                    <td>{{ ff.route__fancy_rendered }}</td>
                 </tr>
             </table>
-            
-        </td>
-        
-        <td id="plane_filter_pane">
-            By Plane Tags<br>
-            {{ ff.plane__tags }}
-            
-            <br><br>
-            
-            By Plane Type<br>
-            {{ ff.plane__type }}
-            
-            <br><br>
-            
-            By Tailnumber<br>
-            {{ ff.plane__tailnumber }}
-            
-            <br><br>
-            
-            By Category/Class<br>
-            {{ ff.plane__cat_class }}
-            
-        </td>
-    </tr>
-    <tr>
-        <td colspan="3">
-            <input type="hidden" name="earth" value="true">
-            <input type="hidden" name="maps" value="true">
-            
-            <input id="logbook" class="filter_submit" type="submit" value="View in Logbook">
-            <input id="earth" class="filter_submit" type="submit" value="View in Google Earth">
-            <input id="maps" class="filter_submit" type="submit" value="View in Google Maps">
-        </td>
-    </tr>
-    
-</table>
+        </div>
+                
+        <div id="filter_left">
+            {# produces a table with id='center_filter_table' #}
+            {{ ff.render_table }}
+
+            <div id="filter_buttons">        
+                <input type="hidden" name="earth" value="true">
+                <input type="hidden" name="maps" value="true">
+                <input id="logbook" class="filter_submit" type="submit" value="View in Logbook">
+                <input id="earth" class="filter_submit" type="submit" value="View in Google Earth">
+                <input id="maps" class="filter_submit" type="submit" value="View in Google Maps">
+            </div>
+        </div>
+    </div>    
+</form>
+

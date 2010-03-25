@@ -5,11 +5,6 @@
 
 {% block javascript %}
 
-    <style>
-        .date       {width: 8em}
-        select      {font-size: small}
-    </style>
-    
     <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/sprintf.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/bargraphs.js"></script>
     
@@ -22,7 +17,6 @@
 {% endblock %}
 
 {% block title %}Line Graphs{% endblock %}
-
 
 {% block canvas %}
     <select id="func">
@@ -42,8 +36,6 @@
     </select>
 
     <input id="bar_graph" class="render_button png" name="line_render" value="Render" type="submit">
- 
-    {#################################}
     
     <br> <br> <br>
     <img src="" id="image" style="display:none; margin-right: auto; margin-left: auto">

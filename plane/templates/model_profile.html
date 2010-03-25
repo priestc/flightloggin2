@@ -5,10 +5,6 @@
 
 {% block description %}{{ model|upper }} model profile{% endblock%}
 
-{% block javascript %}
-<link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/item_profile.css">
-{% endblock %}
-
 {% block title %}Model Profile - {{ model }}{% endblock %}
 
 {% block canvas %}
@@ -19,7 +15,7 @@
 {% include "gmaps.html" %}
 
 {% cache 10800 model_profile model %}
-<table class="main">
+<table id="item_profile">
     <tr>
         <th>Users who have flown a {{ model }}</th>
         <td>{{ users|list_users }}</td>
