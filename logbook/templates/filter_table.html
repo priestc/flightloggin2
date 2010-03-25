@@ -55,4 +55,20 @@
         </div>
     </div>    
 </form>
-
+<script type="text/javascript">
+    $('a#filter_swap').toggle(
+        function() {
+        
+            $("div#filter_box").show('slow');
+            
+        },
+        function() {
+        
+            $("div#filter_box").hide('slow');
+        }
+    );
+    
+    if(location.href.indexOf('?') > 0 & location.href.indexOf('=') > 0)
+        $("div#filter_box").show();
+    
+</script>
