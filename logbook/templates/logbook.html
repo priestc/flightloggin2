@@ -106,10 +106,17 @@
 	
 	{% include "pagination_table.html" %}
 	<hr>
-    <a href="" id="filter_swap">Filter Flights</a> &nbsp; &nbsp; &nbsp;
-	{% if page_of_flights.object_list and not request.shared %}
-		<a href="{% url mass-edit request.display_user.username page_of_flights.number %}">Mass Edit this page</a>
-	{% endif %}
+	<div style="overflow:hidden">
+	    <div style="float:left">
+            <a href="" id="filter_swap">Filter Flights</a>
+        </div>
+	    {% if page_of_flights.object_list and not request.shared %}
+	    <div style="float:right">
+	        <a href="{% url mass-edit request.display_user.username page_of_flights.number %}">Mass Edit this page</a>
+	    </div>
+	    {% endif %}
+	</div>
+	
 	
 	{% include "filter_table.html" %}
 {% include "new_flight.html" %}
