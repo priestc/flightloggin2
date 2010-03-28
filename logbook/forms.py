@@ -91,15 +91,43 @@ class BlankIntField(BlankHourField):
     
 ###############################################################################
 
+class PlaneTextInput(TextInput):
+    def render(self, name, value, attrs=None):
+        value = self._format_value_out(value)
+        return super(PlaneTextInput, self).render(name, value, attrs)
+    
+    def _format_value_out(self, value):
+        """
+        In: plane pk
+        Out: that plane's tailnumber
+        """
+        
+        if not value or value == 0:
+            return ""
+
+        return Plane.objects.get(pk=value).tailnumber
+    
+    
+    def _has_changed(self, initial, data):
+        return super(PlaneTextInput, self).\
+                    _has_changed(self._format_value_out(initial), data)
+
 class TextPlaneField(ModelChoiceField):
     """
-    A field that returns a plane instance and uses a text field instead of
-    a dropdown box
+    A field that returns a plane instance and uses a text field widget 
+    instead of a dropdown box.
     """
     
-    widget = forms.TextInput()
+    widget = PlaneTextInput()
+    
+#    def __init__(self, user, *args, **kwargs):
+#        self.user=user
+#        super(TextPlaneField, self).__init__(*args, **kwargs)
     
     def clean(self, val):
+        """
+        Turns the entered value (a tailnumber), into a plane instance
+        """
         
         if val.startswith("pk:"):
             pk = val[3:]
@@ -110,7 +138,7 @@ class TextPlaneField(ModelChoiceField):
                 return Plane.objects.get(pk=settings.UNKNOWN_PLANE_ID)  
         
         if val == '':
-            ## if the thing was blank, get and return the global unknown plane
+            ## if input was blank, get and return the global unknown plane
             return Plane.objects.get(pk=settings.UNKNOWN_PLANE_ID)
         
         elif " " in val:
@@ -126,13 +154,8 @@ class TextPlaneField(ModelChoiceField):
         except IndexError:
             # couldn't find airplane, it either doesn't exist, or it's retired
             return Plane.objects.create(**kwarg)
-        
+    
 ###############################################################################
-
-text_plane_field = \
-    TextPlaneField(
-       queryset=Plane.objects.get_empty_query_set()
-    )
 
 class PopupFlightForm(ModelForm):
     
@@ -187,13 +210,11 @@ class PopupFlightForm(ModelForm):
             return ''
         
         ## this will raise the proper validation errors
-        handle_fuel_burn(value, 56)
+        # 1488 is just a dummy value, the result is not used
+        handle_fuel_burn(value, 1488)
         
         return value
-        
-class PopupFlightFormText(PopupFlightForm):
-    plane = text_plane_field
-        
+              
 ###############################################################################
 
 class FormsetFlightForm(PopupFlightForm):
@@ -212,27 +233,33 @@ class FormsetFlightForm(PopupFlightForm):
                 required=False)
         
 from django.forms.models import BaseModelFormSet
-class FixedPlaneModelFormset(BaseModelFormSet):
+class MassEntryFormset(BaseModelFormSet):
     """
     An edited formset to deal with the custom plane queryset, as well as
     passing in the user instance to each form
     """
     
     def __init__(self, *args, **kwargs):
-        
-        if kwargs.has_key('planes_queryset'):
-            self.custom_queryset = kwargs.pop('planes_queryset')
             
-        if kwargs.has_key('user'):
-            self.user = kwargs.pop('user')
+
+        self.user = kwargs.pop('user')
+        self.text_plane = self.user.get_profile().text_plane
         
-        super(FixedPlaneModelFormset, self).__init__(*args, **kwargs)
+        super(MassEntryFormset, self).__init__(*args, **kwargs)
 
     def add_fields(self, form, index):
-        super(FixedPlaneModelFormset, self).add_fields(form, index)
+        """
+        Swaps out the plane field. If the user wants a text field, it drops in
+        a TextPlane instance, otherwise it just overwrites the queryset
+        with a queryset depicting all planes owned by the user
+        """
         
-        pqs = Plane.objects.get_empty_query_set()
-        form.fields["plane"] = ModelChoiceField(queryset=pqs, required=True)
-        form.fields['plane'].queryset = self.custom_queryset
+        super(MassEntryFormset, self).add_fields(form, index)
         
-    
+        qs = Plane.objects.user_common(self.user)
+        
+        if self.text_plane:
+            form.fields["plane"] = TextPlaneField(qs)
+            form.fields["plane"].user=self.user
+        else:
+            form.fields["plane"] = ModelChoiceField(queryset=qs, required=True)

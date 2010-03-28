@@ -1,21 +1,18 @@
-from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.forms.models import modelformset_factory
-from django.forms.formsets import formset_factory
 from django.core.urlresolvers import reverse
-    
+from django.views.decorators.cache import cache_page
+
 from annoying.decorators import render_to
 from share.decorator import no_share
 
 from models import Flight, Columns
 from plane.models import Plane
-import forms
 from constants import *
 from profile.models import Profile, AutoButton
-
 from utils import proper_flight_form, logbook_url
+import forms
 
-from django.views.decorators.cache import cache_page
 
 ###############################################################################
 
@@ -209,11 +206,11 @@ def logbook(request, page=0, form=None, fail=None):
 def mass_entry(request):
     
     profile,c = Profile.objects.get_or_create(user=request.display_user)
-        
+    
     NewFlightFormset = modelformset_factory(Flight,
                                        form=forms.FormsetFlightForm,
                                        extra=profile.per_page,
-                                       formset=forms.FixedPlaneModelFormset)
+                                       formset=forms.MassEntryFormset)
         
     if request.POST.get('submit'):
         post = request.POST.copy()
@@ -227,8 +224,8 @@ def mass_entry(request):
                 post.update({"form-%s-user" % pk: u''})
             
         formset = NewFlightFormset(post,
-                    queryset=Flight.objects.get_empty_query_set(),
-                    planes_queryset=Plane.objects.user_common(request.display_user)
+                    queryset=Flight.objects.none(),
+                    user=request.display_user
                   )
         
         if formset.is_valid():
@@ -249,18 +246,18 @@ def mass_entry(request):
         
     else:
         qs = Flight.objects.get_empty_query_set()
-        pqs = Plane.objects.user_common(request.display_user)
-        formset = NewFlightFormset(queryset=qs, planes_queryset=pqs)
+        formset = NewFlightFormset(queryset=qs,
+                                   user=request.display_user)
 
     return locals()
 
 @no_share('NEVER')
 @render_to("mass_entry.html")     
 def mass_edit(request, page=0):
-    edit = True 
+
     flights = Flight.objects.filter(user=request.display_user)
     profile,c = Profile.objects.get_or_create(user=request.display_user)
-        
+    
     start = (int(page)-1) * int(profile.per_page)
     duration = int(profile.per_page)
     qs = Flight.objects.filter(user=request.display_user)\
@@ -268,15 +265,16 @@ def mass_edit(request, page=0):
     
     NewFlightFormset = modelformset_factory(Flight,
                                             form=forms.FormsetFlightForm,
-                                            formset=forms.FixedPlaneModelFormset,
+                                            formset=forms.MassEntryFormset,
                                             extra=0,
                                             can_delete=True)
         
     if request.POST.get('submit'):
-        formset = NewFlightFormset(request.POST, queryset=qs,
-                    user=request.display_user,
-                    planes_queryset=Plane.objects.user_common(request.display_user)
-                  )
+        pqs = Plane.objects.user_common(request.display_user)
+        
+        formset = NewFlightFormset(request.POST,
+                                   queryset=qs,
+                                   user=request.display_user)
         
         if formset.is_valid():
             formset.save()
@@ -294,6 +292,7 @@ def mass_edit(request, page=0):
             )
     else:
         pqs = Plane.objects.user_common(request.display_user)
-        formset = NewFlightFormset(queryset=qs, planes_queryset=pqs)
-    
+        formset = NewFlightFormset(queryset=qs, user=request.display_user)
+
+    edit = True     # for rendering some text in the template
     return locals()      

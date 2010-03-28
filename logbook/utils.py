@@ -148,20 +148,23 @@ def logbook_url(user, page):
 
     return reverse(view, kwargs=kwargs)
 
-def proper_flight_form(profile):
+def proper_flight_form(profile, mass=False):
     """
     Prepares the popup flight form based on how the user wants each field
     widget to be rendered as.
     """
-    
-    from logbook.forms import PopupFlightForm, PopupFlightFormText
+
+    from copy import deepcopy
+    from plane.models import Plane
+    from logbook.forms import TextPlaneField, PopupFlightForm
     
     if profile.text_plane:
-        return PopupFlightFormText
+        text_plane_field = TextPlaneField(queryset=Plane.objects.none())
+        NewForm = deepcopy(PopupFlightForm)
+        NewForm.base_fields['plane'] = text_plane_field
+        return NewForm
     
     return PopupFlightForm
-
-
 
 def expire_logbook_cache_totals(user=None):
 
