@@ -15,6 +15,10 @@
 {% block canvas %}
 
 <form id="prefs_form" action="{% url profile request.display_user.username %}" method="post">
+    <div>
+		<input class="prefs_submit_button" type="submit" value="Submit Preferences">
+	</div>
+	
 	<fieldset>
 
 		<legend>General</legend>
@@ -103,59 +107,6 @@
 			
 		</table>
 	</fieldset>
-
-	<fieldset id="logbook_section">
-
-		<legend>Logbook</legend>
-	
-		<table class="prefs_table">	
-			<tr>
-				<td colspan="4">
-					<table id="columns_table">
-					    <thead>
-						<tr>	
-							<td>Auto<br>Button</td>
-							<td>Display<br>Column</td>
-							<td></td>
-							<td></td>
-						</tr>
-						</thead>
-{% for field in bool_fields %}
-{{field|safe}}
-{% endfor %}
-					</table>
-				</td>
-			</tr>
-			
-			<tr>
-				<th>{{ profile_form.per_page.label_tag }}</th>
-				<td>{{ profile_form.per_page }}</td>
-				<td>{{ profile_form.per_page.errors }}</td>
-			</tr>
-			
-			<tr>
-				<th>{{ profile_form.minutes.label_tag }}</th>
-				<td>{{ profile_form.minutes }}</td>
-				<td>{{ profile_form.minutes.errors }}</td>
-			</tr>
-			
-			<tr>
-				<th>{{ profile_form.text_plane.label_tag }}</th>
-				<td>{{ profile_form.text_plane }}</td>
-				<td>{{ profile_form.text_plane.errors }}</td>
-			</tr>
-			
-			<tr>
-				<th>{{ profile_form.date_format.label_tag }}</th>
-				<td>{{ profile_form.date_format }}</td>
-				<td>{{ profile_form.date_format.errors }}<br>
-				    Default: "Y-m-d" For a guide to date formatting, <a target="_blank" href="http://us3.php.net/manual/en/function.date.php">click here</a>
-				</td>
-			</tr>
-		
-		</table>
-		
-	</fieldset>
 	
 	<fieldset>
 
@@ -180,6 +131,67 @@
 				<td>If you do not receive an email, it is most likely because your ISP thinks FlightLogg.in' is sending spam. For best results, use a GMail or Yahoo account.</td>
 			</tr>
 		</table>
+	</fieldset>
+
+	<fieldset id="logbook_section">
+
+		<legend>Logbook</legend>
+	
+		<table class="prefs_table">	
+		
+		    <tr>
+				<th>{{ profile_form.per_page.label_tag }}</th>
+				<td>{{ profile_form.per_page }}</td>
+				<td>{{ profile_form.per_page.errors }}</td>
+			</tr>
+			
+			<tr>
+				<th>{{ profile_form.minutes.label_tag }}</th>
+				<td>{{ profile_form.minutes }}</td>
+				<td>{{ profile_form.minutes.errors }}</td>
+			</tr>
+			
+			<tr>
+				<th>{{ profile_form.text_plane.label_tag }}</th>
+				<td>{{ profile_form.text_plane }}</td>
+				<td>{{ profile_form.text_plane.errors }}</td>
+			</tr>
+			
+			<tr>
+				<th>{{ profile_form.date_format.label_tag }}</th>
+				<td>{{ profile_form.date_format }}</td>
+				<td>{{ profile_form.date_format.errors }}<br>
+				    Default: "Y-m-d" For a guide to date formatting, <a target="_blank" href="http://us3.php.net/manual/en/function.date.php">click here</a>
+				</td>
+			</tr>
+		</table>
+    </fieldset>    
+    
+	<fieldset id="logbook_section">
+
+		<legend>Columns</legend>
+	
+		<table class="prefs_table">	
+			<tr>
+				<td colspan="4">
+					<table id="columns_table">
+					    <thead>
+						<tr>	
+							<td>Auto<br>Button</td>
+							<td>Display<br>Column</td>
+							<td></td>
+							<td></td>
+						</tr>
+						</thead>
+{% for field in bool_fields %}
+{{field|safe}}
+{% endfor %}
+					</table>
+				</td>
+			</tr>
+		
+		</table>
+		
 	</fieldset>
 	
 	<fieldset>
@@ -224,9 +236,6 @@
         </div>
 	
 	</fieldset>
-    <div>
-		<input class="prefs_submit_button" type="submit" value="Submit Preferences">
-	</div>
 </form>
 {{auto_form.errors}}
 {{column_form.errors}}

@@ -132,7 +132,7 @@
 		</table>
 		
 		<div id="tags_window">
-			{% tag_cloud_for_model plane.Plane as cloud with distribution=log min_count=30 steps=5 %}
+			{% tag_cloud_for_model plane.Plane as cloud with distribution=log min_count=80 steps=5 %}
 			
 			{% for tag in cloud %}
             <a href="" title="Add this tag" class="tag{{tag.font_size}}">{{ tag }}</a>
