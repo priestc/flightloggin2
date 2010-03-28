@@ -68,7 +68,7 @@ class Location(EnhancedModel):
         # a function that always returns a constant
         l = lambda value: repeat(value).next
 
-        icons = defaultdict(l('#navaid'), {
+        icons = defaultdict(l('#white'), {
                     0: "#white",     #unknown
                     1: "#yellow",    #small
                     2: "#orange",    #medium
@@ -76,7 +76,7 @@ class Location(EnhancedModel):
                     4: "#gray",      #closed
                     5: "#purple",    #heliport
                     6: "#cyan",      #seaport
-                    7: "#purple",    #baloon port
+                    7: "#teal",      #baloon port
                     8: "#green",     #off airport
                 })
                         

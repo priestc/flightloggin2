@@ -40,11 +40,11 @@
 	
 	{##########################################}
 	
-	<Style id="teal">
+	<Style id="yellow">
 		<IconStyle>
 			<scale>1.0</scale>
 			<Icon>
-				<href>files/teal.png</href>
+				<href>files/yellow.png</href>
 			</Icon>
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
@@ -59,17 +59,7 @@
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
 	</Style>
-
-	<Style id="white">
-		<IconStyle>
-			<scale>1.0</scale>
-			<Icon>
-				<href>files/white.png</href>
-			</Icon>
-			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
-		</IconStyle>
-	</Style>
-
+	
 	<Style id="red">
 		<IconStyle>
 			<scale>1.0</scale>
@@ -80,21 +70,41 @@
 		</IconStyle>
 	</Style>
 	
-	<Style id="yellow">
+	<Style id="green">
 		<IconStyle>
 			<scale>1.0</scale>
 			<Icon>
-				<href>files/yellow.png</href>
+				<href>files/green.png</href>
 			</Icon>
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
 	</Style>
-
+	
 	<Style id="purple">
 		<IconStyle>
 			<scale>1.0</scale>
 			<Icon>
 				<href>files/purple.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+	
+	<Style id="cyan">
+		<IconStyle>
+			<scale>1.0</scale>
+			<Icon>
+				<href>files/cyan.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+	</Style>
+	
+	<Style id="teal">
+		<IconStyle>
+			<scale>1.0</scale>
+			<Icon>
+				<href>files/teal.png</href>
 			</Icon>
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
@@ -109,12 +119,12 @@
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
 	</Style>
-	
-	<Style id="cyan">
+
+	<Style id="white">
 		<IconStyle>
 			<scale>1.0</scale>
 			<Icon>
-				<href>files/cyan.png</href>
+				<href>files/white.png</href>
 			</Icon>
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>

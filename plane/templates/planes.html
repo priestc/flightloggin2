@@ -86,8 +86,13 @@
 				</tr>
 				
 				<tr>
-					<th></th>
-					<td>{{ form.hidden.label_tag }}{{ form.hidden }} &nbsp; {{ form.retired.label_tag }}{{ form.retired }}</td>
+					<th>&nbsp;</th>
+					<td>
+					    <div style="overflow: hidden">
+					        {{ form.hidden.label_tag }}{{ form.hidden }}
+					        {{ form.retired.label_tag }}{{ form.retired }}
+					    </div>
+					</td>
 				</tr>
 				
 				<tr>
