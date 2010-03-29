@@ -322,7 +322,11 @@ class Flight(EnhancedModel):
         #########
             
         elif cn in ('liters', 'gallons', 'gph', 'mpg'):
-            disp = self.get_fuel_burn().as_unit(cn)
+            try:
+                disp = self.get_fuel_burn().as_unit(cn)
+            except:
+                return ""
+            
             if not self.fuel_burn:
                 ## wrap the output in a span because this value did not come
                 ## directly from the user, it was calculated implictly
