@@ -124,7 +124,7 @@ def logbook(request, page=0, form=None, fail=None):
     """
     Prepare the Logbook page
     """
-    
+
     if page == "0":
         url = reverse("logbook", kwargs={"username": request.display_user})
         return HttpResponseRedirect(url)

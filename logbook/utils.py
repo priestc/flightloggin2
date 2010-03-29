@@ -70,7 +70,7 @@ def logbook_url(user, page):
 
     return reverse(view, kwargs=kwargs)
 
-def proper_flight_form(profile, mass=False):
+def proper_flight_form(profile):
     """
     Prepares the popup flight form based on how the user wants each field
     widget to be rendered as.

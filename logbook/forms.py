@@ -120,10 +120,6 @@ class TextPlaneField(ModelChoiceField):
     
     widget = PlaneTextInput()
     
-#    def __init__(self, user, *args, **kwargs):
-#        self.user=user
-#        super(TextPlaneField, self).__init__(*args, **kwargs)
-    
     def clean(self, val):
         """
         Turns the entered value (a tailnumber), into a plane instance

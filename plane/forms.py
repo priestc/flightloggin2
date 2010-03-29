@@ -49,7 +49,7 @@ def clean_fuel_burn(self):
     ## this will raise validation error if the units or w/e are incorrect
     FuelBurn(input=fuel_burn)
     
-    return self.cleaned_data
+    return fuel_burn
 
 class PopupPlaneForm(ModelForm):
     tags = TagField(widget=forms.Textarea, required=False)
