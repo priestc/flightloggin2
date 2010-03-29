@@ -44,6 +44,8 @@ def linegraph_image(request, columns, dates=None, ext='png',
             pu = 'Approaches'
         elif column in ('night_l', 'day_l'):
             pu = "Landings"
+        elif column == 'gallons':
+            pu = 'Gallons Burned'
         else:
             pu = "Accumulated Flight Hours"
                        
