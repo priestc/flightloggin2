@@ -203,15 +203,14 @@ class PopupFlightForm(ModelForm):
         exclude = ('user', 'speed', 'gallons', 'gph', 'mpg', 'route')
         
     def clean_fuel_burn(self):
-        from utils import handle_fuel_burn
+        from fuel_burn import FuelBurn
         value = self.cleaned_data['fuel_burn']
         
         if value == '':
             return ''
         
         ## this will raise the proper validation errors
-        # 1488 is just a dummy value, the result is not used
-        handle_fuel_burn(value, 1488)
+        FuelBurn(input=value)
         
         return value
               

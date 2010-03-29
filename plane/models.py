@@ -27,8 +27,11 @@ class Plane(EnhancedModel):
     manufacturer =   models.CharField(                        max_length=32, blank=True, help_text="e.g. Cessna, Boeing")
     cat_class =      models.IntegerField( "Category/Class",   choices=CATEGORY_CLASSES, null=False, default=0)
     description =    models.TextField(                        blank=True)
+    
     hidden =         models.BooleanField(default=False)
     retired =        models.BooleanField(default=False)
+    fuel_burn =      models.CharField("Fuel Burn", max_length=12, blank=True)
+    
     tags =           TagField()
     
     #regex that matches all tailnumbers and types

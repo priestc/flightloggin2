@@ -302,7 +302,7 @@ class FlightQuerySet(EnhancedQuerySet):
             
             elif cn == "pic_night":
                 ret = self.all_pic()._db_agg('night')
-            
+                
             elif cn == "line_dist":
                 ret = self._db_agg('line_dist')
 

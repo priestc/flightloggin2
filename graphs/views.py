@@ -46,6 +46,8 @@ def linegraph_image(request, columns, dates=None, ext='png',
             pu = "Landings"
         elif column == 'gallons':
             pu = 'Gallons Burned'
+        elif column == 'line_dist':
+            pu = 'Nautical Miles'
         else:
             pu = "Accumulated Flight Hours"
                        

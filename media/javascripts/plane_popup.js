@@ -17,6 +17,7 @@ function fill_in_plane(dom_id) {
     $("#id_manufacturer").val(trim($("#p" + id + "_manufacturer").text()));
     $("#id_type").val(trim($("#p" + id + "_type").text()));
     $("#id_tags").val(trim($("#p" + id + "_tags").text()));
+    $("#id_fuel_burn").val(trim($("#p" + id + "_fuel_burn").text()));
 
     var desc = trim($("#p" + id + "_description").text())
 

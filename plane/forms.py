@@ -42,10 +42,6 @@ def clean(self):
     
     return self.cleaned_data
 
-
-
-
-
 class PopupPlaneForm(ModelForm):
     tags = TagField(widget=forms.Textarea, required=False)
     class Meta:

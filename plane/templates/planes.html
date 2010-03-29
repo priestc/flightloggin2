@@ -23,6 +23,7 @@
 			    <td>Manufacturer</td>
 			    <td>Type</td>
 			    <td>Model Name</td>
+			    <td>Default Fuel Burn</td>
 			    <td>Category/Class</td>
 			    <td>Tags</td>
 			    <td>Description</td>
@@ -41,6 +42,7 @@
 			    <td id="p{{ plane.id }}_manufacturer">{{ plane.manufacturer }}</td>
 			    <td id="p{{ plane.id }}_type">{{ plane.type }}</td>
 			    <td id="p{{ plane.id }}_model">{{ plane.model }}</td>
+			    <td id="p{{ plane.id }}_fuel_burn">{{ plane.fuel_burn|default:"" }}</td>
 			    <td id="p{{ plane.id }}_cat_class">{{ plane.get_cat_class_display }}</td>
 			    <td id="p{{ plane.id }}_tags">{{ plane.get_tags_quote|join:", " }}</td>
 			    <td id="p{{ plane.id }}_description">{{ plane.hidden_tag }}{{ plane.retired_tag }}{{ plane.description }}</td>
@@ -131,6 +133,11 @@
 				<tr>
 					<th>{{ form.description.label_tag }}</th>
 					<td>{{ form.description }}</td>
+				</tr>
+				
+				<tr>
+					<th>{{ form.fuel_burn.label_tag }}</th>
+					<td>{{ form.fuel_burn }}{{ form.fuel_burn.errors|default:"<br>" }}</td>
 				</tr>
 				
 			</tbody>

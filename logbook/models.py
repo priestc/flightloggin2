@@ -7,6 +7,7 @@ from plane.models import Plane
 from route.models import Route
 from constants import *
 from utils import to_minutes
+from fuel_burn import FuelBurn
 
 from main.enhanced_model import QuerySetManager, EnhancedModel
 from queryset_manager import FlightQuerySet
@@ -320,31 +321,16 @@ class Flight(EnhancedModel):
 
         #########
             
-        elif cn == 'gallons':
-            if self.gallons:
-                return "%.1f" % self.gallons
-            else:
-                return ""
-            
-        elif cn == 'liters':
-            if self.gallons:
-                return "%.1f" % (self.gallons * 3.78541178)
-            else:
-                return ""
-    
-        #########
-        
-        elif cn == 'gph':
-            if self.gph:
-                return "%.1f" % self.gph
-            else:
-                return ""
-            
-        elif cn == 'mpg':
-            if self.mpg:
-                return "%.1f" % self.mpg
-            else:
-                return ""
+        elif cn in ('liters', 'gallons', 'gph', 'mpg'):
+            disp = self.get_fuel_burn().as_unit(cn)
+            if not self.fuel_burn:
+                ## wrap the output in a span because this value did not come
+                ## directly from the user, it was calculated implictly
+                ## from the plane. Determined by checking to see if the
+                ## fuel burn field on the flight is empty
+                t = '<span class="indirect_fuel_burn">{disp}</span>'
+                return t.format(disp=disp)
+            return disp
             
         elif cn == 'fuel_burn':
             return self.fuel_burn or ""
@@ -449,6 +435,21 @@ class Flight(EnhancedModel):
             return to_minutes(ret)
             
         return ret
+    
+    def get_fuel_burn(self):
+        """
+        Return the fuel burn for this flight as a FuelBurn object. If the
+        flight has no fuel burn info, then create the object from the plane's
+        default
+        """
+        
+        mileage = self.route.total_line_all
+        fb = self.fuel_burn
+        
+        if not fb:
+            fb = getattr(self.plane, "fuel_burn", None)
+        
+        return FuelBurn(time=self.total, input=fb, mileage=mileage)
     
     @classmethod
     def make_pagination(cls, qs, profile, page):
@@ -681,12 +682,16 @@ def render_route(sender, **kwargs):
     
     #####
     
-    if flight.fuel_burn:
-        from utils import handle_fuel_burn
-        flight.gallons, flight.gph = handle_fuel_burn(flight.fuel_burn, time)
+    if flight.fuel_burn or flight.plane.fuel_burn:
         
-        if distance > 0 and flight.gallons > 0:
-            flight.mpg = distance / flight.gallons
+        if flight.fuel_burn:
+            fb = FuelBurn(input=flight.fuel_burn, time=time, mileage=distance)
+        else:
+            fb = FuelBurn(input=flight.plane.fuel_burn, time=time, mileage=distance)
+        
+        flight.gallons = fb.as_unit('gallons', for_db=True)
+        flight.gph = fb.as_unit('gph', for_db=True)
+        flight.mpg = fb.as_unit('mpg', for_db=True)
 
 models.signals.pre_save.connect(render_route, sender=Flight)
 
