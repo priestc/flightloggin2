@@ -4,6 +4,7 @@ from django.forms import ModelChoiceField, ModelForm, CharField
 from django import forms
 
 from models import *
+from logbook.fuel_burn import FuelBurn
 from tagging.forms import TagField
 
 
@@ -42,6 +43,14 @@ def clean(self):
     
     return self.cleaned_data
 
+def clean_fuel_burn(self):
+    fuel_burn = self.cleaned_data.get('fuel_burn', "")
+    
+    ## this will raise validation error if the units or w/e are incorrect
+    FuelBurn(input=fuel_burn)
+    
+    return self.cleaned_data
+
 class PopupPlaneForm(ModelForm):
     tags = TagField(widget=forms.Textarea, required=False)
     class Meta:
@@ -51,6 +60,7 @@ class PopupPlaneForm(ModelForm):
     ## code when adding them to the mass entry form as well...
     clean_tailnumber = clean_tailnumber
     clean_type = clean_type
+    clean_fuel_burn = clean_fuel_burn
     clean = clean
         
 class MassPlaneForm(ModelForm):
@@ -63,6 +73,7 @@ class MassPlaneForm(ModelForm):
         
     clean_tailnumber = clean_tailnumber
     clean_type = clean_type
+    clean_fuel_burn = clean_fuel_burn
     clean = clean
     
     
