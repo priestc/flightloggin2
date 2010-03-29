@@ -124,7 +124,27 @@ class Flight(EnhancedModel):
         
         return ", ".join(l)
             
+    
+    def calc_fuel(self):
+        """
+        Calculated the `gallons` and `mpg` database fields. It tries to use
+        the fuel_burn value opn the flight but falls back to using the value
+        associated with the plane if no value is present.
+        """
         
+        distance = self.route.total_line_all
+        
+        if self.fuel_burn or self.plane.fuel_burn:
+            
+            if self.fuel_burn:
+                fb = FuelBurn(input=self.fuel_burn, time=self.total, mileage=distance)
+            else:
+                fb = FuelBurn(input=self.plane.fuel_burn, time=self.total, mileage=distance)
+            
+            self.gallons = fb.as_unit('gallons', for_db=True)
+            self.gph = fb.as_unit('gph', for_db=True)
+            self.mpg = fb.as_unit('mpg', for_db=True)
+      
     def disp_app(self):
         if self.app == 0:
            app = ""
@@ -654,81 +674,3 @@ class Columns(models.Model):
 
     def __unicode__(self):
         return self.user.username
-
-
-
-###################
-## SIGNALS BELOW ##
-###################
-
-def render_route(sender, **kwargs):
-    """
-    Fill in the speed and fuel burn columns
-    """
-    
-    flight = kwargs['instance']
-    
-    if not flight.route_is_rendered():
-        flight.render_route()
-    
-    route = flight.route
-    
-    #####
-    
-    time = flight.total    
-    distance = route.total_line_all
-
-    if distance > 0 and time > 0:  ## avoid zero division
-        speed = distance / time
-        flight.speed = speed
-    else:
-        speed = None
-    
-    #####
-    
-    if flight.fuel_burn or flight.plane.fuel_burn:
-        
-        if flight.fuel_burn:
-            fb = FuelBurn(input=flight.fuel_burn, time=time, mileage=distance)
-        else:
-            fb = FuelBurn(input=flight.plane.fuel_burn, time=time, mileage=distance)
-        
-        flight.gallons = fb.as_unit('gallons', for_db=True)
-        flight.gph = fb.as_unit('gph', for_db=True)
-        flight.mpg = fb.as_unit('mpg', for_db=True)
-
-models.signals.pre_save.connect(render_route, sender=Flight)
-
-###############################################################################
-
-def expire_logbook_cache(sender, **kwargs):
-    """
-    When the user save new preferences, expire the caches on all logbook
-    pages. This function is called two was: one was is by the Profile
-    save signal, where sender will be the profile class, and the other way
-    is by the edit_logbook signasl, in which the user instance will be the
-    sender
-    """
-    
-    from utils import expire_all, expire_logbook_cache_page
-    
-    page = kwargs.get('page', None)
-    
-    if page:
-        user = sender
-        expire_logbook_cache_page(user, page)
-        
-    elif getattr(sender, "__name__", "ff") == "Profile":
-        profile = kwargs.pop('instance')
-        expire_all(profile=profile)
-
-    else:
-        user = sender
-        expire_all(user=user)
-    
-    
-from profile.models import Profile 
-models.signals.post_save.connect(expire_logbook_cache, sender=Profile)
-
-from backup.models import edit_logbook
-edit_logbook.connect(expire_logbook_cache)
