@@ -46,11 +46,8 @@ def recalculate_fuel(sender, **kwargs):
         return
     
     for f in Flight.objects.filter(plane=plane).iterator():
-        print "recalc due to plane save", f.plane.tailnumber
         f.calc_fuel()
-        print "NUMERIC GALLONS", f.gallons
         f.save()
-        print "NUMERIC GALLONS AGAIN", f.gallons
 
 ###############################################################################
 
@@ -81,5 +78,7 @@ def expire_logbook_cache(sender, **kwargs):
 
 models.signals.pre_save.connect(calculate_flight, sender=Flight)
 models.signals.post_save.connect(recalculate_fuel, sender=Plane)    
+
+models.signals.pre_save.connect(expire_logbook_cache, sender=Plane)
 models.signals.post_save.connect(expire_logbook_cache, sender=Profile)
 edit_logbook.connect(expire_logbook_cache)
