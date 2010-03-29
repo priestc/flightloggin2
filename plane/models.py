@@ -30,7 +30,7 @@ class Plane(EnhancedModel):
     
     hidden =         models.BooleanField(default=False)
     retired =        models.BooleanField(default=False)
-    fuel_burn =      models.CharField("Fuel Burn", max_length=12, blank=True)
+    fuel_burn =      models.CharField("Fuel Burn", max_length=12, blank=True, help_text="e.g. '5.6gph', '650pph'")
     
     tags =           TagField()
     

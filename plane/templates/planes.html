@@ -102,6 +102,7 @@
 					<td>{{ form.tailnumber }}{{ form.tailnumber.errors|default:"<br>" }}
 					<span class="help_text">{{form.tailnumber.help_text}}</span></td>
 				</tr>
+				
 				<tr>
 					<th>{{ form.manufacturer.label_tag }}<br>&nbsp;</th>
 					<td>{{ form.manufacturer }}{{ form.manufacturer.errors|default:"<br>" }}
@@ -121,6 +122,12 @@
 				</tr>
 				
 				<tr>
+					<th>{{ form.fuel_burn.label_tag }}<br>&nbsp;</th>
+					<td>{{ form.fuel_burn }}{{ form.fuel_burn.errors|default:"<br>" }}
+					<span class="help_text">{{form.fuel_burn.help_text}}</span></td>
+				</tr>
+				
+				<tr>
 					<th>{{ form.cat_class.label_tag }}</th>
 					<td>{{ form.cat_class }}</td>
 				</tr>
@@ -134,12 +141,7 @@
 					<th>{{ form.description.label_tag }}</th>
 					<td>{{ form.description }}</td>
 				</tr>
-				
-				<tr>
-					<th>{{ form.fuel_burn.label_tag }}</th>
-					<td>{{ form.fuel_burn }}{{ form.fuel_burn.errors|default:"<br>" }}</td>
-				</tr>
-				
+
 			</tbody>
 		</table>
 		
