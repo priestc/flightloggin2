@@ -12,16 +12,18 @@
 <thead>
 <tr>
     <td>Tailnumber</td><td>Manufacturer</td><td>Type</td><td>Model</td>
-    <td>Default Fuel Burn</td>
+    <td>Fuel Burn</td>
     <td>Category/Class</td><td>Tags</td><td>Description</td>
+    <td>Retired</td><td>Hidden</td>
 </tr>
 </thead>
 
 <tfoot>
 <tr>
     <td>Tailnumber</td><td>Manufacturer</td><td>Type</td><td>Model</td>
-    <td>Default Fuel Burn</td>
+    <td>Fuel Burn</td>
     <td>Category/Class</td><td>Tags</td><td>Description</td>
+    <td>Retired</td><td>Hidden</td>
 </tr>
 </tfoot>
 <tbody>
@@ -35,6 +37,8 @@
     <td>{{form.cat_class}}</td>
     <td>{{form.tags}}</td>
     <td>{{form.description}}</td>
+    <td>{{form.retired}}</td>
+    <td>{{form.hidden}}</td>
 </tr>
 {% if form.errors %}
 <tr>
