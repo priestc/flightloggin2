@@ -88,18 +88,27 @@ class ProgressGraph(NothingHereMixin):
         return self.fig
     
     def add_plot(self, plot):
-        ax = self.fig.add_subplot(111)
-        ax.plot(plot.x, plot.y, **plot.kwargs)
-        ax.set_ylabel(self.plot_unit)
         
-        if plot.do_rate:
+        ax = self.fig.add_subplot(111)
+        
+        if not plot.twin:
+            ax.plot(plot.x, plot.y, **plot.kwargs)
+            ax.set_ylabel(self.plot_unit)
+            
+        if plot.do_rate or plot.twin:
+            # get either the rate plot lists or the actual plot list
+            # if this part is being executed because plot.twin is True, then
+            # there will be no plot.rx/ry, the data will be in plot.x/y instead
+            rx = getattr(plot, "rx", None) or plot.x
+            ry = getattr(plot, "ry", None) or plot.y
+            
             c = plot.rate_kwargs['color']
             if not self.ax2:
                 # add all rate graphs to the same axis
                 self.ax2 = ax.twinx()
                 
-            self.ax2.plot(plot.rx, plot.ry, **plot.rate_kwargs)
-            self.ax2.set_ylabel(self.rate_unit, color=c)
+            self.ax2.plot(rx, ry, **plot.rate_kwargs)
+            self.ax2.set_ylabel(self.rate_unit or plot.rate_unit, color=c)
             
             for tl in self.ax2.get_yticklabels():
                 tl.set_color(c)
@@ -146,7 +155,7 @@ class Plot(object):
     
     interval = 30
     
-    def __init__(self, rate=None, pad=True, **kwargs):
+    def __init__(self, rate=None, pad=True, twin=False, rate_unit=None, **kwargs):
         """
         All subclasses need to first determine self.start and self.end, and
         self.title before this constructor can be called with super()
@@ -157,6 +166,8 @@ class Plot(object):
         self.pad = pad
         self.rate = rate
         self.kwargs = kwargs
+        self.twin = twin
+        
         
         if not 'drawstyle' in kwargs.keys():
             self.kwargs['drawstyle'] = 'steps-post'
@@ -165,7 +176,7 @@ class Plot(object):
             self.kwargs['lw'] = 2
         
         self.unit = "Accumulated Flight Hours"
-        self.rate_unit = "30 Day Moving Total"
+        self.rate_unit = rate_unit or "30 Day Moving Total"
             
     def _moving_value(self, iterable):
         """

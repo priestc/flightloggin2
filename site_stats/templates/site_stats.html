@@ -111,6 +111,20 @@
     </tr>
     
     <tr>
+        <td>Other graphs</td>
+        <td>
+            <a href="" class="graph_popup" id="distribution">Distribution of Logbook Totals</a>
+            <br>
+            <a href="" class="graph_popup" id="empty_v_total">Empty Users vs. Total Users</a>
+            <br>
+            <a href="" class="graph_popup" id="hours_v_flights">Total Flights vs. Total Hours</a>
+            <br>
+        </td>
+    
+    
+    </tr>
+    
+    <tr>
         <td>{{ t.most_common_airports.0 }}</td>
         <td>{{ linked_airports|safe|linebreaksbr }}</td>
     </tr>
@@ -165,7 +179,5 @@
 </table>
 
 <div style="display:none" id="popup_div"><div class="x"><a href="" title="close this popup" class="x">X</a></div><img src="dummy"></div>
-
-<img src="{% url histogram-user_totals %}" alt="Distribution of Logbook Totals amoung users">
 
 {% endblock %}

@@ -55,12 +55,34 @@ def save_to_db(request):
 def stats_graph(request, item, ext):
     from graph import StatsGraph, SiteStatsPlot
     
+    plots = False
+    rt = None
+    
+    if item == 'distribution':
+        from histogram.views import user_totals
+        return user_totals(request)
+    
+    elif item == 'empty_v_total':
+        plots = [SiteStatsPlot('users', no_acc=True),
+                 SiteStatsPlot('non_empty_users', no_acc=True)]
+    
+    elif item == 'hours_v_flights':
+        plots = [SiteStatsPlot('total_hours', no_acc=True),
+                 SiteStatsPlot('total_logged', no_acc=True),
+                 SiteStatsPlot('avg_duration', no_acc=True, twin=True,
+                    rate_unit="Average Duration of Each Flight")]
+    #######
+    
     if item.endswith("_7_days"):
         kwarg = {'drawstyle': "default"}
     else:
         kwarg = {}
     
-    plots = [SiteStatsPlot(item, no_acc=True, **kwarg)]
+    if not plots:
+        plots = [SiteStatsPlot(item, no_acc=True, **kwarg)]
+        
+    #######
+    
     g = StatsGraph(plots, title=item, plot_unit=STATS_TITLES[item][1])
     
     if ext == 'png':

@@ -1,7 +1,9 @@
 STATS_TITLES = {
     "users":           ("Total user accounts", "Users"),
     "non_empty_users": ("Number of users with a non-empty logbook", "Users"),
+    "empty_v_total":   ("Empty Users vs. Total Users", "Users"),
     "total_hours":     ("Total flight hours from all users", "flight hours"),
+    "hours_v_flights": ("Total Flights vs. Total Hours", "Flights/Hours"),
     "day_wmu":         ("Date where the most unique users edited some part of their logbook","NA"),
     "day_wmh":         ("Date with the most hours logged by all users","NA"),
     "total_logged":    ("Total number of flights logged","Flights"),

@@ -3,7 +3,7 @@ from models import NewsItem
 
 @render_to("news.html")
 def news(request):
-    news = NewsItem.objects.all()[:15]
+    news = NewsItem.objects.all()[:10]
     
     if request.user.is_authenticated():
         request.display_user = request.user

@@ -190,6 +190,10 @@ class Profile(models.Model, GoonMixin):
         from logbook.models import Flight
         return Flight.objects.filter(user=self.user).count()
     flightcount.short_description = '#'
+    
+    def openid(self):
+        return self.user.useropenid_set.get().claimed_id
+    openid.short_description = 'OpenID'   
 
 class Entries(models.Model):
     user =          models.ForeignKey(User, blank=False, primary_key=True)
