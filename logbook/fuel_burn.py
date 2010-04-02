@@ -98,14 +98,14 @@ class FuelBurn(object):
             g = gph * time
         
         elif unit == 'pll':
-            g = num * 6
+            g = num / 6
             if time > 0:
                 gph = (g / time)
             else:
                 gph = 0
             
         elif unit == 'p' or unit == 'pj':
-            g = num * 6.8
+            g = num / 6.8
             if time > 0:
                 gph = (g / time)
             else:
