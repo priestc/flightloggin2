@@ -10,6 +10,7 @@ from django.forms.util import ValidationError
 from models import *
 from logbook.utils import from_minutes
 from plane.models import Plane
+from fuel_burn import FuelBurn
 
 #####################################
 
@@ -199,14 +200,18 @@ class PopupFlightForm(ModelForm):
         exclude = ('user', 'speed', 'gallons', 'gph', 'mpg', 'route')
         
     def clean_fuel_burn(self):
-        from fuel_burn import FuelBurn
         value = self.cleaned_data['fuel_burn']
         
         if value == '':
             return ''
         
+        if '+' in value or '-' in value or '/' in value or '*' in value:
+               value = FuelBurn.pre_eval(value)
+        
+        print value
+        
         ## this will raise the proper validation errors
-        FuelBurn(input=value)
+        FuelBurn.split_and_validate(value)
         
         return value
               

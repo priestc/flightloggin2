@@ -47,7 +47,7 @@ def clean_fuel_burn(self):
     fuel_burn = self.cleaned_data.get('fuel_burn', "")
     
     ## this will raise validation error if the units or w/e are incorrect
-    FuelBurn(input=fuel_burn)
+    FuelBurn.split_and_validate(fuel_burn)
     
     return fuel_burn
 

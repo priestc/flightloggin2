@@ -6,22 +6,28 @@ class FuelBurn(object):
     A class that handles converting various fuel burn units
     """
     
-    def __init__(self, input, time=None, mileage=None):
+    def __init__(self, input, time, mileage=None):
+        num, unit = FuelBurn.split(input)
         
-        num, unit = self.split_and_validate(input)
-        
-        self.gallons = None
-        self.gph = None
         self.mileage = mileage
-        
-        if time and unit and num:
-            self.time = time
-            self.gallons, self.gph = self.normalize_units(num, unit, time)
+        self.time = time
+        self.gallons, self.gph = self.normalize_units(num, unit, time)
     
-    def split_and_validate(self, value):
+    @classmethod
+    def pre_eval(cls, value):
         """
-        Make sure the fuel burn the user entered is valid; both the unit and
-        the numeric part, then return them
+        This function evaluates the fuel burn numeric value in case it contains
+        any mathematical operators. Returns the unit and numeric part together.
+        """
+        
+        num, unit = cls.split(value)
+        
+        return "{0} {1}".format(eval(num), unit)
+        
+    @classmethod   
+    def split(self, value):
+        """
+        Splits the num and the units from each other, returns them seperately
         """
         
         if not value:
@@ -31,8 +37,20 @@ class FuelBurn(object):
         
         ## the value with just the number part, the unit is removed
         ## strip out all non-numeric characters but keep decimal point
-        num = re.sub(r'[^\.\d\s]', '', val)
-        unit = re.sub(r'[\.\d\s]', '', val)
+        ## and all mathematical operators
+        num = re.sub(r'[^\.\d\s+-\\*]', '', val)
+        unit = re.sub(r'[\.\d\s+-\\*]', '', val)
+        
+        return num, unit
+
+    @classmethod
+    def split_and_validate(self, value):
+        """
+        Make sure the fuel burn the user entered is valid; both the unit and
+        the numeric part, then return them
+        """
+        
+        num, unit = FuelBurn.split(value)
         
         ## all valid units the user can use
         units = ('pphll', 'pphj', 'pph', 'ppl', 'p', 'pj', 'pll',
@@ -88,6 +106,8 @@ class FuelBurn(object):
         Given a fuelburn value in any weird format, return that value
         converted to gallons and gallons per hour.
         """
+        
+        num = float(num)
         
         if unit == 'pphll':
             gph = num / 6
