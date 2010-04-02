@@ -175,7 +175,7 @@ class PopupFlightForm(ModelForm):
     
     # to reset the max_length setting so the user has
     # room to do "1000+4000+2145 g"
-    fuel_burn =forms.CharField()
+    fuel_burn =forms.CharField(required=False)
     
     def __init__(self, *args, **kwargs):
         
