@@ -32,7 +32,7 @@ class Backup(object):
             tmp=[]
             for field in BACKUP_FIELDS:
                 try:
-                    ## nested try blocks are ugy, but this si the only
+                    ## nested try blocks are ugly, but this is the only
                     ## way to have a way to make dates and unicode characters
                     ## both made into strings
                     try:
@@ -51,9 +51,10 @@ class Backup(object):
         
         planes = Plane.objects.filter(user=self.user)    
         for p in planes:
+            tags = ", ".join(p.get_tags_quote())
             writer.writerow(["##PLANE", p.tailnumber, p.manufacturer, p.model,
-                        p.type, p.cat_class, "X", ", ".join(p.get_tags()),
-                        p.description])
+                        p.type, p.cat_class, "X", tags,
+                        p.description, p.fuel_burn])
                         
         events = NonFlight.objects.filter(user=self.user)    
         for e in events:
@@ -61,23 +62,21 @@ class Backup(object):
         
         locations = Location.objects.filter(user=self.user)
         for l in locations:
-            
-            try:
-                x = l.location.x
-                y = l.location.y
-            except AttributeError:
-                x, y = "", ""
+            x = getattr(l.location, "x", "")
+            y = getattr(l.location, "y", "")
             
             writer.writerow(["##LOC", l.identifier, l.name, x, y,
                     l.municipality, l.get_loc_type_display()])
                     
-        #save to self.csv before returning, for later use
+        #save to self.csv before returning, for potential later use
         self.csv = csv_sio
         
         return csv_sio
 
     def output_zip(self):
-        """Outputs a StringIO representing a zipfile containing the CSV file"""
+        """
+        Outputs a StringIO representing a zipfile containing the CSV file
+        """
         
         self.output_csv()
         

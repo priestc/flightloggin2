@@ -1,4 +1,6 @@
 from constants import CSV_FIELDS
+from plane.models import Plane
+from constants import NON_FLIGHT_TRANSLATE_NUM
 
 class PrepareLine(object):
     """
@@ -105,7 +107,7 @@ class Fixer(object):
         
     def processor(self, column):
         """
-        Calls the proper processor function if it exists
+        Calls the proper processor function (if it exists)
         processor functions are used instead of proper_mapper to return
         values that differ than whats exactly in the CSV file
         """
@@ -181,9 +183,7 @@ class RecordsFixer(Fixer):
                }
 
     
-###############################################################################    
-
-from plane.models import Plane
+###############################################################################
 
 class PlaneFixer(Fixer):
 
@@ -196,6 +196,7 @@ class PlaneFixer(Fixer):
                 'cat_class': 'pic',
                 'RT': 'solo',
                 'tags': 'sic',
+                'fuel_burn': 'night',
             }
         
     def tags_processor(self):
@@ -259,7 +260,6 @@ class NonFlightFixer(Fixer):
     """
     
     def non_flying_processor(self):
-        from constants import NON_FLIGHT_TRANSLATE_NUM
         return NON_FLIGHT_TRANSLATE_NUM[self.proper_mapper('non_flying')]
     
     def remarks_processor(self):
