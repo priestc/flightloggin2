@@ -68,16 +68,16 @@ function fill_in_flight(dom_id) {
 	
 	//####################################################
 	
-	if($("#f" + id + " span.data_remarks span.flying_event:contains([Pilot Checkride])").text())
+	if($("#f" + id + " span.data_remarks span.remarks_tag:contains([Pilot Checkride])").text())
 		$("#id_new-pilot_checkride").attr("checked", "checked");
-		
-	if($("#f" + id + " span.data_remarks span.flying_event:contains([Instructor Checkride])").text())
+	
+	if($("#f" + id + " span.data_remarks span.remarks_tag:contains([Instructor Checkride])").text())
 		$("#id_new-cfi_checkride").attr("checked", "checked");
 		
-	if($("#f" + id + " span.data_remarks span.flying_event:contains([IPC])").text())
+	if($("#f" + id + " span.data_remarks span.remarks_tag:contains([IPC])").text())
 		$("#id_new-ipc").attr("checked", "checked");
 		
-	if($("#f" + id + " span.data_remarks span.flying_event:contains([Flight Review])").text())
+	if($("#f" + id + " span.data_remarks span.remarks_tag:contains([Flight Review])").text())
 		$("#id_new-flight_review").attr("checked", "checked");
 		
 	if($("#f" + id + " span.data_app:contains(T)").text())
@@ -88,7 +88,7 @@ function fill_in_flight(dom_id) {
 	
 	// must be at the bottom because it removes the flying events from the dom	
 	var clone = $("#f" + id + " span.data_remarks");
-	$("span.flying_event", clone).remove();
+	$("span.remarks_tag", clone).remove();
 	var remarks = clone.text();
 	$("#id_new-remarks").val(trim(remarks));
 		

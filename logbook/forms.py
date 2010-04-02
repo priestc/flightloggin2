@@ -173,6 +173,10 @@ class PopupFlightForm(ModelForm):
     night_l =  BlankIntField(label="Night Landings")
     app =      BlankIntField(label="Approaches")
     
+    # to reset the max_length setting so the user has
+    # room to do "1000+4000+2145 g"
+    fuel_burn =forms.CharField()
+    
     def __init__(self, *args, **kwargs):
         
         if kwargs.has_key('user'):
