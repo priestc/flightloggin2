@@ -16,14 +16,18 @@ table.mass_table
     tr:nth-child(even)
         background: #DDDDDD
 
+    div.date_holder
+        width: 9em
+        
+    td.date_cell
+        max-width: 7.8em
+        overflow: visible
+
     input
         margin: 0
         
         &.route_line, &.person_line
             width: 8em
-
-        &.vDateField
-            width: 6.5em
 
         &.float_line
             width: 2.4em
@@ -49,7 +53,13 @@ table.mass_table
             
         &[id$='fuel_burn']
             width: 6em
+            
+        &[id$='route_string']
+            width: 10em
         
     select   
         &[id$='cat_class']
+            width: 10em
+            
+        &[id$='plane']
             width: 10em

@@ -2,7 +2,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 
-from annoying.decorators import render_to
 from share.decorator import secret_key, no_share
 from django.views.decorators.cache import cache_page
 
@@ -21,7 +20,8 @@ def render_image(request, type_, ext):
 
 def image_redirect(request, type_):
     """
-    Redirect to the pre-rendered png image
+    Redirect to the pre-rendered png image, kept for legacy reasons
+    will be removed at some point in time
     """
 
     path = "%s/%s/%s" % (settings.SITE_URL,
@@ -41,42 +41,3 @@ def render_me(request):
     url = reverse('maps', args=(request.display_user.username,) )
 
     return HttpResponseRedirect(url)
-
-
-@render_to('states.html')
-def states_page(request):
-    
-    return locals()
-    
-
-def render_for_user(user):
-    """
-    Given a user instance, it renders the three map images and saves them
-    into the appropriate directory.
-    """
-    
-    import os
-           
-    BMP = settings.BASE_MAP_PATH
-    
-    #the directory that the images will be saved to
-    directory = os.path.join(BMP, str(user.id))
-    
-    #if the directory is not there, then create it.
-    if not os.path.isdir(directory):
-        os.makedirs(directory)
-        
-    filename = os.path.join(directory, 'states-unique.png')
-    f = open(filename, 'w')
-    UniqueStateMap(user).to_file(f)
-    f.close()
-    
-    filename = os.path.join(directory, 'states-count.png')
-    f = open(filename, 'w')
-    CountStateMap(user).to_file(f)
-    f.close()
-    
-    filename = os.path.join(directory, 'states-colored.png')
-    f = open(filename, 'w')
-    FlatStateMap(user).to_file(f)
-    f.close()

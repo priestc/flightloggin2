@@ -41,7 +41,7 @@ $(document).ready(function() {
 	
 	$("#id_new-date, .date_picker").datepicker({	// add the date pickers
 			dateFormat: "yy-mm-dd",
-			yearRange: "1999:2011", 
+			yearRange: "-10:+1", 
 			showOn: "button", 
 			buttonImage: date_button, 
 			buttonImageOnly: true,

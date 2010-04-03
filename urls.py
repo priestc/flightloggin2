@@ -398,7 +398,8 @@ urlpatterns += patterns('',
     
     url(
         r'^(?P<username>\w+)/states\.html$',
-        "maps.states_views.states_page",
+        direct_to_template,
+        {"template": "states.html"},
                                                                  name="states",
     ),
     
