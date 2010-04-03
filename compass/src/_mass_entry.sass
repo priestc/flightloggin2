@@ -25,14 +25,14 @@ table.mass_table
 
     input
         margin: 0
-        
-        &.route_line, &.person_line
-            width: 8em
 
         &.float_line
             width: 2.4em
             margin: 1px
-            
+        
+        &[id$='date']
+            width: 90px
+        
         &[id$='tags']
             width: 10em
         
@@ -56,6 +56,9 @@ table.mass_table
             
         &[id$='route_string']
             width: 10em
+            
+        &[id$='person']
+            width: 8em
         
     select   
         &[id$='cat_class']
