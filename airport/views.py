@@ -6,38 +6,6 @@ from annoying.decorators import render_to
 from models import Location, HistoricalIdent
 
 ################################
-                        
-@secret_key
-def update_airports(request):
-    import os
-    from django.conf import settings
-    home = settings.PROJECT_PATH
-    secret_key = settings.SECRET_KEY
-    host = settings.SITE_URL
-    
-    if request.GET.get('get') == 'true':
-        urls = {}
-        urls['navaids'] = "http://www.ourairports.com/data/navaids.csv"
-        urls['airports'] = "http://www.ourairports.com/data/airports.csv"
-        urls['countries'] = "http://www.ourairports.com/data/countries.csv"
-        urls['regions'] = "http://www.ourairports.com/data/regions.csv"
-        
-        system_call = ""
-        for name,url in urls.items():
-            system_call += "wget -O - %s > %s/airport/fixtures/%s.csv;"\
-                             % (url, home, name)
-    
-        os.system(system_call)
-        
-    from imports import airports, regions, countries, navaids
-    
-    regions()
-    countries()
-    airports()
-    navaids()
-    
-    return HttpResponse("done!")
-
 
 @render_to('location_profile.html')
 def airport_profile(request, navaid, ident):
@@ -47,19 +15,14 @@ def airport_profile(request, navaid, ident):
     from django.contrib.auth.models import User
     from django.http import Http404
     
-    try:
-        loc = Location.objects.filter(loc_class__in=(1,2), identifier=ident)[0]
-    except IndexError:
-        #t_flights = 0
-        #return locals()
-        raise Http404('no such airport')
+
+    loc = Location.goof(loc_class__in=(1,2), identifier=ident)
     
     if loc.loc_class == 1 and navaid:
         raise Http404
     
     if loc.loc_class == 2 and not navaid:
         raise Http404
-        
     
     users = Location.get_profiles(ident, 'identifier')
     

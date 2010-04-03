@@ -78,28 +78,17 @@
 	{% for row in page_of_flights.object_list %}
         <div class="small_popup" id="s{{row.pk}}">
         
-            <a href="" class="edit_popup_link" id="x{{row.pk}}">
-                Edit this flight
-            </a>
-            <br>
-            <a target="_blank" href="{% url single_route-kml row.pk "f" as kml %}{{ kml }}">
-                View this route in Google Earth
-            </a>
-            <br>
-            <a target="_blank" href="http://maps.google.com/?q=http://flightlogg.in{{ kml }}">
-                View this route in Google Maps
-            </a>
+            <a href="" class="edit_popup_link" id="x{{row.pk}}">Edit this flight</a>
 
             <br>
+            
             {% url profile-route row.route.simple_rendered as pr %}
-            <a href="{{pr}}">
-                More info about this route 
-            </a>
+            <a href="{{pr}}">More info about this route</a>
+            
             <br>
+            
             {% url profile-tailnumber row.plane.tailnumber|upper as pt%}
-            <a href="{{pt}}">
-                More info about this tailnumber
-            </a>      
+            <a href="{{pt}}">More info about this tailnumber</a>      
             
         </div>
 	{% endfor %}

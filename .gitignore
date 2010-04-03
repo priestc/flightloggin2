@@ -6,7 +6,7 @@ env
 *.swp
 *.json.bz2
 fixtures
-dump
+dumps
 uploads
 *~
 .sass-cache

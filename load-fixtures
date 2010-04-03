@@ -9,6 +9,19 @@ then
     exit
 fi
 
-pg_restore dump --clean -U postgres -d logbook
+NEWEST=
+for f in /srv/flightloggin/dumps/*.dump
+do
+    if [ -z "$NEWEST" ]
+    then 
+        NEWEST=$f
+    elif [ "$f" -nt "$NEWEST" ] 
+    then
+        NEWEST=$f
+    fi
+done
+
+echo "$NEWEST";
+pg_restore "$NEWEST" --clean -U postgres -d logbook
 
 exit

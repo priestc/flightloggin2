@@ -11,7 +11,7 @@ function initialize()
 		
 		map.setCenter(new GLatLng(10,0), 2);
 		
-		map.addControl(new GSmallZoomControl3D());
+		map.addControl(new GLargeMapControl3D());
 		map.addControl(new GHierarchicalMapTypeControl());
 		map.enableContinuousZoom();
 	}

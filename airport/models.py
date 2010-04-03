@@ -56,6 +56,21 @@ class Location(EnhancedModel):
                       .order_by('user__username')\
                       .distinct()
     
+    @classmethod
+    def goof(cls, *args, **kwargs):
+        """
+        An improved "get_object_or_404" method that deals with there potentially
+        being multiple airports with the same identifier.
+        """
+        
+        try:
+            loc = cls.objects.filter(*args, **kwargs)[0]
+        except IndexError:
+            raise Http404('no such airport')
+        
+        return loc
+    
+    
     def kml_icon(self):
         """
         Returns the proper KML icon class based on the loc_type attribute
