@@ -397,6 +397,12 @@ urlpatterns += patterns('',
     ),
     
     url(
+        r'^(?P<username>\w+)/states\.html$',
+        "maps.states_views.states_page",
+                                                                 name="states",
+    ),
+    
+    url(
         r'^(?P<username>\w+)/states-(?P<type_>[\w\-]+)\.(?P<ext>(png|svg))$',
         "maps.states_views.render_image",
                                                               name="state-map",

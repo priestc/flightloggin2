@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block description %}{{ request.display_user.username }}'s states maps{% endblock%}
+
+{% block javascript %}
+<script type="text/javascript">
+NAVBAR_HIGHLIGHT = "states-sel";
+</script>
+{% endblock %}
+
+{% block title %}States Maps{% endblock %}
+
+{% block canvas %}
+
+<table id="images_table">
+    <tr>
+        <td>
+            <h3>All states colored equally</h3>
+            {% url state-map request.display_user "colored" "png" as colored %}
+            <img src="{{ colored }}"><br>
+            {{ SITE_URL }}{{ colored }}
+        </td>
+        <td>
+            <h3>States colored by total visits</h3>
+            {% url state-map request.display_user "count" "png" as count %}
+            <img src="{{ count }}"><br>
+            {{ SITE_URL }}{{ count }}
+        </td>
+    </tr>
+    <tr>
+        <td colspan=2>
+            <h3>States colored by unique airports visited</h3>
+            {% url state-map request.display_user "unique" "png" as unique %}
+            <img src="{{ unique }}"><br>
+            {{ SITE_URL }}{{ unique }}
+        </td>
+    </tr>
+</table>
+
+{% endblock %}

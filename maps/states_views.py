@@ -2,6 +2,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 
+from annoying.decorators import render_to
 from share.decorator import secret_key, no_share
 from django.views.decorators.cache import cache_page
 
@@ -41,6 +42,12 @@ def render_me(request):
 
     return HttpResponseRedirect(url)
 
+
+@render_to('states.html')
+def states_page(request):
+    
+    return locals()
+    
 
 def render_for_user(user):
     """
