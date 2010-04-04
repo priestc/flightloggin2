@@ -178,8 +178,12 @@ class Route(EnhancedModel):
         qs = cls.objects.user(user)\
                         .distinct()\
                         .annotate(fid=Max('flight__id')) # max id == only id
+                        
         for r in qs.iterator():
             r.hard_render(user=user, flight_id=r.fid)
+            print r.fancy_rendered
+            print "////////////////////////////////////"
+            #r.save()
             
         return qs.count()
         
@@ -399,33 +403,35 @@ class Route(EnhancedModel):
         """
         
         from make_route import MakeRoute
+        from logbook.models import Flight
+        from django.contrib.auth.models import User
         
         if not flight_id:
+            # no flight id was provided, try to get it
             try:
                 f = self.flight.all()[0]
                 
             except IndexError:  
-                # no flight associated with this route
-                date = None
-            
-            else:
-                flight_id = f.id
-                user = f.user
-                date = f.date
+                # route is orphaned, go no further
+                return
+                
+        else:
+            f = Flight.objects.get(pk=flight_id)    
+
+        flight_id = f.id
+        user = f.user
+        date = f.date
                 
         if (not user) and username:
-            from django.contrib.auth.models import User
             user = User.objects.get(username=username)
-            
-        if not user and not username:
-            user = share.get_display_user()
         
-        new_route = MakeRoute(self.fallback_string, user, date=date).get_route()
+        # get the falllback string from either the route or the flight
+        fallback = f.route_string or self.fallback_string
         
-        if flight_id:
-            from logbook.models import Flight
-            flight = Flight.objects.get(pk=flight_id)
-            flight.route = new_route
-            flight.save()
+        new_route = MakeRoute(fallback, user, date=date).get_route()
+
+        flight = Flight.objects.get(pk=flight_id)
+        flight.route = new_route
+        flight.save()
         
         return new_route
