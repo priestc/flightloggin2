@@ -157,57 +157,28 @@ class Route(EnhancedModel):
         is not an expensive operation (relatively), so this isn't
         needing to be done in patches like hard_render.
         """
-        
-        from multiprocessing import Process
 
         qs = cls.objects.order_by('-id')
         
         if only_unknowns:
             qs = qs.filter(routebase__unknown__isnull=False)
         
-        def chunks(l, n):
-            for i in xrange(0, len(l), n):
-                yield l[i:i+n]
-     
-        def actor(chunk):
-            for r in chunk:
-                r.easy_render()
-     
-        a=0
-        for chunk in chunks(qs, 500):
-            print "CHUNK----", a
-            
-            p = Process(target=actor, args=(chunk,))
-            p.start()
-            p.join()
-            
-            a += 1
-            
+        for r in qs.iterator():
+            r.easy_render()            
             
     
     @classmethod
-    def hard_render_user(cls, username=None, user=None, no_dupe=True):
+    def hard_render_user(cls, user):
         """
-        Hard re-render all routes for the given username
+        Hard re-render all routes for the given username. This function makes
+        sure to not orphan any route objects during re-rendering.
         """
-        
-        if username:
-            from django.contrib.auth.models import User
-            user=User.objects.get(username=username)
-        
-        kwargs = {'flight__user': user}
-        
-        if no_dupe:
-            # only apply to routes that have zero routebases. Routes with no
-            # routebases occur after all locations are deleted (which often
-            # happens when the locations database is updated)
-            kwargs.update({'routebase__isnull': True})
             
         from django.db.models import Max
-        qs = cls.objects.filter(**kwargs)\
+        qs = cls.objects.user(user)\
                         .distinct()\
-                        .annotate(fid=Max('flight__id'))
-        for r in qs:
+                        .annotate(fid=Max('flight__id')) # max id == only id
+        for r in qs.iterator():
             r.hard_render(user=user, flight_id=r.fid)
             
         return qs.count()
@@ -215,12 +186,13 @@ class Route(EnhancedModel):
     @classmethod
     def from_string(cls, raw_route_string, user=None, date=None):
         """
-        Create a route object from a waw string
+        Create a route object from a raw string
         """
+        
         from make_route import MakeRoute
-        # so we know which user to make the custom points from
-        # if no user explicitly given, try to get the currently logged in user
+        
         if not user:
+            # for legacy only
             user = share.get_display_user()
             
         return MakeRoute(raw_route_string, user=user, date=date).get_route()
@@ -457,39 +429,3 @@ class Route(EnhancedModel):
             flight.save()
         
         return new_route
-    
-###############################################################################
-###############################################################################
-#################### signals below ############################################
-###############################################################################
-###############################################################################
-###############################################################################
-
-def re_render_routes(sender, **kwargs):
-    """
-    When the user edits their locations, re-render all custom/unknown routes
-    """
-    
-    from django.conf import settings
-    from route.models import Route
-    
-    instance = kwargs.get('instance', None)
-    
-    if not instance or instance.user.id == settings.COMMON_USER_ID:
-        #disable this functionality when doing a location database update
-        return
-
-    qs = Route.objects\
-              .user(instance.user)\
-              .filter( models.Q(routebase__location__loc_class=3) | 
-                       models.Q(routebase__unknown__isnull=False) |
-                       models.Q(fallback_string__contains='!')
-                     )\
-              .distinct()
-
-    for r in qs.iterator():
-        r.hard_render()
-    
-from airport.models import Location
-models.signals.post_save.connect(re_render_routes, sender=Location)
-models.signals.post_delete.connect(re_render_routes, sender=Location)

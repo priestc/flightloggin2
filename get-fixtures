@@ -1,28 +1,16 @@
 #! /bin/bash
 
-date=`date +%Y-%m-%d_%k`
-myfilename="mysql-${date}.sql.bz2"
+date=`date +%Y-%m-%d_%I`
 
 echo "lets do this";
-#eval $(ssh-agent)
-#ssh-add
 
-cd /srv/flightloggin
-
-# clean up the database, and create the backup file
-# ~/bin/mysql-clean; ~/bin/mysql-backup; 
-ssh linode "/srv/flightloggin/make-fixtures";
+# create the backup file 
+ssh -i /home/chris/.ssh/id_rsa linode "/srv/flightloggin/make-fixtures";
 
 echo "after ssh";
 
-# copy mysql backup file to local machine
-#scp chris@flightlogg.in:~/backups/${myfilename} /storage/mysql;
-
-# copy flightloggin django fixtures and sql files to the local project dir
-scp linode:/srv/flightloggin/dump ./dumps/${date}.dump;
+# copy the dump to the local project dir
+scp -i /home/chris/.ssh/id_rsa linode:/srv/flightloggin/dump /srv/flightloggin/dumps/${date}.dump;
 echo "after scp";
 
-# delete the mysql backup file from the remote server (to save space)
-#ssh chris@flightlogg.in "rm ~/backups/${myfilename}";
-
-exit
+exit 0;

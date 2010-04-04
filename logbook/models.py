@@ -107,6 +107,10 @@ class Flight(EnhancedModel):
             f.render_route()
     
     def render_route(self):
+        """
+        Completely redo the route object, then update the flight's db record.
+        """
+        
         self.route = Route.from_string(self.route_string,
                                        user=self.user,
                                        date=self.date)
@@ -119,6 +123,11 @@ class Flight(EnhancedModel):
             return False
         
     def conditions_of_flight(self):
+        """
+        Return a list of fields this flight qualifies as. Used in the
+        Facebook app.
+        """
+        
         fields = ['pic', 'act_inst', 'sic', 'dual_g', 'dual_r', 'night']
         l = [FIELD_ABBV[field] for field in fields if self.column(field)]
         
@@ -163,7 +172,8 @@ class Flight(EnhancedModel):
         return app 
     
     def disp_events(self):
-        """Returns the special events with HTML formatting, if no events,
+        """
+        Returns the special events with HTML formatting, if no events,
         return nothing
         """
         
@@ -187,7 +197,8 @@ class Flight(EnhancedModel):
             return mark_safe('<span class="remarks_tag">%s</span> ' % ret)
 
     def column(self, cn, format="decimal", ret=0.0):
-        """Returns a string that represents the column being passed
+        """
+        Returns a string that represents the column being passed
         All output in strings except for date, which will be formatted later
         """
     

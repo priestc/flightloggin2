@@ -6,8 +6,6 @@ from main.mixins import GoonMixin
 
 class Profile(models.Model, GoonMixin):
     user =           models.ForeignKey(User, primary_key=True)
-    
-    
 
     dob =            models.DateField(
                          "Date of Birth",

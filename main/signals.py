@@ -1,11 +1,15 @@
 from django.db import models
+from django.conf import settings
 
-from backup.models import edit_logbook
-from logbook.models import Flight
 from logbook.fuel_burn import FuelBurn
 from logbook.utils import expire_all, expire_logbook_cache_page
+    
 from profile.models import Profile
+from airport.models import Location
 from plane.models import Plane
+from backup.models import edit_logbook
+from logbook.models import Flight
+from route.models import Route
 
 def calculate_flight(sender, **kwargs):
     """
@@ -75,6 +79,33 @@ def expire_logbook_cache(sender, **kwargs):
         expire_all(user=user)
         
 ###############################################################################
+
+def re_render_routes(sender, **kwargs):
+    """
+    When the user edits their locations, re-render all custom/unknown routes
+    """
+    
+    instance = kwargs.get('instance', None)
+    
+    if not instance or instance.user.id == settings.COMMON_USER_ID:
+        #disable this functionality when doing a location database update
+        return
+
+    qs = Route.objects\
+              .user(instance.user)\
+              .filter( models.Q(routebase__location__loc_class=3) | 
+                       models.Q(routebase__unknown__isnull=False) |
+                       models.Q(fallback_string__contains='!')
+                     )\
+              .distinct()
+
+    for r in qs.iterator():
+        r.hard_render()
+    
+###############################################################################
+
+models.signals.post_save.connect(re_render_routes, sender=Location)
+models.signals.post_delete.connect(re_render_routes, sender=Location)
 
 models.signals.pre_save.connect(calculate_flight, sender=Flight)
 models.signals.post_save.connect(recalculate_fuel, sender=Plane)    
