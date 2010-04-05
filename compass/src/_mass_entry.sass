@@ -17,10 +17,12 @@ table.mass_table
         background: #DDDDDD
 
     div.date_holder
-        width: 9em
+        // must be big enough for the textbox and the calendar icon
+        width: 120px
         
     td.date_cell
-        max-width: 7.8em
+        // just big enough for the whole text box and some padding
+        max-width: 103px
         overflow: visible
 
     input
@@ -31,7 +33,8 @@ table.mass_table
             margin: 1px
         
         &[id$='date']
-            width: 90px
+            // just big enough for the date: '2010-04-01'
+            width: 100px
         
         &[id$='tags']
             width: 10em
@@ -59,7 +62,9 @@ table.mass_table
             
         &[id$='person']
             width: 8em
-        
+            
+        &[id$='plane']
+            width: 6em
     select   
         &[id$='cat_class']
             width: 10em

@@ -430,8 +430,7 @@ class Route(EnhancedModel):
         
         new_route = MakeRoute(fallback, user, date=date).get_route()
 
-        flight = Flight.objects.get(pk=flight_id)
-        flight.route = new_route
-        flight.save()
+        f.route = new_route
+        f.save()
         
         return new_route

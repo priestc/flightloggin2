@@ -10,7 +10,7 @@ from models import Flight, Columns
 from plane.models import Plane
 from constants import *
 from profile.models import Profile, AutoButton
-from utils import proper_flight_form, logbook_url
+from utils import proper_plane_widget, logbook_url
 import forms
 
 
@@ -68,12 +68,13 @@ def edit_flight(request, page):
         return HttpResponseRedirect(url)
     
     profile,c = Profile.objects.get_or_create(user=request.display_user)
-    PopupFlightForm = proper_flight_form(profile)
+    plane_widget = proper_plane_widget(profile)
     
     flight_id = request.POST['id']
     flight = Flight(pk=flight_id, user=request.display_user)
 
-    form = PopupFlightForm(request.POST,
+    form = forms.PopupFlightForm(request.POST,
+                           plane_widget=plane_widget,
                            user=request.display_user,
                            instance=flight,
                            prefix="new")
@@ -96,11 +97,12 @@ def new_flight(request, page):
         return HttpResponseRedirect(url)
     
     profile,c = Profile.objects.get_or_create(user=request.display_user)
-    PopupFlightForm = proper_flight_form(profile)
-    print PopupFlightForm
+    plane_widget = proper_plane_widget(profile)
+
     flight = Flight(user=request.display_user)
     
-    form = PopupFlightForm(request.POST,
+    form = forms.PopupFlightForm(request.POST,
+                           plane_widget=plane_widget,
                            user=request.display_user,
                            instance=flight,
                            prefix="new")
@@ -185,8 +187,8 @@ def logbook(request, page=0, form=None, fail=None):
     do_pagination = page_of_flights.paginator.num_pages > 1
     
     if not form:
-        PopupFlightForm = proper_flight_form(profile)       
-        form = PopupFlightForm(prefix="new")
+        plane_widget = proper_plane_widget(profile)
+        form = forms.PopupFlightForm(plane_widget=plane_widget, prefix="new")
         
     else:
         ## set this variable so we know which popup to prepare to enter the

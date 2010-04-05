@@ -113,18 +113,28 @@ class PlaneTextInput(TextInput):
         return super(PlaneTextInput, self).\
                     _has_changed(self._format_value_out(initial), data)
 
-class TextPlaneField(ModelChoiceField):
+class PlaneField(ModelChoiceField):
     """
-    A field that returns a plane instance and uses a text field widget 
-    instead of a dropdown box.
+    A field that returns a plane instance. Uses either a text field widget
+    or a dropdown box widget.
     """
     
-    widget = PlaneTextInput()
+    def __init__(self, *args, **kwargs):
+        
+        print self.widget
+        qs = Plane.objects.none()
+        
+        super(PlaneField, self).__init__(queryset=qs, *args, **kwargs)
     
     def clean(self, val):
         """
-        Turns the entered value (a tailnumber), into a plane instance
+        Turns the entered value (a tailnumber or a pk), into a plane instance
         """
+        
+        print "WIDGET", self.widget
+        
+        if re.match(r'[0-9]', val):
+            return Plane.objects.get(pk=val)
         
         if val.startswith("pk:"):
             pk = val[3:]
@@ -158,6 +168,8 @@ class PopupFlightForm(ModelForm):
     
     route_string = forms.CharField(label="Route", widget=TextInput(), required=False)
     
+    plane =    PlaneField(empty_label=None)
+    
     total =    BlankDecimalField(label="Total Time")
     pic =      BlankDecimalField(label="PIC")
     sic =      BlankDecimalField(label="SIC")
@@ -185,6 +197,8 @@ class PopupFlightForm(ModelForm):
             from share.middleware import share
             self.user = share.get_display_user()
         
+        pw = kwargs.pop('plane_widget', None)
+        
         super(PopupFlightForm, self).__init__(*args, **kwargs)
 
         self.fields['date'].widget = widgets.AdminDateWidget()
@@ -196,7 +210,9 @@ class PopupFlightForm(ModelForm):
                       .exclude(retired=True)\
                       .annotate(fd=Max('flight__date'))\
                       .order_by('-fd')
-        
+        if pw:             
+            self.fields['plane'].widget = pw
+            
         self.fields['plane'].user = self.user
 
     class Meta:
@@ -244,7 +260,6 @@ class MassEntryFormset(BaseModelFormSet):
     """
     
     def __init__(self, *args, **kwargs):
-            
 
         self.user = kwargs.pop('user')
         self.text_plane = self.user.get_profile().text_plane
@@ -263,7 +278,7 @@ class MassEntryFormset(BaseModelFormSet):
         qs = Plane.objects.user_common(self.user)
         
         if self.text_plane:
-            form.fields["plane"] = TextPlaneField(qs)
-            form.fields["plane"].user=self.user
+            form.fields["plane"].widget = PlaneTextInput()
+            form.fields["plane"].user = self.user
         else:
             form.fields["plane"] = ModelChoiceField(queryset=qs, required=True)
