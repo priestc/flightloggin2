@@ -26,7 +26,7 @@ class CustomForm(ModelForm):
                     required=False,
                     help_text="In decimal format (e.g. 34.322631,-84.481517)")
     
-    identifier = IdentField(max_length=10)
+    identifier = IdentField(max_length=8)
     
     class Meta:
         model = get_model('airport', 'Location')

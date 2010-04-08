@@ -226,7 +226,7 @@ class PopupFlightForm(ModelForm):
         if '+' in value or '-' in value or '/' in value or '*' in value:
                value = FuelBurn.pre_eval(value)
 
-        ## this will raise the proper validation errors
+        ## this will raise the proper validation exceptions
         FuelBurn.split_and_validate(value)
         
         return value
