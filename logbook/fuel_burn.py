@@ -50,6 +50,9 @@ class FuelBurn(object):
         the numeric part, then return them
         """
         
+        if not value:
+            return None, None
+        
         num, unit = FuelBurn.split(value)
         
         ## all valid units the user can use

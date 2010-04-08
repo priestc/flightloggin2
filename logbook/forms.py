@@ -121,7 +121,6 @@ class PlaneField(ModelChoiceField):
     
     def __init__(self, *args, **kwargs):
         
-        print self.widget
         qs = Plane.objects.none()
         
         super(PlaneField, self).__init__(queryset=qs, *args, **kwargs)
@@ -130,8 +129,6 @@ class PlaneField(ModelChoiceField):
         """
         Turns the entered value (a tailnumber or a pk), into a plane instance
         """
-        
-        print "WIDGET", self.widget
         
         if re.match(r'[0-9]', val):
             return Plane.objects.get(pk=val)
@@ -210,6 +207,7 @@ class PopupFlightForm(ModelForm):
                       .exclude(retired=True)\
                       .annotate(fd=Max('flight__date'))\
                       .order_by('-fd')
+        
         if pw:             
             self.fields['plane'].widget = pw
             
@@ -227,9 +225,7 @@ class PopupFlightForm(ModelForm):
         
         if '+' in value or '-' in value or '/' in value or '*' in value:
                value = FuelBurn.pre_eval(value)
-        
-        print value
-        
+
         ## this will raise the proper validation errors
         FuelBurn.split_and_validate(value)
         
@@ -238,9 +234,10 @@ class PopupFlightForm(ModelForm):
 ###############################################################################
 
 class FormsetFlightForm(PopupFlightForm):
-    """Form used for the mass entry section. It's the same as the normal flight
-       form except that it renders the route field as a string, and the
-       remarks are in a big textbox
+    """
+    Form used for the mass entry section. It's the same as the normal flight
+    form except that it renders the route field as a string, and the
+    remarks are in a big textbox
     """
     
     remarks = forms.CharField(
@@ -280,5 +277,3 @@ class MassEntryFormset(BaseModelFormSet):
         if self.text_plane:
             form.fields["plane"].widget = PlaneTextInput()
             form.fields["plane"].user = self.user
-        else:
-            form.fields["plane"] = ModelChoiceField(queryset=qs, required=True)
