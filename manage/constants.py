@@ -5,14 +5,18 @@ COLUMN_NAMES = {
     "TIME IN FLIGHT": 'total',
     "TOTAL": 'total',	
     "TOTALTIME": 'total',			
+    "TOTAL TIME": 'total',
     "DURATION": 'total',
     "CREDIT": "total",
     "DURATION OF FLIGHT": 'total',
     "TOTAL DURATION OF FLIGHT": 'total',
+    "SEL": 'total',
+    "MEL": 'total',
 				
     "AIRCRAFT TYPE": 'type',
     "AIRCRAFT MAKE & MODEL": 'type',
     "TYPE": 'type',
+    "A/C TYPE": 'type',
 
     "ROUTE OF FLIGHT": 'route',
     "ROUTE": 'route',
@@ -31,6 +35,7 @@ COLUMN_NAMES = {
     "ROUTE FROM": 'from_',
 
     "AIRCRAFT IDENT": 'tailnumber',
+    "A/C ID": 'tailnumber',
     "TAIL NUMBER": 'tailnumber',
     "TAILNUMBER": 'tailnumber',
     "N-NUMBER": 'tailnumber',
@@ -58,6 +63,7 @@ COLUMN_NAMES = {
     "APPROACHES": 'app',
     "APPROACHES & TYPE": 'app',
     "INSTAPPR": 'app',
+    "NUM INST APP": 'app',
 
     "PILOT IN COMMAND": 'pic',
     "PIC": 'pic',
@@ -70,6 +76,7 @@ COLUMN_NAMES = {
     "DUAL": 'dual_r',
     "DUAL RECIEVED": 'dual_r',
     "DUAL RECEIVED": 'dual_r',
+    "DUAL RCVD": 'dual_r',
 
     "AS INSTRUCTOR": 'dual_g',
     "AS FLIGHT INSTRUCTOR": 'dual_g',
@@ -85,9 +92,11 @@ COLUMN_NAMES = {
     "INSTRUMENT": 'act_inst',
     "ACTUAL INSTRUMENT": 'act_inst',
     "ACTUALINSTR": 'act_inst',
+    "ACTUAL INSTR": 'act_inst',
 				
     "SIMULATED INSTRUMENT": 'sim_inst',
     'SIMINSTR': 'sim_inst',
+    "SIM INSTR": 'sim_inst',
 				
     "STUDENT": 'student',
     "INSTRUCTOR":'instructor',
@@ -151,9 +160,14 @@ PLANE_HEADERS = (
         )
         
 PLANE_MAP = {
-        'SKIP': 'date', 'tailnumber': 'tailnumber', 'manufacturer': 'type',
-        'model': 'route', 'type': 'total', 'cat_class': 'pic',
-        'tags': 'sic', 'RT': 'solo',
+        'SKIP': 'date',
+        'tailnumber': 'tailnumber',
+        'manufacturer': 'type',
+        'model': 'route',
+        'type': 'total',
+        'cat_class': 'pic',
+        'tags': 'sic',
+        'RT': 'solo',
         }
 
 ###### flightlogg.in 1.0 uses these names when it makes backup files ######

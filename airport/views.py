@@ -60,9 +60,7 @@ def search_airport(request):
     
     s = request.GET.get('q')
     
-    q = ( Q(identifier__icontains=s)
-        | Q(name__icontains=s)
-        | Q(municipality__icontains=s)
+    q = ( Q(identifier__icontains=s) | Q(name__icontains=s) | Q(municipality__icontains=s)
         )
     
     results = Location.objects\
