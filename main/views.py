@@ -4,7 +4,7 @@ from models import NewsItem
 @render_to("news.html")
 def news(request):
     news = NewsItem.objects.all()[:10]
-    
+
     if request.user.is_authenticated():
         request.display_user = request.user
         
@@ -13,3 +13,7 @@ def news(request):
 def not_found(request):
     from django.http import HttpResponse
     return HttpResponse('404')
+
+@render_to('500.html')
+def handler500(request):
+    return {'shared': False}

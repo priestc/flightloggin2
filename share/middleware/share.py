@@ -100,7 +100,6 @@ class ShareMiddleware(object):
     is vewing his own logbook, or viewing another."""
     
     def process_view(self, request, view, args, kwargs):   
-        
         if 'username' in kwargs:
             try:
                 share = Share(request, kwargs.pop('username'))

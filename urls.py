@@ -1,8 +1,11 @@
 from django.conf.urls.defaults import *
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.contrib import admin
+from plane.models import Plane
 
 admin.autodiscover()
+
+handler500 = "main.views.handler500"
 
 ###############################################################################
 
@@ -28,17 +31,10 @@ sitemaps = {
 
 ###############################################################################
 
-from plane.models import Plane
-
-###############################################################################
-
 ## all views get `shared` and `display_user`
 ## variables from `username` via ShareMiddleware
 
 urlpatterns = patterns('django_openid_auth.views',
-
-    ###########################################################################
-
 
     url(
         r'^openid/login/$',

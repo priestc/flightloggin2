@@ -31,7 +31,7 @@ def figure_navbar(request):
     """
     
     from django.contrib.auth.models import User
-        
+    
     if getattr(request, "display_user", False):
         ## viewing an app page, print the navbar for the user whose app
         ## it belongs to
@@ -47,7 +47,7 @@ def figure_navbar(request):
         ret = {"navbar_user": User(username="demo")}
         
     ret.update({"shared": getattr(request, "shared", False)})
-    
+
     return ret
 
 def site_url(request):

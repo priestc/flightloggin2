@@ -62,13 +62,12 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'share.middleware.share.ShareMiddleware',
+    'facebook.djangofb.FacebookMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'pagination.middleware.PaginationMiddleware',
-    'facebook.djangofb.FacebookMiddleware',
-    
+    'share.middleware.share.ShareMiddleware',
 )
 
 if DEBUG_TOOLBAR:
