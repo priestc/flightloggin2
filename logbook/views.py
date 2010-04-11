@@ -222,8 +222,9 @@ def mass_entry(request):
                 # add the user 
                 post.update({"form-%s-user" % pk: str(request.user.pk)})
             else:
-                # blank the user
-                post.update({"form-%s-user" % pk: u''})
+                # blank the user and plane fields
+                post.update({"form-%s-user" % pk: u'',
+                             "form-%s-plane" % pk: u''})
             
         formset = NewFlightFormset(post,
                     queryset=Flight.objects.none(),
