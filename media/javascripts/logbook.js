@@ -24,7 +24,7 @@ function fill_in_flight(dom_id) {
 	var fuel_burn = $("#f" + id + " span.data_fuel_burn").text();
 	$("#id_new-fuel_burn").val(fuel_burn);
 	
-	var total = $("#f" + id + " span.data_total").text();
+	var total = $("#f" + id + " span.data_raw_total").text();
     $("#id_new-total").val(total);
 
     var pic = $("#f" + id + " span.data_pic").text();

@@ -377,6 +377,9 @@ class Flight(EnhancedModel):
         
         elif cn == 'p61_xc' and self.route.max_width_land > 49:
             ret = self.total
+            
+        elif cn == 'raw_total':
+            ret = self.total
         
         elif cn == "total" and not self.plane.is_sim():     #total
             ret = self.total
