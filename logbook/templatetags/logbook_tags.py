@@ -39,8 +39,8 @@ class DateCell(template.Node):
                 (row.id, self.a_title, formatted_date)
         
         spans = ""
-        for data_column in ('date', 'plane', 'route', 'raw_total', 'pic', 'sic',
-        'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst',
+        for data_column in ('date', 'plane', 'route', 'raw_total', 'pic',
+        'sic', 'solo', 'night', 'dual_r','dual_g', 'xc','act_inst', 'sim_inst',
         'night_l','day_l', 'app', 'person', 'fuel_burn', 'remarks'):
             data = row.column(data_column, profile.get_num_format())
             

@@ -15,6 +15,11 @@ function fill_in_flight(dom_id) {
         // otherwise, use this other method, because the plane field is
         // a textbox
         plane = plane.split(' ')[0]
+        if(plane == 'UNKNOWN') {
+            // unknown plane becomes blank to aviod creating a new
+            // plane called 'UNKNOWN'
+            plane = '';
+        }
         $("#id_new-plane").val(plane);
     }
 	
