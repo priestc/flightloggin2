@@ -4,7 +4,7 @@ from django import forms
 from django.conf import settings
 from django.forms import ModelForm, ModelChoiceField
 from django.contrib.admin import widgets
-from django.forms.widgets import TextInput, HiddenInput
+from django.forms.widgets import TextInput, HiddenInput, Select, flatatt
 from django.forms.util import ValidationError
 
 from models import *
@@ -113,10 +113,30 @@ class PlaneTextInput(TextInput):
         return super(PlaneTextInput, self).\
                     _has_changed(self._format_value_out(initial), data)
 
+class PlaneSelectBox(Select):
+    def render(self, name, value, attrs=None, choices=()):
+        """
+        Adds the UNKNOWN airplane to the bottom of the selectbox
+        """
+        
+        if value is None:
+            value = ''
+        final_attrs = self.build_attrs(attrs, name=name)
+        output = [u'<select%s>' % flatatt(final_attrs)]
+        options = self.render_options(choices, [value])
+        if options:
+            output.append(options)
+            
+        pk = settings.UNKNOWN_PLANE_ID
+        output.append('<option value="{0}">UNKNOWN</option>'.format(pk))
+        output.append('</select>')
+        
+        return mark_safe(u'\n'.join(output))
+
 class PlaneField(ModelChoiceField):
     """
     A field that returns a plane instance. Uses either a text field widget
-    or a dropdown box widget.
+    or a modified dropdown box widget.
     """
     
     def __init__(self, *args, **kwargs):
@@ -165,7 +185,7 @@ class PopupFlightForm(ModelForm):
     
     route_string = forms.CharField(label="Route", widget=TextInput(), required=False)
     
-    plane =    PlaneField(empty_label=None)
+    plane =    PlaneField(empty_label=None, widget=PlaneSelectBox())
     
     total =    BlankDecimalField(label="Total Time")
     pic =      BlankDecimalField(label="PIC")
@@ -203,8 +223,9 @@ class PopupFlightForm(ModelForm):
         from django.db.models import Max
         self.fields['plane'].queryset = \
                  Plane.objects\
-                      .user_common(self.user)\
+                      .user(self.user)\
                       .exclude(retired=True)\
+                      .select_related()\
                       .annotate(fd=Max('flight__date'))\
                       .order_by('-fd')
         

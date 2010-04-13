@@ -189,7 +189,6 @@ def logbook(request, page=0, form=None, fail=None):
     if not form:
         plane_widget = proper_plane_widget(profile)
         form = forms.PopupFlightForm(plane_widget=plane_widget, prefix="new")
-        
     else:
         ## set this variable so we know which popup to prepare to enter the
         ## failed form data
