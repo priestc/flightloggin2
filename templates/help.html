@@ -12,6 +12,18 @@
 
 {% block canvas %}
 
+<h2>How do I log flights in simulators? Theres no simulator field in the
+New Flight popup box!</h2>
+
+You are supposed to log the flight just like any other flight in an actual
+airplane. As long as the plane that the flight is logged in is either "Unknown",
+"Airplane Simulator", "Airplane FTD", "Helicopter Simulator", or "Helicopter FTD",
+anything you enter in the "Total Time" field will not be counted as proper total
+time. The time will show up in your logbook with parenthesis, and will not
+be included in the "Logbook Totals", or "Page Totals" sections. Additionally,
+everywhere else on the site where "Total Time" is refrenced, it only includes
+flights in actual airplanes (Simulators/FTDs excluded).
+
 <h2>How do I log the route for my flights?</h2>
 
 You are supposed to put the identifier of each you flew to. All places in the
@@ -22,7 +34,7 @@ York to Boston via the Bradley VORTAC, you would log the flight as
 with a navaid. If it does not find a navaid, it will try to match it with an
 airport.
 
-<h2>How do I enter my fuel burn?</h2>
+<h2>How do I enter fuel burn?</h2>
 
 You enter the number, followed by the unit. If your fuel burn was 650 pounds of jet
 fuel per jour, you'd enter "650pphj". If your burn was 87 galons per hour, you'd
