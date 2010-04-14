@@ -1,14 +1,13 @@
 function wipe_clean() {
-
     // uncheck all checkboxes and clear all input boxes
-	$("#popup input[type=text], #popup textarea, #popup select").val("");
-	$("#popup input[type=checkbox]").attr("checked", "");
+    $("#popup input[type=text], #popup textarea, #popup select").val("");
+    $("#popup input[type=checkbox]").attr("checked", "");
 	
-	// remove the error messages
-	$("#popup td#new_error_cell").text("");
-	$("#popup td#edit_error_cell").text("");
-	$("#popup td#display_error_cell").text("");
-	$("#popup ul.errorlist").before("<br />").remove();
+    // remove the error messages
+    $("#popup td#new_error_cell").text("");
+    $("#popup td#edit_error_cell").text("");
+    $("#popup td#display_error_cell").text("");
+    $("#popup ul.errorlist").before("<br />").remove();
 }
 
 function fire_popup() {
@@ -65,11 +64,3 @@ $(document).ready(function() {
         fire_popup();
     }
 });
-
-
-
-
-
-
-
-
