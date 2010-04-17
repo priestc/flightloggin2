@@ -68,8 +68,7 @@ urlpatterns += patterns('',
     
     url(
         r'^help.html$',
-        direct_to_template,
-        {"template": "help.html"},
+        "main.views.help",
                                                                    name="help",
     ),
     

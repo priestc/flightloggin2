@@ -1,5 +1,5 @@
 from annoying.decorators import render_to
-from models import NewsItem
+from models import NewsItem, HelpItem
 
 @render_to("news.html")
 def news(request):
@@ -10,6 +10,14 @@ def news(request):
         
     return locals()
 
+
+@render_to("help.html")
+def help(request):
+    
+    helpitems = HelpItem.objects.order_by('category', 'order', 'id')
+    
+    return locals()
+
 def not_found(request):
     from django.http import HttpResponse
     return HttpResponse('404')
@@ -17,3 +25,5 @@ def not_found(request):
 @render_to('500.html')
 def handler500(request):
     return {'shared': False}
+
+
