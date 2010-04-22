@@ -28,8 +28,6 @@ class Milestone(object):
         
         self.result = self.determine(self.calculate())
         
-        
-        
         try:
             self.relevent()
         except NotImplementedError:
@@ -188,8 +186,6 @@ class Part61_Private(Milestone):
         ##################################################################
         
         qs = self.nosim
-        
-        print self.figure_dual_60()
         
         data = [
                     dict(

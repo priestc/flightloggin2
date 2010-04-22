@@ -141,8 +141,6 @@ class StatDB(models.Model):
         rate = float((now - sixty) / 60)
         million_to_go = 1000000 - now
         
-        print "now: {now}, sixty_ago: {sixty}, rate: {rate}".format(**locals())
-        
         return million_to_go / rate
         
     
