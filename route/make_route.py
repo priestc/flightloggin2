@@ -173,8 +173,6 @@ class MakeRoute(object):
         airport_ident = None
         airport = None
         
-        print "trying " + ident,
-        
         if hi.count() > 0:
             try:
                 valid_hi = hi.get(start__lte=date, end__gte=date)
@@ -183,7 +181,6 @@ class MakeRoute(object):
                 valid_hi = None
                 invalid_hi = hi.latest('end')
         elif ex:
-            print "found it!"
             return ex
         
         ##############
@@ -202,7 +199,6 @@ class MakeRoute(object):
         
         elif not valid_hi and not invalid_hi and not ex:
             #we have nothing :(
-            print "not found"
             return None
             
         else:
