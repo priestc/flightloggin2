@@ -47,7 +47,7 @@ def re_render_all():
     for r in Route.objects.iterator():
         r.easy_render()
 
-BANNED = ('46307', '14715')   
+BANNED = (46307, 14715)   
 
 def airports():   #import airport
     """

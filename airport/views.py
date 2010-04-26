@@ -79,10 +79,10 @@ def export_to_xml(request, index):
     """
     
     index = int(index)
-    
-    size = 5000
-    
+    size = 5
     start = (index * size)
+    article_start = 178 + (index * size)
+    rev_start = 182 + (index * size)
     
     qs = Location.objects\
                  .select_related()\
@@ -90,32 +90,10 @@ def export_to_xml(request, index):
                  .order_by('identifier')[start:start+size]\
                  .iterator()
     
-    article_start = 180
-    rev_start = 430
-    
     airports = []
     for num,a in enumerate(qs):
         a.article_id = num + article_start
         a.rev_id = num + rev_start
         airports.append(a)
                
-    return locals()
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
+    return locals()  

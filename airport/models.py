@@ -27,6 +27,15 @@ class WikiMixins(object):
     
     def wiki_coord(self):
         return u"{0}° {1}°".format(self.location.y, self.location.x).encode('utf-8')
+    
+    def historical(self):
+        out = []
+        for hist in self.historicalident_set.all().iterator():
+            out.append("{{Historical|%s|%s|%s}}" % (hist.identifier,
+                                                    hist.start,
+                                                    hist.end))
+            
+        return "\n".join(out)
 
 class Location(EnhancedModel, WikiMixins):
     

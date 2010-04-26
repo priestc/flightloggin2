@@ -40,7 +40,7 @@
         <id>{{airport.article_id}}</id>
         <revision>
         <id>{{airport.rev_id}}</id>
-            <timestamp>2010-04-21T00:59:03Z</timestamp>
+            <timestamp>2010-04-26T00:59:03Z</timestamp>
 
             <contributor>
                 <username>WikiSysop</username>
@@ -51,11 +51,13 @@
 
             <text xml:space="preserve">{% templatetag openvariable %}Airport
 |master = {{ airport.identifier }}
-{%if airport.icao_identifier %}|other  = {{ airport.icao_identifier }}
-{% endif %}{%if airport.iata_identifier %}|other  = {{ airport.iata_identifier }}
-{% endif %}{%if airport.local_identifier %}|other  = {{ airport.local_identifier }}
+{%if airport.icao_identifier %}|icao  = {{ airport.icao_identifier }}
+{% endif %}{%if airport.iata_identifier %}|iata  = {{ airport.iata_identifier }}
+{% endif %}{%if airport.local_identifier %}|local  = {{ airport.local_identifier }}
 {% endif %}|name   = {{ airport.name }}
 |city   = {{ airport.municipality }}
+|region = {{ airport.region.name }}
+|country = {{ airport.country.name }}
 |coord  = {{ airport.wiki_coord }}
 {% templatetag closevariable %}
 
@@ -65,7 +67,8 @@
 
 [[Category: {{airport.region_category}}]]
 [[Category: {{airport.get_loc_type_display}}s]]{% if not airport.any_ident %}
-[[Category: Airports with no official identifier]]{% endif %}
+[[Category: Airports with no official identifier]]{% endif %}{% if aiport.historical %}
+{{ aiport.historical }}{% endif %}
             </text>
         </revision>
     </page>
