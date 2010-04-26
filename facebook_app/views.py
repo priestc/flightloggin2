@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from logbook.models import Flight
 
 @facebook.require_login()
-@render_to('facebook_app/register.fbml')
+@render_to('register.fbml')
 def register(request):
 
     uid = request.facebook.uid
@@ -34,7 +34,7 @@ def register(request):
     return locals()
 
 @facebook.require_login()
-@render_to('facebook_app/profile_tab.fbml')
+@render_to('profile_tab.fbml')
 def profile_tab(request, registered=False):
     """
     Render the profile tab page. This is the main page for this app.
@@ -69,7 +69,7 @@ def profile_tab(request, registered=False):
     return locals()
 
 @facebook.require_login()
-@render_to('facebook_app/canvas.fbml')
+@render_to('canvas.fbml')
 def canvas(request):
     
     if request.POST.get('username', None):
@@ -79,27 +79,3 @@ def canvas(request):
     fb_users = Profile.objects.exclude(facebook_uid="").count()
     
     return locals()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
