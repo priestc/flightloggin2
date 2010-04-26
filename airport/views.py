@@ -72,14 +72,14 @@ def search_airport(request):
     
     return locals()
 
-@render_to('wiki_airport.html', mimetype="application/xml")
+@render_to('wiki_airport.html', mimetype="text/plain") #application/xml")
 def export_to_xml(request, index):
     """
     Export all airports to an XML file for inputting into wikiPLANEia
     """
     
     index = int(index)
-    size = 5
+    size = 5000
     start = (index * size)
     article_start = 178 + (index * size)
     rev_start = 182 + (index * size)

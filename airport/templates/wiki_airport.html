@@ -59,7 +59,9 @@
 |region = {{ airport.region.name }}
 |country = {{ airport.country.name }}
 |coord  = {{ airport.wiki_coord }}
-{% templatetag closevariable %}
+{% templatetag closevariable %}{% if airport.historical %}
+
+{{ airport.historical }}{% endif %}
 
 {% if airport.no_ident %}{% templatetag openvariable %}No Airport Ident{% templatetag closevariable %}{% endif %}
 
@@ -67,9 +69,7 @@
 
 [[Category: {{airport.region_category}}]]
 [[Category: {{airport.get_loc_type_display}}s]]{% if not airport.any_ident %}
-[[Category: Airports with no official identifier]]{% endif %}{% if aiport.historical %}
-{{ aiport.historical }}{% endif %}
-            </text>
+[[Category: Airports with no official identifier]]{% endif %}</text>
         </revision>
     </page>
 {% endfor %}

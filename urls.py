@@ -65,7 +65,7 @@ urlpatterns += patterns('',
     (r'^search/locations\.html$', 'airport.views.search_airport'),
     (r'^search/tailnumbers\.html$', 'plane.views.search_tailnumbers'),
     
-    ('export_airports-(?P<index>\d{1,2}).xml', "airport.views.export_to_xml"),
+    ('export_airports-(?P<index>\d{1,5}).xml', "airport.views.export_to_xml"),
     
     url(
         r'^help.html$',
