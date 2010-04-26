@@ -47,7 +47,7 @@ def re_render_all():
     for r in Route.objects.iterator():
         r.easy_render()
 
-BANNED = ('46307', )   
+BANNED = ('46307', '14715')   
 
 def airports():   #import airport
     """
@@ -56,22 +56,11 @@ def airports():   #import airport
     gps_code	iata_code	local_code	home_link	wikipedia_link	keywords
     """
     
-    path = os.path.join(PROJECT_PATH, 'airport', 'csv', 'airports.csv')
+    path = os.path.join(PROJECT_PATH, 'airport', 'csv', 'airports_new.csv')
     f = open(path, 'rb')
     reader = csv.reader(f, "excel")
     titles = reader.next()
     reader = csv.DictReader(f, titles)
-
-    types = {
-               '': 0,
-               'balloonport': 7,
-               'closed': 4,
-               'heliport': 5,
-               'large_airport': 3,
-               'medium_airport': 2,
-               'seaplane_base': 6,
-               'small_airport': 1,
-            }
 
     # a list of idents that have changed, and therefore get HistoricalIdents
     hists = []
@@ -82,71 +71,40 @@ def airports():   #import airport
         
         ##########################
 
-        lat =    line["latitude_deg"]
-        lng =    line["longitude_deg"]
-        elev =   line["elevation_ft"]
+        point =  line["point"]
+        elev =   line["elev"]
         type_ =  line["type"]
-        local =  line["local_code"]
-        fback =  line['ident'].upper().replace('-', '')
-        name =   line["name"].decode('utf-8')
-        country= line["iso_country"].upper()
-        city =   line["municipality"].decode('utf-8')
-        region = line["iso_region"].upper()
-        idd =    line['id']
-        ident =  line['gps_code'].upper().replace('-', '')
         
-        loc_wkt = "POINT ({0} {1})".format(float(lng), float(lat))
+        ident =  line['ident']
+        local =  line["local"]
+        icao =   line["icao"]
+        iata =   line["iata"]
+        
+        country= line["country"]
+        region = int(line["region"])
+        
+        city =   line["city"].decode('utf-8')
+        name =   line["name"].decode('utf-8')
+        
+        idd =    int(line['id'])        
         
         if elev == "":
-            elev = None
-
-        if not ident or type_ == 'closed':
-            # closed airports should use the ID ident, to avoid unique
-            # name collisions
-            ident = fback
-            
-        ##########################
-                                           
-        if country == "US":
-            if (ident.startswith("K")
-                and len(ident) == 4
-                and re.search("[0-9]", ident)
-               ):
-                   
-                # ourairports has a problem where non-icao identifiers in the
-                # US are prefixed with a 'K' when they shouldn't be.
-                
-                ident = ident[1:] # remove the 'K'
-                
-            if (not ident.startswith("K")
-                and len(ident) == 3
-                and not re.search("[0-9]", ident)
-                and not region == 'US-AK'):
-                
-                # there also is a problem where airports that should have
-                # the 'K' do not
-                   
-                ident = "K" + ident
-                
-                
-        if ident.startswith("US"):
-            if local:
-                ident = local
+            elev = None    
 
         ##########################
         
         if idd not in BANNED:
-            l,c = Location.objects.get_or_create(pk=idd,
+            l,created = Location.objects.get_or_create(pk=idd,
                                              user=ALL_USER,
                                              loc_class=1)
         else:
             l = Location(id=idd)
         
-        if c:
+        if created:
             print "new airport:", ident
         
         elif idd in BANNED:
-            print "BANNED: " + ident
+            print "BANNED: %s" % ident
             
         else:
             if not l.identifier == ident:
@@ -158,22 +116,26 @@ def airports():   #import airport
             elif not l.name == name:
                 a = [ident, colored(l.name, 'red'), colored(name, 'green')]
                 print u"changed name!:  {0} {1} -> {2}".format(*a)
-                Flight.render_airport(ident)
+                redo_after_save = True
             
             elif not l.municipality == city:
                 a = [ident, colored(l.municipality, 'red'), colored(city, 'green')]
                 print u"changed city!:  {0} {1} -> {2}".format(*a)
-                Flight.render_airport(ident)
+                redo_after_save = True
         
         l.municipality = city
-        l.country = Country.objects.get(code=country)
+        l.country = Country(pk=country)
         l.elevation = elev
-        l.location = loc_wkt
-        l.loc_type = types[type_]
-        l.identifier = ident
+        l.location = point
+        l.loc_type = type_
         l.name = name
-        l.region = Region.goon(code=region, country=country)
-            
+        l.region = Region(pk=region)
+        
+        l.identifier = ident
+        l.icao_identifier = icao
+        l.iata_identifier = iata
+        l.local_identifier = local
+        
         try:
             if l.id not in BANNED:
                 l.save()
@@ -187,7 +149,7 @@ def airports():   #import airport
         except Exception, e:
             print ident, e
             
-        if (count % 500) == 0:
+        if (count % 1000) == 0:
             #update user on status
             print colored("\n{0}\n".format(count), 'cyan')
 
@@ -306,7 +268,9 @@ def regions():   #import region
         
         r.name = name
         r.country = country
-            
+        
+        r.save()
+         
         if c:
             print "new region: " + code
 

@@ -128,7 +128,7 @@ class ColumnsTest(TestCase):
     #    response = self.client.get('/test/logbook.html')
     #    self.failUnlessEqual(response.status_code, 200)
 
-class FuelBurn(TestCase): 
+class FuelBurnTest(TestCase): 
 
     def setUp(self):
         self.p = Plane(tailnumber="N444444", cat_class=4, type="TYPE")

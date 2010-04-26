@@ -1,0 +1,74 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.3/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.3/ http://www.mediawiki.org/xml/export-0.3.xsd" version="0.3" xml:lang="en">
+
+<siteinfo>
+<sitename>WikiPLANEia</sitename>
+<base>http://wikiplaneia.com/wiki/Main_Page</base>
+<generator>MediaWiki 1.15.3</generator>
+<case>first-letter</case>
+
+<namespaces>
+<namespace key="-2">Media</namespace>
+<namespace key="-1">Special</namespace>
+<namespace key="0"/>
+<namespace key="1">Talk</namespace>
+<namespace key="2">User</namespace>
+<namespace key="3">User talk</namespace>
+<namespace key="4">WikiPLANEia</namespace>
+<namespace key="5">WikiPLANEia talk</namespace>
+<namespace key="6">File</namespace>
+<namespace key="7">File talk</namespace>
+<namespace key="8">MediaWiki</namespace>
+<namespace key="9">MediaWiki talk</namespace>
+<namespace key="10">Template</namespace>
+<namespace key="11">Template talk</namespace>
+<namespace key="12">Help</namespace>
+<namespace key="13">Help talk</namespace>
+<namespace key="14">Category</namespace>
+<namespace key="15">Category talk</namespace>
+<namespace key="102">Property</namespace>
+<namespace key="103">Property talk</namespace>
+<namespace key="104">Type</namespace>
+<namespace key="105">Type talk</namespace>
+<namespace key="108">Concept</namespace>
+<namespace key="109">Concept talk</namespace>
+</namespaces>
+</siteinfo>
+
+{% for airport in airports %}
+    <page>
+        <title>{{airport.identifier}}</title>
+        <id>{{airport.article_id}}</id>
+        <revision>
+        <id>{{airport.rev_id}}</id>
+            <timestamp>2010-04-21T00:59:03Z</timestamp>
+
+            <contributor>
+                <username>WikiSysop</username>
+                <id>1</id>
+            </contributor>
+            
+            <comment>Initial Import</comment>
+
+            <text xml:space="preserve">{% templatetag openvariable %}Airport
+|master = {{ airport.identifier }}
+{%if airport.icao_identifier %}|other  = {{ airport.icao_identifier }}
+{% endif %}{%if airport.iata_identifier %}|other  = {{ airport.iata_identifier }}
+{% endif %}{%if airport.local_identifier %}|other  = {{ airport.local_identifier }}
+{% endif %}|name   = {{ airport.name }}
+|city   = {{ airport.municipality }}
+|coord  = {{ airport.wiki_coord }}
+{% templatetag closevariable %}
+
+{% if airport.no_ident %}{% templatetag openvariable %}No Airport Ident{% templatetag closevariable %}{% endif %}
+
+{% templatetag openvariable %}Airport_linkback{% templatetag closevariable %}
+
+[[Category: {{airport.region_category}}]]
+[[Category: {{airport.get_loc_type_display}}s]]{% if not airport.any_ident %}
+[[Category: Airports with no official identifier]]{% endif %}
+            </text>
+        </revision>
+    </page>
+{% endfor %}
+
+</mediawiki>

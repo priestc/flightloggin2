@@ -246,7 +246,7 @@ class Flight(EnhancedModel):
         
         elif cn == "date":
             return self.date
-            
+        
         elif cn == "tailnumber" and self.plane:
             return self.plane.tailnumber
             

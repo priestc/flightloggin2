@@ -71,3 +71,51 @@ def search_airport(request):
     did_something = True
     
     return locals()
+
+@render_to('wiki_airport.html', mimetype="application/xml")
+def export_to_xml(request, index):
+    """
+    Export all airports to an XML file for inputting into wikiPLANEia
+    """
+    
+    index = int(index)
+    
+    size = 5000
+    
+    start = (index * size)
+    
+    qs = Location.objects\
+                 .select_related()\
+                 .filter(country__code='US', loc_class=1, loc_type=1)\
+                 .order_by('identifier')[start:start+size]\
+                 .iterator()
+    
+    article_start = 180
+    rev_start = 430
+    
+    airports = []
+    for num,a in enumerate(qs):
+        a.article_id = num + article_start
+        a.rev_id = num + rev_start
+        airports.append(a)
+               
+    return locals()
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    

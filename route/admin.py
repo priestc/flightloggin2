@@ -26,7 +26,7 @@ class RouteBaseAdmin(admin.ModelAdmin):
     search_fields = ('id',)
     list_display = ('location', 'unknown', 'land', RouteBase.admin_loc_class,
                      RouteBase.owner)
-    raw_id_fields = ('location', )
+    raw_id_fields = ('location', 'route')
     
 ####################################################
 
