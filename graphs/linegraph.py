@@ -155,7 +155,8 @@ class Plot(object):
     
     interval = 30
     
-    def __init__(self, rate=None, pad=True, twin=False, rate_unit=None, **kwargs):
+    def __init__(self, rate=None, pad=True, twin=False,
+                 rate_unit=None, already_acc=False, **kwargs):
         """
         All subclasses need to first determine self.start and self.end, and
         self.title before this constructor can be called with super()
@@ -163,11 +164,24 @@ class Plot(object):
             [{'value': 34, 'date': datetime.date(207, 4, 2)}, { ... } ]
         """
         
+        # does this plot come out of the database already in an even interval?
         self.pad = pad
+        
+        # do we need to calculate a rate for this data?
         self.rate = rate
+        
+        #passed directly to the matplotlib plot() function
         self.kwargs = kwargs
+        
+        # put this plot on the other side of the graph image
         self.twin = twin
         
+        # will the data already be in accumulated form?
+        self.already_acc = already_acc
+        
+        # when the actual data starts, this is always before the displayed
+        # data starts to ensure rate graphs don't start at zero
+        self.interval_start = None
         
         if not 'drawstyle' in kwargs.keys():
             self.kwargs['drawstyle'] = 'steps-post'
@@ -196,7 +210,8 @@ class Plot(object):
     def _construct_plot_lists(self, data, rate, pad):
         """
         Transform the raw data into plot ready lists: x, y.
-        And for the rate: padx, pady
+        And for calculating the rate: padx, pady
+        accumulation and values are for main plotting
         """
         
         values = []
@@ -235,13 +250,17 @@ class Plot(object):
         return (start, end)
     
     def calculate(self):
-    
+        """
+        Render the lists and calculate the moving averages if necessary
+        """
+        
         data = self.get_data()
      
         self.x, self.rawy, self.y, padx, pady = \
                 self._construct_plot_lists(data, self.rate, self.pad)
                 
-        if self.kwargs.pop('no_acc', False):
+        if self.already_acc:
+            ## the data comes from the database already accumulated
             self.y = self.rawy
             
         self.do_rate = False

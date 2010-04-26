@@ -1,4 +1,5 @@
 from collections import deque
+import datetime
 
 from graphs.linegraph import ProgressGraph, Plot
 from models import StatDB
@@ -19,7 +20,7 @@ class SiteStatsPlot(Plot):
 
         self.val = str(val)
 
-        super(SiteStatsPlot, self).__init__(rate=rate, **kwargs)
+        super(SiteStatsPlot, self).__init__(rate=rate, already_acc=True, **kwargs)
     
     def get_data(self):
         val = self.val
@@ -37,12 +38,15 @@ class SiteStatsPlot(Plot):
         qs = qs.annotate(date=Max('dt'), value=Max(val))\
                .values('date', 'value')
         
+        if val == 'total_logged':
+            qs = qs.filter(dt__gte="2010-01-20")
+
         data = list(qs)
- 
         self.start = data[0]['date']
         self.end = data[-1]['date']
         
-        self.interval_start = self.start # no need to use a pre-interval
+        if not getattr(self, "interval_start", None):
+            self.interval_start = self.start # no need to use a pre-interval
         
         return data
     
@@ -52,11 +56,14 @@ class SiteStatsPlot(Plot):
         slightly modified because we're calculating already-summed data
         """
         
-        d = deque([], self.interval)
+        interval = self.interval
+        
+        d = deque([], interval)
         
         data = []
         for elem in iterable:
             d.append(elem)
-            data.append((abs(sum(d)-elem*len(d)) / len(d)) * self.interval)
-            
-        return data
+            v = (abs(sum(d)-elem*len(d)) / len(d)) * interval
+            data.append(v)
+        
+        return data 
