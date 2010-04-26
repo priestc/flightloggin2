@@ -63,15 +63,14 @@ def stats_graph(request, item, ext):
         return user_totals(request)
     
     elif item == 'empty_v_total':
-        plots = [SiteStatsPlot('users'),
-                 SiteStatsPlot('non_empty_users')]
+        plots = [SiteStatsPlot('users', no_acc=True),
+                 SiteStatsPlot('non_empty_users', no_acc=True)]
     
     elif item == 'hours_v_flights':
-        plots = [SiteStatsPlot('total_hours'),
-                 SiteStatsPlot('total_logged'),
-                 SiteStatsPlot('avg_duration', twin=True,
-                    rate_unit="Average Duration of Each Flight")
-                ]
+        plots = [SiteStatsPlot('total_hours', no_acc=True),
+                 SiteStatsPlot('total_logged', no_acc=True),
+                 SiteStatsPlot('avg_duration', no_acc=True, twin=True,
+                    rate_unit="Average Duration of Each Flight")]
     #######
     
     if item.endswith("_7_days"):
@@ -80,7 +79,7 @@ def stats_graph(request, item, ext):
         kwarg = {}
     
     if not plots:
-        plots = [SiteStatsPlot(item, pad=False, rate=True, **kwarg)]
+        plots = [SiteStatsPlot(item, no_acc=True, **kwarg)]
         
     #######
     
