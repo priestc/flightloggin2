@@ -42,6 +42,16 @@ def airport_profile(request, navaid, ident):
     previous_identifiers = HistoricalIdent.objects\
                                .filter(current_location=loc)
     
+    if navaid:
+        ty = 'navaid'
+    else:
+        ty = 'airport'
+    
+    kwargs ={'ident': loc.identifier, 'type': ty}
+    
+    kml_url = reverse("routes_for_location-kml", kwargs=kwargs)
+    print kml_url
+    
     return locals()
     
 def location_redirect(request, ident):
@@ -86,7 +96,8 @@ def export_to_xml(request, index):
     
     qs = Location.objects\
                  .select_related()\
-                 .filter(country__code='US', loc_class=1, loc_type=1)\
+                 .filter(country__code='US', loc_class=1)\
+                 .exclude(loc_type=1)\
                  .order_by('identifier')[start:start+size]\
                  .iterator()
     

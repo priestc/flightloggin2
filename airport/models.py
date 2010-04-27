@@ -15,7 +15,7 @@ from queryset_manager import *
 
 class WikiMixins(object):
     def region_category(self):
-        return "{0} ({1}) Airports".format(self.region.name, self.country.code)
+        return "{0} ({1}) Airports".format(self.region.name, self.country.code).encode('utf-8')
     
     def country_category(self):
         return "{0} Airports".format(self.country.name)

@@ -33,7 +33,7 @@ urlpatterns = patterns('maps.kml_views',
     ),
     
     url(
-        r'location-(?P<ident>[A-Z0-9]+)\.kmz$',
+        r'(?P<type>(navaid|location|airport))-(?P<ident>[A-Z0-9]+)\.kmz$',
         "routes_location_kml",
                                                 name="routes_for_location-kml",
     ),

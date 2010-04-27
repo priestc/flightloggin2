@@ -58,14 +58,21 @@ def single_location_kml(request, ident):
 #------------------------------------------------------------------------------
 
 @cache_page(60 * 60)
-def routes_location_kml(request, ident):
+def routes_location_kml(request, ident, type):
     """
     Returns a KMZ of all routes flown to the passed location identifier,
     also adds a point over the passed identifier
     """
     
+    if type == 'airport':
+        lc=1
+    elif type == 'navaid':
+        lc=2
+    else:
+        lc=1
+        
     #raises 404 if no location is found
-    l = Location.goof(identifier=ident, loc_class=1)
+    l = Location.goof(identifier=ident, loc_class=lc)
     
     qs = Route.objects\
               .filter(routebase__location__identifier=ident.upper())\

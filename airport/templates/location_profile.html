@@ -22,7 +22,7 @@
 {% endfor %}
 
 
-{% url routes_for_location-kml loc.identifier as kml_url %}
+
 {% include "gmaps.html" %}
 
 {% cache 10800 loc_profile ident %}
