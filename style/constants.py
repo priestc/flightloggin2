@@ -47,3 +47,41 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>""",
 
 }
+
+WIKI_ADS = {
+2:
+    """
+    <div class="other_ad" style="background: #ADCFD9">
+        <span class="corner_ad_text">Non-profit ad:</span>
+        <a target="_blank" href="http://wikiplaneia.com">
+            <img style="border: 0px" src="http://wikiplaneia.com/images/logo.png">
+        </a>
+        
+        <br><br>A free information source for pilots.
+    </div>
+    """,
+    
+1:
+    """
+    <div class="other_ad" style="background: white; border: 1px solid #A7F4A6">
+        <span class="corner_ad_text">Non-profit ad:</span>
+        <a target="_blank" href="http://wikiplaneia.com">
+            <img style="border: 0px" src="http://wikiplaneia.com/images/logo.png">
+        </a>
+        
+        <br><br>A free information source for pilots.
+    </div>
+    """,
+
+3:
+    """
+    <div class="other_ad" style="background: white; border: 1px solid #FFB898">
+        <span class="corner_ad_text">Non-profit ad:</span>
+        <a target="_blank" href="http://wikiplaneia.com">
+            <img style="border: 0px" src="http://wikiplaneia.com/images/logo.png">
+        </a>
+        
+        <br><br>A free information source for pilots.
+    </div>
+    """
+}

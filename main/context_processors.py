@@ -1,4 +1,8 @@
+import random
+
 from django.conf import settings
+from style.constants import GOOGLE_ADS, WIKI_ADS
+from profile.models import Profile
 
 def old_browser(request):
     ua = request.META.get('HTTP_USER_AGENT', "ff")
@@ -55,3 +59,20 @@ def site_url(request):
     gmk = settings.GOOGLE_MAPS_KEY
     
     return {"SITE_URL": settings.SITE_URL, "GOOGLE_MAPS_KEY": gmk}
+
+def proper_ad(request):
+    
+    u = getattr(request, "display_user", None) or request.user
+    style = Profile.get_for_user(u).style
+    
+    if random.choice([True] * 10 + [False]):
+        ad_text = GOOGLE_ADS[style]
+    else:
+        ad_text = WIKI_ADS[style]
+    
+    #######
+    
+    import os
+    CSS_URL = os.path.join(settings.MEDIA_URL, "css", "style-%s" % style)
+    
+    return {"proper_ad": ad_text, 'CSS_URL': CSS_URL}
