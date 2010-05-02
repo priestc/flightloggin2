@@ -1,6 +1,7 @@
-settings_local.py
+local_settings.py
 manage.py
 env
+.fl_env
 *.bak
 *.pyc
 *.swp

@@ -1,5 +1,5 @@
 import os, sys
-from settings_local import *
+from local_settings import *
 
 PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
 TEMPLATE_DEBUG = DEBUG

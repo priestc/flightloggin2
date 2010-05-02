@@ -1,9 +1,9 @@
 import datetime
 
-from django.db import models
-
 from django.contrib.auth.models import User
+from django.db import models
 from django.db.models import Count, Sum, Avg
+
 from logbook.models import Flight
 from route.models import RouteBase, Route
 from plane.models import Plane
@@ -149,7 +149,7 @@ class Stat(object):
 
     def __init__(self):
         
-        self.base_flights = Flight.objects.user('ALL')
+        self.base_flights = Flight.objects.user('ALL').exclude(total__gt=24)
         
         self.users = User.objects.count()
         self.today = datetime.date.today()
@@ -187,10 +187,9 @@ class Stat(object):
     #--------------------------------------------------------------------------
     
     def calc_day_wmh(self):
-        """day with the most hours logged, ignoring entries > 24h"""
+        """day with the most hours logged"""
         item = self.base_flights\
                      .values('total', 'date')\
-                     .filter(total__lte=24)\
                      .values('date')\
                      .annotate(t=Sum('total'))\
                      .order_by('-t')[0]
@@ -229,7 +228,7 @@ class Stat(object):
         return self.fsd.count()
     
     def calc_time_7_days(self):
-        return self.fsd.exclude(total__gte=24).aggregate(s=Sum('total'))['s'] 
+        return self.fsd.aggregate(s=Sum('total'))['s'] 
                           
     def calc_auv(self):
         """
@@ -279,7 +278,7 @@ class Stat(object):
         Average length of each flight, excluding adjustment entries
         """
         
-        hours = self.base_flights.exclude(total__gte=24).aggregate(t=Sum('total'))['t']
+        hours = self.base_flights.aggregate(t=Sum('total'))['t']
         return hours / self.total_logged
     
     def calc_avg_per_active(self):

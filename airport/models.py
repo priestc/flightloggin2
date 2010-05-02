@@ -3,7 +3,7 @@
 import os
 
 from django.contrib.gis.db import models
-from django.contrib.gis.utils import LayerMapping
+#from django.contrib.gis.utils import LayerMapping
 from django.contrib.auth.models import User
 from django.db.models import Count
 from django.http import Http404

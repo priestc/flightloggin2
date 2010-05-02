@@ -3,9 +3,9 @@
 # only let thi script run on the development server (chris-comp), 
 # otherwise it will clear the production database, and that would not be good
 
-if [ $(hostname) != 'chris-comp' ]
+if [ $(hostname) != 'chris-desktop' ]
 then
-    echo "not chris-comp";
+    echo "not chris-desktop";
     exit
 fi
 
@@ -22,6 +22,6 @@ do
 done
 
 echo "$NEWEST";
-pg_restore "$NEWEST" --clean -U postgres -d logbook
+pg_restore "$NEWEST" --clean -U chris -d logbook
 
 exit
