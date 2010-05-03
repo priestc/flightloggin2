@@ -1,4 +1,5 @@
 from django.utils.safestring import mark_safe
+from django.http import Http404
 from annoying.decorators import render_to
 from share.decorator import no_share
 
@@ -25,6 +26,9 @@ def linegraph_image(request, columns, dates=None, ext='png',
     plots = []
     columns = columns.split('-')
     for column in columns:
+
+        if column not in GRAPH_FIELDS:
+            raise Http404
         
         if len(columns) > 1:
             color = PLOT_COLORS[column]
@@ -141,24 +145,24 @@ def linegraphs(request):
 @no_share('other')
 @render_to('bargraphs.html')
 def bargraphs(request):
-    """the view function that renders the bargraph builder interface"""   
+    """
+    the view function that renders the bargraph builder interface
+    """
+    
     from constants import BAR_AGG_FIELDS, BAR_FIELDS
     
     column_options = []
+    a = column_options.append
     for field in BAR_FIELDS:
-        column_options.append("<option value=\"%s\">%s</option>" %
-                                        (field, FIELD_TITLES[field])
-        )
+        a("<option value=\"%s\">%s</option>" % (field, FIELD_TITLES[field]))
     
     agg_options = []
-    
+    a = agg_options.append
     for field in BAR_AGG_FIELDS:
         sys = field.split('By ')[1].lower().replace(" ",'_').replace('/','_')
         sel = ""
         if field == "By Type": sel = " selected=\"selected\"" #default
-        agg_options.append("<option value=\"%s\"%s>%s</option>" %
-                                (sys, sel, field)
-        )
+        a("<option value=\"%s\"%s>%s</option>" % (sys, sel, field))
         
     column_options = mark_safe("\n".join(column_options))
     agg_options = mark_safe("\n".join(agg_options))

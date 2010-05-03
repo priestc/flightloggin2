@@ -106,9 +106,12 @@ class MakeRoute(object):
                                                   loc_class=3,
                                                   identifier=ident)
         else:
-            cu = Location.goon(loc_class=3,
+            try:
+                cu = Location.objects.filter(loc_class=3,
                                user=self.user,
-                               identifier=ident)
+                               identifier=ident)[0]
+            except IndexError:
+                cu = None
 
         if cu:
             return RouteBase(location=cu, sequence=i)
