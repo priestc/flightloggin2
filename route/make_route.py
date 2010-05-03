@@ -81,8 +81,12 @@ class MakeRoute(object):
             # no previous routebases,
             # dont other with the extra queries trying to find the nearest 
             # based on the last
-            navaid = Location.goon(loc_class=2,
-                                   identifier=ident)
+            try:
+                navaid = Location.objects.filter(loc_class=2,
+                                   identifier=ident)[0]
+            except IndexError:
+                navaid = None
+                
         if navaid:
             return RouteBase(location=navaid, sequence=i)
         else:
