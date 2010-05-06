@@ -1,7 +1,0 @@
-#! /bin/bash
-
-cd /srv/flightloggin
-
-pg_dump --clean --format=c -U postgres logbook > dump
-
-exit
