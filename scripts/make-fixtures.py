@@ -13,7 +13,7 @@ from local_settings import AWS_SECRET_KEY, AWS_ACCESS_KEY
 # do the dump
 os.system("pg_dump --clean --format=c -U postgres logbook > this_dump")
 
-conn = S3Connection()
+conn = S3Connection(AWS_ACCESS_KEY, AWS_SECRET_KEY)
 bucket = conn.get_bucket('fl_dumps')
 
 k = Key(bucket)
