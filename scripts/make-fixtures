@@ -1,7 +1,0 @@
-#!/usr/bin/env python
-# dump the database, then send it to Amazon S3
-
-import os
-import boto
-
-os.system("pg_dump --clean --format=c -U postgres logbook > this_dump")
