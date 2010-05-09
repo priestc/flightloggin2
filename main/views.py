@@ -1,3 +1,6 @@
+from django.http import HttpResponse
+from django.views.decorators.cache import never_cache
+
 from annoying.decorators import render_to
 from models import NewsItem, HelpItem
 
@@ -26,4 +29,6 @@ def not_found(request):
 def handler500(request):
     return {'shared': False}
 
-
+@never_cache
+def is_alive(request):
+    return HttpResponse("OK", mimetype="text/plain")

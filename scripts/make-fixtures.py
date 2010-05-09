@@ -13,12 +13,13 @@ from local_settings import AWS_SECRET_KEY, AWS_ACCESS_KEY
 # do the dump only if it already hasn't been done yet
 if not os.path.exists('this_dump'):
     os.system("pg_dump --clean --format=c -U postgres logbook > this_dump")
+else:
+    print("skipping dump because it already exists")
 
 conn = S3Connection(AWS_ACCESS_KEY, AWS_SECRET_KEY)
 bucket = conn.get_bucket('fl_dumps')
 
 k = Key(bucket)
-
 k.key = datetime.datetime.now().isoformat()
 
 #set the timestamp for later retrieval

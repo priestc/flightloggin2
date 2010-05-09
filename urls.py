@@ -72,6 +72,11 @@ urlpatterns += patterns('',
         "main.views.help",
                                                                    name="help",
     ),
+
+    (
+        r'^is_alive$',
+        "main.views.is_alive"
+    ),
     
     url(
         r'^privacy_policy.html$',
