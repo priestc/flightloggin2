@@ -56,7 +56,7 @@ class FAA_Landing(Currency):
             
         if cat_class:
             # filter by plane cat/class
-            qs = qs.filter(plane__cat_class=cat_class)
+            qs = qs.filter(plane__cat_class=cat_class, plane__retired=False)
         
         if tr:               
             # filter by type rating 
