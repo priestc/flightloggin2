@@ -1,78 +1,63 @@
 #popup
-    position: absolute
-    top: 50px
-    left: 50px
-    display: none
-    width: 380px
-    background= !popup_bg
-    font-size: small !important
+  position: absolute
+  top: 50px
+  left: 50px
+  display: none
+  width: 380px
+  background: $popup_bg
+  font-size: small !important
+  text-align: center
+  overflow: hidden
+  border: 2px solid #000
+  input[type="button"]
+    margin: 10px
+  table
+    margin-left: auto
+    margin-right: auto
+  // for the events, location, and planes popups
+  table.single_column
+    width: 100%
+    td
+      text-align: left
+    th
+      text-align: right
+      padding-right: 5px
+      font-weight: normal
+    td.empty_row
+      font-weight: bold
+      font-size: large
+      padding: 10px
+    input, textarea, select
+      width: 200px
+    textarea
+      height: 50px
+  ul.errorlist
+    color: red
+    margin: 0
+    margin-left: auto
+    margin-right: auto
+    padding: 0px
+    width: 80%
+    list-style-type: none
     text-align: center
-    overflow: hidden
-    border: 2px solid black
-    
-    
-    input[type="button"]
-        margin: 10px
-        
-    table
-        margin-left: auto
-        margin-right: auto
-    
-    // for the events, location, and planes popups
-    table.single_column
+    border: 1px dotted red
+  #dragbar
+    background: $popup_header
+    width: 100%
+    text-align: right
+    margin-bottom: 0.5em
+    border-bottom: 1px solid #000
+    color: $popup_header_text
+    td
+      &:first-child
         width: 100%
-        td
-            text-align: left
-        th
-            text-align: right
-            padding-right: 5px 
-            font-weight: normal
-            
-        td.empty_row
-            font-weight: bold
-            font-size: large
-            padding: 10px
-        
-        input, textarea, select
-            width: 200px
-        
-        textarea
-            height: 50px
-    
-    ul.errorlist
-        color: red
-        margin: 0
-        margin-left: auto
-        margin-right: auto
-        padding: 0px
-        width: 80%
-        list-style-type: none
         text-align: center
-        border: 1px dotted red
-
-    #dragbar
-        background= !popup_header
-        width: 100%
+        font-weight: bold
+        font-size: larger
+      &:last-child
         text-align: right
-        margin-bottom: .5em
-        border-bottom: 1px solid black
-        color= !popup_header_text
-        
-        td
-            &:first-child
-                width: 100%
-                text-align: center
-                font-weight: bold
-                font-size: larger
-
-            &:last-child
-                text-align: right
-
-
-        #close_x
-            cursor: pointer
-            font-weight: bold
-
-
-    #edit_buttons, #new_buttons
-        padding: 10px
+    #close_x
+      cursor: pointer
+      font-weight: bold
+  #edit_buttons, #new_buttons
+    padding: 10px

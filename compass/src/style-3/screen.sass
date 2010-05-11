@@ -1,62 +1,60 @@
-/*
-  Welcome to Compass.
-  In this file you should write your main styles. (or centralize your imports)
-  Import this file using the following HTML or equivalent:
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
 
 //@import compass/reset.sass
 
-/*
-  The *:focus rule is reset and suppresses link outlining.
-  You _must_ remember to redefine your own outline, as it’s an important accessibility aid. E.g.
-  *:focus
-    outline: #ccc dotted medium
+/* The *:focus rule is reset and suppresses link outlining.
+ * You _must_ remember to redefine your own outline, as it’s an important accessibility aid. E.g.
+ * *:focus
+ *   outline: #ccc dotted medium
 
 // white background (peach theme)
-!raw_text = red
-!bg = white
-!h1 = "red"
-!h2 = "#DF6B1A"
+$raw_text: red
+$bg: #fff
+$h1: red
+$h2: unquote("#DF6B1A")
 
-!navbar = #E58D7B
-!navbar_text = white
-!navbar_dot = red
-!navbar_current = #D52741
-!navbar_border = "1px dashed purple"
+$navbar: #e58d7b
+$navbar_text: #fff
+$navbar_dot: red
+$navbar_current: #d52741
+$navbar_border: unquote("1px dashed purple")
 
 // canvas
-!canvas = white
-!canvas_text = black
-!canvas_link = #C47E53
+$canvas: #fff
+$canvas_text: #000
+$canvas_link: #c47e53
 
 // logbook
-!remarks_tag = #2731A1
-!logbook_header = #E1BD6B
-!logbook_header_text = black
-!logbook_strip1 = white
-!logbook_strip2 = #FFF2E4
-!logbook_border = "1px dotted #ddd"
-!small_popup = white
+$remarks_tag: #2731a1
+$logbook_header: #e1bd6b
+$logbook_header_text: #000
+$logbook_strip1: #fff
+$logbook_strip2: #fff2e4
+$logbook_border: unquote("1px dotted #ddd")
+$small_popup: #fff
 
 // popup
-!popup_bg = white
-!popup_header = !navbar
-!popup_header_text = black
-!popup_footer = !navbar
+$popup_bg: #fff
+$popup_header: $navbar
+$popup_header_text: #000
+$popup_footer: $navbar
 
 // minor table
-!minor_strip1 = #FFDDB6
-!minor_strip2 = #E2E2E2
-!minor_text = black
-!minor_header_text = white
+$minor_strip1: #ffddb6
+$minor_strip2: #e2e2e2
+$minor_text: #000
+$minor_header_text: #fff
 
 // filter
-!filter = #E5BBC1
+$filter: #e5bbc1
 
 // currency
-!currency_current = #E58D7B
-!currency_alert = #AE345E
-!currency_expired = #999
+$currency_current: #e58d7b
+$currency_alert: #ae345e
+$currency_expired: #999
 
 ///////////////////////////////////////////
 

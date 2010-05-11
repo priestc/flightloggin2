@@ -1,73 +1,54 @@
 table.mass_table
-    border-collapse: collapse
-    margin: 0 auto 0 auto
-    background: white
-    border-collapse: collapse
+  border-collapse: collapse
+  margin: 0 auto 0 auto
+  background: #fff
+  border-collapse: collapse
+  overflow: visible
+  input
+    font-size: small
+  tr.header_row td
+    font-size: x-small
+    background: #fff
+    padding: 0
+  tr:nth-child(even)
+    background: #ddd
+  div.date_holder
+    // must be big enough for the textbox and the calendar icon
+    width: 120px
+  td.date_cell
+    // just big enough for the whole text box and some padding
+    max-width: 103px
     overflow: visible
-
-    input
-        font-size: small
-
-    tr.header_row td
-        font-size: x-small
-        background: white
-        padding: 0
-
-    tr:nth-child(even)
-        background: #DDDDDD
-
-    div.date_holder
-        // must be big enough for the textbox and the calendar icon
-        width: 120px
-        
-    td.date_cell
-        // just big enough for the whole text box and some padding
-        max-width: 103px
-        overflow: visible
-
-    input
-        margin: 0
-
-        &.float_line
-            width: 2.4em
-            margin: 1px
-        
-        &[id$='date']
-            // just big enough for the date: '2010-04-01'
-            width: 100px
-        
-        &[id$='tags']
-            width: 10em
-        
-        &[id$='tailnumber']
-            width: 4.5em
-            
-        &[id$='model']
-            width: 5em
-            
-        &[id$='manufacturer']
-            width: 5em
-            
-        &[id$='type']
-            width: 5em
-            
-        &[id$='description']
-            width: 10em
-            
-        &[id$='fuel_burn']
-            width: 6em
-            
-        &[id$='route_string']
-            width: 10em
-            
-        &[id$='person']
-            width: 8em
-            
-        &[id$='plane']
-            width: 6em
-    select   
-        &[id$='cat_class']
-            width: 10em
-            
-        &[id$='plane']
-            width: 10em
+  input
+    margin: 0
+    &.float_line
+      width: 2.4em
+      margin: 1px
+    &[id$='date']
+      // just big enough for the date: '2010-04-01'
+      width: 100px
+    &[id$='tags']
+      width: 10em
+    &[id$='tailnumber']
+      width: 4.5em
+    &[id$='model']
+      width: 5em
+    &[id$='manufacturer']
+      width: 5em
+    &[id$='type']
+      width: 5em
+    &[id$='description']
+      width: 10em
+    &[id$='fuel_burn']
+      width: 6em
+    &[id$='route_string']
+      width: 10em
+    &[id$='person']
+      width: 8em
+    &[id$='plane']
+      width: 6em
+  select
+    &[id$='cat_class']
+      width: 10em
+    &[id$='plane']
+      width: 10em

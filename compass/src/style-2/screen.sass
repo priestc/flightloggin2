@@ -1,62 +1,60 @@
-/*
-  Welcome to Compass.
-  In this file you should write your main styles. (or centralize your imports)
-  Import this file using the following HTML or equivalent:
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
 
 //@import compass/reset.sass
 
-/*
-  The *:focus rule is reset and suppresses link outlining.
-  You _must_ remember to redefine your own outline, as it’s an important accessibility aid. E.g.
-  *:focus
-    outline: #ccc dotted medium
+/* The *:focus rule is reset and suppresses link outlining.
+ * You _must_ remember to redefine your own outline, as it’s an important accessibility aid. E.g.
+ * *:focus
+ *   outline: #ccc dotted medium
 
 // blue background
-!raw_text = black
-!bg = #CCE4EB
-!h1 = blue
-!h2 = #3899C2
+$raw_text: #000
+$bg: #cce4eb
+$h1: blue
+$h2: #3899c2
 
-!navbar = #665B1E
-!navbar_text = white
-!navbar_dot = white
-!navbar_current = #5DC7E9
-!navbar_border = "none"
+$navbar: #665b1e
+$navbar_text: #fff
+$navbar_dot: #fff
+$navbar_current: #5dc7e9
+$navbar_border: none
 
 // canvas
-!canvas = white
-!canvas_text = black
-!canvas_link = #001147
+$canvas: #fff
+$canvas_text: #000
+$canvas_link: #001147
 
 // logbook
-!remarks_tag = "darkred"
-!logbook_header = #E0FFFF
-!logbook_header_text = black
-!logbook_strip1 = white
-!logbook_strip2 = #E2EEEE
-!logbook_border = "1px solid #c3c3c3"
-!small_popup = white
+$remarks_tag: darkred
+$logbook_header: #e0ffff
+$logbook_header_text: #000
+$logbook_strip1: #fff
+$logbook_strip2: #e2eeee
+$logbook_border: unquote("1px solid #c3c3c3")
+$small_popup: #fff
 
 // popup
-!popup_bg = #E8F8FF
-!popup_header = !navbar
-!popup_header_text = white
-!popup_footer = !navbar
+$popup_bg: #e8f8ff
+$popup_header: $navbar
+$popup_header_text: #fff
+$popup_footer: $navbar
 
 // minor table
-!minor_strip1 = #DFDFDF
-!minor_strip2 = #E2EEEE
-!minor_text = black
-!minor_header_text = white
+$minor_strip1: #dfdfdf
+$minor_strip2: #e2eeee
+$minor_text: #000
+$minor_header_text: #fff
 
 // filter
-!filter = white
+$filter: #fff
 
 //currency
-!currency_current = #E1B053
-!currency_alert = #AE345E
-!currency_expired = #555
+$currency_current: #e1b053
+$currency_alert: #ae345e
+$currency_expired: #555
 
 ///////////////////////////////////////////
 

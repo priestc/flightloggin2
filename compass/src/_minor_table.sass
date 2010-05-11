@@ -1,29 +1,24 @@
 // table for events, planes, and places
 
 table.minor_table
-    width: 100%
-    font-size: small
-    border-collapse: collapse
-
-    thead td, tfoot td
-        border: 1px solid #C3C3C3
-        background= !logbook_header
-        color= !logbook_header_text
-        font-weight: normal
-        padding: 2px
-
-    td
-        border: 1px solid #C3C3C3
-        padding: 2px
-        color= !minor_text
-
-    tr
-        &:nth-child(odd)
-            background= !minor_strip2
-
-        &:nth-child(even)
-            background= !minor_strip1
-
-    td.nothing
-        font-size: x-large
-        padding: 10px
+  width: 100%
+  font-size: small
+  border-collapse: collapse
+  thead td, tfoot td
+    border: 1px solid #c3c3c3
+    background: $logbook_header
+    color: $logbook_header_text
+    font-weight: normal
+    padding: 2px
+  td
+    border: 1px solid #c3c3c3
+    padding: 2px
+    color: $minor_text
+  tr
+    &:nth-child(odd)
+      background: $minor_strip2
+    &:nth-child(even)
+      background: $minor_strip1
+  td.nothing
+    font-size: x-large
+    padding: 10px

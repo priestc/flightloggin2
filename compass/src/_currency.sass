@@ -1,95 +1,73 @@
 div#currency_canvas_wrapper
-    text-align: left
-    
-    p
-        margin-top: 3px
-        
-    h2
-        margin-left: auto
-        margin-right: auto
-
+  text-align: left
+  p
+    margin-top: 3px
+  h2
+    margin-left: auto
+    margin-right: auto
+  h3
+    font-size: large
+    color: #000
+    margin: 11px 0 5px 0
+  div.currbox
+    width: 100%
+    overflow: hidden
+    margin-bottom: 10px
+    text-align: center
+  div
+    &.inner_currbox
+      border: 1px solid #000
+      width: 49%
+      height: 100px
+    &.medical_third
+      border: 1px solid #000
+      width: 32%
+      height: 100px
+      float: left
+      margin: 5px
+    &.inst_four
+      border: 1px solid #000
+      width: 23.5%
+      height: 50px
+      float: left
+      margin: 5px
+      font-size: xx-small
+      padding-top: 3px
+    &.day
+      float: left
+    &.night
+      float: right
+    &.bfr
+      float: left
+    &.cfi
+      float: right
+  .expired, .never
+    background-color: $currency_expired
+  .current
+    background-color: $currency_current
+  .alert
+    background-color: $currency_alert
+  table.currbox
+    width: 100%
+    border: 1px solid #000
+    text-align: center
+    font-size: xx-small
+    height: 100px
+    border-collapse: collapse
+    margin-bottom: 10px
+    strong
+      font-size: small
+    td
+      border: 1px solid #000
+      padding: 0px
     h3
-        font-size: large
-        color: black
-        margin: 11px 0 5px 0
-
-    div.currbox
-        width: 100%
-        overflow: hidden
-        margin-bottom: 10px
-        text-align: center
-        
-    div
-        &.inner_currbox
-            border: 1px solid black
-            width: 49%
-            height: 100px
-
-        &.medical_third
-            border: 1px solid black
-            width: 32%
-            height: 100px
-            float: left
-            margin: 5px
-
-        &.inst_four
-            border: 1px solid black
-            width: 23.5%
-            height: 50px
-            float: left
-            margin: 5px
-            font-size: xx-small
-            padding-top: 3px
-
-        &.day
-            float: left
-
-        &.night
-            float: right
-
-        &.bfr
-            float: left
-
-        &.cfi
-            float: right
-
-    .expired, .never
-        background-color= !currency_expired
-
-    .current
-        background-color= !currency_current
-
-    .alert
-        background-color= !currency_alert
-
-    table.currbox
-        width: 100%
-        border: 1px solid black
-        text-align: center
-        font-size: xx-small
-        height: 100px
-        border-collapse: collapse
-        margin-bottom: 10px
-
-        strong
-            font-size: small
-
-        td
-            border: 1px solid black
-            padding: 0px
-
-        h3
-            margin-top: 0px
-
-
-    table
-        &.instrument td
-            width: 25%
-
-        &.medical td
-            width: 33%
-            
-    .nothing
-        font-size: large
-        margin: 10px
-        text-align: center
+      margin-top: 0px
+  table
+    &.instrument td
+      width: 25%
+    &.medical td
+      width: 33%
+  .nothing
+    font-size: large
+    margin: 10px
+    text-align: center
