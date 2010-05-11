@@ -17,6 +17,7 @@ COLUMN_NAMES = {
     "AIRCRAFT MAKE & MODEL": 'type',
     "TYPE": 'type',
     "A/C TYPE": 'type',
+    'TYPE ACFT': 'type',
 
     "ROUTE OF FLIGHT": 'route',
     "ROUTE": 'route',
