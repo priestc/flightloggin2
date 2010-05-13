@@ -66,7 +66,7 @@ class TotalsSig(BaseSig):
                             for text in self.title_columns)
         
         # the total width in pixels of the numerical section
-        self.d_width = max(self.font.getsize(" %.1f " % num)[0]
+        self.d_width = max(self.font.getsize(" %.1f " % (num or 0))[0]
                             for num in self.data.values())
         
         width_padding = 0
