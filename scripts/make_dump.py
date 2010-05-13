@@ -22,10 +22,6 @@ bucket = conn.get_bucket('fl_dumps')
 k = Key(bucket)
 k.key = datetime.datetime.now().isoformat()
 
-#set the timestamp for later retrieval
-ts = time.mktime(datetime.datetime.now().timetuple())
-k.set_metadata('timestamp', str(int(ts)))
-
 #upload file
 k.set_contents_from_filename('this_dump')
 

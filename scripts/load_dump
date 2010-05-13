@@ -1,0 +1,18 @@
+#! /bin/bash
+
+# only let thi script run on the development server (chris-desktop), 
+# otherwise it may clear the production database, and that would not be good
+
+if [ $(hostname) != 'chris-desktop' ]
+then
+    echo "not chris-desktop";
+    exit
+fi
+
+cd /srv/flightloggin/scripts
+./get_dump.py
+
+cd /srv/flightloggin/dumps;
+pg_restore latest_dump --clean -U chris -d logbook
+
+exit 0;
