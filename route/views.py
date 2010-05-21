@@ -2,14 +2,6 @@ from django.http import HttpResponse
 from models import Route
 from annoying.decorators import render_to
 
-def del_routes(request):
-       
-    count=Route.objects.filter(flight__pk__isnull=True).count()
-    Route.objects.filter(flight__pk__isnull=True).delete()
-    return HttpResponse("%s routes deleted" % count,
-                        mimetype='text/plain')
-                        
-
 @render_to('route_profile.html')
 def route_profile(request, r):
     from django.contrib.auth.models import User

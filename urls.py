@@ -203,11 +203,6 @@ urlpatterns += patterns('',
         {'feed_dict': feeds},
     ),
     
-    (
-        r'^del-routes\.py$',
-        "route.views.del_routes",
-    ),
-    
     url(
         r'^schedule-(?P<schedule>\w+).py$',
         "backup.views.schedule",

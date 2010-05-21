@@ -4,6 +4,7 @@ from django.views.decorators.cache import cache_page
 from annoying.decorators import render_to
 
 from models import Stat
+from route.models import Route
 from share.decorator import secret_key
 
 from utils import *
@@ -42,7 +43,13 @@ def site_stats(request):
 
 @secret_key
 def save_to_db(request):
-
+    """
+    Renders the stats
+    """
+    
+    # remove all empty routes first
+    Route.objects.filter(flight__pk__isnull=True).delete()
+    
     start = datetime.datetime.now()
     ss = Stat()
     ss.save_to_db()
