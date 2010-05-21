@@ -6,6 +6,8 @@ TEMPLATE_DEBUG = DEBUG
 
 AUTH_PROFILE_MODULE = 'profile.profile'
 
+GOOGLE_ANALYTICS_CODE = "UA-501381-5"
+
 ## gravatar settings
 GRAVATAR_DEFAULT_IMAGE = "http://flightlogg.in/fl-media/images/empty.png"
 
