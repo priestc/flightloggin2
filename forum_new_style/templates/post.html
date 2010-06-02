@@ -3,16 +3,13 @@
         <td style="width:10em; text-align: left">
             <u>
             {% if post.as_admin %}
-            <strong>
+            <strong>**
             {% endif %}
             
-            {% if post.as_anon %}
-                Anonymous
-            {% else %}
-                {{ post.user|default:"Anonymous" }}
-            {% endif %}
+            {{ post.poster }}
+            
             {% if post.as_admin %}
-                ** admin **</strong>
+                **</strong>
             {% endif %}
             </u>
 
@@ -21,7 +18,7 @@
             </small>
 
             {% if admin_rights %}
-                <br><a alt="Delete this post" onclick="return confirm('Are you sure? This deletes this post forever')" href="{% url forum:delete post.id post.timehash %}">X</a>
+                <br><a alt="Delete this post" onclick="return confirm('Are you sure? You are about to delete this post forever')" href="{% url forum:delete post.id post.timehash %}">X</a>
             {% endif %}
         </td>
         

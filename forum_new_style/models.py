@@ -115,3 +115,16 @@ class Post(models.Model):
         """
         
         return self.posted_time.microsecond
+    
+    def poster(self):
+        """
+        Print out the name of the user who has made this post with respect
+        to the anonymity the user has chosen.
+        """
+        
+        if self.as_anon and not self.as_admin:
+            return "Anonymous"
+        elif self.as_anon and self.as_admin:
+            return "Admin"
+        else:
+            return self.user.username
