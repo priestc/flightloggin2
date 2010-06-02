@@ -233,8 +233,7 @@ def get_captcha_error(request):
     it always returns no errors.
     """
     
-    if request.POST.get("recaptcha_challenge_field", None) and captcha:
-        # Check the form captcha.  If not good, pass the template an error code
+    if settings.FORUM_USE_RECAPTCHA and captcha:
         captcha_response = captcha.submit(
                 request.POST.get("recaptcha_challenge_field", None),
                 request.POST.get("recaptcha_response_field", None),
