@@ -21,7 +21,7 @@
             </small>
 
             {% if admin_rights %}
-                <br><a href="{% url forum:delete post.id post.timehash %}">X</a>
+                <br><a alt="Delete this post" onclick="return confirm('Are you sure? This deletes this post forever')" href="{% url forum:delete post.id post.timehash %}">X</a>
             {% endif %}
         </td>
         
