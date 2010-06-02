@@ -38,7 +38,9 @@ class Forum(models.Model):
     
     def threads_by_bumped(self):
         """
-        Return all threads ordered by last bumped datetime
+        Return all threads ordered by last bumped datetimeas a queryset
+        annotated with 'bumped'
+        (vbulletin style)
         """
         
         return self.thread_set\
@@ -47,7 +49,9 @@ class Forum(models.Model):
                    
     def threads_by_op(self):
         """
-        Return all threads ordered by date of the first post
+        Return all threads ordered by date of the first post as a queryset
+        annotated with 'bumped'
+        (google groups style)
         """
         
         return self.thread_set\
@@ -70,26 +74,26 @@ class Thread(models.Model):
     
     def op(self):
         """
-        Return the name of the user who made the first post in this thread
+        Return the first post in this thread
         """
         
-        op = self.post_set\
-                 .values_list('user__username', flat=True)\
-                 .order_by('posted_time')
+        op = self.post_set.order_by('posted_time').select_related()
         
         if not op:
-            return "Nobody"
+            return Post()
                
-        return op[0] or "Anonymous"
+        return op[0]
 
     
     def last_bumped(self):
-        lb = self.post_set\
-                 .values_list('posted_time', flat=True)\
-                 .order_by('-posted_time')
-        
+        """
+        Returs a datetime object of when the last post was made in this thread
+        """
+
         try:
-            return lb[0]
+            return self.post_set\
+                       .values_list('posted_time', flat=True)\
+                       .order_by('-posted_time')[0]
         except IndexError:
             # thread has no posts for whatever reason
             return "Never"

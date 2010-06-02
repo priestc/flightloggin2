@@ -20,8 +20,16 @@
 {% for thread in threads %}
 
     <tr>
-        <td style="text-align: left"><a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a></td>
-        <td>{{ thread.op }}</td>
+        <td style="text-align: left">
+            <a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a>
+        </td>
+            
+        <td>
+            {% if thread.op.as_admin %}<strong>**{% endif %}
+            {{ thread.op.poster }}
+            {% if thread.op.as_admin %}**</strong>{% endif %}
+        </td>
+            
         <td>{{ thread.post_count }}</td>
         <td>{{ thread.last_bumped|date:"Y M d - G:i:s T" }}</td>
     </tr>
