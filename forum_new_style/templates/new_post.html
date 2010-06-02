@@ -1,0 +1,48 @@
+<form method="post" action=".">
+<table style="padding: 10px; margin: 10px auto 10px auto; background: #d0d0d0">
+    <tr>
+        <td>{% if threadform %}
+        <big>Make New Thread</big>
+        {% else %}
+        <big>Make New Reply</big>
+        {% endif %}
+        </td>
+    </tr>
+    
+    {% if threadform %}
+    <tr>
+        <td>{{ threadform.title.label_tag }} {{ threadform.title }}</td>
+    </tr>
+    {% endif %}
+    
+    <tr>
+        <td>{{ postform.body }}</td>
+    </tr>
+    
+    <tr>
+        <td>
+        {% if user.is_staff %}
+            {{ postform.as_admin.label_tag }}{{ postform.as_admin }}
+            {{ postform.as_anon.label_tag }}{{ postform.as_anon }}
+        {% else %}
+            {% if user.is_authenticated %}
+                {{ postform.as_anon.label_tag }}{{ postform.as_anon }}</td>
+            {% else %}
+                You are not logged in, this post will be anonymous
+                <style>
+                div#recaptcha_area {margin: 0 auto 0 auto}
+                </style>
+                <div>{{ recaptcha }}</div>
+            {% endif %}
+        {% endif %}
+    </tr>
+
+    <tr>
+        <td><input type="submit" value="Submit New {{ button }}"></td>
+    </tr>
+</table>
+<div>
+{{ postform.thread_id }}{{ postform.user_id }}
+{{ postform.spam_prevent }}{{ threadform.forum_id }}
+</div>
+</form>

@@ -14,8 +14,11 @@ GRAVATAR_DEFAULT_IMAGE = "http://flightlogg.in/fl-media/images/empty.png"
 ## postgis setting for testing
 TEST_RUNNER='django.contrib.gis.tests.run_tests'
 
-# debug bar settings#############################
+# forum new style settings
+FORUM_USE_RECAPTCHA = True
+RECAPTCHA_PUBLIC_KEY = '6LeOlLoSAAAAAIQyHuTVkL0gRmY0A36igAExm7le'
 
+# debug bar settings#############################
 INTERNAL_IPS = ('127.0.0.1','192.168.1.145')
 DEBUG_TOOLBAR_CONFIG = {"INTERCEPT_REDIRECTS": False}
 
@@ -63,17 +66,17 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.load_template_source',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES = [
     'facebook.djangofb.FacebookMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'pagination.middleware.PaginationMiddleware',
     'share.middleware.share.ShareMiddleware',
-)
+]
 
 if DEBUG_TOOLBAR:
-    MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware', )
+    MIDDLEWARE_CLASSES += ['debug_toolbar.middleware.DebugToolbarMiddleware', ]
 
 ROOT_URLCONF = 'flightloggin.urls'
 
@@ -81,7 +84,7 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_PATH, 'templates')
 )
 
-INSTALLED_APPS += (
+INSTALLED_APPS += [
     'logbook',
     'records',
     'plane',
@@ -101,6 +104,7 @@ INSTALLED_APPS += (
     'milestones',
     'manage',
     'facebook_app',
+    'forum_new_style',
     
     'tagging',
     'pagination',
@@ -116,10 +120,10 @@ INSTALLED_APPS += (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.sitemaps',
-)
+]
 
 if DEBUG_TOOLBAR:
-    INSTALLED_APPS += ('debug_toolbar', )
+    INSTALLED_APPS += ['debug_toolbar', ]
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.auth',

@@ -1,0 +1,32 @@
+<table style="width: 100%; text-align: left; border: 1px solid black; margin: 4px; padding: 3px; background: #dfdfdf">
+    <tr>
+        <td style="width:10em; text-align: left">
+            <u>
+            {% if post.as_admin %}
+            <strong>
+            {% endif %}
+            
+            {% if post.as_anon %}
+                Anonymous
+            {% else %}
+                {{ post.user|default:"Anonymous" }}
+            {% endif %}
+            {% if post.as_admin %}
+                ** admin **</strong>
+            {% endif %}
+            </u>
+
+            <small><br>{{ post.posted_time|date:"Y M d" }}<br>
+            {{ post.posted_time|date:"G:i:s T" }}
+            </small>
+
+            {% if admin_rights %}
+                <br><a href="{% url forum:delete post.id post.timehash %}">X</a>
+            {% endif %}
+        </td>
+        
+        <td style="text-align: left">
+            {{ post.body }}
+        </td>
+    </tr>
+</table>

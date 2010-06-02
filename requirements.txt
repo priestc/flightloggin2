@@ -1,9 +1,9 @@
--e svn+http://code.djangoproject.com/svn/django/trunk@12806#egg=Django-1.2_beta_1-py2.6-dev_r12806
+django==1.2.1
 #basemap==0.99.4
-django-annoying==0.7.4
--e git+http://github.com/dcramer/django-devserver.git@112d7c1653bd648165ad40586f8123cf10a4966a#egg=django_devserver-0.0.2-py2.6-dev
+hg+http://bitbucket.org/offline/django-annoying
+git+http://github.com/dcramer/django-devserver.git
 django-extensions==0.4.1
--e git+git@github.com:nbv4/django-gravatar2.git@916572613cdabd4494361dcec27b23d28ad59f74#egg=django_gravatar2-0.2.0-py2.6-dev
+git+git@github.com:nbv4/django-gravatar2.git
 -e bzr+http://bazaar.launchpad.net/~django-openid-auth/django-openid-auth/trunk/@65#egg=django_openid_auth-0.2
 django-pagination==1.0.5
 -e svn+http://django-tagging.googlecode.com/svn/trunk@185#egg=django_tagging-0.4.dev1-py2.6-dev_r185
@@ -14,6 +14,7 @@ numpy==1.3.0
 psycopg2==2.0.14
 -e git+http://github.com/sciyoshi/pyfacebook.git@7ba3654569e2b3d7ecddbe2e05693c24e6d36c24#egg=pyfacebook-0.1-py2.6-dev
 python-openid==2.2.4
+python-dateutil==1.5
 pytz==2010e
 reportlab==2.4
 termcolor==0.1.2

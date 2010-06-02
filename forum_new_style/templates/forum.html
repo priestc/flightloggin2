@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title%}{{ forum.name }}{% endblock %}
+
+{% block canvas %}
+
+<h1>
+<a href="{% url forum:index %}">Index</a> >
+{{ forum.name }}
+</h1>
+
+<table style="width: 100%; border: 1px solid black; background: #dfdfdf" >
+    <tr>
+        <th>Thread title</th>
+        <th>Thread starter</th>
+        <th>Posts</th>
+        <th>last bumped</th>
+    </tr>
+
+{% for thread in threads %}
+
+    <tr>
+        <td style="text-align: left"><a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a></td>
+        <td>{{ thread.op }}</td>
+        <td>{{ thread.post_count }}</td>
+        <td>{{ thread.last_bumped|date:"Y M d - G:i:s T" }}</td>
+    </tr>
+
+{% empty %}
+
+    <tr>
+        <td colspan="4">No posts to show</td>
+    </tr>
+
+{% endfor %}
+</table>
+
+{{ new_form }}
+
+{% endblock %}
