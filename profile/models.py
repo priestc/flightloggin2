@@ -169,9 +169,11 @@ class Profile(models.Model, GoonMixin):
         
     def adminlink(self):
         "Puts a link in the admin page for the user's logbook"
-        
-        return "<a target='_blank' href='http://beta.flightlogg.in%s'>Link</a>"\
+        try:
+            return "<a target='_blank' href='http://flightlogg.in%s'>Link</a>"\
                     % self.get_absolute_url()
+        except:
+            return "**ERROR**"
     adminlink.allow_tags = True
     adminlink.short_description="Link"
     
