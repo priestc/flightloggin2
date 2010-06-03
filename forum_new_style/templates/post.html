@@ -1,5 +1,8 @@
 <table style="width: 100%; text-align: left; border: 1px solid black; margin: 4px; padding: 3px; background: #dfdfdf">
     <tr>
+        <td><a name="{{ post.pk }}"></a></td>
+    </tr>
+    <tr>
         <td style="width:10em; text-align: left">
             <u>
             {% if post.as_admin %}
@@ -18,12 +21,14 @@
             </small>
 
             {% if admin_rights %}
-                <br><a alt="Delete this post" onclick="return confirm('Are you sure? You are about to delete this post forever')" href="{% url forum:delete post.id post.timehash %}">X</a>
+                <br><a alt="Delete this post"
+                       onclick="return confirm('Are you sure? You are about to delete this post forever')"
+                       href="{% url forum:delete post.id post.timehash %}">X</a>
             {% endif %}
         </td>
         
         <td style="text-align: left">
-            {{ post.body }}
+            {{ post.body|linebreaks }}
         </td>
     </tr>
 </table>

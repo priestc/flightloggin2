@@ -17,7 +17,7 @@ TEST_RUNNER='django.contrib.gis.tests.run_tests'
 # forum new style settings
 FORUM_USE_RECAPTCHA = True
 RECAPTCHA_PUBLIC_KEY = '6LeOlLoSAAAAAIQyHuTVkL0gRmY0A36igAExm7le'
-
+FORUM_OVERALL_NAME = "The FlightLogg.in' Forums"
 # debug bar settings#############################
 INTERNAL_IPS = ('127.0.0.1','192.168.1.145')
 DEBUG_TOOLBAR_CONFIG = {"INTERCEPT_REDIRECTS": False}

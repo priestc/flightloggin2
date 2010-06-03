@@ -45,7 +45,7 @@ class Forum(models.Model):
         
         return self.thread_set\
                    .annotate(bumped=models.Max('post__posted_time'))\
-                   .order_by('-bumped')
+                   .order_by('-bumped').select_related()
                    
     def threads_by_op(self):
         """
@@ -56,7 +56,7 @@ class Forum(models.Model):
         
         return self.thread_set\
                    .annotate(bumped=models.Min('post__posted_time'))\
-                   .order_by('-bumped')
+                   .order_by('-bumped').select_related()
     
 class Thread(models.Model):
     forum = models.ForeignKey(Forum)
@@ -83,7 +83,7 @@ class Thread(models.Model):
             return Post()
                
         return op[0]
-
+    op = property(op)
     
     def last_bumped(self):
         """
@@ -109,8 +109,15 @@ class Post(models.Model):
     flagged = models.BooleanField('Flag this post as spam', default=False)
     ip = models.IPAddressField(default="0.0.0.0") 
     
+    class Meta:
+        ordering = ['-posted_time', ]
+    
+    def get_absolute_url(self):
+        return self.thread.get_absolute_url() + "#%s" % self.pk
+    
     def __unicode__(self):
-        return "%s - %s" % (self.posted_time, getattr(self.user, "username", "Anon"))
+        return "%s - %s" % (self.posted_time,
+                            getattr(self.user, "username", "Anon"))
     
     def timehash(self):
         """
