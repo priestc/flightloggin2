@@ -2,6 +2,9 @@ from django.db import models
 from django.conf import settings
 from django.template.defaultfilters import slugify
 from django.core.urlresolvers import reverse
+from django.utils.safestring import mark_safe
+
+RSS = '<link rel="alternate" title="%s" href="%s" type="application/rss+xml">'
 
 class Forum(models.Model):
     name = models.TextField("The name of the forum (or divider)", blank=False)
@@ -46,7 +49,21 @@ class Forum(models.Model):
         return self.thread_set\
                    .annotate(bumped=models.Max('post__posted_time'))\
                    .order_by('-bumped').select_related()
-                   
+    
+    def threads_rss(self):
+        
+        title = self.name + " Threads feed"
+        url = reverse('forum:forum_post_feed', kwargs={'id': self.pk})
+        
+        return mark_safe(RSS % (title, url))
+    
+    def posts_rss(self):
+        
+        title = self.name + " Posts feed"
+        url = reverse('forum:forum_thread_feed', kwargs={'id': self.pk})
+        
+        return mark_safe(RSS % (title, url))
+                
     def threads_by_op(self):
         """
         Return all threads ordered by date of the first post as a queryset
@@ -110,7 +127,7 @@ class Post(models.Model):
     ip = models.IPAddressField(default="0.0.0.0") 
     
     class Meta:
-        ordering = ['-posted_time', ]
+        ordering = ['posted_time', ]
     
     def get_absolute_url(self):
         return self.thread.get_absolute_url() + "#%s" % self.pk

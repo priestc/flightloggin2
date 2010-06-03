@@ -2,6 +2,11 @@
 
 {% block title%}{{ forum.name }}{% endblock %}
 
+{% block javascript %}
+{{ forum.threads_rss }}
+{{ forum.posts_rss }}
+{% endblock %}
+
 {% block canvas %}
 
 <h1>

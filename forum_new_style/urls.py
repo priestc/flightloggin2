@@ -10,10 +10,6 @@ urlpatterns = patterns('forum_new_style.views',
     ),
     
     ##########################
-    
-
-    
-    ##########################
 
     url(
         r'forum/(?P<id>\d+)(?P<slug>[-\w]+)/$',
@@ -22,13 +18,13 @@ urlpatterns = patterns('forum_new_style.views',
     ),
     
     url(
-        r'forum/(?P<id>\d+)(?P<slug>[-\w]+)/thread_rss$',
+        r'forum/(?P<id>\d+)/thread_rss$',
         ForumThreadFeed(),
         name='forum_thread_feed',
     ),
     
     url(
-        r'forum/(?P<id>\d+)(?P<slug>[-\w]+)/post_rss$',
+        r'forum/(?P<id>\d+)/post_rss$',
         ForumPostFeed(),
         name='forum_post_feed',
     ),
@@ -42,7 +38,7 @@ urlpatterns = patterns('forum_new_style.views',
     ),
     
     url(
-        r'thread/(?P<id>\d+)(?P<slug>[-\w]+)/post_rss$',
+        r'thread/(?P<id>\d+)/post_rss$',
         ThreadPostFeed(),
         name='thread_post_feed',
     ),

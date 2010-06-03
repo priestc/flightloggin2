@@ -25,7 +25,7 @@ class ForumThreadFeed(GenericThreadFeed):
     Feed of all threads in one forum
     """
     
-    def get_object(self, request, slug, id):
+    def get_object(self, request, id):
         """
         Get and return the forum object that was passed in
         """
@@ -45,7 +45,7 @@ class ForumThreadFeed(GenericThreadFeed):
             disp = ""
         return "%s Threads %s" % (obj.name, disp)
         
-     def link(self, forum):
+    def link(self, forum):
         return forum.get_absolute_url()
     
 class AllThreadFeed(GenericThreadFeed):
@@ -82,7 +82,7 @@ class GenericPostFeed(Feed):
         return post.body
 
     def link(self, post):
-        return "ff" #post.thread.get_absolute_url()
+        return "ff"
 
 
 class ForumPostFeed(GenericPostFeed):
@@ -90,7 +90,7 @@ class ForumPostFeed(GenericPostFeed):
     Feed of all posts from a forum
     """
         
-    def get_object(self, request, slug, id):
+    def get_object(self, request, id):
         return get_object_or_404(Forum, pk=id)
 
     def items(self, forum):
@@ -115,7 +115,7 @@ class ThreadPostFeed(GenericPostFeed):
     Feed of all posts from a thread
     """
     
-    def get_object(self, request, slug, id):
+    def get_object(self, request, id):
         return get_object_or_404(Thread, pk=id)
 
     def items(self, thread):
