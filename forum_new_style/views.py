@@ -234,7 +234,7 @@ def get_captcha_error(request):
     it always returns no errors.
     """
     
-    if settings.FORUM_USE_RECAPTCHA and captcha:
+    if settings.FORUM_USE_RECAPTCHA and captcha and not request.user.is_authenticated():
         captcha_response = captcha.submit(
                 request.POST.get("recaptcha_challenge_field", None),
                 request.POST.get("recaptcha_response_field", None),
