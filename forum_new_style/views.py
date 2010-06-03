@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.defaultfilters import slugify
 from django.template import RequestContext
@@ -26,7 +26,7 @@ def thread_view(request, id, slug):
     Render the thread and all the posts in it
     """
     
-    thread = Thread.objects.get(pk=id)
+    thread = get_object_or_404(Thread, pk=id)
     captcha_error = ''
     errors = None
     
@@ -68,7 +68,7 @@ def forum_view(request, id, slug):
     Render the forum (the thread list), also handle the new thread form
     """
     
-    forum = Forum.objects.get(pk=id)
+    forum = get_object_or_404(Forum, pk=id)
     captcha_error = ''
     
     if request.POST:
@@ -109,6 +109,7 @@ def forum_view(request, id, slug):
 
 
 ###############################
+## all edit/new aux views below
 ###############################
 
 class Result(object):
