@@ -3,6 +3,10 @@
 
 {% block title%}{{ thread.title }}{% endblock %}
 
+{% block javascript %}
+{% rss_markup thread 'posts' }}
+{% endblock %}
+
 {% block canvas %}
 
 <h1>
@@ -17,7 +21,7 @@
 
 {% empty %}
 
-    whoops, no posts to show here
+    <h2>whoops, no posts to show here</h2>
 
 {% endfor %}
 

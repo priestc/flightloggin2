@@ -1,6 +1,12 @@
 {% extends "base.html" %}
+{% load forum_tags %}
 
 {% block title %}Forums{% endblock %}
+
+{% block javascript %}
+{% rss_markup 'all' 'threads' %}
+{% rss_markup 'all' 'posts' %}
+{% endblock %}
 
 {% block canvas %}
 <h1>Forum Index</h1>

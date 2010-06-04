@@ -1,10 +1,11 @@
 {% extends "base.html" %}
+{% load forum_tags %}
 
 {% block title%}{{ forum.name }}{% endblock %}
 
 {% block javascript %}
-{{ forum.threads_rss }}
-{{ forum.posts_rss }}
+{% rss_markup forum 'threads' %}
+{% rss_markup forum 'posts' %}
 {% endblock %}
 
 {% block canvas %}
