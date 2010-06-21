@@ -1,3 +1,5 @@
+import re
+
 from forms import ProfileForm, ColumnsForm, AutoForm, UserForm
 from models import *
 
@@ -59,20 +61,22 @@ def profile(request):
                 column_form.save()
              
             if user_form.is_valid():
-                   
-                import re
                 ## remove illegal characters and spaces
-                user_form.cleaned_data['username'] = \
-                    re.sub(r'\W', '', user_form.cleaned_data['username'])\
+                user = user_form.save(commit=False)
+                user.username = \
+                    re.sub(r'\W', '', user.username)\
                     .replace(" ",'')
                     
+                print user.username
+                 
                 if request.display_user.id == settings.DEMO_USER_ID:
                     ## don't let anyone change the demo's username or email
                     ## it will break stuff
                     user_form.cleaned_data['username'] = 'demo'
                     user_form.cleaned_data['email'] = 'demo@what.com'
                 
-                user_form.save()        
+                #assert False, user.username
+                user.save()        
     
     else:
         profile_form = ProfileForm(instance=profile)
@@ -87,6 +91,7 @@ def profile(request):
     
     bool_fields = []
     ## mix the auto button and the columns fields into the same html table
+    ## FIXME: this should all be in a template tag
     for field in OPTION_FIELDS:
         row = []
         
