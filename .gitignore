@@ -2,6 +2,7 @@ local_settings.py
 manage.py
 env
 .fl_env
+forum_new_style
 *.bak
 *.pyc
 *.swp

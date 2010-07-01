@@ -24,6 +24,8 @@
                 <br><a alt="Delete this post"
                        onclick="return confirm('Are you sure? You are about to delete this post forever')"
                        href="{% url forum:delete post.id post.timehash %}">X</a>
+                    <a alt="Edit this post"
+                       href="{% url forum:edit post.id post.timehash %}">E</a>
             {% endif %}
         </td>
         
