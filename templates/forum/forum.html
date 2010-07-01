@@ -11,7 +11,7 @@
 {% block canvas %}
 
 <h1>
-<a href="{% url forum:index %}">Index</a> >
+<a href="{% url index %}">Index</a> >
 {{ forum.name }}
 </h1>
 
@@ -20,7 +20,7 @@
         <th>Thread title</th>
         <th>Thread starter</th>
         <th>Posts</th>
-        <th>last bumped</th>
+        <th>Last bumped</th>
     </tr>
 
 {% for thread in threads %}
@@ -37,7 +37,7 @@
         </td>
             
         <td>{{ thread.post_count }}</td>
-        <td>{{ thread.last_bumped|date:"Y M d - G:i:s T" }}</td>
+        <td>{{ thread.last_bumped|date:"Y M d - G:i:s T" }} by <em>{{ thread.last_post.poster }}</em></td>
     </tr>
 
 {% empty %}
