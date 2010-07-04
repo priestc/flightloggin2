@@ -1,6 +1,6 @@
 import datetime
 
-from share.decorator import no_share, secret_key
+from share.decorator import no_share
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, Http404
 from annoying.decorators import render_to
@@ -27,7 +27,9 @@ def backup(request):
 
 @no_share('NEVER')
 def emailbackup(request):
-    """Send email backup to the user"""
+    """
+    Send email backup to the user
+    """
     
     email = EmailBackup(request.display_user)
     sent = email.send()
@@ -64,49 +66,6 @@ def submit_change(request, userid):
         done=True
     
     return locals()
-
-@secret_key
-def schedule(request, schedule):
-    """Only send out the emails to the people who's schedule is exactly the
-       one being passed as 'schedule'
-    """
-    
-    test = request.GET.get('test') == 'true'
-    
-    from django.contrib.auth.models import User
-    if schedule == 'weekly':
-        users = User.objects.filter(profile__backup_freq=1)
-    
-    elif schedule == 'biweekly':
-        users = User.objects.filter(profile__backup_freq=2)
-    
-    elif schedule == 'monthly':
-        users = User.objects.filter(profile__backup_freq=3)
-        
-    elif schedule == 'daily':
-        today = datetime.date.today()
-        users = User.objects.filter(profile__backup_freq=4,
-                                    userstoday__date=today
-                                   )
-    
-    ret = "%s - %s\n\n" % (schedule, datetime.datetime.now())    
-    for user in users:
-        try:
-            em = EmailBackup(user, auto=True)
-        except Exception, e:
-            ## do not raise exception of a single user's email can't be made,
-            ## instead print the error message to the log
-            ret +=  "ERROR: %s - %s" % (self.user, e)
-        
-        else:
-            result = em.send(test=test)
-            ret += "%s [%s]\n" % (user.username, result)
-    
-    
-    r = HttpResponse(ret, mimetype="text/plain")
-    r['Content-Disposition'] = 'attachment; filename=%s.txt' % datetime.date.today()
-
-    return r
 
 ##
 ## crontab:

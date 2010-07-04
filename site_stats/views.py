@@ -47,14 +47,6 @@ def save_to_db(request):
     Renders the stats
     """
     
-    # remove all empty routes first
-    Route.objects.filter(flight__pk__isnull=True).delete()
-    
-    start = datetime.datetime.now()
-    ss = Stat()
-    ss.save_to_db()
-    stop = datetime.datetime.now()
-    
     from django.http import HttpResponse
     return HttpResponse(str(stop-start), mimetype='text/plain')
 
