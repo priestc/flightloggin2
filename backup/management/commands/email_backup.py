@@ -69,6 +69,7 @@ class Command(NoArgsCommand):
         elif options['daily']:
             schedule = "daily"
             today = datetime.date.today()
+            records = UsersToday.objects.filter(date__gte=today)
             users = User.objects.filter(profile__backup_freq=4,
                                         userstoday__date=today)
         
