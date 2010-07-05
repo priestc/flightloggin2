@@ -148,10 +148,6 @@ urlpatterns += patterns('',
                                                                     name="root"
     ),
     
-    ############################ facebook app
-    
-
-    
     ############################ graphs
 
     (
@@ -204,18 +200,6 @@ urlpatterns += patterns('',
         {'feed_dict': feeds},
     ),
     
-    url(
-        r'^schedule-(?P<schedule>\w+).py$',
-        "backup.views.schedule",
-                                                               name="schedule",
-    ),
-    
-    url(
-        r'^stats_save\.py$',
-        "site_stats.views.save_to_db",
-                                                             name="save_stats",
-    ),
-    
     (
         r'^admin/doc/',
         include('django.contrib.admindocs.urls')
@@ -225,13 +209,6 @@ urlpatterns += patterns('',
         r'^admin/',
         include(admin.site.urls),
     ),
-    
-    (
-        r'^admin-manage\.html$',
-        direct_to_template,
-        {'template': 'manage.html'},
-    ),
-    
     
         ############################ main site 
     

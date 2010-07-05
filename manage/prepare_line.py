@@ -111,6 +111,7 @@ class Fixer(object):
         processor functions are used instead of proper_mapper to return
         values that differ than whats exactly in the CSV file
         """
+        
         proccess_function = getattr(self, column + "_processor", None)
         
         if proccess_function and callable(proccess_function):
@@ -292,28 +293,22 @@ class FlightFixer(Fixer):
         return fix_remarks( self.proper_mapper('remarks') )
         
     def pilot_checkride_processor(self):
-        if "P" in self.proper_mapper('flying'): return True
-        return False
+        return "P" in self.proper_mapper('flying')
     
     def cfi_checkride_processor(self):
-        if "C" in self.proper_mapper('flying'): return True
-        return False
+        return "C" in self.proper_mapper('flying')
     
     def ipc_processor(self):
-        if "I" in self.proper_mapper('flying'): return True
-        return False
+        return "I" in self.proper_mapper('flying')
     
     def flight_review_processor(self):
-        if "P" in self.proper_mapper('flying'): return True
-        return False
+        return "P" in self.proper_mapper('flying')
     
     def tracking_processor(self):
-        if "T" in self.proper_mapper('flying'): return True
-        return False
+        return "T" in self.proper_mapper('flying')
     
     def holding_processor(self):
-        if "H" in self.proper_mapper('flying'): return True
-        return False
+        return "H" in self.proper_mapper('flying')
 
     def route_processor(self):
         

@@ -10,8 +10,6 @@ from site_stats.models import Stat
 class Command(BaseCommand):
     help = 'Calculate all stats and save to the database'
     
-    
-    
     def handle(self, *args, **options):
         
         # remove all empty routes first for accurate distance values

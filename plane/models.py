@@ -34,12 +34,8 @@ class Plane(EnhancedModel):
     
     tags =           TagField()
     
-    #regex that matches all tailnumbers and types
-    plane_regex = r'[A-Za-z0-9-\[\]\)\(}{\.]'
-    
-    @classmethod
-    def reverse_plane_regex(cls):
-        return '[^' + cls.plane_regex[1:]
+    class Meta:
+        ordering = ["manufacturer", 'type', 'tailnumber']
     
     @classmethod
     def currency_types(cls, user):
@@ -57,49 +53,18 @@ class Plane(EnhancedModel):
                                 .values_list('type', flat=True)\
                                 .order_by()\
                                 .distinct())
-        
-    
-    def save(self, *args, **kwargs):
-        """
-        Automatically fill in make/models if they are not already supplied
-        and then save the object to the database
-        """
-        if (not self.manufacturer and
-            not self.model and
-            not self.cat_class) and self.type:
-                
-            from auto_fill import autofill
-            d = autofill(self.type)
-            
-            if d.get('manufacturer', False):
-                ## autofill hit a match, use that data
-                self.manufacturer = d['manufacturer'] or ""
-                self.model = d['model'] or ""
-                self.cat_class = d['cat_class'] or 1
-                self.tags = d['tags'] or ""
-            
-            if "frasca" in self.type.lower():
-                self.manufacturer="Frasca"
-                self.cat_class = 16
-                
-        self.clean_type()
-        self.clean_tailnumber()
-                
-        if not self.user:
-            from share.middleware import share
-            self.user = share.get_display_user()
-        
-        super(Plane, self).save(*args, **kwargs)
-    
+
     @classmethod    
     def get_users_tailnumber(cls, tailnumber):
-        """Returns the users who also have flown in this tailnumber"""
+        """
+        Returns the users who also have flown in this tailnumber
+        """
         
         from django.contrib.auth.models import User
         return User.objects\
                    .filter(profile__social=True)\
                    .filter(plane__tailnumber=tailnumber).distinct()
-                   
+
     @classmethod
     def get_profiles(cls, **kwarg):
         """
@@ -120,11 +85,66 @@ class Plane(EnhancedModel):
                    .values('user__username', 'user__id', 'logbook_share')\
                    .order_by('user__username')\
                    .distinct()
+                   
+    def __unicode__(self):
+        if self.type:
+            disp = " (%s)" % self.type
+        elif self.model:
+            disp = " (%s)" % self.model
+        elif self.manufacturer:
+            disp = " (%s)" % self.manufacturer
+        else:
+            disp = ""
+            
+        return u"%s%s" % (self.tailnumber, disp)
     
-    @classmethod
-    def regex_tail_type(cls, s):        
-        return re.sub(cls.reverse_plane_regex(), '', s or "")
+    def clean(self):
+        """
+        remove special characters and white space because they mess up
+        the url resolvers
+        """
+        
+        s = self.tailnumber
+        self.tailnumber = re.sub(r'[^A-Za-z0-9-\[\]\)\(}{\.]', '', s or "")
+        
+        t = self.type
+        self.type = re.sub(r'[^A-Za-z0-9-\[\]\)\(}{\.]', '', t or "")
     
+    # for the url conf
+    plane_regex = r'[^A-Za-z0-9-\[\]\)\(}{\.]'
+    
+    def save(self, *args, **kwargs):
+        """
+        Automatically fill in make/models if they are not already supplied
+        and then save the object to the database
+        """
+        
+        if (not self.manufacturer and
+            not self.model and
+            not self.cat_class) and self.type:
+                
+            from auto_fill import autofill
+            d = autofill(self.type)
+            
+            if d.get('manufacturer', False):
+                ## autofill hit a match, use that data
+                self.manufacturer = d['manufacturer'] or ""
+                self.model = d['model'] or ""
+                self.cat_class = d['cat_class'] or 1
+                self.tags = d['tags'] or ""
+            
+            if "frasca" in self.type.lower():
+                self.manufacturer="Frasca"
+                self.cat_class = 16
+                
+        if not self.user:
+            from share.middleware import share
+            self.user = share.get_display_user()
+        
+        self.full_clean()
+        
+        super(Plane, self).save(*args, **kwargs)
+
     def hidden_tag(self):
         if self.hidden:
             return mark_safe("<span class='remarks_tag'>[Hidden]</span>")
@@ -136,35 +156,6 @@ class Plane(EnhancedModel):
             return mark_safe("<span class='remarks_tag'>[Retired]</span>")
         else:
             return ""
-                   
-    def clean_tailnumber(self):
-        """
-        remove special characters and white space because they mess up
-        the url resolvers
-        !!replace with model validators when django 1.2 drops!!
-        """
-        self.tailnumber = Plane.regex_tail_type(self.tailnumber)
-        
-    def clean_type(self):
-        """
-        remove special characters and white space because they mess up
-        the url resolvers
-        !!replace with model validators when django 1.2 drops!!
-        """
-        self.type = Plane.regex_tail_type(self.type)
-        
-
-    def __unicode__(self):
-        if self.type:
-            disp = " (" + self.type + ")"
-        elif self.model:
-            disp = " (" + self.model + ")"
-        elif self.manufacturer:
-            disp = " (" + self.manufacturer + ")"
-        else:
-            disp = ""
-            
-        return u"%s%s" % (self.tailnumber, disp)
     
     def fancy_name(self):
         ret = []
@@ -196,9 +187,6 @@ class Plane(EnhancedModel):
                 tag = "\"" + tag.name + "\""
             ret.append(str(tag))
         return ret
-
-    class Meta:
-        ordering = ["manufacturer", 'type', 'tailnumber']
 
     def is_turbine(self):
         return Plane.goon(pk=self.pk, tags__icontains="turbine") == self

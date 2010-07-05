@@ -34,6 +34,7 @@ class BaseImport(object):
         get the first 10,000 characters of the file to determine
         the csv delimiter
         """
+        
         self.file.seek(0)
         pre = self.file.read(10000)
         self.file.seek(0)
@@ -49,7 +50,9 @@ class BaseImport(object):
         
         
     def get_dict_reader(self):
-        """makes a dictreader that is seek'd to the first valid line of data"""
+        """
+        makes a dictreader that is seek'd to the first valid line of data
+        """
         
         if not self.force_tsv:
             dialect = self.get_dialect()
@@ -73,8 +76,9 @@ class BaseImport(object):
         self.dr = csv.DictReader(self.file, titles, dialect=dialect)
             
     def action(self):
-        """Go through each line, determine which type it is, then hand off that
-           line to the proper function.
+        """
+        Go through each line, determine which type it is, then hand off that
+        line to the proper function.
         """
 
         from prepare_line import PrepareLine
@@ -105,9 +109,11 @@ class BaseImport(object):
         self.make_headers()
         
     def swap_out_flight_titles(self, original):
-        """transform the headers of the user's CSV file to normalized headers
-           which can be processed.
         """
+        Transform the headers of the user's CSV file to normalized headers
+        which can be processed.
+        """
+        
         from constants import COLUMN_NAMES
         new = []
         for title in original:

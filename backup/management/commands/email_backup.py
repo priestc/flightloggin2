@@ -91,4 +91,5 @@ class Command(NoArgsCommand):
                 result = em.send()
                 print "%s [%s]" % (user.username, result)
         
-        print "total processing time: %s" % (datetime.datetime.now() - start)
+        print "\n=====\ntotal processing time: %s" % \
+                                (datetime.datetime.now() - start)

@@ -16,7 +16,7 @@ def clean_tailnumber(self):
         raise forms.ValidationError("Spaces not allowed in Tailnumber")
     
     ## if more than one character matches this regex, raise error
-    if re.subn(Plane.reverse_plane_regex(), 'X', tn)[1] > 0:
+    if re.subn(r'[^A-Za-z0-9-\[\]\)\(}{\.]', 'X', tn)[1] > 0:
         raise forms.ValidationError("Invalid characters")
     
     return tn
@@ -29,7 +29,7 @@ def clean_type(self):
         raise forms.ValidationError("Spaces not allowed in Type")
     
     ## if more than one character matches this regex, raise error
-    if re.subn(Plane.reverse_plane_regex(), 'X', ty)[1] > 0:
+    if re.subn(r'[^A-Za-z0-9-\[\]\)\(}{\.]', 'X', ty)[1] > 0:
         raise forms.ValidationError("Invalid characters")
     
     return ty

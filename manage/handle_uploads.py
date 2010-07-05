@@ -3,9 +3,10 @@ UPLOADS_DIR = settings.UPLOADS_DIR
 import datetime
 
 def get_last(uid):
-    """Goes through the uploads directory and returns the latest file (based
-       on modified date/time in metadata) that starts with the user's ID.
-       returns the file, and then a dict with some metadata
+    """
+    Goes through the uploads directory and returns the latest file (based
+    on modified date/time in metadata) that starts with the user's ID.
+    returns the file, and then a dict with some metadata
     """
     import os
     filenames = os.listdir(UPLOADS_DIR)
@@ -57,8 +58,10 @@ def make_filename(user):
          user.username)
 
 def save_upload(f, user):
-    """Saves a UploadFile instance to the uploads direrctory
     """
+    Saves a UploadFile instance to the uploads direrctory
+    """
+    
     filename = make_filename(user)
     dest = open(filename, 'wb+')
     
@@ -67,8 +70,10 @@ def save_upload(f, user):
     dest.close()
     
 def save_php(f, user):
-    """Saves an addinfourl file object to the uploads directory
     """
+    Saves an addinfourl file object to the uploads directory
+    """
+    
     filename = make_filename(user)
     dest = open(filename, 'wb+')
     
