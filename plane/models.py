@@ -111,7 +111,7 @@ class Plane(EnhancedModel):
         self.type = re.sub(r'[^A-Za-z0-9-\[\]\)\(}{\.]', '', t or "")
     
     # for the url conf
-    plane_regex = r'[^A-Za-z0-9-\[\]\)\(}{\.]'
+    plane_regex = r'[A-Za-z0-9-\[\]\)\(}{\.]'
     
     def save(self, *args, **kwargs):
         """
