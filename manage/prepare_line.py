@@ -214,18 +214,18 @@ class PlaneFixer(Fixer):
         
         return tags
 
-    def type_processor(self):
-        return Plane.regex_tail_type(self.proper_mapper('type'))
-        
-    def tailnumber_processor(self):
-        return Plane.regex_tail_type(self.proper_mapper('tailnumber'))
+#    def type_processor(self):
+#        return Plane.regex_tail_type(self.proper_mapper('type'))
+#        
+#    def tailnumber_processor(self):
+#        return Plane.regex_tail_type(self.proper_mapper('tailnumber'))
     
     def as_dict(self):
         return {
-                    "tailnumber":   self.processor('tailnumber'),
+                    "tailnumber":   self.proper_mapper('tailnumber'),
                     "manufacturer": self.proper_mapper('manufacturer'),
                     "model":        self.proper_mapper('model'),
-                    "type":         self.processor('type'),
+                    "type":         self.proper_mapper('type'),
                     "cat_class":    self.proper_mapper('cat_class'),
                     "tags":         self.processor('tags'),
                     "description":  self.proper_mapper('description'),
@@ -343,19 +343,19 @@ class FlightFixer(Fixer):
         else:
             return total
     
-    def type_processor(self):
-        return Plane.regex_tail_type(self.proper_mapper('type'))
-        
-    def tailnumber_processor(self):
-        return Plane.regex_tail_type(self.proper_mapper('tailnumber'))
+#    def type_processor(self):
+#        return Plane.regex_tail_type(self.proper_mapper('type'))
+#        
+#    def tailnumber_processor(self):
+#        return Plane.regex_tail_type(self.proper_mapper('tailnumber'))
     
     
     def as_dict(self):
     
         return {
                     "date":            self.proper_mapper('date'),
-                    "tailnumber":      self.processor('tailnumber'),
-                    "type":            self.processor('type'),
+                    "tailnumber":      self.proper_mapper('tailnumber'),
+                    "type":            self.proper_mapper('type'),
                     "route_string":    self.processor('route'),
                     
                     "total":           self.processor('total'),
