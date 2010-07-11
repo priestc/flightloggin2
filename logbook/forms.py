@@ -150,9 +150,13 @@ class PlaneField(ModelChoiceField):
         Turns the entered value (a tailnumber or a pk), into a plane instance
         """
         
+        if val == '' or val is None:
+            ## if input was blank, get and return the global unknown plane
+            return Plane.objects.get(pk=settings.UNKNOWN_PLANE_ID)
+        
         if re.match(r'[0-9]', val):
             return Plane.objects.get(pk=val)
-        
+                
         if val.startswith("pk:"):
             pk = val[3:]
             p = Plane.goon(pk=pk, user=self.user)
@@ -161,9 +165,7 @@ class PlaneField(ModelChoiceField):
             else:
                 return Plane.objects.get(pk=settings.UNKNOWN_PLANE_ID)  
         
-        if val == '':
-            ## if input was blank, get and return the global unknown plane
-            return Plane.objects.get(pk=settings.UNKNOWN_PLANE_ID)
+        
         
         elif " " in val:
             tn, ty = val.split(' ')[:2]
