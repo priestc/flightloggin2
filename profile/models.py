@@ -177,6 +177,17 @@ class Profile(models.Model, GoonMixin):
     adminlink.allow_tags = True
     adminlink.short_description="Link"
     
+    def get_openid(self):
+        """
+        Get the OpenID url for the user of this profile (used in the admin)
+        """
+        
+        try:
+            return self.user.useropenid_set.all()[0].claimed_id
+        except:
+            return "ERROR"
+    get_openid.short_description="OpenID"
+    
     def date_registered(self):
         "Used in the admin interface to see when a user registered"
         

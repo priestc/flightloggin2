@@ -7,5 +7,6 @@ class ProfileAdmin(admin.ModelAdmin):
                     'get_email', 'get_date_format', 'adminlink', 'flightcount')
     list_filter = ('backup_freq', 'style', 'logbook_share', 'social')
     list_per_page = 20
+    readonly_fields = ('get_openid', )
 
 admin.site.register(Profile, ProfileAdmin)
