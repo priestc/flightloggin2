@@ -14,9 +14,10 @@ class Command(NoArgsCommand):
           
         # do the dump only if it already hasn't been done yet
         if not os.path.exists('this_dump'):
+            print("Dumping postgres...")
             os.system("pg_dump --clean --format=c -U postgres logbook > this_dump")
         else:
-            print("skipping dump because it already exists")
+            print("Skipping postgres dump because it already exists")
 
         conn = S3Connection(settings.AWS_ACCESS_KEY, settings.AWS_SECRET_KEY)
         bucket = conn.get_bucket('fl_dumps')
@@ -25,6 +26,7 @@ class Command(NoArgsCommand):
         k.key = datetime.datetime.now().isoformat()
 
         #upload file
+        print("uploading to S3...")
         k.set_contents_from_filename('this_dump', reduced_redundancy=True)
 
         #clean up
