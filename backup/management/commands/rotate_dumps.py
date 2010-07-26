@@ -31,7 +31,7 @@ class Command(NoArgsCommand):
                 if is_monday_9PM:
                     print "keep:", dt
                 else:
-                    print "delete:", dt, is_monday_9PM
+                    print "delete:", dt
                     #key.delete()
             else:
                 print "keep:", dt
