@@ -32,9 +32,6 @@ class Command(NoArgsCommand):
                     print "keep:", dt
                 else:
                     print "delete:", dt
-                    #key.delete()
+                    key.delete()
             else:
                 print "keep:", dt
-            
-            
-            #print dt, is_2_weeks_old, is_3_months_old, is_monday, is_first_of_month
