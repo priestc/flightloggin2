@@ -8,7 +8,10 @@ from django.http import Http404
 from logbook.constants import *
 
 class Backup(object):
-
+    """
+    Constructor takes one argument, an instance of the User object
+    """
+    
     def __init__(self, user):
         self.user=user
         
@@ -47,7 +50,8 @@ class Backup(object):
         
         records = Records.goon(user=self.user)
         if records and records.text:
-            writer.writerow(["##RECORDS", records.text.replace("\n","\\n")])
+            rec = records.text.encode("utf-8", "ignore").replace("\n","\\n")
+            writer.writerow(["##RECORDS", rec])
         
         planes = Plane.objects.filter(user=self.user)    
         for p in planes:
