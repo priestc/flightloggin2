@@ -255,10 +255,15 @@ class DatabaseImport(PreviewImport):
         
     def handle_plane(self, line):
         
-        p,c=Plane.objects.get_or_create(user=self.user,
-                                        tailnumber=line['tailnumber'],
-                                        type=line['type'])
+        kwargs = dict(user=self.user,
+                      tailnumber=line['tailnumber'],
+                      type=line['type'])
         
+        try:
+            p,c=Plane.objects.get_or_create(**kwargs)
+        except Plane.MultipleObjectsReturned:
+            p = Plane.objects.filter(**kwargs)[0]
+            
         p.manufacturer = line['manufacturer']
         p.model = line['model']
         p.cat_class = line['cat_class']

@@ -460,15 +460,21 @@ class Flight(EnhancedModel):
         if ret == "0" or ret == "0.0" or ret == 0:
             return ""
             
-        elif format == "decimal" and type(ret) == type(0.0):
+        elif format == "decimal" and type(ret) == float:
             # decimals are padded to one decimal, then converted to string
-            return "%.1f" % ret
+            if ("%.2f" % ret)[-1] == '0':
+                # number is just a one decimal float
+                return "%.1f" % ret
+            else:
+                # number was entered as a HH:MM, return more precise value
+                return "%.3f" % ret
             
-        elif type(ret) == type(5):
+        elif type(ret) == int:
             # int's are straight converted to string and returned
+            # (no decimals to deal with)
             return str(ret)
             
-        elif format == "minutes" and type(ret) == type(0.0):
+        elif format == "minutes" and type(ret) == float:
             # convert to HH:MM
             return to_minutes(ret)
             
