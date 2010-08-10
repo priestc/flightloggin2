@@ -203,8 +203,10 @@ class DatabaseImport(PreviewImport):
             if line.get("type"):
                 kwargs.update({"type": line.get("type")})
                 
-            plane, created = Plane.objects.get_or_create(**kwargs)
-            
+            try:
+                plane, created = Plane.objects.get_or_create(**kwargs)
+            except Plane.MultipleObjectsReturned:
+                plane = Plane.objects.filter(**kwargs)[0]
         else:
             ## 90 = the unknown plane
             plane = Plane(pk=90) ## FIXME should be something more intuitive
