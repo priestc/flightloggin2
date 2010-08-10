@@ -26,8 +26,6 @@ def profile(request):
     column =  Columns.objects.get_or_create(user=request.display_user)[0]
     auto =    AutoButton.objects.get_or_create(user=request.display_user)[0]
     
-    #assert False
-    
     if request.POST:
         profile_form = ProfileForm(request.POST, instance=profile)
         user_form = UserForm(request.POST, instance=request.display_user)

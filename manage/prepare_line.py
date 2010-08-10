@@ -261,7 +261,7 @@ class NonFlightFixer(Fixer):
     """
     
     def non_flying_processor(self):
-        return NON_FLIGHT_TRANSLATE_NUM[self.proper_mapper('non_flying')]
+        return NON_FLIGHT_TRANSLATE_NUM.get(self.proper_mapper('non_flying'), "")
     
     def remarks_processor(self):
         return fix_remarks(self.proper_mapper('remarks'))
