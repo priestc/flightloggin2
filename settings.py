@@ -111,8 +111,8 @@ INSTALLED_APPS += [
     'pagination',
     'gravatar',
     'djcelery',
-    
     'django_openid_auth',
+    
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.auth',

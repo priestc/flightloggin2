@@ -33,7 +33,11 @@ class DateCell(template.Node):
     def render(self, context):
         row = self.row_var.resolve(context)
         profile = self.profile_var.resolve(context)
-        formatted_date = dj_date_format(row.date, profile.date_format)
+        try:
+            formatted_date = dj_date_format(row.date, profile.date_format)
+        except AttributeError:
+            formatted_date = dj_date_format(row.date, 'Y-m-d') + " (invalid format)"
+            
         
         a_date = '<a class="popup_link" href="" id="f%s" %s>%s' %\
                 (row.id, self.a_title, formatted_date)
