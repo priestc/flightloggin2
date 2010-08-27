@@ -57,9 +57,14 @@ class UserTotalsHistogram(BaseHistogram):
                         .filter(t__isnull=False)\
                         .values_list('t', flat=True)
                         
+        e = self.data.filter(t__gt=3000).count()
+        
+        self.data = self.data.exclude(t__gt=3000)
+                        
         self.x_label = 'Total Flight Hours'
         self.y_label = 'Number of Users'
-        self.title = "Distribution of Logbook Totals"
+        self.title = "Distribution of Logbook Totals\n" + \
+                     "(excluding %s people with over 3000 hours)" % e
 
 class ModelSpeedHistogram(BaseHistogram):
     def get_data(self):
