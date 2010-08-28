@@ -154,8 +154,15 @@ class PlaneField(ModelChoiceField):
             ## if input was blank, get and return the global unknown plane
             return Plane.objects.get(pk=settings.UNKNOWN_PLANE_ID)
         
-        if re.match(r'[0-9]', val):
-            return Plane.objects.get(pk=val)
+        if re.match(r'^[0-9]$', val):
+            try:
+                # most likely a PK
+                return Plane.objects.user(self.user)\
+                            .filter(retired=False, pk=val)[0]
+            except Plane.DoesNotExist:
+                # but could also be a all numeric tailnumber
+                return Plane.objects.user(self.user)\
+                            .filter(retired=False, tailnumber=val)[0]
                 
         if val.startswith("pk:"):
             pk = val[3:]
