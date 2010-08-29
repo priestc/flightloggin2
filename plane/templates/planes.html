@@ -45,7 +45,7 @@
 			    <td id="p{{ plane.id }}_fuel_burn">{{ plane.fuel_burn|default:"" }}</td>
 			    <td id="p{{ plane.id }}_cat_class">{{ plane.get_cat_class_display }}</td>
 			    <td id="p{{ plane.id }}_tags">{{ plane.get_tags_quote|join:", " }}</td>
-			    <td id="p{{ plane.id }}_description">{{ plane.hidden_tag }}{{ plane.retired_tag }}{{ plane.description }}</td>
+			    <td id="p{{ plane.id }}_description">{{ plane.hidden_tag }}{{ plane.retired_tag }} {{ plane.description }}</td>
 		    </tr>		
 	    {% empty %}
 	        <tr>
@@ -168,7 +168,10 @@
 <div class="instructions">
 Tip: If the plane you are creating is a Beechcraft, Cessna or Piper, just fill
 in the type designator (eg. PA-28-151), and the other details will be filled
-in for you.
+in for you.<br><br>
+Tip: If you have a lof of duplicate plane entries, to get rid of them,
+go to the preferences section and click on the "Remove Duplicate Planes" button
+at the bottom.
 </div>
 
 {% endblock %}
