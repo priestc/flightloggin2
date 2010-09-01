@@ -159,7 +159,7 @@ class PlaneField(ModelChoiceField):
                 # most likely a PK
                 return Plane.objects.user(self.user)\
                             .filter(retired=False, pk=val)[0]
-            except Plane.DoesNotExist, IndexError:
+            except IndexError:
                 # but could also be a all numeric tailnumber
                 return Plane.objects.user(self.user)\
                             .filter(retired=False, tailnumber=val)[0]
