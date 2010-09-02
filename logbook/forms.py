@@ -150,7 +150,7 @@ class PlaneField(ModelChoiceField):
         Turns the entered value (a tailnumber or a pk), into a plane instance
         """
         
-        if val == '' or val is None:
+        if val == '' or val is None or val == '90':
             ## if input was blank, get and return the global unknown plane
             return Plane.objects.get(pk=settings.UNKNOWN_PLANE_ID)
         
