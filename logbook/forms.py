@@ -33,7 +33,8 @@ class BlankHourWidget(TextInput):
     def _has_changed(self, initial, data):
         return super(BlankHourWidget, self).\
                     _has_changed(self._format_value_out(initial), data)
-        
+
+
 class BlankDecimalWidget(BlankHourWidget):
     def _format_value_out(self, value):
         """Prepare value for output in the mass entry form
@@ -46,6 +47,7 @@ class BlankDecimalWidget(BlankHourWidget):
         else:
             return value
     
+    
 class BlankIntWidget(BlankHourWidget):
     def _format_value_out(self, value):
         """Prepare value for outout in the mass entry form
@@ -57,6 +59,7 @@ class BlankIntWidget(BlankHourWidget):
             return ""
         else:
             return str(value)
+
 
 class BlankHourField(forms.Field):
     widget = BlankHourWidget
@@ -83,9 +86,11 @@ class BlankHourField(forms.Field):
         
     def __init__(self, *args, **kwargs):
         super(BlankHourField, self).__init__(required=False, *args, **kwargs)
+
         
 class BlankDecimalField(BlankHourField):
     widget = BlankDecimalWidget
+
 
 class BlankIntField(BlankHourField):
     widget = BlankIntWidget
@@ -113,6 +118,7 @@ class PlaneTextInput(TextInput):
         return super(PlaneTextInput, self).\
                     _has_changed(self._format_value_out(initial), data)
 
+
 class PlaneSelectBox(Select):
     def render(self, name, value, attrs=None, choices=()):
         """
@@ -133,6 +139,7 @@ class PlaneSelectBox(Select):
         
         return mark_safe(u'\n'.join(output))
 
+
 class PlaneField(ModelChoiceField):
     """
     A field that returns a plane instance. Uses either a text field widget
@@ -140,9 +147,7 @@ class PlaneField(ModelChoiceField):
     """
     
     def __init__(self, *args, **kwargs):
-        
         qs = Plane.objects.none()
-        
         super(PlaneField, self).__init__(queryset=qs, *args, **kwargs)
     
     def clean(self, val):
@@ -170,9 +175,7 @@ class PlaneField(ModelChoiceField):
             if p:
                 return p
             else:
-                return Plane.objects.get(pk=settings.UNKNOWN_PLANE_ID)  
-        
-        
+                return Plane.objects.get(pk=settings.UNKNOWN_PLANE_ID)
         
         elif " " in val:
             tn, ty = val.split(' ')[:2]
