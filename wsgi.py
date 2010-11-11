@@ -1,12 +1,15 @@
-import os
-os.environ['DJANGO_SETTINGS_MODULE'] = 'flightloggin.settings'
-os.environ['MPLCONFIGDIR'] = '/var/cache/mpl'
-
 import sys
 sys.path = ['/srv/', '/srv/flightloggin/'] + sys.path
 
+print sys.path
+
+import os
+os.environ['DJANGO_SETTINGS_MODULE'] = 'flightloggin.settings'
+os.environ['MPLCONFIGDIR'] = '/var/cache/mpl'
+os.environ["CELERY_LOADER"] = "django"
+
 import site
-from settings_local import ENV_DIR
+from local_settings import ENV_DIR
 site.addsitedir(ENV_DIR + "/lib/python2.6/site-packages")
 
 from django.core.handlers.wsgi import WSGIHandler
