@@ -33,6 +33,6 @@ def handler500(request):
 def is_alive(request):
     return HttpResponse("OK", mimetype="text/plain")
 
-def robot(request):
+def robots(request):
     return HttpResponse("""User-agent: *
-Disallow: *.kmz""", mimetype='text-html')
+Disallow: *.kmz""", mimetype='text-plain')
