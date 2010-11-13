@@ -36,6 +36,11 @@ sitemaps = {
 
 urlpatterns = patterns('django_openid_auth.views',
 
+    (
+        r'^robots.txt',
+        'main.views.robots'
+    ),
+
     url(
         r'^openid/login/$',
         'login_begin',
