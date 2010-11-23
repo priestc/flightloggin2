@@ -13,7 +13,7 @@ class LimitBotsMiddleware(object):
         
         now = datetime.datetime.now().hour
         in_interval = self.bots_start_hour < now < self.bots_stop_hour
-        is_googlebot = 'googlebot' in request.META['HTTP_USER_AGENT'].lower()
+        is_googlebot = 'googlebot' in request.META.get('HTTP_USER_AGENT', 'what').lower()
         
         if is_googlebot and not in_interval:
             return HttpResponse("503 - Server Overloaded, come back later", status=503)
