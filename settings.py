@@ -74,6 +74,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'pagination.middleware.PaginationMiddleware',
     'share.middleware.share.ShareMiddleware',
+    'googlebot.middleware.LimitBotsMiddleware',
 ]
 
 if DEBUG_TOOLBAR:
