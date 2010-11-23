@@ -32,3 +32,7 @@ def handler500(request):
 @never_cache
 def is_alive(request):
     return HttpResponse("OK", mimetype="text/plain")
+
+def robots(request):
+    return HttpResponse("""User-agent: *
+Disallow: *.kmz""", mimetype='text-plain')

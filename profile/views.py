@@ -9,6 +9,7 @@ from annoying.decorators import render_to
 
 from django.conf import settings
 
+from backup.models import edit_logbook
 from plane.models import Plane
 from logbook.models import Flight
 from records.models import Records, NonFlight
@@ -34,12 +35,14 @@ def profile(request):
     
         if request.POST.get("submit") == "Delete All Flights":
             Flight.objects.filter(user=request.display_user).delete()
+            edit_logbook.send(sender=request.display_user)
         
         elif request.POST.get("submit") == "Delete All Events":
             NonFlight.objects.filter(user=request.display_user).delete()
         
         elif request.POST.get("submit") == "Delete Unused Planes":
             Plane.objects.filter(flight__isnull=True, user=request.display_user).delete()
+            edit_logbook.send(sender=request.display_user)
             
         elif request.POST.get("submit") == "Completely Reset All Data":
             NonFlight.objects.filter(user=request.display_user).delete()
@@ -47,6 +50,7 @@ def profile(request):
             Records.objects.filter(user=request.display_user).delete()
             Location.objects.filter(loc_class=3, user=request.display_user).delete()
             Plane.objects.filter(user=request.display_user).delete()
+            edit_logbook.send(sender=request.display_user)
             
         else:
             if auto_form.is_valid():

@@ -108,8 +108,8 @@ class StatDB(models.Model):
     auv =              models.TextField(null=False)    
     
     unique_tn =        models.PositiveIntegerField(default=0, null=False)
-    day_wmu =          models.CharField(max_length=25, blank=True, null=True)
-    day_wmh =          models.CharField(max_length=25, blank=True, null=True)
+    day_wmu =          models.CharField(max_length=55, blank=True, null=True)
+    day_wmh =          models.CharField(max_length=55, blank=True, null=True)
     
     class Meta:
         get_latest_by = 'dt'
@@ -195,7 +195,7 @@ class Stat(object):
                      .order_by('-t')[0]
                      
         from django.utils.dateformat import format
-        return "%s (%s)" % (format(item['date'], 'd M, Y'), item['t'])
+        return "%s (%.1f)" % (format(item['date'], 'd M, Y'), item['t'])
     
     def calc_day_wmu(self):
         """day with most users having edited their logbook"""
@@ -207,7 +207,7 @@ class Stat(object):
                           
         from django.utils.dateformat import format
                           
-        return "%s (%s)" % (format(item['date'], 'd M, Y'), item['c'])
+        return "%s (%.1f)" % (format(item['date'], 'd M, Y'), item['c'])
     
     def calc_unique_tn(self):
         return Plane.objects.values('tailnumber').distinct().count()

@@ -6,7 +6,7 @@
 if [ $(hostname) != 'chris-desktop' ]
 then
     echo "not chris-desktop";
-    exit
+    #exit
 fi
 
 cd /srv/flightloggin/scripts

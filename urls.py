@@ -57,6 +57,10 @@ urlpatterns = patterns('django_openid_auth.views',
 ###############################################################################
 
 urlpatterns += patterns('',
+    (
+        r'^robots\.txt$',
+        'main.views.robots'
+    ),
 
     (r'^histogram/', include('histogram.urls')),
     (r'^kml/', include('maps.kml_urls')),
