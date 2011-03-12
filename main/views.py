@@ -35,4 +35,4 @@ def is_alive(request):
 
 def robots(request):
     return HttpResponse("""User-agent: *
-Disallow: *.kmz""", mimetype='text-plain')
+Disallow: /kml/""", mimetype='text-plain')

@@ -62,7 +62,7 @@ class Backup(object):
                         
         events = NonFlight.objects.filter(user=self.user)    
         for e in events:
-            writer.writerow(["##EVENT", e.date, e.non_flying, e.remarks])
+            writer.writerow(["##EVENT", e.date, e.non_flying, e.remarks.encode("utf-8", "ignore")])
         
         locations = Location.objects.filter(user=self.user)
         for l in locations:
