@@ -355,7 +355,7 @@ class Part61_FixedWing_Commercial(Part61_Commercial):
                     ),
                     
                     dict(
-                        mine=self.all.fixed_wing().agg('pic'),
+                        mine=self.all.fixed_wing().agg('total'),
                         display="Total Fixed Wing",
                         goal=50,
                         reg="61.129(%s)(1)" % self.reg_letter,
