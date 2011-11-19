@@ -65,7 +65,7 @@ def proper_ad(request):
     u = getattr(request, "display_user", None) or request.user
     style = Profile.get_for_user(u).style
     
-    if random.choice([True] * 20 + [False]):
+    if True: #random.choice([True] * 20 + [False]):
         ad_text = GOOGLE_ADS[style]
     else:
         ad_text = WIKI_ADS[style]
