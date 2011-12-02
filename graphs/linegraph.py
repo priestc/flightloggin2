@@ -203,7 +203,7 @@ class Plot(object):
         dates = []
         d={}
         for item in data:
-            values.append(item['value'])
+            values.append(item['value'] or 0)
             dates.append(item['date'])
             d.update({item['date']: item['value']})
             
