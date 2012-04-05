@@ -1,3 +1,13 @@
 packages:
 
-git apache2
+git
+apache2
+mercurial
+postgres-9.1-postgis
+python-pip
+virtualenv
+libapache2-mod-wsgi
+python-virtualenv
+
+postgresql-contrib-9.1
+proj
