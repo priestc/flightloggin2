@@ -3,16 +3,16 @@ django==1.2.1
 hg+http://bitbucket.org/offline/django-annoying
 git+http://github.com/dcramer/django-devserver.git
 django-extensions==0.4.1
-git+git@github.com:nbv4/django-gravatar2.git
--e bzr+http://bazaar.launchpad.net/~django-openid-auth/django-openid-auth/trunk/@65#egg=django_openid_auth-0.2
+git+https://github.com/nbv4/django-gravatar2.git
+bzr+http://bazaar.launchpad.net/~django-openid-auth/django-openid-auth/trunk/@65#egg=django_openid_auth-0.2
 django-pagination==1.0.5
--e svn+http://django-tagging.googlecode.com/svn/trunk@185#egg=django_tagging-0.4.dev1-py2.6-dev_r185
+svn+http://django-tagging.googlecode.com/svn/trunk@185#egg=django_tagging-0.4.dev1-py2.6-dev_r185
 django-test-utils==0.3
 ipython==0.10
 #matplotlib==0.99.1.1
 numpy==1.3.0
 psycopg2==2.0.14
--e git+http://github.com/sciyoshi/pyfacebook.git@7ba3654569e2b3d7ecddbe2e05693c24e6d36c24#egg=pyfacebook-0.1-py2.6-dev
+git+http://github.com/sciyoshi/pyfacebook.git@7ba3654569e2b3d7ecddbe2e05693c24e6d36c24#egg=pyfacebook-0.1-py2.6-dev
 python-openid==2.2.4
 python-dateutil==1.5
 pytz==2010e
