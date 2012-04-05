@@ -10,7 +10,7 @@ svn+http://django-tagging.googlecode.com/svn/trunk@185#egg=django_tagging-0.4.de
 django-test-utils==0.3
 ipython==0.10
 #matplotlib==0.99.1.1
-numpy==1.3.0
+#numpy==1.3.0
 psycopg2==2.0.14
 git+http://github.com/sciyoshi/pyfacebook.git@7ba3654569e2b3d7ecddbe2e05693c24e6d36c24#egg=pyfacebook-0.1-py2.6-dev
 python-openid==2.2.4
