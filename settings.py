@@ -111,7 +111,6 @@ INSTALLED_APPS += [
     'tagging',
     'pagination',
     'gravatar',
-    'djcelery',
     'django_openid_auth',
     
     'django.contrib.admin',
