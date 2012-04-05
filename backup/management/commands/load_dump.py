@@ -1,5 +1,5 @@
-from iso8601 import parse_date
 import os
+from dateutil.parser import parse
 
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
@@ -24,5 +24,6 @@ class Command(NoArgsCommand):
         Given a S3 bucket, return the key in that bucket named with the latest
         timestamp.
         """
-        keys = [parse_date(k.name) for k in bucket.list()]
+        d2 = parse(d1)
+        keys = [parse(k.name) for k in bucket.list()]
         latest = sorted(keys)
