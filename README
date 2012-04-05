@@ -11,3 +11,9 @@ python-virtualenv
 
 postgresql-contrib-9.1
 proj
+linpng12-dev
+libfreetype6-dev
+libpq-dev
+libgeos-dev
+libproj-dev
+libjpeg62-dev
