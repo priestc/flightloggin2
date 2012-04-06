@@ -81,7 +81,7 @@ class TotalsSig(BaseSig):
         # wifth of the entire image in pixels
         img_width = width_padding + self.t_width + self.d_width
         
-        self.im = Image.new("RGBA", (img_width, height))
+        self.im = Image.new("RGBA", (int(img_width), int(height)))
         self.draw = ImageDraw.Draw(self.im)
         
         self.put_all_columns()
