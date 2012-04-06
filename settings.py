@@ -140,7 +140,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 DUMP_MANIFEST = {
     'default': {
-        'database': 'logbook',
+        'database': 'default',
         'exclude-models': 'Location',
         's3-bucket': 'fl_dumps'
     }
