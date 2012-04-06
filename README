@@ -3,8 +3,11 @@ packages:
 git
 apache2
 mercurial
+bzr
+subversion
 postgres-9.1-postgis
 python-pip
+python-dev
 virtualenv
 libapache2-mod-wsgi
 python-virtualenv
