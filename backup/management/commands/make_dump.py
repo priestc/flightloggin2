@@ -15,7 +15,7 @@ class Command(NoArgsCommand):
         # do the dump only if it already hasn't been done yet
         if not os.path.exists('this_dump'):
             print("Dumping postgres...")
-            os.system("pg_dump --clean --format=c -U postgres logbook > this_dump")
+            os.system("pg_dump --clean --no-owner --format=c logbook > this_dump")
         else:
             print("Skipping postgres dump because it already exists")
 
