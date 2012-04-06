@@ -9,11 +9,11 @@ handler500 = "main.views.handler500"
 
 ###############################################################################
 
-from feeds.classes import LatestFlights, LatestNews
-feeds = {
-    'flights': LatestFlights,
-    'news': LatestNews,
-}
+#from feeds.classes import LatestFlights, LatestNews
+#feeds = {
+#    'flights': LatestFlights,
+#    'news': LatestNews,
+#}
 
 ###############################################################################
 
@@ -65,7 +65,6 @@ urlpatterns += patterns('',
     (r'^histogram/', include('histogram.urls')),
     (r'^kml/', include('maps.kml_urls')),
     (r'^facebook', include('facebook_app.urls')),
-    (r'discussions/', include('forum_new_style.urls', app_name='forum', namespace='forum')),
     
     (r'^search/locations\.html$', 'airport.views.search_airport'),
     (r'^search/tailnumbers\.html$', 'plane.views.search_tailnumbers'),
@@ -198,11 +197,11 @@ urlpatterns += patterns('',
 
     ################################ admin functions
     
-    (
-        r'^feeds/(?P<url>.*)/$',
-        "django.contrib.syndication.views.feed",
-        {'feed_dict': feeds},
-    ),
+    #(
+    #    r'^feeds/(?P<url>.*)/$',
+    #    "django.contrib.syndication.views.feed",
+    #    {'feed_dict': feeds},
+    #),
     
     (
         r'^admin/doc/',
