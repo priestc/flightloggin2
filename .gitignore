@@ -1,5 +1,6 @@
 local_settings.py
 env
+manage.py
 .fl_env
 forum_new_style
 *.bak
