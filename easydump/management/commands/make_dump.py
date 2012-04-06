@@ -9,14 +9,19 @@ from django.core.management.base import NoArgsCommand
 from django.conf import settings
 from django.db import models
 
+import logging
+log = logging.getLogger(__name__)
+
+cmd = "pg_dump --clean --no-owner --format=c logbook > this_dump"
+
 class Command(NoArgsCommand):
 
     def handle(self, *args, **options):
-          
+        
         # do the dump only if it already hasn't been done yet
-        if not os.path.exists('this_dump'):
-            print("Dumping postgres...")
-            os.system("pg_dump --clean --no-owner --format=c logbook > this_dump")
+        if not os.path.exists('dump'):
+            log.info("Dumping postgres to file...")
+            os.system(cmd)
         else:
             print("Skipping postgres dump because it already exists")
 
@@ -27,8 +32,8 @@ class Command(NoArgsCommand):
         k.key = datetime.datetime.now().isoformat()
 
         #upload file
-        print("uploading to S3...")
-        k.set_contents_from_filename('this_dump', reduced_redundancy=True)
+        log.info("uploading %s to S3..." % k.key)
+        k.set_contents_from_filename('dump', reduced_redundancy=True)
 
         #clean up
         os.remove('this_dump')

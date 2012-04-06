@@ -106,6 +106,7 @@ INSTALLED_APPS += [
     'milestones',
     'manage',
     'facebook_app',
+    'easydump',
     
     'tagging',
     'pagination',

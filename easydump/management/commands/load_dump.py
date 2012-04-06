@@ -1,4 +1,3 @@
-import logging
 import os
 from optparse import make_option
 
@@ -9,12 +8,14 @@ from boto.s3.connection import S3Connection
 from django.core.management.base import NoArgsCommand
 from django.conf import settings
 
+import logging
 log = logging.getLogger(__name__)
 
-PROJECT_PATH = getattr(settings, 'PROJECT_PATH', None)
-TEMP_LOCATION = getattr(settings, 'TEMP_LOCATION', None)
+from easydump.mixins import DumpMixin
 
-class Command(NoArgsCommand):
+restore_cmd = 'pg_restore -d {manifest[database][NAME]} --role={manifest[database][USER]} --jobs={manifest[jobs]} {manifest[save_path]}'
+
+class Command(NoArgsCommand, DumpMixin):
     
     option_list = NoArgsCommand.option_list + (
         make_option(
@@ -26,39 +27,30 @@ class Command(NoArgsCommand):
     )
     
     def handle(self, *args, **options):
-        DUMP_MANIFEST = getattr(settings, 'DUMP_MANIFEST')
+        
+        # get manifest
         dump = options['dump']
-        manifest = DUMP_MANIFEST[dump]                
+        manifest = self.get_manifest(dump)
+
+        # connect to S3
         c = S3Connection(settings.AWS_ACCESS_KEY, settings.AWS_SECRET_KEY)
         bucket = c.get_bucket(manifest['s3-bucket'])
-        latest_key = self.get_latest(bucket)
-        key = bucket.get_key(latest_key)
-        path = self.get_save_path()
-        save_path = os.path.join(path, '{0}-{1}'.format(dump, key.name))
         
-        if not os.path.exists(save_path):       
-            key.get_contents_to_filename(save_path)
+        # get the key for the correct dump (the latest one)
+        key = self.get_latest(bucket)
+        
+        manifest['save_path'] = manifest['save_path'].format(key=key.name)
+        
+        if not os.path.exists(manifest['save_path']):
+            log.info("Downloading from S3...")      
+            key.get_contents_to_filename(manifest['save_path'])
+            log.info("Done")
         else:
             log.info('not downloading because it already has been downloaded')
         
         # put into postgres
-        cmd = 'pg_restore -d {0[database]} --role={0[role]} --file={1}'.format(
-            manifest, save_path
-        )
-        
+        cmd = restore_cmd.format(manifest=manifest)
         os.system(cmd)
-
-    def get_save_path(self):
-        """
-        Based on the settings provided, figure out where to save incoming dumps
-        """
-        if TEMP_LOCATION:
-            return TEMP_LOCATION
-            
-        if PROJECT_PATH:
-            return PROJECT_PATH
-        
-        return '.' # if no setting can be found, use current dir
 
     def get_latest(self, bucket):
         """
@@ -70,4 +62,4 @@ class Command(NoArgsCommand):
         key = latest['string']
         dt = latest['dt']
         log.info("Using latest dump from: {0:%B %m, %y -- %X}".format(dt))
-        return key
+        return bucket.get_key(key)
