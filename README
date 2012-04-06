@@ -8,6 +8,7 @@ python-pip
 virtualenv
 libapache2-mod-wsgi
 python-virtualenv
+python-matplotlib
 
 postgresql-contrib-9.1
 proj
