@@ -8,7 +8,7 @@ os.environ["CELERY_LOADER"] = "django"
 
 from site import addsitedir
 from local_settings import ENV_DIR
-site.addsitedir(ENV_DIR + "/lib/python2.6/site-packages")
+addsitedir(ENV_DIR + "/lib/python2.7/site-packages")
 
 from django.core.handlers.wsgi import WSGIHandler
 application = WSGIHandler()

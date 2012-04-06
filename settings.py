@@ -106,7 +106,6 @@ INSTALLED_APPS += [
     'milestones',
     'manage',
     'facebook_app',
-    'forum_new_style',
     
     'tagging',
     'pagination',
