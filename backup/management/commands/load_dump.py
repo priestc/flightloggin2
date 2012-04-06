@@ -42,7 +42,10 @@ class Command(NoArgsCommand):
             log.info('not downloading because it already has been downloaded')
         
         # put into postgres
-        cmd = 'pg_restore -d %s %s' % (manifest['database'], save_path)
+        cmd = 'pg_restore -d {0[database]} --role={0[role]} --file={1}'.format(
+            manifest, save_path
+        )
+        
         os.system(cmd)
 
     def get_save_path(self):
