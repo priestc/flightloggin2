@@ -34,7 +34,7 @@ class Command(NoArgsCommand):
         latest_key = self.get_latest(bucket)
         key = bucket.get_key(latest_key)
         path = self.get_save_path()
-        save_path = os.path.join(path, 'dump-{0}'.format(key.name))
+        save_path = os.path.join(path, '{0}-{1}'.format(dump, key.name))
         
         if not os.path.exists(save_path):       
             key.get_contents_to_filename(save_path)

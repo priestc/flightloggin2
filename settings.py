@@ -137,3 +137,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'main.context_processors.figure_navbar',
     'main.context_processors.site_url',
 )
+
+DUMP_MANIFEST = {
+    'default': {
+        'database': 'logbook',
+        'exclude-models': 'Location',
+        's3-bucket': 'fl_dumps'
+    }
+}
