@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load forum_tags %}
+
+{% block title%}{{ thread.title }}{% endblock %}
+
+{% block javascript %}
+{% rss_markup thread 'posts' %}
+{% endblock %}
+
+{% block canvas %}
+
+<h1>
+<a href="{% url forum:index %}">Index</a> >
+<a href="{{ forum.get_absolute_url }}">{{ forum.name }}</a> >
+{{ thread.title }}
+</h1>
+
+{% for post in posts %}
+
+    {% post_render post request.user request.META.REMOTE_ADDR %}
+
+{% empty %}
+
+    <h2>whoops, no posts to show here</h2>
+
+{% endfor %}
+
+{{ new_form }}
+
+{% endblock %}

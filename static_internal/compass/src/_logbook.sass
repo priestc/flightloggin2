@@ -1,0 +1,42 @@
+#logbook_table
+  width: 100%
+  border: none
+  background: $canvas
+  font-size: x-small
+  border-collapse: collapse
+  tbody tr
+    &:nth-child(even) td
+      background: $logbook_strip1
+    &:nth-child(odd) td
+      background: $logbook_strip2
+  td.date_col span
+    display: none
+  td
+    border: $logbook_border
+    padding: 1px
+    &:last-child:not([colspan])
+      white-space: normal
+      text-align: left
+  // logbook header cells
+  tr.header td
+    color: $logbook_header_text
+    background: $logbook_header unquote("!important")
+  tfoot td[colspan]
+    border: none
+    text-align: right
+    background: $canvas unquote("!important")
+  tfoot td
+    background: #fff
+  td.empty_logbook
+    font-size: x-large
+    padding: 10px !important
+  span.indirect_fuel_burn
+    color: gray
+
+div.small_popup
+  background: $small_popup
+  display: none
+  position: absolute
+  padding: 3px
+  font-size: x-small
+  border: 1px solid #000

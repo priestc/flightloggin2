@@ -1,0 +1,77 @@
+form#prefs_form
+  input[type="submit"]
+    margin: 15px
+  fieldset
+    text-align: right
+    margin-bottom: 20px
+    legend
+      font-size: large
+      font-weight: bold
+      color: #11566d
+    div
+      margin: 0 auto 0 auto
+      text-align: center
+      &#instructions
+        margin-bottom: 5px
+  table
+    width: 100%
+    font-size: medium
+    margin-right: auto
+    margin-left: auto
+    th
+      // the first column
+      text-align: right
+      font-weight: normal
+      width: 40%
+      border: 0px solid green
+      padding-right: 5px
+    td
+      // the middle column
+      text-align: left
+      padding-right: 10px
+      width: 20%
+      input, select
+        margin: 0 0 0 0
+        width: 150px
+      input[type="checkbox"]
+        width: auto
+    td:last-child
+      // the last column
+      text-align: left
+      font-size: x-small
+      color: gray
+      width: 40%
+  // the auto button column table
+  #columns_table
+    color: #000
+    border: 1px solid #ccc
+    margin-right: auto
+    margin-left: auto
+    width: 100%
+    border-collapse: collapse
+    margin-bottom: 15px
+    td
+      text-align: left
+      border: 1px solid #ccc
+      width: auto
+    td.description
+      font-size: xx-small
+      font-style: italics
+      color: #000
+    td.aauto
+      width: 2em
+      text-align: center
+    td.column
+      width: 2em
+      text-align: center
+    tbody
+      tr
+        &:nth-child(even) td
+          background: $minor_strip1
+        &:nth-child(odd) td
+          background: $minor_strip2
+    thead
+      td
+        border: 0px
+        text-align: center
+        background: clear

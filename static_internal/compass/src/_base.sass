@@ -1,0 +1,149 @@
+@import compass/utilities.sass
+
+body
+  color: $raw_text
+  background: $bg
+  line-height: default
+  margin: 5px
+  margin-top: 0px
+  padding: 0px
+  line-height: 110%
+  font-size: small
+  font-family: "Bitstream Vera Sans", sans-serif
+  min-height: 100%
+  height: 100%
+  a
+    +link-colors($raw_text, $navbar_current - #222)
+  span
+    &.logged_user, &.display_user
+      font-weight: bold
+
+#header
+  margin: 5px
+  overflow: visible
+  border: 0px solid #000
+
+#main_content
+  margin: 5px
+  overflow: hidden
+  border: 0px solid #000
+  overflow: visible
+
+#logo
+  margin-top: 16px
+  margin-bottom: 5px
+  border: 0px
+  float: left
+
+#inner_header
+  text-align: right
+  font-weight: normal
+  width: 100%
+  overflow: hidden
+  border: 0
+
+#demo
+  font-weight: bold
+  color: #a33
+
+.display_user, .logged_user
+  color: $raw_text
+
+input.embed + img
+  position: relative
+  left: -20px
+  top: 3px
+  cursor: pointer
+
+h1
+  text-align: center
+  font-weight: bold
+  color: $h1
+  font-size: x-large
+
+h2
+  font-weight: bold
+  color: $h2
+  font-size: large
+
+textarea
+  border: 1px solid #000
+  font-family: inherit
+  font-size: inherit
+  background: #fff
+
+select
+  border: 1px solid #000
+  background: #eee
+  font-family: inherit
+
+.instructions
+  background: #ddd
+  padding: 20px
+
+input
+  &[type="button"]:hover, &[type="submit"]:hover
+    cursor: pointer
+
+input[type="button"]
+  margin-bottom: 5px
+
+button:hover
+  cursor: pointer
+
+input
+  &[type="submit"], &[type="button"]
+    border: 1px solid #000
+
+button
+  border: 1px solid #000
+
+input
+  &[type="password"], &[type="text"]
+    border: 1px solid #000
+    margin: 2px
+    background: #fff
+
+#footer
+  text-align: center
+  font-size: x-small
+  color: gray
+  width: 100%
+
+#navbar_header
+  margin-bottom: 10px
+
+div.other_ad
+  width: 728px
+  height: 90px
+  position: relative
+  text-align: center
+  margin: 0 auto 0 auto
+  span.corner_ad_text
+    font-size: xx-small
+    position: absolute
+    left: 2px
+    top: 0px
+
+#canvas
+  background: $canvas
+  color: $canvas_text
+  padding: 1em
+  overflow: visible
+  width: 73em
+  margin: 0 auto 0 auto
+  text-align: center
+  border: 0px solid purple
+  a
+    +link-colors($canvas_link, $navbar_current - #222)
+  //all tables are centered by default
+  table
+    td
+      text-align: center
+  span.help_text
+    color: gray
+    font-size: x-small
+    font-style: italic
+  span.remarks_tag
+    color: $remarks_tag
+    font-weight: bold

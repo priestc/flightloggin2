@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block description %}FlightLogg.in' help, frequently asked questions, a site guide{% endblock%}
+
+{% block title %}Help{% endblock %}
+
+{% block javascript %}
+<style type="text/css">
+    div#canvas   {text-align: left}
+</style>
+{% endblock %}
+
+{% block canvas %}
+
+
+{% for help in helpitems %}
+
+    <div class="faq_help_item">
+        <h2>{{ help.title }}</h2>
+        {{ help.body|safe|linebreaks }}
+    </div>
+
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% if obj.remarks %}<i>{{obj.remarks}}</i><br><br>{% endif %}
+
+{% ifequal obj.plane.tailnumber "UNKNOWN" %}
+    Unknown aircraft
+{% else %}
+    {{obj.plane.tailnumber}}
+{% endifequal %}
+
+{% if obj.plane.fancy_name %}
+({{obj.plane.fancy_name}})
+{% endif %}<br><br>
+
+{% for rb in obj.route.routebase_set.all %}
+    {% with rb.destination as dest %}
+    {{dest.identifier}} - {{dest.location_summary}}<br>
+    {% endwith %}
+{% endfor %}
+
+<br>
+{% if obj.total %}Total: <b>{{obj.total}}</b><br>{% endif %}
+{% if obj.pic %}PIC: <b>{{obj.pic}}</b><br>{% endif %}
+{% if obj.sic %}SIC: <b>{{obj.sic}}</b><br>{% endif %}
+{% if obj.act_inst %}Actual: <b>{{obj.act_inst}}</b><br>{% endif %}
+{% if obj.sim_inst %}Hood: <b>{{obj.sim_inst}}</b><br>{% endif %}
+{% if obj.night %}Night: <b>{{obj.night}}</b><br>{% endif %}
+{% if obj.xc %}Cross Country: <b>{{obj.xc}}</b><br>{% endif %}

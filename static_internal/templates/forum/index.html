@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load forum_tags %}
+
+{% block title %}Forums{% endblock %}
+
+{% block javascript %}
+{% rss_markup 'all' 'threads' %}
+{% rss_markup 'all' 'posts' %}
+{% endblock %}
+
+{% block canvas %}
+<h1>Forum Index</h1>
+<table style="width: 100%; background: #dfdfdf; border: 1px solid black; margin: 10px 0 0 0">
+    <tr>
+        <th>Forum Name</th>
+        <th>Posts</th>
+        <th>Threads</th>
+        <th>Last Post</th>
+    </tr>
+    
+{% for forum in forums %}
+    {% if not forum.divider %}
+        <tr>
+            <td style="text-align: left">
+                <big><a href="{{ forum.get_absolute_url }}">{{ forum.name }}</a></big> - 
+                {{ forum.description }}</td>
+            <td>{{ forum.post_count }}</td>
+            <td>{{ forum.thread_count }}</td>
+            <td>{{ forum.last_post|date:"Y M d - G:i:s T"|default:"Never" }}</td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="3">---- {{ forum.name }} ----</td>
+        </tr>
+    {% endif %}
+{% endfor %}
+</table>
+
+{% endblock %}
