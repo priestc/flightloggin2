@@ -12,3 +12,4 @@ dumps
 uploads
 *~
 .sass-cache
+.DS_Store

@@ -7,6 +7,7 @@ from boto.s3.key import Key
 
 from django.core.management.base import NoArgsCommand
 from django.conf import settings
+from django.db import models
 
 class Command(NoArgsCommand):
 
@@ -31,3 +32,19 @@ class Command(NoArgsCommand):
 
         #clean up
         os.remove('this_dump')
+        
+    
+    def get_tables(self, manifest):
+        """
+        For a given manifest, return all the database tables that we are going
+        to dump.
+        """
+        all_models = model.get_models()
+        dump_models = []
+        
+        for model in all_models:
+            if model.__name__ not in manifest['exclude-models']:
+                dump_models.append(m._meta.db_table)
+        
+        return dump_models
+        
