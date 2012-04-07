@@ -9,7 +9,7 @@ from constants import *
 from utils import to_minutes
 from fuel_burn import FuelBurn
 
-from flightloggin.main.enhanced_model import QuerySetManager, EnhancedModel
+from main.enhanced_model import QuerySetManager, EnhancedModel
 from queryset_manager import FlightQuerySet
 
 

@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from constants import *
 
 from flightloggin.plane.constants import CATEGORY_CLASSES, FAKE_CLASSES
-from flightloggin.main.mixins import GoonMixin
+from main.mixins import GoonMixin
 
 class Profile(models.Model, GoonMixin):
     user =           models.ForeignKey(User, primary_key=True)

@@ -5,8 +5,8 @@ from django.views.decorators.cache import cache_page
 
 from annoying.decorators import render_to
 
-from flightloggin.share.decorator import no_share
-from flightloggin.maps.utils import qs_to_time_kmz
+from share.decorator import no_share
+from maps.utils import qs_to_time_kmz
 from flightloggin.route.models import Route
 from flightloggin.profile.models import Profile, AutoButton
 from flightloggin.plane.models import Plane

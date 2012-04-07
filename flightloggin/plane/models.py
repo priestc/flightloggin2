@@ -9,11 +9,11 @@ from tagging.fields import TagField
 import tagging
 from tagging.models import Tag
 
-from flightloggin.main.mixins import GoonMixin
+from main.mixins import GoonMixin
 from constants import *
 
 from utils import PlaneQuerySet
-from flightloggin.main.enhanced_model import QuerySetManager, EnhancedModel
+from main.enhanced_model import QuerySetManager, EnhancedModel
 
 class Plane(EnhancedModel):
 

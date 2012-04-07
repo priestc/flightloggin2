@@ -1,7 +1,7 @@
 import datetime
 
 from django.db import models
-from flightloggin.main.mixins import UserMixin
+from main.mixins import UserMixin
 
 class Duty(models.Model, UserMixin):
     user = models.ForeignKey('auth.User')

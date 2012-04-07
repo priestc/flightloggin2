@@ -5,7 +5,7 @@ from django.db.models import Sum, Avg, Max
 
 from annoying.decorators import render_to
 
-from flightloggin.share.decorator import no_share
+from share.decorator import no_share
 from logbook.models import Flight
 from flightloggin.airport.models import Location
 from flightloggin.route.models import Route

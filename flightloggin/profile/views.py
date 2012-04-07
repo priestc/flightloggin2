@@ -4,7 +4,7 @@ from forms import ProfileForm, ColumnsForm, AutoForm, UserForm
 from models import *
 
 from django.contrib.auth.decorators import login_required
-from flightloggin.share.decorator import no_share
+from share.decorator import no_share
 from annoying.decorators import render_to
 
 from django.conf import settings

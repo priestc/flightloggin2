@@ -1,8 +1,8 @@
 import datetime
 from annoying.decorators import render_to
 
-from flightloggin.main.utils import json_view
-from flightloggin.main.utils import ajax_timestamp_to_datetime as atd
+from main.utils import json_view
+from main.utils import ajax_timestamp_to_datetime as atd
 from models import Duty, Block
 
 @render_to('realtime.html')

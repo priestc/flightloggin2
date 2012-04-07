@@ -1,9 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from constants import *
-from flightloggin.main.mixins import GoonMixin
-from flightloggin.main.queryset_manager import QuerySetManager
-from flightloggin.share.middleware import share
+from main.mixins import GoonMixin
+from main.queryset_manager import QuerySetManager
+from share.middleware import share
 
 class Records(models.Model, GoonMixin):
     

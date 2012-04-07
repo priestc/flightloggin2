@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from annoying.decorators import render_to
 
 from forms import ImportForm
-from flightloggin.share.decorator import no_share
+from share.decorator import no_share
 
 from import_class import PreviewImport, DatabaseImport, BaseImport
 from handle_uploads import save_php, save_upload, get_last

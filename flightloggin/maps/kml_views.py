@@ -2,7 +2,7 @@ from django.views.decorators.cache import cache_page
 
 from logbook.models import Flight
 from flightloggin.route.models import RouteBase, Route
-from flightloggin.share.decorator import no_share
+from share.decorator import no_share
 
 from utils import *
 from flightloggin.airport.models import Location

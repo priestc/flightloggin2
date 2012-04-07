@@ -1,5 +1,5 @@
 from annoying.decorators import render_to
-from flightloggin.share.decorator import no_share
+from share.decorator import no_share
 
 from flightloggin.plane.models import Plane
 from flightloggin.plane.constants import CURRENCIES

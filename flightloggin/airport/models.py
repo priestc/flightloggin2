@@ -10,7 +10,7 @@ from django.http import Http404
 
 from constants import LOCATION_TYPE, LOCATION_CLASS
 
-from flightloggin.main.enhanced_model import GeoQuerySetManager, EnhancedModel
+from main.enhanced_model import GeoQuerySetManager, EnhancedModel
 from queryset_manager import * 
 
 class WikiMixins(object):

@@ -6,7 +6,7 @@ from flightloggin.plane.models import Plane
 
 admin.autodiscover()
 
-handler500 = "flightloggin.main.views.handler500"
+handler500 = "main.views.handler500"
 
 ###############################################################################
 
@@ -60,11 +60,11 @@ urlpatterns = patterns('django_openid_auth.views',
 urlpatterns += patterns('',
     (
         r'^robots\.txt$',
-        'flightloggin.main.views.robots'
+        'main.views.robots'
     ),
 
     (r'^histogram/', include('flightloggin.histogram.urls')),
-    (r'^kml/', include('flightloggin.maps.kml_urls')),
+    (r'^kml/', include('maps.kml_urls')),
     (r'^facebook', include('flightloggin.facebook_app.urls')),
     
     (r'^search/locations\.html$', 'flightloggin.airport.views.search_airport'),
@@ -74,7 +74,7 @@ urlpatterns += patterns('',
     
     url(
         r'^help.html$',
-        "flightloggin.main.views.help",
+        "main.views.help",
                                                                    name="help",
     ),
     
@@ -220,7 +220,7 @@ urlpatterns += patterns('',
     
     url(
         r'^news\.html$',
-        "flightloggin.main.views.news",
+        "main.views.news",
                                                                    name="news",
     ),
     
@@ -354,7 +354,7 @@ urlpatterns += patterns('',
     
     url(
         r'^(?P<username>\w+)/maps\.html$',
-        "flightloggin.maps.views.maps",
+        "maps.views.maps",
                                                                    name="maps",
     ),
     
@@ -367,7 +367,7 @@ urlpatterns += patterns('',
     
     url(
         r'^(?P<username>\w+)/states-(?P<type_>[\w\-]+)\.(?P<ext>(png|svg))$',
-        "flightloggin.maps.states_views.render_image",
+        "maps.states_views.render_image",
                                                               name="state-map",
     ),
     

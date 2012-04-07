@@ -3,10 +3,10 @@ import re
 from django.contrib.gis.db import models
 from django.db.models import Q
 
-from flightloggin.share.middleware import share
+from share.middleware import share
 from flightloggin.airport.models import Location, HistoricalIdent
 
-from flightloggin.main.enhanced_model import QuerySetManager, EnhancedModel
+from main.enhanced_model import QuerySetManager, EnhancedModel
 
 ###############################################################################
 

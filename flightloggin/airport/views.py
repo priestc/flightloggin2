@@ -1,7 +1,7 @@
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
-from flightloggin.share.decorator import secret_key
+from share.decorator import secret_key
 from annoying.decorators import render_to
 from models import Location, HistoricalIdent
 

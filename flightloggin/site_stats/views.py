@@ -4,7 +4,7 @@ from django.views.decorators.cache import cache_page
 from annoying.decorators import render_to
 
 from flightloggin.route.models import Route
-from flightloggin.share.decorator import secret_key
+from share.decorator import secret_key
 from models import Stat
 
 from utils import *

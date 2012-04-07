@@ -2,7 +2,7 @@ from django.db.models import Q
 from django.db.models import Sum
 from constants import AGG_FIELDS, EXTRA_AGG, DB_FIELDS
 
-from flightloggin.main.enhanced_model import EnhancedQuerySet
+from main.enhanced_model import EnhancedQuerySet
 from logbook.utils import proper_format
 
 class FlightQuerySet(EnhancedQuerySet):
