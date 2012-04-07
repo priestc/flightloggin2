@@ -1,7 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-{% load gravatar %}
-{% load analytics %}
-{% load staticfiles %}
+{% load gravatar %}{% load analytics %}
 <html lang="en">
     <head profile="http://www.w3.org/2005/10/profile">
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -11,7 +9,7 @@
 		<link rel="icon" type="image/png" href="/icons/favicon.png">
         
         <script type="text/javascript">
-	        MEDIA_URL = "{{ MEDIA_URL }}";
+	        MEDIA_URL = "{{ STATIC_URL }}";
 	        window.google_analytics_uacct = "UA-501381-5";
 	    </script>
 

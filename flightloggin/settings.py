@@ -149,6 +149,7 @@ AUTH_PROFILE_MODULE = 'profile.Profile'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.static',
     'django.core.context_processors.debug',
     'django.core.context_processors.request',
     'django.core.context_processors.media',
@@ -159,6 +160,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'main.context_processors.site_url',
 )
 
+from django.template.loader import add_to_builtins
+add_to_builtins('django.contrib.staticfiles.templatetags.staticfiles')
 
 AUTHENTICATION_BACKENDS = (
     'django_openid_auth.auth.OpenIDBackend',

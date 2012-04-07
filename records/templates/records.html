@@ -3,7 +3,7 @@
 {% block description %}{{ request.display_user.username }}'s logbook records{% endblock%}
 
 {% block javascript %}
-	<script type="text/javascript">NAVBAR_HIGHLIGHT = "records-sel";</script>
+    <script type="text/javascript">NAVBAR_HIGHLIGHT = "records-sel";</script>
 {% endblock %}
 
 {% block title %}Records{% endblock %}
@@ -11,27 +11,27 @@
 {% block canvas %}
 
 <form action="{% url records request.display_user.username %}" method="post">
-	{% csrf_token %}
-	<div>
-	    {% if not request.shared %}
-		<input type="submit" value="Save" /><br><br>
-		{% endif %}
-		
-		{% if saved %}
-		
-		<span style="color: red; font-weight: bold">Saved</span>
-		<br />
-		
-		{% endif %}
-		<textarea class="records" cols="50" rows="10" name="records">{{ records.text }}</textarea>
-	</div>
+    {% csrf_token %}
+    <div>
+        {% if not request.shared %}
+        <input type="submit" value="Save" /><br><br>
+        {% endif %}
+        
+        {% if saved %}
+        
+        <span style="color: red; font-weight: bold">Saved</span>
+        <br />
+        
+        {% endif %}
+        <textarea class="records" cols="50" rows="10" name="records">{{ records.text }}</textarea>
+    </div>
 </form>
 <br>
     <div class="instructions">
-		Use this space to record any information you'd normally put in the back
-		of a paper logbook. Phone numbers and addresses of contacts; dates of
-		endorsements; student signoffs and outcomes; notes, etc.
-	</div>
+        Use this space to record any information you'd normally put in the back
+        of a paper logbook. Phone numbers and addresses of contacts; dates of
+        endorsements; student signoffs and outcomes; notes, etc.
+    </div>
 
 
 {% endblock %}

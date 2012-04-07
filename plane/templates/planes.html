@@ -4,58 +4,60 @@
 {% block description %}{{ request.display_user.username }}'s planes{% endblock%}
 
 {% block javascript %}
-    <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/plane_popup.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/popup.js"></script>
+    <script type="text/javascript" src="{% static "js/plane_popup.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/popup.js" %}"></script>
     <script type="text/javascript">NAVBAR_HIGHLIGHT = "planes-sel";</script>
 {% endblock %}
 
 {% block title %}Planes{% endblock %}
 
-
 {% block canvas %}
     {% if not request.shared %}
-	<input id="new_plane" type="button" value="New Plane">
+    <input id="new_plane" type="button" value="New Plane">
     {% endif %}
     <table id="p_t" class="minor_table">
-	    <thead>
-		    <tr>
-			    <td>Tailnumber</td>
-			    <td>Manufacturer</td>
-			    <td>Type</td>
-			    <td>Model Name</td>
-			    <td>Fuel Burn</td>
-			    <td>Category/Class</td>
-			    <td>Tags</td>
-			    <td>Description</td>
-		    </tr>
-	    </thead>
-	    <tbody>
-	    {% for plane in planes %}
-		    <tr>
-			    <td id="p{{ plane.id }}_tailnumber" title="Tailnumber (click to edit)">
-			    <a href="" id="p{{ plane.id }}" class="popup_link">
-			    {% if not plane.tailnumber %}
-			    &nbsp;&nbsp;
-			    {% else %}
-			    {{ plane.tailnumber }}
-			    {% endif %}</a></td>
-			    <td id="p{{ plane.id }}_manufacturer">{{ plane.manufacturer }}</td>
-			    <td id="p{{ plane.id }}_type">{{ plane.type }}</td>
-			    <td id="p{{ plane.id }}_model">{{ plane.model }}</td>
-			    <td id="p{{ plane.id }}_fuel_burn">{{ plane.fuel_burn|default:"" }}</td>
-			    <td id="p{{ plane.id }}_cat_class">{{ plane.get_cat_class_display }}</td>
-			    <td id="p{{ plane.id }}_tags">{{ plane.get_tags_quote|join:", " }}</td>
-			    <td id="p{{ plane.id }}_description">{{ plane.hidden_tag }}{{ plane.retired_tag }} {{ plane.description }}</td>
-		    </tr>		
-	    {% empty %}
-	        <tr>
-	            <td class="nothing" colspan="8">Nothing to show here, sorry</td>
-	        </tr>
-	    {% endfor %}
-	
-	
-	    </tbody>
+        <thead>
+            <tr>
+                <td>Tailnumber</td>
+                <td>Manufacturer</td>
+                <td>Type</td>
+                <td>Model Name</td>
+                <td>Fuel Burn</td>
+                <td>Category/Class</td>
+                <td>Tags</td>
+                <td>Description</td>
+            </tr>
+        </thead>
+        <tbody>
+        {% for plane in planes %}
+            <tr>
+                <td id="p{{ plane.id }}_tailnumber" title="Tailnumber (click to edit)">
+                    <a href="" id="p{{ plane.id }}" class="popup_link">
+                        {% if not plane.tailnumber %}
+                        &nbsp;&nbsp;
+                        {% else %}
+                        {{ plane.tailnumber }}
+                        {% endif %}
+                    </a>
+                </td>
+                <td id="p{{ plane.id }}_manufacturer">{{ plane.manufacturer }}</td>
+                <td id="p{{ plane.id }}_type">{{ plane.type }}</td>
+                <td id="p{{ plane.id }}_model">{{ plane.model }}</td>
+                <td id="p{{ plane.id }}_fuel_burn">{{ plane.fuel_burn|default:"" }}</td>
+                <td id="p{{ plane.id }}_cat_class">{{ plane.get_cat_class_display }}</td>
+                <td id="p{{ plane.id }}_tags">{{ plane.get_tags_quote|join:", " }}</td>
+                <td id="p{{ plane.id }}_description">{{ plane.hidden_tag }}{{ plane.retired_tag }} {{ plane.description }}</td>
+            </tr>        
+        {% empty %}
+            <tr>
+                <td class="nothing" colspan="8">Nothing to show here, sorry</td>
+            </tr>
+            {% endfor %}
+            
+            
+        </tbody>
     </table>
+
     <div id="mass_edit_link">
         {% if not request.shared %}
         <a href="{% url mass-planes request.display_user %}">Mass Edit/Entry</a>
@@ -63,106 +65,107 @@
     </div>
 
 <div id="popup" class="plane" title="New Entry">
-	<table id="dragbar">
-		<tr>
-			<td><span id="titlebar">New Plane</span></td>
-			<td><span id="close_x" title="Close this popup">[X]</span></td>
-		</tr>
-	</table>
-	
-	<form id="new_plane_form" action="{% url planes request.display_user.username %}" method="post">
-		<table class="single_column">
-			<tbody>
-				<tr>
-					<td>
-						<input type="hidden" name="id" id="id_id" value="{{ request.POST.id }}" />
-					</td>  {# putting the POST.id here allows the edit popup to be populated with the ID when an edit fails  #}
-				</tr>
-				<tr>
-				    <td style="display: none" id="{{edit_or_new}}_error_cell">{{ form.errors }}</td>
-				</tr>
-				<tr>
-				    <td id="display_error_cell" colspan="2">
-				        {{ form.non_field_errors }}
-				    </td>
-				</tr>
-				
-				<tr>
-					<th>&nbsp;</th>
-					<td>
-					    <div style="overflow: hidden">
-					        {{ form.hidden.label_tag }}{{ form.hidden }}
-					        {{ form.retired.label_tag }}{{ form.retired }}
-					    </div>
-					</td>
-				</tr>
-				
-				<tr>
-					<th>{{ form.tailnumber.label_tag }}<br>&nbsp;</th>
-					<td>{{ form.tailnumber }}{{ form.tailnumber.errors|default:"<br>" }}
-					<span class="help_text">{{form.tailnumber.help_text}}</span></td>
-				</tr>
-				
-				<tr>
-					<th>{{ form.manufacturer.label_tag }}<br>&nbsp;</th>
-					<td>{{ form.manufacturer }}{{ form.manufacturer.errors|default:"<br>" }}
-					<span class="help_text">{{form.manufacturer.help_text}}</span></td>
-				</tr>
-			
-				<tr>
-					<th>{{ form.type.label_tag }}<br>&nbsp;</th>
-					<td>{{ form.type }}{{ form.type.errors|default:"<br>" }}
-					<span class="help_text">{{form.type.help_text}}</span></td>
-				</tr>
-				
-				<tr>
-					<th>{{ form.model.label_tag }}<br>&nbsp;</th>
-					<td>{{ form.model }}{{ form.model.errors|default:"<br>" }}
-					<span class="help_text">{{form.model.help_text}}</span></td>
-				</tr>
-				
-				<tr>
-					<th>{{ form.fuel_burn.label_tag }}<br>&nbsp;</th>
-					<td>{{ form.fuel_burn }}{{ form.fuel_burn.errors|default:"<br>" }}
-					<span class="help_text">{{form.fuel_burn.help_text}}</span></td>
-				</tr>
-				
-				<tr>
-					<th>{{ form.cat_class.label_tag }}</th>
-					<td>{{ form.cat_class }}</td>
-				</tr>
-				
-				<tr>
-					<th>Tags</th>
-					<td>{{ form.tags }}</td>
-				</tr>
-				
-				<tr>
-					<th>{{ form.description.label_tag }}</th>
-					<td>{{ form.description }}</td>
-				</tr>
+    <table id="dragbar">
+        <tr>
+            <td><span id="titlebar">New Plane</span></td>
+            <td><span id="close_x" title="Close this popup">[X]</span></td>
+        </tr>
+    </table>
+    
+    <form id="new_plane_form" action="{% url planes request.display_user.username %}" method="post">
+        {% csrf_token %}
+        <table class="single_column">
+            <tbody>
+                <tr>
+                    <td>
+                        <input type="hidden" name="id" id="id_id" value="{{ request.POST.id }}" />
+                    </td>  {# putting the POST.id here allows the edit popup to be populated with the ID when an edit fails  #}
+                </tr>
+                <tr>
+                    <td style="display: none" id="{{edit_or_new}}_error_cell">{{ form.errors }}</td>
+                </tr>
+                <tr>
+                    <td id="display_error_cell" colspan="2">
+                        {{ form.non_field_errors }}
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th>&nbsp;</th>
+                    <td>
+                        <div style="overflow: hidden">
+                            {{ form.hidden.label_tag }}{{ form.hidden }}
+                            {{ form.retired.label_tag }}{{ form.retired }}
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th>{{ form.tailnumber.label_tag }}<br>&nbsp;</th>
+                    <td>{{ form.tailnumber }}{{ form.tailnumber.errors|default:"<br>" }}
+                    <span class="help_text">{{form.tailnumber.help_text}}</span></td>
+                </tr>
+                
+                <tr>
+                    <th>{{ form.manufacturer.label_tag }}<br>&nbsp;</th>
+                    <td>{{ form.manufacturer }}{{ form.manufacturer.errors|default:"<br>" }}
+                    <span class="help_text">{{form.manufacturer.help_text}}</span></td>
+                </tr>
+            
+                <tr>
+                    <th>{{ form.type.label_tag }}<br>&nbsp;</th>
+                    <td>{{ form.type }}{{ form.type.errors|default:"<br>" }}
+                    <span class="help_text">{{form.type.help_text}}</span></td>
+                </tr>
+                
+                <tr>
+                    <th>{{ form.model.label_tag }}<br>&nbsp;</th>
+                    <td>{{ form.model }}{{ form.model.errors|default:"<br>" }}
+                    <span class="help_text">{{form.model.help_text}}</span></td>
+                </tr>
+                
+                <tr>
+                    <th>{{ form.fuel_burn.label_tag }}<br>&nbsp;</th>
+                    <td>{{ form.fuel_burn }}{{ form.fuel_burn.errors|default:"<br>" }}
+                    <span class="help_text">{{form.fuel_burn.help_text}}</span></td>
+                </tr>
+                
+                <tr>
+                    <th>{{ form.cat_class.label_tag }}</th>
+                    <td>{{ form.cat_class }}</td>
+                </tr>
+                
+                <tr>
+                    <th>Tags</th>
+                    <td>{{ form.tags }}</td>
+                </tr>
+                
+                <tr>
+                    <th>{{ form.description.label_tag }}</th>
+                    <td>{{ form.description }}</td>
+                </tr>
 
-			</tbody>
-		</table>
-		
-		<div id="tags_window">
-			{% tag_cloud_for_model plane.Plane as cloud with distribution=log min_count=80 steps=5 %}
-			
-			{% for tag in cloud %}
+            </tbody>
+        </table>
+        
+        <div id="tags_window">
+            {% tag_cloud_for_model plane.Plane as cloud with distribution=log min_count=80 steps=5 %}
+            
+            {% for tag in cloud %}
             <a href="" title="Add this tag" class="tag{{tag.font_size}}">{{ tag }}</a>
             {% endfor %}
-		</div>
-		
-		<div id="new_plane_buttons">
-			<input type="submit" name="submit" value="Create New Plane" id="submit_new_flight" />
-		</div>
+        </div>
+        
+        <div id="new_plane_buttons">
+            <input type="submit" name="submit" value="Create New Plane" id="submit_new_flight" />
+        </div>
         {% if not request.shared %}
-		<div id="edit_plane_buttons">
-			<input type="submit" name="submit" value="Submit Changes" id="submit_edit_flight" />
-			<input type="submit" name="submit" value="Delete Plane" id="submit_delete_flight" />
-		</div>
+        <div id="edit_plane_buttons">
+            <input type="submit" name="submit" value="Submit Changes" id="submit_edit_flight" />
+            <input type="submit" name="submit" value="Delete Plane" id="submit_delete_flight" />
+        </div>
         {% endif %}
-	</form>
+    </form>
 </div>
 <br>
 <div class="instructions">
