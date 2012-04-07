@@ -15,7 +15,6 @@ from logbook.models import Flight
 from records.models import Records, NonFlight
 from logbook.models import Columns
 from airport.models import Location
-
 from logbook.constants import OPTION_FIELDS, FIELD_TITLES
 
 @no_share('NEVER')

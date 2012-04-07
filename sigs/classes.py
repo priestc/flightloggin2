@@ -24,7 +24,7 @@ class BaseSig(object):
         else:
             self.logo = False
         
-        fontdir = os.path.join(settings.MEDIA_ROOT, "fonts", self.font)
+        fontdir = os.path.join(settings.PROJECT_ROOT, 'static_internal', "fonts", self.font)
         self.font = ImageFont.truetype(fontdir, self.font_size)
         
         self.line_height = self.font.getsize("TlIKOPgq")[1] + 2
