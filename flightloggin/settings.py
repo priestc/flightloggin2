@@ -1,4 +1,4 @@
-# Django settings for django_template project.
+# Django settings for flightloggin project.
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -26,11 +26,11 @@ SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
-USE_I18N = True
+USE_I18N = False
 
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale.
-USE_L10N = True
+USE_L10N = False
 
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
@@ -89,7 +89,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'flightloggin.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'django_template.wsgi.application'
+WSGI_APPLICATION = 'flightloggin.wsgi.application'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".

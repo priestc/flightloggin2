@@ -1,5 +1,5 @@
 from django.contrib.sitemaps import Sitemap
-from route.models import Route
+from flightloggin.route.models import Route
 
 class RouteSitemap(Sitemap):
     changefreq = "daily"

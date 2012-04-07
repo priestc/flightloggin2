@@ -1,7 +1,7 @@
 from django.db.models import Q
 from django.db.models.query import QuerySet
 from django.db.models import Sum
-from main.mixins import UserMixin
+from flightloggin.main.mixins import UserMixin
 
 class PlaneQuerySet(QuerySet, UserMixin):
     

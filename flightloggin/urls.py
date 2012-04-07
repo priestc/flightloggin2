@@ -1,7 +1,8 @@
 from django.conf.urls.defaults import *
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.contrib import admin
-from plane.models import Plane
+
+from flightloggin.plane.models import Plane
 
 admin.autodiscover()
 
@@ -17,9 +18,9 @@ handler500 = "main.views.handler500"
 
 ###############################################################################
 
-from route.sitemaps import RouteSitemap
-from plane.sitemaps import TailnumberSitemap, TypeSitemap, ModelSitemap
-from airport.sitemaps import LocationSitemap
+from flightloggin.route.sitemaps import RouteSitemap
+from flightloggin.plane.sitemaps import TailnumberSitemap, TypeSitemap, ModelSitemap
+from flightloggin.airport.sitemaps import LocationSitemap
 
 sitemaps = {
     'tailnumber': TailnumberSitemap,

@@ -24,7 +24,7 @@ DEMO_USER_ID = 2
 UNKNOWN_PLANE_ID = 90
 COMMON_USER_ID = 1
 
-DEV_APPS = ['django_extensions', ]
+DEV_APPS = ('django_extensions', )
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
