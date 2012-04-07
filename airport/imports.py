@@ -20,7 +20,7 @@ setup_environ(settings)
 
 
 from django.conf import settings
-PROJECT_PATH = settings.PROJECT_PATH
+PROJECT_ROOT = settings.PROJECT_ROOT
 ######################################################
 
 from airport.models import Location, Region, Country, HistoricalIdent
@@ -56,7 +56,7 @@ def airports():   #import airport
     gps_code	iata_code	local_code	home_link	wikipedia_link	keywords
     """
     
-    path = os.path.join(PROJECT_PATH, 'airport', 'csv', 'airports_new.csv')
+    path = os.path.join(PROJECT_ROOT, 'airport', 'csv', 'airports_new.csv')
     f = open(path, 'rb')
     reader = csv.reader(f, "excel")
     titles = reader.next()
@@ -184,7 +184,7 @@ def navaids():
     associated_airport
     """
     
-    path = os.path.join(PROJECT_PATH, 'airport', 'csv', 'navaids.csv')
+    path = os.path.join(PROJECT_ROOT, 'airport', 'csv', 'navaids.csv')
     f = open(path, 'rb')
     
     reader = csv.reader(f, "excel")
@@ -247,7 +247,7 @@ def regions():   #import region
     keywords
     """
 
-    path = os.path.join(PROJECT_PATH, 'airport', 'csv', 'regions.csv')
+    path = os.path.join(PROJECT_ROOT, 'airport', 'csv', 'regions.csv')
     f = open(path, 'rb')
     
     reader = csv.reader(f, "excel")
@@ -283,7 +283,7 @@ def countries():   #import country
     id	code	name	continent	wikipedia_link	keywords
     """
 
-    path = os.path.join(PROJECT_PATH, 'airport', 'csv', 'countries.csv')
+    path = os.path.join(PROJECT_ROOT, 'airport', 'csv', 'countries.csv')
     f = open(path, 'rb')
     
     reader = csv.reader(f, "excel")

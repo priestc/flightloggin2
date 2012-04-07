@@ -1,4 +1,4 @@
-django==1.2.1
+django==1.4
 hg+http://bitbucket.org/offline/django-annoying
 git+http://github.com/dcramer/django-devserver.git
 django-extensions
@@ -12,9 +12,12 @@ numpy
 psycopg2
 git+http://github.com/sciyoshi/pyfacebook.git@7ba3654569e2b3d7ecddbe2e05693c24e6d36c24#egg=pyfacebook-0.1-py2.6-dev
 python-openid==2.2.4
-python-dateutil==1.5
+python-dateutil
 pytz==2010e
 reportlab==2.4
 termcolor==0.1.2
 yolk
 boto
+debug
+sentry
+PIL

@@ -3,9 +3,9 @@ import datetime
 from django.views.decorators.cache import cache_page
 from annoying.decorators import render_to
 
-from models import Stat
 from route.models import Route
 from share.decorator import secret_key
+from models import Stat
 
 from utils import *
 from constants import STATS_TITLES

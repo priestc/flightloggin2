@@ -3,6 +3,7 @@ import random
 from django.conf import settings
 from style.constants import GOOGLE_ADS, WIKI_ADS
 from profile.models import Profile
+from django.contrib.sites.models import Site
 
 def old_browser(request):
     ua = request.META.get('HTTP_USER_AGENT', "ff")
@@ -55,10 +56,9 @@ def figure_navbar(request):
     return ret
 
 def site_url(request):
-    
     gmk = settings.GOOGLE_MAPS_KEY
-    
-    return {"SITE_URL": settings.SITE_URL, "GOOGLE_MAPS_KEY": gmk}
+    url = Site.objects.get_current()
+    return {"SITE_URL": url, "GOOGLE_MAPS_KEY": gmk}
 
 def proper_ad(request):
     

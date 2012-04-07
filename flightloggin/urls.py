@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import *
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.contrib import admin
+
 from plane.models import Plane
 
 admin.autodiscover()
@@ -9,11 +10,11 @@ handler500 = "main.views.handler500"
 
 ###############################################################################
 
-from feeds.classes import LatestFlights, LatestNews
-feeds = {
-    'flights': LatestFlights,
-    'news': LatestNews,
-}
+#from feeds.classes import LatestFlights, LatestNews
+#feeds = {
+#    'flights': LatestFlights,
+#    'news': LatestNews,
+#}
 
 ###############################################################################
 
@@ -26,7 +27,7 @@ sitemaps = {
     'type': TypeSitemap,
     'route': RouteSitemap,
     'model': ModelSitemap,
-    'location': LocationSitemap,  
+    'location': LocationSitemap,
 }
 
 ###############################################################################
@@ -65,7 +66,6 @@ urlpatterns += patterns('',
     (r'^histogram/', include('histogram.urls')),
     (r'^kml/', include('maps.kml_urls')),
     (r'^facebook', include('facebook_app.urls')),
-    (r'discussions/', include('forum_new_style.urls', app_name='forum', namespace='forum')),
     
     (r'^search/locations\.html$', 'airport.views.search_airport'),
     (r'^search/tailnumbers\.html$', 'plane.views.search_tailnumbers'),
@@ -76,11 +76,6 @@ urlpatterns += patterns('',
         r'^help.html$',
         "main.views.help",
                                                                    name="help",
-    ),
-
-    (
-        r'^is_alive$',
-        "main.views.is_alive"
     ),
     
     url(
@@ -121,17 +116,6 @@ urlpatterns += patterns('',
     ##########################################################################
 
     (
-        r'^icons/favicon.png$',
-        redirect_to,
-        {'url': '/fl-media/icons/favicon.ico'},
-    ),
-
-    (
-        r'forums/?$',
-        "redirect.views.redirect_to_forums",
-    ),
-
-    (
         r'^sitemap.xml$',
         'django.contrib.sitemaps.views.index',
         {'sitemaps': sitemaps}
@@ -147,7 +131,7 @@ urlpatterns += patterns('',
     
     url(
         r'^$',
-        "django.views.generic.simple.redirect_to",
+        redirect_to,
         {'url': 'news.html'},
                                                                     name="root"
     ),
@@ -176,12 +160,6 @@ urlpatterns += patterns('',
     ),
     
     ################################## sigs
-                                                              
-    (       # old sig url format (for legacy)
-        r'^(?P<username>\w+)/sigs/(?P<columns>[\w\-]+)\.png',
-        "sigs.views.make_totals_sig",
-        {"font": "VeraMono", "logo": "nologo"},
-    ),
     
     (       # new sig format
         r'^(?P<username>\w+)/(?P<logo>(logo|nologo))-sigs/' + 
@@ -198,11 +176,11 @@ urlpatterns += patterns('',
 
     ################################ admin functions
     
-    (
-        r'^feeds/(?P<url>.*)/$',
-        "django.contrib.syndication.views.feed",
-        {'feed_dict': feeds},
-    ),
+    #(
+    #    r'^feeds/(?P<url>.*)/$',
+    #    "django.contrib.syndication.views.feed",
+    #    {'feed_dict': feeds},
+    #),
     
     (
         r'^admin/doc/',
@@ -216,11 +194,11 @@ urlpatterns += patterns('',
     
         ############################ main site 
     
-    url(
-        r'^logout/$','django.contrib.auth.views.logout',
-        {"next_page": "/"},
-                                                                 name="logout",
-    ),
+    #url(
+    #    r'^logout/$','django.contrib.auth.views.logout',
+    #    {"next_page": "/"},
+    #                                                             name="logout",
+    #),
     
     url(
         r'^change_email\.html$',
@@ -474,22 +452,11 @@ urlpatterns += patterns('',
         "pdf.views.pdf",
                                                                     name="pdf",
     ),
-    
-    (
-        r'^lcl_dev_media/(?P<path>.*)$',
-        'django.views.static.serve',
-        {'document_root': '/srv/flightloggin/media', 'show_indexes': True},
-    ),
 
     (
         r'^\w+/$',
-        "django.views.generic.simple.redirect_to",
+        redirect_to,
         {'url': 'logbook.html'},
-    ),
-    
-    (
-        r'\.php',
-        "redirect.views.redirect",
     ),
 )
 

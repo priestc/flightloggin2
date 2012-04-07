@@ -7,54 +7,56 @@
 
 {% block canvas %}
 <form action="{% url mass-planes request.display_user.username %}" method="post">
-<div>{{ formset.management_form }}</div>
-<table class="mass_table minor_table">
-<thead>
-<tr>
-    <td>Tailnumber</td><td>Manufacturer</td><td>Type</td><td>Model</td>
-    <td>Fuel Burn</td>
-    <td>Category/Class</td><td>Tags</td><td>Description</td>
-    <td>Retired</td><td>Hidden</td>
-</tr>
-</thead>
+    {% csrf_token %}
+    <div>{{ formset.management_form }}</div>
+    <table class="mass_table minor_table">
+        <thead>
+            <tr>
+                <td>Tailnumber</td><td>Manufacturer</td><td>Type</td><td>Model</td>
+                <td>Fuel Burn</td>
+                <td>Category/Class</td><td>Tags</td><td>Description</td>
+                <td>Retired</td><td>Hidden</td>
+            </tr>
+        </thead>
 
-<tfoot>
-<tr>
-    <td>Tailnumber</td><td>Manufacturer</td><td>Type</td><td>Model</td>
-    <td>Fuel Burn</td>
-    <td>Category/Class</td><td>Tags</td><td>Description</td>
-    <td>Retired</td><td>Hidden</td>
-</tr>
-</tfoot>
-<tbody>
-{% for form in formset.forms %}
-<tr> 
-    <td>{{form.tailnumber}}{{form.id}}{{form.user}}</td>
-    <td>{{form.manufacturer}}</td>
-    <td>{{form.type}}</td>
-    <td>{{form.model}}</td>
-    <td>{{form.fuel_burn}}</td>
-    <td>{{form.cat_class}}</td>
-    <td>{{form.tags}}</td>
-    <td>{{form.description}}</td>
-    <td>{{form.retired}}</td>
-    <td>{{form.hidden}}</td>
-</tr>
-{% if form.errors %}
-<tr>
-    <td>{{ form.errors }}</td>
-</td>
-{% endif%}
-{% endfor %}
-</tbody>
-</table>
-<input type="submit" name="submit" value="Submit" />
-</form>
-<br>
-<div class="instructions">
+        <tfoot>
+            <tr>
+                <td>Tailnumber</td><td>Manufacturer</td><td>Type</td><td>Model</td>
+                <td>Fuel Burn</td>
+                <td>Category/Class</td><td>Tags</td><td>Description</td>
+                <td>Retired</td><td>Hidden</td>
+            </tr>
+        </tfoot>
+        <tbody>
+            {% for form in formset.forms %}
+            <tr> 
+                <td>{{form.tailnumber}}{{form.id}}{{form.user}}</td>
+                <td>{{form.manufacturer}}</td>
+                <td>{{form.type}}</td>
+                <td>{{form.model}}</td>
+                <td>{{form.fuel_burn}}</td>
+                <td>{{form.cat_class}}</td>
+                <td>{{form.tags}}</td>
+                <td>{{form.description}}</td>
+                td>{{form.retired}}</td>
+                td>{{form.hidden}}</td>
+            </tr>
+            {% if form.errors %}
+            <tr>
+                <td>{{ form.errors }}</td>
+            </td>
+            {% endif%}
+            {% endfor %}
+        </tbody>
+    </table>
+    <input type="submit" name="submit" value="Submit" />
+    </form>
+    <br>
+    <div class="instructions">
 Tip: If the plane you are creating is a Beechcraft, Cessna or Piper, just fill
 in the type designator (eg. PA-28-151), and the other details will be filled
 in for you.
-</div>
+    </div>
+
 {% include "pagination_table.html" %}
 {% endblock %}

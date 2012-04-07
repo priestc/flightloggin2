@@ -1,6 +1,0 @@
-linpng12-dev
-libfreetype6-dev
-libpq-dev
-libgeos-dev
-libproj-dev
-libjpeg62-dev

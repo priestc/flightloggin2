@@ -1,11 +1,16 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.contrib.auth.models import User
+from django.db.models import Sum, Avg, Max
 
 from annoying.decorators import render_to
+
 from share.decorator import no_share
+from logbook.models import Flight
+from airport.models import Location
+from route.models import Route
 
 from models import Plane
-from logbook.models import Flight
 from forms import PopupPlaneForm
 
 @render_to('planes.html')
@@ -81,11 +86,6 @@ def mass_planes(request, page=0):
 
 
 ###############################################################################
-
-from django.contrib.auth.models import User
-from airport.models import Location
-from route.models import Route
-from django.db.models import Sum, Avg, Max
 
 @render_to('tailnumber_profile.html')
 def tailnumber_profile(request, tn):
