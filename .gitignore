@@ -1,15 +1,9 @@
-local_settings.py
-env
-manage.py
+settings_private.py
 .fl_env
-forum_new_style
 *.bak
 *.pyc
 *.swp
-*.json.bz2
-fixtures
 dumps
-uploads
 *~
 .sass-cache
 .DS_Store
