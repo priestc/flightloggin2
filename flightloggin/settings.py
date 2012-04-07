@@ -87,6 +87,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'share.middleware.share.ShareMiddleware',
     'googlebot.middleware.LimitBotsMiddleware',
+    'pipeline.middleware.MinifyHTMLMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )

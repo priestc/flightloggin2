@@ -21,3 +21,4 @@ boto
 debug
 sentry
 PIL
+django-pipeline==1.2.1
