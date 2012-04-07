@@ -28,12 +28,12 @@ class BarGraph(object):
         
         import ImageFont
         import os
-        root = settings.MEDIA_ROOT
+        font_dir = os.path.join(settings.PROJECT_ROOT, 'static_internal', "fonts")
         
-        font = os.path.join(root, "fonts", self.regular_font[0])
+        font =  os.path.join(font_dir, self.regular_font[0])
         self.font = ImageFont.truetype(font, self.regular_font[1])
         
-        titlefont = os.path.join(root, "fonts", self.title_font[0])
+        titlefont = os.path.join(font_dir, self.title_font[0])
         self.titlefont = ImageFont.truetype(font, self.title_font[1])
         
         from logbook.models import Flight
