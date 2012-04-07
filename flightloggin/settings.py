@@ -51,7 +51,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = os.path.join(PROJECT_PATH, '..', 'static_serve')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -86,7 +86,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'share.middleware.share.ShareMiddleware',
-    'flightloggin.googlebot.middleware.LimitBotsMiddleware',
+    'googlebot.middleware.LimitBotsMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -111,29 +111,31 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    'django.contrib.humanize',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     
-    'flightloggin.logbook',
-    'flightloggin.records',
-    'flightloggin.plane',
-    'flightloggin.airport',
+    'logbook',
+    'records',
+    'plane',
+    'airport',
     'main',
-    'flightloggin.profile',
-    'flightloggin.route',
-    'flightloggin.site_stats',
-    'flightloggin.realtime',
-    'flightloggin.backup',
+    'profile',
+    'route',
+    'site_stats',
+    'realtime',
+    'backup',
     'maps',
-    'flightloggin.realtime',
-    'flightloggin.graphs',
-    'flightloggin.currency',
-    'flightloggin.auto8710',
-    'flightloggin.sigs',
-    'flightloggin.milestones',
-    'flightloggin.manage',
-    'flightloggin.facebook_app',
-    'flightloggin.easydump',
+    'realtime',
+    'graphs',
+    'currency',
+    'auto8710',
+    'sigs',
+    'milestones',
+    'manage',
+    'facebook_app',
+    'easydump',
+    'style',
     
     'tagging',
     'pagination',
@@ -143,7 +145,7 @@ INSTALLED_APPS = (
 
 ################
 
-AUTH_PROFILE_MODULE = 'profile.UserProfile'
+AUTH_PROFILE_MODULE = 'profile.Profile'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',

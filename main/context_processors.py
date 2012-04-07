@@ -1,8 +1,8 @@
 import random
 
 from django.conf import settings
-from flightloggin.style.constants import GOOGLE_ADS, WIKI_ADS
-from flightloggin.profile.models import Profile
+from style.constants import GOOGLE_ADS, WIKI_ADS
+from profile.models import Profile
 from django.contrib.sites.models import Site
 
 def old_browser(request):

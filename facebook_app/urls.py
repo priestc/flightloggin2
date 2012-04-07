@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('flightloggin.facebook_app.views',
+urlpatterns = patterns('facebook_app.views',
     (
         r'canvas/$',
         'canvas',

@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('flightloggin.histogram.views',
+urlpatterns = patterns('histogram.views',
 
     url(
         r'^model-(?P<model>.+)\.png$',

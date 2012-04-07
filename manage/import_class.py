@@ -1,10 +1,10 @@
 import datetime
 import csv
 
-from flightloggin.records.forms import NonFlightForm
+from records.forms import NonFlightForm
 from logbook.models import Flight
-from flightloggin.records.models import Records, NonFlight
-from flightloggin.plane.models import Plane
+from records.models import Records, NonFlight
+from plane.models import Plane
 
 class BaseImport(object):
     

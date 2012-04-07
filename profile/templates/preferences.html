@@ -15,6 +15,7 @@
 {% block canvas %}
 
 <form id="prefs_form" action="{% url profile request.display_user.username %}" method="post">
+	{% csrf_token %}
     <div>
 		<input class="prefs_submit_button" type="submit" value="Submit Preferences">
 	</div>

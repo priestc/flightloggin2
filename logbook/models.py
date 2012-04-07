@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 from django.conf import settings
 
-from flightloggin.plane.models import Plane
-from flightloggin.route.models import Route
+from plane.models import Plane
+from route.models import Route
 from constants import *
 from utils import to_minutes
 from fuel_burn import FuelBurn

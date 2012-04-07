@@ -4,7 +4,7 @@ from matplotlib.figure import Figure
 
 from django.conf import settings
 from django.db.models import Sum
-from flightloggin.graphs.image_formats import plot_png, plot_svg
+from graphs.image_formats import plot_png, plot_svg
 from main.mixins import NothingHereMixin
 
 class BaseHistogram(NothingHereMixin):

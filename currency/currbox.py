@@ -1,6 +1,6 @@
 from django.utils.safestring import mark_safe
 
-from flightloggin.plane.constants import CATEGORY_CLASSES
+from plane.constants import CATEGORY_CLASSES
 from datetime import *
 import math
 

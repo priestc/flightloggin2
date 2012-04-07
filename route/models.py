@@ -4,7 +4,7 @@ from django.contrib.gis.db import models
 from django.db.models import Q
 
 from share.middleware import share
-from flightloggin.airport.models import Location, HistoricalIdent
+from airport.models import Location, HistoricalIdent
 
 from main.enhanced_model import QuerySetManager, EnhancedModel
 

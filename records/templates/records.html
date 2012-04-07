@@ -11,6 +11,7 @@
 {% block canvas %}
 
 <form action="{% url records request.display_user.username %}" method="post">
+	{% csrf_token %}
 	<div>
 	    {% if not request.shared %}
 		<input type="submit" value="Save" /><br><br>

@@ -50,6 +50,7 @@
 	</table>
 	
 	<form id="new_plane_form" action="{% url events request.display_user.username %}" method="post">
+		{% csrf_token %}
 		<table class="single_column">
 			<tbody>
 				<tr>

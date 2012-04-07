@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from constants import *
 
-from flightloggin.plane.constants import CATEGORY_CLASSES, FAKE_CLASSES
+from plane.constants import CATEGORY_CLASSES, FAKE_CLASSES
 from main.mixins import GoonMixin
 
 class Profile(models.Model, GoonMixin):

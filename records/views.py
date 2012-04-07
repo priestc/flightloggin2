@@ -1,5 +1,5 @@
 from annoying.decorators import render_to
-from flightloggin.airport.models import Location
+from airport.models import Location
 from models import Records, NonFlight
 from forms import *
 from share.decorator import no_share

@@ -8,7 +8,7 @@ from matplotlib.colors import rgb2hex, LinearSegmentedColormap
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 from django.db.models import Count
-from flightloggin.airport.models import Region, Location
+from airport.models import Region, Location
 
 ###############################################################################
 ###############################################################################

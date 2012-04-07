@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelChoiceField
 from models import *
 from logbook.forms import PopupFlightForm
-from flightloggin.plane.models import Plane
+from plane.models import Plane
        
 ###############################################################################
 

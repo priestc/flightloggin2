@@ -6,6 +6,7 @@
 
 <div id="popup" title="New Entry">
 	<form id="new_entry_form" action="placeholder" method="post">
+		{% csrf_token %}
 		<table id="dragbar">
 		    <tr>
 			    <td><span id="titlebar">New Entry</span></td>

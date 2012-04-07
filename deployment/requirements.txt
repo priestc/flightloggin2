@@ -19,3 +19,4 @@ termcolor==0.1.2
 yolk
 boto
 debug
+sentry

@@ -7,8 +7,8 @@ from annoying.decorators import render_to
 
 from share.decorator import no_share
 from logbook.models import Flight
-from flightloggin.airport.models import Location
-from flightloggin.route.models import Route
+from airport.models import Location
+from route.models import Route
 
 from models import Plane
 from forms import PopupPlaneForm

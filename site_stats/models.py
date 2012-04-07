@@ -5,9 +5,9 @@ from django.db import models
 from django.db.models import Count, Sum, Avg
 
 from logbook.models import Flight
-from flightloggin.route.models import RouteBase, Route
-from flightloggin.plane.models import Plane
-from flightloggin.airport.models import Location
+from route.models import RouteBase, Route
+from plane.models import Plane
+from airport.models import Location
 
 class MostCommonPlane(object):
     title = "??"

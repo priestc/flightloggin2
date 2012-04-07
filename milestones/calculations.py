@@ -6,7 +6,7 @@ from django.db.models import Count
 
 from logbook.models import Flight
 from logbook.constants import FIELD_TITLES
-from flightloggin.route.models import Route
+from route.models import Route
         
 class Milestone(object):
     

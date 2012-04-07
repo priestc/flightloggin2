@@ -7,9 +7,9 @@ from annoying.decorators import render_to
 
 from share.decorator import no_share
 from maps.utils import qs_to_time_kmz
-from flightloggin.route.models import Route
-from flightloggin.profile.models import Profile, AutoButton
-from flightloggin.plane.models import Plane
+from route.models import Route
+from profile.models import Profile, AutoButton
+from plane.models import Plane
 
 from models import Flight, Columns
 from constants import *

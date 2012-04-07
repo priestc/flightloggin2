@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 {% load gravatar %}
 {% load analytics %}
+{% load staticfiles %}
 <html lang="en">
     <head profile="http://www.w3.org/2005/10/profile">
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -13,12 +14,12 @@
 	        MEDIA_URL = "{{ MEDIA_URL }}";
 	        window.google_analytics_uacct = "UA-501381-5";
 	    </script>
-	
-        <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/screen.css">
+
+        <link rel="stylesheet" type="text/css" href="{% static CSS_URL %}/screen.css">
 		
-        <script type="text/javascript" src="{{ MEDIA_URL }}/jquery/jquery-1.4.min.js"></script>
-        <script type="text/javascript" src="{{ MEDIA_URL }}/jquery/jquery-ui-1.7.1.custom.min.js"></script>
-        <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/master.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="{% static "js/master.js" %}"></script>
         {% block javascript %}{% endblock %}
 		
         <title>{% block title %}{% endblock %} - FlightLogg.in - Electronic Pilot Logbook</title>
@@ -31,7 +32,7 @@
 
             <div id="inner_header">
             
-                <a href="/"><img id="logo" src="{{ CSS_URL }}/logo.png" alt="FlightLogg.in' Logo" /></a>
+                <a href="/"><img id="logo" src="{% static CSS_URL %}/logo.png" alt="FlightLogg.in' Logo" /></a>
                 
                 <div id="userbox" style="float: right; overflow: hidden">
                     <div style="float: left">
