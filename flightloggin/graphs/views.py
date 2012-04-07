@@ -1,7 +1,7 @@
 from django.utils.safestring import mark_safe
 from django.http import Http404
 from annoying.decorators import render_to
-from share.decorator import no_share
+from flightloggin.share.decorator import no_share
 
 from logbook.constants import GRAPH_FIELDS, AGG_FIELDS, FIELD_TITLES
 from constants import PLOT_COLORS

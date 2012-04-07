@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 
-from share.decorator import secret_key, no_share
+from flightloggin.share.decorator import secret_key, no_share
 from django.views.decorators.cache import cache_page
 
 from states import CountStateMap, UniqueStateMap, FlatStateMap

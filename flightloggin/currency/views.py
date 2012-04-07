@@ -1,9 +1,9 @@
 from annoying.decorators import render_to
-from share.decorator import no_share
+from flightloggin.share.decorator import no_share
 
-from plane.models import Plane
-from plane.constants import CURRENCIES
-from logbook.models import Flight
+from flightloggin.plane.models import Plane
+from flightloggin.plane.constants import CURRENCIES
+from flightloggin.logbook.models import Flight
 from currbox import MediCurrBox, LandCurrBox, CertsCurrBox, InstCurrBox
 from FAA import FAA_Landing, FAA_Medical, FAA_Instrument, FAA_Certs
 

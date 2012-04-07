@@ -1,8 +1,8 @@
 from annoying.decorators import render_to
-from airport.models import Location
+from flightloggin.airport.models import Location
 from models import Records, NonFlight
 from forms import *
-from share.decorator import no_share
+from flightloggin.share.decorator import no_share
 
 @no_share('records')
 @render_to("records.html")

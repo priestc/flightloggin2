@@ -5,7 +5,7 @@ from annoying.decorators import render_to
 
 from models import Stat
 from route.models import Route
-from share.decorator import secret_key
+from flightloggin.share.decorator import secret_key
 
 from utils import *
 from constants import STATS_TITLES

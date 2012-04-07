@@ -3,9 +3,9 @@ import datetime
 
 from django.db.models import Q
 
-from plane.models import Plane
-from logbook.models import Flight
-from records.models import NonFlight
+from flightloggin.plane.models import Plane
+from flightloggin.logbook.models import Flight
+from flightloggin.records.models import NonFlight
 
 from currency import Currency
 

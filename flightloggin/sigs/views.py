@@ -1,8 +1,8 @@
 from annoying.decorators import render_to
-from logbook.constants import FIELD_TITLES, GRAPH_FIELDS
-from share.decorator import no_share
+from flightloggin.logbook.constants import FIELD_TITLES, GRAPH_FIELDS
+from flightloggin.share.decorator import no_share
 
-from main.table import html_table
+from flightloggin.main.table import html_table
 
 def all_agg_checkbox(prefix=""):
     out = []

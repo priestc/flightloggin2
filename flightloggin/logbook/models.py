@@ -3,13 +3,13 @@ from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 from django.conf import settings
 
-from plane.models import Plane
-from route.models import Route
+from flightloggin.plane.models import Plane
+from flightloggin.route.models import Route
 from constants import *
 from utils import to_minutes
 from fuel_burn import FuelBurn
 
-from main.enhanced_model import QuerySetManager, EnhancedModel
+from flightloggin.main.enhanced_model import QuerySetManager, EnhancedModel
 from queryset_manager import FlightQuerySet
 
 

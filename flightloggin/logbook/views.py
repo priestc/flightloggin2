@@ -4,12 +4,12 @@ from django.core.urlresolvers import reverse
 from django.views.decorators.cache import cache_page
 
 from annoying.decorators import render_to
-from share.decorator import no_share
+from flightloggin.share.decorator import no_share
 
 from models import Flight, Columns
-from plane.models import Plane
+from flightloggin.plane.models import Plane
 from constants import *
-from profile.models import Profile, AutoButton
+from flightloggin.profile.models import Profile, AutoButton
 from utils import proper_plane_widget, logbook_url
 import forms
 

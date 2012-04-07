@@ -57,15 +57,15 @@ urlpatterns = patterns('django_openid_auth.views',
 
 ###############################################################################
 
-urlpatterns += patterns('',
+urlpatterns += patterns('flightloggin',
     (
         r'^robots\.txt$',
         'main.views.robots'
     ),
 
-    (r'^histogram/', include('histogram.urls')),
-    (r'^kml/', include('maps.kml_urls')),
-    (r'^facebook', include('facebook_app.urls')),
+    (r'^histogram/', include('flightloggin.histogram.urls')),
+    (r'^kml/', include('flightloggin.maps.kml_urls')),
+    (r'^facebook', include('flightloggin.facebook_app.urls')),
     
     (r'^search/locations\.html$', 'airport.views.search_airport'),
     (r'^search/tailnumbers\.html$', 'plane.views.search_tailnumbers'),
@@ -77,18 +77,13 @@ urlpatterns += patterns('',
         "main.views.help",
                                                                    name="help",
     ),
-
-    (
-        r'^is_alive$',
-        "main.views.is_alive"
-    ),
     
-    url(
-        r'^privacy_policy.html$',
-        direct_to_template,
-        {"template": "privacy.html"},
-                                                                name="privacy",
-    ),
+    #url(
+    #    r'^privacy_policy.html$',
+    #    direct_to_template,
+    #    {"template": "privacy.html"},
+    #                                                            name="privacy",
+    #),
     
     url(
         r'^(?P<username>\w+)/realtime\.html$',
@@ -121,17 +116,6 @@ urlpatterns += patterns('',
     ##########################################################################
 
     (
-        r'^icons/favicon.png$',
-        redirect_to,
-        {'url': '/fl-media/icons/favicon.ico'},
-    ),
-
-    (
-        r'forums/?$',
-        "redirect.views.redirect_to_forums",
-    ),
-
-    (
         r'^sitemap.xml$',
         'django.contrib.sitemaps.views.index',
         {'sitemaps': sitemaps}
@@ -147,8 +131,8 @@ urlpatterns += patterns('',
     
     url(
         r'^$',
-        "django.views.generic.simple.redirect_to",
-        {'url': 'news.html'},
+        redirect_to,
+        {'url': 'main/news.html'},
                                                                     name="root"
     ),
     
@@ -374,12 +358,12 @@ urlpatterns += patterns('',
                                                                    name="maps",
     ),
     
-    url(
-        r'^(?P<username>\w+)/states\.html$',
-        direct_to_template,
-        {"template": "states.html"},
-                                                                 name="states",
-    ),
+    #url(
+    #    r'^(?P<username>\w+)/states\.html$',
+    #    direct_to_template,
+    #    {"template": "states.html"},
+    #                                                             name="states",
+    #),
     
     url(
         r'^(?P<username>\w+)/states-(?P<type_>[\w\-]+)\.(?P<ext>(png|svg))$',
@@ -475,21 +459,16 @@ urlpatterns += patterns('',
                                                                     name="pdf",
     ),
     
-    (
-        r'^lcl_dev_media/(?P<path>.*)$',
-        'django.views.static.serve',
-        {'document_root': '/srv/flightloggin/media', 'show_indexes': True},
-    ),
+    #(
+    #    r'^lcl_dev_media/(?P<path>.*)$',
+    #    'django.views.static.serve',
+    #    {'document_root': '/srv/flightloggin/media', 'show_indexes': True},
+    #),
 
     (
         r'^\w+/$',
-        "django.views.generic.simple.redirect_to",
+        redirect_to,
         {'url': 'logbook.html'},
-    ),
-    
-    (
-        r'\.php',
-        "redirect.views.redirect",
     ),
 )
 

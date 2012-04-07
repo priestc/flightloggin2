@@ -1,15 +1,15 @@
 from django.db import models
 from django.conf import settings
 
-from logbook.fuel_burn import FuelBurn
-from logbook.utils import expire_all, expire_logbook_cache_page
+from flightloggin.logbook.fuel_burn import FuelBurn
+from flightloggin.logbook.utils import expire_all, expire_logbook_cache_page
     
-from profile.models import Profile
-from airport.models import Location
-from plane.models import Plane
-from backup.models import edit_logbook
-from logbook.models import Flight
-from route.models import Route
+from flightloggin.profile.models import Profile
+from flightloggin.airport.models import Location
+from flightloggin.plane.models import Plane
+from flightloggin.backup.models import edit_logbook
+from flightloggin.logbook.models import Flight
+from flightloggin.route.models import Route
 
 def calculate_flight(sender, **kwargs):
     """

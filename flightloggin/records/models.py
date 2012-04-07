@@ -1,7 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from constants import *
-from main.mixins import GoonMixin
+from flightloggin.main.mixins import GoonMixin
+from flightloggin.main.queryset_manager import QuerySetManager
+from flightloggin.share.middleware import share
 
 class Records(models.Model, GoonMixin):
     
@@ -28,12 +30,12 @@ class Records(models.Model, GoonMixin):
     has_something.boolean = True
         
     def save(self, *args, **kwargs):
-        from share.middleware import share
+        
         if not self.user:
             self.user = share.get_display_user()
         super(Records,self).save(*args, **kwargs)
 
-from main.queryset_manager import QuerySetManager
+
      
 class NonFlight(models.Model, GoonMixin):
 

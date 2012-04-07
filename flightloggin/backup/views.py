@@ -1,6 +1,6 @@
 import datetime
 
-from share.decorator import no_share
+from flightloggin.share.decorator import no_share
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, Http404
 from annoying.decorators import render_to

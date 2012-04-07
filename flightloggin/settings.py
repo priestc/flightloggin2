@@ -1,5 +1,8 @@
 # Django settings for flightloggin project.
 
+import os, sys
+PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -95,6 +98,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    os.path.join(PROJECT_PATH, '../static_internal/templates'),
 )
 
 INSTALLED_APPS = (
@@ -107,6 +111,32 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    
+    'flightloggin.logbook',
+    'flightloggin.records',
+    'flightloggin.plane',
+    'flightloggin.airport',
+    'flightloggin.main',
+    'flightloggin.profile',
+    'flightloggin.route',
+    'flightloggin.site_stats',
+    #'flightloggin.realtime',
+    'flightloggin.backup',
+    'flightloggin.maps',
+    'flightloggin.realtime',
+    'flightloggin.graphs',
+    'flightloggin.currency',
+    'flightloggin.auto8710',
+    'flightloggin.sigs',
+    'flightloggin.milestones',
+    'flightloggin.manage',
+    'flightloggin.facebook_app',
+    'flightloggin.easydump',
+    
+    'tagging',
+    'pagination',
+    'gravatar',
+    'django_openid_auth',
 )
 
 ################

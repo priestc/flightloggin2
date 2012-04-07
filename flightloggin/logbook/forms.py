@@ -8,8 +8,8 @@ from django.forms.widgets import TextInput, HiddenInput, Select, flatatt
 from django.forms.util import ValidationError
 
 from models import *
-from logbook.utils import from_minutes
-from plane.models import Plane
+from flightloggin.logbook.utils import from_minutes
+from flightloggin.plane.models import Plane
 from fuel_burn import FuelBurn
 
 #####################################

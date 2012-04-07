@@ -1,4 +1,4 @@
-from share.decorator import no_share
+from flightloggin.share.decorator import no_share
 from pdf import PDF
 
 @no_share('logbook')

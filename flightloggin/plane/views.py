@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
 from annoying.decorators import render_to
-from share.decorator import no_share
+from flightloggin.share.decorator import no_share
 
 from models import Plane
 from logbook.models import Flight

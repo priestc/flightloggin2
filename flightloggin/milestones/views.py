@@ -1,7 +1,7 @@
 from annoying.decorators import render_to
-from share.decorator import no_share
+from flightloggin.share.decorator import no_share
 
-from logbook.models import Flight
+from flightloggin.logbook.models import Flight
 from calculations import *
 
 @no_share('other')

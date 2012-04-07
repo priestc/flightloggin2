@@ -5,7 +5,7 @@ import datetime
 
 from django.http import Http404
 
-from logbook.constants import *
+from flightloggin.logbook.constants import *
 
 class Backup(object):
     """

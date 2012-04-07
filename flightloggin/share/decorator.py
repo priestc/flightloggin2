@@ -1,5 +1,7 @@
-from settings import SECRET_KEY
+from django.conf import settings
 from django.http import Http404
+
+SECRET_KEY = settings.SECRET_KEY
 
 class no_share(object):
     """Decorator to determine if the view should be executed based on

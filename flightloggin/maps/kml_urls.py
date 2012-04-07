@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
-from plane.models import Plane
+from flightloggin.plane.models import Plane
 
 urlpatterns = patterns('maps.kml_views',
     url(
