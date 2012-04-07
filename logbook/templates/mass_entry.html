@@ -3,9 +3,7 @@
 {% block description %}{{ request.display_user.username }}'s mass entry page{% endblock%}
 
 {% block javascript %}
-<link rel="stylesheet"
-      type="text/css"
-      href="{{ MEDIA_URL }}/jquery/css/black-tie/jquery-ui-1.7.1.custom.css">  
+    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7/themes/ui-lightness/jquery-ui.css"> 
 	<script type="text/javascript">
 	    $(document).ready(function() {
 	        $(".vDateField").datepicker({
@@ -36,6 +34,7 @@
 {% else %}
 <form action="{% url mass-entry request.display_user.username %}" method="post">
 {% endif %}
+{% csrf_token %}
 <div>{{ formset.management_form }}</div>
 <table class="mass_table">
 <tr class="header_row">

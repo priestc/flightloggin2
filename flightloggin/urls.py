@@ -132,7 +132,7 @@ urlpatterns += patterns('',
     url(
         r'^$',
         redirect_to,
-        {'url': 'manews.html'},
+        {'url': 'news.html'},
                                                                     name="root"
     ),
     
