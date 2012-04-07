@@ -1,7 +1,8 @@
 from django.forms import ModelForm
-from models import *
-from logbook.models import Columns
 from django.contrib.auth.models import User
+
+from logbook.models import Columns
+from models import *
 
 class ProfileForm(ModelForm):
     class Meta:

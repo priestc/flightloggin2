@@ -3,6 +3,7 @@ from django.db.models import Sum
 from constants import AGG_FIELDS, EXTRA_AGG, DB_FIELDS
 
 from flightloggin.main.enhanced_model import EnhancedQuerySet
+from logbook.utils import proper_format
 
 class FlightQuerySet(EnhancedQuerySet):
         
@@ -312,7 +313,6 @@ class FlightQuerySet(EnhancedQuerySet):
             elif not ret:
                 ret = self.filter_by_column(cn)._db_agg('pic')
             
-        from logbook.utils import proper_format
         if not float:
             return proper_format(ret, cn, format)
         else:

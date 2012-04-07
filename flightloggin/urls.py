@@ -6,7 +6,7 @@ from flightloggin.plane.models import Plane
 
 admin.autodiscover()
 
-handler500 = "main.views.handler500"
+handler500 = "flightloggin.main.views.handler500"
 
 ###############################################################################
 
@@ -27,7 +27,7 @@ sitemaps = {
     'type': TypeSitemap,
     'route': RouteSitemap,
     'model': ModelSitemap,
-    'location': LocationSitemap,  
+    'location': LocationSitemap,
 }
 
 ###############################################################################
@@ -57,60 +57,60 @@ urlpatterns = patterns('django_openid_auth.views',
 
 ###############################################################################
 
-urlpatterns += patterns('flightloggin',
+urlpatterns += patterns('',
     (
         r'^robots\.txt$',
-        'main.views.robots'
+        'flightloggin.main.views.robots'
     ),
 
     (r'^histogram/', include('flightloggin.histogram.urls')),
     (r'^kml/', include('flightloggin.maps.kml_urls')),
     (r'^facebook', include('flightloggin.facebook_app.urls')),
     
-    (r'^search/locations\.html$', 'airport.views.search_airport'),
-    (r'^search/tailnumbers\.html$', 'plane.views.search_tailnumbers'),
+    (r'^search/locations\.html$', 'flightloggin.airport.views.search_airport'),
+    (r'^search/tailnumbers\.html$', 'flightloggin.plane.views.search_tailnumbers'),
     
-    ('export_airports-(?P<index>\d{1,5}).xml', "airport.views.export_to_xml"),
+    ('export_airports-(?P<index>\d{1,5}).xml', "flightloggin.airport.views.export_to_xml"),
     
     url(
         r'^help.html$',
-        "main.views.help",
+        "flightloggin.main.views.help",
                                                                    name="help",
     ),
     
-    #url(
-    #    r'^privacy_policy.html$',
-    #    direct_to_template,
-    #    {"template": "privacy.html"},
-    #                                                            name="privacy",
-    #),
+    url(
+        r'^privacy_policy.html$',
+        direct_to_template,
+        {"template": "privacy.html"},
+                                                                name="privacy",
+    ),
     
     url(
         r'^(?P<username>\w+)/realtime\.html$',
-        "realtime.views.realtime2",
+        "flightloggin.realtime.views.realtime2",
                                                                name="realtime",
     ),
     
     (
         r'^(?P<username>\w+)/duty_status/$',
-        "realtime.views.ajax_duty_status",
+        "flightloggin.realtime.views.ajax_duty_status",
     ),
     
     url(
         r'^(?P<username>\w+)/go_on_duty/$',
-        "realtime.views.ajax_go_on_duty",
+        "flightloggin.realtime.views.ajax_go_on_duty",
                                                         name="ajax_go_on_duty",
     ),
     
     url(
         r'^(?P<username>\w+)/go_off_duty/$',
-        "realtime.views.ajax_go_off_duty",
+        "flightloggin.realtime.views.ajax_go_off_duty",
                                                        name="ajax_go_off_duty",
     ),
     
     url(
         r'^(?P<username>\w+)/get_master_duty/$',
-        "realtime.views.ajax_get_master_duty",
+        "flightloggin.realtime.views.ajax_get_master_duty",
                                                    name="ajax_get_master_duty",
     ),
     ##########################################################################
@@ -132,7 +132,7 @@ urlpatterns += patterns('flightloggin',
     url(
         r'^$',
         redirect_to,
-        {'url': 'main/news.html'},
+        {'url': 'manews.html'},
                                                                     name="root"
     ),
     
@@ -146,7 +146,7 @@ urlpatterns += patterns('flightloggin',
         r'(?P<spikes>(-spikes|-nospikes)?)' +
         r'.(?P<ext>(png|svg))$',
         # username/linegraph/(columns)/(dates) or (all).extension
-        "graphs.views.linegraph_image",
+        "flightloggin.graphs.views.linegraph_image",
     ),
     
     (
@@ -156,27 +156,27 @@ urlpatterns += patterns('flightloggin',
         r'by-(?P<agg>[\w]+)' +
         r'.png$',
         # username/bargraph/(column)/(func)/by-(agg).png
-        'graphs.views.bargraph_image',
+        'flightloggin.graphs.views.bargraph_image',
     ),
     
     ################################## sigs
                                                               
     (       # old sig url format (for legacy)
         r'^(?P<username>\w+)/sigs/(?P<columns>[\w\-]+)\.png',
-        "sigs.views.make_totals_sig",
+        "flightloggin.sigs.views.make_totals_sig",
         {"font": "VeraMono", "logo": "nologo"},
     ),
     
     (       # new sig format
         r'^(?P<username>\w+)/(?P<logo>(logo|nologo))-sigs/' + 
         r'(?P<font>\w+)-(?P<size>\d{1,2})/(?P<columns>[\w\-]+)\.png',
-        "sigs.views.make_totals_sig",
+        "flightloggin.sigs.views.make_totals_sig",
     ),
     
     (       # new sig format
         r'^(?P<username>\w+)/ds-sigs/' + 
         r'(?P<font>\w+)-(?P<size>\d{1,2})/(?P<mode>[\w]+)\.png',
-        "sigs.views.make_days_since_sig",
+        "flightloggin.sigs.views.make_days_since_sig",
     ),
     
 
@@ -200,27 +200,27 @@ urlpatterns += patterns('flightloggin',
     
         ############################ main site 
     
-    url(
-        r'^logout/$','django.contrib.auth.views.logout',
-        {"next_page": "/"},
-                                                                 name="logout",
-    ),
+    #url(
+    #    r'^logout/$','django.contrib.auth.views.logout',
+    #    {"next_page": "/"},
+    #                                                             name="logout",
+    #),
     
     url(
         r'^change_email\.html$',
-        "backup.views.change_email",
+        "flightloggin.backup.views.change_email",
                                                            name="change_email",
     ),
     
     url(
         r'^(?P<userid>\d+)_remove_email\.html$',
-        "backup.views.submit_change",
+        "flightloggin.backup.views.submit_change",
                                                     name="submit_change_email",
     ),
     
     url(
         r'^news\.html$',
-        "main.views.news",
+        "flightloggin.main.views.news",
                                                                    name="news",
     ),
     
@@ -228,13 +228,13 @@ urlpatterns += patterns('flightloggin',
     
     url(
         r'^site_stats\.html$',
-        "site_stats.views.site_stats",
+        "flightloggin.site_stats.views.site_stats",
                                                              name="site_stats",
     ),
     
     url(
         r'^stats_graph/(?P<item>[\w_]+)\.(?P<ext>(png|svg))$',
-        "site_stats.views.stats_graph",
+        "flightloggin.site_stats.views.stats_graph",
                                                             name="stats_graph",
     ),
     
@@ -242,7 +242,7 @@ urlpatterns += patterns('flightloggin',
     
     url(
         r'^(?P<username>\w+)/email-backup.html$',
-        "backup.views.emailbackup",
+        "flightloggin.backup.views.emailbackup",
                                                            name="email-backup",
     ),
 
@@ -250,43 +250,43 @@ urlpatterns += patterns('flightloggin',
     
     url(
         r'^route-(?P<r>[\w-]+)\.html$',
-        "route.views.route_profile",
+        "flightloggin.route.views.route_profile",
                                                           name="profile-route",
     ),
     
     url(
         r'^tailnumber-(?P<tn>%s+)\.html$' % Plane.plane_regex,
-        "plane.views.tailnumber_profile",
+        "flightloggin.plane.views.tailnumber_profile",
                                                      name="profile-tailnumber",
     ),
     
     url(
         r'^type-(?P<ty>%s+)\.html$' % Plane.plane_regex,
-        "plane.views.type_profile",
+        "flightloggin.plane.views.type_profile",
                                                            name="profile-type",
     ),
     
     url(
         r'^model-(?P<model>.+)\.html$',
-        "plane.views.model_profile",
+        "flightloggin.plane.views.model_profile",
                                                           name="profile-model",
     ),
     
     url(
         r'^navaid-(?P<ident>[A-Z0-9]+)\.html$',
-        "airport.views.airport_profile",
+        "flightloggin.airport.views.airport_profile",
         {"navaid": True},                                name="profile-navaid",
     ),
     
     url(
         r'^airport-(?P<ident>[A-Z0-9-]+)\.html$',
-        "airport.views.airport_profile",
+        "flightloggin.airport.views.airport_profile",
         {"navaid": False},                              name="profile-airport",
     ),
 
     url(
         r'^location-(?P<ident>[A-Z0-9-]+)\.html$',
-        "airport.views.location_redirect",
+        "flightloggin.airport.views.location_redirect",
                                                        name="profile-location",
     ),
     
@@ -294,67 +294,67 @@ urlpatterns += patterns('flightloggin',
     
     url(
         r'^(?P<username>\w+)/8710\.html$',
-        "auto8710.views.auto8710",
+        "flightloggin.auto8710.views.auto8710",
                                                                     name="est",
     ),
     
     url(
         r'^(?P<username>\w+)/preferences\.html$',
-        "profile.views.profile",
+        "flightloggin.profile.views.profile",
                                                                 name="profile",
     ),
     
     url(
         r'^(?P<username>\w+)/import\.html$',
-        "manage.views.import_v",
+        "flightloggin.manage.views.import_v",
                                                                  name="import",
     ),
     
     url(
         r'^(?P<username>\w+)/export\.html$',
-        "manage.views.export",
+        "flightloggin.manage.views.export",
                                                                  name="export",
     ),
     
     url(
         r'^(?P<username>\w+)/records\.html$',
-        "records.views.records",
+        "flightloggin.records.views.records",
                                                                 name="records",
     ),
     
     url(
         r'^(?P<username>\w+)/events\.html$',
-        "records.views.events",
+        "flightloggin.records.views.events",
                                                                  name="events",
     ),
     
     url(
         r'^(?P<username>\w+)/linegraphs\.html$',
-        "graphs.views.linegraphs",
+        "flightloggin.graphs.views.linegraphs",
                                                              name="linegraphs",
     ),
     
     url(
         r'^(?P<username>\w+)/bargraphs\.html$',
-        "graphs.views.bargraphs",
+        "flightloggin.graphs.views.bargraphs",
                                                               name="bargraphs",
     ),
     
     url(
         r'^(?P<username>\w+)/planes\.html$',
-        "plane.views.planes",
+        "flightloggin.plane.views.planes",
                                                                  name="planes",
     ),
     
     url(
         r'^(?P<username>\w+)/mass_planes\.html$',
-        "plane.views.mass_planes",
+        "flightloggin.plane.views.mass_planes",
                                                             name="mass-planes",
     ),
     
     url(
         r'^(?P<username>\w+)/maps\.html$',
-        "maps.views.maps",
+        "flightloggin.maps.views.maps",
                                                                    name="maps",
     ),
     
@@ -367,49 +367,49 @@ urlpatterns += patterns('flightloggin',
     
     url(
         r'^(?P<username>\w+)/states-(?P<type_>[\w\-]+)\.(?P<ext>(png|svg))$',
-        "maps.states_views.render_image",
+        "flightloggin.maps.states_views.render_image",
                                                               name="state-map",
     ),
     
     url(
         r'^(?P<username>\w+)/milestones\.html$',
-        "milestones.views.milestones",
+        "flightloggin.milestones.views.milestones",
                                                              name="milestones",
     ),
     
     url(
         r'^smallbar/(?P<val>\d+(\.\d+)?)--(?P<max_val>\d+(\.\d+)?)\.png$',
-        "milestones.views.smallbar",
+        "flightloggin.milestones.views.smallbar",
                                                                name='smallbar',
     ),
     
     url(
         r'^(?P<username>\w+)/currency\.html$',
-        "currency.views.currency",
+        "flightloggin.currency.views.currency",
                                                                name="currency",
     ),
     
     url(
         r'^(?P<username>\w+)/locations\.html$',
-        "records.views.locations",
+        "flightloggin.records.views.locations",
                                                               name="locations",
     ),
     
     url(
         r'^(?P<username>\w+)/backup/$',
-        "backup.views.backup",
+        "flightloggin.backup.views.backup",
                                                                  name="backup",
     ),
     
     url(
         r'^(?P<username>\w+)/massentry\.html$',
-        "logbook.views.mass_entry",
+        "flightloggin.logbook.views.mass_entry",
                                                              name="mass-entry",
     ),
     
     url(
         r'^(?P<username>\w+)/massedit-page-(?P<page>\d+)\.html$',
-        "logbook.views.mass_edit",
+        "flightloggin.logbook.views.mass_edit",
                                                               name="mass-edit",
     ),
     
@@ -417,31 +417,31 @@ urlpatterns += patterns('flightloggin',
     
     url(
         r'^(?P<username>\w+)/logbook\.html$',
-        "logbook.views.root_logbook",
+        "flightloggin.logbook.views.root_logbook",
                                                                 name="logbook",
     ),
     
     url(
         r'^(?P<username>\w+)/logbook-page-(?P<page>\d+)\.html',
-        "logbook.views.logbook",
+        "flightloggin.logbook.views.logbook",
                                                            name="logbook-page",
     ),
     
     url(
         r'^(?P<username>\w+)/edit_flight-(?P<page>\d+)/$',
-        "logbook.views.edit_flight",
+        "flightloggin.logbook.views.edit_flight",
                                                             name="edit_flight",
     ),
     
     url(
         r'^(?P<username>\w+)/new_flight-(?P<page>\d+)/$',
-        "logbook.views.new_flight",
+        "flightloggin.logbook.views.new_flight",
                                                              name="new_flight",
     ),
     
     url(
         r'^(?P<username>\w+)/delete_flight-(?P<page>\d+)/$',
-        "logbook.views.delete_flight",
+        "flightloggin.logbook.views.delete_flight",
                                                           name="delete_flight",
     ),
 
@@ -449,13 +449,13 @@ urlpatterns += patterns('flightloggin',
         
     url(
         r'^(?P<username>\w+)/sigs\.html$',
-        "sigs.views.sigs",
+        "flightloggin.sigs.views.sigs",
                                                                    name="sigs",
     ),
     
     url(
         r'^(?P<username>\w+)/print\.pdf$',
-        "pdf.views.pdf",
+        "flightloggin.pdf.views.pdf",
                                                                     name="pdf",
     ),
     

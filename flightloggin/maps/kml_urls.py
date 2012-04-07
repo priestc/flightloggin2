@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import *
 from flightloggin.plane.models import Plane
 
-urlpatterns = patterns('maps.kml_views',
+urlpatterns = patterns('flightloggin.maps.kml_views',
     url(
         r'tailnumber-(?P<tn>%s+)\.kmz$' % Plane.plane_regex,
         "routes_tailnumber_kml",

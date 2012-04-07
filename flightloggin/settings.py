@@ -85,6 +85,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'flightloggin.share.middleware.share.ShareMiddleware',
+    'flightloggin.googlebot.middleware.LimitBotsMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -98,7 +100,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_PATH, '../static_internal/templates'),
+    os.path.join(PROJECT_PATH, '..', 'static_internal', 'templates'),
 )
 
 INSTALLED_APPS = (
@@ -120,7 +122,7 @@ INSTALLED_APPS = (
     'flightloggin.profile',
     'flightloggin.route',
     'flightloggin.site_stats',
-    #'flightloggin.realtime',
+    'flightloggin.realtime',
     'flightloggin.backup',
     'flightloggin.maps',
     'flightloggin.realtime',
@@ -140,6 +142,26 @@ INSTALLED_APPS = (
 )
 
 ################
+
+AUTH_PROFILE_MODULE = 'profile.UserProfile'
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.request',
+    'django.core.context_processors.media',
+    'flightloggin.main.context_processors.user_label',
+    'flightloggin.main.context_processors.proper_ad',
+    'flightloggin.main.context_processors.old_browser',
+    'flightloggin.main.context_processors.figure_navbar',
+    'flightloggin.main.context_processors.site_url',
+)
+
+
+AUTHENTICATION_BACKENDS = (
+    'django_openid_auth.auth.OpenIDBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 from settings_app import *
 from settings_private import *

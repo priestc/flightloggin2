@@ -9,7 +9,7 @@ from matplotlib.figure import Figure
 
 from logbook.constants import FIELD_TITLES, DB_FIELDS
 from logbook.models import Flight
-from main.mixins import NothingHereMixin
+from flightloggin.main.mixins import NothingHereMixin
 
 from utils import datetimeRange
 from image_formats import plot_png, plot_svg, plot_png2, plot_svg2

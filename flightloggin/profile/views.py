@@ -9,13 +9,12 @@ from annoying.decorators import render_to
 
 from django.conf import settings
 
-from backup.models import edit_logbook
-from plane.models import Plane
+from flightloggin.backup.models import edit_logbook
+from flightloggin.plane.models import Plane
 from logbook.models import Flight
-from records.models import Records, NonFlight
+from flightloggin.records.models import Records, NonFlight
 from logbook.models import Columns
-from airport.models import Location
-
+from flightloggin.airport.models import Location
 from logbook.constants import OPTION_FIELDS, FIELD_TITLES
 
 @no_share('NEVER')

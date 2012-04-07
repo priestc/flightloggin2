@@ -1,5 +1,5 @@
 from annoying.decorators import render_to
-from flightloggin.logbook.constants import FIELD_TITLES, GRAPH_FIELDS
+from logbook.constants import FIELD_TITLES, GRAPH_FIELDS
 from flightloggin.share.decorator import no_share
 
 from flightloggin.main.table import html_table

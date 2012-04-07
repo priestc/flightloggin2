@@ -4,8 +4,8 @@ from matplotlib.figure import Figure
 
 from django.conf import settings
 from django.db.models import Sum
-from graphs.image_formats import plot_png, plot_svg
-from main.mixins import NothingHereMixin
+from flightloggin.graphs.image_formats import plot_png, plot_svg
+from flightloggin.main.mixins import NothingHereMixin
 
 class BaseHistogram(NothingHereMixin):
     def __init__(self, **kwargs):      

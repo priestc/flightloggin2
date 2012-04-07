@@ -4,15 +4,17 @@ from django.core.urlresolvers import reverse
 from django.views.decorators.cache import cache_page
 
 from annoying.decorators import render_to
+
 from flightloggin.share.decorator import no_share
+from flightloggin.maps.utils import qs_to_time_kmz
+from flightloggin.route.models import Route
+from flightloggin.profile.models import Profile, AutoButton
+from flightloggin.plane.models import Plane
 
 from models import Flight, Columns
-from flightloggin.plane.models import Plane
 from constants import *
-from flightloggin.profile.models import Profile, AutoButton
-from utils import proper_plane_widget, logbook_url
 import forms
-
+from utils import proper_plane_widget, logbook_url
 
 ###############################################################################
 
@@ -165,8 +167,6 @@ def logbook(request, page=0, form=None, fail=None):
     maps = request.GET.get('maps')
     
     if earth == 'true':
-        from maps.utils import qs_to_time_kmz
-        from route.models import Route
         routes = Route.objects.filter(flight__in=filtered_flights)
         response = qs_to_time_kmz(routes)
         response['Content-Disposition'] = 'attachment; filename=filter.kmz'

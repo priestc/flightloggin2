@@ -5,8 +5,8 @@ from django.template.loader import get_template
 from django.http import HttpResponse
 from django.template import Context
 
-from flightloggin.logbook.models import Flight
-from flightloggin.logbook.constants import FIELD_ABBV
+from logbook.models import Flight
+from logbook.constants import FIELD_ABBV
 
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Table, TableStyle, Paragraph, SimpleDocTemplate

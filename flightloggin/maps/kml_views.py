@@ -1,11 +1,11 @@
 from django.views.decorators.cache import cache_page
 
 from logbook.models import Flight
-from route.models import RouteBase, Route
+from flightloggin.route.models import RouteBase, Route
 from flightloggin.share.decorator import no_share
 
 from utils import *
-from airport.models import Location
+from flightloggin.airport.models import Location
 
 @cache_page(60 * 60 * 900)
 def single_route_kml(request, pk, f=False):

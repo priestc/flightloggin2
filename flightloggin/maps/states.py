@@ -1,11 +1,14 @@
 import numpy as np
+try:
+    from mpl_toolkits.basemap import Basemap, cm
+except ImportError:
+    Basemap = cm = None
 
-from mpl_toolkits.basemap import Basemap, cm
 from matplotlib.colors import rgb2hex, LinearSegmentedColormap
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 from django.db.models import Count
-from airport.models import Region, Location
+from flightloggin.airport.models import Region, Location
 
 ###############################################################################
 ###############################################################################

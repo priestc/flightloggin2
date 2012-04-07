@@ -3,7 +3,7 @@ import facebook.djangofb as facebook
 
 from django.db.models import Sum
 
-from profile.models import Profile
+from flightloggin.profile.models import Profile
 from django.contrib.auth.models import User
 from logbook.models import Flight
 
