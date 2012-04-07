@@ -88,7 +88,7 @@ class StateMap(object):
         import settings
         
         import os
-        path = os.path.join(settings.PROJECT_PATH, 'maps', 'st99_d00')
+        path = os.path.join(settings.PROJECT_ROOT, 'maps', 'st99_d00')
         self.m.readshapefile(path, 'states', drawbounds=True)
 
         text = []

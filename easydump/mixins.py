@@ -2,7 +2,7 @@ import os
 
 from django.conf import settings
 
-PROJECT_PATH = getattr(settings, 'PROJECT_PATH', None)
+PROJECT_ROOT = getattr(settings, 'PROJECT_ROOT', None)
 TEMP_LOCATION = getattr(settings, 'TEMP_LOCATION', None)
 
 # these attrs are added to each manifest (user's prefs override)
@@ -51,7 +51,7 @@ class DumpMixin(object):
         if TEMP_LOCATION:
             return TEMP_LOCATION
 
-        if PROJECT_PATH:
-            return PROJECT_PATH
+        if PROJECT_ROOT:
+            return PROJECT_ROOT
 
         return '.' # if no setting can be found, use current dir
