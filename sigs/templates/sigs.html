@@ -3,8 +3,8 @@
 {% block description %}{{ request.display_user.username }}'s signature images generator{% endblock%}
 
 {% block javascript %}
-<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/sprintf.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/sigs.js"></script>
+<script type="text/javascript" src="{% static "js/sprintf.js" %}"></script>
+<script type="text/javascript" src="{% static "js/sigs.js" %}"></script>
 <script type="text/javascript">NAVBAR_HIGHLIGHT = "sigs-sel";</script>
 {% endblock %}
 

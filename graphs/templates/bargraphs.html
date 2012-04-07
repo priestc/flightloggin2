@@ -5,12 +5,12 @@
 
 {% block javascript %}
 
-    <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/sprintf.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/bargraphs.js"></script>
+    <script type="text/javascript" src="{% static "js/sprintf.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/bargraphs.js" %}"></script>
     
     <script type="text/javascript">
-        date_button = "{% static "images/calendar.gif " %}";
-        year_range = "1990:2009";
+        date_button = "{% static "images/calendar.gif" %}";
+        year_range = "1990:2013";
         var NAVBAR_HIGHLIGHT = "bargraphs-sel";
 	</script>
 	

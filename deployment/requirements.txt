@@ -20,3 +20,4 @@ yolk
 boto
 debug
 sentry
+PIL

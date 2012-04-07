@@ -160,12 +160,6 @@ urlpatterns += patterns('',
     ),
     
     ################################## sigs
-                                                              
-    (       # old sig url format (for legacy)
-        r'^(?P<username>\w+)/sigs/(?P<columns>[\w\-]+)\.png',
-        "sigs.views.make_totals_sig",
-        {"font": "VeraMono", "logo": "nologo"},
-    ),
     
     (       # new sig format
         r'^(?P<username>\w+)/(?P<logo>(logo|nologo))-sigs/' + 
@@ -358,12 +352,12 @@ urlpatterns += patterns('',
                                                                    name="maps",
     ),
     
-    #url(
-    #    r'^(?P<username>\w+)/states\.html$',
-    #    direct_to_template,
-    #    {"template": "states.html"},
-    #                                                             name="states",
-    #),
+    url(
+        r'^(?P<username>\w+)/states\.html$',
+        direct_to_template,
+        {"template": "states.html"},
+                                                                 name="states",
+    ),
     
     url(
         r'^(?P<username>\w+)/states-(?P<type_>[\w\-]+)\.(?P<ext>(png|svg))$',
@@ -458,12 +452,6 @@ urlpatterns += patterns('',
         "pdf.views.pdf",
                                                                     name="pdf",
     ),
-    
-    #(
-    #    r'^lcl_dev_media/(?P<path>.*)$',
-    #    'django.views.static.serve',
-    #    {'document_root': '/srv/flightloggin/media', 'show_indexes': True},
-    #),
 
     (
         r'^\w+/$',

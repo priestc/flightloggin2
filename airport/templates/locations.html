@@ -3,9 +3,9 @@
 {% block description %}{{ request.display_user.username }}'s custom locations{% endblock%}
 
 {% block javascript %}
-    <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/popup.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/location_popup.js"></script>
-	<script type="text/javascript">NAVBAR_HIGHLIGHT = "locations-sel";</script>
+    <script type="text/javascript" src="{% static "js/popup.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/location_popup.js" %}"></script>
+    <script type="text/javascript">NAVBAR_HIGHLIGHT = "locations-sel";</script>
 {% endblock %}
 
 {% block title %}Locations{% endblock %}
@@ -76,60 +76,61 @@ accurately to differentiate between flights that quality for Point to Point XC.
 </div>
 
 <div id="popup" class="location" title="New Location">
-	<table id="dragbar">
-		<tr>
-			<td><span id="titlebar">New Location</span></td>
-			<td><span id="close_x" title="Close this popup">[X]</span></td>
-		</tr>
-	</table>
-	
-	<form id="new_plane_form" action="{% url locations request.display_user.username %}" method="post">
-		<table class="single_column">
-			<tbody>
-				<tr>
-					<td>
-						<input type="hidden" name="id" id="id_id" value="" />
-					</td>
-				</tr>
-				<tr>
-				    <td id="{{edit_or_new}}_error_cell">{{form.errors}}</td>
-				</tr>
-				<tr>
-					<th>{{ form.identifier.label_tag }}</th>
-					<td>{{ form.identifier }}<br><span class="help_text">{{form.identifier.help_text}}</span></td>
-				</tr>
-				<tr>
-					<th>{{ form.name.label_tag }}</th>
-					<td>{{ form.name }}<br><span class="help_text">{{form.name.help_text}}</span></td>
-				</tr>
-			
-				<tr>
-					<th>{{ form.coordinates.label_tag }}<br>&nbsp;</th>
-					<td>{{ form.coordinates }}<br><span class="help_text">{{form.coordinates.help_text}}</span></td>
-				</tr>
+    <table id="dragbar">
+        <tr>
+            <td><span id="titlebar">New Location</span></td>
+            <td><span id="close_x" title="Close this popup">[X]</span></td>
+        </tr>
+    </table>
+    
+    <form id="new_plane_form" action="{% url locations request.display_user.username %}" method="post">
+        {% csrf_token %}
+        <table class="single_column">
+            <tbody>
+                <tr>
+                    <td>
+                        <input type="hidden" name="id" id="id_id" value="" />
+                    </td>
+                </tr>
+                <tr>
+                    <td id="{{edit_or_new}}_error_cell">{{form.errors}}</td>
+                </tr>
+                <tr>
+                    <th>{{ form.identifier.label_tag }}</th>
+                    <td>{{ form.identifier }}<br><span class="help_text">{{form.identifier.help_text}}</span></td>
+                </tr>
+                <tr>
+                    <th>{{ form.name.label_tag }}</th>
+                    <td>{{ form.name }}<br><span class="help_text">{{form.name.help_text}}</span></td>
+                </tr>
+            
+                <tr>
+                    <th>{{ form.coordinates.label_tag }}<br>&nbsp;</th>
+                    <td>{{ form.coordinates }}<br><span class="help_text">{{form.coordinates.help_text}}</span></td>
+                </tr>
 
-				<tr>
-					<th>{{ form.municipality.label_tag }}</th>
-					<td>{{ form.municipality }}<br><span class="help_text">{{form.municipality.help_text}}</span></td>
-				</tr>
-				
-				<tr>
-					<th>{{ form.loc_type.label_tag }}</th>
-					<td>{{ form.loc_type }}<br><span class="help_text">{{form.loc_type.help_text}}</span></td>
-				</tr>
-			</tbody>
-		</table>
-		
-    	<div id="new_buttons">
-			<input type="submit" name="submit" value="Create New Location" />
-		</div>
+                <tr>
+                    <th>{{ form.municipality.label_tag }}</th>
+                    <td>{{ form.municipality }}<br><span class="help_text">{{form.municipality.help_text}}</span></td>
+                </tr>
+                
+                <tr>
+                    <th>{{ form.loc_type.label_tag }}</th>
+                    <td>{{ form.loc_type }}<br><span class="help_text">{{form.loc_type.help_text}}</span></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div id="new_buttons">
+            <input type="submit" name="submit" value="Create New Location" />
+        </div>
         {% if not request.shared %}
-		<div id="edit_buttons">
-			<input type="submit" name="submit" value="Submit Changes" />
-			<input type="submit" name="submit" value="Delete Location" />
-		</div>
+        <div id="edit_buttons">
+            <input type="submit" name="submit" value="Submit Changes" />
+            <input type="submit" name="submit" value="Delete Location" />
+        </div>
         {% endif %}
-	</form>
+    </form>
 </div>
 
 

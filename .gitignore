@@ -1,4 +1,5 @@
 settings_private.py
+static_serve
 .fl_env
 *.bak
 *.pyc
