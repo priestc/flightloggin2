@@ -457,6 +457,6 @@ urlpatterns += patterns('',
         r'^\w+/$',
         redirect_to,
         {'url': 'logbook.html'},
-    ),
+    )
 )
 
