@@ -4,7 +4,7 @@
 {% block description %}FlightLogg.in' overall stats page{% endblock%}
 
 {% block javascript %}
-    <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/site_stats.js"></script>
+    <script type="text/javascript" src="{% static "js/site_stats.js" %}" ></script>
 {% endblock %}
 
 {% block title %}Site Stats{% endblock %}
@@ -15,23 +15,23 @@
 <table id="site_stats">
     <tr>
         <td>{{ t.users.0 }}</td>
-        <td><a href="" class="graph_popup" id="users"><img src="{{ MEDIA_URL }}/icons/graph.png" alt="Click to see graph"></a>
+        <td><a href="" class="graph_popup" id="users"><img src="{% static "icons/graph.png" %}" alt="Click to see graph"></a>
         {{ cs.users }}</td>
     </tr>
     <tr>
         <td>{{ t.non_empty_users.0 }}</td>
-        <td><a href="" class="graph_popup" id="non_empty_users"><img src="{{ MEDIA_URL }}/icons/graph.png" alt="Click to see graph"></a>
+        <td><a href="" class="graph_popup" id="non_empty_users"><img src="{% static "icons/graph.png" %}" alt="Click to see graph"></a>
         {{ cs.non_empty_users }}</td>
     </tr>
     <tr>
         <td>{{ t.total_hours.0 }}</td>
-        <td><a href="" class="graph_popup" id="total_hours"><img src="{{ MEDIA_URL }}/icons/graph.png" alt="Click to see graph"></a>
+        <td><a href="" class="graph_popup" id="total_hours"><img src="{% static "icons/graph.png" %}" alt="Click to see graph"></a>
         {{ cs.total_hours|floatformat:1|intcomma }}</td>
     </tr>
     
     <tr>
         <td>{{ t.total_logged.0 }}</td>
-        <td><a href="" class="graph_popup" id="total_logged"><img src="{{ MEDIA_URL }}/icons/graph.png" alt="Click to see graph"></a>
+        <td><a href="" class="graph_popup" id="total_logged"><img src="{% static "icons/graph.png" %}" alt="Click to see graph"></a>
         {{ cs.total_logged|intcomma }}</td>
     </tr>
     
@@ -42,61 +42,61 @@
     
     <tr>
         <td>{{ t.avg_duration.0 }}</td>
-        <td><a href="" class="graph_popup" id="avg_duration"><img src="{{ MEDIA_URL }}/icons/graph.png" alt="Click to see graph"></a>
+        <td><a href="" class="graph_popup" id="avg_duration"><img src="{% static "icons/graph.png" %}" alt="Click to see graph"></a>
         {{ cs.avg_duration|floatformat:2 }}</td>
     </tr>
     
     <tr>
         <td>{{ t.avg_per_active.0 }}</td>
-        <td><a href="" class="graph_popup" id="avg_per_active"><img src="{{ MEDIA_URL }}/icons/graph.png" alt="Click to see graph"></a>
+        <td><a href="" class="graph_popup" id="avg_per_active"><img src="{% static "icons/graph.png" %}" alt="Click to see graph"></a>
         {{ cs.avg_per_active|floatformat:1|intcomma }}</td>
     </tr>
     
     <tr>
         <td>{{ t.num_7_days.0 }}</td>
-        <td><a href="" class="graph_popup" id="num_7_days"><img src="{{ MEDIA_URL }}/icons/graph.png" alt="Click to see graph"></a>
+        <td><a href="" class="graph_popup" id="num_7_days"><img src="{% static "icons/graph.png" %}" alt="Click to see graph"></a>
         {{ cs.num_7_days|intcomma }}</td>
     </tr>
     
     <tr>
         <td>{{ t.user_7_days.0 }}</td>
-        <td><a href="" class="graph_popup" id="user_7_days"><img src="{{ MEDIA_URL }}/icons/graph.png" alt="Click to see graph"></a>
+        <td><a href="" class="graph_popup" id="user_7_days"><img src="{% static "icons/graph.png" %}" alt="Click to see graph"></a>
         {{ cs.user_7_days|intcomma }}</td>
     </tr>
     
     <tr>
         <td>{{ t.time_7_days.0 }}</td>
-        <td><a href="" class="graph_popup" id="time_7_days"><img src="{{ MEDIA_URL }}/icons/graph.png" alt="Click to see graph"></a>
+        <td><a href="" class="graph_popup" id="time_7_days"><img src="{% static "icons/graph.png" %}" alt="Click to see graph"></a>
         {{ cs.time_7_days|floatformat:1|intcomma }}</td>
     </tr>
     
     <tr>
         <td>{{ t.unique_airports.0 }}</td>
-        <td><a href="" class="graph_popup" id="unique_airports"><img src="{{ MEDIA_URL }}/icons/graph.png" alt="Click to see graph"></a>
+        <td><a href="" class="graph_popup" id="unique_airports"><img src="{% static "icons/graph.png" %}" alt="Click to see graph"></a>
         {{ cs.unique_airports|intcomma }}</td>
     </tr>
     
     <tr>
         <td>{{ t.unique_countries.0 }}</td>
-        <td><a href="" class="graph_popup" id="unique_countries"><img src="{{ MEDIA_URL }}/icons/graph.png" alt="Click to see graph"></a>
+        <td><a href="" class="graph_popup" id="unique_countries"><img src="{% static "icons/graph.png" %}" alt="Click to see graph"></a>
         {{ cs.unique_countries|intcomma }}</td>
     </tr>
     
     <tr>
         <td>{{ t.total_dist.0 }}</td>
-        <td><a href="" class="graph_popup" id="total_dist"><img src="{{ MEDIA_URL }}/icons/graph.png" alt="Click to see graph"></a>
+        <td><a href="" class="graph_popup" id="total_dist"><img src="{% static "icons/graph.png" %}" alt="Click to see graph"></a>
         {{ cs.total_dist|floatformat:1|intcomma }} NM</td>
     </tr>
     
     <tr>
         <td>{{ t.route_earths.0 }}</td>
-        <td><a href="" class="graph_popup" id="route_earths"><img src="{{ MEDIA_URL }}/icons/graph.png" alt="Click to see graph"></a>
+        <td><a href="" class="graph_popup" id="route_earths"><img src="{% static "icons/graph.png" %}" alt="Click to see graph"></a>
         {{ cs.route_earths|floatformat:1|intcomma }} Earths</td>
     </tr>
     
     <tr>
         <td>{{ t.unique_tn.0 }}</td>
-        <td><a href="" class="graph_popup" id="unique_tn"><img src="{{ MEDIA_URL }}/icons/graph.png" alt="Click to see graph"></a>
+        <td><a href="" class="graph_popup" id="unique_tn"><img src="{% static "icons/graph.png" %}" alt="Click to see graph"></a>
         {{ cs.unique_tn }}</td>
     </tr>
     
