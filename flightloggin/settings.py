@@ -83,7 +83,7 @@ TEMPLATE_LOADERS = (
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'share.middleware.share.ShareMiddleware',
@@ -171,7 +171,6 @@ AUTHENTICATION_BACKENDS = (
 )
 
 from settings_app import *
-from settings_private import *
 from settings_local import *
 
 INSTALLED_APPS = INSTALLED_APPS + DEV_APPS

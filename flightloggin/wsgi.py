@@ -18,10 +18,6 @@ import sys
 
 sys.path = ['srv/flightloggin2'] + sys.path
 
-f = open('/var/fl-uploads/log', 'w')
-f.write(str(sys.path))
-f.close()
-
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "flightloggin.settings")
 
 # This application object is used by any WSGI server configured to use this
