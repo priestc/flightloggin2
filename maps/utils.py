@@ -1,3 +1,12 @@
+import os
+
+from django.template.loader import get_template
+from django.template import Context
+from django.http import HttpResponse
+
+# filesystem path to the directory where icons are stored.
+ICON_DIR = os.path.abspath(os.path.join(__file__, '..', 'static', 'icons'))
+
 class RenderedRoute(object):
     name = ""
     kml = ""
@@ -98,10 +107,6 @@ class AirportFolder(BaseFolder):
 
 ###############################################################################
 
-from django.template.loader import get_template
-from django.template import Context
-from django.http import HttpResponse
-
 def folders_to_kmz_response(folders, title=None,
                             add_icon=False, compression=True):
     
@@ -126,36 +131,36 @@ def folders_to_kmz_response(folders, title=None,
     
     if add_icon:
         from django.conf import settings
-        icon = "{0}/icons/white_pad.png".format(settings.MEDIA_ROOT)
+        icon = "{0}/white_pad.png".format(ICON_DIR)
         z.write(icon, "files/icon_unknown.png")
         
         ############################################
         
-        icon = "{0}/icons/cyan_pad.png".format(settings.MEDIA_ROOT)
+        icon = "{0}/cyan_pad.png".format(ICON_DIR)
         z.write(icon, "files/cyan.png")
 
-        icon = "{0}/icons/gray_pad.png".format(settings.MEDIA_ROOT)
+        icon = "{0}/gray_pad.png".format(ICON_DIR)
         z.write(icon, "files/gray.png")
 
-        icon = "{0}/icons/yellow_pad.png".format(settings.MEDIA_ROOT)
+        icon = "{0}/yellow_pad.png".format(ICON_DIR)
         z.write(icon, "files/yellow.png")
 
-        icon = "{0}/icons/red_pad.png".format(settings.MEDIA_ROOT)
+        icon = "{0}/red_pad.png".format(ICON_DIR)
         z.write(icon, "files/red.png")
         
-        icon = "{0}/icons/teal_pad.png".format(settings.MEDIA_ROOT)
+        icon = "{0}/teal_pad.png".format(ICON_DIR)
         z.write(icon, "files/teal.png")
 
-        icon = "{0}/icons/white_pad.png".format(settings.MEDIA_ROOT)
+        icon = "{0}/white_pad.png".format(ICON_DIR)
         z.write(icon, "files/white.png")
         
-        icon = "{0}/icons/orange_pad.png".format(settings.MEDIA_ROOT)
+        icon = "{0}/orange_pad.png".format(ICON_DIR)
         z.write(icon, "files/orange.png")
 
-        icon = "{0}/icons/green_pad.png".format(settings.MEDIA_ROOT)
+        icon = "{0}/green_pad.png".format(ICON_DIR)
         z.write(icon, "files/green.png")
         
-        icon = "{0}/icons/purple_pad.png".format(settings.MEDIA_ROOT)
+        icon = "{0}/purple_pad.png".format(ICON_DIR)
         z.write(icon, "files/purple.png")
         
     z.close()
