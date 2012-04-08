@@ -194,11 +194,11 @@ urlpatterns += patterns('',
     
         ############################ main site 
     
-    #url(
-    #    r'^logout/$','django.contrib.auth.views.logout',
-    #    {"next_page": "/"},
-    #                                                             name="logout",
-    #),
+    url(
+        r'^logout/$','django.contrib.auth.views.logout',
+        {"next_page": "/"},
+                                                                 name="logout",
+    ),
     
     url(
         r'^change_email\.html$',

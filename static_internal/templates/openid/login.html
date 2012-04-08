@@ -3,13 +3,13 @@
 {% block title %}Sign in using OpenID{% endblock %}
 
 {% block javascript %}
-<script type="text/javascript" src="{{ MEDIA_URL }}/openid-realselector/js/jquery.openid.min.js"></script>	
-<link rel="stylesheet" href="{{ MEDIA_URL }}/openid-realselector/css/style.css">
+<script type="text/javascript" src="{% static "openid-realselector/js/jquery.openid.min.js" %}"></script>	
+<link rel="stylesheet" href="{% static "openid-realselector/css/style.css" %}">
 
 <script type="text/javascript">
 		$(document).ready(function() {
 			$('#openid').openid({
-       			img_path: '{{ MEDIA_URL }}/openid-realselector/img/',
+       			img_path: '{% static "openid-realselector/img/" %}',
       });
 	});
 </script>
