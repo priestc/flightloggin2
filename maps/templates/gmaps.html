@@ -1,5 +1,5 @@
 <script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key={{ GOOGLE_MAPS_KEY }}"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/gmaps.js"></script>
+<script type="text/javascript" src="{% static "js/gmaps.js" %}"></script>
 <script type="text/javascript">    
     var kml_url = "http://flightlogg.in{{ kml_url }}"
 </script>
@@ -19,25 +19,25 @@
 <div id="key">
     <table id="icon">
     <tr>
-        <td><img src="{{ MEDIA_URL }}/icons/yellow_pad.png" alt="yellow dot"><br>Small Airport</td>
-        <td><img src="{{ MEDIA_URL }}/icons/orange_pad.png" alt="orange dot"><br>Medium Airport</td>
-        <td><img src="{{ MEDIA_URL }}/icons/red_pad.png" alt="red dot"><br>Large Airport</td>
-        <td><img src="{{ MEDIA_URL }}/icons/green_pad.png" alt="green dot"><br>Off Airport</td>
-        <td><img src="{{ MEDIA_URL }}/icons/purple_pad.png" alt="purple dot"><br>Heliport</td>
-        <td><img src="{{ MEDIA_URL }}/icons/cyan_pad.png" alt="cyan dot"><br>Seaport</td>
-        <td><img src="{{ MEDIA_URL }}/icons/teal_pad.png" alt="teal dot"><br>Balloon Port</td>
-        <td><img src="{{ MEDIA_URL }}/icons/gray_pad.png" alt="gray dot"><br>Closed</td>
-        <td><img src="{{ MEDIA_URL }}/icons/white_pad.png" alt="white dot"><br>Unknown</td>
+        <td><img src="{% static "icons/yellow_pad.png" %}" alt="yellow dot"><br>Small Airport</td>
+        <td><img src="{% static "icons/orange_pad.png" %}" alt="orange dot"><br>Medium Airport</td>
+        <td><img src="{% static "icons/red_pad.png" %}" alt="red dot"><br>Large Airport</td>
+        <td><img src="{% static "icons/green_pad.png" %}" alt="green dot"><br>Off Airport</td>
+        <td><img src="{% static "icons/purple_pad.png" %}" alt="purple dot"><br>Heliport</td>
+        <td><img src="{% static "icons/cyan_pad.png" %}" alt="cyan dot"><br>Seaport</td>
+        <td><img src="{% static "icons/teal_pad.png" %}" alt="teal dot"><br>Balloon Port</td>
+        <td><img src="{% static "icons/gray_pad.png" %}" alt="gray dot"><br>Closed</td>
+        <td><img src="{% static "icons/white_pad.png" %}" alt="white dot"><br>Unknown</td>
     </tr>
     </table>
     
     <table id="line">
     <tr>
-        <td><img src="{{ MEDIA_URL }}/icons/green_line.png" alt="green line"><br>Actual Instrument</td>
-        <td><img src="{{ MEDIA_URL }}/icons/orange_line.png" alt="orange line"><br>Dual Given</td>
-        <td><img src="{{ MEDIA_URL }}/icons/red_line.png" alt="red line"><br>PIC</td>
-        <td><img src="{{ MEDIA_URL }}/icons/purple_line.png" alt="purple line"><br>SIC</td>
-        <td><img src="{{ MEDIA_URL }}/icons/blue_line.png" alt="blue line"><br>Dual Received</td>
+        <td><img src="{% static "icons/green_line.png" %}" alt="green line"><br>Actual Instrument</td>
+        <td><img src="{% static "icons/orange_line.png" %}" alt="orange line"><br>Dual Given</td>
+        <td><img src="{% static "icons/red_line.png" %}" alt="red line"><br>PIC</td>
+        <td><img src="{% static "icons/purple_line.png" %}" alt="purple line"><br>SIC</td>
+        <td><img src="{% static "icons/blue_line.png" %}" alt="blue line"><br>Dual Received</td>
     </tr>
     </table>
 </div>

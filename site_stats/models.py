@@ -115,30 +115,40 @@ class StatDB(models.Model):
         get_latest_by = 'dt'
     
     @classmethod
-    def get_object_ago(cls, unit):
+    def get_total_at(cls, num, unit):
         """
-        Get stats object nearest to the passed in unit of time.
+        Get the one object from `num` days ago. If that object does not exist,
+        find the nearest one and return it.
         """
         
-        if unit.endswith("d"):
-            num = int(unit[:-1])
+        if unit == "days":
             dt = datetime.datetime.now() - datetime.timedelta(days=num)
             y=dt.year
             m=dt.month
             d=dt.day
-            return cls.objects.filter(dt__year=y, dt__month=m, dt__day=d).latest()
-    
-    def days_until_million(self):
+            
+            latest = cls.objects.filter(dt__year=y, dt__month=m, dt__day=d).latest()
+            return num, latest.total_logged
+            
+            
+    def days_until_million(self, sample_length=(60, 'days')):
         """
         Calculate the rate of flights being added by calculating the average
         flights per day based on the past 60 days. The project how long it will
         be until the total there are a million flights.
         """
+        if sample_length == 0:
+            return 0
+        
+        try:
+            prev_total, days_ago = StatDB.get_total_at(*sample_length)
+        except self.DoesNotExist:
+            # no value at 60 days ago (missing poll?), try 59, then 58...
+            day_earlier = (sample_length[0]-1, sample_length[1])
+            prev_total, days_ago = StatDB.get_total_at(*day_earlier)
         
         now = self.total_logged
-        sixty = StatDB.get_object_ago('60d').total_logged
-        
-        rate = float((now - sixty) / 60)
+        rate = float((now - prev_total) / 60)
         million_to_go = 1000000 - now
         
         return million_to_go / rate
