@@ -1,3 +1,6 @@
+DEBUG = False
+TEMPLATE_DEBUG = DEBUG
+
 from settings_private import *
 
 SERVER_EMAIL = 'info@fanmarkers.com'
