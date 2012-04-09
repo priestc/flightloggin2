@@ -1,12 +1,9 @@
 # m h  dom mon dow   command
-01 */3 *         * * /srv/flightloggin/manage.py calc_stats >> /root/stats_times.txt
-10 11  *         * * /srv/flightloggin/manage.py rotate_dumps
 
-30 5   1         * * /root/month/month
-30 4   1,7,14,21 * * /root/week/week
-30 3   1,14      * * /root/biweek/biweek 
-50 23  *         * * /root/day/day
-
-55 23  *         * * /root/graph
-
-30 */6 *         * * /srv/flightloggin/manage.py make_dump
+01 */3 *         * * /srv/flightloggin2/manage.py calc_stats
+30 5   1         * * /srv/flightloggin2/manage.py email_backup
+30 4   1,7,14,21 * * /srv/flightloggin2/manage.py email_backup --weekly
+30 3   1,14      * * /srv/flightloggin2/manage.py email_backup --biweekly 
+50 23  *         * * /srv/flightloggin2/manage.py email_backup --daily
+30 */6 *         * * /srv/flightloggin2/manage.py make_dump
+10 11  *         * * /srv/flightloggin2/manage.py rotate_dumps
