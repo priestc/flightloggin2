@@ -1,6 +1,6 @@
 # easydump settings ##############################
 
-DUMP_MANIFEST = {
+EASYDUMP_MANIFESTS = {
     'default': {
         'database': 'default',
         'exclude-models': 'Location',
@@ -19,10 +19,6 @@ LOGIN_REDIRECT_URL = '/'
 
 INTERNAL_IPS = ('127.0.0.1','192.168.1.145')
 DEBUG_TOOLBAR_CONFIG = {"INTERCEPT_REDIRECTS": False}
-
-# django settings
-
-POSTGIS_TEMPLATE='template_postgis'
 
 ########### flightloggin settings
 

@@ -144,6 +144,8 @@ INSTALLED_APPS = (
 
 ################
 
+POSTGIS_TEMPLATE='template_postgis'
+
 AUTH_PROFILE_MODULE = 'profile.Profile'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
