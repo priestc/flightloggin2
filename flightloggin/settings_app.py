@@ -3,7 +3,12 @@
 EASYDUMP_MANIFESTS = {
     'default': {
         'database': 'default',
-        'exclude-models': 'Location',
+        'exclude-models': ('WorldBorders', 'USStates'),
+        's3-bucket': 'fl_dumps'
+    },
+    'geographical': {
+        'database': 'default',
+        'include-models': ('WorldBorders', 'USStates'),
         's3-bucket': 'fl_dumps'
     }
 }
@@ -27,4 +32,3 @@ UPLOADS_DIR = '/var/fl-uploads'
 
 #the path where the state maps are stored
 BASE_MAP_PATH = '/var/www/states'
-
