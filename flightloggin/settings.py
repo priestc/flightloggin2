@@ -171,5 +171,6 @@ AUTHENTICATION_BACKENDS = (
 
 from settings_app import *
 from settings_local import *
+from settings_email import *
 
 INSTALLED_APPS = INSTALLED_APPS + DEV_APPS

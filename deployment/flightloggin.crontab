@@ -5,5 +5,5 @@
 30 4   1,7,14,21 * * /srv/flightloggin2/manage.py email_backup --weekly
 30 3   1,14      * * /srv/flightloggin2/manage.py email_backup --biweekly 
 50 23  *         * * /srv/flightloggin2/manage.py email_backup --daily
-30 */6 *         * * /srv/flightloggin2/manage.py make_dump
+30 */6 *         * * /srv/flightloggin2/manage.py make_dump default
 10 11  *         * * /srv/flightloggin2/manage.py rotate_dumps
