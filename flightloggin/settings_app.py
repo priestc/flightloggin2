@@ -32,3 +32,11 @@ UPLOADS_DIR = '/var/fl-uploads'
 
 #the path where the state maps are stored
 BASE_MAP_PATH = '/var/www/states'
+
+EASYDUMP_MANIFESTS = {
+    'default': {
+        'database': 'default',
+        's3-bucket': 'fl_dumps',
+    }
+
+}
