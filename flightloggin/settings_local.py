@@ -3,13 +3,6 @@ TEMPLATE_DEBUG = DEBUG
 
 from settings_private import *
 
-SERVER_EMAIL = 'info@fanmarkers.com'
-EMAIL_HOST = "localhost"
-EMAIL_HOST_PASSWORD = ""
-EMAIL_HOST_USER = ""
-EMAIL_PORT = 25
-DEFAULT_FROM_EMAIL = "info@flightlogg.in"
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
