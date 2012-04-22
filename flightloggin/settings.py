@@ -136,6 +136,7 @@ INSTALLED_APPS = (
     'easydump',
     'style',
     
+    'raven',
     'tagging',
     'pagination',
     'gravatar',

@@ -38,5 +38,4 @@ EASYDUMP_MANIFESTS = {
         'database': 'default',
         's3-bucket': 'fl_dumps',
     }
-
 }

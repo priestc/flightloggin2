@@ -34,7 +34,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'root': {
         'level': 'INFO',
-        'handlers': ['console']
+        'handlers': ['console', 'sentry']
     },
     'formatters': {
         'verbose': {
