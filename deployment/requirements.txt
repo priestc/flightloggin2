@@ -2,7 +2,7 @@ django==1.4
 hg+http://bitbucket.org/offline/django-annoying
 git+http://github.com/dcramer/django-devserver.git
 django-extensions
-git+https://github.com/nbv4/django-gravatar2.git
+git+https://github.com/priestc/django-gravatar2.git
 bzr+http://bazaar.launchpad.net/~django-openid-auth/django-openid-auth/trunk/@65#egg=django_openid_auth-0.2
 django-pagination==1.0.5
 svn+http://django-tagging.googlecode.com/svn/trunk@185#egg=django_tagging-0.4.dev1-py2.6-dev_r185
