@@ -85,7 +85,7 @@ class StateMap(object):
 
     def draw_state_map(self, states_to_plot):
         from matplotlib.patches import Polygon
-        import settings
+        from django.conf inport settings
         
         import os
         path = os.path.join(settings.PROJECT_ROOT, 'maps', 'st99_d00')
