@@ -9,7 +9,6 @@ def news(request):
     news = NewsItem.objects.all()[:10]
     if request.user.is_authenticated():
         request.display_user = request.user
-        
     return locals()
 
 

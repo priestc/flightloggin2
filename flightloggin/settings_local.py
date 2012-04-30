@@ -1,4 +1,4 @@
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 from settings_private import *
