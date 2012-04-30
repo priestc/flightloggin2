@@ -135,7 +135,7 @@ class EmailBackup(object):
         
         #import ipdb; ipdb.set_trace()
         
-        file_ = Backup(self.user).output_zip().getvalue()
+        file_ = Backup(self.user).output_csv().getvalue()
         
         if self.auto:
             f = "Auto Backup Mailer <info@flightlogg.in>"
@@ -148,7 +148,7 @@ class EmailBackup(object):
                              from_email=f,
                              headers={"List-Unsubscribe": unsub})
                              
-        email.attach("backup-%s.tsv.zip" % today, file_,)
+        email.attach("backup-%s.tsv" % today, file_,)
             
         return email
     
