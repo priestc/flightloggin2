@@ -43,9 +43,10 @@ urlpatterns = patterns('django_openid_auth.views',
                                                                   name="login",
     ),
     
-    (
+    url(
         r'^openid/complete/$',
         'login_complete',
+        name='openid-complete'
     ),
     
     url(
@@ -65,7 +66,6 @@ urlpatterns += patterns('',
 
     (r'^histogram/', include('histogram.urls')),
     (r'^kml/', include('maps.kml_urls')),
-    (r'^facebook', include('facebook_app.urls')),
     
     (r'^search/locations\.html$', 'airport.views.search_airport'),
     (r'^search/tailnumbers\.html$', 'plane.views.search_tailnumbers'),

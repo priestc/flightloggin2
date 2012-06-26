@@ -132,7 +132,6 @@ INSTALLED_APPS = (
     'sigs',
     'milestones',
     'manage',
-    'facebook_app',
     'easydump',
     'style',
     
