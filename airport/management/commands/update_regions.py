@@ -27,8 +27,10 @@ class Command(NoArgsCommand):
         ),
     )
 
-    def handle(self, *args, **kwargs):
-        path = os.path.join(PROJECT_ROOT, 'airport', 'csv', 'regions.csv')
+    def handle(self, *args, **options):
+        path = os.path.join(settings.PROJECT_ROOT, 'airport', 'csv', 'regions.csv')
+        if options['download']:
+            os.system('wget http://www.ourairports.com/data/regions.csv -O %s' % path)
         f = open(path, 'rb')
 
         reader = csv.reader(f, "excel")

@@ -183,15 +183,18 @@ class Command(NoArgsCommand):
     )
     
     def handle(self, *args, **options):
+        path = os.path.join(settings.PROJECT_ROOT, 'airport', 'csv', 'airports.csv')
+        if options['download']:
+            os.system('wget http://www.ourairports.com/data/airports.csv -O %s' % path)
+        old = open(path, 'rb')
+        new = open(os.path.join(CSV_LOCATION, "airports_new.csv"), 'w')
+        
         start = datetime.datetime.now()
         global REGIONS
         
         REGIONS = {}
         for d in Region.objects.values('code', 'pk'):
             REGIONS.update({d['code']: d['pk']})
-
-        old = open(os.path.join(CSV_LOCATION, "airports.csv"), 'rb')
-        new = open(os.path.join(CSV_LOCATION, "airports_new.csv"), 'w')
 
         reader = csv.reader(old, "excel")
         titles = reader.next()
