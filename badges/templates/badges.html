@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block -sel %}nav_selected{% endblock%}
+
+{% block description %}{{ request.display_user.username }}'s badges{% endblock%}
+
+{% block javascript %}
+    
+    <script type="text/javascript">
+        var NAVBAR_HIGHLIGHT = "badges-sel";
+	</script>
+	
+{% endblock %}
+
+{% block title %}Badges{% endblock %}
+
+<div>
+    {% for badge in badges %}
+    <h3>{{ badge.title }}</h3>
+    <span class="awarded_flight">{{ badge.awarded_flight }}</span>
+    {% endfor %}
+
+{% block canvas %}
+
+{% endblock %}
