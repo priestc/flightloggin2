@@ -134,7 +134,9 @@ INSTALLED_APPS = (
     'manage',
     'easydump',
     'style',
-    
+   
+    'etsy_colors',
+ 
     'raven',
     'tagging',
     'pagination',
