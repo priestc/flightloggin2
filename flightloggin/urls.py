@@ -59,6 +59,7 @@ urlpatterns = patterns('django_openid_auth.views',
 ###############################################################################
 
 urlpatterns += patterns('',
+    
     (
         r'', include('etsy_colors.urls')
     ),    

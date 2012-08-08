@@ -8,17 +8,6 @@ import re
 
 from warnings import warn
 
-print "Initilizing Django...",
-#sys.stdout.flush()
-
-sys.path = ['/srv/', '/srv/flightloggin/'] + sys.path
-from flightloggin import settings
-
-from django.core.management import setup_environ
-setup_environ(settings)
-
-print "Done"
-
 from airport.models import Region, Country
 
 ##################

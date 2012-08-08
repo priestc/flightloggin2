@@ -166,7 +166,7 @@ def make_historical_ident(l, new_ident):
     print "used: " + str(used)
 
     if used > 0:
-        msg = "Creating HistoricalIdent {0} -> {0}".format(l.identifier, new_ident)
+        msg = "Creating HistoricalIdent {0} -> {1}".format(l.identifier, new_ident)
         print colored(msg, 'yellow', attrs=['bold'])
         today = datetime.date.today()
         hi = HistoricalIdent(end=today, identifier=l.identifier, current_location=l)

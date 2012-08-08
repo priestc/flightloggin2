@@ -111,6 +111,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.humanize',
+    'django.contrib.gis',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     
@@ -134,9 +135,9 @@ INSTALLED_APPS = (
     'manage',
     'easydump',
     'style',
-   
     'etsy_colors',
- 
+    'badges',
+    
     'raven',
     'tagging',
     'pagination',
