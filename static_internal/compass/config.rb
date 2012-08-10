@@ -6,5 +6,6 @@ sass_dir = "src"
 images_dir = "images"
 javascripts_dir = "../media/javascripts"
 output_style = :compressed
+initialize_on_precompile = false
 # To enable relative paths to assets via compass helper functions. Uncomment:
 # relative_assets = true

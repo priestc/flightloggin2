@@ -59,12 +59,15 @@ urlpatterns = patterns('django_openid_auth.views',
 ###############################################################################
 
 urlpatterns += patterns('',
-    
-    (
-        r'', include('etsy_colors.urls')
-    ),    
+    #(
+    #    r'', include('etsy_colors.urls')
+    #),    
 
-(
+    (
+        r'^fba/', include('facebook_auth.urls')
+    ),
+
+    (
         r'^robots\.txt$',
         'main.views.robots'
     ),
@@ -290,6 +293,12 @@ urlpatterns += patterns('',
     ),
     
     #--------------------------------------------------------------------------
+    
+    url(
+        r'^(?P<username>\w+)/badges\.html$',
+        "badges.views.badges",
+                                                                 name="badges",
+    ),
     
     url(
         r'^(?P<username>\w+)/8710\.html$',

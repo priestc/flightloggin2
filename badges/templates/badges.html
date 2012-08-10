@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% block -sel %}nav_selected{% endblock%}
 
 {% block description %}{{ request.display_user.username }}'s badges{% endblock%}
 
@@ -13,12 +12,16 @@
 
 {% block title %}Badges{% endblock %}
 
-<div>
-    {% for badge in badges %}
-    <h3>{{ badge.title }}</h3>
-    <span class="awarded_flight">{{ badge.awarded_flight }}</span>
-    {% endfor %}
 
 {% block canvas %}
+
+<div>
+    {% for badge in badges %}
+    <div class="badge">
+        <h3>{{ badge.title }} ({{ badge.level }})</h3>
+        <span class="awarded_flight">{{ badge.awarded_flight }}</span>
+    </div>
+    {% endfor %}
+</div>
 
 {% endblock %}

@@ -15,10 +15,16 @@ class Milestone(object):
     X = '<span class="x">&#10005;</span>'
     Q = '<span class="q">?</span>'
 
-    def __init__(self, user):
+    def __init__(self, user, as_of_date=None):
         
         self.user = user
         self.all = Flight.objects.user(user)
+        
+        if as_of_date is not None:
+            self.as_of_date = as_of_date
+            self.all = self.all.filter(date__lte=as_of_date)
+        else:
+            self.as_of_date = datetime.date.today()
         
         ## this is true if all items of the milestones are passed
         self.overall_passed = False
@@ -128,7 +134,7 @@ class Milestone(object):
                     return flight.date
         
         # calculate 60 days ago from today
-        today = datetime.date.today()
+        today = self.as_of_date
         sixtydaysago = today - datetime.timedelta(days=60)
         
         #filter flights between today and 60 days ago, count dual_r hours
@@ -139,7 +145,7 @@ class Milestone(object):
         date = get_date_of_3_hours(dual)
         
         if date:
-            remain = 60 - (datetime.date.today() - date).days
+            remain = 60 - (self.as_of_date - date).days
         else:
             remain = 0
 

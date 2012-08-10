@@ -1,6 +1,8 @@
 from django.db import models
 from airport.models import Location
 from logbook.models import Flight
+from plane.models import Plane
+from milestones.calculations import Part61_Private, ATP
 
 class AwardedBadge(models.Model):
     user = models.ForeignKey('auth.User')
@@ -14,15 +16,22 @@ class AwardedBadge(models.Model):
             self.id, self.title, self.level, self.user.username, self.awarded_flight
         )
     
-    def award(status_class, awarding_flight):
+    @classmethod
+    def total_badge_count(cls, user):
+        """
+        Count of badges that the user has been awarded.
+        """
+        return cls.objects.filter(user=user).aggregate(s=models.Sum('level'))['s']
+    
+    def award(status_class):
         """
         Award the user ith this badge.
         status_class is one of the clases in this file that that ends with
         StatusClass.
         """
-        self.user = user
-        self.title = status.title
-        self.awarded_flight = awarding_flight
+        self.user = status_class.user
+        self.title = status_class.title
+        self.awarded_flight = status_class.new_flight
         self.save()
 
 #################################
@@ -120,6 +129,15 @@ class FirstFlightBadgeStatus(SingleBadgeStatus):
     def eligible(self):
         return True
 
+class TwinBadgeStatus(SingleBadgeStatus):
+    """
+    Awarded when a User logs his first flight in a twin
+    """
+    title = "Twins"
+
+    def eligible(self):
+        return self.new_flight.plane.cat_class in (2,4)
+
 class AdaptableBadgeStatus(SingleBadgeStatus):
     """
     Awarded when a user logs a flight in a turbine aircraft and a piston
@@ -131,6 +149,30 @@ class AdaptableBadgeStatus(SingleBadgeStatus):
         flights_today = self.flights.filter(date=self.new_flight.date)
         return flights_today.turbine().count() - flights_today.count() != 0
 
+class CompleteSetBadgeStatus(SingleBadgeStatus):
+    """
+    Awarded when you have a flight logged in a single engine, twin engine,
+    tailwheel and a turbine aircraft
+    """
+    title = "Complete Set"
+    
+    def eligible(self):
+        planes = Plane.objects.filter(flight__in=self.flights)
+        r = {'turbine': False, 'tailwheel': False, 'sea': False, 'single': False, 'multi': False}
+        for p in planes:
+            if p.cat_class in [2,4]:
+                r['multi'] = True
+            if p.cat_class in [1,3]:
+                r['single'] = True
+            if p.cat_class in [3,4]:
+                r['sea'] = True
+            if 'turbine' in p.tags.lower():
+                r['turbine'] = True
+            if 'tailwheel' in p.tags.lower():
+                r['tailwheel'] = True
+        
+        return all(r.values())
+
 class ThousandHourBadgeStatus(SingleBadgeStatus):
     """
     Awarded when the user logs 1000 hours.
@@ -139,7 +181,30 @@ class ThousandHourBadgeStatus(SingleBadgeStatus):
     
     def eligible(self):
         f = self.flights.aggregate(s=models.Sum('total'))
-        return f['s'] >= 1000
+        c = self.flights.count()
+        return f['s'] >= 1000 and c > 100
+
+class FiveThousandHourBadgeStatus(SingleBadgeStatus):
+    """
+    Awarded when the user logs 5000 hours.
+    """
+    title = "Five Thousand Hours"
+
+    def eligible(self):
+        f = self.flights.aggregate(s=models.Sum('total'))
+        c = self.flights.count()
+        return f['s'] >= 5000 and c > 500
+
+class TenThousandHourBadgeStatus(SingleBadgeStatus):
+    """
+    Awarded when the user logs 5000 hours.
+    """
+    title = "Ten Thousand Hours"
+
+    def eligible(self):
+        f = self.flights.aggregate(s=models.Sum('total'))
+        c = self.flights.count()
+        return f['s'] >= 10000 and c > 500
 
 class AdventurerBadgeStatus(SingleBadgeStatus):
     """
@@ -165,12 +230,35 @@ class PrivateBadgeStatus(SingleBadgeStatus):
     Awarded when the user gets all the requirements for the FAA Private license
     """
     title = "Private Pilot"
+    
     def eligible(self):
-        return False
+        milestone = Part61_Private(user=self.user, as_of_date=self.new_flight.date)
+        d = milestone.calculate()
+        result = milestone.determine(d)
+        for item in result:
+            if 'x' in item['icon']:
+                return False
+        return True
+
+
+class ATPBadgeStatus(SingleBadgeStatus):
+    """
+    Awarded when the user gets all the requirements for the FAA Private license
+    """
+    title = "ATP"
+
+    def eligible(self):
+        milestone = ATP(user=self.user, as_of_date=self.new_flight.date)
+        d = milestone.calculate()
+        result = milestone.determine(d)
+        for item in result:
+            if 'x' in item['icon']:
+                return False
+        return True
 
 ################################################################################
 
-class MileHighClubBadgeStatus(MultipleLevelBadgeStatus):
+class MileHighClubBadgeStatus(SingleBadgeStatus):
     """
     Awarded when a user lands at an airport with an elevation 1 mile MSL
     """
@@ -182,18 +270,38 @@ class MileHighClubBadgeStatus(MultipleLevelBadgeStatus):
                                 .filter(elevation__gt=5280)\
                                 .count()
         
-        return self.determine_level(airport_count)
+        return airport_count > 1
 
    
-class RidingWithTheBigBoysBadgeStatus(MultipleLevelBadgeStatus):
+class ClassBBadgeStatus(MultipleLevelBadgeStatus):
     """
     Awarded when the user lands at a large airport.
     """
-    title = "Riding With The Big Boys"
+    title = "Class B"
+    
+    level_1 = 1
+    level_2 = 5
+    level_3 = 10
+    level_4 = 20
+    level_5 = 35
+    
     def eligible(self):
-        ret = self.new_flight.route.routebase_set.filter(location__loc_class=3).exists()
-        print ret
-        return ret
+        airports = Location.objects.filter(routebase__route__flight__in=self.flights)\
+                                   .values_list('identifier', flat=True)\
+                                   .distinct()
+        class_b = [
+            'KPHX', 'KLAX', 'KNKX', 'KSAN', 'KSFO', 'KDEN', 'KMCO', 'KMIA',
+            'KTPA', 'KATL', 'PHNL', 'KORD', 'KCVG', 'KMSY', 'KADW', 'KBWI',
+            'KBOS', 'KDTW', 'KMSP', 'KMCI', 'KSTL', 'KLAS', 'KEWR', 'KLGA',
+            'KJFK', 'KCLT', 'KCLE', 'KPHL', 'KPIT', 'KMEM', 'KDFW', 'KHOU',
+            'KIAH', 'KSLC', 'KDCA', 'KIAD', 'KSEA'
+        ]
+        count = 0
+        for a in class_b:
+            if a in airports:
+                count +=1
+        
+        return self.determine_level(count)
     
 class LongHaulBadgeStatus(MultipleLevelBadgeStatus):
     """
@@ -247,14 +355,13 @@ class BusyBeeBadgeStatus(MultipleLevelBadgeStatus):
 
   
 def get_badges_classes():
-    classes = globals()
-    ret = []
-    for name, class_ in classes.iteritems():
-        if not hasattr(class_, 'mro'):
-            continue
-        if BadgeStatus in class_.mro() and class_ not in [MultipleLevelBadgeStatus, BadgeStatus, SingleBadgeStatus]:
-            ret.append(class_)
-    return ret
+    return (
+        BusyBeeBadgeStatus, WorldExplorerBadgeStatus, FirstFlightBadgeStatus,
+        AdaptableBadgeStatus, MileHighClubBadgeStatus, ThousandHourBadgeStatus,
+        AdventurerBadgeStatus, ATPBadgeStatus, PrivateBadgeStatus, CompleteSetBadgeStatus,
+        FiveThousandHourBadgeStatus, TenThousandHourBadgeStatus, ClassBBadgeStatus,
+        
+    )
 
  
 def award_badges(new_flight):

@@ -135,7 +135,8 @@ INSTALLED_APPS = (
     'manage',
     'easydump',
     'style',
-    'etsy_colors',
+    #'etsy_colors',
+    'facebook_auth',
     'badges',
     
     'raven.contrib.django',
