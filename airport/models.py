@@ -49,7 +49,7 @@ class Location(EnhancedModel, WikiMixins):
                                          
     user = models.ForeignKey(User, null=True)
     
-    identifier = models.CharField(max_length=8)
+    identifier = models.CharField(max_length=8, db_index=True)
     icao_identifier = models.CharField(max_length=4, blank=True)
     iata_identifier = models.CharField(max_length=3, blank=True)
     local_identifier = models.CharField(max_length=8, blank=True)

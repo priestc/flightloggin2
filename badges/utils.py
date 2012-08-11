@@ -1,11 +1,16 @@
 from django.contrib.auth.models import User
 from logbook.models import Flight
+from models import get_badges_classes
 import time
 
-def new_badge(badge_classes, test=False):
+def new_badge(badge_classes=None, test=False):
     """
     Utility function for awarding a badge when a new one is added.
     """
+    
+    badge_classes = get_badges_classes() if badge_classes is None else badge_classes
+
+
     if test:
         users = [User.objects.get(username='chris')]
     else:

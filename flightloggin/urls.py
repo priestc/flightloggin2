@@ -40,7 +40,7 @@ urlpatterns = patterns('django_openid_auth.views',
     url(
         r'^openid/login/$',
         'login_begin',
-                                                                  name="login",
+                                                                  name="openid_login",
     ),
     
     url(
