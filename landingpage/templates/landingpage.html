@@ -1,0 +1,122 @@
+<html>
+  <head>
+    <title>FlightLogg.in'</title>
+  </head>
+  <body>
+    <div id="fb-root"></div>
+    <script>
+      window.fbAsyncInit = function() {
+         FB.init({
+           appId      : '331657940258873', // App ID
+           channelUrl : '//WWW.YOUR_DOMAIN.COM/channel.html', // Channel File
+           status     : true, // check login status
+           cookie     : true, // enable cookies to allow the server to access the session
+           xfbml      : true  // parse XFBML
+         });
+         // Additional initialization code here
+      };
+      // Load the SDK Asynchronously
+      (function(d){
+          var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+          if (d.getElementById(id)) {return;}
+          js = d.createElement('script'); js.id = id; js.async = true;
+          js.src = "//connect.facebook.net/en_US/all.js";
+          ref.parentNode.insertBefore(js, ref);
+      }(document));
+    </script>
+
+    <style>
+      body {
+        font-family: helvetica;
+        background: #CCE4EB;
+      }
+      #register {
+        background: white;
+        padding: 5px;
+        border: 1px solid black;
+        margin: 5px;
+        text-align: center;
+      }
+
+      #register ul.errorlist {
+        color: red;
+        margin-bottom: 0px;
+      }
+
+      #register span.helptext{
+        color: #aaaaaa;
+      }
+
+      #register table {
+        margin: 0 auto 0 auto;
+      }
+
+      #content {
+        margin: 0 auto 0 auto;
+        width: 550px;
+      }
+      #logo-wrapper {
+        margin: 40px;
+        text-align: center;
+      }
+      #login {
+        position: absolute;
+        right: 0;
+        top: 0;
+        background: white;
+        padding: 10px;
+        margin: 10px;
+        text-align: center;
+        border: 1px solid black;
+      }
+    </style>
+
+  <div id="content">
+    <div id="logo-wrapper">
+    <img id="logo" src="{% static CSS_URL %}/logo.png" alt="FlightLogg.in' Logo" />
+    </div>
+
+    <h3>FlightLoggin' is an online pilot logbook application. Gone are the days of
+    using a paper booklet manage your aviation career data.</h3>
+    
+    <br>
+    <br>
+
+    <div id="register">
+      <h2>Register</h2>
+      <form action='.' method='post'>
+        <table>
+          {{ form.as_table }}
+        </table>
+        <br>
+        <input type="submit">
+      </form>
+      <a href="{% url logbook username='demo' %}">Click here to see the demo account</a>
+    </div>
+
+    <br>
+    Key features of FlightLogg.in' include:
+    <ul>
+      <li><strong>Web-based</strong> - Access your data from any internet enabled device</li>
+      <li><strong>Email Backups</strong> - Automatically sends you a copy of all your logbook data to your email for redundantcy and piece of mind.</li>
+      <li><strong>Sinple, no-nonsense user interface</strong> - designed for efficiency and easy of use
+      <li><strong>Open Source</strong> - The code that runs FlightLogg.in' is completely open source
+      <li><strong>No lock-in</strong> - Export your data at any time in a format that con be read by any program</li>
+      <li><strong>Ad supported</strong> - No subscription fees</li>
+      <li><strong>Create Data visualization</strong> such as graphs and histograms</li>
+      <li><strong>Location Awareness</strong> - automatically calculates the diatance of your flights based on the airport identifiers in the 'route' column</li>
+    </ul>
+
+    <div id="login">
+      <strong>Sign-in</strong>
+      <form action='{% url new_login %}' method='post'>
+        <label>Username: <input type="text" name='login_username'></label><br>
+        <label>Password: <input type="password" name='login_pssword'></label>
+        <br>
+        <input type="submit">
+      </form>
+      <a href="{% url openid_login %}">Click here to login with OpenID</a>
+    </div>
+
+  </div>
+</html>

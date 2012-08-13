@@ -101,7 +101,7 @@
         </div>
         {% if page_of_flights.object_list and not request.shared %}
         <div style="float:right">
-            <a href="{% url mass-edit request.display_user.username page_of_flights.number %}">Mass Edit this page</a>
+            <a href="{% url mass-edit username=request.display_user.username page=page_of_flights.number %}">Mass Edit this page</a>
         </div>
         {% endif %}
     </div>

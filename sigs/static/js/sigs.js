@@ -1,12 +1,10 @@
 
 // the domain name of the page
 var p = location.href.split("/");
-p[p.length-1]="";
-p=p.join("/");
-
+p = p[0] + '//' + p[2] + '/' + p[4] + '/';
 
 // the default to show
-var url = p + "sigs/pic.png";
+var url = p + "/sigs/pic.png";
 
 $(document).ready(function() {
 
