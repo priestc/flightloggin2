@@ -86,6 +86,7 @@ MIDDLEWARE_CLASSES = (
     'share.middleware.share.ShareMiddleware',
     'googlebot.middleware.LimitBotsMiddleware',
     'pipeline.middleware.MinifyHTMLMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -157,6 +158,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'django.core.context_processors.debug',
     'django.core.context_processors.request',
+    'django.contrib.messages.context_processors.messages',
     'django.core.context_processors.media',
     'main.context_processors.user_label',
     'main.context_processors.proper_ad',

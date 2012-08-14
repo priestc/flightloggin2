@@ -10,12 +10,12 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
+from django.contrib import messages
 
 from profile.models import Profile
 from forms import RegistrationForm
 
 def landingpage(request):
-    domain = "flightlogg-test.com"
     if request.user.is_authenticated():
         url = reverse('logbook', args=[request.user.username])
         return HttpResponseRedirect(url)
@@ -34,6 +34,9 @@ def landingpage(request):
     return TemplateResponse(request, 'landingpage.html', locals())
 
 def registration(request):
+    """
+    Handle the data coming in from the register form on the landingpage
+    """
     if request.POST['signed_request']:
         return fb_registration_callback(request)
     
@@ -45,13 +48,20 @@ def registration(request):
 
 
 def new_login(request):
-    username = request.POST.get('username')
-    password = request.POST.get('password')
+    """
+    Handle data coming in from the login box on the landingpage
+    """
+    username = request.POST.get('login_username')
+    password = request.POST.get('login_password')
 
     if not request.POST or not (username and password):
         return HttpResponseRedirect(reverse('landingpage'))
     
-    user = authenticate(user, password)
+    user = authenticate(username=username, password=password)
+    if user is None:
+        messages.info(request, 'Username/password incorrect')
+        return HttpResponseRedirect(reverse('landingpage'))
+
     login(request, user)
     return HttpResponseRedirect(reverse('logbook', args=[request.user.username]))
 

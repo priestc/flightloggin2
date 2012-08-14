@@ -195,6 +195,39 @@
         
     </fieldset>
     
+    <fieldset id="logbook_section">
+
+        <legend>Change Password</legend>
+    
+        <table class="prefs_table">
+            <tr>
+                <td>{{ password_form.errors }}</td>
+            </tr>
+            <tr>
+                <th>{{ password_form.old.label_tag }}</th>
+                <td>{{ password_form.old }}</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <th>{{ password_form.new.label_tag }}</th>
+                <td>{{ password_form.new }}</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <th>{{ password_form.new2.label_tag }}</th>
+                <td>{{ password_form.new2 }}</td>
+                <td></td>
+            </tr>
+        </table>
+        
+    </fieldset>
+
+    <div>
+        <input class="prefs_submit_button" type="submit" value="Submit Preferences">
+    </div>
+
     <fieldset>
         <legend>Clear Data</legend>
         <div id="instructions">Check each checkbox on either side to enable button.</div>
@@ -237,6 +270,7 @@
         </div>
     
     </fieldset>
+
 </form>
 {{auto_form.errors}}
 {{column_form.errors}}

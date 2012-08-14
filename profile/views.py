@@ -1,6 +1,6 @@
 import re
 
-from forms import ProfileForm, ColumnsForm, AutoForm, UserForm
+from forms import ProfileForm, ColumnsForm, AutoForm, UserForm, ChangePasswordForm
 from models import *
 
 from django.contrib.auth.decorators import login_required
@@ -31,7 +31,8 @@ def profile(request):
         user_form = UserForm(request.POST, instance=request.display_user)
         column_form = ColumnsForm(request.POST, prefix="column", instance=column)
         auto_form = AutoForm(request.POST, prefix="auto", instance=auto)
-    
+        password_form = ChangePasswordForm(request.POST, prefix='pass', user=request.user)
+
         if request.POST.get("submit") == "Delete All Flights":
             Flight.objects.filter(user=request.display_user).delete()
             edit_logbook.send(sender=request.display_user)
@@ -52,6 +53,7 @@ def profile(request):
             edit_logbook.send(sender=request.display_user)
             
         else:
+            
             if auto_form.is_valid():
                 auto_form.save()
                 
@@ -67,8 +69,6 @@ def profile(request):
                 user.username = \
                     re.sub(r'\W', '', user.username)\
                     .replace(" ",'')
-                    
-                print user.username
                  
                 if request.display_user.id == settings.DEMO_USER_ID:
                     ## don't let anyone change the demo's username or email
@@ -76,15 +76,16 @@ def profile(request):
                     user_form.cleaned_data['username'] = 'demo'
                     user_form.cleaned_data['email'] = 'demo@what.com'
                 
-                #assert False, user.username
-                user.save()        
-    
+                user.save()
+
+            if password_form.is_valid():
+                password_form.save()
     else:
         profile_form = ProfileForm(instance=profile)
         user_form = UserForm(instance=request.display_user)
         column_form = ColumnsForm(prefix="column", instance=column)
         auto_form = AutoForm(prefix="auto", instance=auto)
-    
+        password_form = ChangePasswordForm(prefix='pass')
     
     f1 = '<td class="{cls}">{checkbox}</td>'
     f2 = '<td class="title">{title}</td><td class="description">{desc}</td>\n'

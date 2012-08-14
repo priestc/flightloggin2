@@ -1,29 +1,6 @@
 <html>
   <head>
     <title>FlightLogg.in'</title>
-  </head>
-  <body>
-    <div id="fb-root"></div>
-    <script>
-      window.fbAsyncInit = function() {
-         FB.init({
-           appId      : '331657940258873', // App ID
-           channelUrl : '//WWW.YOUR_DOMAIN.COM/channel.html', // Channel File
-           status     : true, // check login status
-           cookie     : true, // enable cookies to allow the server to access the session
-           xfbml      : true  // parse XFBML
-         });
-         // Additional initialization code here
-      };
-      // Load the SDK Asynchronously
-      (function(d){
-          var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-          if (d.getElementById(id)) {return;}
-          js = d.createElement('script'); js.id = id; js.async = true;
-          js.src = "//connect.facebook.net/en_US/all.js";
-          ref.parentNode.insertBefore(js, ref);
-      }(document));
-    </script>
 
     <style>
       body {
@@ -69,8 +46,14 @@
         text-align: center;
         border: 1px solid black;
       }
-    </style>
 
+      ul.messages {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    
   <div id="content">
     <div id="logo-wrapper">
     <img id="logo" src="{% static CSS_URL %}/logo.png" alt="FlightLogg.in' Logo" />
@@ -111,10 +94,17 @@
       <strong>Sign-in</strong>
       <form action='{% url new_login %}' method='post'>
         <label>Username: <input type="text" name='login_username'></label><br>
-        <label>Password: <input type="password" name='login_pssword'></label>
+        <label>Password: <input type="password" name='login_password'></label>
         <br>
         <input type="submit">
       </form>
+      {% if messages %}
+        <ul class="messages">
+          {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
       <a href="{% url openid_login %}">Click here to login with OpenID</a>
     </div>
 
