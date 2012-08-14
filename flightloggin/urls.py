@@ -430,6 +430,11 @@ urlpatterns += patterns('',
         r'^\w+/$',
         redirect_to,
         {'url': '/landingpage'},
+    ),
+
+    (
+        r'.html$',
+        "main.views.remove_html_redirection",
     )
 )
 

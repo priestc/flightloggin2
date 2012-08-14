@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponsePermanentRedirect
 from django.views.decorators.cache import never_cache
 
 from annoying.decorators import render_to
@@ -34,3 +34,18 @@ def is_alive(request):
 def robots(request):
     return HttpResponse("""User-agent: *
 Disallow: /kml/""", mimetype='text-plain')
+
+def remove_html_redirection(request):
+    """
+    Dirty hack for dealing with redirecting old urls with the '.html' to the
+    nre scheme.
+    """
+    url = request.path
+
+    if 'logbook' in url or 'graphs' in url:
+        _, user, page = url.split('/')
+        url = "/%s/%s" % (page, user)
+    
+    url = url.replace('.html', '')
+    print url
+    return HttpResponsePermanentRedirect(url)
