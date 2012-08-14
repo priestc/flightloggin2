@@ -46,6 +46,23 @@ def registration(request):
 
     return HttpResponseRedirect('/%s' % user.username)
 
+def reset_password(request):
+    if request.POST:
+        data = request.POST['data']
+        if "@" in data:
+            o = {'email': data}
+        else:
+            o = {'username': data}
+
+        try:
+            u = User.objects.filter(**o)
+        except User.DoesNotExist:
+            messages.error('Email or username could not be found')
+        else:
+            send_reset_email(u)
+            messages.info('Email sent')
+    
+    return TemplateResponse(request, 'reset_password.html', locals())
 
 def new_login(request):
     """

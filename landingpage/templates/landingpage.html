@@ -1,56 +1,11 @@
 <html>
   <head>
     <title>FlightLogg.in'</title>
-
-    <style>
-      body {
-        font-family: helvetica;
-        background: #CCE4EB;
-      }
-      #register {
-        background: white;
-        padding: 5px;
-        border: 1px solid black;
-        margin: 5px;
-        text-align: center;
-      }
-
-      #register ul.errorlist {
-        color: red;
-        margin-bottom: 0px;
-      }
-
-      #register span.helptext{
-        color: #aaaaaa;
-      }
-
-      #register table {
-        margin: 0 auto 0 auto;
-      }
-
-      #content {
-        margin: 0 auto 0 auto;
-        width: 550px;
-      }
-      #logo-wrapper {
-        margin: 40px;
-        text-align: center;
-      }
-      #login {
-        position: absolute;
-        right: 0;
-        top: 0;
-        background: white;
-        padding: 10px;
-        margin: 10px;
-        text-align: center;
-        border: 1px solid black;
-      }
-
-      ul.messages {
-        color: red;
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/landing.css' %}">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta name="DESCRIPTION" content="FlightLoggin' is an online pilot logbook application Gone are the days of using a paper booklet manage your aviation career data.">
+        <meta name="KEYWORDS" content="Airline, Travel, Aircraft, Aviation, Pilot Logbook, Open Source, GPL, Pilot Log, Flight Logbook, web application, Flight Training, Private Pilot">
+        <link rel="icon" type="image/png" href="{% static "images/favicon.ico" %}">
   </head>
   <body>
     
@@ -105,8 +60,14 @@
           {% endfor %}
         </ul>
       {% endif %}
+      <a href="{%url reset_password %}">Reset Password</a><br>
       <a href="{% url openid_login %}">Click here to login with OpenID</a>
     </div>
 
   </div>
+  <hr>
+  {% include 'footer.html' %}
+  {% load analytics %}
+  {% googleanalyticsjs %}
+
 </html>

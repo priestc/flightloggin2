@@ -1,0 +1,53 @@
+body {
+  font-family: helvetica;
+  background: #CCE4EB;
+}
+#register {
+  background: white;
+  padding: 5px;
+  border: 1px solid black;
+  margin: 5px;
+  text-align: center;
+}
+
+#register ul.errorlist {
+  color: red;
+  margin-bottom: 0px;
+}
+
+#register span.helptext{
+  color: #aaaaaa;
+}
+
+#register table {
+  margin: 0 auto 0 auto;
+}
+
+#content {
+  margin: 0 auto 0 auto;
+  width: 550px;
+}
+#logo-wrapper {
+  margin: 40px;
+  text-align: center;
+}
+#login {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: white;
+  padding: 10px;
+  margin: 10px;
+  text-align: center;
+  border: 1px solid black;
+}
+
+ul.messages {
+  color: red;
+}
+#footer{
+  text-align:center;
+  font-size:x-small;
+  color:gray;
+  width:100%
+}

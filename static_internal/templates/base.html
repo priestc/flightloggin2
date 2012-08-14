@@ -5,8 +5,7 @@
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <meta name="DESCRIPTION" content="{% block description %}{% endblock %}">
         <meta name="KEYWORDS" content="Airline, Travel, Aircraft, Aviation, Pilot Logbook, Open Source, GPL, Pilot Log, Flight Logbook, web application, Flight Training, Private Pilot">
-        <meta name="google-site-verification" content="xe-f505ZHR6pNZzKFyeK5PNnZSkSZ8LlW979worOSHM">
-        <link rel="icon" type="image/png" href="{% static "icons/favicon.png" %}">
+        <link rel="icon" type="image/png" href="{% static "images/favicon.ico" %}">
         
         <script type="text/javascript">
             MEDIA_URL = "{{ STATIC_URL }}";
@@ -94,17 +93,7 @@
             
 		</div>
 
-		<div id="footer">
-            <a href="{% url news %}">News</a> -
-            <a href="{% url help %}">Help</a> -
-            <a href="{% url site_stats %}">Site Stats</a> -
-            <a href="https://groups.google.com/forum/#!forum/flightloggin">Google Groups</a> -
-            <a href="http://twitter.com/flightloggin" target="_blank">Twitter</a> -
-            <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=9683553" target="_blank">Donate</a> -
-            <a href="http://github.com/nbv4/flightloggin" target="_blank">Code</a> -
-            <a href="{% url privacy %}">Privacy Policy</a>
-            <br>&copy; 2012 FlightLogg.in'
-		</div>
+		{% include 'footer.html' %}
 		
 	</div>
     {% googleanalyticsjs %}
