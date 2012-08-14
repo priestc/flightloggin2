@@ -10,7 +10,7 @@ function render_line_graph(ext) {
         rate="rate";
     }
     else {
-        rate="norate";        
+        rate="norate";
     }
     
     if($("#filter_spikes:checked").val()){
@@ -20,11 +20,13 @@ function render_line_graph(ext) {
         spikes="spikes";        
     }
     
+    var username = location.href.split('/')[4];
+
     if(start && end)
-        url = sprintf("linegraph/%s/%s-%s/%s-%s.%s",column, start, end, rate, spikes, ext)
+        url = sprintf("/%s/linegraph/%s/%s-%s/%s-%s.%s",username, column, start, end, rate, spikes, ext)
         
     else
-        url = sprintf("linegraph/%s/%s-%s.%s",column, rate, spikes, ext)
+        url = sprintf("/%s/linegraph/%s/%s-%s.%s",username, column, rate, spikes, ext)
         
     if(ext=="png")
   	    $("#image").attr("src", url).css("display", "block")

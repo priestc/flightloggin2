@@ -20,7 +20,6 @@ def help(request):
     return locals()
 
 def not_found(request):
-    from django.http import HttpResponse
     return HttpResponse('404')
 
 @render_to('500.html')
