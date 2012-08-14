@@ -42,9 +42,14 @@ body {
   border: 1px solid black;
 }
 
-ul.messages {
+ul.messages li.error {
   color: red;
 }
+
+ul.messages li.info {
+  color: green;
+}
+
 #footer{
   text-align:center;
   font-size:x-small;

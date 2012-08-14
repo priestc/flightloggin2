@@ -3,6 +3,7 @@ import hashlib
 import hmac
 import simplejson as json
 import random
+import string
 
 from django.template.response import TemplateResponse
 from django.conf import settings
@@ -11,6 +12,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
+from django.core.mail import EmailMessage
 
 from profile.models import Profile
 from forms import RegistrationForm
@@ -55,13 +57,13 @@ def reset_password(request):
             o = {'username': data}
 
         try:
-            u = User.objects.filter(**o)
+            u = User.objects.get(**o)
         except User.DoesNotExist:
-            messages.error('Email or username could not be found')
+            messages.error(request, 'Email or username could not be found')
         else:
             send_reset_email(u)
-            messages.info('Email sent')
-    
+            messages.info(request, 'Email sent to %s' % u.email)
+
     return TemplateResponse(request, 'reset_password.html', locals())
 
 def new_login(request):
@@ -76,7 +78,7 @@ def new_login(request):
     
     user = authenticate(username=username, password=password)
     if user is None:
-        messages.info(request, 'Username/password incorrect')
+        messages.error(request, 'Username/password incorrect')
         return HttpResponseRedirect(reverse('landingpage'))
 
     login(request, user)
@@ -106,6 +108,29 @@ def fb_registration_callback(request):
     )
     
     print response
+
+
+def send_reset_email(user):
+    char_set = string.ascii_uppercase + string.digits
+    password = ''.join(random.sample(char_set,10))
+    user.set_password(password)
+    user.save()
+
+    title = "FlightLoggin' password reset"
+    message = """You requested a password reset.\n
+    Password: {0}\nUsername: {1}\n
+    http://flightlogg.in"""
+
+    message = message.format(password, user.username)
+
+    email = EmailMessage(
+        title,
+        message,
+        to=(user.email,),
+        from_email='info@flightlogg.in',
+    )
+    email.send()
+
 
 def base64_url_decode(inp):
     padding_factor = (4 - len(inp) % 4) % 4
