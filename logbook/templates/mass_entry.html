@@ -30,7 +30,7 @@
 {% include "pagination_table.html" %}
 
 {% if edit %}
-<form action="{% url mass-edit request.display_user.username page %}" method="post">
+<form action="{% url mass-edit username=request.display_user.username page=page %}" method="post">
 {% else %}
 <form action="{% url mass-entry request.display_user.username %}" method="post">
 {% endif %}
