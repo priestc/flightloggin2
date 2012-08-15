@@ -61,7 +61,10 @@ def reset_password(request):
         except User.DoesNotExist:
             messages.error(request, 'Email or username could not be found')
         else:
-            send_reset_email(u)
+            try:
+                send_reset_email(u)
+            except Exception:
+                messages.error('No email attached to account %' % data)
             messages.info(request, 'Email sent to %s' % u.email)
 
     return TemplateResponse(request, 'reset_password.html', locals())
@@ -122,6 +125,11 @@ def send_reset_email(user):
     http://flightlogg.in"""
 
     message = message.format(password, user.username)
+
+    email = user.email or email.get_profile().backup_email
+
+    if not email:
+        raise Exception('No email')
 
     email = EmailMessage(
         title,
