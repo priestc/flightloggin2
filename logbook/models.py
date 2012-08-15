@@ -11,6 +11,7 @@ from fuel_burn import FuelBurn
 
 from main.enhanced_model import QuerySetManager, EnhancedModel
 from queryset_manager import FlightQuerySet
+from badges.models import award_badges
 
 
 class Flight(EnhancedModel):
@@ -83,7 +84,13 @@ class Flight(EnhancedModel):
             from share.middleware import share
             self.user = share.get_display_user()
         
+
+        no_badges = kwargs.pop('no_badges', False)
+
         super(Flight,self).save(*args, **kwargs)
+
+        if not no_badges:
+            award_badges(self)
     
     @classmethod
     def render_airport(cls, airport=None, **filters):
@@ -114,7 +121,7 @@ class Flight(EnhancedModel):
         self.route = Route.from_string(self.route_string,
                                        user=self.user,
                                        date=self.date)
-        self.save()
+        self.save(no_badges=True)
         
     def route_is_rendered(self):
         try:

@@ -431,6 +431,6 @@ class Route(EnhancedModel):
         new_route = MakeRoute(fallback, user, date=date).get_route()
 
         f.route = new_route
-        f.save()
+        f.save(no_badges=True)
         
         return new_route

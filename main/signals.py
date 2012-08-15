@@ -51,7 +51,7 @@ def recalculate_fuel(sender, **kwargs):
     
     for f in Flight.objects.filter(plane=plane).iterator():
         f.calc_fuel()
-        f.save()
+        f.save(no_badges=True)
 
 ###############################################################################
 
