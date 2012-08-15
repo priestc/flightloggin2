@@ -50,9 +50,5 @@ class ChangePasswordForm(forms.Form):
         return self.cleaned_data
 
     def save(self):
-        #user = User.objects.get(username=self.user.username)
-        print "old", self.user.password
         self.user.set_password(self.cleaned_data['new'])
         self.user.save()
-        #import debug
-        #print user.password
