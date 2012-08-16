@@ -15,9 +15,13 @@ from django.contrib import messages
 from django.core.mail import EmailMessage
 
 from profile.models import Profile
+from site_stats.models import StatDB
 from forms import RegistrationForm
 
 def landingpage(request):
+
+    stats = StatDB.objects.latest()
+
     if request.user.is_authenticated():
         url = reverse('logbook', args=[request.user.username])
         return HttpResponseRedirect(url)

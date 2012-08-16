@@ -1,4 +1,5 @@
 <html>
+{% load humanize %}
   <head>
     <title>FlightLogg.in'</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/landing.css' %}">
@@ -17,8 +18,9 @@
     <h3>FlightLoggin' is an online pilot logbook application. Gone are the days of
     using a paper booklet manage your aviation career data.</h3>
     
-    <br>
-    <br>
+    <p style="text-align: center; color: brown">
+      Currently serving <strong>{{ stats.total_logged|intcomma }}</strong> flights from <strong>{{ stats.users|intcomma }}</strong> users.
+    </p>
 
     <div id="register">
       <h2>Register</h2>

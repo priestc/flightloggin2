@@ -11,8 +11,6 @@ from fuel_burn import FuelBurn
 
 from main.enhanced_model import QuerySetManager, EnhancedModel
 from queryset_manager import FlightQuerySet
-from badges.models import award_badges
-
 
 class Flight(EnhancedModel):
 
@@ -90,6 +88,7 @@ class Flight(EnhancedModel):
         super(Flight,self).save(*args, **kwargs)
 
         if not no_badges:
+            from badges.models import award_badges
             award_badges(self)
     
     @classmethod
