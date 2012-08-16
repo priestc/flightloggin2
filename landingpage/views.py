@@ -60,16 +60,16 @@ def reset_password(request):
         else:
             o = {'username': data}
 
-        try:
-            u = User.objects.get(**o)
-        except User.DoesNotExist:
+        users = User.objects.filter(**o)
+        if not users.exists():
             messages.error(request, 'Email or username could not be found')
         else:
-            try:
-                send_reset_email(u)
-            except Exception:
-                messages.error('No email attached to account %' % data)
-            messages.info(request, 'Email sent to %s' % u.email)
+            for u in users:
+                try:
+                    send_reset_email(u)
+                except Exception:
+                    messages.error('No email attached to account %' % data)
+                messages.info(request, 'Email sent to %s for user %s' % (u.email, u.username))
 
     return TemplateResponse(request, 'reset_password.html', locals())
 
