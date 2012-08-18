@@ -256,7 +256,6 @@ class ThousandHourBadgeStatus(SingleBadgeStatus):
     def eligible(self):
         hours = self.flights.sim(False).aggregate(s=models.Sum('total'))['s']
         c = self.flights.count()
-        print self.new_flight, hours
         return hours >= 1000 and c > 100
 
 

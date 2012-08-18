@@ -141,7 +141,7 @@ class StatDB(models.Model):
             return 0
         
         try:
-            prev_total, days_ago = StatDB.get_total_at(*sample_length)
+            days_ago, prev_total = StatDB.get_total_at(*sample_length)
         except self.DoesNotExist:
             # no value at 60 days ago (missing poll?), try 59, then 58...
             day_earlier = (sample_length[0]-1, sample_length[1])
