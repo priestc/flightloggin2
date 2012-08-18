@@ -7,19 +7,65 @@
     <script type="text/javascript">
         var NAVBAR_HIGHLIGHT = "badges-sel";
 	</script>
-	
+	<style>
+        .badge {
+            border: 1px solid black;
+            background: white;
+            text-align: left;
+            padding: 10px;
+            margin: 5px;
+            overflow: hidden;
+            line-height: 25px
+        }
+
+        .badge .title {
+            font-size: xx-large;
+        }
+
+        .badge img {
+            vertical-align: text-bottom;
+            margin-right: 10px;
+            float: left;
+        }
+
+        .badge .badge_body {
+            float: left;
+        }
+
+        .badge .awarded_flight {
+        }
+
+        .badge .description {
+            font-weight: bold;
+        }
+    </style>
 {% endblock %}
 
 {% block title %}Badges{% endblock %}
-
 
 {% block canvas %}
 
 <div>
     {% for badge in badges %}
     <div class="badge">
-        <h3>{{ badge.title }} ({{ badge.level }})</h3>
-        <span class="awarded_flight">{{ badge.awarded_flight }}</span>
+        <img src="{% static badge.icon %}">
+        <div class="badge_body">
+            <span class='title'>{{ badge.title }}</span>
+            <br>
+            <span class="description">
+                {% if badge.is_multi_level %}
+                    Level {{ badge.level }} - 
+                {% endif %}
+                {{ badge.description }}
+            </span>
+            <br>
+            <span class="awarded_flight">Awarded on:
+                {{ badge.awarded_flight.date }} - 
+                {{ badge.awarded_flight.route }} -
+                {{ badge.awarded_flight.plane }} - 
+                {{ badge.awarded_flight.remarks }}
+            </span>
+        </div>
     </div>
     {% endfor %}
 </div>

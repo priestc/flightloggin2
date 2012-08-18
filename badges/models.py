@@ -16,6 +16,42 @@ class AwardedBadge(models.Model):
             self.id, self.title, self.level, self.user.username, self.awarded_flight
         )
     
+    @property
+    def status_object(self):
+        """
+        Return the matcing status object that corresponds to the badge this
+        instance beongs to.
+        """
+        for badge in get_badges_classes():
+            if self.title == badge.title:
+                return badge
+
+    def is_multi_level(self):
+        """
+        Returns True if this badge is a multilevel badge
+        """
+        return MultipleLevelBadgeStatus in self.status_object.mro()
+
+    def description(self):
+        return self.status_object.get_description(self.level)
+
+    def icon(self):
+        """
+        Return the icon name that corresponds with the badge.
+        """
+        if self.level == 1:
+            ret = "green"
+        elif self.level == 2:
+            ret = "blue"
+        elif self.level == 3:
+            ret = "red"
+        elif self.level == 4:
+            ret = "purple"
+        elif self.level == 5:
+            ret = 'gold'
+
+        return "icons/star_%s_48.png" % ret
+
     @classmethod
     def total_badge_count(cls, user):
         """
@@ -37,6 +73,9 @@ class AwardedBadge(models.Model):
 #################################
 
 class BadgeStatus(object):
+
+    description = '[placeholder]'
+
     def __init__(self, new_flight, all_flights=None):
         self.user = new_flight.user
         if all_flights is None:
@@ -44,6 +83,10 @@ class BadgeStatus(object):
         else:
             self.flights = all_flights
         self.new_flight = new_flight
+
+    @classmethod
+    def get_description(cls, level):
+        return cls.description
 
     def grant_badge(self, level=1):
         badge = AwardedBadge.objects.filter(
@@ -88,6 +131,18 @@ class MultipleLevelBadgeStatus(BadgeStatus):
     level_4 = 25
     level_5 = 50
     
+    @classmethod
+    def get_description(cls, level):
+        level_count = getattr(cls, "level_%s" % level)
+        description = cls.description % {'level_count': level_count}
+        if level < 5:
+            # no level after 5
+            next_level = getattr(cls, "level_%s" % (level + 1))
+            next_level_msg = "Next Level at %s" % next_level
+        else:
+            next_level_msg = ''
+        return "%s (%s)" % (description, next_level_msg)
+
     def determine_level(self, count):        
         if count >= self.level_5:
             return 5
@@ -125,26 +180,23 @@ class FirstFlightBadgeStatus(SingleBadgeStatus):
     Awarded when a User logs his first flight
     """
     title = "First Flight"
+    description = "Your first flight. Congradulations!"
     
     def eligible(self):
         return True
 
 class TwinBadgeStatus(SingleBadgeStatus):
-    """
-    Awarded when a User logs his first flight in a twin
-    """
     title = "Twins"
+    description = "Logging your first flight in a twin engned aircraft!"
 
     def eligible(self):
         return self.new_flight.plane.cat_class in (2,4)
 
 class AdaptableBadgeStatus(SingleBadgeStatus):
-    """
-    Awarded when a user logs a flight in a turbine aircraft and a piston
-    aircraft in the same day.
-    """
     title = "Adaptable"
-    
+    description = """Logging a flight in a turbine aircraft and a piston aircraft
+        on the same day."""
+
     def eligible(self):
         flights_today = self.flights.filter(date=self.new_flight.date)
         turb = flights_today.turbine().count()
@@ -152,11 +204,9 @@ class AdaptableBadgeStatus(SingleBadgeStatus):
         return turb > 0 and total > 0 and turb != total
 
 class TranscontinentalBadgeStatus(SingleBadgeStatus):
-    """
-    Awarded when a user log a flight from one continent to another
-    """
     title = "Transcontinental"
-    
+    description = "Logging a flight from one continent to another"
+
     def eligible(self):
         r = self.new_flight.route
         c = Location.objects.filter(routebase__route=r)\
@@ -166,12 +216,10 @@ class TranscontinentalBadgeStatus(SingleBadgeStatus):
         return c > 2
 
 class CompleteSetBadgeStatus(SingleBadgeStatus):
-    """
-    Awarded when you have a flight logged in a single engine, twin engine,
-    tailwheel and a turbine aircraft
-    """
     title = "Complete Set"
-    
+    description = """Logging a flight logged in a single engine, twin engine, 
+        tailwheel and a turbine aircraft"""
+
     def eligible(self):
         planes = Plane.objects.filter(flight__in=self.flights)
         r = {'turbine': False, 'tw': False, 'sea': False, 'single': False, 'multi': False}
@@ -190,48 +238,43 @@ class CompleteSetBadgeStatus(SingleBadgeStatus):
         return all(r.values())
 
 class ThousandHourBadgeStatus(SingleBadgeStatus):
-    """
-    Awarded when the user logs 1000 hours.
-    """
     title = "One Thousand Hours"
-    
+    description = "Logging 1000 hours"
+
     def eligible(self):
         f = self.flights.aggregate(s=models.Sum('total'))
         c = self.flights.count()
         return f['s'] >= 1000 and c > 100
 
 class FiveThousandHourBadgeStatus(SingleBadgeStatus):
-    """
-    Awarded when the user logs 5000 hours.
-    """
     title = "Five Thousand Hours"
+    description = "Logging 5000 hours"
 
     def eligible(self):
         f = self.flights.aggregate(s=models.Sum('total'))
         c = self.flights.count()
         return f['s'] >= 5000 and c > 500
 
+
 class TenThousandHourBadgeStatus(SingleBadgeStatus):
-    """
-    Awarded when the user logs 5000 hours.
-    """
     title = "Ten Thousand Hours"
+    description = "Logging 10,000 hours"
 
     def eligible(self):
         f = self.flights.aggregate(s=models.Sum('total'))
         c = self.flights.count()
         return f['s'] >= 10000 and c > 500
 
+
 class AdventurerBadgeStatus(SingleBadgeStatus):
-    """
-    Awarded when the user visits more than 25 airports
-    """
     title = "Adventurer"
     needed = 25
+    description = "Visiting 25 unique airports"
     
     def eligible(self):
         count = Location.objects.filter(routebase__route__flight__in=self.flights)
         return count.count() > self.needed
+
 
 class NightAdventurerBadgeStatus(SingleBadgeStatus):
     """
@@ -241,11 +284,10 @@ class NightAdventurerBadgeStatus(SingleBadgeStatus):
     def eligible(self):
         return False
 
+
 class PrivateBadgeStatus(SingleBadgeStatus):
-    """
-    Awarded when the user gets all the requirements for the FAA Private license
-    """
     title = "Private Pilot"
+    description = "Metting all the requirements for the commercial certificate"
     
     def eligible(self):
         milestone = Part61_Private(user=self.user, as_of_date=self.new_flight.date)
@@ -258,10 +300,8 @@ class PrivateBadgeStatus(SingleBadgeStatus):
 
 
 class ATPBadgeStatus(SingleBadgeStatus):
-    """
-    Awarded when the user gets all the requirements for the FAA Private license
-    """
     title = "ATP"
+    description = "Meeting all the requirements for the ATP certificate"
 
     def eligible(self):
         milestone = ATP(user=self.user, as_of_date=self.new_flight.date)
@@ -275,10 +315,8 @@ class ATPBadgeStatus(SingleBadgeStatus):
 ################################################################################
 
 class MileHighClubBadgeStatus(SingleBadgeStatus):
-    """
-    Awarded when a user lands at an airport with an elevation 1 mile MSL
-    """
     title = "Mile High Club"
+    description = "Lands at an airport with an elevation of 1 mile"
     
     def eligible(self):
         airport_count = Location.objects\
@@ -289,11 +327,9 @@ class MileHighClubBadgeStatus(SingleBadgeStatus):
         return airport_count > 1
 
 class ClassBBadgeStatus(MultipleLevelBadgeStatus):
-    """
-    Awarded when the user lands at a large airport.
-    """
     title = "Class B"
-    
+    description = "Landing at %(level_count)s Class B airports"
+
     level_1 = 1
     level_2 = 5
     level_3 = 10
@@ -321,6 +357,7 @@ class LongHaulBadgeStatus(MultipleLevelBadgeStatus):
     Awarded when a user logs enough long (in terms of time) flights.
     """
     title = "Long Hauler"
+    description = "Logging a flight of %(level_count)s hours in length"
 
     level_1 = 4
     level_2 = 7
@@ -332,10 +369,8 @@ class LongHaulBadgeStatus(MultipleLevelBadgeStatus):
         return self.determine_level(self.new_flight.total) 
 
 class GoingTheDistanceStatus(MultipleLevelBadgeStatus):
-    """
-    Awarded when a user logs enough long (in terms of distance) flights.
-    """
     title = "Going the distance"
+    description = "Logging a flight with a route of %(level_count)s miles long"
 
     level_1 = 250
     level_2 = 500
@@ -347,10 +382,8 @@ class GoingTheDistanceStatus(MultipleLevelBadgeStatus):
         return self.determine_level(self.new_flight.route.max_width_all)
 
 class WorldExplorerBadgeStatus(MultipleLevelBadgeStatus):
-    """
-    Awarded when the user lands in a diferent country.
-    """
     title = "World Explorer"
+    description = "Visiting %(level_count)s different countries"
     level_1 = 2
     
     def eligible(self):
@@ -363,10 +396,8 @@ class WorldExplorerBadgeStatus(MultipleLevelBadgeStatus):
         return level
 
 class BusyBeeBadgeStatus(MultipleLevelBadgeStatus):
-    """
-    Landing at multiple airports in a single day.
-    """
     title = "Busy Bee"
+    description = "Visiting %(level_count)s unique airports in the same day"
     
     level_1 = 4
     level_2 = 6
@@ -396,6 +427,7 @@ def get_badges_classes():
         AdventurerBadgeStatus, ATPBadgeStatus, PrivateBadgeStatus, CompleteSetBadgeStatus,
         FiveThousandHourBadgeStatus, TenThousandHourBadgeStatus, ClassBBadgeStatus,
         TranscontinentalBadgeStatus, GoingTheDistanceStatus, LongHaulBadgeStatus,
+        TwinBadgeStatus,
     )
 
  
