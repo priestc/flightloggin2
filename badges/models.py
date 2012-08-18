@@ -171,7 +171,6 @@ class MultipleLevelBadgeStatus(BadgeStatus):
         
         if level > self.current_level():
             self.grant_badge(level=level)
-        
 
 ################################################################################
 
@@ -185,12 +184,22 @@ class FirstFlightBadgeStatus(SingleBadgeStatus):
     def eligible(self):
         return True
 
+
 class TwinBadgeStatus(SingleBadgeStatus):
     title = "Twins"
     description = "Logging your first flight in a twin engned aircraft!"
 
     def eligible(self):
         return self.new_flight.plane.cat_class in (2,4)
+
+
+class SeaBadgeStatus(SingleBadgeStatus):
+    title = "Seaplane"
+    description = "Logging your first flight in a seaplane!"
+
+    def eligible(self):
+        return self.new_flight.plane.cat_class in (3,4)
+
 
 class AdaptableBadgeStatus(SingleBadgeStatus):
     title = "Adaptable"
@@ -203,6 +212,7 @@ class AdaptableBadgeStatus(SingleBadgeStatus):
         total = flights_today.count()
         return turb > 0 and total > 0 and turb != total
 
+
 class TranscontinentalBadgeStatus(SingleBadgeStatus):
     title = "Transcontinental"
     description = "Logging a flight from one continent to another"
@@ -214,6 +224,7 @@ class TranscontinentalBadgeStatus(SingleBadgeStatus):
                             .distinct()\
                             .count()
         return c > 2
+
 
 class CompleteSetBadgeStatus(SingleBadgeStatus):
     title = "Complete Set"
@@ -237,6 +248,7 @@ class CompleteSetBadgeStatus(SingleBadgeStatus):
         
         return all(r.values())
 
+
 class ThousandHourBadgeStatus(SingleBadgeStatus):
     title = "One Thousand Hours"
     description = "Logging 1000 hours"
@@ -245,6 +257,7 @@ class ThousandHourBadgeStatus(SingleBadgeStatus):
         f = self.flights.aggregate(s=models.Sum('total'))
         c = self.flights.count()
         return f['s'] >= 1000 and c > 100
+
 
 class FiveThousandHourBadgeStatus(SingleBadgeStatus):
     title = "Five Thousand Hours"
@@ -326,6 +339,7 @@ class MileHighClubBadgeStatus(SingleBadgeStatus):
         
         return airport_count > 1
 
+
 class ClassBBadgeStatus(MultipleLevelBadgeStatus):
     title = "Class B"
     description = "Landing at %(level_count)s Class B airports"
@@ -352,10 +366,8 @@ class ClassBBadgeStatus(MultipleLevelBadgeStatus):
         
         return self.determine_level(count)
 
+
 class LongHaulBadgeStatus(MultipleLevelBadgeStatus):
-    """
-    Awarded when a user logs enough long (in terms of time) flights.
-    """
     title = "Long Hauler"
     description = "Logging a flight of %(level_count)s hours in length"
 
@@ -367,6 +379,7 @@ class LongHaulBadgeStatus(MultipleLevelBadgeStatus):
 
     def eligible(self):
         return self.determine_level(self.new_flight.total) 
+
 
 class GoingTheDistanceStatus(MultipleLevelBadgeStatus):
     title = "Going the distance"
@@ -381,6 +394,7 @@ class GoingTheDistanceStatus(MultipleLevelBadgeStatus):
     def eligible(self):
         return self.determine_level(self.new_flight.route.max_width_all)
 
+
 class WorldExplorerBadgeStatus(MultipleLevelBadgeStatus):
     title = "World Explorer"
     description = "Visiting %(level_count)s different countries"
@@ -394,6 +408,7 @@ class WorldExplorerBadgeStatus(MultipleLevelBadgeStatus):
         c = countries.count()
         level = self.determine_level(c)
         return level
+
 
 class BusyBeeBadgeStatus(MultipleLevelBadgeStatus):
     title = "Busy Bee"
@@ -417,6 +432,20 @@ class BusyBeeBadgeStatus(MultipleLevelBadgeStatus):
         return self.determine_level(count)
         
 
+class TypeMasterBadgeStatus(MultipleLevelBadgeStatus):
+    title = "Long Hauler"
+    description = "Flying %(level_count)s distinct aircraft types."
+
+    level_1 = 2
+    level_2 = 5
+    level_3 = 10
+    level_4 = 20
+    level_5 = 50
+
+    def eligible(self):
+        types = self.flight.values_list('plane__type', flat=True).distinct().count()
+        return self.determine_level(types)
+
 ################################################################################
 
   
@@ -427,7 +456,7 @@ def get_badges_classes():
         AdventurerBadgeStatus, ATPBadgeStatus, PrivateBadgeStatus, CompleteSetBadgeStatus,
         FiveThousandHourBadgeStatus, TenThousandHourBadgeStatus, ClassBBadgeStatus,
         TranscontinentalBadgeStatus, GoingTheDistanceStatus, LongHaulBadgeStatus,
-        TwinBadgeStatus,
+        TwinBadgeStatus, TypeMasterBadgeStatus, SeaBadgeStatus
     )
 
  
