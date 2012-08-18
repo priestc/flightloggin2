@@ -329,6 +329,15 @@ class ATPBadgeStatus(SingleBadgeStatus):
                 return False
         return True
 
+class MasterInstructorBadgeStatus(SingleBadgeStatus):
+    title = "Master Instructor"
+    description = "Logging 1000 hours of dual given"
+
+    def eligible(self):
+        hours = self.flights.aggregate(s=models.Sum('dual_given'))['s']
+        print hours
+        return hours > 1000
+
 class TypeRatingBadgeStatus(SingleBadgeStatus):
     title = "Type Rating"
     description = "Logging PIC time in an airplane that requires a type rating"
