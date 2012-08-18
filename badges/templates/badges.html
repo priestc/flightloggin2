@@ -22,6 +22,11 @@
             font-size: xx-large;
         }
 
+        .badge div.image {
+            height: 100%;
+            float: left;
+        }
+
         .badge img {
             vertical-align: text-bottom;
             margin-right: 10px;
@@ -48,7 +53,9 @@
 <div>
     {% for badge in badges %}
     <div class="badge">
-        <img src="{% static badge.icon %}">
+        <div class='image'>
+            <img src="{% static badge.icon %}">
+        </div>
         <div class="badge_body">
             <span class='title'>{{ badge.title }}</span>
             <br>

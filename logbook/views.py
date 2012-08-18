@@ -155,7 +155,7 @@ def logbook(request, page=0, form=None, fail=None):
     total_sign = "Overall"
     
     if request.GET:
-        ff=FilterForm(request.GET)
+        ff = FilterForm(request.GET)
         filtered_flights = filtered_flights.custom_logbook_view(ff)
         ## split it to get just the part after the '?', ignore the part before
         get = "?" + request.get_full_path().split("?")[1]
@@ -208,10 +208,12 @@ def mass_entry(request):
     
     profile,c = Profile.objects.get_or_create(user=request.display_user)
     
-    NewFlightFormset = modelformset_factory(Flight,
-                                       form=forms.FormsetFlightForm,
-                                       extra=profile.per_page,
-                                       formset=forms.MassEntryFormset)
+    NewFlightFormset = modelformset_factory(
+        Flight,
+        form=forms.FormsetFlightForm,
+        extra=profile.per_page,
+        formset=forms.MassEntryFormset
+    )
         
     if request.POST.get('submit'):
         post = request.POST.copy()
@@ -225,10 +227,11 @@ def mass_entry(request):
                 post.update({"form-%s-user" % pk: u'',
                              "form-%s-plane" % pk: u''})
             
-        formset = NewFlightFormset(post,
-                    queryset=Flight.objects.none(),
-                    user=request.display_user
-                  )
+        formset = NewFlightFormset(
+            post,
+            queryset=Flight.objects.none(),
+            user=request.display_user
+        )
         
         if formset.is_valid():
             for form in formset.forms:

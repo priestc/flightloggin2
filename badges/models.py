@@ -254,9 +254,10 @@ class ThousandHourBadgeStatus(SingleBadgeStatus):
     description = "Logging 1000 hours"
 
     def eligible(self):
-        f = self.flights.aggregate(s=models.Sum('total'))
+        hours = self.flights.sim(False).aggregate(s=models.Sum('total'))['s']
         c = self.flights.count()
-        return f['s'] >= 1000 and c > 100
+        print self.new_flight, hours
+        return hours >= 1000 and c > 100
 
 
 class FiveThousandHourBadgeStatus(SingleBadgeStatus):
@@ -264,9 +265,9 @@ class FiveThousandHourBadgeStatus(SingleBadgeStatus):
     description = "Logging 5000 hours"
 
     def eligible(self):
-        f = self.flights.aggregate(s=models.Sum('total'))
+        hours = self.flights.sim(False).aggregate(s=models.Sum('total'))['s']
         c = self.flights.count()
-        return f['s'] >= 5000 and c > 500
+        return hours >= 5000 and c > 500
 
 
 class TenThousandHourBadgeStatus(SingleBadgeStatus):
@@ -274,9 +275,9 @@ class TenThousandHourBadgeStatus(SingleBadgeStatus):
     description = "Logging 10,000 hours"
 
     def eligible(self):
-        f = self.flights.aggregate(s=models.Sum('total'))
+        hours = self.flights.sim(False).aggregate(s=models.Sum('total'))['s']
         c = self.flights.count()
-        return f['s'] >= 10000 and c > 500
+        return hours >= 10000 and c > 500
 
 
 class AdventurerBadgeStatus(SingleBadgeStatus):
