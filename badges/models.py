@@ -286,16 +286,19 @@ class AdventurerBadgeStatus(SingleBadgeStatus):
     
     def eligible(self):
         count = Location.objects.filter(routebase__route__flight__in=self.flights)
-        return count.count() > self.needed
+        return count.distinct().count() > self.needed
 
 
 class NightAdventurerBadgeStatus(SingleBadgeStatus):
-    """
-    Awarded when the user performs 5 night landings at 5 different airports
-    """
     title = "Night Adventurer"
+    needed = 10
+    description = "Visiting 10 distinct airports at night"
+
     def eligible(self):
-        return False
+        count = Location.objects.filter(
+            routebase__route__flight__in=self.flights,
+            routebase__route__flight__night__gt=0)
+        return count.distinct().count() > self.needed
 
 
 class PrivateBadgeStatus(SingleBadgeStatus):
@@ -325,11 +328,18 @@ class ATPBadgeStatus(SingleBadgeStatus):
                 return False
         return True
 
+class TypeRatingBadgeStatus(SingleBadgeStatus):
+    title = "Type Rating"
+    description = "Logging PIC time in an airplane that requires a type rating"
+
+    def eligible(self):
+        return self.new_flight.pic > 0 and self.new_flight.plane.is_type_rating()
+
 ################################################################################
 
 class MileHighClubBadgeStatus(SingleBadgeStatus):
     title = "Mile High Club"
-    description = "Lands at an airport with an elevation of 1 mile"
+    description = "Landing at an airport with an elevation of 1 mile"
     
     def eligible(self):
         airport_count = Location.objects\
@@ -443,7 +453,7 @@ class TypeMasterBadgeStatus(MultipleLevelBadgeStatus):
     level_5 = 50
 
     def eligible(self):
-        types = self.flight.values_list('plane__type', flat=True).distinct().count()
+        types = self.flights.values_list('plane__type', flat=True).distinct().count()
         return self.determine_level(types)
 
 ################################################################################
@@ -456,7 +466,8 @@ def get_badges_classes():
         AdventurerBadgeStatus, ATPBadgeStatus, PrivateBadgeStatus, CompleteSetBadgeStatus,
         FiveThousandHourBadgeStatus, TenThousandHourBadgeStatus, ClassBBadgeStatus,
         TranscontinentalBadgeStatus, GoingTheDistanceStatus, LongHaulBadgeStatus,
-        TwinBadgeStatus, TypeMasterBadgeStatus, SeaBadgeStatus
+        TwinBadgeStatus, TypeMasterBadgeStatus, SeaBadgeStatus, NightAdventurerBadgeStatus,
+        TypeRatingBadgeStatus
     )
 
  

@@ -63,7 +63,7 @@ class RegistrationForm(forms.Form):
         }
 
         if self.cleaned_data.get('dob', None):
-            kwargs['dob'] = self.cleaned_data.get('dob', ''),
+            kwargs['dob'] = self.cleaned_data.get('dob', '')
 
         p = Profile.objects.create(**kwargs)
 
