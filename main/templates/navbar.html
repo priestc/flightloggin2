@@ -43,10 +43,8 @@
     <span id="maps-sel">
     <a href="{% url maps user.username as url %}{{ url }}">Maps</a></span>
     
-    {% comment %}
     <span id="badges-sel">
     <a href="{% url badges user.username as url %}{{ url }}">Badges ({{ badges_count }})</a></span>
-    {% endcomment %}
 
     <span id="states-sel">
     <a href="{% url states user.username as url %}{{ url }}">States</a></span>
