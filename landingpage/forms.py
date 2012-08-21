@@ -46,12 +46,14 @@ class RegistrationForm(forms.Form):
         return self.cleaned_data
 
     def register(self, *a, **k):
-        x = self.cleaned_data
+        first_name = self.cleaned_data.get('first_name', '')
+        last_name = self.cleaned_data.get('last_name', '')
+
         u = User.objects.create(
             email=self.cleaned_data['email'],
             username=self.cleaned_data['username'],
-            first_name=self.cleaned_data.get('first_name', ''),
-            last_name=self.cleaned_data.get('last_name', ''),
+            first_name=first_name,
+            last_name=last_name,
 		)
 
         u.set_password(self.cleaned_data['password'])
@@ -59,7 +61,8 @@ class RegistrationForm(forms.Form):
 
         kwargs = {
             'backup_email': self.cleaned_data.get('email', ''),
-            'user': u
+            'user': u,
+            'real_name': "%s %s" % (first_name, last_name),
         }
 
         if self.cleaned_data.get('dob', None):

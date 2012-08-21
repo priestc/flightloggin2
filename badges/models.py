@@ -480,10 +480,10 @@ class SocialBadgeStatus(MultipleLevelBadgeStatus):
     title = "Social"
     description = "Flying with %(level_count)s different people"
 
-    level_1 = 2
-    level_2 = 5
-    level_3 = 10
-    level_4 = 20
+    level_1 = 5
+    level_2 = 10
+    level_3 = 20
+    level_4 = 30
     level_5 = 50
 
     def eligible(self):
@@ -502,7 +502,7 @@ def get_badges_classes():
         FiveThousandHourBadgeStatus, TenThousandHourBadgeStatus, ClassBBadgeStatus,
         TranscontinentalBadgeStatus, GoingTheDistanceStatus, LongHaulBadgeStatus,
         TwinBadgeStatus, TypeMasterBadgeStatus, SeaBadgeStatus, NightAdventurerBadgeStatus,
-        TypeRatingBadgeStatus
+        TypeRatingBadgeStatus, SocialBadgeStatus
     )
 
  
