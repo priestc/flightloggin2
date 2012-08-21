@@ -79,13 +79,17 @@ class BadgeStatus(object):
     description = '[placeholder]'
     disabled = True
 
-    def __init__(self, new_flight, all_flights=None):
+    def __init__(self, new_flight=None, all_flights=None, user=None):
         """
         all_flights == the collection of flights that exist in the logbook.
         new_flight == the new flight that was just added that cause this
         class to be initialized
         """
-        self.user = new_flight.user
+        if not user and new_flight is not None:
+            self.user = new_flight.user
+        else:
+            self.user = user
+
         if all_flights is None:
             self.flights = Flight.objects.filter(user=self.user)
         else:
@@ -96,25 +100,31 @@ class BadgeStatus(object):
     def get_description(cls, level):
         return cls.description
 
-    def grant_badge(self, level=1):
+    def grant_badge(self, level=1, awarding_flight=None):
+
+        if awarding_flight is None:
+            awarding_flight = self.new_flight
+
         badge = AwardedBadge.objects.filter(
             title=self.title,
             user=self.user
         )
         
         if badge:
+            # badge was already awarded, update it!
             badge = badge[0]
-            badge.awarded_flight=self.new_flight
+            badge.awarded_flight=awarding_flight
             badge.level = level
             badge.save()
-            print "updated_badge %s - %s - %s" % (self.title, level, self.new_flight.id)
+            print "updated badge - %s - %s - %s" % (self.title, level, awarding_flight.date)
         else:
+            # new badge! create it!
             AwardedBadge.objects.create(
                 title=self.title,
                 user=self.user,
-                awarded_flight=self.new_flight
+                awarded_flight=awarding_flight
             )
-            print "new badge %s - %s - %s" % (self.title, level, self.new_flight.id)
+            print "new badge - %s - %s - %s" % (self.title, level, awarding_flight.date)
 
 class SingleBadgeStatus(BadgeStatus):
     
@@ -141,6 +151,11 @@ class MultipleLevelBadgeStatus(BadgeStatus):
     
     @classmethod
     def get_description(cls, level):
+        """
+        Render the description of the badge including the current level, and
+        how to get to the next level, ex:
+        Flying with 20 different people. Next level at 50.
+        """
         level_count = getattr(cls, "level_%s" % level)
         description = cls.description % {'level_count': level_count}
         if level < 5:
@@ -190,6 +205,11 @@ class FirstFlightBadgeStatus(SingleBadgeStatus):
     description = "Your first flight. Congratulations!"
     disabled = False
 
+    def add(self):
+        all_flights = Flight.objects.filter(user=self.user).order_by('date', 'id')
+        if all_flights.exists():
+            self.grant_badge(level=1, awarding_flight=all_flights[0])
+
     def eligible(self):
         return True
 
@@ -198,6 +218,13 @@ class TwinBadgeStatus(SingleBadgeStatus):
     title = "Twins"
     description = "Logging your first flight in a twin engined aircraft!"
     disabled = False
+
+    def new(self):
+        all_flights = Flight.objects.filter(user=self.user).order_by('date', 'id')
+        for flight in all_flights:
+            if flight.plane.cat_class in (2,4):
+                self.grant_badge(level=1, awarding_flight=flight)
+
 
     def eligible(self):
         return self.new_flight.plane.cat_class in (2,4)
@@ -208,6 +235,12 @@ class SeaBadgeStatus(SingleBadgeStatus):
     description = "Logging your first flight in a seaplane!"
     disabled = False
 
+    def new(self):
+        all_flights = Flight.objects.filter(user=self.user).order_by('date', 'id')
+        for flight in all_flights:
+            if flight.plane.cat_class in (3,4):
+                self.grant_badge(level=1, awarding_flight=flight)
+
     def eligible(self):
         return self.new_flight.plane.cat_class in (3,4)
 
@@ -216,6 +249,19 @@ class AdaptableBadgeStatus(SingleBadgeStatus):
     title = "Adaptable"
     description = """Logging a flight in a turbine aircraft and a piston aircraft
         on the same day."""
+
+    def add(self):
+        all_dates = Flight.objects.filter(user=self.user)\
+                                  .values_list('date', flat=True)\
+                                  .distinct()\
+
+        for date in all_dates:
+            flights = Flight.objects.filter(user=self.user, date=date)
+            turb = flights.turbine().count()
+            total = flights.count()
+            if turb > 0 and total > 0 and turb != total:
+                self.grant_badge(level=1, awarding_flight=flights[0])
+                return
 
     def eligible(self):
         flights_today = self.flights.filter(date=self.new_flight.date)
@@ -227,6 +273,20 @@ class AdaptableBadgeStatus(SingleBadgeStatus):
 class TranscontinentalBadgeStatus(SingleBadgeStatus):
     title = "Transcontinental"
     description = "Logging a flight from one continent to another"
+
+    def add(self):
+        all_flights = Flight.objects.filter(user=self.user).select_related('route__routebase__location__country')
+        for flight in all_flights:
+            continents = set()
+            for routebase in flight.route.routebase_set.all():
+                if not routebase.location:
+                    continue
+                continents.add(routebase.location.country.continent)
+            if len(continents) > 1:
+                self.grant_badge(level=1, awarding_flight=flight)
+                return
+
+
 
     def eligible(self):
         r = self.new_flight.route
@@ -263,6 +323,20 @@ class CompleteSetBadgeStatus(SingleBadgeStatus):
 class OneThousandHourBadgeStatus(SingleBadgeStatus):
     title = "One Thousand Hours"
     description = "Logging 1000 hours"
+    disabled = False
+    
+    def add(self):
+        all_flights = Flight.objects.filter(user=self.user).sim(False).order_by('date', 'id')
+        
+        if all_flights.count() < 100:
+            return None
+
+        running_total = 0
+        for flight in all_flights:
+            running_total += flight.total
+            if running_total >= 1000:
+                self.grant_badge(level=1, awarding_flight=flight)
+                return
 
     def eligible(self):
         hours = self.flights.sim(False).aggregate(s=models.Sum('total'))['s']
@@ -273,6 +347,20 @@ class OneThousandHourBadgeStatus(SingleBadgeStatus):
 class FiveThousandHourBadgeStatus(SingleBadgeStatus):
     title = "Five Thousand Hours"
     description = "Logging 5000 hours"
+    disabled = False
+
+    def add(self):
+        all_flights = Flight.objects.filter(user=self.user).sim(False).order_by('date', 'id')
+        
+        if all_flights.count() < 500:
+            return None
+
+        running_total = 0
+        for flight in all_flights:
+            running_total += flight.total
+            if running_total >= 5000:
+                self.grant_badge(level=1, awarding_flight=flight)
+                return
 
     def eligible(self):
         hours = self.flights.sim(False).aggregate(s=models.Sum('total'))['s']
@@ -283,6 +371,20 @@ class FiveThousandHourBadgeStatus(SingleBadgeStatus):
 class TenThousandHourBadgeStatus(SingleBadgeStatus):
     title = "Ten Thousand Hours"
     description = "Logging 10,000 hours"
+    disabled = False
+
+    def add(self):
+        all_flights = Flight.objects.filter(user=self.user).sim(False).order_by('date', 'id')
+        
+        if all_flights.count() < 500:
+            return None
+
+        running_total = 0
+        for flight in all_flights:
+            running_total += flight.total
+            if running_total >= 10000:
+                self.grant_badge(level=1, awarding_flight=flight)
+                return
 
     def eligible(self):
         hours = self.flights.sim(False).aggregate(s=models.Sum('total'))['s']
@@ -349,7 +451,6 @@ class MasterInstructorBadgeStatus(SingleBadgeStatus):
 
     def eligible(self):
         hours = self.flights.aggregate(s=models.Sum('dual_given'))['s']
-        print hours
         return hours > 1000
 
 class TypeRatingBadgeStatus(SingleBadgeStatus):
@@ -423,7 +524,7 @@ class GoingTheDistanceStatus(MultipleLevelBadgeStatus):
     title = "Going the distance"
     description = "Logging a flight with a route of at least %(level_count)s miles"
     disabled = False
-    
+
     level_1 = 250
     level_2 = 500
     level_3 = 1000

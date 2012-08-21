@@ -1,4 +1,5 @@
 from logbook.models import Flight
+from django.contrib.auth.models import User
 from models import get_badges_classes
 import time
 
@@ -41,3 +42,13 @@ def new_badge(badge_classes=None, users=None):
             total_flights_processed += 1
 
     return performance
+
+def new_badge2(badges=None):
+    users = User.objects.all().order_by('username')
+    if not badges:
+        badges = get_badges_classes()
+    
+    for user in users:
+        print '---- %s ----' % user.username
+        for Badge in badges:
+            Badge(user=user).add()
