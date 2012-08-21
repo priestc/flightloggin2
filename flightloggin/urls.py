@@ -53,7 +53,11 @@ urlpatterns = patterns('django_openid_auth.views',
 urlpatterns += patterns('',   
 
     (
-        r'^landingpage/', include('landingpage.urls')
+        r'', include('landingpage.urls')
+    ),
+
+    (
+        r'landingpage', redirect_to, {'url': '/'}
     ),
 
     (r'^histogram/', include('histogram.urls')),

@@ -77,8 +77,14 @@ class AwardedBadge(models.Model):
 class BadgeStatus(object):
 
     description = '[placeholder]'
+    disabled = True
 
     def __init__(self, new_flight, all_flights=None):
+        """
+        all_flights == the collection of flights that exist in the logbook.
+        new_flight == the new flight that was just added that cause this
+        class to be initialized
+        """
         self.user = new_flight.user
         if all_flights is None:
             self.flights = Flight.objects.filter(user=self.user)
@@ -182,6 +188,7 @@ class FirstFlightBadgeStatus(SingleBadgeStatus):
     """
     title = "First Flight"
     description = "Your first flight. Congratulations!"
+    disabled = False
     
     def eligible(self):
         return True
@@ -493,23 +500,26 @@ class SocialBadgeStatus(MultipleLevelBadgeStatus):
         return self.determine_level(people)
 
 ################################################################################
-  
-def get_badges_classes():
-    return (
-        BusyBeeBadgeStatus, WorldExplorerBadgeStatus, FirstFlightBadgeStatus,
-        AdaptableBadgeStatus, MileHighClubBadgeStatus, ThousandHourBadgeStatus,
-        AdventurerBadgeStatus, ATPBadgeStatus, PrivateBadgeStatus, CompleteSetBadgeStatus,
-        FiveThousandHourBadgeStatus, TenThousandHourBadgeStatus, ClassBBadgeStatus,
-        TranscontinentalBadgeStatus, GoingTheDistanceStatus, LongHaulBadgeStatus,
-        TwinBadgeStatus, TypeMasterBadgeStatus, SeaBadgeStatus, NightAdventurerBadgeStatus,
-        TypeRatingBadgeStatus, SocialBadgeStatus
-    )
 
+def get_badges_classes():
+    """
+    Return all badge status classes that are enabled.
+    """
+    badge_classes = []
+    exclude = ("BadgeStatus", 'MultipleLevelBadgeStatus', 'SingleBadgeStatus')
+    for name, class_ in globals().iteritems():
+        is_descended = hasattr(class_, 'mro') and BadgeStatus in class_.mro()
+        is_not_excluded = name not in exclude
+        is_enabled = hasattr(class_, 'disabled') and not class_.disabled
+        if is_descended and is_not_excluded and is_enabled:
+            badge_classes.append(class_)
+    return badge_classes
+
+BADGE_CLASSES = get_badges_classes()
  
 def award_badges(new_flight):
     user = new_flight.user
-    classes = get_badges_classes()
-    for BadgeClass in classes:
+    for BadgeClass in BADGE_CLASSES:
         BadgeClass(new_flight).grant_if_eligible()
 
 
