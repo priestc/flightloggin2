@@ -207,7 +207,7 @@ class SeaBadgeStatus(SingleBadgeStatus):
     title = "Seaplane"
     description = "Logging your first flight in a seaplane!"
     disabled = False
-    
+
     def eligible(self):
         return self.new_flight.plane.cat_class in (3,4)
 
@@ -407,6 +407,7 @@ class ClassBBadgeStatus(MultipleLevelBadgeStatus):
 class LongHaulBadgeStatus(MultipleLevelBadgeStatus):
     title = "Long Hauler"
     description = "Logging a flight of %(level_count)s hours in length"
+    disabled = False
 
     level_1 = 4
     level_2 = 7
@@ -421,7 +422,8 @@ class LongHaulBadgeStatus(MultipleLevelBadgeStatus):
 class GoingTheDistanceStatus(MultipleLevelBadgeStatus):
     title = "Going the distance"
     description = "Logging a flight with a route of at least %(level_count)s miles"
-
+    disabled = False
+    
     level_1 = 250
     level_2 = 500
     level_3 = 1000
