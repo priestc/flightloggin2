@@ -1,3 +1,5 @@
+import time
+
 from django.db import models
 from airport.models import Location
 from logbook.models import Flight
@@ -99,14 +101,14 @@ class BadgeStatus(object):
             badge.awarded_flight=self.new_flight
             badge.level = level
             badge.save()
-            print "badge updated!", self.title, "level", level
+            print "updated_badge %s - %s - %s" % (self.title, level, self.new_flight.id)
         else:
             AwardedBadge.objects.create(
                 title=self.title,
                 user=self.user,
                 awarded_flight=self.new_flight
             )
-            print "new badge!!", self.title, " on", self.new_flight.date, "level", level
+            print "new badge %s - %s - %s" % (self.title, level, self.new_flight.id)
 
 class SingleBadgeStatus(BadgeStatus):
     
@@ -179,7 +181,7 @@ class FirstFlightBadgeStatus(SingleBadgeStatus):
     Awarded when a User logs his first flight
     """
     title = "First Flight"
-    description = "Your first flight. Congradulations!"
+    description = "Your first flight. Congratulations!"
     
     def eligible(self):
         return True
@@ -187,7 +189,7 @@ class FirstFlightBadgeStatus(SingleBadgeStatus):
 
 class TwinBadgeStatus(SingleBadgeStatus):
     title = "Twins"
-    description = "Logging your first flight in a twin engned aircraft!"
+    description = "Logging your first flight in a twin engined aircraft!"
 
     def eligible(self):
         return self.new_flight.plane.cat_class in (2,4)
@@ -303,9 +305,11 @@ class NightAdventurerBadgeStatus(SingleBadgeStatus):
 
 class PrivateBadgeStatus(SingleBadgeStatus):
     title = "Private Pilot"
-    description = "Metting all the requirements for the commercial certificate"
+    description = "Meeting all of the requirements for the Private pilot certificate"
     
     def eligible(self):
+        if self.flights.sim(False).aggregate(t=models.Sum('total'))['t'] < 40:
+            return False
         milestone = Part61_Private(user=self.user, as_of_date=self.new_flight.date)
         d = milestone.calculate()
         result = milestone.determine(d)
@@ -320,6 +324,8 @@ class ATPBadgeStatus(SingleBadgeStatus):
     description = "Meeting all the requirements for the ATP certificate"
 
     def eligible(self):
+        if self.flights.sim(False).aggregate(t=models.Sum('total'))['t'] < 1500:
+            return False
         milestone = ATP(user=self.user, as_of_date=self.new_flight.date)
         d = milestone.calculate()
         result = milestone.determine(d)
@@ -348,7 +354,7 @@ class TypeRatingBadgeStatus(SingleBadgeStatus):
 
 class MileHighClubBadgeStatus(SingleBadgeStatus):
     title = "Mile High Club"
-    description = "Landing at an airport with an elevation of 1 mile"
+    description = "Landing at an airport with an elevation of 5280 feet"
     
     def eligible(self):
         airport_count = Location.objects\
@@ -378,11 +384,14 @@ class ClassBBadgeStatus(MultipleLevelBadgeStatus):
             'KJFK', 'KCLT', 'KCLE', 'KPHL', 'KPIT', 'KMEM', 'KDFW', 'KHOU',
             'KIAH', 'KSLC', 'KDCA', 'KIAD', 'KSEA'
         ]
-        count = Location.objects.filter(identifier__in=class_b)\
-                                .filter(routebase__route__flight__in=self.flights)\
-                                .distinct()\
-                                .count()
-        
+
+        t0 = time.time()
+        qs = Location.objects.only('id')\
+                             .filter(identifier__in=class_b)\
+                             .filter(routebase__route__flight__in=self.flights)\
+                             .distinct()
+        count = qs.count()
+
         return self.determine_level(count)
 
 
@@ -397,12 +406,12 @@ class LongHaulBadgeStatus(MultipleLevelBadgeStatus):
     level_5 = 20
 
     def eligible(self):
-        return self.determine_level(self.new_flight.total) 
+        return self.determine_level(self.new_flight.total)
 
 
 class GoingTheDistanceStatus(MultipleLevelBadgeStatus):
     title = "Going the distance"
-    description = "Logging a flight with a route of %(level_count)s miles long"
+    description = "Logging a flight with a route of at least %(level_count)s miles"
 
     level_1 = 250
     level_2 = 500
@@ -411,6 +420,8 @@ class GoingTheDistanceStatus(MultipleLevelBadgeStatus):
     level_5 = 5000
 
     def eligible(self):
+        if self.new_flight.plane.is_sim():
+            return False
         return self.determine_level(self.new_flight.route.max_width_all)
 
 
@@ -452,7 +463,7 @@ class BusyBeeBadgeStatus(MultipleLevelBadgeStatus):
         
 
 class TypeMasterBadgeStatus(MultipleLevelBadgeStatus):
-    title = "Long Hauler"
+    title = "Type Master"
     description = "Flying %(level_count)s distinct aircraft types."
 
     level_1 = 2
@@ -465,8 +476,21 @@ class TypeMasterBadgeStatus(MultipleLevelBadgeStatus):
         types = self.flights.values_list('plane__type', flat=True).distinct().count()
         return self.determine_level(types)
 
-################################################################################
+class SocialBadgeStatus(MultipleLevelBadgeStatus):
+    title = "Social"
+    description = "Flying with %(level_count)s different people"
 
+    level_1 = 2
+    level_2 = 5
+    level_3 = 10
+    level_4 = 20
+    level_5 = 50
+
+    def eligible(self):
+        people = self.flights.values_list('person', flat=True).distinct().count()
+        return self.determine_level(people)
+
+################################################################################
   
 def get_badges_classes():
     return (
