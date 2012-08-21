@@ -39,3 +39,5 @@ EASYDUMP_MANIFESTS = {
         's3-bucket': 'fl_dumps',
     }
 }
+
+BADGES_ENABLE = False

@@ -87,7 +87,7 @@ class Flight(EnhancedModel):
 
         super(Flight,self).save(*args, **kwargs)
 
-        if not no_badges:
+        if (not no_badges) and settings.BADGES_ENABLE:
             from badges.models import award_badges
             award_badges(self)
     
