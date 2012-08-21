@@ -487,6 +487,8 @@ class SocialBadgeStatus(MultipleLevelBadgeStatus):
     level_5 = 50
 
     def eligible(self):
+        if not self.new_flight.person:
+            return False
         people = self.flights.values_list('person', flat=True).distinct().count()
         return self.determine_level(people)
 
