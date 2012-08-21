@@ -189,7 +189,7 @@ class FirstFlightBadgeStatus(SingleBadgeStatus):
     title = "First Flight"
     description = "Your first flight. Congratulations!"
     disabled = False
-    
+
     def eligible(self):
         return True
 
@@ -197,6 +197,7 @@ class FirstFlightBadgeStatus(SingleBadgeStatus):
 class TwinBadgeStatus(SingleBadgeStatus):
     title = "Twins"
     description = "Logging your first flight in a twin engined aircraft!"
+    disabled = False
 
     def eligible(self):
         return self.new_flight.plane.cat_class in (2,4)
@@ -205,7 +206,8 @@ class TwinBadgeStatus(SingleBadgeStatus):
 class SeaBadgeStatus(SingleBadgeStatus):
     title = "Seaplane"
     description = "Logging your first flight in a seaplane!"
-
+    disabled = False
+    
     def eligible(self):
         return self.new_flight.plane.cat_class in (3,4)
 
@@ -258,7 +260,7 @@ class CompleteSetBadgeStatus(SingleBadgeStatus):
         return all(r.values())
 
 
-class ThousandHourBadgeStatus(SingleBadgeStatus):
+class OneThousandHourBadgeStatus(SingleBadgeStatus):
     title = "One Thousand Hours"
     description = "Logging 1000 hours"
 
