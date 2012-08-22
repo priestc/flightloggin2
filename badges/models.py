@@ -251,6 +251,7 @@ class AdaptableBadgeStatus(SingleBadgeStatus):
     title = "Adaptable"
     description = """Logging a flight in a turbine aircraft and a piston aircraft
         on the same day."""
+    disabled = False
 
     def add(self):
         all_dates = Flight.objects.filter(user=self.user)\
@@ -278,7 +279,9 @@ class TranscontinentalBadgeStatus(SingleBadgeStatus):
     disabled = False
 
     def add(self):
-        all_flights = Flight.objects.filter(user=self.user).select_related('route__routebase__location__country')
+        all_flights = Flight.objects.filter(user=self.user)\
+            .select_related('route__routebase__location__country')
+
         for flight in all_flights:
             continents = set()
             for routebase in flight.route.routebase_set.all():
@@ -326,7 +329,6 @@ class CompleteSetBadgeStatus(SingleBadgeStatus):
             if all(r.values()):
                 self.grant_badge(level=1, awarding_flight=flight)
                 return
-
 
     def eligible(self):
         planes = Plane.objects.filter(flight__in=self.flights)
@@ -461,32 +463,63 @@ class ATPBadgeStatus(SingleBadgeStatus):
                 return False
         return True
 
+
 class MasterInstructorBadgeStatus(SingleBadgeStatus):
     title = "Master Instructor"
     description = "Logging 1000 hours of dual given"
+    disabled = False
+
+    def add(self):
+        all_flights = Flight.objects.filter(user=self.user).dual_g(True).order_by('date', 'id')
+        running_total = 0
+        for flight in all_flights:
+            running_total += flight.dual_g
+            if running_total >= 1000:
+                self.grant_badge(level=1, awarding_flight=flight)
+                return
 
     def eligible(self):
-        hours = self.flights.aggregate(s=models.Sum('dual_given'))['s']
+        hours = self.flights.aggregate(s=models.Sum('dual_g'))['s']
         return hours > 1000
+
 
 class TypeRatingBadgeStatus(SingleBadgeStatus):
     title = "Type Rating"
     description = "Logging PIC time in an airplane that requires a type rating"
+    disabled = False
+
+    def add(self):
+        all_flights = Flight.objects.filter(user=self.user)\
+                                    .pic(True)\
+                                    .type_rating(True)\
+                                    .order_by('date', 'id')\
+                                    .select_related('plane')
+        if all_flights.exists():
+            self.grant_badge(level=1, awarding_flight=all_flights[0])
 
     def eligible(self):
         return self.new_flight.pic > 0 and self.new_flight.plane.is_type_rating()
 
+
 class MileHighClubBadgeStatus(SingleBadgeStatus):
     title = "Mile High Club"
     description = "Landing at an airport with an elevation of 5280 feet"
-    
-    def eligible(self):
-        airport_count = Location.objects\
-                                .filter(routebase__route__flight__in=self.flights)\
-                                .filter(elevation__gt=5280)\
-                                .count()
+    mile = 5280
+    disabled = False
+
+    def add(self):
+        flights = Flight.objects.filter(
+            user=self.user,
+            route__routebase__location__elevation__gte=self.mile
+        ).order_by('date', 'id')
         
-        return airport_count > 1
+        if flights.exists():
+            self.grant_badge(level=1, awarding_flight=flights[0])
+
+    def eligible(self):
+        for routebase in self.new_flight.route.routebase_set.all():
+            if hasattr(routebase, 'location') and routebase.location.elevation > self.mile:
+                self.grant_badge(level=1, awarding_flight=self.new_flight)
 
 ################################################################################
 
@@ -506,6 +539,7 @@ class ExplorerBadgeStatus(MultipleLevelBadgeStatus):
     def eligible(self):
         count = Location.objects.filter(routebase__route__flight__in=self.flights)
         return self.determine_level(count.distinct().count())
+
 
 class ClassBBadgeStatus(MultipleLevelBadgeStatus):
     title = "Class B"
@@ -618,6 +652,7 @@ class TypeMasterBadgeStatus(MultipleLevelBadgeStatus):
     def eligible(self):
         types = self.flights.values_list('plane__type', flat=True).distinct().count()
         return self.determine_level(types)
+
 
 class SocialBadgeStatus(MultipleLevelBadgeStatus):
     title = "Social"

@@ -39,6 +39,12 @@ class FlightQuerySet(EnhancedQuerySet):
         if not f:
             return self.exclude(**kwarg)
         return self.filter(**kwarg)
+
+    def type_rating(self, f=True):
+        kwarg={'plane__tags__icontains': 'TYPE RATING'}
+        if not f:
+            return self.exclude(**kwarg)
+        return self.filter(**kwarg)
     
     ## by cat_class
     
