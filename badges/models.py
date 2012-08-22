@@ -292,7 +292,6 @@ class TranscontinentalBadgeStatus(SingleBadgeStatus):
                     continents.add(routebase.location.country.continent)
 
             if len(continents) > 1:
-                print continents, flight.route
                 self.grant_badge(level=1, awarding_flight=flight)
                 return
 
@@ -606,7 +605,6 @@ class ClassBBadgeStatus(MultipleLevelBadgeStatus):
                 if new_level > level:
                     awarding_flight = flight
                     level = new_level
-                    print level, visited
 
         if level >= 1:
             self.grant_badge(level=level, awarding_flight=awarding_flight)
@@ -625,13 +623,28 @@ class ClassBBadgeStatus(MultipleLevelBadgeStatus):
 class LongHaulBadgeStatus(MultipleLevelBadgeStatus):
     title = "Long Hauler"
     description = "Logging a flight of %(level_count)s hours in length"
-    disabled = True
+    disabled = False
 
     level_1 = 4
     level_2 = 7
     level_3 = 11
     level_4 = 15
     level_5 = 20
+
+    def add(self):
+        all_flights = Flight.objects.filter(user=self.user)\
+                            .order_by('date', 'id')\
+                            .filter(total__gt=0)
+        level = 0
+        awarding_flight = None
+        for flight in all_flights:
+            new_level = self.determine_level(flight.total)
+            if new_level > level:
+                awarding_flight = flight
+                level = new_level
+
+        if level >= 1:
+            self.grant_badge(level=level, awarding_flight=awarding_flight)
 
     def eligible(self):
         return self.determine_level(self.new_flight.total)
@@ -640,13 +653,29 @@ class LongHaulBadgeStatus(MultipleLevelBadgeStatus):
 class GoingTheDistanceStatus(MultipleLevelBadgeStatus):
     title = "Going the distance"
     description = "Logging a flight with a route of at least %(level_count)s miles"
-    disabled = True
+    disabled = False
 
     level_1 = 250
     level_2 = 500
     level_3 = 1000
     level_4 = 2000
     level_5 = 5000
+
+    def add(self):
+        all_flights = Flight.objects.filter(user=self.user)\
+                            .order_by('date', 'id')\
+                            .filter(route__isnull=False)\
+                            .select_related('route')
+        level = 0
+        awarding_flight = None
+        for flight in all_flights:
+            new_level = self.determine_level(flight.route.max_width_all)
+            if new_level > level:
+                awarding_flight = flight
+                level = new_level
+
+        if level >= 1:
+            self.grant_badge(level=level, awarding_flight=awarding_flight)
 
     def eligible(self):
         if self.new_flight.plane.is_sim():
