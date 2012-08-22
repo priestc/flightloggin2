@@ -40,4 +40,4 @@ EASYDUMP_MANIFESTS = {
     }
 }
 
-BADGES_ENABLE = False
+BADGES_ENABLE = True

@@ -43,12 +43,14 @@ def new_badge(badge_classes=None, users=None):
 
     return performance
 
-def new_badge2(badges=None):
-    users = User.objects.all().order_by('username')
+def new_badge2(badges=None, **kwargs):
+    users = User.objects.filter(**kwargs).order_by('username')
     if not badges:
         badges = get_badges_classes()
     
     for user in users:
         print '---- %s ----' % user.username
         for Badge in badges:
+            t0 = time.time()
             Badge(user=user).add()
+            print "%s - %.3f s" % (Badge.__name__, time.time() - t0)

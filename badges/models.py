@@ -219,11 +219,12 @@ class TwinBadgeStatus(SingleBadgeStatus):
     description = "Logging your first flight in a twin engined aircraft!"
     disabled = False
 
-    def new(self):
+    def add(self):
         all_flights = Flight.objects.filter(user=self.user).order_by('date', 'id')
         for flight in all_flights:
             if flight.plane.cat_class in (2,4):
                 self.grant_badge(level=1, awarding_flight=flight)
+                return
 
 
     def eligible(self):
@@ -235,11 +236,12 @@ class SeaBadgeStatus(SingleBadgeStatus):
     description = "Logging your first flight in a seaplane!"
     disabled = False
 
-    def new(self):
+    def add(self):
         all_flights = Flight.objects.filter(user=self.user).order_by('date', 'id')
         for flight in all_flights:
             if flight.plane.cat_class in (3,4):
                 self.grant_badge(level=1, awarding_flight=flight)
+                return
 
     def eligible(self):
         return self.new_flight.plane.cat_class in (3,4)
@@ -303,9 +305,28 @@ class CompleteSetBadgeStatus(SingleBadgeStatus):
     title = "Complete Set"
     description = """Logging a flight logged in a single engine, twin engine, 
         tailwheel and a turbine aircraft"""
+    disabled = False
 
     def add(self):
-        pass
+        all_flights = Flight.objects.filter(user=self.user).select_related('plane')
+        r = {'turbine': False, 'tw': False, 'sea': False, 'single': False, 'multi': False}
+        for flight in all_flights:
+            p = flight.plane
+            if p.cat_class in [2,4]:
+                r['multi'] = True
+            if p.cat_class in [1,3]:
+                r['single'] = True
+            if p.cat_class in [3,4]:
+                r['sea'] = True
+            if 'turbine' in p.tags.lower():
+                r['turbine'] = True
+            if 'tailwheel' in p.tags.lower():
+                r['tw'] = True
+
+            if all(r.values()):
+                self.grant_badge(level=1, awarding_flight=flight)
+                return
+
 
     def eligible(self):
         planes = Plane.objects.filter(flight__in=self.flights)
@@ -397,18 +418,8 @@ class TenThousandHourBadgeStatus(SingleBadgeStatus):
         return hours >= 10000 and c > 500
 
 
-class AdventurerBadgeStatus(SingleBadgeStatus):
-    title = "Adventurer"
-    needed = 25
-    description = "Visiting 25 unique airports"
-    
-    def eligible(self):
-        count = Location.objects.filter(routebase__route__flight__in=self.flights)
-        return count.distinct().count() > self.needed
-
-
 class NightAdventurerBadgeStatus(SingleBadgeStatus):
-    title = "Night Adventurer"
+    title = "Night Explorer"
     needed = 10
     description = "Visiting 10 distinct airports at night"
 
@@ -421,7 +432,7 @@ class NightAdventurerBadgeStatus(SingleBadgeStatus):
 
 class PrivateBadgeStatus(SingleBadgeStatus):
     title = "Private Pilot"
-    description = "Meeting all of the requirements for the Private pilot certificate"
+    description = "Meeting all of the requirements for the private pilot certificate"
     
     def eligible(self):
         if self.flights.sim(False).aggregate(t=models.Sum('total'))['t'] < 40:
@@ -465,8 +476,6 @@ class TypeRatingBadgeStatus(SingleBadgeStatus):
     def eligible(self):
         return self.new_flight.pic > 0 and self.new_flight.plane.is_type_rating()
 
-################################################################################
-
 class MileHighClubBadgeStatus(SingleBadgeStatus):
     title = "Mile High Club"
     description = "Landing at an airport with an elevation of 5280 feet"
@@ -479,6 +488,24 @@ class MileHighClubBadgeStatus(SingleBadgeStatus):
         
         return airport_count > 1
 
+################################################################################
+
+class ExplorerBadgeStatus(MultipleLevelBadgeStatus):
+    title = "Explorer"
+    description = "Visiting %(level_count)s unique airports"
+    
+    level_1 = 10
+    level_2 = 20
+    level_3 = 40
+    level_4 = 100
+    level_5 = 500
+
+    def new(self):
+        pass
+
+    def eligible(self):
+        count = Location.objects.filter(routebase__route__flight__in=self.flights)
+        return self.determine_level(count.distinct().count())
 
 class ClassBBadgeStatus(MultipleLevelBadgeStatus):
     title = "Class B"
@@ -490,19 +517,18 @@ class ClassBBadgeStatus(MultipleLevelBadgeStatus):
     level_4 = 20
     level_5 = 35
     
-    def eligible(self):
-        
-        class_b = [
-            'KPHX', 'KLAX', 'KNKX', 'KSAN', 'KSFO', 'KDEN', 'KMCO', 'KMIA',
-            'KTPA', 'KATL', 'PHNL', 'KORD', 'KCVG', 'KMSY', 'KADW', 'KBWI',
-            'KBOS', 'KDTW', 'KMSP', 'KMCI', 'KSTL', 'KLAS', 'KEWR', 'KLGA',
-            'KJFK', 'KCLT', 'KCLE', 'KPHL', 'KPIT', 'KMEM', 'KDFW', 'KHOU',
-            'KIAH', 'KSLC', 'KDCA', 'KIAD', 'KSEA'
-        ]
+    class_b = [
+        'KPHX', 'KLAX', 'KNKX', 'KSAN', 'KSFO', 'KDEN', 'KMCO', 'KMIA',
+        'KTPA', 'KATL', 'PHNL', 'KORD', 'KCVG', 'KMSY', 'KADW', 'KBWI',
+        'KBOS', 'KDTW', 'KMSP', 'KMCI', 'KSTL', 'KLAS', 'KEWR', 'KLGA',
+        'KJFK', 'KCLT', 'KCLE', 'KPHL', 'KPIT', 'KMEM', 'KDFW', 'KHOU',
+        'KIAH', 'KSLC', 'KDCA', 'KIAD', 'KSEA'
+    ]
 
+    def eligible(self):
         t0 = time.time()
         qs = Location.objects.only('id')\
-                             .filter(identifier__in=class_b)\
+                             .filter(identifier__in=self.class_b)\
                              .filter(routebase__route__flight__in=self.flights)\
                              .distinct()
         count = qs.count()
@@ -513,7 +539,7 @@ class ClassBBadgeStatus(MultipleLevelBadgeStatus):
 class LongHaulBadgeStatus(MultipleLevelBadgeStatus):
     title = "Long Hauler"
     description = "Logging a flight of %(level_count)s hours in length"
-    disabled = False
+    disabled = True
 
     level_1 = 4
     level_2 = 7
@@ -528,7 +554,7 @@ class LongHaulBadgeStatus(MultipleLevelBadgeStatus):
 class GoingTheDistanceStatus(MultipleLevelBadgeStatus):
     title = "Going the distance"
     description = "Logging a flight with a route of at least %(level_count)s miles"
-    disabled = False
+    disabled = True
 
     level_1 = 250
     level_2 = 500
