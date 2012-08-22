@@ -273,6 +273,7 @@ class AdaptableBadgeStatus(SingleBadgeStatus):
 class TranscontinentalBadgeStatus(SingleBadgeStatus):
     title = "Transcontinental"
     description = "Logging a flight from one continent to another"
+    disabled = False
 
     def add(self):
         all_flights = Flight.objects.filter(user=self.user).select_related('route__routebase__location__country')
@@ -281,12 +282,13 @@ class TranscontinentalBadgeStatus(SingleBadgeStatus):
             for routebase in flight.route.routebase_set.all():
                 if not routebase.location:
                     continue
-                continents.add(routebase.location.country.continent)
+                if routebase.location.country is not None:
+                    continents.add(routebase.location.country.continent)
+
             if len(continents) > 1:
+                print continents, flight.route
                 self.grant_badge(level=1, awarding_flight=flight)
                 return
-
-
 
     def eligible(self):
         r = self.new_flight.route
@@ -301,6 +303,9 @@ class CompleteSetBadgeStatus(SingleBadgeStatus):
     title = "Complete Set"
     description = """Logging a flight logged in a single engine, twin engine, 
         tailwheel and a turbine aircraft"""
+
+    def add(self):
+        pass
 
     def eligible(self):
         planes = Plane.objects.filter(flight__in=self.flights)

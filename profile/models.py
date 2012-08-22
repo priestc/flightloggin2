@@ -28,7 +28,7 @@ class Profile(models.Model, GoonMixin):
     real_name =      models.CharField(
                          "Real Name",
                          blank=True,
-                         max_length=32,
+                         max_length=64,
                      )
                          
     per_page =       models.PositiveIntegerField(
