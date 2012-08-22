@@ -530,8 +530,8 @@ class MileHighClubBadgeStatus(SingleBadgeStatus):
             self.grant_badge(level=1, awarding_flight=flights[0])
 
     def eligible(self):
-        for routebase in self.new_flight.route.routebase_set.all():
-            if hasattr(routebase, 'location') and routebase.location.elevation > self.mile:
+        for routebase in self.new_flight.route.routebase_set.filter(location__isnull=False):
+            if getattr(routebase.location, 'elevation', 0) > self.mile:
                 self.grant_badge(level=1, awarding_flight=self.new_flight)
 
 ################################################################################
