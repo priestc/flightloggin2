@@ -576,13 +576,13 @@ class ClassBBadgeStatus(MultipleLevelBadgeStatus):
     title = "Class B"
     description = "Landing at %(level_count)s Class B airports"
     disabled = False
-    
+
     level_1 = 1
     level_2 = 5
     level_3 = 10
     level_4 = 20
     level_5 = 35
-    
+
     class_b = [
         'KPHX', 'KLAX', 'KNKX', 'KSAN', 'KSFO', 'KDEN', 'KMCO', 'KMIA',
         'KTPA', 'KATL', 'PHNL', 'KORD', 'KCVG', 'KMSY', 'KADW', 'KBWI',
