@@ -122,7 +122,8 @@ class BadgeStatus(object):
             AwardedBadge.objects.create(
                 title=self.title,
                 user=self.user,
-                awarded_flight=awarding_flight
+                awarded_flight=awarding_flight,
+                level=level,
             )
             print "new badge - %s - %s - %s" % (self.title, level, awarding_flight.date)
 
@@ -161,10 +162,10 @@ class MultipleLevelBadgeStatus(BadgeStatus):
         if level < 5:
             # no level after 5
             next_level = getattr(cls, "level_%s" % (level + 1))
-            next_level_msg = "Next Level at %s" % next_level
+            next_level_msg = " (Next Level at %s)" % next_level
         else:
             next_level_msg = ''
-        return "%s (%s)" % (description, next_level_msg)
+        return "%s%s" % (description, next_level_msg)
 
     def determine_level(self, count):        
         if count >= self.level_5:
@@ -539,15 +540,32 @@ class MileHighClubBadgeStatus(SingleBadgeStatus):
 class ExplorerBadgeStatus(MultipleLevelBadgeStatus):
     title = "Explorer"
     description = "Visiting %(level_count)s unique airports"
-    
+    disabled = False
+
     level_1 = 10
-    level_2 = 20
-    level_3 = 40
-    level_4 = 100
+    level_2 = 50
+    level_3 = 100
+    level_4 = 250
     level_5 = 500
 
-    def new(self):
-        pass
+    def add(self):
+        all_flights = Flight.objects.filter(user=self.user)\
+                                    .order_by('date', 'id')\
+                                    .select_related('route__routebase__location')
+        visited = set()
+        level = 0
+        awarding_flight = None
+        for flight in all_flights:
+            for routebase in flight.route.routebase_set.filter(location__isnull=False):
+                visited.add(routebase.location.identifier)
+                new_level = self.determine_level(len(visited))
+                if new_level > level:
+                    awarding_flight = flight
+                    level = new_level
+
+        if level >= 1:
+            self.grant_badge(level=level, awarding_flight=awarding_flight)
+
 
     def eligible(self):
         count = Location.objects.filter(routebase__route__flight__in=self.flights)
