@@ -424,6 +424,19 @@ class NightAdventurerBadgeStatus(SingleBadgeStatus):
     title = "Night Explorer"
     needed = 10
     description = "Visiting 10 distinct airports at night"
+    disabled = False
+
+    def add(self):
+        all_flights = Flight.objects.filter(user=self.user)\
+                                    .sim(False).filter(night__gt=0)\
+                                    .order_by('date', 'id')
+        places = set()
+        for flight in all_flights:
+            for routebase in flight.route.routebase_set.filter(location__isnull=False):
+                places.add(routebase.location.identifier)
+            if len(places) >= 10:
+                self.grant_badge(level=1, awarding_flight=flight)
+                return
 
     def eligible(self):
         count = Location.objects.filter(
