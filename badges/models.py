@@ -532,7 +532,57 @@ class MileHighClubBadgeStatus(SingleBadgeStatus):
     def eligible(self):
         for routebase in self.new_flight.route.routebase_set.filter(location__isnull=False):
             if getattr(routebase.location, 'elevation', 0) > self.mile:
-                self.grant_badge(level=1, awarding_flight=self.new_flight)
+                return True
+        return False
+
+
+class SwimmingPoolOfFuelBadgeStatus(SingleBadgeStatus):
+    title = "Swimming Pool-o-Fuel"
+    description = "Burning enough fuel to fill an entire olympic sized swimming pool (660,000 gallons)"
+    capacity = 660000
+    disabled = False
+
+    def add(self):
+        all_flights = Flight.objects.filter(user=self.user).filter(gallons__gt=0).order_by('date', 'id')
+        gal = 0
+        for flight in all_flights:
+            gal += flight.gallons
+            if gal >= self.capacity:
+                self.grant_badge(level=1, awarding_flight=flight)
+                return
+
+    def eligible(self):
+        total_gals = self.flights.aggregate(s=models.Sum('gallons'))['s']
+        return total_gals >= self.capacity
+
+class FuelTruckBadgeStatus(SwimmingPoolOfFuelBadgeStatus):
+    title = 'Fuel Truck'
+    description = "Burning enough fuel to fill a typical large fuel truck (25,000 gallons)"
+    capacity = 25000
+    
+class ToTheMoonBadgeStatus(SingleBadgeStatus):
+    title = "To The Moon"
+    description = "Total length of all routes equaling the distance between the earth and the moon (207598 NM)"
+    distance = 207598
+    disabled = False
+
+    def add(self):
+        all_flights = Flight.objects.filter(user=self.user).order_by('date', 'id')
+        dis = 0
+        for flight in all_flights:
+            dis += flight.route.total_line_all
+            if dis >= self.distance:
+                self.grant_badge(level=1, awarding_flight=flight)
+                return
+
+    def eligible(self):
+        total_dis = self.flights.aggregate(s=models.Sum('gallons'))['s']
+        return total_dis >= self.distance
+
+class AroundTheEarthBadgeStatus(ToTheMoonBadgeStatus):
+    title = "Around The World"
+    description = "Total length of all routes equaling the circumference of the earth (21638 NM)"
+    distance = 21638.4
 
 ################################################################################
 
@@ -669,7 +719,7 @@ class GoingTheDistanceStatus(MultipleLevelBadgeStatus):
         level = 0
         awarding_flight = None
         for flight in all_flights:
-            new_level = self.determine_level(flight.route.max_width_all)
+            new_level = self.determine_level(flight.route.total_line_all)
             if new_level > level:
                 awarding_flight = flight
                 level = new_level
@@ -680,14 +730,33 @@ class GoingTheDistanceStatus(MultipleLevelBadgeStatus):
     def eligible(self):
         if self.new_flight.plane.is_sim():
             return False
-        return self.determine_level(self.new_flight.route.max_width_all)
+        return self.determine_level(self.new_flight.route.total_line_all)
 
 
 class WorldExplorerBadgeStatus(MultipleLevelBadgeStatus):
     title = "World Explorer"
     description = "Visiting %(level_count)s different countries"
     level_1 = 2
-    
+    disabled = False
+
+    def add(self):
+        all_flights = Flight.objects.filter(user=self.user)\
+                            .order_by('date', 'id')\
+                            .select_related('route__routebase__location__country')
+        visited = set()
+        level = 0
+        awarding_flight = None
+        for flight in all_flights:
+            for routebase in flight.route.routebase_set.filter(location__isnull=False):
+                if getattr(routebase.location, 'country', None):
+                    visited.add(routebase.location.country.code)
+                new_level = self.determine_level(len(visited))
+                if new_level > level:
+                    awarding_flight = flight
+                    level = new_level
+        if level >= 1:
+            self.grant_badge(level=level, awarding_flight=awarding_flight)
+
     def eligible(self):
         countries = Location.objects\
                             .filter(routebase__route__flight__in=self.flights)\
@@ -723,12 +792,30 @@ class BusyBeeBadgeStatus(MultipleLevelBadgeStatus):
 class TypeMasterBadgeStatus(MultipleLevelBadgeStatus):
     title = "Type Master"
     description = "Flying %(level_count)s distinct aircraft types."
+    disabled = False
 
     level_1 = 2
     level_2 = 5
     level_3 = 10
     level_4 = 20
     level_5 = 50
+
+    def add(self):
+        all_flights = Flight.objects.filter(user=self.user)\
+                            .order_by('date', 'id')\
+                            .select_related('plane')
+        types = set()
+        level = 0
+        awarding_flight = None
+        for flight in all_flights:
+            types.add(flight.plane.type)
+            new_level = self.determine_level(len(types))
+            if new_level > level:
+                awarding_flight = flight
+                level = new_level
+
+        if level >= 1:
+            self.grant_badge(level=level, awarding_flight=awarding_flight)
 
     def eligible(self):
         types = self.flights.values_list('plane__type', flat=True).distinct().count()
@@ -738,12 +825,29 @@ class TypeMasterBadgeStatus(MultipleLevelBadgeStatus):
 class SocialBadgeStatus(MultipleLevelBadgeStatus):
     title = "Social"
     description = "Flying with %(level_count)s different people"
+    disabled = False
 
     level_1 = 5
-    level_2 = 10
-    level_3 = 20
-    level_4 = 30
-    level_5 = 50
+    level_2 = 20
+    level_3 = 50
+    level_4 = 100
+    level_5 = 500
+
+    def add(self):
+        all_flights = Flight.objects.filter(user=self.user)\
+                            .order_by('date', 'id')
+        people = set()
+        level = 0
+        awarding_flight = None
+        for flight in all_flights:
+            people.add(flight.person)
+            new_level = self.determine_level(len(people))
+            if new_level > level:
+                awarding_flight = flight
+                level = new_level
+
+        if level >= 1:
+            self.grant_badge(level=level, awarding_flight=awarding_flight)
 
     def eligible(self):
         if not self.new_flight.person:
