@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 {% load gravatar %}{% load analytics %}
 <html lang="en">
     <head profile="http://www.w3.org/2005/10/profile">
@@ -12,13 +12,27 @@
 	        window.google_analytics_uacct = "UA-501381-5";
         </script>
 
-        <link rel="stylesheet" type="text/css" href="{% static CSS_URL %}/screen.css">
+        <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}">
 		
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/jquery-ui.min.js"></script>
-        <script type="text/javascript" src="{% static "js/master.js" %}"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/jquery-ui.min.js"></script>
+        <script src="{% static "js/master.js" %}"></script>
+        <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
         {% block javascript %}{% endblock %}
-		
+
+        <script>
+        $(document).ready(function() {
+            // set the navbar to the correct item
+            var url = window.location.pathname;
+            if(url.indexOf('logbook') != -1) {
+                var username = url.split('/')[2];
+                url = '/logbook/' + username;
+            }
+            var li = $('ul.nav li a[href="'+ url +'"]');
+            li.parent().addClass('active');
+        });
+        </script>
+
         <title>{% block title %}{% endblock %} - FlightLogg.in - Electronic Pilot Logbook</title>
     </head>
 	
