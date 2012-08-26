@@ -5,13 +5,13 @@
 {% block description %}{{ request.display_user.username }}'s flights{% endblock%}
 
 {% block javascript %}
-<script type="text/javascript" src="{% static "js/popup.js" %}"></script>
-<script type="text/javascript" src="{% static "js/flight_popup.js" %}"></script>
-<script type="text/javascript" src="{% static "js/logbook.js" %}"></script>
-<script type="text/javascript" src="{% static "js/sprintf.js" %}"></script>
+
+{% load compressed %}
+
+{% compressed_css 'logbook' %}
+{% compressed_js 'logbook' %}
 
 <script type="text/javascript">
-    NAVBAR_HIGHLIGHT = "logbook-sel";
     $(document).ready(function() {
         page_totals({{cols.agg_list|safe}})  // pass in the names of each column that needs a page total
     });
@@ -25,7 +25,6 @@
 </style>
 
 <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7/themes/ui-lightness/jquery-ui.css">
-<link rel="alternate" title="{{ request.display_user.username }}'s flights feed" href="/feeds/flights/{{request.display_user.username}}" type="application/rss+xml">
 
 {% endblock %}
 
@@ -33,7 +32,10 @@
 
 {% block canvas %}
     {% if not request.shared %}
-    <input id="new_flight_button" type="button" value="New Flight" />
+    <div class="divButton">
+      <a data-toggle="modal" href="#new_flight_popup" class=
+      "btn btn-primary btn-large">New Flight</a>
+    </div>
     {% endif %}
     
     {% include "pagination_table.html" %}

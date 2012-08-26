@@ -13,25 +13,14 @@
         </script>
 
         <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}">
-		
+		<link href="{% static 'bootstrap/css/bootstrap-responsive.css' %}" rel="stylesheet">
+        <link href="{% static 'structure.css' %}" rel="stylesheet">
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/jquery-ui.min.js"></script>
         <script src="{% static "js/master.js" %}"></script>
         <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
         {% block javascript %}{% endblock %}
-
-        <script>
-        $(document).ready(function() {
-            // set the navbar to the correct item
-            var url = window.location.pathname;
-            if(url.indexOf('logbook') != -1) {
-                var username = url.split('/')[2];
-                url = '/logbook/' + username;
-            }
-            var li = $('ul.nav li a[href="'+ url +'"]');
-            li.parent().addClass('active');
-        });
-        </script>
 
         <title>{% block title %}{% endblock %} - FlightLogg.in - Electronic Pilot Logbook</title>
     </head>
@@ -42,8 +31,6 @@
         <div id="logo_header" style="overflow: hidden">
 
             <div id="inner_header">
-            
-                <a href="/"><img id="logo" src="{% static CSS_URL %}/logo.png" alt="FlightLogg.in' Logo" /></a>
                 
                 <div id="userbox" style="float: right; overflow: hidden">
                     <div style="float: left">
@@ -79,10 +66,8 @@
                             
                         {% endif %}
                     </div>
-                
                 </div>
             </div>
-            
             
 
 		</div>

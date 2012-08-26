@@ -144,6 +144,7 @@ INSTALLED_APPS = (
     'tagging',
     'pagination',
     'gravatar',
+    'pipeline',
     'django_openid_auth',
 )
 
@@ -167,6 +168,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'main.context_processors.site_url',
     'badges.context_processors.badge_count'
 )
+
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
 from django.template.loader import add_to_builtins
 add_to_builtins('django.contrib.staticfiles.templatetags.staticfiles')

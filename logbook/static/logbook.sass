@@ -1,31 +1,38 @@
 #logbook_table
+  margin-left: 15px
   width: 100%
   border: none
-  background: $canvas
+  background: white
   font-size: x-small
   border-collapse: collapse
   tbody tr
     &:nth-child(even) td
-      background: $logbook_strip1
+      background: lightcyan
     &:nth-child(odd) td
-      background: $logbook_strip2
+      background: white
   td.date_col span
+    // hidden data for the flight popup
     display: none
   td
-    border: $logbook_border
+    text-align: center
+    border: 1px solid gray
     padding: 1px
     &:last-child:not([colspan])
+      // remarks column
       white-space: normal
       text-align: left
+  
   // logbook header cells
   tr.header td
-    color: $logbook_header_text
-    background: $logbook_header unquote("!important")
+    color: black
+    background: #AAAAAA unquote("!important")
   tfoot td[colspan]
+    // the footer cells that are empty
     border: none
     text-align: right
-    background: $canvas unquote("!important")
+    background: white unquote("!important")
   tfoot td
+    // footer cells that contain page and overall totals
     background: #fff
   td.empty_logbook
     font-size: x-large
@@ -34,7 +41,8 @@
     color: gray
 
 div.small_popup
-  background: $small_popup
+  // the little popup that comes up when clicking on the date.
+  background: white
   display: none
   position: absolute
   padding: 3px

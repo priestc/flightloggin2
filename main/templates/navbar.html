@@ -1,3 +1,15 @@
+<script>
+    $(document).ready(function() {
+        // set the navbar to the correct item
+        var url = window.location.pathname;
+        if(url.indexOf('logbook') != -1) {
+            var username = url.split('/')[2];
+            url = '/logbook/' + username;
+        }
+        var li = $('ul.nav li a[href="'+ url +'"]');
+        li.parent().addClass('active');
+    });
+</script>
 <div id="navbar" class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-inner">
         <ul class="nav">
