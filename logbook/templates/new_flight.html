@@ -5,14 +5,14 @@
 </script>
 
 <div class="modal hide fade" id="new_flight_popup">
-    <div class="modal-header">
-        <a href="#" class="close" data-dismiss="modal">&times;</a>
-        <h3>New Flight</h3>
-    </div>
+    <form id="new_entry_form" action="placeholder" method="post">
+        <div class="modal-header">
+            <a href="#" class="close" data-dismiss="modal">&times;</a>
+            <h3>New Flight</h3>
+        </div>
 
-    <div class="modal-body">
-        <div class="divDialogElements">
-            <form id="new_entry_form" action="placeholder" method="post">
+        <div class="modal-body">
+            <div class="divDialogElements">
                 {% csrf_token %}
                 <div id="table_holder">
                     <table id="flight_left_table">
@@ -120,61 +120,50 @@
                     </table>
                 </div>
 
-                    <table id="landings_table">
-                        <tbody>                    
-                            <tr>
-                                <td class="day_l_field">{{ form.day_l.label_tag }}    {{ form.day_l }}</td>
-                                <td class="night_l_field">{{ form.night_l.label_tag }}    {{ form.night_l }}</td>
-                                <td class="app_field">{{ form.app.label_tag }}    {{ form.app }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                    <table id="flight_events_table" summary="flying event selection">
-                        <tbody>
-                            <tr>
-                                <td>{{ form.pilot_checkride }}</td>
-                                <td>{{ form.pilot_checkride.label_tag }}</td>
-                                
-                                <td>{{ form.flight_review }}</td>
-                                <td>{{ form.flight_review.label_tag }}</td>
-                                
-                                <td>{{ form.holding }}</td>
-                                <td>{{ form.holding.label_tag }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ form.cfi_checkride }}</td>
-                                <td>{{ form.cfi_checkride.label_tag }}</td>
-                                
-                                <td>{{ form.ipc }}</td>
-                                <td>{{ form.ipc.label_tag }}</td>
-                                
-                                <td>{{ form.tracking }}</td>
-                                <td>{{ form.tracking.label_tag }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <table id="landings_table">
+                    <tbody>                    
+                        <tr>
+                            <td class="day_l_field">{{ form.day_l.label_tag }}    {{ form.day_l }}</td>
+                            <td class="night_l_field">{{ form.night_l.label_tag }}    {{ form.night_l }}</td>
+                            <td class="app_field">{{ form.app.label_tag }}    {{ form.app }}</td>
+                        </tr>
+                    </tbody>
+                </table>
                 
-                    <div id="flight_buttons">
-                    
-                        {% if not request.shared %}
-                        <div id="new_buttons">
-                            <input type="submit" name="submit" value="Submit New Flight" id="submit_new_flight"/>
-                        </div>
-                        <div id="edit_buttons">
-                            <input type="submit" name="submit" value="Edit Flight" id="submit_edit_flight"/>
-                            <input type="submit" name="submit" value="Delete Flight" id="delete_flight" disabled="disabled"/>
-                            <input type="checkbox"><input type="checkbox"><input type="checkbox">
-                        </div>
-                        {% endif %}
-                        
-                    </div>
-            </form>
+                <table id="flight_events_table" summary="flying event selection">
+                    <tbody>
+                        <tr>
+                            <td>{{ form.pilot_checkride }}</td>
+                            <td>{{ form.pilot_checkride.label_tag }}</td>
+                            
+                            <td>{{ form.flight_review }}</td>
+                            <td>{{ form.flight_review.label_tag }}</td>
+                            
+                            <td>{{ form.holding }}</td>
+                            <td>{{ form.holding.label_tag }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ form.cfi_checkride }}</td>
+                            <td>{{ form.cfi_checkride.label_tag }}</td>
+                            
+                            <td>{{ form.ipc }}</td>
+                            <td>{{ form.ipc.label_tag }}</td>
+                            
+                            <td>{{ form.tracking }}</td>
+                            <td>{{ form.tracking.label_tag }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
 
-    <div class="modal-footer">
-        <a href="#" class="btn" onclick="closeDialog ();">Cancel</a> <a href="#" class=
-        "btn btn-primary" onclick="okClicked ();">OK</a>
-    </div>
+        <div class="modal-footer">
+            {% if not request.shared %}
+                <input type="button" class="btn" onclick="$('.modal').modal('hide')" value="Cancel" id="cancel_flight_popup"/>
+                <input type="submit" class="btn btn-primary" name="submit" value="Submit New Flight" id="submit_new_flight"/>
+                <input type="submit" class="btn btn-primary" name="submit" value="Edit Flight" id="submit_edit_flight"/>
+                <input type="submit" class="btn btn-danger" name="submit" value="Delete Flight" id="delete_flight" disabled="disabled"/>
+            {% endif %}
+        </div>
+    </form>
 </div>

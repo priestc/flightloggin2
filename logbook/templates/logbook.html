@@ -33,8 +33,9 @@
 {% block canvas %}
     {% if not request.shared %}
     <div class="divButton">
-      <a data-toggle="modal" href="#new_flight_popup" class=
-      "btn btn-primary btn-large">New Flight</a>
+      <button id="new_flight" href="#new_flight_popup" class= "btn btn-primary btn-large">
+        New Flight
+      </button>
     </div>
     {% endif %}
     
@@ -43,7 +44,7 @@
     <table id="logbook_table" summary="logbook table">
         <thead>
             <tr class="header">
-                    {{ cols.header_row|safe }}
+                {{ cols.header_row|safe }}
             </tr>
         </thead>
         {% if get %}
@@ -109,7 +110,7 @@
     </div>
     
     
-    {% include "filter_table.html" %}
+{% include "filter_table.html" %}
 {% include "new_flight.html" %}
 {{ff.errors}}
 {% endblock %}

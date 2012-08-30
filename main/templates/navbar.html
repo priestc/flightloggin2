@@ -45,55 +45,75 @@
             {% endif %}
                 
             {% if not shared or user.get_profile.other_share %}
-            <li>
-                <a href="{% url linegraphs user.username as url %}{{ url }}">Graphs</a>
+            
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  Visualize
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="{% url linegraphs user.username as url %}{{ url }}">Graphs</a>
+                    </li>
+                    <li>
+                        <a href="{% url bargraphs user.username as url %}{{ url }}">Bar Graphs</a>
+                    </li>
+                    <li>
+                        <a href="{% url maps user.username as url %}{{ url }}">Maps</a>
+                    </li>
+                    <li>
+                        <a href="{% url states user.username as url %}{{ url }}">States</a>
+                    </li>
+                    <li>
+                        <a href="{% url sigs user.username as url %}{{ url }}">Sigs</a>
+                    </li>
+                </ul>
             </li>
             
-            <li>
-                <a href="{% url bargraphs user.username as url %}{{ url }}">Bar Graphs</a>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  Analyze
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="{% url est user.username as url %}{{ url }}">8710</a>
+                    </li>
+                    <li>
+                        <a href="{% url currency user.username as url %}{{ url }}">Currency</a>
+                    </li>
+                    <li>
+                        <a href="{% url milestones user.username as url %}{{ url }}">Milestones</a>
+                    </li>
+                </ul>
             </li>
-            
-            <li>
-                <a href="{% url maps user.username as url %}{{ url }}">Maps</a>
-            </li>
-            
+
             <li>
                 <a href="{% url badges user.username as url %}{{ url }}">Badges ({{ badges_count }})</a>
             </li>
             
-            <li>
-            <a href="{% url states user.username as url %}{{ url }}">States</a>
-            </li>
-            
-            <li>
-            <a href="{% url est user.username as url %}{{ url }}">8710</a>
-            </li>
-            
-            <li>
-                <a href="{% url sigs user.username as url %}{{ url }}">Sigs</a>
-            </li>
-
-            <li>
-                <a href="{% url currency user.username as url %}{{ url }}">Currency</a>
-            </li>
-            
-            <li>
-                <a href="{% url milestones user.username as url %}{{ url }}">Milestones</a>
-            </li>
             {% endif %}
             
             {% if not shared %}
-            <li>
-                <a href="{% url mass-entry user.username as url %}{{ url }}">Mass Entry</a>
-            </li>
 
-            <li>
-                <a href="{% url import user.username as url %}{{ url }}">Import</a>
-            </li>
-            
-            <li>
-                <a href="{% url export user.username as url %}{{ url }}">Export</a>
-            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  Data
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="{% url mass-entry user.username as url %}{{ url }}">Mass Entry</a>
+                    </li>
+                    <li>
+                        <a href="{% url import user.username as url %}{{ url }}">Import</a>
+                    </li>
+                    
+                    <li>
+                        <a href="{% url export user.username as url %}{{ url }}">Export</a>
+                    </li>
+                </ul>
+            </li>                    
 
             <li>
                 <a href="{% url profile user.username as url %}{{ url }}">Preferences</a>

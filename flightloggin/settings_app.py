@@ -47,6 +47,8 @@ PIPELINE_CSS = {
         'source_filenames': (
           'logbook.sass',
           'fancy_route.sass',
+          'filter_table.sass',
+          'flight_popup.sass',
         ),
         'output_filename': 'logbook.css',
         'extra_context': {

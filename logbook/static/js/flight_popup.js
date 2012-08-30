@@ -7,24 +7,27 @@ var todays_date = d.getFullYear() + "-" + month + "-" + day;
 //////////////////////////////////////////////////////////////////
 
 function prepare_new(wipe) {					    //prepares the new entry popup
+	console.log('prepare_new');
 
 	if(wipe) {
     	wipe_clean();
 	    $("#id_new-date").val(todays_date);
 	}
 	
-	$('#titlebar').text("New Flight");
-	$("#edit_buttons").hide();
-	$("#new_buttons").show();
+	$('.modal h3').text("New Flight");
+	$("#submit_edit_flight").hide();
+	$("#delete_flight").hide();
+	$("#submit_new_flight").show();
 }
 
 function prepare_edit(wipe) {				//prepares the new entry popup
 	if(wipe)
 		wipe_clean();
 	
-	$('#titlebar').text("Edit Flight");
-	$("#new_buttons").hide();
-	$("#edit_buttons").show();
+	$('.modal h3').text("Edit Flight");
+	$("#submit_new_flight").hide();
+	$("#submit_edit_flight").show();
+	$("#delete_flight").show();
 }
 
 function close_all_small_popups(){
@@ -95,9 +98,10 @@ $(document).ready(function() {
 	
 	////////////////////////////////////////////////////////
 	
-	$("#new_flight_button").click(function(event) {			//make the popup when the new flight button is clicked
+	$("#new_flight").click(function(event) {			//make the popup when the new flight button is clicked
 		prepare_new(true);
 		fire_popup();
+		console.log('new flight')
 	});
 	
 	$("a.popup_link").click(function(){
