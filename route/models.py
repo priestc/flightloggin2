@@ -91,7 +91,7 @@ class Route(EnhancedModel):
 
     fancy_rendered =  models.TextField(blank=True, null=True)
     fallback_string = models.TextField(blank=True, null=True)
-    simple_rendered = models.TextField(blank=True, null=True)
+    simple_rendered = models.TextField(blank=True, null=True, db_index=True)
     kml_rendered =    models.TextField(blank=True, null=True)
     
     max_width_all =   models.FloatField(null=True, default=0)
