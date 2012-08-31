@@ -214,45 +214,75 @@ urlpatterns += patterns('',
     #--------------------------------------------------------------------------
     
     url(
-        r'^route-(?P<r>[\w-]+)$',
+        r'^route/(?P<r>[\w-]+)$',
         "route.views.route_profile",
                                                           name="profile-route",
     ),
     
     url(
-        r'^tailnumber-(?P<tn>%s+)$' % Plane.plane_regex,
+        r'^tailnumber/(?P<tn>%s+)$' % Plane.plane_regex,
         "plane.views.tailnumber_profile",
                                                      name="profile-tailnumber",
     ),
     
     url(
-        r'^type-(?P<ty>%s+)$' % Plane.plane_regex,
+        r'^type/(?P<ty>%s+)$' % Plane.plane_regex,
         "plane.views.type_profile",
                                                            name="profile-type",
     ),
     
     url(
-        r'^model-(?P<model>.+)$',
+        r'^model/(?P<model>.+)$',
         "plane.views.model_profile",
                                                           name="profile-model",
     ),
     
     url(
-        r'^navaid-(?P<ident>[A-Z0-9]+)$',
+        r'^navaid/(?P<ident>[A-Z0-9]+)$',
         "airport.views.airport_profile",
         {"navaid": True},                                name="profile-navaid",
     ),
     
     url(
-        r'^airport-(?P<ident>[A-Z0-9-]+)$',
+        r'^airport/(?P<ident>[A-Z0-9-]+)$',
         "airport.views.airport_profile",
         {"navaid": False},                              name="profile-airport",
     ),
 
     url(
-        r'^location-(?P<ident>[A-Z0-9-]+)$',
+        r'^location/(?P<ident>[A-Z0-9-]+)$',
         "airport.views.location_redirect",
                                                        name="profile-location",
+    ),
+
+    #### temporary redirect, remove at some point
+    url(
+        r'^location-(?P<ident>[A-Z0-9-]+)$',
+        "main.views.temp_redirect",
+    ),
+    url(
+        r'^airport-(?P<ident>[A-Z0-9-]+)$',
+        "main.views.temp_redirect",
+    ),
+    url(
+        r'^navaid-(?P<ident>[A-Z0-9-]+)$',
+        "main.views.temp_redirect",
+    ),
+    url(
+        r'^model-(?P<ident>[A-Z0-9-]+)$',
+        "main.views.temp_redirect",
+    ),
+    url(
+        r'^type-(?P<ident>[A-Z0-9-]+)$',
+        "main.views.temp_redirect",
+    ),
+    url(
+        r'^tailnumber-(?P<ident>[A-Z0-9-]+)$',
+        "main.views.temp_redirect",
+    ),
+    url(
+        r'^route-(?P<ident>[A-Z0-9-]+)$',
+        "main.views.temp_redirect",
     ),
     
     #--------------------------------------------------------------------------
