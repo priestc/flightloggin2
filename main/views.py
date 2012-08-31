@@ -1,5 +1,6 @@
 from django.http import HttpResponse, HttpResponsePermanentRedirect
 from django.views.decorators.cache import never_cache
+from django.core.urlresolvers import reverse
 
 from annoying.decorators import render_to
 from models import NewsItem, HelpItem
@@ -37,7 +38,7 @@ Disallow: /kml/""", mimetype='text-plain')
 def remove_html_redirection(request):
     """
     Dirty hack for dealing with redirecting old urls with the '.html' to the
-    nre scheme.
+    new scheme.
     """
     url = request.path
 
@@ -46,5 +47,14 @@ def remove_html_redirection(request):
         url = "/%s/%s" % (page, user)
     
     url = url.replace('.html', '')
-    print url
     return HttpResponsePermanentRedirect(url)
+
+def temp_redirect(request, ident):
+    """
+    Urls for the various profile pages have changed, so instead of all old links
+    ending up as 404s, return a 301 redirect. After some time, this redirect can be removed
+    """
+    for item in ('location', 'navaid', 'airport', 'route', 'tailnumber', 'type', 'model'):
+        if item in request.path:
+            url = reverse('profile-%s' % item, args=(ident,))
+            return HttpResponsePermanentRedirect(url)
