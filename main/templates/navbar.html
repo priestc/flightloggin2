@@ -10,43 +10,44 @@
         li.parent().addClass('active');
     });
 </script>
-<div id="navbar" class="navbar navbar-inverse navbar-fixed-top">
-    <div class="navbar-inner">
-        <ul class="nav">
 
+<div id="navbar" class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <a class="brand" href="/">FlightLogg.in'</a>
+        <ul class="nav">
             {% if not shared or user.get_profile.logbook_share %}
-            <li>
+            <li class="pull-left">
                 <a href="/logbook/{{ user.username }}">Flights</a>
             </li>
             {% endif %}
             
             {% if not shared or user.get_profile.logbook_share %}
-            <li>
+            <li class="pull-left">
                 <a href="{% url planes user.username as url %}{{ url }}">Planes</a>
             </li>
             {% endif %}
             
             {% if not shared or user.get_profile.events_share %}
-            <li>
+            <li class="pull-left">
                 <a href="{% url events user.username as url %}{{ url }}">Events</a>
             </li>
             {% endif %}
             
             {% if not shared or user.get_profile.logbook_share %}
-            <li>
+            <li class="pull-left">
                 <a href="{% url locations user.username as url %}{{ url }}">Locations</a>
             </li>
             {% endif %}
             
             {% if not shared or user.get_profile.records_share %}
-            <li>
+            <li class="pull-left">
                 <a href="{% url records user.username as url %}{{ url }}">Records</a>
             </li>
             {% endif %}
                 
             {% if not shared or user.get_profile.other_share %}
             
-            <li class="dropdown">
+            <li class="dropdown pull-left">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   Visualize
                   <b class="caret"></b>
@@ -70,7 +71,7 @@
                 </ul>
             </li>
             
-            <li class="dropdown">
+            <li class="dropdown pull-left">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   Analyze
                   <b class="caret"></b>
@@ -88,7 +89,7 @@
                 </ul>
             </li>
 
-            <li>
+            <li class="pull-left">
                 <a href="{% url badges user.username as url %}{{ url }}">Badges ({{ badges_count }})</a>
             </li>
             
@@ -96,7 +97,7 @@
             
             {% if not shared %}
 
-            <li class="dropdown">
+            <li class="dropdown pull-left">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   Data
                   <b class="caret"></b>
@@ -119,6 +120,11 @@
                 <a href="{% url profile user.username as url %}{{ url }}">Preferences</a>
             </li>
             {% endif %}
+
+            <li class="pull-right">
+                <a>Logged in as</a>
+            </li>
+
         </li>
     </div>
 </div>

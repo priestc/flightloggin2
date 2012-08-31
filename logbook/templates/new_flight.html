@@ -4,6 +4,9 @@
     var new_url = "{% url new_flight username=request.display_user.username page=page %}";
 </script>
 
+<link rel="stylesheet" href="{% static 'chosen/chosen.css' %}" />
+<script src="{% static 'chosen/chosen.jquery.js' %}" type="text/javascript"></script>
+
 <div class="modal hide fade" id="new_flight_popup">
     <form id="new_entry_form" action="placeholder" method="post">
         <div class="modal-header">
@@ -61,7 +64,6 @@
                                 <td>{{ form.fuel_burn.label_tag }}</td>
                                 <td>{{ form.fuel_burn }}<br>{{ form.fuel_burn.errors }}</td>
                             </tr>
-                            
                         </tbody>
                     </table>
                 
@@ -123,9 +125,9 @@
                 <table id="landings_table">
                     <tbody>                    
                         <tr>
-                            <td class="day_l_field">{{ form.day_l.label_tag }}    {{ form.day_l }}</td>
-                            <td class="night_l_field">{{ form.night_l.label_tag }}    {{ form.night_l }}</td>
-                            <td class="app_field">{{ form.app.label_tag }}    {{ form.app }}</td>
+                            <td class="day_l_field">{{ form.day_l.label }}    {{ form.day_l }}</td>
+                            <td class="night_l_field">{{ form.night_l.label }}    {{ form.night_l }}</td>
+                            <td class="app_field">{{ form.app.label }}    {{ form.app }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -167,3 +169,4 @@
         </div>
     </form>
 </div>
+<script>$('.plane-select').chosen()</script>

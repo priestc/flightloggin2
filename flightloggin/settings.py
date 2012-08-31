@@ -173,6 +173,7 @@ STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
 from django.template.loader import add_to_builtins
 add_to_builtins('django.contrib.staticfiles.templatetags.staticfiles')
+#add_to_builtins('pipeline.templatetags.compressed')
 
 AUTHENTICATION_BACKENDS = (
     'django_openid_auth.auth.OpenIDBackend',

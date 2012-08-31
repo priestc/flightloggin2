@@ -31,9 +31,7 @@ function prepare_edit(wipe) {				//prepares the new entry popup
 }
 
 function close_all_small_popups(){
-
     $(".small_popup").hide();
-
 }
 
 $(document).click(close_all_small_popups);
@@ -43,24 +41,13 @@ $(document).click(close_all_small_popups);
 $(document).ready(function() {
 	
 	$("#id_new-date, .date_picker").datepicker({	// add the date pickers
-			dateFormat: "yy-mm-dd",
+			dateFormat: "yyyy-mm-dd",
 			yearRange: "-10:+1", 
 			showOn: "button", 
 			buttonImage: date_button, 
 			buttonImageOnly: true,
 			changeYear: true 
 	}).addClass("embed");
-	
-	///////////////////////////////////////// confirm checkboxes for delete flight
-	
-	$("#edit_buttons input[type='checkbox']").click(function() {
-	
-	    if ( $("#edit_buttons input[type='checkbox']:not(:checked)").size() == 0 )
-            $('#delete_flight').removeAttr("disabled")
-        else
-            $('#delete_flight').attr("disabled", "disabled")
-	    
-	});
 	
 	/////////////////////////////////////////shortcut buttons
 	

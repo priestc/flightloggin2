@@ -14,75 +14,57 @@
 
         <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}">
 		<link href="{% static 'bootstrap/css/bootstrap-responsive.css' %}" rel="stylesheet">
-        <link href="{% static 'structure.css' %}" rel="stylesheet">
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/jquery-ui.min.js"></script>
         <script src="{% static "js/master.js" %}"></script>
         <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+
+        {% load compressed %}
+        {% compressed_css 'main' %}
+        {% compressed_js 'main' %}
+
         {% block javascript %}{% endblock %}
 
         <title>{% block title %}{% endblock %} - FlightLogg.in - Electronic Pilot Logbook</title>
     </head>
 	
     <body>
-    <div id="holder">
+        <div id="content">
 
-        <div id="logo_header" style="overflow: hidden">
-
-            <div id="inner_header">
-                
-                <div id="userbox" style="float: right; overflow: hidden">
-                    <div style="float: left">
-                    {% if DEMO %}
-                        <span id="demo">** VIEWING THE DEMO ACCOUNT **</span>
-                    {% endif %}
-
-                    {% if user.is_authenticated %}
-	                    Logged in as: <span class="logged_user">{{ user.username }}</span>
-                    {% endif %}
-
-                    {% ifnotequal request.user request.display_user %}
-                    {% if request.display_user %}
-	                    <br>Viewing the logbook of: <span class="display_user">{{ request.display_user }}</span>
-	                {% endif %}
-                    {% endifnotequal %}
-
-                    {% if not user.is_authenticated %}
-                        <br><a href="{% url landingpage %}">Sign-in/Register</a>
-                    {% else %}
-                        <br><a href="/logout">Log Out</a>
-                    {% endif %}
-                    </div>
-                    
-                    <div style="margin-left: 3px; margin-top: 2px; float: right">
-                        {% if request.display_user %}
-                            {% gravatar request.display_user %}
-                        {% else %}
-                        
-                            {% if user.is_authenticated %}
-                                {% gravatar user %}
-                            {% endif %}
-                            
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-            
-
-		</div>
-        
-        <div id="navbar_header">
             {% with navbar_user as user %}
             {% include "navbar.html" %}
             {% endwith %}
-        </div>
-        
-        <div id="main_content">
-		    
+
+            <div id="userbox">
+                {% if DEMO %}
+                    <span id="demo">** VIEWING THE DEMO ACCOUNT **</span>
+                {% endif %}
+
+                {% if user.is_authenticated %}
+                    Logged in as: <span class="logged_user">{{ user.username }}</span>
+                {% endif %}
+
+                {% if request.user != request.display_user and request.display_user%}
+                    <br>Viewing the logbook of: <span class="display_user">{{ request.display_user }}</span>
+                {% endif %}
+
+                {% if not user.is_authenticated %}
+                    <br><a href="{% url landingpage %}">Sign-in/Register</a>
+                {% else %}
+                    <br><a href="/logout">Log Out</a>
+                {% endif %}
+            
+                {% if request.display_user %}
+                    {% gravatar request.display_user %}
+                {% elif user.is_authenticated %}
+                    {% gravatar user %}
+                {% endif %}
+            </div>
+        		    
             {% block no_canvas %}
             <div id="canvas" class="">
-                <div style="text-align: center; margin: auto auto 10px">
+                <div id="vertbox">
                 {# from the ad context processor #}
                 {{ proper_ad|safe }}
                 </div>
@@ -93,8 +75,6 @@
 		</div>
 
 		{% include 'footer.html' %}
-		
-	</div>
-    {% googleanalyticsjs %}
+        {% googleanalyticsjs %}
 	</body>
 </html>

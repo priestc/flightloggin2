@@ -1,7 +1,7 @@
 function wipe_clean() {
     // uncheck all checkboxes and clear all input boxes
     $(".modal input[type=text], .modal textarea, .modal select").val("");
-    $(".modal input[type=checkbox]").attr("checked", "");
+    $(".modal input[type=checkbox]").attr("checked", false);
 	
     // remove the error messages
     $(".modal td#new_error_cell").text("");

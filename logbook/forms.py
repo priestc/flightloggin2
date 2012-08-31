@@ -128,6 +128,7 @@ class PlaneSelectBox(Select):
         if value is None:
             value = ''
         final_attrs = self.build_attrs(attrs, name=name)
+        final_attrs['class'] = "plane-select" # for chosen
         output = [u'<select%s>' % flatatt(final_attrs)]
         options = self.render_options(choices, [value])
         if options:

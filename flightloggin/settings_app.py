@@ -43,12 +43,21 @@ EASYDUMP_MANIFESTS = {
 BADGES_ENABLE = True
 
 PIPELINE_CSS = {
+    'main': {
+        'source_filenames': (
+            'main.sass',
+        ),
+        'output_filename': 'main.css',
+        'extra_context': {
+            'media': 'screen,projection',
+        },
+    },
     'logbook': {
         'source_filenames': (
-          'logbook.sass',
-          'fancy_route.sass',
-          'filter_table.sass',
-          'flight_popup.sass',
+            'logbook.sass',
+            'fancy_route.sass',
+            'filter_table.sass',
+            'flight_popup.sass',
         ),
         'output_filename': 'logbook.css',
         'extra_context': {
@@ -66,10 +75,10 @@ PIPELINE_CSS = {
 PIPELINE_JS = {
     'logbook': {
         'source_filenames': (
-          'js/logbook.js',
-          'js/sprintf.js',
-          'js/popup.js',
-          'js/flight_popup.js',
+            'js/logbook.js',
+            'js/sprintf.js',
+            'js/popup.js',
+            'js/flight_popup.js',
         ),
         'output_filename': 'js/logbook.js',
     }
