@@ -6,6 +6,7 @@ from django.forms import ModelForm, ModelChoiceField
 from django.contrib.admin import widgets
 from django.forms.widgets import TextInput, HiddenInput, Select, flatatt
 from django.forms.util import ValidationError
+from django.db.models import Max
 
 from models import *
 from logbook.utils import from_minutes
@@ -232,7 +233,6 @@ class PopupFlightForm(ModelForm):
 
         self.fields['date'].widget = widgets.AdminDateWidget()
         
-        from django.db.models import Max
         self.fields['plane'].queryset = \
                  Plane.objects\
                       .user(self.user)\

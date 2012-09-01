@@ -134,12 +134,8 @@ class Plane(EnhancedModel):
                 self.tags = d['tags'] or ""
             
             if "frasca" in self.type.lower():
-                self.manufacturer="Frasca"
+                self.manufacturer = "Frasca"
                 self.cat_class = 16
-                
-        if not self.user:
-            from share.middleware import share
-            self.user = share.get_display_user()
         
         self.full_clean()
         

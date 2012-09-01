@@ -2,6 +2,7 @@ from django.http import HttpResponseRedirect
 from django.forms.models import modelformset_factory
 from django.core.urlresolvers import reverse
 from django.views.decorators.cache import cache_page
+from django.utils.functional import curry
 
 from annoying.decorators import render_to
 
@@ -188,7 +189,7 @@ def logbook(request, page=0, form=None, fail=None):
     
     if not form:
         plane_widget = proper_plane_widget(profile)
-        form = forms.PopupFlightForm(plane_widget=plane_widget, prefix="new")
+        form = forms.PopupFlightForm(plane_widget=plane_widget, prefix="new", user=request.display_user)
     else:
         ## set this variable so we know which popup to prepare to enter the
         ## failed form data
@@ -214,6 +215,7 @@ def mass_entry(request):
         extra=profile.per_page,
         formset=forms.MassEntryFormset
     )
+    NewFlightFormset.form = staticmethod(curry(forms.FormsetFlightForm, user=request.user))
         
     if request.POST.get('submit'):
         post = request.POST.copy()
@@ -268,11 +270,14 @@ def mass_edit(request, page=0):
     qs = Flight.objects.filter(user=request.display_user)\
                        .order_by('date')[start:start+duration]
     
-    NewFlightFormset = modelformset_factory(Flight,
-                                            form=forms.FormsetFlightForm,
-                                            formset=forms.MassEntryFormset,
-                                            extra=0,
-                                            can_delete=True)
+    NewFlightFormset = modelformset_factory(
+        Flight,
+        form=forms.FormsetFlightForm,
+        formset=forms.MassEntryFormset,
+        extra=0,
+        can_delete=True
+    )
+    NewFlightFormset.form = staticmethod(curry(forms.FormsetFlightForm, user=request.user))
         
     if request.POST.get('submit'):
         pqs = Plane.objects.user_common(request.display_user)
