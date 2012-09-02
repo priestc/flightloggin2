@@ -215,7 +215,7 @@ def mass_entry(request):
         extra=profile.per_page,
         formset=forms.MassEntryFormset
     )
-    NewFlightFormset.form = staticmethod(curry(forms.FormsetFlightForm, user=request.user))
+    NewFlightFormset.form = staticmethod(curry(forms.FormsetFlightForm, user=request.display_user))
         
     if request.POST.get('submit'):
         post = request.POST.copy()
@@ -277,7 +277,7 @@ def mass_edit(request, page=0):
         extra=0,
         can_delete=True
     )
-    NewFlightFormset.form = staticmethod(curry(forms.FormsetFlightForm, user=request.user))
+    NewFlightFormset.form = staticmethod(curry(forms.FormsetFlightForm, user=request.display_user))
         
     if request.POST.get('submit'):
         pqs = Plane.objects.user_common(request.display_user)
