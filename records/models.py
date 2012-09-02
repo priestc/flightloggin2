@@ -28,17 +28,12 @@ class Records(models.Model, GoonMixin):
     def has_something(self):
         return bool(self.text) is True
     has_something.boolean = True
-        
-    def save(self, *args, **kwargs):
-        
-        if not self.user:
-            self.user = share.get_display_user()
-        super(Records,self).save(*args, **kwargs)
-
 
      
 class NonFlight(models.Model, GoonMixin):
-
+    """
+    Represents a logbook event that is not a flight: medical, signoff, etc
+    """
     date =      models.DateField()
     user =      models.ForeignKey(User, blank=True)
     remarks =   models.TextField(blank=True)
@@ -53,13 +48,4 @@ class NonFlight(models.Model, GoonMixin):
         get_latest_by = 'date'
     
     def __unicode__(self):
-        return u"%s -- %s" % (self.date, self.get_non_flying_display() )
-    
-    def save(self, *args, **kwargs):
-        from share.middleware import share
-        try:
-            self.user.pk
-        except:
-            self.user = share.get_display_user()
-            
-        super(NonFlight,self).save(*args, **kwargs)
+        return u"%s -- %s" % (self.date, self.get_non_flying_display())

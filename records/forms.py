@@ -1,3 +1,5 @@
+import re
+
 from django.forms.models import modelformset_factory
 from django.forms import ModelForm
 from django.forms.widgets import HiddenInput
@@ -7,9 +9,10 @@ from django import forms
 from django.db.models import get_model
 
 class NonFlightForm(ModelForm):
+
     class Meta:
+        widgets = {'user': forms.widgets.HiddenInput()}
         model = get_model('records', 'NonFlight')
-        exclude = ('user' )
         
 ##############################
 ##############################
@@ -17,7 +20,6 @@ from django.forms import widgets #import TextInput, HiddenInput
 
 class IdentField(forms.CharField):
     def clean(self, value):      
-        import re
         value = re.sub(r'\W', '', value).upper()
         return super(IdentField, self).clean(value)
     

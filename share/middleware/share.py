@@ -14,6 +14,7 @@ _thread_locals = local()
 ###############################################################
 
 def get_display_user():
+    raise Exception('thread locals bad')
     user = getattr(_thread_locals, "display_user", None)
     if not user:
          user,c = User.objects.get_or_create(pk=999999,
@@ -21,9 +22,11 @@ def get_display_user():
     return user
 
 def get_shared():
+    raise Exception('thread locals bad')
     return getattr(_thread_locals, "shared", None)
 
 def get_user():
+    raise Exception('thread locals bad')
     return getattr(_thread_locals, "user", None)
 
 ###############################################################
@@ -108,24 +111,14 @@ class ShareMiddleware(object):
                 view = lambda x: HttpResponseForbidden(x)
                 return view(message)
             
-            _thread_locals.display_user = display_user
-            _thread_locals.shared = shared
-            _thread_locals.user = getattr(request, "user", None)
+            #_thread_locals.display_user = display_user
+            #_thread_locals.shared = shared
+            #_thread_locals.user = getattr(request, "user", None)
             
             request.display_user = display_user
             request.shared = shared
             
             return view(request=request, *args, **kwargs)
-#        
-#    def process_response(self, request, response):
-#        
-#        if getattr("request", "display_user", False):
-#            print "DISPLAY_USER"
-#        else:
-#            print "NOPE"
-#            
-#        return response
-
 
 
 

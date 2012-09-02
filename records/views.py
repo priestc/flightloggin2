@@ -3,6 +3,7 @@ from airport.models import Location
 from models import Records, NonFlight
 from forms import *
 from share.decorator import no_share
+from backup.models import edit_logbook
 
 @no_share('records')
 @render_to("records.html")
@@ -10,12 +11,11 @@ def records(request):
       
     if request.POST:
         text = request.POST.get('records', None)
-        records=Records(user=request.display_user, text=text)
+        records = Records(user=request.display_user, text=text)
         records.save()
         saved=True
         
         # send signal to specify this user as editing their data
-        from backup.models import edit_logbook
         edit_logbook.send(sender=request.display_user, touch_cache=False)
     
     else:
@@ -30,7 +30,7 @@ def locations(request):
     changed = False
     
     if "New" in request.POST.get('submit', "DERP"):
-        form=CustomForm(request.POST)
+        form = CustomForm(request.POST)
         edit_or_new = 'new'
         
         if form.is_valid():
@@ -44,14 +44,13 @@ def locations(request):
             changed = True
             
         else:
-            assert False, form.errors
             ERROR = 'true'
             
     elif "Submit" in request.POST.get('submit', "DERP"):
         custom = Location.objects.get(loc_class=3,
                                       user=request.display_user,
                                       pk=request.POST.get('id', None) )
-        form=CustomForm(request.POST, instance=custom)
+        form = CustomForm(request.POST, instance=custom)
         edit_or_new = 'edit'
         
         if form.is_valid():
@@ -80,7 +79,6 @@ def locations(request):
         
     if changed:
         # send signal to specify this user as editing their data
-        from backup.models import edit_logbook
         edit_logbook.send(sender=request.display_user)
         
     return locals()
@@ -89,13 +87,7 @@ def locations(request):
 @render_to("events.html")
 def events(request):
     
-    ##################################################
-
-    try:
-        profile = request.display_user.get_profile()
-    except:
-        from profile.models import Profile
-        profile = Profile()
+    profile = request.display_user.get_profile()
         
     if profile.date_format:
         date_format = profile.date_format
@@ -111,13 +103,13 @@ def events(request):
         
         if request.POST.get("submit") == "Submit Changes":
             nf = NonFlight(pk=request.POST['id'])
-            form=NonFlightForm(request.POST, instance=nf)
+            form = NonFlightForm(request.POST, instance=nf)
             if form.is_valid():
                 form.save()
                 changed = True
                 
         elif request.POST.get("submit") == "Create New Event":
-            form=NonFlightForm(request.POST)
+            form = NonFlightForm(request.POST)
             if form.is_valid():
                 form.save()
                 changed = True
@@ -130,11 +122,10 @@ def events(request):
             form = NonFlightForm()
                 
     else:
-        form = NonFlightForm()
+        form = NonFlightForm(initial={'user': request.user})
         
     if changed:
         # send signal to specify this user as editing their data
-        from backup.models import edit_logbook
         edit_logbook.send(sender=request.display_user, touch_cache=False)
     
     return locals()
