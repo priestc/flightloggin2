@@ -214,7 +214,7 @@ class DatabaseImport(PreviewImport):
         line.update({"plane": plane.pk})
         
         flight = Flight(user=self.user)
-        form = ImportFlightForm(line, instance=flight)
+        form = ImportFlightForm(line, instance=flight, user=self.user)
         
         if form.is_valid():
             form.save()
