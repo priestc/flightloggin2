@@ -23,7 +23,7 @@ class RegistrationForm(forms.Form):
 
     def clean_username(self):
         u = self.cleaned_data['username']
-        r = r'^[\w\d@.+-_]{3,30}$'
+        r = r'^[\w\d@+-_]{3,30}$'
 
         if len(u) > 30 or len(u) < 3:
             raise forms.ValidationError('Username must be between 3 and 30 characters in length')
