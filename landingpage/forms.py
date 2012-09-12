@@ -28,7 +28,7 @@ class RegistrationForm(forms.Form):
         if len(u) > 30 or len(u) < 3:
             raise forms.ValidationError('Username must be between 3 and 30 characters in length')
 
-        if not re.match(r, u):
+        if not re.match(r, u) or '.' in u:
             raise forms.ValidationError('invalid characters in username')
 
         try:
