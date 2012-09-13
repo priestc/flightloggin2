@@ -9,4 +9,4 @@ dumps
 .sass-cache
 .DS_Store
 airports/csv
-flightloggin/settings_local.py
+flightloggin2/settings_local.py
