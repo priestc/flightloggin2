@@ -13,11 +13,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.core.mail import EmailMessage
+from django.views.decorators.cache import cache_page
 
 from profile.models import Profile
 from site_stats.models import StatDB
 from forms import RegistrationForm
 
+@cache_page(5 * 60 * 60)
 def landingpage(request):
 
     stats = StatDB.objects.latest()
