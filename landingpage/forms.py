@@ -8,7 +8,7 @@ from django.forms.extras.widgets import SelectDateWidget
 w = SelectDateWidget(years=[str(x) for x in range(2012, 1912, -1)])
 
 class RegistrationForm(forms.Form):
-    dob = forms.DateField(help_text="For calculating currency", widget=w, required=False, label="Date of Birth")
+    dob = forms.DateField(help_text="For calculating medical durations", widget=w, required=False, label="Date of Birth")
     username = forms.CharField(max_length=30) # @/./+/-/_
     first_name = forms.CharField(max_length=30, required=False)
     last_name = forms.CharField(max_length=30, required=False)

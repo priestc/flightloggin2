@@ -1,47 +1,65 @@
 body {
   font-family: helvetica;
   background: #CCE4EB;
+/* IE10 Consumer Preview */ 
+background-image: -ms-linear-gradient(top left, #CCE4EB 0%, #DDF7FF 100%);
+
+/* Mozilla Firefox */ 
+background-image: -moz-linear-gradient(top left, #CCE4EB 0%, #DDF7FF 100%);
+
+/* Opera */ 
+background-image: -o-linear-gradient(top left, #CCE4EB 0%, #DDF7FF 100%);
+
+/* Webkit (Safari/Chrome 10) */ 
+background-image: -webkit-gradient(linear, left top, right bottom, color-stop(0, #CCE4EB), color-stop(1, #DDF7FF));
+
+/* Webkit (Chrome 11+) */ 
+background-image: -webkit-linear-gradient(top left, #CCE4EB 0%, #DDF7FF 100%);
+
+/* W3C Markup, IE10 Release Preview */ 
+background-image: linear-gradient(to bottom right, #CCE4EB 0%, #DDF7FF 100%);
+}
+#box_container {
+  overflow: hidden;
+  height: 400px;
+  padding-bottom: 15px;
 }
 #register {
+  height: 100%;
   background: white;
   padding: 5px;
   border: 1px solid black;
-  margin: 5px;
   text-align: center;
+  float: left;
+  width: 60%;
 }
-
+#login {
+  height: 100%;
+  float: right;
+  background: white;
+  padding: 5px;
+  width: 35%;
+  text-align: center;
+  border: 1px solid black;
+}
 #register ul.errorlist {
   color: red;
   margin-bottom: 0px;
 }
-
-#register span.helptext{
+#register span.helptext {
   color: #aaaaaa;
 }
-
 #register table {
   margin: 0 auto 0 auto;
 }
-
 #content {
   margin: 0 auto 0 auto;
-  width: 550px;
+  width: 850px;
 }
 #logo-wrapper {
   margin: 40px;
   text-align: center;
 }
-#login {
-  position: absolute;
-  right: 0;
-  top: 0;
-  background: white;
-  padding: 10px;
-  margin: 10px;
-  text-align: center;
-  border: 1px solid black;
-}
-
 ul.messages li.error {
   color: red;
 }
@@ -49,10 +67,16 @@ ul.messages li.error {
 ul.messages li.info {
   color: green;
 }
-
-#footer{
+#footer {
   text-align:center;
   font-size:x-small;
   color:gray;
   width:100%
+}
+#reset {
+  background: white;
+  padding: 5px;
+  border: 1px solid black;
+  margin: 5px;
+  text-align: center;
 }
