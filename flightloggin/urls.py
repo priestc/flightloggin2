@@ -60,6 +60,10 @@ urlpatterns += patterns('',
         r'landingpage', redirect_to, {'url': '/'}
     ),
 
+    (
+        r'twice', include('twice_scroll.urls')
+    ),
+
     (r'^histogram/', include('histogram.urls')),
     (r'^kml/', include('maps.kml_urls')),
     
@@ -428,6 +432,11 @@ urlpatterns += patterns('',
     
     ###########################################################################
     
+    url(
+        r'logbook$',
+        'logbook.views.root_logbook'
+    ),
+
     url(
         r'^logbook/(?P<username>\w+)$',
         "logbook.views.root_logbook",

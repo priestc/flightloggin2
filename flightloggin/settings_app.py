@@ -18,7 +18,7 @@ EASYDUMP_MANIFESTS = {
 OPENID_CREATE_USERS = True
 OPENID_UPDATE_DETAILS_FROM_SREG = True
 LOGIN_URL = "/openid/login/"
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/logbook'
 
 # debug bar settings #############################
 

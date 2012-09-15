@@ -33,14 +33,19 @@ def root_logbook(request):
     except:
         per_page = 50
     
-    flights = Flight.objects.user(request.display_user).count()
+    if hasattr(request, 'display_user'):
+        user = request.display_user
+    else:
+        user = request.user
+
+    flights = Flight.objects.user(user).count()
     last_page = int(math.ceil(flights / float(per_page)))
     
     if last_page == 0:
         last_page = 1
     
     url = reverse("logbook-page", kwargs={"page": last_page,
-                                          "username": request.display_user})
+                                          "username": user})
     
     return redirect(url)
 
