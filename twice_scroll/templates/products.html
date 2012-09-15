@@ -1,0 +1,65 @@
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'jquery.esn.autobrowse.js' %}"></script>
+    <script type="text/javascript" src="{% static 'jstorage.js' %}"></script>
+    <style>
+    .product {
+      /*float: right;*/
+      width: 500px;
+      height: 200px;
+      background: lightblue;
+      border: 1px solid black;
+      padding: 5px;
+      margin: 5px;
+      text-align: center;
+    }
+    .page {
+      margin: 0 auto 0 auto;
+      width: 500px;
+    }
+    </style>
+  </head>
+
+  <body>
+    {% for category in categories %}
+      <a href="{% url twice_scroll category %}">{{ category }}</a> &nbsp;
+    {% endfor %}
+    <div class="page">
+      <div id="items"></div>
+    </div>
+  </body>
+
+  <script type="text/javascript" charset="utf-8">
+    var category = "{{ category }}"
+    $("#items").autobrowse({
+      url: function (offset) {
+          var page = 1 + Math.round(offset/30);
+          console.log(page);
+          return "/twice/products-" + category + "-" + page;
+      },
+      template: function (response) {
+          var markup='';
+          for (var i=0; i<response.items.length; i++) {
+              var product = response.items[i];
+              var img = "https://twice-item-photos.s3.amazonaws.com/" + product.id + "-front-85.jpg";
+
+              markup += '<div class="product">';
+              markup += '<img src="' + img + '" />';
+              markup += '<p><strong>' + product.name + '</strong><br><br>';
+              markup += product.description.summary;
+              markup += '</p></div>';
+          }
+          return markup;
+      },
+      itemsReturned: function (response) {
+        return response.items.length;
+      },
+      max: 100,
+      sensitivity: 100,
+      finished: function () {
+        $(this).append('<div style="text-align:center">Nothing more to show</div>')
+      }
+    });
+  </script>
+</html>

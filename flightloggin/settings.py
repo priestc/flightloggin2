@@ -139,6 +139,7 @@ INSTALLED_APPS = (
     #'etsy_colors',
     'landingpage',
     'badges',
+    'twice_scroll',
     
     'raven.contrib.django',
     'tagging',
