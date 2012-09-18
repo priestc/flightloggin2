@@ -32,7 +32,7 @@ class SiteStatsPlot(Plot):
             ## this is because the 7 days graphs data is only precise to the
             ## day. Below the queryset is limited to only items that are
             ## taken at the 9 PM data poll.
-            qs = qs.extra(where=['EXTRACT (HOUR FROM dt) = 18'])
+            qs = qs.extra(where=['EXTRACT (HOUR FROM dt) in (17, 18, 19)'])
         
         qs = qs.annotate(date=Max('dt'), value=Max(val))\
                .values('date', 'value')
