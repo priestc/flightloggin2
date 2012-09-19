@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseNotAllowed
 from django.forms.models import modelformset_factory
 from django.core.urlresolvers import reverse
 from django.views.decorators.cache import cache_page
@@ -55,7 +55,7 @@ def delete_flight(request, page):
     url = logbook_url(request.display_user, page)
     
     if not request.POST:
-        return HttpResponseRedirect(url)
+        return HttpResponseNotAllowed("method not allowed")
         
     if request.display_user.username != 'ALL':
         flight_id = request.POST['id']
