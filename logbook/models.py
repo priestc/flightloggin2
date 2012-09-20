@@ -71,7 +71,6 @@ class Flight(EnhancedModel):
         All perma links for each flight instance point to the owner user's
         logbook page
         """
-        
         return ('logbook', [self.user.username])
     
     def save(self, *args, **kwargs):
@@ -81,7 +80,6 @@ class Flight(EnhancedModel):
             #user is not set, we now must get the current logged in user
             from share.middleware import share
             self.user = share.get_display_user()
-        
 
         no_badges = kwargs.pop('no_badges', False)
 
@@ -89,6 +87,7 @@ class Flight(EnhancedModel):
 
         if (not no_badges) and settings.BADGES_ENABLE:
             from badges.models import award_badges
+            print "doing badge calc"
             award_badges(self)
     
     @classmethod

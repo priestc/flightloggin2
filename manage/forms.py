@@ -16,3 +16,9 @@ class ImportForm(forms.Form):
 class ImportFlightForm(PopupFlightForm):
     plane = ModelChoiceField(queryset=Plane.objects.all(),
                              widget=forms.TextInput)
+
+    #def save(self, *args, **kwargs):
+   # 	# disable badges checking when adding flights via the import feature
+    	# because after the import is done, we calculate badges once.
+    #	kwargs['no_badges'] = True
+   # 	return super(ImportFlightForm, self).save(*args, **kwargs)

@@ -3,25 +3,28 @@ import cStringIO
 import zipfile
 import datetime
 
+from django.core.mail import EmailMessage
 from django.http import Http404
+from django.conf import settings
 
 from logbook.constants import *
+from records.models import Records, NonFlight
+from plane.models import Plane
+from logbook.models import Flight, Columns
+from airport.models import Location
+from profile.models import Profile
+
+from main.utils import hash_ten
 
 class Backup(object):
     """
     Constructor takes one argument, an instance of the User object
     """
-    
     def __init__(self, user):
-        self.user=user
+        self.user = user
         
     def output_csv(self):
         """returns a StringIO representing a csv backup file for the user"""
-        
-        from records.models import Records, NonFlight
-        from plane.models import Plane
-        from logbook.models import Flight, Columns
-        from airport.models import Location
 
         csv_sio = cStringIO.StringIO()
         writer = csv.writer(csv_sio, delimiter="\t")
@@ -30,7 +33,7 @@ class Backup(object):
         
         writer.writerow([FIELD_TITLES[field] for field in BACKUP_FIELDS])
         
-        flights = Flight.objects.filter(user=self.user)
+        flights = Flight.objects.filter(user=self.user).order_by('date')
         for flight in flights:
             tmp=[]
             for field in BACKUP_FIELDS:
@@ -99,23 +102,17 @@ class EmailBackup(object):
         self.auto = auto
 
         self.user = user
-        from profile.models import Profile
         self.profile,c = Profile.objects.get_or_create(user=user)
         
         self.addr = self.profile.backup_email or self.profile.user.email
     
-    def make_unsubscrbe_link(self):
-        from main.utils import hash_ten
-        
+    def make_unsubscrbe_link(self):        
         token = hash_ten(self.user.id)
         url = "http://flightlogg.in/change_email.html?u=%s&t=%s"
         
         return url % (self.user.id, token)
     
     def make_email(self):
-        from django.core.mail import EmailMessage
-        import datetime
-
         today = datetime.date.today()
         
         unsub = self.make_unsubscrbe_link()
@@ -153,11 +150,10 @@ class EmailBackup(object):
         return email
     
     def send(self, test=False):
-        """makes the email object, sends it, then, if successful, 
-           returns the address it sent it to
         """
-        
-        from django.conf import settings
+        Makes the email object, sends it, then, if successful, 
+        returns the address it sent it to
+        """
         if self.user.id == settings.DEMO_USER_ID:
             return """e-mail backups disabled for the demo account, please register an account to use this feature"""
         
