@@ -2,8 +2,8 @@ import datetime
 from django.http import HttpResponse
 
 class LimitBotsMiddleware(object):
-    bots_start_hour = 3
-    bots_stop_hour =  9
+    bots_start_hour = 2
+    bots_stop_hour =  10
     
     def process_request(self, request):
         """
