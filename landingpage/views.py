@@ -68,7 +68,8 @@ def reset_password(request):
         else:
             for u in users:
                 try:
-                    send_reset_email(u)
+                    #send_reset_email(u)
+                    print u
                 except Exception:
                     messages.error('No email attached to account %' % data)
                 messages.info(request, 'Email sent to %s for user %s' % (u.email, u.username))

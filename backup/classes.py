@@ -129,9 +129,7 @@ class EmailBackup(object):
                             
         title = "%s's FlightLogg.in backup for %s" %\
                 (self.profile.real_name or self.profile.user.username, today)
-        
-        #import ipdb; ipdb.set_trace()
-        
+                
         file_ = Backup(self.user).output_csv().getvalue()
         
         if self.auto:
