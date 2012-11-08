@@ -352,7 +352,6 @@ NAVBAR_HIGHLIGHT = "states-sel";
         var item
         for(i in response) {
           item = response[i];
-          console.log(item);
           $("#" + item['code']).css('fill', 'red');
           $('h2 .number').text(parseInt(i)+1);
         }
