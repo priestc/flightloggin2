@@ -383,7 +383,7 @@ urlpatterns += patterns('',
     ),
     
     url(
-        r'^(?P<username>\w+)/states-(?P<type_>[\w\-]+)\.json$',
+        r'^states_data/(?P<username>\w+)/(?P<type_>(unique|landings)+)\.json$',
         "maps.states_views.states_data",
                                                               name="state-data",
     ),

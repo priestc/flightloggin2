@@ -33,8 +33,3 @@ def get_states_data(user, by):
         new.append({'count': item.get('c', 0), 'code': item['code'][3:]})
 
     return new
-
-
-
-
-   
