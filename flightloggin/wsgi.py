@@ -26,9 +26,9 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "flightloggin.settings")
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
 
-import newrelic.agent
-newrelic.agent.initialize('/srv/flightloggin2/newrelic.ini')
-application = newrelic.agent.wsgi_application()(application)
+#import newrelic.agent
+#newrelic.agent.initialize('/srv/flightloggin2/newrelic.ini')
+#application = newrelic.agent.wsgi_application()(application)
 
 # Apply WSGI middleware here.
 # from helloworld.wsgi import HelloWorldApplication

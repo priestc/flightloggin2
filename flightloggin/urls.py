@@ -383,9 +383,9 @@ urlpatterns += patterns('',
     ),
     
     url(
-        r'^(?P<username>\w+)/states-(?P<type_>[\w\-]+)\.(?P<ext>(png|svg))$',
-        "maps.states_views.render_image",
-                                                              name="state-map",
+        r'^(?P<username>\w+)/states-(?P<type_>[\w\-]+)\.json$',
+        "maps.states_views.states_data",
+                                                              name="state-data",
     ),
     
     url(
