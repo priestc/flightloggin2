@@ -421,8 +421,8 @@ NAVBAR_HIGHLIGHT = "countries-sel";
   
   function fill_states(mode) {
     $.ajax({
-      type: "POST",
-      url: "/states_data/" + username + '/' + mode + '.json',
+      type: "GET",
+      url: "/countries_data/" + username + '/' + mode + '.json',
       success: function(response) {
         var item
         for(i in response) {

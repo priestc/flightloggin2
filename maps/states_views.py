@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from share.decorator import secret_key, no_share
 from django.views.decorators.cache import cache_page
 
-from states import get_states_data
+from states import get_states_data, get_countries_data
 
 @cache_page(60 * 60 * 6)
 def states_data(request, type_):
@@ -18,7 +18,6 @@ def states_data(request, type_):
 def countries_data(request, type_):
     data = json.dumps(list(get_countries_data(request.display_user, type_)))
     return HttpResponse(data, mimetype="application/json")
-
 
 @no_share('NEVER')
 @login_required

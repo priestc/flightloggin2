@@ -392,6 +392,12 @@ urlpatterns += patterns('',
     ),
     
     url(
+        r'^countries_data/(?P<username>\w+)/(?P<type_>(unique|landings)+)\.json$',
+        "maps.states_views.countries_data",
+                                                            name="country-data",
+    ),
+
+    url(
         r'^milestones/(?P<username>\w+)$',
         "milestones.views.milestones",
                                                              name="milestones",

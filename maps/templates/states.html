@@ -345,7 +345,7 @@ NAVBAR_HIGHLIGHT = "states-sel";
   
   function fill_states(mode) {
     $.ajax({
-      type: "POST",
+      type: "GET",
       url: "/states_data/" + username + '/' + mode + '.json',
       success: function(response) {
         var item
