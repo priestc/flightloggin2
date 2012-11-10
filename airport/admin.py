@@ -25,9 +25,14 @@ class HistoricalIdentAdmin(admin.OSMGeoAdmin):
     search_fields = ('identifier', 'current_location__identifier')
     list_display = ('identifier', 'current_location', 'curr_name', 'start', 'end')
 
+class CountryAdmin(admin.OSMGeoAdmin):
+    search_fields = ('name','code')
+    list_display = ('name', 'code')
+    
+
 admin.site.register(Location, LocationAdmin)
 admin.site.register(WorldBorders, WorldBordersAdmin)
 admin.site.register(USStates, USStatesAdmin)
-admin.site.register(Country)
+admin.site.register(Country, CountryAdmin)
 admin.site.register(Region, RegionAdmin)
 admin.site.register(HistoricalIdent, HistoricalIdentAdmin)

@@ -377,6 +377,13 @@ urlpatterns += patterns('',
         {"template": "states.html"},
                                                                  name="states",
     ),
+
+    url(
+        r'^countries/(?P<username>\w+)$',
+        direct_to_template,
+        {"template": "countries.html"},
+                                                              name="countries",
+    ),
     
     url(
         r'^states_data/(?P<username>\w+)/(?P<type_>(unique|landings)+)\.json$',
