@@ -14,6 +14,12 @@ def states_data(request, type_):
     data = json.dumps(list(get_states_data(request.display_user, type_)))
     return HttpResponse(data, mimetype="application/json")
 
+@cache_page(60 * 60 * 6)
+def countries_data(request, type_):
+    data = json.dumps(list(get_countries_data(request.display_user, type_)))
+    return HttpResponse(data, mimetype="application/json")
+
+
 @no_share('NEVER')
 @login_required
 def render_me(request):
