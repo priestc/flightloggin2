@@ -86,7 +86,6 @@ def locations(request):
 @no_share('events')
 @render_to("events.html")
 def events(request):
-    
     profile = request.display_user.get_profile()
         
     if profile.date_format:

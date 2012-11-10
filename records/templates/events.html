@@ -28,8 +28,8 @@
     {% for nf in nonflights %}
        <tr id="row_{{nf.id}}">
            <td class="date" title="Date (click to edit)">
-                <span class="unformatted_date">{{nf.date}}</span>
-                <a class="nonflight_click" id="n{{nf.id}}" href="">{{ nf.date|date:date_format }}</a>
+                <span class="unformatted_date">{{ nf.date|date:'Y-m-d' }}</span>
+                <a class="nonflight_click" id="n{{ nf.id }}" href="">{{ nf.date|date:date_format }}</a>
            </td>
            <td class="non_flying">{{ nf.get_non_flying_display }}</td>
            <td class="remarks">{{ nf.remarks }}</td>
