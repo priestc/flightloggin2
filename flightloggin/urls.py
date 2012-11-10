@@ -60,13 +60,9 @@ urlpatterns += patterns('',
         r'landingpage', redirect_to, {'url': '/'}
     ),
 
-    (
-        r'twice', include('twice_scroll.urls')
-    ),
-
     (r'^histogram/', include('histogram.urls')),
     (r'^kml/', include('maps.kml_urls')),
-    
+
     (r'^search/locations\.html$', 'airport.views.search_airport'),
     (r'^search/tailnumbers\.html$', 'plane.views.search_tailnumbers'),
     
@@ -442,6 +438,12 @@ urlpatterns += patterns('',
         "logbook.views.root_logbook",
                                                                 name="logbook",
     ),
+
+    url(
+        r'^mobile/(?P<username>\w+)$',
+        "logbook.views.mobile_new_flight",
+                                                      name="mobile-new-flight",
+    ),
     
     url(
         r'^logbook-page-(?P<page>\d+)/(?P<username>\w+)',
@@ -465,6 +467,12 @@ urlpatterns += patterns('',
         r'^delete_flight-(?P<page>\d+)/(?P<username>\w+)$',
         "logbook.views.delete_flight",
                                                           name="delete_flight",
+    ),
+
+    url(
+        r'^nearby_airports.json$',
+        "airport.views.nearby_airports",
+                                                             name="new_flight",
     ),
 
     ###########################################################################

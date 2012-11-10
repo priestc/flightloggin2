@@ -1,5 +1,8 @@
+import json
+
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.contrib.gis.geos import GEOSGeometry
 
 from share.decorator import secret_key
 from annoying.decorators import render_to
@@ -108,3 +111,33 @@ def export_to_xml(request, index):
         airports.append(a)
                
     return locals()  
+
+def nearby_airports(request):
+    """
+    Return a list of airports that are near the lat and lng included in the POST
+    """
+    lng = request.GET['lng']
+    lat = request.GET['lat']
+
+    point = GEOSGeometry('POINT(%s %s)' % (lat, lng))
+
+    airports = Location.objects\
+                       .exclude(location=None)\
+                       .distance(point)\
+                       .order_by('distance')[:10]
+    out = []
+    for airport in airports:
+        if airport.distance.mi < 100:
+            a = {
+                'ident': airport.identifier,
+                'name': airport.name,
+                'distance': "%.2f" % airport.distance.mi
+            }
+            out.append(a)
+
+    return HttpResponse(json.dumps(out), mimetype="application/json")
+
+
+
+
+

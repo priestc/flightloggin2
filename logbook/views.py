@@ -310,4 +310,8 @@ def mass_edit(request, page=0):
         formset = NewFlightFormset(queryset=qs, user=request.display_user)
 
     edit = True     # for rendering some text in the template
-    return locals()      
+    return locals()
+
+@render_to('mobile_new_flight.html')
+def mobile_new_flight(request):
+    return {}
