@@ -103,6 +103,9 @@ def do_import(preview, user, force_tsv):
     # do the actual import routine now    
     im.action()
 
+    from badges.utils import new_badge2
+    new_badge2(users=[user])
+
     flight_out = im.flight_out
     non_out = im.non_out
     records_out = im.records_out

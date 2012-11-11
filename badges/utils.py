@@ -8,8 +8,8 @@ from collections import defaultdict
 def new_badge(badge_classes=None, users=None):
     """
     Utility function for awarding a badge when a new badge is defined.
+    Or, for awarding all badges to a user after they do an import (slowly).
     """
-    
     badge_classes = get_badges_classes() if badge_classes is None else badge_classes
     total = users.count()
     
@@ -43,8 +43,13 @@ def new_badge(badge_classes=None, users=None):
 
     return performance
 
-def new_badge2(badges=None, **kwargs):
-    users = User.objects.filter(**kwargs).order_by('username')
+def new_badge2(badges=None, users=None, **kwargs):
+    """
+    Improved function for awarding all badges to a user after they do an import.
+    """
+    if users is None:
+        users = User.objects.filter(**kwargs).order_by('username')
+    
     if not badges:
         badges = get_badges_classes()
     

@@ -217,7 +217,8 @@ class DatabaseImport(PreviewImport):
         form = ImportFlightForm(line, instance=flight, user=self.user)
         
         if form.is_valid():
-            form.save()
+            ff = form.save(commit=False)
+            ff.save(no_badges=True)
             message = 'good'
         else:
             message = form.errors
@@ -228,7 +229,6 @@ class DatabaseImport(PreviewImport):
         
     def handle_nonflight(self, line):
         from records.forms import NonFlightForm
-        
         nf = NonFlight(user=self.user)
         
         form = NonFlightForm(line, instance=nf)
@@ -280,8 +280,6 @@ class DatabaseImport(PreviewImport):
                 the_tags.append(tag)
         
         p.tags = " ".join(the_tags)
-        
-        
         
         try:
             p.save()

@@ -35,7 +35,7 @@ class NonFlight(models.Model, GoonMixin):
     Represents a logbook event that is not a flight: medical, signoff, etc
     """
     date =      models.DateField()
-    user =      models.ForeignKey(User, blank=True)
+    user =      models.ForeignKey(User, blank=True, null=True)
     remarks =   models.TextField(blank=True)
     non_flying = models.IntegerField(choices=NON_FLYING_CHOICES, default=0, blank=False)
 
