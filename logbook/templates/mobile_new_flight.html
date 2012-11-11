@@ -1,24 +1,121 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8" />
         <title>New Flight</title>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1"> 
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+        <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+
         <script type="text/javascript" src="{% static 'js/jquery.jclock.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/suncalc.min.js' %}"></script>
+        
+        <style>
+            div#total_time {font-size: x-large; color: red}
+            div#day_landings {font-size: x-large; color: navy; background: white}
+            div#night_landings {font-size: x-large; color: white; background: navy}
+            div#approaches {font-size: x-large; color: orange}
+            div#hood_time {font-size: x-large; color: orange}
+            div#actual_time {font-size: x-large; color: orange}
+
+            div#page_two {border: 1px solid black; width: 300px}
+            div#page_one {border: 1px solid black; width: 300px}
+            div#page_three {border: 1px solid black; width: 300px}
+        </style>
     </head>
     <body>
-        <div id="clock"></div>
-        <button id="takeoff_button">Takeoff</button>
-        <form method="post">
-            <input type="text" id="total" placeholder="Total"><input type="button" value=""><br>
-            <input type="text" placeholder="PIC"><br>
-            <input type="text" placeholder="SIC"><br>
-            <input type="text" placeholder="Day Landings" id="day_landings"><br>
-            <input type="button" id="landing_button" value="Land">
-        </form>
+        <div data-role="page" id="one">
+            <div data-role="header">
+                <h1>New Flight</h1>
+            </div>
+            <div data-role="content">
+                <label for="person">Person:</label><input type="text" id="person" name="person">
+                <br>    
+                <label for="plane">Plane:</label><input type="text" id="plane" name="plane">
+                <br>
+                <label for="purpose">Purpose:</label>
+                <select id="purpose" name="purpose">
+                    <option>Captain</option>
+                    <option>First Officer</option>
+                    <option>Instructor</option>
+                    <option>Student</option>
+                    <option>Solo</option>
+                </select>
+                <a href="#two" data-role="button" id="start_button">Start</button>
+            </div>
+            <div data-role="footer">
+                <h4><a href="/logbook">Back to logbook</a></h4>
+            </div>
+        </div>
 
-        <a href="/logbook">Back to logbook</a>
-        
+        <div data-role="page" id="two">
+            <div data-role="header">
+                <h1>Flight In Progress</h1>
+            </div>
+            <div data-role="content">
+                <div id="clock"></div>
+                <div id="day_night"></div>
+                <div id="next">
+                    Next Morning Twilight: <span id="morning_twilight"></span><br>
+                    Next Sunrise: <span id="sunrise"></span><br>
+                    Next Sunset: <span id="sunset"></span><br>
+                    Next Evening Twilight: <span id="evening_twilight"></span><br>
+                </div>
+                
+                <div id="total_time"></div>
+                <div id="hood_time"></div>
+                <div id="actual_time"></div>
+                <div id="day_landings"></div>
+                <div id="night_landings"></div>
+                <div id="approaches"></div>
+
+                <button id="landing_button">Land</button>
+                <button id="actual_button">Actual</button>
+                <button id="hood_button">Hood</button>
+                <button id="approach_button">Approach</button>
+                <br>
+                <a href="#three" data-role="button" id="shutdown_button">Shutdown</button>
+            </div>
+            <div data-role="footer">
+                <h4><a href="/logbook">Back to logbook</a></h4>
+            </div>
+        </div>
+
+        <div data-role="page" id="three">
+            <div data-role="header">
+                <h1>Submit Flight</h1>
+            </div>
+            <div data-role="content">
+                <form>
+                    <label for="total">Total</label>
+                    <input type="number" name="total"><br>
+                    <label for="pic">PIC</label>
+                    <input type="number" name="pic"><br>
+                    <label for="sic">SIC</label>
+                    <input type="number" name="sic"><br>
+                    <label for="solo">Solo</label>
+                    <input type="number" name="solo"><br>
+                    <label for="dual_r">Dual Recieved</label>
+                    <input type="number" name="Dual Received"><br>
+                    <label for="dual_g">Dual Given</label>
+                    <input type="number" name=""><br>
+                    <label for="act_inst">Actual</label>
+                    <input type="number" name="actual_inst"><br>
+                    <label for="sim_inst">Hood</label>
+                    <input type="number" name="sim_inst"><br>
+                    <label for="day_l">Day Landings</label>
+                    <input type="number" name="day_l"><br>
+                    <label for="night_l">Night Landings</label>
+                    <input type="number" name="night_l"><br>
+                    <label for="approaches">Approaches</label>
+                    <input type="number" name="approaches"><br>
+                </form>
+            </div>
+            <div data-role="footer">
+                <h4><a href="/logbook">Back to logbook</a></h4>
+            </div>
+        </div>
+
         <script>
 
         function get_current_time() {
@@ -27,21 +124,45 @@
             return [parseInt(t[0]), parseInt(t[1]), parseInt(t[2])]
         }
 
+        function get_location(cb) {
+            navigator.geolocation.getCurrentPosition(cb);
+        }
+
         function get_nearest_airports() {
-            navigator.geolocation.getCurrentPosition(
-                function(loc) {
-                    $.ajax({
-                        url: '/nearby_airports.json',
-                        data: {'lng': loc.coords.longitude, 'lat': loc.coords.latitude},
-                        success: function(res) {
-                            console.log(res);
-                        }
-                    });
-                },
-                function(){
-                    console.log("no loc");
+            $.ajax({
+                url: '/nearby_airports.json',
+                data: {'lng': current_location.longitude, 'lat': current_location.latitude},
+                success: function(res) {
+                    console.log(res);
                 }
-            );
+            });
+        }
+
+        function is_it_day_or_night(mode) {
+            var t = get_current_time();
+            var julian_t = (t[0] * 60) + t[1];
+            var julian_ect = (ect[0] * 60) + ect[1];
+            var julian_mct = (mct[0] * 60) + mct[1];
+            var julian_rise = (sunrise[0] * 60) + sunrise[1];
+            var julian_set = (sunset[0] * 60) + sunset[1];
+
+            var night, day;
+
+            if(mode == 'landing') {
+                // use civil twilight because thats how the FAA defines night landings
+                night = julian_ect;
+                day = julian_mct;
+            } else {
+                // use sunset and sunrise because thats how the FAA defines night and day hour logging.
+                night = julian_set;
+                day = julian_rise;
+            }
+
+            if(julian_t > day && julian_t < night) {
+                return 'day'
+            } else {
+                return 'night'
+            }
         }
 
         function get_difference(t1, t2) {
@@ -73,25 +194,66 @@
             return [h, m, s];
         }
 
-        $("#takeoff_button").click(function() {
+        $("#start_button").click(function() {
             var start_time = get_current_time();
-            $("#total").val("0.0");
+            $("div#total_time").text("0.0");
             setInterval(function() {
                 var current_time = get_current_time();
                 var elapsed = get_difference(start_time, current_time);
-                console.log(elapsed);
+                $("div#total_time").text(elapsed);
             }, 60000);
         });
-        $("#clock").jclock({utc: true, fontSize: "36px"});
-        $('#landing_button').click(function() {
-            var old = $('#day_landings').val();
-            if(old == '') {
-                old = 0
-            }
-            var n = parseInt(old) + 1;
-            $('#day_landings').val(n);
-            console.log('sdad', old, n);
+
+        var hood_timer;
+        $("#hood_button").click(function() {
+            var start_time = get_current_time();
+            $("div#hood_time").text("0.0");
+            hood_timer = setInterval(function() {
+                var current_time = get_current_time();
+                var elapsed = get_difference(start_time, current_time);
+                $("div#hood_time").text(elapsed);
+            }, 60000);
         });
+
+        var actual_timer;
+        $("#actual_button").click(function() {
+            var start_time = get_current_time();
+            $("div#actual_time").text("0.0");
+            actual_timer = setInterval(function() {
+                var current_time = get_current_time();
+                var elapsed = get_difference(start_time, current_time);
+                $("div#actual_time").text(elapsed);
+            }, 60000);
+        });
+
+        $('#landing_button').click(function() {
+            var div = "#" + is_it_day_or_night('landing') + "_landings";
+            // increment the landing box by one landing.
+            var prev = Number($(div).text());
+            $(div).text(prev + 1);
+        });
+
+        $('#approach_button').click(function() {
+            // increment the approach box by one landing.
+            var prev = Number($('#approaches').text());
+            $('#approaches').text(prev + 1);
+        });
+
+        $("#clock").jclock({utc: true, fontSize: "36px"});
+
+        var mct, ect, sunrise, sunset;
+        get_location(function(res) {
+            var times = SunCalc.getTimes(new Date(),res.coords.latitude, res.coords.longitude);
+            mct = [times.dawn.getUTCHours(), times.dawn.getUTCMinutes()];
+            ect = [times.dusk.getUTCHours(), times.dusk.getUTCMinutes()];
+            sunrise = [times.sunrise.getUTCHours(), times.sunrise.getUTCMinutes()];
+            sunset = [times.sunset.getUTCHours(), times.sunset.getUTCMinutes()];
+            $('#next #morning_twilight').text(mct[0] + ":" + mct[1]);
+            $('#next #sunset').text(sunset[0] + ":" + sunset[1]);
+            $('#next #evening_twilight').text(ect[0] + ":" + ect[1]);
+            $('#next #sunrise').text(sunrise[0] + ":" + sunrise[1]);
+        });
+
         </script>
     </body>
 </html>
