@@ -17,7 +17,7 @@
 
             div#total_time { color: black}
             div#day_landings {color: black}
-            div#night_landings {font-size: x-large; color: white; background: navy}
+            div#night_landings {font-size: x-large}
             div#approaches {font-size: x-large; color: black}
             div#hood_time {font-size: x-large; color: black}
             div#actual_time {font-size: x-large; color: black}
@@ -29,7 +29,9 @@
             div#clock {width: 100%; text-align: center}
 
             table {width: 100%}
-            td {border: 1px solid black }
+            table.current_times td {border: 1px solid black }
+
+            form input[type=number] {width: 4em}
         </style>
     </head>
     <body>
@@ -43,12 +45,13 @@
                 <label for="plane">Plane:</label><input type="text" id="plane" name="plane">
                 <br>
                 <label for="purpose">Purpose:</label>
-                <select id="purpose" name="purpose">
-                    <option>Captain</option>
-                    <option>First Officer</option>
-                    <option>Instructor</option>
-                    <option>Student</option>
-                    <option>Solo</option>
+                <select id="purpose">
+                    <option value="captain">Captain</option>
+                    <option value="fo">First Officer</option>
+                    <option value="instructor">Instructor</option>
+                    <option value="student">Student</option>
+                    <option value="training">Training</option>
+                    <option value="solo">Solo</option>
                 </select>
                 <a href="#two" data-role="button" id="start_button" data-theme="e">Start</button>
             </div>
@@ -59,19 +62,10 @@
 
         <div data-role="page" id="two" data-theme="c">
             <div data-role="header">
-                <h1>Flight In Progress</h1>
+                <h1 id="outer_clock"><span id="clock"></span> Z</h1>
             </div>
             <div data-role="content">
-                <div id="clock"></div>
-                <div id="day_night"></div>
-                <div id="next">
-                    Next Morning Twilight: <span id="morning_twilight"></span><br>
-                    Next Sunrise: <span id="sunrise"></span><br>
-                    Next Sunset: <span id="sunset"></span><br>
-                    Next Evening Twilight: <span id="evening_twilight"></span><br>
-                </div>
-                <hr>
-                <table>
+                <table class="current_times">
                     <tr>
                         <th>Total</th> <th>Night</th> <th>Hood</th> <th>Actual</th>
                     </tr>
@@ -82,20 +76,22 @@
                         <td><div class="time_container" id="actual_time">0.0</div></td>
                     </tr>
                 </table>
-                <table>
+                <table class="current_times">
                     <tr>
                         <th>Day Landings</th> <th>Night Landings</th> <th>Approaches</th>
                     </tr>
                     <tr>
                         <td><div class="time_container" id="day_landings">0</div></td>
-                        <td><div class="time_container" id="night_landings"></div></td>
+                        <td><div class="time_container" id="night_landings">0</div></td>
                         <td><div class="time_container" id="approaches">0</div></td>
                     </tr>
                 </table>
 
-                <button id="landing_button">Land</button>
-                <button id="approach_button">Approach</button>
-
+                <div data-role="controlgroup" data-type="horizontal">
+                    <button id="landing_button" data-icon="add">Land</button>
+                    <button id="waypoint_button" data-icon="add">WP</button>
+                    <button id="approach_button" data-icon="add">App</button>
+                </div>
                 <fieldset data-role="controlgroup" data-type="horizontal" id="inst_condition">
                     <input type="radio" name="inst_condition" id="radio-choice-21" value="visual" checked="checked">
                     <label for="radio-choice-21">Visual</label>
@@ -106,9 +102,28 @@
                     <input type="radio" name="inst_condition" id="radio-choice-23" value="actual">
                     <label for="radio-choice-23">Actual</label>
                 </fieldset>
-
-                <br>
-                <a href="#three" data-role="button"  data-theme="e" id="shutdown_button">Shutdown</button>
+                <a href="#three" data-role="button"  data-theme="e" id="shutdown_button">Shutdown</a>
+                <div id="day_night"></div>
+                <div id="next">
+                    <table>
+                        <tr>
+                            <td>Next Morning Twilight:</td>
+                            <td><span id="morning_twilight"></span> Z</td>
+                        </tr>
+                        <tr>
+                            <td>Next Sunrise:</td>
+                            <td><span id="sunrise"></span> Z</td>
+                        </tr>
+                        <tr>
+                            <td>Next Sunset:</td>
+                            <td><span id="sunset"></span> Z</td>
+                        </tr>
+                        <tr>
+                            <td>Next Evening Twilight:</td>
+                            <td><span id="evening_twilight"></span> Z</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
             <div data-role="footer">
                 <h4><a href="/logbook">Back to logbook</a></h4>
@@ -121,45 +136,56 @@
             </div>
             <div data-role="content">
                 <form>
-                    <label for="total">Total</label>
-                    <input type="number" name="total"><br>
-                    <label for="pic">PIC</label>
-                    <input type="number" name="pic"><br>
-                    <label for="sic">SIC</label>
-                    <input type="number" name="sic"><br>
-                    <label for="solo">Solo</label>
-                    <input type="number" name="solo"><br>
-                    <label for="dual_r">Dual Recieved</label>
-                    <input type="number" name="Dual Received"><br>
-                    <label for="dual_g">Dual Given</label>
-                    <input type="number" name=""><br>
-                    <label for="act_inst">Actual</label>
-                    <input type="number" name="actual_inst"><br>
-                    <label for="sim_inst">Hood</label>
-                    <input type="number" name="sim_inst"><br>
-                    <label for="day_l">Day Landings</label>
-                    <input type="number" name="day_l"><br>
-                    <label for="night_l">Night Landings</label>
-                    <input type="number" name="night_l"><br>
-                    <label for="approaches">Approaches</label>
-                    <input type="number" name="approaches"><br>
+                    <table>
+                        <tr>
+                            <td>
+                                <label for="total">Total</label>
+                                <input type="number" name="total"><br>
+                                <label for="pic">PIC</label>
+                                <input type="number" name="pic"><br>
+                                <label for="sic">SIC</label>
+                                <input type="number" name="sic"><button id="sic">X</button><br>
+                                <label for="solo">Solo</label>
+                                <input type="number" name="solo"><br>
+                                <label for="dual_r">Dual Recieved</label>
+                                <input type="number" name="dual_r"><br>
+                                <label for="xc">Cross Country</label>
+                                <input type="number" name="xc"><br>
+                            </td>
+                            <td>
+                                <label for="dual_g">Dual Given</label>
+                                <input type="number" name=""><br>
+                                <label for="act_inst">Actual</label>
+                                <input type="number" name="actual_inst"><br>
+                                <label for="sim_inst">Hood</label>
+                                <input type="number" name="sim_inst"><br>
+                                <label for="day_l">Day Landings</label>
+                                <input type="number" name="day_l"><br>
+                                <label for="night_l">Night Landings</label>
+                                <input type="number" name="night_l"><br>
+                                <label for="approaches">Approaches</label>
+                                <input type="number" name="approaches"><br>
+                            </td>
+                        </tr>
+                    </table>
                 </form>
             </div>
+            <div id="route_box"></div>
             <div data-role="footer">
                 <h4><a href="/logbook">Back to logbook</a></h4>
             </div>
         </div>
 
         <script>
-        $("#clock").jclock({utc: true, fontSize: "36px"});
+        $("#clock").jclock({utc: true});
 
         var mct, ect, sunrise, sunset;
         get_location(function(res) {
             var times = SunCalc.getTimes(new Date(),res.coords.latitude, res.coords.longitude);
             mct = [times.dawn.getUTCHours(), times.dawn.getUTCMinutes()];
             ect = [times.dusk.getUTCHours(), times.dusk.getUTCMinutes()];
-            sunrise = [times.sunrise.getUTCHours(), times.sunrise.getUTCMinutes()];
-            sunset = [times.sunset.getUTCHours(), times.sunset.getUTCMinutes()];
+            sunrise = [times.sunrise.getUTCHours(), times.sunrise.getUTCMinutes(), 0];
+            sunset = [times.sunset.getUTCHours(), times.sunset.getUTCMinutes(), 0];
             $('#next #morning_twilight').text(mct[0] + ":" + mct[1]);
             $('#next #sunset').text(sunset[0] + ":" + sunset[1]);
             $('#next #evening_twilight').text(ect[0] + ":" + ect[1]);
@@ -206,35 +232,134 @@
                     decimal = tuple_to_display(duration);
                 }
                 $('#night_time').text(decimal);
-            }, 30000);
+            }, 5000);
         });
 
-        var hood_tup = [0, 0, 0];
-        var actual_tup = [0, 0, 0];
-        setInterval(function() {
-            var cond = $('input[name=inst_condition]:radio:checked').attr('value');
-            if(cond == 'hood') {
-                hood_tup[2] = hood_tup[2] + 1;
-                decimal = tuple_to_display(hood_tup);
-                $('#hood_time').text(decimal);
-            } else if(cond == 'actual') {
-                actual_tup[2] = actual_tup[2] + 1;
-                decimal = tuple_to_display(actual_tup);
-                $('#actual_time').text(decimal);
+        function close_out_hood(now) {
+            if(hood_start) {
+                var new_hood = get_difference(hood_start, now);
+                hood_acc = add_times(new_hood, hood_acc);
+                hood_start = undefined;
             }
-        }, 1000);
+        }
 
+        function close_out_actual(now) {
+            if(actual_start) {
+                var new_actual = get_difference(actual_start, now);
+                actual_acc = add_times(new_actual, actual_acc);
+                actual_start = undefined;
+            }
+        }
+
+        var hood_start, actual_start;
+        var hood_acc = [0, 0, 0], actual_acc = [0, 0, 0];
+        $('input[name=inst_condition]:radio').click(function() {
+            var cond = $('input[name=inst_condition]:radio:checked').attr('value');
+            var now = get_current_time();
+            if(cond == 'visual') {
+                close_out_actual(now);
+                close_out_hood(now)
+            }
+            if(cond == 'actual') {
+                if(!actual_start) {
+                    actual_start = now;
+                }
+                close_out_hood(now);
+            }
+            if(cond == 'hood') {
+                if(!hood_start) {
+                    hood_start = now;
+                }
+                close_out_actual(now);
+            }
+        });
+
+        setInterval(function() {
+            // every 5 seconds, update the timer display for actual and hood
+            var now = get_current_time();
+            var new_actual = [0, 0, 0];
+            if(actual_start) {
+                new_actual = get_difference(actual_start, now);
+            }
+            var actual = add_times(actual_acc, new_actual);
+            decimal = tuple_to_display(actual);
+            $('#actual_time').text(decimal);
+            
+            ///////
+
+            var new_hood = [0, 0, 0];
+            if(hood_start) {
+                new_hood = get_difference(hood_start, now);
+            }
+            var hood = add_times(hood_acc, new_hood);
+            decimal = tuple_to_display(hood);
+            $('#hood_time').text(decimal);
+
+        }, 5000);
+
+        var route_points = [];
         $('#landing_button').click(function() {
             var div = "#" + is_it_day_or_night('landing') + "_landings";
-            // increment the landing box by one landing.
+            // increment the correct landing box by one landing.
             var prev = Number($(div).text());
             $(div).text(prev + 1);
+            get_location(function(res) {
+                route_points.push(['land', res.coords])
+            });
+        });
+
+        $('#waypoint_button').click(function() {
+            get_location(function(res) {
+                route_points.push(['waypoint', res.coords]);
+            });
         });
 
         $('#approach_button').click(function() {
-            // increment the approach box by one landing.
+            // increment the approach box by one.
             var prev = Number($('#approaches').text());
             $('#approaches').text(prev + 1);
+        });
+
+        $('#shutdown_button').click(function() {
+            var mode = $('#purpose').val()
+            var total = $('#total_time').text();
+            var night = $('#night_time').text();
+            var hood = $('#hood_time').text();
+            var actual = $('#actual_time').text();
+            var day_l = $('#day_landings').text();
+            var night_l = $('#night_landings').text();
+            var approaches = $('#approaches').text();
+
+            $('form input[name=total]').val(total);
+            $('form input[name=night]').val(night);
+            $('form input[name=act_inst]').val(actual);
+            $('form input[name=sim_inst]').val(hood);
+            $('form input[name=approaches]').val(approaches);
+            $('form input[name=night_l]').val(night_l);
+            $('form input[name=day_l]').val(day_l);
+
+            if(mode == 'student') {
+                $('form input[name=dual_r]').val(total);
+            }
+            if(mode == 'fo') {
+                $('form input[name=sic]').val(total);
+            }
+            if(mode == 'captain') {
+                $('form input[name=pic]').val(total);
+            }
+            if(mode == 'instructor') {
+                $('form input[name=dual_g]').val(total);
+                $('form input[name=pic]').val(total);
+            }
+            if(mode == 'solo') {
+                $('form input[name=solo]').val(total);
+                $('form input[name=pic]').val(total);
+            }
+            if(mode == 'training') {
+                $('form input[name=dual_r]').val(total);
+                $('form input[name=pic]').val(total);
+            }
+            make_route_selection(landing_points);
         });
 
         </script>

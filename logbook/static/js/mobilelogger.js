@@ -8,14 +8,8 @@ function get_location(cb) {
     navigator.geolocation.getCurrentPosition(cb);
 }
 
-function get_nearest_airports() {
-    $.ajax({
-        url: '/nearby_airports.json',
-        data: {'lng': current_location.longitude, 'lat': current_location.latitude},
-        success: function(res) {
-            console.log(res);
-        }
-    });
+function add_times(t1, t2) {
+    return normalize_time([t1[0] + t2[0], t1[1] + t2[1], t1[2] + t2[2]])
 }
 
 function to_julian(tup) {
@@ -61,19 +55,72 @@ function get_difference(t1, t2) {
         var m = t2[1] + m0;
         var s = t2[2] + s0;
 
-        if(s >= 60) {
-            s = s - 60;
-            m += 1
-        }
-
-        if(m >= 60) {
-            m = m - 60;
-            h += 1;
-        }
     } else {
         var h = t2[0] - t1[0];
         var m = t2[1] - t1[1];
         var s = t2[2] - t1[2];
     }
-    return [h, m, s];
+
+    return normalize_time([h, m, s]);
 }
+
+function normalize_time(t) {
+    var h = t[0], m = t[1], s = t[2];
+
+    if(s >= 60) {
+        s = s - 60;
+        m += 1;
+    }
+
+    if(m >= 60) {
+        m = m - 60;
+        h += 1;
+    }
+
+    if(s < 0) {
+        m = m - 1;
+        s = s + 60;
+    }
+    if(m < 0) {
+        h = h - 1;
+        m = m + 60;
+    }
+    return [h, m, s]
+}
+
+function make_route_selection(points) {
+    var lookups = [];
+    for(p in points) {
+        var point = points[p];
+        var cb = $.ajax({
+            url: '/nearby_airports.json',
+            data: {'type': point[0], 'lng': point[1].longitude, 'lat': point[1].latitude},
+        });
+        lookups.push(cb);
+    }
+    $.when(lookups).then(function() {
+        for(i in lookups) {
+            var lookup = lookups[i];
+            console.log(lookup);
+            $("#route_box").append(lookup.responseText);
+        }
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
