@@ -9,6 +9,7 @@
 
         <script type="text/javascript" src="{% static 'js/jquery.jclock.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/suncalc.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/mobilelogger.js' %}"></script>
         
         <style>
             div {text-align: center}
@@ -95,14 +96,14 @@
                 <button id="landing_button">Land</button>
                 <button id="approach_button">Approach</button>
 
-                <fieldset data-role="controlgroup" data-type="horizontal" >
-                    <input type="radio" name="inst_condition" id="radio-choice-21" value="choice-1" checked="checked">
-                    <label for="radio-choice-21">Normal</label>
+                <fieldset data-role="controlgroup" data-type="horizontal" id="inst_condition">
+                    <input type="radio" name="inst_condition" id="radio-choice-21" value="visual" checked="checked">
+                    <label for="radio-choice-21">Visual</label>
 
-                    <input type="radio" name="inst_condition" id="radio-choice-22" value="choice-2">
+                    <input type="radio" name="inst_condition" id="radio-choice-22" value="hood">
                     <label for="radio-choice-22">Hood</label>
 
-                    <input type="radio" name="inst_condition" id="radio-choice-23" value="choice-3">
+                    <input type="radio" name="inst_condition" id="radio-choice-23" value="actual">
                     <label for="radio-choice-23">Actual</label>
                 </fieldset>
 
@@ -165,86 +166,6 @@
             $('#next #sunrise').text(sunrise[0] + ":" + sunrise[1]);
         });
 
-        function get_current_time() {
-            // return the current state of the UTC clock, parsed to integers.
-            var t = $("#clock").text().split(':');
-            return [parseInt(t[0]), parseInt(t[1]), parseInt(t[2])]
-        }
-
-        function get_location(cb) {
-            navigator.geolocation.getCurrentPosition(cb);
-        }
-
-        function get_nearest_airports() {
-            $.ajax({
-                url: '/nearby_airports.json',
-                data: {'lng': current_location.longitude, 'lat': current_location.latitude},
-                success: function(res) {
-                    console.log(res);
-                }
-            });
-        }
-
-        function to_julian(tup) {
-            // minutes since midnight, tup = [hour, minutes, seconds]
-            return (tup[0] * 60) + tup[1] + (tup[2] / 60);
-        }
-
-        function is_it_day_or_night(mode) {
-            var t = get_current_time();
-            var night, day;
-
-            if(mode == 'landing') {
-                // use civil twilight because thats how the FAA defines night landings
-                night = to_julian(ect);
-                day = to_julian(mct);
-            } else {
-                // use sunset and sunrise because thats how the FAA defines night and day hour logging.
-                night = to_julian(sunset);
-                day = to_julian(sunrise);
-            }
-
-            if(to_julian(t) > day && to_julian(t) < night) {
-                return 'day'
-            } else {
-                return 'night'
-            }
-        }
-
-        function tuple_to_display(tup) {
-            var dec = (tup[0] + (tup[1] + (tup[2] / 60)) / 60).toFixed(1)
-            return dec
-        }
-
-        function get_difference(t1, t2) {
-            // get the difference between two clock times.
-            // t1 = ["05", "23", "13"] t2 = ["06", "50", "02"]
-            if(t1[0] > t2[0]) {
-                // clock has spanned 00:00, calculate differently
-                var h0 = 23 - t1[0];
-                var m0 = 59 - t1[1];
-                var s0 = 60 - t1[2];
-                var h = t2[0] + h0;
-                var m = t2[1] + m0;
-                var s = t2[2] + s0;
-
-                if(s >= 60) {
-                    s = s - 60;
-                    m += 1
-                }
-
-                if(m >= 60) {
-                    m = m - 60;
-                    h += 1;
-                }
-            } else {
-                var h = t2[0] - t1[0];
-                var m = t2[1] - t1[1];
-                var s = t2[2] - t1[2];
-            }
-            return [h, m, s];
-        }
-
         var start_time, night_start, night_stop;
         $("#start_button").click(function() {
             start_time = get_current_time();
@@ -288,27 +209,20 @@
             }, 30000);
         });
 
-        var hood_timer;
-        $("#hood_button").click(function() {
-            var start_time = get_current_time();
-            $("div#hood_time").text("0.0");
-            hood_timer = setInterval(function() {
-                var current_time = get_current_time();
-                var elapsed = get_difference(start_time, current_time);
-                $("div#hood_time").text(elapsed);
-            }, 60000);
-        });
-
-        var actual_timer;
-        $("#actual_button").click(function() {
-            var start_time = get_current_time();
-            $("div#actual_time").text("0.0");
-            actual_timer = setInterval(function() {
-                var current_time = get_current_time();
-                var elapsed = get_difference(start_time, current_time);
-                $("div#actual_time").text(elapsed);
-            }, 60000);
-        });
+        var hood_tup = [0, 0, 0];
+        var actual_tup = [0, 0, 0];
+        setInterval(function() {
+            var cond = $('input[name=inst_condition]:radio:checked').attr('value');
+            if(cond == 'hood') {
+                hood_tup[2] = hood_tup[2] + 1;
+                decimal = tuple_to_display(hood_tup);
+                $('#hood_time').text(decimal);
+            } else if(cond == 'actual') {
+                actual_tup[2] = actual_tup[2] + 1;
+                decimal = tuple_to_display(actual_tup);
+                $('#actual_time').text(decimal);
+            }
+        }, 1000);
 
         $('#landing_button').click(function() {
             var div = "#" + is_it_day_or_night('landing') + "_landings";
