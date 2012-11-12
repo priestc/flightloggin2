@@ -166,7 +166,7 @@
                     </table>
                 </controlgroup>
                 <textarea rows="5" placeholder="remarks"></textarea>
-                <div id="route_box"></div>
+                <input type="text" id="route_box">
                 <button data-theme="e">Submit</button>
             </div>
 
@@ -338,6 +338,8 @@
         });
 
         $('#shutdown_button').click(function() {
+            clearInterval(updater_id);
+            
             var mode = $('#purpose').val()
             var total = $('#total_time').text();
             var night = $('#night_time').text();
@@ -376,7 +378,7 @@
                 $('form input[name=dual_r]').val(total);
                 $('form input[name=pic]').val(total);
             }
-            make_route_selection(landing_points);
+            make_route_selection(route_points);
         });
 
 

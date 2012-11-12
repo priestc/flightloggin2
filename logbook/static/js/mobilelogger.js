@@ -101,8 +101,8 @@ function make_route_selection(points) {
     $.when(lookups).then(function() {
         for(i in lookups) {
             var lookup = lookups[i];
-            console.log(lookup);
-            $("#route_box").append(lookup.responseText);
+            console.log(lookup.responseText);
+            $("#route_box").val(lookup.responseText);
         }
     });
 }

@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth.models import User
@@ -210,3 +212,30 @@ def search_tailnumbers(request):
     did_something = True
     
     return locals()
+
+def user_planes(request):
+    planes = Plane.objects.user(request.display_user)\
+                          .exclude(retired=True)\
+                          .values_list('tailnumber', 'type')
+    return HttpResponse(json.dumps(planes), mimetype="application/json")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -2,8 +2,6 @@ from django.conf.urls.defaults import *
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.contrib import admin
 
-from plane.models import Plane
-
 admin.autodiscover()
 
 handler500 = "main.views.handler500"
@@ -52,22 +50,14 @@ urlpatterns = patterns('django_openid_auth.views',
 
 urlpatterns += patterns('',   
 
-    (
-        r'', include('landingpage.urls')
-    ),
-
-    (
-        r'landingpage', redirect_to, {'url': '/'}
-    ),
-
+    (r'', include('landingpage.urls')),
+    (r'landingpage', redirect_to, {'url': '/'}),
+    (r'^planes/', include('plane.urls')),
     (r'^histogram/', include('histogram.urls')),
     (r'^kml/', include('maps.kml_urls')),
 
     (r'^search/locations\.html$', 'airport.views.search_airport'),
-    (r'^search/tailnumbers\.html$', 'plane.views.search_tailnumbers'),
-    
-    ('export_airports-(?P<index>\d{1,5}).xml', "airport.views.export_to_xml"),
-    
+        
     url(
         r'^help$',
         "main.views.help",
@@ -218,25 +208,7 @@ urlpatterns += patterns('',
         "route.views.route_profile",
                                                           name="profile-route",
     ),
-    
-    url(
-        r'^tailnumber/(?P<tn>%s+)$' % Plane.plane_regex,
-        "plane.views.tailnumber_profile",
-                                                     name="profile-tailnumber",
-    ),
-    
-    url(
-        r'^type/(?P<ty>%s+)$' % Plane.plane_regex,
-        "plane.views.type_profile",
-                                                           name="profile-type",
-    ),
-    
-    url(
-        r'^model/(?P<model>.+)$',
-        "plane.views.model_profile",
-                                                          name="profile-model",
-    ),
-    
+
     url(
         r'^navaid/(?P<ident>[A-Z0-9]+)$',
         "airport.views.airport_profile",
@@ -257,31 +229,32 @@ urlpatterns += patterns('',
 
     #### temporary redirect, remove at some point
     url(
-        r'^location-(?P<ident>[A-Z0-9-]+)$',
+        r'^location-(?P<ident>[A-Z0-9-]+)(\.html)?$',
         "main.views.temp_redirect",
     ),
     url(
-        r'^airport-(?P<ident>[A-Z0-9-]+)$',
+        r'^airport-(?P<ident>[A-Z0-9-]+)(\.html)?$',
         "main.views.temp_redirect",
     ),
     url(
-        r'^navaid-(?P<ident>[A-Z0-9-]+)$',
+        r'^navaid-(?P<ident>[A-Z0-9-]+)(\.html)?$',
         "main.views.temp_redirect",
     ),
     url(
-        r'^model-(?P<ident>[A-Z0-9-]+)$',
+        r'^model(-|/)(?P<ident>[A-Z0-9-]+)(\.html)?$',
         "main.views.temp_redirect",
     ),
     url(
-        r'^type-(?P<ident>[A-Z0-9-]+)$',
+        r'^type(-|/)(?P<ident>[A-Z0-9-]+)(\.html)?$',
         "main.views.temp_redirect",
     ),
     url(
-        r'^tailnumber-(?P<ident>[A-Z0-9-]+)$',
+        r'^tailnumber(-|/)(?P<ident>[A-Z0-9-]+)(\.html)?$',
         "main.views.temp_redirect",
     ),
+
     url(
-        r'^route-(?P<ident>[A-Z0-9-]+)$',
+        r'^route-(?P<ident>[A-Z0-9-]+)(\.html)?$',
         "main.views.temp_redirect",
     ),
     
@@ -340,19 +313,7 @@ urlpatterns += patterns('',
         "graphs.views.bargraphs",
                                                               name="bargraphs",
     ),
-    
-    url(
-        r'^planes/(?P<username>\w+)$',
-        "plane.views.planes",
-                                                                 name="planes",
-    ),
-    
-    url(
-        r'^mass_planes/(?P<username>\w+)$',
-        "plane.views.mass_planes",
-                                                            name="mass-planes",
-    ),
-    
+
     url(
         r'^maps/(?P<username>\w+)$',
         "maps.views.maps",
@@ -489,12 +450,6 @@ urlpatterns += patterns('',
     ),
 
     ###########################################################################
-
-    (
-        r'^\w+/$',
-        redirect_to,
-        {'url': '/landingpage'},
-    ),
 
     (
         r'.html$',
