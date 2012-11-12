@@ -7,10 +7,12 @@
         <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
 
-        <script type="text/javascript" src="{% static 'js/jquery.jclock.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/suncalc.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/mobilelogger.js' %}"></script>
-        
+        <script src="{% static 'js/jquery.jclock.js' %}"></script>
+        <script src="{% static 'js/suncalc.min.js' %}"></script>
+        <script src="{% static 'js/mobilelogger.js' %}"></script>
+        <script>
+        $.mobile.ignoreContentEnabled = true;
+        </script>
         <style>
             div {text-align: center}
             div.time_container {font-size: x-large}
@@ -31,7 +33,11 @@
             table {width: 100%}
             table.current_times td {border: 1px solid black }
 
-            form input[type=number] {width: 4em}
+            table#results_table input, table#results_table button{font-size: large}
+            table#results_table input[type=number], table#results_table input[type=text] {width: 3em}
+            table#results_table button {width: 6em; margin: 2px}
+            table#results_table div {padding-bottom: 10px}
+
         </style>
     </head>
     <body>
@@ -102,7 +108,7 @@
                     <input type="radio" name="inst_condition" id="radio-choice-23" value="actual">
                     <label for="radio-choice-23">Actual</label>
                 </fieldset>
-                <a href="#three" data-role="button"  data-theme="e" id="shutdown_button">Shutdown</a>
+                <a href="#three" data-role="button" data-theme="e" id="shutdown_button">Shutdown</a>
                 <div id="day_night"></div>
                 <div id="next">
                     <table>
@@ -135,42 +141,35 @@
                 <h1>Submit Flight</h1>
             </div>
             <div data-role="content">
-                <form>
-                    <table>
+                <controlgroup data-enhance="false">
+                    <table id="results_table">
                         <tr>
                             <td>
-                                <label for="total">Total</label>
-                                <input type="number" name="total"><br>
-                                <label for="pic">PIC</label>
-                                <input type="number" name="pic"><br>
-                                <label for="sic">SIC</label>
-                                <input type="number" name="sic"><button id="sic">X</button><br>
-                                <label for="solo">Solo</label>
-                                <input type="number" name="solo"><br>
-                                <label for="dual_r">Dual Recieved</label>
-                                <input type="number" name="dual_r"><br>
-                                <label for="xc">Cross Country</label>
-                                <input type="number" name="xc"><br>
+                                <div><button>Total</button><input type="number" name="total"></div>
+                                <div><button>PIC</button><input type="number" name="pic"></div>
+                                <div><button>Dual R.</button><input type="number" name="dual_r"></div>
+                                <div><button>Hood</button><input type="number" name="sim_inst"></div>
+                                <div><button>XC</button><input type="number" name="xc"></div>
+                                <div><button>Day L.</button><input type="number" name="day_l"></div>
+                                <div><button>Fuel</button><input type="text" name="Fuel"></div>
                             </td>
                             <td>
-                                <label for="dual_g">Dual Given</label>
-                                <input type="number" name=""><br>
-                                <label for="act_inst">Actual</label>
-                                <input type="number" name="actual_inst"><br>
-                                <label for="sim_inst">Hood</label>
-                                <input type="number" name="sim_inst"><br>
-                                <label for="day_l">Day Landings</label>
-                                <input type="number" name="day_l"><br>
-                                <label for="night_l">Night Landings</label>
-                                <input type="number" name="night_l"><br>
-                                <label for="approaches">Approaches</label>
-                                <input type="number" name="approaches"><br>
+                                <div><button>Night</button><input type="number" name="night"></div>
+                                <div><button>SIC</button><input type="number" name="sic"></div>
+                                <div><button>Dual G.</button><input type="number" name="dual_g"></div>
+                                <div><button>Actual</button><input type="number" name="actual_inst"></div>
+                                <div><button>Solo</button><input type="number" name="solo"></div>
+                                <div><button>Night L.</button><input type="number" name="night_l"></div>
+                                <div><button>App.</button><input type="number" name="approaches"></div>
                             </td>
                         </tr>
                     </table>
-                </form>
+                </controlgroup>
+                <textarea rows="5" placeholder="remarks"></textarea>
+                <div id="route_box"></div>
+                <button data-theme="e">Submit</button>
             </div>
-            <div id="route_box"></div>
+
             <div data-role="footer">
                 <h4><a href="/logbook">Back to logbook</a></h4>
             </div>
@@ -178,6 +177,17 @@
 
         <script>
         $("#clock").jclock({utc: true});
+
+        $('#results_table button').click(function() {
+            // handle auto buttons
+            var total = $('input[name=total]').val();
+            var inp = $(this).parent().find('input');
+            if(inp.val() == total) {
+                inp.val('');
+            } else if(inp.val() == '') {
+                inp.val(total);
+            }
+        });
 
         var mct, ect, sunrise, sunset;
         get_location(function(res) {
@@ -192,46 +202,78 @@
             $('#next #sunrise').text(sunrise[0] + ":" + sunrise[1]);
         });
 
-        var start_time, night_start, night_stop;
+        var actual_start;
+        var actual_acc = [0, 0, 0];
+        function update_actual_decimal(now) {
+            var new_actual = [0, 0, 0];
+            if(actual_start) {
+                new_actual = get_difference(actual_start, now);
+            }
+            var actual = add_times(actual_acc, new_actual);
+            decimal = tuple_to_display(actual);
+            $('#actual_time').text(decimal);
+        }
+
+        var hood_start;
+        var hood_acc = [0, 0, 0];
+        function update_hood_decimal(now) {
+            var new_hood = [0, 0, 0];
+            if(hood_start) {
+                new_hood = get_difference(hood_start, now);
+            }
+            var hood = add_times(hood_acc, new_hood);
+            decimal = tuple_to_display(hood);
+            $('#hood_time').text(decimal);
+        }
+
+        var start_time;
+        function update_total_decimal(now) {
+            var elapsed = get_difference(start_time, now);
+            $("#total_time").text(tuple_to_display(elapsed));
+        }
+
+        var night_start, night_stop;
+        function update_night_decimal(now) {
+            var currently = is_it_day_or_night('flight');
+            if(night_start && currently == 'day') {
+                // just switched from night to day
+                night_stop = now;
+            } else if(!night_start && currently == 'night') {
+                // just switched from day to night
+                night_start = now;
+            }
+
+            var duration, decimal;
+            if(night_start && !night_stop) {
+                // day timer is still going
+                duration = get_difference(night_start, now);
+                decimal = tuple_to_display(duration);
+            }
+            if(!night_start) {
+                // day timer has not been started yet.
+                decimal = '0.0';
+            }
+            if(night_start && night_stop) {
+                // night timer is done. Complete.
+                duration = get_difference(night_start, night_stop);
+                decimal = tuple_to_display(duration);
+            }
+            $('#night_time').text(decimal);
+        }
+
+        var updater_id;
         $("#start_button").click(function() {
             start_time = get_current_time();
             if(is_it_day_or_night('flight') == 'night') {
-                night_start = start_time
+                night_start = start_time;
             }
 
-            setInterval(function() {
+            updater_id = setInterval(function() {
                 var now = get_current_time();
-                var elapsed = get_difference(start_time, now);
-                $("#total_time").text(tuple_to_display(elapsed));
-            }, 30000);
-
-            setInterval(function() {
-                var now = get_current_time();
-                var currently = is_it_day_or_night('flight');
-                if(night_start && currently == 'day') {
-                    // just switched from night to day
-                    night_stop = now
-                } else if(!night_start && currently == 'night') {
-                    // just switched from day to night
-                    night_start = now
-                }
-
-                var duration, decimal;
-                if(night_start && !night_stop) {
-                    // day timer is still going
-                    duration = get_difference(night_start, now);
-                    decimal = tuple_to_display(duration);
-                }
-                if(!night_start) {
-                    // day timer has not been started yet.
-                    decimal = '0.0';
-                }
-                if(night_start && night_stop) {
-                    // night timer is done. Complete.
-                    duration = get_difference(night_start, night_stop);
-                    decimal = tuple_to_display(duration);
-                }
-                $('#night_time').text(decimal);
+                update_night_decimal(now);
+                update_total_decimal(now);
+                update_hood_decimal(now);
+                update_actual_decimal(now);
             }, 5000);
         });
 
@@ -251,8 +293,6 @@
             }
         }
 
-        var hood_start, actual_start;
-        var hood_acc = [0, 0, 0], actual_acc = [0, 0, 0];
         $('input[name=inst_condition]:radio').click(function() {
             var cond = $('input[name=inst_condition]:radio:checked').attr('value');
             var now = get_current_time();
@@ -273,29 +313,6 @@
                 close_out_actual(now);
             }
         });
-
-        setInterval(function() {
-            // every 5 seconds, update the timer display for actual and hood
-            var now = get_current_time();
-            var new_actual = [0, 0, 0];
-            if(actual_start) {
-                new_actual = get_difference(actual_start, now);
-            }
-            var actual = add_times(actual_acc, new_actual);
-            decimal = tuple_to_display(actual);
-            $('#actual_time').text(decimal);
-            
-            ///////
-
-            var new_hood = [0, 0, 0];
-            if(hood_start) {
-                new_hood = get_difference(hood_start, now);
-            }
-            var hood = add_times(hood_acc, new_hood);
-            decimal = tuple_to_display(hood);
-            $('#hood_time').text(decimal);
-
-        }, 5000);
 
         var route_points = [];
         $('#landing_button').click(function() {
@@ -361,6 +378,8 @@
             }
             make_route_selection(landing_points);
         });
+
+
 
         </script>
     </body>
