@@ -268,6 +268,10 @@
                 night_start = start_time;
             }
 
+            get_location(function(res) {
+                route_points.push(['land', res.coords]);
+            });
+
             updater_id = setInterval(function() {
                 var now = get_current_time();
                 update_night_decimal(now);
@@ -338,8 +342,13 @@
         });
 
         $('#shutdown_button').click(function() {
+            get_location(function(res) {
+                route_points.push(['land', res.coords]);
+                make_route_selection(route_points);
+            });
+
             clearInterval(updater_id);
-            
+
             var mode = $('#purpose').val()
             var total = $('#total_time').text();
             var night = $('#night_time').text();
@@ -378,11 +387,7 @@
                 $('form input[name=dual_r]').val(total);
                 $('form input[name=pic]').val(total);
             }
-            make_route_selection(route_points);
         });
-
-
-
         </script>
     </body>
 </html>

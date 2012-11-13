@@ -90,19 +90,42 @@ function normalize_time(t) {
 
 function make_route_selection(points) {
     var lookups = [];
+    var responses = [];
     for(p in points) {
         var point = points[p];
         var cb = $.ajax({
             url: '/nearby_airports.json',
             data: {'type': point[0], 'lng': point[1].longitude, 'lat': point[1].latitude},
+        }).success(function(res){
+            responses.push(res);
         });
         lookups.push(cb);
     }
-    $.when(lookups).then(function() {
-        for(i in lookups) {
-            var lookup = lookups[i];
-            console.log(lookup.responseText);
-            $("#route_box").val(lookup.responseText);
+
+    $.when.apply($, lookups).done(function() {
+        for(i in responses) {
+            var ident, type, n;
+            var response = responses[i];
+            var old = $("#route_box").val().split('-');
+
+            if(old.length == 1 && !old[0]) {
+                old = []
+            }
+            type = points[i][0];
+
+            if(type == 'land') {
+                ident = response[0].ident;
+            } else if(type == 'waypoint') {
+                // add '@' to the front of waypoint identifiers as per the flightloggin standard.
+                ident = '@' + response[0].ident;
+            }
+
+            if(old.slice(-1)[0] != ident) {
+                // skip this identifier if the last identifier is the same.
+                old.push(ident);
+            }
+
+            $("#route_box").val(old.join('-'));
         }
     });
 }

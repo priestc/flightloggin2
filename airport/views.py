@@ -118,20 +118,25 @@ def nearby_airports(request):
     """
     lng = request.GET['lng']
     lat = request.GET['lat']
-
-    point = GEOSGeometry('POINT(%s %s)' % (lat, lng))
+    type_ = request.GET['type']
+    
+    point = GEOSGeometry('POINT(%s %s)' % (lng, lat))
 
     airports = Location.objects\
                        .exclude(location=None)\
                        .distance(point)\
-                       .order_by('distance')[:10]
+                       .order_by('distance')
+    
+    if type_ == 'land':
+        airports = airports.filter(loc_class=1)
+
     out = []
-    for airport in airports:
-        if airport.distance.mi < 100:
+    for airport in airports[:10]:
+        if airport.distance.mi < 10:
             a = {
                 'ident': airport.identifier,
                 'name': airport.name,
-                'distance': "%.2f" % airport.distance.mi
+                'distance': "%.2f" % airport.distance.mi,
             }
             out.append(a)
 

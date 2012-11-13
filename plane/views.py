@@ -1,9 +1,10 @@
 import json
 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.db.models import Sum, Avg, Max
+from django.core.urlresolvers import reverse 
 
 from annoying.decorators import render_to
 
@@ -54,7 +55,6 @@ def planes(request):
         from backup.models import edit_logbook
         edit_logbook.send(sender=request.display_user)
     
-           
     return locals()
 
 
@@ -71,8 +71,6 @@ def mass_planes(request, page=0):
         
         if formset.is_valid():
             formset.save()
-            from django.http import HttpResponseRedirect
-            from django.core.urlresolvers import reverse 
             url = reverse('planes', kwargs={"username": request.display_user.username})
             return HttpResponseRedirect(url)
             
@@ -217,7 +215,7 @@ def user_planes(request):
     planes = Plane.objects.user(request.display_user)\
                           .exclude(retired=True)\
                           .values_list('tailnumber', 'type')
-    return HttpResponse(json.dumps(planes), mimetype="application/json")
+    return HttpResponse(json.dumps(list(planes)), mimetype="application/json")
 
 
 
