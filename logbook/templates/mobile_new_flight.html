@@ -10,8 +10,9 @@
         <script src="{% static 'js/jquery.jclock.js' %}"></script>
         <script src="{% static 'js/suncalc.min.js' %}"></script>
         <script src="{% static 'js/mobilelogger.js' %}"></script>
+        <script src="{% static 'js/select2.min.js' %}"></script>
         <script>
-        $.mobile.ignoreContentEnabled = true;
+            $.mobile.ignoreContentEnabled = true;
         </script>
         <style>
             div {text-align: center}
@@ -51,7 +52,7 @@
                 <label for="plane">Plane:</label><input type="text" id="plane" name="plane">
                 <br>
                 <label for="purpose">Purpose:</label>
-                <select id="purpose">
+                <select id="purpose" data-role="none">
                     <option value="captain">Captain</option>
                     <option value="fo">First Officer</option>
                     <option value="instructor">Instructor</option>
@@ -151,22 +152,22 @@
                                 <div><button>Hood</button><input type="number" name="sim_inst"></div>
                                 <div><button>XC</button><input type="number" name="xc"></div>
                                 <div><button>Day L.</button><input type="number" name="day_l"></div>
-                                <div><button>Fuel</button><input type="text" name="Fuel"></div>
+                                <div><button>Fuel</button><input type="text" name="fuel_burn"></div>
                             </td>
                             <td>
                                 <div><button>Night</button><input type="number" name="night"></div>
                                 <div><button>SIC</button><input type="number" name="sic"></div>
                                 <div><button>Dual G.</button><input type="number" name="dual_g"></div>
-                                <div><button>Actual</button><input type="number" name="actual_inst"></div>
+                                <div><button>Actual</button><input type="number" name="act_inst"></div>
                                 <div><button>Solo</button><input type="number" name="solo"></div>
                                 <div><button>Night L.</button><input type="number" name="night_l"></div>
-                                <div><button>App.</button><input type="number" name="approaches"></div>
+                                <div><button>App.</button><input type="number" name="app"></div>
                             </td>
                         </tr>
                     </table>
                 </controlgroup>
-                <textarea rows="5" placeholder="remarks"></textarea>
-                <input type="text" id="route_box">
+                <textarea name="remarks" placeholder="remarks"></textarea>
+                <input type="text" name="route_string" id="route_box">
                 <button data-theme="e">Submit</button>
             </div>
 
@@ -358,35 +359,39 @@
             var night_l = $('#night_landings').text();
             var approaches = $('#approaches').text();
 
-            $('form input[name=total]').val(total);
-            $('form input[name=night]').val(night);
-            $('form input[name=act_inst]').val(actual);
-            $('form input[name=sim_inst]').val(hood);
-            $('form input[name=approaches]').val(approaches);
-            $('form input[name=night_l]').val(night_l);
-            $('form input[name=day_l]').val(day_l);
+            $('input[name=total]').val(total);
+            $('input[name=night]').val(night);
+            $('input[name=act_inst]').val(actual);
+            $('input[name=sim_inst]').val(hood);
+            $('input[name=app]').val(approaches);
+            $('input[name=night_l]').val(night_l);
+            $('input[name=day_l]').val(day_l);
 
             if(mode == 'student') {
-                $('form input[name=dual_r]').val(total);
+                $('input[name=dual_r]').val(total);
             }
             if(mode == 'fo') {
-                $('form input[name=sic]').val(total);
+                $('input[name=sic]').val(total);
             }
             if(mode == 'captain') {
-                $('form input[name=pic]').val(total);
+                $('input[name=pic]').val(total);
             }
             if(mode == 'instructor') {
-                $('form input[name=dual_g]').val(total);
-                $('form input[name=pic]').val(total);
+                $('input[name=dual_g]').val(total);
+                $('input[name=pic]').val(total);
             }
             if(mode == 'solo') {
-                $('form input[name=solo]').val(total);
-                $('form input[name=pic]').val(total);
+                $('input[name=solo]').val(total);
+                $('input[name=pic]').val(total);
             }
             if(mode == 'training') {
-                $('form input[name=dual_r]').val(total);
-                $('form input[name=pic]').val(total);
+                $('input[name=dual_r]').val(total);
+                $('input[name=pic]').val(total);
             }
+        });
+
+        $('#submit_button').click(function() {
+            send_data();
         });
         </script>
     </body>

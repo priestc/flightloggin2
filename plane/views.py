@@ -214,7 +214,7 @@ def search_tailnumbers(request):
 def user_planes(request):
     planes = Plane.objects.user(request.display_user)\
                           .exclude(retired=True)\
-                          .values_list('tailnumber', 'type')
+                          .values_list('tailnumber', 'type', 'id')
     return HttpResponse(json.dumps(list(planes)), mimetype="application/json")
 
 

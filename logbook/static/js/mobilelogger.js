@@ -21,14 +21,16 @@ function is_it_day_or_night(mode) {
     var t = get_current_time();
     var night, day;
 
-    if(mode == 'landing') {
+    if(mode == 'land') {
         // use civil twilight because thats how the FAA defines night landings
         night = to_julian(ect);
         day = to_julian(mct);
-    } else {
+    } else if(mode == 'flight') {
         // use sunset and sunrise because thats how the FAA defines night and day hour logging.
         night = to_julian(sunset);
         day = to_julian(sunrise);
+    } else {
+        throw;
     }
 
     if(to_julian(t) > day && to_julian(t) < night) {
@@ -130,11 +132,52 @@ function make_route_selection(points) {
     });
 }
 
+function send_data() {
+    var fields = ['act_inst', 'remarks', 'night_l', 'dual_g', 'fuel_burn', 'dual_r',
+              'xc', 'plane', 'sim_inst', 'total', 'day_l', 'pic', 'solo', 'night',
+              'app', 'sic', 'person', 'route_string'];
+    
+    var username = 'chris';
+    var d = new Date();
+    var date = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
+    var data = {'submit': 'Submit New Flight', 'new-date': date};
+    for(i in fields) {
+        field = fields[i];
+        data['new-' + field] = $('input[name=' + field + '], textarea[name=' + field + ']').val();
+    }
 
 
+    $.ajax({
+        type: 'post',
+        url: '/new_flight-1/' + username,
+        data: data,
+    });
+}
 
-
-
+/*
+<QueryDict: {
+ 'new-act_inst': [u''],
+ 'new-remarks': [u'terds lol'],
+ 'new-night_l': [u''],
+ 'new-dual_g': [u'1.3'],
+ 'new-fuel_burn': [u'2.3 gph'],
+ 'submit': [u'Submit New Flight'],
+ 'new-dual_r': [u''],
+ 'new-xc': [u''],
+ 'new-plane': [u'100242'],
+ 'new-sim_inst': [u''],
+ 'new-ipc': [u'on'],
+ 'new-total': [u'1.3'],
+ 'new-day_l': [u'2'], 
+ 'new-pic': [u''], 
+ 'new-solo': [u''], 
+ 'new-night': [u'1.3'], 
+ 'new-app': [u''],
+ 'new-sic': [u''], 
+ 'new-person': [u'woop'], 
+ 'new-route_string': [u'mer-lga'], 
+ 'new-date': [u'2012-11-12']}>
+*/
 
 
 
