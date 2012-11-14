@@ -3,7 +3,8 @@
     <head>
         <title>New Flight</title>
         <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1"> 
-        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css">
+        <link rel="stylesheet" href="http://jquerymobile.com/demos/1.2.0/docs/_assets/css/jqm-docs.css">
         <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
 
@@ -12,6 +13,7 @@
         <script src="{% static 'js/mobilelogger.js' %}"></script>
         <script src="{% static 'js/select2.min.js' %}"></script>
         <script>
+            var username = window.location.href.split('/')[4]
             $.mobile.ignoreContentEnabled = true;
         </script>
         <style>
@@ -48,11 +50,9 @@
             </div>
             <div data-role="content">
                 <label for="person">Person:</label><input type="text" id="person" name="person">
-                <br>    
-                <label for="plane">Plane:</label><input type="text" id="plane" name="plane">
-                <br>
+                <label for="plane">Plane:</label><select placeholder="plane" id="plane" name="new-plane">
                 <label for="purpose">Purpose:</label>
-                <select id="purpose" data-role="none">
+                <select id="purpose">
                     <option value="captain">Captain</option>
                     <option value="fo">First Officer</option>
                     <option value="instructor">Instructor</option>
@@ -60,7 +60,7 @@
                     <option value="training">Training</option>
                     <option value="solo">Solo</option>
                 </select>
-                <a href="#two" data-role="button" id="start_button" data-theme="e">Start</button>
+                <a href="#two" data-role="button" id="start_button" data-theme="e">Start</a>
             </div>
             <div data-role="footer">
                 <h4><a href="/logbook">Back to logbook</a></h4>
@@ -168,19 +168,30 @@
                 </controlgroup>
                 <textarea name="remarks" placeholder="remarks"></textarea>
                 <input type="text" name="route_string" id="route_box">
-                <button data-theme="e">Submit</button>
+                <button data-theme="e" id="submit_button">Submit</button>
             </div>
-
+            <div data-role="popup" id="failed_popup" data-overlay-theme="a" data-theme="c" style="max-width:400px;" class="ui-corner-all">
+                <div data-role="header" data-theme="a" class="ui-corner-top">
+                    <h1>Send Failed</h1>
+                </div>
+                <div data-role="content" data-theme="d" class="ui-corner-bottom ui-content">
+                    <h3 class="ui-title">Connection to server could not be established.</h3>
+                    <p>Try again now, or later when you have better connectivity?</p>
+                    <a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c">Now</a>    
+                    <a href="#" data-role="button" data-inline="true" data-rel="back" data-transition="flow" data-theme="b">Later</a>  
+                </div>
+            </div>
             <div data-role="footer">
                 <h4><a href="/logbook">Back to logbook</a></h4>
             </div>
         </div>
 
         <script>
+        get_planes(); // fill in the plane select box
         $("#clock").jclock({utc: true});
 
         $('#results_table button').click(function() {
-            // handle auto buttons
+            // handle auto buttons on page 3
             var total = $('input[name=total]').val();
             var inp = $(this).parent().find('input');
             if(inp.val() == total) {
@@ -321,7 +332,7 @@
 
         var route_points = [];
         $('#landing_button').click(function() {
-            var div = "#" + is_it_day_or_night('landing') + "_landings";
+            var div = "#" + is_it_day_or_night('land') + "_landings";
             // increment the correct landing box by one landing.
             var prev = Number($(div).text());
             $(div).text(prev + 1);
@@ -348,16 +359,25 @@
                 make_route_selection(route_points);
             });
 
+            // the timer has stopped, quit updating the display.
             clearInterval(updater_id);
+
+            blank = function(val) {
+                if(Number(val) == 0) {
+                    return '';
+                } else {
+                    return val;
+                }
+            }
 
             var mode = $('#purpose').val()
             var total = $('#total_time').text();
-            var night = $('#night_time').text();
-            var hood = $('#hood_time').text();
-            var actual = $('#actual_time').text();
-            var day_l = $('#day_landings').text();
-            var night_l = $('#night_landings').text();
-            var approaches = $('#approaches').text();
+            var night = blank($('#night_time').text());
+            var hood = blank($('#hood_time').text());
+            var actual = blank($('#actual_time').text());
+            var day_l = blank($('#day_landings').text());
+            var night_l = blank($('#night_landings').text());
+            var approaches = blank($('#approaches').text());
 
             $('input[name=total]').val(total);
             $('input[name=night]').val(night);
