@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 {% load gravatar %}{% load analytics %}
 <html lang="en">
     <head profile="http://www.w3.org/2005/10/profile">
@@ -32,7 +32,7 @@
                 <a href="/"><img id="logo" src="{% static CSS_URL %}/logo.png" alt="FlightLogg.in' Logo" /></a>
                 
                 <div id="userbox" style="float: right; overflow: hidden">
-                    <div style="float: left">
+                    <div style="float: left; margin-top: 10px">
                     {% if DEMO %}
                         <span id="demo">** VIEWING THE DEMO ACCOUNT **</span>
                     {% endif %}
