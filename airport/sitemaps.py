@@ -2,7 +2,7 @@ from django.contrib.sitemaps import Sitemap
 from models import Location
 
 class LocationSitemap(Sitemap):
-    changefreq = "daily"
+    changefreq = "weekly"
     priority = 0.5
 
     def items(self):
