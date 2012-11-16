@@ -8,7 +8,7 @@
 <script type="text/javascript">NAVBAR_HIGHLIGHT = "sigs-sel";</script>
 {% endblock %}
 
-{% block title %}Sigs{% endblock %}
+{% block title %}Sigs ({{ request.display_user.username }}){% endblock %}
 
 {% block canvas %}
 <div id="sigs_canvas_wrapper">

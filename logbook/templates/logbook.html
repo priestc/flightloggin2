@@ -29,7 +29,7 @@
 
 {% endblock %}
 
-{% block title %}Flights{% endblock %}
+{% block title %}Flights ({{ request.display_user.username }}'s page {{ page_of_flights.number }}){% endblock %}
 
 {% block canvas %}
     {% if not request.shared %}
@@ -101,7 +101,7 @@
         </div>
         {% if page_of_flights.object_list and not request.shared %}
         <div style="float:right">
-            <a href="{% url mass-edit username=request.display_user.username page=page_of_flights.number %}">Mass Edit this page</a>
+            <a href="{% url mass-edit username=request.display_user.username page=page_of_flights.number %}">Mass Edit page {{ page_of_flights.number }}</a>
         </div>
         {% endif %}
     </div>

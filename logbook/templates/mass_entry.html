@@ -24,7 +24,7 @@
     </style>
 {% endblock %}
 
-{% block title %}{% if edit %}Mass Edit{% else %}Mass Entry{% endif %}{% endblock %}
+{% block title %}{% if edit %}Mass Edit{% else %}Mass Entry{% endif %} ({{ request.display_user.username }}) (page {{ page }}){% endblock %}
 
 {% block canvas %}
 {% include "pagination_table.html" %}
