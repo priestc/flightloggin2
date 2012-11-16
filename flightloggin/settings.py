@@ -182,3 +182,5 @@ from settings_local import *
 from settings_email import *
 
 INSTALLED_APPS = INSTALLED_APPS + DEV_APPS
+
+REGEX_USERNAME = "[\w\d.]{3,30}"

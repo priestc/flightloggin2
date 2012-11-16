@@ -2,7 +2,7 @@ import re
 from django import forms
 from django.contrib.auth.models import User
 from profile.models import Profile
-
+from django.conf import settings
 from django.forms.extras.widgets import SelectDateWidget
 
 w = SelectDateWidget(years=[str(x) for x in range(2012, 1912, -1)])
@@ -23,7 +23,7 @@ class RegistrationForm(forms.Form):
 
     def clean_username(self):
         u = self.cleaned_data['username']
-        r = r'^\w{3,30}$'
+        r = settings.REGEX_USERNAME
 
         if len(u) > 30 or len(u) < 3:
             raise forms.ValidationError('Username must be between 3 and 30 characters in length')

@@ -2,6 +2,9 @@ from django.conf.urls.defaults import *
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.contrib import admin
 
+from django.conf import settings
+username_regex = settings.REGEX_USERNAME
+
 admin.autodiscover()
 
 handler500 = "main.views.handler500"
@@ -100,7 +103,7 @@ urlpatterns += patterns('',
     ############################ graphs
 
     (
-        r'^(?P<username>\w+)/linegraph/' +
+        r'^(?P<username>%s)/linegraph/' % username_regex +
         r'(?P<columns>[\w\-]+)/' +
         r'((?P<dates>\d{4}.\d{1,2}.\d{1,2}-\d{4}.\d{1,2}.\d{1,2})/)?' +
         r'(?P<rate>(rate|norate)?)' +
@@ -111,7 +114,7 @@ urlpatterns += patterns('',
     ),
     
     (
-        r'^(?P<username>\w+)/bargraph/' + 
+        r'^(?P<username>%s)/bargraph/' % username_regex + 
         r'(?P<column>[\w]+)/' +
         r'(?P<func>[\w]+)/' +
         r'by-(?P<agg>[\w]+)' +
@@ -123,13 +126,13 @@ urlpatterns += patterns('',
     ################################## sigs
     
     (       # new sig format
-        r'^(?P<username>\w+)/(?P<logo>(logo|nologo))-sigs/' + 
+        r'^(?P<username>%s)/(?P<logo>(logo|nologo))-sigs/' % username_regex + 
         r'(?P<font>\w+)-(?P<size>\d{1,2})/(?P<columns>[\w\-]+)\.png',
         "sigs.views.make_totals_sig",
     ),
     
     (       # new sig format
-        r'^(?P<username>\w+)/ds-sigs/' + 
+        r'^(?P<username>%s)/ds-sigs/' % username_regex + 
         r'(?P<font>\w+)-(?P<size>\d{1,2})/(?P<mode>[\w]+)\.png',
         "sigs.views.make_days_since_sig",
     ),
@@ -196,7 +199,7 @@ urlpatterns += patterns('',
     #--------------------------------------------------------------------------
     
     url(
-        r'^(?P<username>\w+)/email-backup.html$',
+        r'^(?P<username>%s)/email-backup.html$' % username_regex,
         "backup.views.emailbackup",
                                                            name="email-backup",
     ),
@@ -261,93 +264,93 @@ urlpatterns += patterns('',
     #--------------------------------------------------------------------------
     
     url(
-        r'^badges/(?P<username>\w+)$',
+        r'^badges/(?P<username>%s)$' % username_regex,
         "badges.views.badges",
                                                                  name="badges",
     ),
     
     url(
-        r'^8710/(?P<username>\w+)$',
+        r'^8710/(?P<username>%s)$' % username_regex,
         "auto8710.views.auto8710",
                                                                     name="est",
     ),
     
     url(
-        r'^preferences/(?P<username>\w+)$',
+        r'^preferences/(?P<username>%s)$' % username_regex,
         "profile.views.profile",
                                                                 name="profile",
     ),
     
     url(
-        r'^import/(?P<username>\w+)$',
+        r'^import/(?P<username>%s)$' % username_regex,
         "manage.views.import_v",
                                                                  name="import",
     ),
     
     url(
-        r'^export/(?P<username>\w+)$',
+        r'^export/(?P<username>%s)$' % username_regex,
         "manage.views.export",
                                                                  name="export",
     ),
     
     url(
-        r'^records/(?P<username>\w+)$',
+        r'^records/(?P<username>%s)$' % username_regex,
         "records.views.records",
                                                                 name="records",
     ),
     
     url(
-        r'^events/(?P<username>\w+)$',
+        r'^events/(?P<username>%s)$' % username_regex,
         "records.views.events",
                                                                  name="events",
     ),
     
     url(
-        r'^linegraphs/(?P<username>\w+)$',
+        r'^linegraphs/(?P<username>%s)$' % username_regex,
         "graphs.views.linegraphs",
                                                              name="linegraphs",
     ),
     
     url(
-        r'^bargraphs/(?P<username>\w+)$',
+        r'^bargraphs/(?P<username>%s)$' % username_regex,
         "graphs.views.bargraphs",
                                                               name="bargraphs",
     ),
 
     url(
-        r'^maps/(?P<username>\w+)$',
+        r'^maps/(?P<username>%s)$' % username_regex,
         "maps.views.maps",
                                                                    name="maps",
     ),
 
     url(
-        r'^sigs/(?P<username>\w+)$',
+        r'^sigs/(?P<username>%s)$' % username_regex,
         "sigs.views.sigs",
                                                                    name="sigs",
     ),
     
     url(
-        r'^/print/(?P<username>\w+).pdf$',
+        r'^/print/(?P<username>%s).pdf$' % username_regex,
         "pdf.views.pdf",
                                                                     name="pdf",
     ),
     
     url(
-        r'^states/(?P<username>\w+)$',
+        r'^states/(?P<username>%s)$' % username_regex,
         direct_to_template,
         {"template": "states.html"},
                                                                  name="states",
     ),
 
     url(
-        r'^countries/(?P<username>\w+)$',
+        r'^countries/(?P<username>%s)$' % username_regex,
         direct_to_template,
         {"template": "countries.html"},
                                                               name="countries",
     ),
     
     url(
-        r'^states_data/(?P<username>\w+)/(?P<type_>(unique|landings)+)\.json$',
+        r'^states_data/(?P<username>%s)/(?P<type_>(unique|landings)+)\.json$' % username_regex,
         "maps.states_views.states_data",
                                                               name="state-data",
     ),
@@ -359,7 +362,7 @@ urlpatterns += patterns('',
     ),
 
     url(
-        r'^milestones/(?P<username>\w+)$',
+        r'^milestones/(?P<username>%s)$' % username_regex,
         "milestones.views.milestones",
                                                              name="milestones",
     ),
@@ -371,31 +374,31 @@ urlpatterns += patterns('',
     ),
     
     url(
-        r'^currency/(?P<username>\w+)$',
+        r'^currency/(?P<username>%s)$' % username_regex,
         "currency.views.currency",
                                                                name="currency",
     ),
     
     url(
-        r'^locations/(?P<username>\w+)$',
+        r'^locations/(?P<username>%s)$' % username_regex,
         "records.views.locations",
                                                               name="locations",
     ),
     
     url(
-        r'^backup/(?P<username>\w+)$',
+        r'^backup/(?P<username>%s)$ % username_regex',
         "backup.views.backup",
                                                                  name="backup",
     ),
     
     url(
-        r'^massentry/(?P<username>\w+)$',
+        r'^massentry/(?P<username>%s)$ % username_regex',
         "logbook.views.mass_entry",
                                                              name="mass-entry",
     ),
     
     url(
-        r'^massedit-page-(?P<page>\d+)/(?P<username>\w+)$',
+        r'^massedit-page-(?P<page>\d+)/(?P<username>%s)$' % username_regex,
         "logbook.views.mass_edit",
                                                               name="mass-edit",
     ),
@@ -408,37 +411,37 @@ urlpatterns += patterns('',
     ),
 
     url(
-        r'^logbook/(?P<username>\w+)$',
+        r'^logbook/(?P<username>%s)$' % username_regex,
         "logbook.views.root_logbook",
                                                                 name="logbook",
     ),
 
     url(
-        r'^mobile/(?P<username>\w+)$',
+        r'^mobile/(?P<username>%s)$' % username_regex,
         "logbook.views.mobile_new_flight",
                                                       name="mobile-new-flight",
     ),
     
     url(
-        r'^logbook-page-(?P<page>\d+)/(?P<username>\w+)',
+        r'^logbook-page-(?P<page>\d+)/(?P<username>%s)' % username_regex,
         "logbook.views.logbook",
                                                            name="logbook-page",
     ),
     
     url(
-        r'^edit_flight-(?P<page>\d+)/(?P<username>\w+)$',
+        r'^edit_flight-(?P<page>\d+)/(?P<username>%s)$' % username_regex,
         "logbook.views.edit_flight",
                                                             name="edit_flight",
     ),
     
     url(
-        r'^new_flight-(?P<page>\d+)/(?P<username>\w+)$',
+        r'^new_flight-(?P<page>\d+)/(?P<username>%s)$' % username_regex,
         "logbook.views.new_flight",
                                                              name="new_flight",
     ),
     
     url(
-        r'^delete_flight-(?P<page>\d+)/(?P<username>\w+)$',
+        r'^delete_flight-(?P<page>\d+)/(?P<username>%s)$' % username_regex,
         "logbook.views.delete_flight",
                                                           name="delete_flight",
     ),
