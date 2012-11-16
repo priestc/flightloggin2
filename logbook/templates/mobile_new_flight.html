@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html>{% load analytics %}
 <html>
     <head>
         <title>New Flight</title>
@@ -13,7 +13,8 @@
         <script src="{% static 'js/suncalc.min.js' %}"></script>
         <script src="{% static 'js/mobilelogger.js' %}"></script>
         <script>
-            var username = window.location.href.split('/')[4]
+            var username = window.location.href.split('/')[4];
+            window.google_analytics_uacct = "UA-501381-5";
             $.mobile.ignoreContentEnabled = true;
         </script>
     </head>
@@ -159,6 +160,7 @@
                 <h4><a href="/logbook">Back to logbook</a></h4>
             </div>
         </div>
+        {% googleanalyticsjs %}
 
         <script>
         get_planes(); // fill in the plane select box
