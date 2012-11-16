@@ -73,7 +73,7 @@ def edit_flight(request, page):
     url = logbook_url(request.display_user, page)
         
     if not request.POST:
-        return HttpResponseRedirect(url)
+        return HttpResponseNotAllowed("method not allowed")
     
     profile,c = Profile.objects.get_or_create(user=request.display_user)
     plane_widget = proper_plane_widget(profile)
