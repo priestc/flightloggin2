@@ -113,6 +113,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.humanize',
     'django.contrib.gis',
+    'django.contrib.sitemaps',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     
