@@ -113,6 +113,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.humanize',
     'django.contrib.gis',
+    'django.contrib.sitemaps',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     
@@ -182,3 +183,5 @@ from settings_local import *
 from settings_email import *
 
 INSTALLED_APPS = INSTALLED_APPS + DEV_APPS
+
+REGEX_USERNAME = "[\w\d.]{3,30}"

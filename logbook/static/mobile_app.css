@@ -1,0 +1,23 @@
+div {text-align: center}
+div.time_container {font-size: x-large}
+
+div#total_time { color: black}
+div#day_landings {color: black}
+div#night_landings {font-size: x-large}
+div#approaches {font-size: x-large; color: black}
+div#hood_time {font-size: x-large; color: black}
+div#actual_time {font-size: x-large; color: black}
+
+div#page_two {border: 1px solid black; width: 300px}
+div#page_one {border: 1px solid black; width: 300px}
+div#page_three {border: 1px solid black; width: 300px}
+
+div#clock {width: 100%; text-align: center}
+
+table {width: 100%}
+table.current_times td {border: 1px solid black }
+
+table#results_table input, table#results_table button{font-size: large}
+table#results_table input[type=number], table#results_table input[type=text] {width: 3em}
+table#results_table button {width: 6em; margin: 2px}
+table#results_table div {padding-bottom: 10px}
