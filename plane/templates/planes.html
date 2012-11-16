@@ -9,7 +9,7 @@
     <script type="text/javascript">NAVBAR_HIGHLIGHT = "planes-sel";</script>
 {% endblock %}
 
-{% block title %}Planes{% endblock %}
+{% block title %}Planes ({{ request.display_user.username }}){% endblock %}
 
 {% block canvas %}
     {% if not request.shared %}

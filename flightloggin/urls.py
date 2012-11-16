@@ -386,13 +386,13 @@ urlpatterns += patterns('',
     ),
     
     url(
-        r'^backup/(?P<username>%s)$ % username_regex',
+        r'^backup/(?P<username>%s)$' % username_regex,
         "backup.views.backup",
                                                                  name="backup",
     ),
     
     url(
-        r'^massentry/(?P<username>%s)$ % username_regex',
+        r'^massentry/(?P<username>%s)$' % username_regex,
         "logbook.views.mass_entry",
                                                              name="mass-entry",
     ),

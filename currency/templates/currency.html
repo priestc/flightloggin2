@@ -6,7 +6,7 @@
 	<script type="text/javascript">NAVBAR_HIGHLIGHT = "currency-sel";</script>
 {% endblock %}
 
-{% block title %}Currency{% endblock %}
+{% block title %}Currency ({{ request.display_user.username }}){% endblock %}
 
 {% block canvas %}
 <div id="currency_canvas_wrapper">
