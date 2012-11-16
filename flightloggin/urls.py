@@ -219,7 +219,7 @@ urlpatterns += patterns('',
     ),
     
     url(
-        r'^airport/(?P<ident>[A-Z0-9-]+)$',
+        r'^airport/(?P<ident>[A-Z0-9-_]+)$',
         "airport.views.airport_profile",
         {"navaid": False},                              name="profile-airport",
     ),
