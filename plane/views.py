@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.db.models import Sum, Avg, Max
 from django.core.urlresolvers import reverse 
+from django.views.decorators.cache import cache_page
 
 from annoying.decorators import render_to
 
@@ -211,11 +212,46 @@ def search_tailnumbers(request):
     
     return locals()
 
+#@cache_page(30 * 60)
 def user_planes(request):
-    planes = Plane.objects.user(request.display_user)\
+    from currency.FAA import FAA_Landing, FAA_Medical, FAA_Instrument, FAA_Certs
+
+    user = request.display_user
+    planes = Plane.objects.user(user)\
                           .exclude(retired=True)\
-                          .values_list('tailnumber', 'type', 'id')
-    return HttpResponse(json.dumps(list(planes)), mimetype="application/json")
+                          .select_related()\
+                          .annotate(fd=Max('flight__date'))\
+                          .order_by('-fd')
+    ret = []
+    currencies = {}
+    for plane in planes:
+        if not plane.is_type_rating():
+            if plane.cat_class not in currencies:
+                # plane is C-152 and SEL has not yet been determined
+                currency = plane.currencies()
+                currencies[plane.cat_class] = currency
+            else:
+                # plane is C-152 and SEL has already been calculated
+                currency = currencies[plane.cat_class]
+
+        else:
+            if plane.type not in currencies:
+                # a jet, calculate and then store.
+                currency = plane.currencies()
+                currencies[plane.type] = currency
+            else:
+                # already been calculated, use cached value
+                currency = currencies[plane.type]
+
+        p = {
+            'tailnumber': plane.tailnumber,
+            'type': plane.type,
+            'id': plane.id,
+            'currency': currency,
+        }
+        ret.append(p)
+
+    return HttpResponse(json.dumps(ret), mimetype="application/json")
 
 
 

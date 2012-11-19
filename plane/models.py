@@ -220,4 +220,42 @@ class Plane(EnhancedModel):
         """ Is this plane a sim, ftd or pcatd? (cat_class greater than 15) """
         return self.cat_class >= 15
 
+    def currencies(self):
+        """
+        Is the user current in this plane?
+        """
+        from currency.FAA import FAA_Landing, FAA_Medical, FAA_Instrument, FAA_Certs
+
+        fake_class = None
+        if self.cat_class == 6:
+            fake_class = 'helicopter'
+        if self.cat_class in [1,2,3,4]:
+            fake_class = 'fixed_wing'
+
+        ret = {}
+
+        if fake_class:
+            inst = FAA_Instrument(self.user, fake_class=fake_class)
+            if inst.eligible():
+                calc = inst.calculate()
+                ret['instrument'] = calc
+            
+        cat_class = None
+        if self.is_type_rating():
+            cat_class = self.type
+        elif cat_class not in (15, 16, 17, 18, 19):
+            cat_class = self.cat_class
+
+        if cat_class:
+            land = FAA_Landing(self.user, item=cat_class)
+            if land.eligible():
+                calc = land.calculate()
+                ret['landing'] = calc
+
+        return ret
+
+
+
+
+
 #tagging.register(Plane)
