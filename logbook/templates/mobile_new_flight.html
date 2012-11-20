@@ -24,8 +24,18 @@
                 <h1>New Flight</h1>
             </div>
             <div data-role="content">
-                <label for="person">Person:</label><input type="text" id="person" name="person">
-                <label for="plane">Plane:</label><select placeholder="plane" id="plane" name="new-plane">
+                <label for="person">Person:</label>
+                <input type="text" id="person" name="person">
+
+                <label for="plane">Plane:</label>
+                <select placeholder="plane" id="plane" name="new-plane"></select>
+
+                <div id="currency_display">
+                    Day Currency: <span class="day"></span><br>
+                    Night Currency: <span class="night"></span><br>
+                    Instrument Currency: <span class="instrument"></span>
+                </div>
+
                 <label for="purpose">Purpose:</label>
                 <select id="purpose">
                     <option value="captain">Captain</option>
@@ -389,6 +399,18 @@
         $('#submit_button').click(function() {
             send_data();
         });
+
+        $('select#plane').change(function() {
+            var selected = $(this).val();
+            for(var p in planes) {
+                var plane = planes[p];
+                if(plane['id'] == selected) {
+                    set_currency_display(plane['currency'])
+                }
+            }
+        });
+
+
         </script>
     </body>
 </html>

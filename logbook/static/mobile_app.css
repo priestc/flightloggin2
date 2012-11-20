@@ -21,3 +21,7 @@ table#results_table input, table#results_table button{font-size: large}
 table#results_table input[type=number], table#results_table input[type=text] {width: 3em}
 table#results_table button {width: 6em; margin: 2px}
 table#results_table div {padding-bottom: 10px}
+
+#currency_display {padding: 5px; margin: 10px; background: white; border: 1px solid #AAA; border-radius: 10px}
+.current {color: green}
+.not_current {color: red}

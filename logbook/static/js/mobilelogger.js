@@ -155,16 +155,18 @@ function send_data() {
     });
 }
 
+planes = {};
 function get_planes() {
     $.ajax({
         url: '/planes/' + username + '.json',
         type: 'get',
     }).done(function(res) {
+        planes = res;
         for(i in res) {
             var plane = res[i];
             var opt = $('<option>');
-            opt.attr('value', plane[2]); // the plane_id
-            opt.text(plane[0] + ' (' + plane[1] + ')');
+            opt.attr('value', plane['id']); // the plane_id
+            opt.text(plane['tailnumber'] + ' (' + plane['type'] + ')');
             $('select#plane').append(opt);
         }
     }).fail(function() {
@@ -172,7 +174,40 @@ function get_planes() {
     });
 }
 
+var instrument_current, day_current, night_current;
+function set_currency_display(currency) {
+    var day = currency['landing'][0] == 'day: CURRENT';
+    var night = currency['landing'][1] == 'night: CURRENT';
+    var instrument = currency['instrument'] == 'CURRENT';
 
+    if(day) {
+        $('#currency_display .day').text('Current');
+        $('#currency_display .day').addClass('current').removeClass('not_current');
+        day_current = true;
+    } else {
+        $('#currency_display .day').text('Not Current');
+        $('#currency_display .day').addClass('not_current').removeClass('current');
+        day_current = false;
+    }
+    if(night) {
+        $('#currency_display .night').text('Current');
+        $('#currency_display .night').addClass('current').removeClass('not_current');
+        night_current = true
+    } else {
+        $('#currency_display .night').text('Not Current');
+        $('#currency_display .night').addClass('not_current').removeClass('current');
+        night_current = false
+    }
+    if(instrument) {
+        $('#currency_display .instrument').text('Current');
+        $('#currency_display .instrument').addClass('current').removeClass('not_current');
+        instrument_current = true;
+    } else {
+        $('#currency_display .instrument').text('Not Current');
+        $('#currency_display .instrument').addClass('not_current').removeClass('current');
+        instrument_current = false;
+    }
+}
 
 
 

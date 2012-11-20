@@ -224,7 +224,7 @@ class Plane(EnhancedModel):
         """
         Is the user current in this plane?
         """
-        from currency.FAA import FAA_Landing, FAA_Medical, FAA_Instrument, FAA_Certs
+        from currency.FAA import FAA_Landing, FAA_Instrument
 
         fake_class = None
         if self.cat_class == 6:
