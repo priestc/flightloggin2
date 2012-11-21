@@ -9,17 +9,14 @@
 
 {% block title %}News{% endblock %}
 {% block canvas %}
-    {% cache 50000 news %}
-    
-        {% for item in news %}
-            <div class="news_box">
-                <big>{{ item.title }}</big><br />
-                <small>{{ item.date|date:"l, F jS, Y" }}</small>
-                <p>
-                {{ item.text|safe|linebreaksbr }}
-                </p>
-            </div>
-        {% endfor %}
-        
-    {% endcache %}
+    <h1>News</h1>
+    {% for item in news %}
+        <div class="news_box">
+            <h2>{{ item.title }}</h2><br />
+            <h3>{{ item.date|date:"l, F jS, Y" }}</h3>
+            <p>
+            {{ item.text|safe|linebreaksbr }}
+            </p>
+        </div>
+    {% endfor %}
 {% endblock %}

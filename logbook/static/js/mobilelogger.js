@@ -152,6 +152,8 @@ function send_data() {
         type: 'post',
         url: '/new_flight-1/' + username,
         data: data,
+    }).error(function() {
+        $('#failed_popup').popup('open');
     });
 }
 
@@ -169,8 +171,6 @@ function get_planes() {
             opt.text(plane['tailnumber'] + ' (' + plane['type'] + ')');
             $('select#plane').append(opt);
         }
-    }).fail(function() {
-        $('failed_popup').popup();
     });
 }
 
