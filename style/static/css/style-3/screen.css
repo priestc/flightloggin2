@@ -237,11 +237,13 @@ div.news_box p{
 
 div.news_box h2 {
     font-size:x-large;
-    font-weight:bold
+    font-weight:bold;
+    margin-bottom: 2px;
 }
 
 div.news_box h3 {
-    font-size:small
+    font-size:small;
+    margin: 2px
 }
 
 div.faq_help_item{
