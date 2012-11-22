@@ -83,12 +83,12 @@
             <br>
             
             {% url profile-route row.route.simple_rendered as pr %}
-            <a href="{{pr}}">More info about this route</a>
+            <a href="{{pr}}">More info about {{ row.route }}</a>
             
             <br>
             
             {% url profile-tailnumber row.plane.tailnumber|upper as pt%}
-            <a href="{{pt}}">More info about this tailnumber</a>      
+            <a href="{{pt}}">More info about {{ row.plane.tailnumber }}</a>      
             
         </div>
     {% endfor %}
