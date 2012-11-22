@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect, HttpResponseNotAllowed
+from django.http import HttpResponseRedirect, HttpResponseNotAllowed, HttpResponseForbidden
 from django.forms.models import modelformset_factory
 from django.core.urlresolvers import reverse
 from django.views.decorators.cache import cache_page
@@ -25,7 +25,6 @@ def root_logbook(request):
     """
     
     from django.shortcuts import redirect
-    from django.core.urlresolvers import reverse
     import math
     
     try:
@@ -298,7 +297,6 @@ def mass_edit(request, page=0):
             from backup.models import edit_logbook
             edit_logbook.send(sender=request.display_user, page=page)
             
-            from django.core.urlresolvers import reverse
             return HttpResponseRedirect(
                 reverse('logbook-page',
                         kwargs={"username": request.display_user.username,
@@ -313,4 +311,6 @@ def mass_edit(request, page=0):
 
 @render_to('mobile_new_flight.html')
 def mobile_new_flight(request):
+    if not request.user == request.display_user:
+        return HttpResponseForbidden('Please Log in')
     return {}
