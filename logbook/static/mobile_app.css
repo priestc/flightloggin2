@@ -25,3 +25,5 @@ table#results_table div {padding-bottom: 10px}
 #currency_display {padding: 5px; margin: 10px; background: white; border: 1px solid #AAA; border-radius: 10px}
 .current {color: green}
 .not_current {color: red}
+
+#instructions p {text-align: left}

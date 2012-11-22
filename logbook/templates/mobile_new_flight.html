@@ -48,7 +48,7 @@
                 <a href="#two" data-role="button" id="start_button" data-theme="e">Start</a>
             </div>
             <div data-role="footer">
-                <h4><a href="/logbook">Back to logbook</a> <a href="#four">Instructions</a></h4>
+                <h4><a href="/logbook">Back to logbook</a> - <a href="#four">Instructions</a></h4>
             </div>
         </div>
 
@@ -174,9 +174,12 @@
             <div data-role="header">
                 <h1>Instructions</h1>
             </div>
-            <div data-role="content">
+            <div data-role="content" id="instructions">
                 <p>
                     This mobile application is for logging flights to your logbook as they happen.
+                    The software is still in beta phase, so there may still be bugs.
+                    Please report all bugs to either the github issue tracker,
+                    or the FlightLoggin Google Groups.
                 </p>
 
                 <h2>Page 1</h2>
@@ -188,8 +191,8 @@
                     If this is the first time you are flying in a particular aircraft,
                     exit the mobile app, and enter the plane through the
                     <a href="{% url planes request.display_user %}">planes section</a>.
-                    The "Role" selector is a to describe what role the logging pilot plays in this flight.
-                    This option only effects how the times are automatically copied on the last page
+                    The <strong>Role</strong> selector is a to describe what role the logging pilot plays in this flight.
+                    This option only effects how the times are automatically copied on the last page.
                 </p>
 
                 <h2>Page 2</h2>
@@ -199,13 +202,16 @@
                     It has been designed to work without needing an internet connection.
                 </p>
                 <p>
+                    At the top of the page, there is a timer that displays the current time in UTC.
+                </p>
+                <p>
                     Press the <strong>Land</strong> button to increment the "Landing" counter.
                     If it is past evening civil twilight, the landing will be added to "Night Landings".
-                    Whenever you press the landing button, the app also internaly records your coordinates.
+                    Whenever you press the landing button, the app also internally records your coordinates.
                     When you are finished with the flight,
                     these coordinates are compiled to construct the 'route' portion of the logbook entry.
-                    The <strong>WP</strong> button (waypoint) is used to denote flying over a waypoint.
-                    This waypoint can be a Navaid, or an airport. The app polls your phone's GPS when this
+                    The <strong>WP</strong> button (way-point) is used to denote flying over a way-point.
+                    This way-point can be a Navaid, or an airport. The app polls your phone's GPS when this
                     button is pressed, and the coordinates are stored internally.
                     When constructing the logbook entry, the airport or navaid nearest to where the button
                     was pressed is added to the route field.
@@ -213,10 +219,10 @@
                 <p>
                     The night timer will start counting up when the current time passes sunset.
                     Night time stops counting up when the sun rises.
-                    Total time always counts up, starting when you click on the <strong>start</strong> button,
+                    Total time always counts up, starting when you click on the <strong>Start</strong> button,
                     and ending with clicking on the <strong>Shutdown</strong> button.
                     The app polls your GPS every 30 minutes to update the sunset/sunrise times,
-                    as this calculatin depends on your current corrdinates.
+                    as this calculation depends on your current coordinates.
                 </p>
                 <p>
                     The <strong>App</strong> button is used to increment the "approaches" counter.
@@ -244,7 +250,7 @@
                     To erase these numbers, press the button containing the labels of each number field.
                     You can enter any number you wish into these fields.
                     The route fields should contain identifiers of airports that you started and ended at,
-                    as well as any waypoints you have declared enroute.
+                    as well as any way-points you have declared enroute.
                 </p>
                 <p>
                     When you have finished, click the <strong>Submit</strong> button.
