@@ -80,16 +80,18 @@
         
             <a href="" class="edit_popup_link" id="x{{row.pk}}">Edit this flight</a>
 
+            {% if row.route.simple_rendered %}
             <br>
-            
             {% url profile-route row.route.simple_rendered as pr %}
-            <a href="{{pr}}">More info about {{ row.route }}</a>
-            
+            <a href="{{pr}}">More info about {{ row.route.simple_rendered }}</a>
+            {% endif %}
+
             <br>
-            
+            {% if row.plane.tailnumber != 'UNKNOWN' %}
             {% url profile-tailnumber row.plane.tailnumber|upper as pt%}
             <a href="{{pt}}">More info about {{ row.plane.tailnumber }}</a>      
-            
+            {% endif %}
+
         </div>
     {% endfor %}
     
