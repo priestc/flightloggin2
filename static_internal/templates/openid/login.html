@@ -3,6 +3,7 @@
 {% block title %}Sign in using OpenID{% endblock %}
 
 {% block javascript %}
+<meta name="description" content="Login with OpenID">
 <script type="text/javascript" src="{% static "openid-realselector/js/jquery.openid.min.js" %}"></script>	
 <link rel="stylesheet" href="{% static "openid-realselector/css/style.css" %}">
 
@@ -16,6 +17,7 @@
 {% endblock %}
 
 {% block canvas %}
+<h1>Login with OpenID</h1>
 <div class="instructions">
     To create a Flightlogg.in' account, you must have an OpenID account. Don't worry, 
     you probably already have an OpenID account. If you have an account set up with an
