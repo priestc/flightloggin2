@@ -36,7 +36,7 @@
                     Instrument Currency: <span class="instrument"></span>
                 </div>
 
-                <label for="purpose">Purpose:</label>
+                <label for="purpose">Role:</label>
                 <select id="purpose">
                     <option value="captain">Captain</option>
                     <option value="fo">First Officer</option>
@@ -48,7 +48,7 @@
                 <a href="#two" data-role="button" id="start_button" data-theme="e">Start</a>
             </div>
             <div data-role="footer">
-                <h4><a href="/logbook">Back to logbook</a></h4>
+                <h4><a href="/logbook">Back to logbook</a> <a href="#four">Instructions</a></h4>
             </div>
         </div>
 
@@ -168,6 +168,93 @@
             </div>
             <div data-role="footer">
                 <h4><a href="/logbook">Back to logbook</a></h4>
+            </div>
+        </div>
+        <div data-role="page" id="four" data-theme="e">
+            <div data-role="header">
+                <h1>Instructions</h1>
+            </div>
+            <div data-role="content">
+                <p>
+                    This mobile application is for logging flights to your logbook as they happen.
+                </p>
+
+                <h2>Page 1</h2>
+
+                <p>
+                    This first page is intended to be filled out before you enter the plane.
+                    This page requires an internet connection for it to work properly.
+                    Select the plane that you will be flying in.
+                    If this is the first time you are flying in a particular aircraft,
+                    exit the mobile app, and enter the plane through the
+                    <a href="{% url planes request.display_user %}">planes section</a>.
+                    The "Role" selector is a to describe what role the logging pilot plays in this flight.
+                    This option only effects how the times are automatically copied on the last page
+                </p>
+
+                <h2>Page 2</h2>
+                
+                <p>
+                    This page is intended to be used while the airplane is airborne.
+                    It has been designed to work without needing an internet connection.
+                </p>
+                <p>
+                    Press the <strong>Land</strong> button to increment the "Landing" counter.
+                    If it is past evening civil twilight, the landing will be added to "Night Landings".
+                    Whenever you press the landing button, the app also internaly records your coordinates.
+                    When you are finished with the flight,
+                    these coordinates are compiled to construct the 'route' portion of the logbook entry.
+                    The <strong>WP</strong> button (waypoint) is used to denote flying over a waypoint.
+                    This waypoint can be a Navaid, or an airport. The app polls your phone's GPS when this
+                    button is pressed, and the coordinates are stored internally.
+                    When constructing the logbook entry, the airport or navaid nearest to where the button
+                    was pressed is added to the route field.
+                </p>
+                <p>
+                    The night timer will start counting up when the current time passes sunset.
+                    Night time stops counting up when the sun rises.
+                    Total time always counts up, starting when you click on the <strong>start</strong> button,
+                    and ending with clicking on the <strong>Shutdown</strong> button.
+                    The app polls your GPS every 30 minutes to update the sunset/sunrise times,
+                    as this calculatin depends on your current corrdinates.
+                </p>
+                <p>
+                    The <strong>App</strong> button is used to increment the "approaches" counter.
+                    If you press the <strong>Hood</strong> button, the Hood time timer will start counting up.
+                    The is used to keep track of how long you have been under the hood.
+                    The <strong>Actual</strong> timer works the same way as the Hood timer.
+                    It is for keeping track of how long you have been flying in actual instrument conditions.
+                </p>
+                <p>
+                    The <strong>Shutdown</strong> button is pressed when the aircraft engine is shut down,
+                    and the loggable time has stopped. Pressing this button advances the app to page 3.
+                </p>
+
+                    <h2>Page 3</h2>
+                <p>
+                    This page is intended to be completed after you have finished your flight.
+                    It requires an internet connection, so wait until you have a signal before completing this page.
+                    If you can not get to a signal before your next flight, complete page 3 anyways.
+                    When the app tries to send the flight data to the FlightLogggin' servers, the send will fail,
+                    and the data will be saved locally and can be retried again once your phone has a signal.
+                </p>
+                <p>
+                    Depending on the role you selected on page 1, certain fields will contain numbers.
+                    These numbers are filled in from the timers and counters from page 2.
+                    To erase these numbers, press the button containing the labels of each number field.
+                    You can enter any number you wish into these fields.
+                    The route fields should contain identifiers of airports that you started and ended at,
+                    as well as any waypoints you have declared enroute.
+                </p>
+                <p>
+                    When you have finished, click the <strong>Submit</strong> button.
+                    This will send the flight data to the FlightLoggin' servers.
+                    If you now view your logbook, you'll see the new flight listed.
+                </p>
+
+            </div>
+            <div data-role="footer">
+                <h4><a href="#one">Back</a></h4>
             </div>
         </div>
         {% googleanalyticsjs %}
