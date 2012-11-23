@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from profile.models import Profile
 from django.conf import settings
 from django.forms.extras.widgets import SelectDateWidget
+from main.utils import track
 
 w = SelectDateWidget(years=[str(x) for x in range(2012, 1912, -1)])
 
@@ -26,15 +27,18 @@ class RegistrationForm(forms.Form):
         r = "^" + settings.REGEX_USERNAME + "$"
 
         if len(u) > 30 or len(u) < 3:
+            track('bad-length', {'username': u})
             raise forms.ValidationError('Username must be between 3 and 30 characters in length')
 
         if not re.match(r, u):
+            track('invalid-characters', {'username': u})
             raise forms.ValidationError('Invalid characters in username. Allowed chars: numbers, letters and underscores')
 
         try:
             user = User.objects.get(username=u)
         except User.DoesNotExist:
             return u
+
         raise forms.ValidationError('Username %s already taken' % u)
 
     def clean(self):
@@ -43,6 +47,14 @@ class RegistrationForm(forms.Form):
 
         if (pass1 and pass2) and (pass1 != pass2):
             raise forms.ValidationError("Passwords must match")
+
+        firstname = self.cleaned_data.get('first_name', '')
+        lastname = self.cleaned_data.get('last_name', '')
+        letters = lastname[-2:]
+        if len(letters) and letters == letters.upper() and firstname.endswith(letters):
+            track('spam-detection', {'name': "%s %s" % (firstname, lastname)})
+            raise forms.ValidationError("deep derp")
+
         return self.cleaned_data
 
     def register(self, *a, **k):
