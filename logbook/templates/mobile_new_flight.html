@@ -62,10 +62,10 @@
                         <th>Total</th> <th>Night</th> <th>Hood</th> <th>Actual</th>
                     </tr>
                     <tr>
-                        <td><div class="time_container" id="total_time">0.0</div></td>
-                        <td><div class="time_container" id="night_time">0.0</div></td>
-                        <td><div class="time_container" id="hood_time">0.0</div></td>
-                        <td><div class="time_container" id="actual_time">0.0</div></td>
+                        <td><div class="time_container dec" id="total_time">0.0</div></td>
+                        <td><div class="time_container dec" id="night_time">0.0</div></td>
+                        <td><div class="time_container dec" id="hood_time">0.0</div></td>
+                        <td><div class="time_container dec" id="actual_time">0.0</div></td>
                     </tr>
                 </table>
                 <table class="current_times">
@@ -126,8 +126,8 @@
                 <h1>Flight Ended</h1>
             </div>
             <div data-role="content">
-                <a href="#five" data-role="button" data-theme="e">Submit Flight (internet connection required)</a><br>
-                <a href="#one" data-role="button" data-theme="e">Submit later, and Log another flight<a>
+                <a href="#four" data-role="button" data-theme="e" id="pre_submit">Submit Flight (internet connection required)</a><br>
+                <a href="#one" data-role="button" data-theme="e" id="save">Save locally, and log another flight<a>
             </div>
         </div>
         <div data-role="page" id="four" data-theme="c">
@@ -287,18 +287,26 @@
                 inp.val(total);
             }
         });
+        function zeroFill(number, width)
+        {
+            width -= number.toString().length;
+            if ( width > 0 ) {
+                return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
+            }
+            return number + ""; // always return a string
+        }
 
         var mct, ect, sunrise, sunset;
         get_location(function(res) {
-            var times = SunCalc.getTimes(new Date(),res.coords.latitude, res.coords.longitude);
-            mct = [times.dawn.getUTCHours(), times.dawn.getUTCMinutes()];
-            ect = [times.dusk.getUTCHours(), times.dusk.getUTCMinutes()];
+            var times = SunCalc.getTimes(new Date(), res.coords.latitude, res.coords.longitude);
+            mct = [times.dawn.getUTCHours(), times.dawn.getUTCMinutes(), 0];
+            ect = [times.dusk.getUTCHours(), times.dusk.getUTCMinutes(), 0];
             sunrise = [times.sunrise.getUTCHours(), times.sunrise.getUTCMinutes(), 0];
             sunset = [times.sunset.getUTCHours(), times.sunset.getUTCMinutes(), 0];
-            $('#next #morning_twilight').text(mct[0] + ":" + mct[1]);
-            $('#next #sunset').text(sunset[0] + ":" + sunset[1]);
-            $('#next #evening_twilight').text(ect[0] + ":" + ect[1]);
-            $('#next #sunrise').text(sunrise[0] + ":" + sunrise[1]);
+            $('#next #morning_twilight').text(mct[0] + ":" + zeroFill(mct[1], 2));
+            $('#next #sunset').text(sunset[0] + ":" + zeroFill(sunset[1], 2));
+            $('#next #evening_twilight').text(ect[0] + ":" + zeroFill(ect[1], 2));
+            $('#next #sunrise').text(sunrise[0] + ":" + zeroFill(sunrise[1], 2));
         });
 
         var actual_start;
@@ -440,14 +448,11 @@
             $('#approaches').text(prev + 1);
         });
 
-        $('#shutdown_button').click(function() {
+        $('#pre_submit').click(function() {
             get_location(function(res) {
                 route_points.push(['land', res.coords]);
                 make_route_selection(route_points);
             });
-
-            // the timer has stopped, quit updating the display.
-            clearInterval(updater_id);
 
             blank = function(val) {
                 if(Number(val) == 0) {
@@ -497,6 +502,11 @@
             }
         });
 
+        $('#shutdown_button').click(function() {
+            // the timer has stopped, quit updating the display.
+            clearInterval(updater_id);
+        });
+
         $('#submit_button').click(function() {
             send_data();
         });
@@ -511,6 +521,10 @@
             }
         });
 
+        $('#save').click(function() {
+            save_locally(get_data());
+            reset_app();
+        });
 
         </script>
     </body>

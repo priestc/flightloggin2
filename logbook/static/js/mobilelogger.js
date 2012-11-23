@@ -133,25 +133,28 @@ function make_route_selection(points) {
     });
 }
 
-function send_data() {
+var data;
+function get_data() {
     var fields = ['act_inst', 'remarks', 'night_l', 'dual_g', 'fuel_burn', 'dual_r',
               'xc', 'sim_inst', 'total', 'day_l', 'pic', 'solo', 'night',
               'app', 'sic', 'person', 'route_string'];
-    
     var d = new Date();
     var date = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
-    var data = {'submit': 'Submit New Flight', 'new-date': date};
+    data = {'submit': 'Submit New Flight', 'new-date': date};
     for(i in fields) {
         field = fields[i];
         data['new-' + field] = $('input[name=' + field + ']').val();
     }
     data['new-remarks'] = $('textarea[name=remarks]').val();
     data['new-plane'] = $('#plane').val();
+    return data;
+}
 
+function send_data() {
     $.ajax({
         type: 'post',
         url: '/new_flight-1/' + username,
-        data: data,
+        data: get_data(),
     }).error(function() {
         $('#failed_popup').popup('open');
     });
@@ -209,12 +212,42 @@ function set_currency_display(currency) {
     }
 }
 
+function save_locally(data){
+    var old = retrieve_all_saved();
+    old.push(data)
+    var serialized = JSON.stringify(old);
+    console.log('about to save', serialized);
+    localStorage.setItem('flights', serialized);
+}
 
+function retrieve_all_saved() {
+    var s = localStorage.getItem('flights');
+    console.log(s);
+    if(!s) {
+        return [];
+    }
+    return JSON.parse(s);
+}
 
+function reset_app() {
+    $('#person').val('');
+    $('.time_container').text('0');
+    $('.time_container.dec').text('0.0');
 
+    hood_start = actual_start = start_time = night_start = night_stop = undefined;
+    actual_acc = hood_acc = [0, 0, 0];
+    route_points = [];
 
+    var fields = ['act_inst', 'remarks', 'night_l', 'dual_g', 'fuel_burn', 'dual_r',
+              'xc', 'sim_inst', 'total', 'day_l', 'pic', 'solo', 'night',
+              'app', 'sic', 'person', 'route_string'];
+    for(i in fields) {
+        field = fields[i];
+        $('input[name=' + field + ']').val('');
+    }
+    $('textarea[name=remarks]').val('');
 
-
+}
 
 
 
