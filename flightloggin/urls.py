@@ -177,7 +177,7 @@ urlpatterns += patterns('',
     ),
     
     url(
-        r'^news$',
+        r'^news/?$',
         "main.views.news",
                                                                    name="news",
     ),
@@ -185,7 +185,7 @@ urlpatterns += patterns('',
     #--------------------------------------------------------------------------
     
     url(
-        r'^site_stats$',
+        r'^site_stats/?$',
         "site_stats.views.site_stats",
                                                              name="site_stats",
     ),
