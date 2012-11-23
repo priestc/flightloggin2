@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.db import models
 from django.contrib.auth.models import User
 from constants import *
@@ -178,6 +180,12 @@ class Profile(models.Model, GoonMixin):
     adminlink.allow_tags = True
     adminlink.short_description="Link"
     
+    def age(self):
+        if self.dob.year == 1900:
+            return "?"
+        days_in_year = 365.25
+        return int((date.today() - self.dob).days/days_in_year)
+
     def get_openid(self):
         """
         Get the OpenID url for the user of this profile (used in the admin)
