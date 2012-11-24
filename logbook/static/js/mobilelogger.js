@@ -127,7 +127,10 @@ function make_route_selection(points) {
                 // skip this identifier if the last identifier is the same.
                 old.push(ident);
             }
-
+            if(old.length == 1) {
+                // duplicate single identifier routes (flightloggin idiom)
+                old[1] = old[0];
+            }
             $("#route_box").val(old.join('-'));
         }
     });
@@ -281,7 +284,6 @@ function pop_from_queue() {
 }
 
 function reset_app() {
-    console.log('reset');
     $('#person').val('');
     $('.time_container').text('0');
     $('.time_container.dec').text('0.0');
@@ -326,7 +328,7 @@ function get_queue_count() {
 }
 
 var pretty;
-function pretty_raw_route_points() {
+function pretty_raw_route_points(route_points) {
     var out = [];
     var disp, this_accurate, last_accurate;
     for(i in route_points) {
@@ -381,6 +383,8 @@ function fill_in_form(data) {
             return val;
         }
     }
+
+    pretty_raw_route_points(data['route_points'])
 
     var total = data['new-total'];
     var night = blank(data['new-night']);

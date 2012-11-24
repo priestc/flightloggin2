@@ -49,7 +49,7 @@
                 <div id="queue_length"></div>
             </div>
             <div data-role="footer">
-                <h4><a href="/logbook">Back to logbook</a> - <a href="#five">Instructions</a></h4>
+                <h4><a href="/logbook">Back to logbook</a> - <a href="#four">Instructions</a></h4>
             </div>
         </div>
 
@@ -155,8 +155,10 @@
                 <textarea name="remarks" placeholder="remarks"></textarea>
                 <div id="raw_route"></div>
                 <input type="text" name="route_string" id="route_box">
-                <a href="#" data-role="button" data-theme="e" id="submit">Submit (requires internet connection)</a>
+                <a href="#" data-role="button" data-theme="a" id="calc_route">Calculate Route (requires data connection)</a>
+                <a href="#" data-role="button" data-theme="e" id="submit">Submit (requires data connection)</a>
                 <a href="#one" data-role="button" data-theme="e" id="save">Save (submit later)</a>
+                <a href="#" data-role="button" data-theme="b" id="discard">Discard Flight</a>
             </div>
             <div data-role="popup" id="failed_popup" data-overlay-theme="a" data-theme="c" style="max-width:400px;" class="ui-corner-all">
                 <div data-role="header" data-theme="a" class="ui-corner-top">
@@ -470,8 +472,16 @@
             // the timer has stopped, quit updating the display. Fill in data to page 3.
             clearInterval(updater_id);
             var data = get_data(2);
-            fill_in_form(data);
-            prefill_purpose(data);
+            get_location(function(res) {
+                route_points.push(['land', res.coords]);
+                fill_in_form(data);
+                prefill_purpose(data);
+            });
+        });
+
+        $("#calc_route").click(function() {
+            var data = get_data(3);
+            make_route_selection(data.route_points)
         });
 
         $('#submit').click(function() {
@@ -484,6 +494,11 @@
             // used for when you don't have a data signal and need to log another flight.
             save_locally(get_data(3));
             reset_app();
+        });
+
+        $("#discard").click(function() {
+            reset_app();
+            $.mobile.changePage('#one');
         });
 
         $("#failed_popup #now").click(function() {
