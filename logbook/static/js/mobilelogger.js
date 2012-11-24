@@ -133,27 +133,56 @@ function make_route_selection(points) {
     });
 }
 
-var data;
-function get_data() {
-    var fields = ['act_inst', 'remarks', 'night_l', 'dual_g', 'fuel_burn', 'dual_r',
-              'xc', 'sim_inst', 'total', 'day_l', 'pic', 'solo', 'night',
-              'app', 'sic', 'person', 'route_string'];
-    var d = new Date();
-    var date = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
-    data = {'submit': 'Submit New Flight', 'new-date': date};
-    for(i in fields) {
-        field = fields[i];
-        data['new-' + field] = $('input[name=' + field + ']').val();
-    }
-    data['new-remarks'] = $('textarea[name=remarks]').val();
+function get_data(page) {
+    // get data from page 2 or 3 and return it as the standard flight data format.
+    var data = {'submit': 'Submit New Flight'};
     data['new-plane'] = $('#plane').val();
     data['route_points'] = route_points;
+    data['new-person'] = $('#person').val();
+
+    if(page == 3) {
+        var fields = ['act_inst', 'remarks', 'night_l', 'dual_g', 'fuel_burn', 'dual_r',
+                  'xc', 'sim_inst', 'total', 'day_l', 'pic', 'solo', 'night',
+                  'app', 'sic', 'person', 'route_string'];
+
+        var d = new Date();
+        var date = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
+        data['new-date'] = date;
+
+        for(i in fields) {
+            field = fields[i];
+            data['new-' + field] = $('input[name=' + field + ']').val();
+        }
+
+        data['new-remarks'] = $('textarea[name=remarks]').val();
+    } else if(page == 2) {
+        var d = new Date();
+        var date = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
+        data['new-date'] = date;
+
+        data['purpose'] = $('#purpose').val();
+        data['new-total'] = $("#total_time").text();
+        data['new-night'] = $("#night_time").text();
+        data['new-act_inst'] = $("#actual_time").text();
+        data['new-sim_inst'] = $("#hood_time").text();
+        data['new-night_l'] = $("#night_landings").text();
+        data['new-day_l'] = $("#day_landings").text();
+        data['new-app'] = $("#approaches").text();
+    }
     return data;
 }
 
 function send_data(data) {
     // send completed flight data to the flight loggin servers
     // `data` is what comes out of the `get_data()` function.
+
+    $.mobile.loading('show', {
+        text: 'Sending',
+        textVisible: true,
+        theme: 'a',
+        html: ""
+    });
+
     $.ajax({
         type: 'post',
         url: '/new_flight-1/' + username,
@@ -162,6 +191,9 @@ function send_data(data) {
         $('#failed_popup').popup('open');
     }).success(function() {
         reset_app();
+        $.mobile.changePage('#one');
+    }).done(function() {
+        $.mobile.loading('hide');
     });
 }
 
@@ -235,9 +267,16 @@ function retrieve_all_saved() {
 function pop_from_queue() {
     var queued = retrieve_all_saved();
     var ret = queued[0];
+    var replace = [];
+    var flight;
     for(i in queued) {
-
+        // skip the first one, because we're popping that one.
+        if(i != 0) {
+            flight = queued[i];
+            replace.push(flight);
+        }
     }
+    localStorage['flights'] = JSON.stringify(replace);
     return ret;
 }
 
@@ -267,6 +306,7 @@ function reset_app() {
         var existing_button = $('#submit_queue');
         var text = "Submit " + len + " saved flights";
         if(existing_button.length == 0) {
+            //add button to dom
             var button = $('<a data-theme="b" data-role="button" id="submit_queue">').text(text);
             $('#queue_length').append(button);
             button.button();
@@ -274,10 +314,14 @@ function reset_app() {
             // button already exists, update the text.
             existing_button.find(".ui-btn-text").text(text);
         }
+    } else {
+        // no more flights in the queue, remove the button on page one.
+        $('#submit_queue').remove();
     }
 }
 
 function get_queue_count() {
+    // how many currently queued flights not (yet sent to the server) are there?
     return retrieve_all_saved().length;
 }
 
@@ -327,8 +371,8 @@ function zeroFill(number, width) {
     return number + ""; // always return a string
 }
 
-function fill_in_form() {
-    // get data from page 1 and 2 and fill it into the page 3 form.
+function fill_in_form(data) {
+    // get data (from either localstorage or the DOM) and fill it into the page 3 form.
     
     blank = function(val) {
         if(Number(val) == 0) {
@@ -338,13 +382,13 @@ function fill_in_form() {
         }
     }
 
-    var total = $('#total_time').text();
-    var night = blank($('#night_time').text());
-    var hood = blank($('#hood_time').text());
-    var actual = blank($('#actual_time').text());
-    var day_l = blank($('#day_landings').text());
-    var night_l = blank($('#night_landings').text());
-    var approaches = blank($('#approaches').text());
+    var total = data['new-total'];
+    var night = blank(data['new-night']);
+    var hood = blank(data['new-sim_inst']);
+    var actual = blank(data['new-act_inst']);
+    var day_l = blank(data['new-day_l']);
+    var night_l = blank(data['new-night_l']);
+    var approaches = blank(data['new-app']);
 
     $('input[name=total]').val(total);
     $('input[name=night]').val(night);
@@ -354,7 +398,27 @@ function fill_in_form() {
     $('input[name=night_l]').val(night_l);
     $('input[name=day_l]').val(day_l);
 
+    $('input[name=pic]').val(data['new-pic']);
+    $('input[name=dual_r]').val(data['new-dual_r']);
+    $('input[name=xc]').val(data['new-xc']);
+    $('input[name=sic]').val(data['new-sic']);
+    $('input[name=dual_g]').val(data['new-dual_g']);
+    $('input[name=solo]').val(data['new-solo']);
+
+    $('input[name=fuel_burn]').val(data['new-fuel_burn']);
+    $('textarea[name=remarks]').val(data['new-remarks']);
+    $('input[name=route_string]').val(data['new-route_string']);
+}
+
+function prefill_purpose(data) {
+    // fill in certain fields based on the 'purpose' setting.
+
     var mode = $('#purpose').val()
+    var total = data['new-total'];
+
+    if(total == 0) {
+        return
+    }
 
     if(mode == 'student') {
         $('input[name=dual_r]').val(total);

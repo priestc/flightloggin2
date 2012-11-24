@@ -304,6 +304,14 @@
             }
         });
 
+        $("#submit_queue").click(function() {
+            // the button on the first page that says "submit 3 flights saved locally"
+            $.mobile.changePage('#three');
+            data = pop_from_queue();
+            console.log('popped', data);
+            fill_in_form(data);
+        });
+
         var updater_id;
         $("#start_button").click(function() {
             start_time = get_current_time();
@@ -459,36 +467,33 @@
         });
 
         $('#shutdown').click(function() {
-            // the timer has stopped, quit updating the display.
+            // the timer has stopped, quit updating the display. Fill in data to page 3.
             clearInterval(updater_id);
-            fill_in_form();
+            var data = get_data(2);
+            fill_in_form(data);
+            prefill_purpose(data);
         });
 
         $('#submit').click(function() {
             // the button on the last page that sends data to the flightloggin server.
-            send_data(get_data());
+            send_data(get_data(3));
         });
 
         $('#save').click(function() {
-            // the button on the last oage that is an alternate to the submit button
+            // the button on the last page that is an alternate to the submit button
             // used for when you don't have a data signal and need to log another flight.
-            save_locally(get_data());
+            save_locally(get_data(3));
             reset_app();
-        });
-
-        $("#submit_queue").click(function() {
-            // the button on the first page that says "submit 3 flights saved locally"
         });
 
         $("#failed_popup #now").click(function() {
             // send failed, and we want to retry immediately.
-            console.log('now');
+            send_data(get_data(3));
         });
 
         $("#failed_popup #later").click(function() {
             // send failed, and we want to save the data to the queue to be retried later.
-            console.log('later');
-            save_locally(get_data());
+            save_locally(get_data(3));
             reset_app();
         });
 
