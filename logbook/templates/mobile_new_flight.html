@@ -46,6 +46,7 @@
                     <option value="solo">Solo</option>
                 </select>
                 <a href="#two" data-role="button" id="start_button" data-theme="e">Start</a>
+                <div id="queue_length"></div>
             </div>
             <div data-role="footer">
                 <h4><a href="/logbook">Back to logbook</a> - <a href="#five">Instructions</a></h4>
@@ -94,7 +95,7 @@
                     <input type="radio" name="inst_condition" id="radio-choice-23" value="actual">
                     <label for="radio-choice-23">Actual</label>
                 </fieldset>
-                <a href="#three" data-role="button" data-theme="e" id="shutdown_button">Shutdown</a>
+                <a href="#three" data-role="button" data-theme="e" id="shutdown">Shutdown</a>
                 <div id="day_night"></div>
                 <div id="next">
                     <table>
@@ -121,20 +122,12 @@
                 <h4><a href="/logbook">Back to logbook</a></h4>
             </div>
         </div>
-        <div data-role="page" id="three" data-theme="e">
+        <div data-role="page" id="three" data-theme="c">
             <div data-role="header">
-                <h1>Flight Ended</h1>
+                <h1>Finished Flight</h1>
             </div>
             <div data-role="content">
-                <a href="#four" data-role="button" data-theme="e" id="pre_submit">Submit Flight (internet connection required)</a><br>
-                <a href="#one" data-role="button" data-theme="e" id="save">Save locally, and log another flight<a>
-            </div>
-        </div>
-        <div data-role="page" id="four" data-theme="c">
-            <div data-role="header">
-                <h1>Submit Flight</h1>
-            </div>
-            <div data-role="content">
+                <div id="date"></div>
                 <controlgroup data-enhance="false">
                     <table id="results_table">
                         <tr>
@@ -160,8 +153,10 @@
                     </table>
                 </controlgroup>
                 <textarea name="remarks" placeholder="remarks"></textarea>
+                <div id="raw_route"></div>
                 <input type="text" name="route_string" id="route_box">
-                <button data-theme="e" id="submit_button">Submit</button>
+                <a href="#one" data-role="button" data-theme="e" id="submit">Submit (requires internet connection)</a>
+                <a href="#one" data-role="button" data-theme="e" id="save">Save (submit later)</a>
             </div>
             <div data-role="popup" id="failed_popup" data-overlay-theme="a" data-theme="c" style="max-width:400px;" class="ui-corner-all">
                 <div data-role="header" data-theme="a" class="ui-corner-top">
@@ -170,15 +165,19 @@
                 <div data-role="content" data-theme="d" class="ui-corner-bottom ui-content">
                     <h3 class="ui-title">Connection to server could not be established.</h3>
                     <p>Try again now, or later when you have better connectivity?</p>
-                    <a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c">Now</a>    
-                    <a href="#" data-role="button" data-inline="true" data-rel="back" data-transition="flow" data-theme="b">Later</a>  
+                    <a href="#" id="now" data-role="button" data-inline="true" data-rel="back" data-transition="flow" data-theme="c">
+                        Now
+                    </a>
+                    <a href="#one" id="later" data-role="button" data-inline="true" data-rel="back" data-transition="flow" data-theme="b">
+                        Later
+                    </a>
                 </div>
             </div>
             <div data-role="footer">
                 <h4><a href="/logbook">Back to logbook</a></h4>
             </div>
         </div>
-        <div data-role="page" id="five" data-theme="e">
+        <div data-role="page" id="four" data-theme="e">
             <div data-role="header">
                 <h1>Instructions</h1>
             </div>
@@ -244,7 +243,8 @@
                     and the loggable time has stopped. Pressing this button advances the app to page 3.
                 </p>
 
-                    <h2>Page 3</h2>
+                <h2>Page 3</h2>
+                
                 <p>
                     This page is intended to be completed after you have finished your flight.
                     It requires an internet connection, so wait until you have a signal before completing this page.
@@ -274,27 +274,9 @@
         {% googleanalyticsjs %}
 
         <script>
-        get_planes(); // fill in the plane select box
+        get_planes(); // fill in the plane select box (hits the API)
         $("#clock").jclock({utc: true});
-
-        $('#results_table button').click(function() {
-            // handle auto buttons on page 3
-            var total = $('input[name=total]').val();
-            var inp = $(this).parent().find('input');
-            if(inp.val() == total) {
-                inp.val('');
-            } else if(inp.val() == '') {
-                inp.val(total);
-            }
-        });
-        function zeroFill(number, width)
-        {
-            width -= number.toString().length;
-            if ( width > 0 ) {
-                return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
-            }
-            return number + ""; // always return a string
-        }
+        reset_app();
 
         var mct, ect, sunrise, sunset;
         get_location(function(res) {
@@ -308,6 +290,41 @@
             $('#next #evening_twilight').text(ect[0] + ":" + zeroFill(ect[1], 2));
             $('#next #sunrise').text(sunrise[0] + ":" + zeroFill(sunrise[1], 2));
         });
+
+        // page 1
+
+        $('select#plane').change(function() {
+            // when the plane selector changes, change the currency display.
+            var selected = $(this).val();
+            for(var p in planes) {
+                var plane = planes[p];
+                if(plane['id'] == selected) {
+                    set_currency_display(plane['currency'])
+                }
+            }
+        });
+
+        var updater_id;
+        $("#start_button").click(function() {
+            start_time = get_current_time();
+            if(is_it_day_or_night('flight') == 'night') {
+                night_start = start_time;
+            }
+
+            get_location(function(res) {
+                route_points.push(['land', res.coords]);
+            });
+
+            updater_id = setInterval(function() {
+                var now = get_current_time();
+                update_night_decimal(now);
+                update_total_decimal(now);
+                update_hood_decimal(now);
+                update_actual_decimal(now);
+            }, 5000);
+        });
+
+        // page 2
 
         var actual_start;
         var actual_acc = [0, 0, 0];
@@ -367,26 +384,6 @@
             }
             $('#night_time').text(decimal);
         }
-
-        var updater_id;
-        $("#start_button").click(function() {
-            start_time = get_current_time();
-            if(is_it_day_or_night('flight') == 'night') {
-                night_start = start_time;
-            }
-
-            get_location(function(res) {
-                route_points.push(['land', res.coords]);
-            });
-
-            updater_id = setInterval(function() {
-                var now = get_current_time();
-                update_night_decimal(now);
-                update_total_decimal(now);
-                update_hood_decimal(now);
-                update_actual_decimal(now);
-            }, 5000);
-        });
 
         function close_out_hood(now) {
             if(hood_start) {
@@ -448,80 +445,49 @@
             $('#approaches').text(prev + 1);
         });
 
-        $('#pre_submit').click(function() {
-            get_location(function(res) {
-                route_points.push(['land', res.coords]);
-                make_route_selection(route_points);
-            });
+        // page 3
 
-            blank = function(val) {
-                if(Number(val) == 0) {
-                    return '';
-                } else {
-                    return val;
-                }
-            }
-
-            var mode = $('#purpose').val()
-            var total = $('#total_time').text();
-            var night = blank($('#night_time').text());
-            var hood = blank($('#hood_time').text());
-            var actual = blank($('#actual_time').text());
-            var day_l = blank($('#day_landings').text());
-            var night_l = blank($('#night_landings').text());
-            var approaches = blank($('#approaches').text());
-
-            $('input[name=total]').val(total);
-            $('input[name=night]').val(night);
-            $('input[name=act_inst]').val(actual);
-            $('input[name=sim_inst]').val(hood);
-            $('input[name=app]').val(approaches);
-            $('input[name=night_l]').val(night_l);
-            $('input[name=day_l]').val(day_l);
-
-            if(mode == 'student') {
-                $('input[name=dual_r]').val(total);
-            }
-            if(mode == 'fo') {
-                $('input[name=sic]').val(total);
-            }
-            if(mode == 'captain') {
-                $('input[name=pic]').val(total);
-            }
-            if(mode == 'instructor') {
-                $('input[name=dual_g]').val(total);
-                $('input[name=pic]').val(total);
-            }
-            if(mode == 'solo') {
-                $('input[name=solo]').val(total);
-                $('input[name=pic]').val(total);
-            }
-            if(mode == 'training') {
-                $('input[name=dual_r]').val(total);
-                $('input[name=pic]').val(total);
+        $('#results_table button').click(function() {
+            // handle auto buttons on page 3
+            var total = $('input[name=total]').val();
+            var inp = $(this).parent().find('input');
+            if(inp.val() == total) {
+                inp.val('');
+            } else if(inp.val() == '') {
+                inp.val(total);
             }
         });
 
-        $('#shutdown_button').click(function() {
+        $('#shutdown').click(function() {
             // the timer has stopped, quit updating the display.
             clearInterval(updater_id);
+            fill_in_form();
         });
 
-        $('#submit_button').click(function() {
-            send_data();
-        });
-
-        $('select#plane').change(function() {
-            var selected = $(this).val();
-            for(var p in planes) {
-                var plane = planes[p];
-                if(plane['id'] == selected) {
-                    set_currency_display(plane['currency'])
-                }
-            }
+        $('#submit').click(function() {
+            // the button on the last page that sends data to the flightloggin server.
+            send_data(get_data());
         });
 
         $('#save').click(function() {
+            // the button on the last oage that is an alternate to the submit button
+            // used for when you don't have a data signal and need to log another flight.
+            save_locally(get_data());
+            reset_app();
+        });
+
+        $("#submit_queue").click(function() {
+            // the button on the first page that says "submit 3 flights saved locally"
+        });
+
+        $("#failed_popup #now").click(function() {
+            // send failed, and we want to retry immediately.
+            console.log('now');
+        });
+
+        $("#failed_popup #later").click(function() {
+            // send failed, and we want to save the data to the queue to be retried later.
+            console.log('later');
             save_locally(get_data());
             reset_app();
         });

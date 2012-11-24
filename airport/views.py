@@ -116,8 +116,8 @@ def nearby_airports(request):
     """
     Return a list of airports that are near the lat and lng included in the POST
     """
-    lng = request.GET['lng']
-    lat = request.GET['lat']
+    lng = float(request.GET['lng'])
+    lat = float(request.GET['lat'])
     type_ = request.GET['type']
     
     point = GEOSGeometry('POINT(%s %s)' % (lng, lat))

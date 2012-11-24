@@ -47,7 +47,7 @@ function tuple_to_display(tup) {
 
 function get_difference(t1, t2) {
     // get the difference between two clock times.
-    // t1 = ["05", "23", "13"] t2 = ["06", "50", "02"]
+    // t1 = [5, 23, 13] t2 = [6, 50, 2]
     if(t1[0] > t2[0]) {
         // clock has spanned 00:00, calculate differently
         var h0 = 23 - t1[0];
@@ -147,14 +147,17 @@ function get_data() {
     }
     data['new-remarks'] = $('textarea[name=remarks]').val();
     data['new-plane'] = $('#plane').val();
+    data['route_points'] = route_points;
     return data;
 }
 
-function send_data() {
+function send_data(data) {
+    // send completed flight data to the flight loggin servers
+    // `data` is what comes out of the `get_data()` function.
     $.ajax({
         type: 'post',
         url: '/new_flight-1/' + username,
-        data: get_data(),
+        data: data,
     }).error(function() {
         $('#failed_popup').popup('open');
     });
@@ -216,17 +219,24 @@ function save_locally(data){
     var old = retrieve_all_saved();
     old.push(data)
     var serialized = JSON.stringify(old);
-    console.log('about to save', serialized);
     localStorage.setItem('flights', serialized);
 }
 
 function retrieve_all_saved() {
     var s = localStorage.getItem('flights');
-    console.log(s);
     if(!s) {
         return [];
     }
     return JSON.parse(s);
+}
+
+function pop_from_queue() {
+    var queued = retrieve_all_saved();
+    var ret = queued[0];
+    for(i in queued) {
+
+    }
+    return ret;
 }
 
 function reset_app() {
@@ -245,9 +255,123 @@ function reset_app() {
         field = fields[i];
         $('input[name=' + field + ']').val('');
     }
-    $('textarea[name=remarks]').val('');
 
+    $('textarea[name=remarks]').val('');
+    
+    var len = get_queue_count();
+    if(len) {
+        // there are saved flights in the queue, make the button that submits them.
+        var existing_button = $('#submit_queue');
+        var text = "Submit " + len + " saved flights";
+        if(existing_button.length == 0) {
+            var button = $('<a data-theme="b" data-role="button" id="submit_queue">').text(text);
+            $('#queue_length').append(button);
+            button.button();
+        } else {
+            // button already exists, update the text.
+            existing_button.find(".ui-btn-text").text(text);
+        }
+    }
 }
 
+function get_queue_count() {
+    return retrieve_all_saved().length;
+}
 
+var pretty;
+function pretty_raw_route_points() {
+    var out = [];
+    var disp, this_accurate, last_accurate;
+    for(i in route_points) {
+        var rp = route_points[i];
+        var lat = rp[1].latitude.toFixed(2);
+        var lng = rp[1].longitude.toFixed(2);
+        var point = '[' + lat + ',' + lng + ']';
+        if(rp[0] == 'land') {
+            disp = $('<span>').addClass('land').text(point);
+        } else {
+            disp = $('<span>').addClass('waypoint').text(point);
+        }
+        this_accurate = rp[1].latitude.toFixed(4) + rp[1].longitude.toFixed(4);
+        if(last_accurate != this_accurate) {
+            // skip if the last is the same as this one (using more accurate numbers)
+            out.push(disp);
+            last_accurate = this_accurate;
+        }
+    }
+    if(out.length == 1) {
+        // one duplicate the only element if there is only one element
+        // finishing airport is the same as takeoff airport (local flight)
+        // log as KMER-KMER
+        out[1] = out[0];
+    }
+    $('#raw_route').append(out);
+    $('#raw_route span').after(' '); // add spaces between elements to allow wrapping
+}
 
+function calculate_route() {
+    get_location(function(res) {
+        route_points.push(['land', res.coords]);
+        make_route_selection(route_points);
+    });
+}
+
+function zeroFill(number, width) {
+    width -= number.toString().length;
+    if (width > 0) {
+        return new Array(width + (/\./.test(number) ? 2 : 1)).join('0') + number;
+    }
+    return number + ""; // always return a string
+}
+
+function fill_in_form() {
+    // get data from page 1 and 2 and fill it into the page 3 form.
+    
+    blank = function(val) {
+        if(Number(val) == 0) {
+            return '';
+        } else {
+            return val;
+        }
+    }
+
+    var total = $('#total_time').text();
+    var night = blank($('#night_time').text());
+    var hood = blank($('#hood_time').text());
+    var actual = blank($('#actual_time').text());
+    var day_l = blank($('#day_landings').text());
+    var night_l = blank($('#night_landings').text());
+    var approaches = blank($('#approaches').text());
+
+    $('input[name=total]').val(total);
+    $('input[name=night]').val(night);
+    $('input[name=act_inst]').val(actual);
+    $('input[name=sim_inst]').val(hood);
+    $('input[name=app]').val(approaches);
+    $('input[name=night_l]').val(night_l);
+    $('input[name=day_l]').val(day_l);
+
+    var mode = $('#purpose').val()
+
+    if(mode == 'student') {
+        $('input[name=dual_r]').val(total);
+    }
+    if(mode == 'fo') {
+        $('input[name=sic]').val(total);
+    }
+    if(mode == 'captain') {
+        $('input[name=pic]').val(total);
+    }
+    if(mode == 'instructor') {
+        $('input[name=dual_g]').val(total);
+        $('input[name=pic]').val(total);
+    }
+    if(mode == 'solo') {
+        $('input[name=solo]').val(total);
+        $('input[name=pic]').val(total);
+    }
+    if(mode == 'training') {
+        $('input[name=dual_r]').val(total);
+        $('input[name=pic]').val(total);
+    }
+}

@@ -27,3 +27,7 @@ table#results_table div {padding-bottom: 10px}
 .not_current {color: red}
 
 #instructions p {text-align: left}
+
+#raw_route span {margin-right: 2px; margin-left: 2px}
+#raw_route span.land {color: green}
+#raw_route span.waypoint {color: blue}
