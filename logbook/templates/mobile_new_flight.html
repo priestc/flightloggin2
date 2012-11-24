@@ -13,7 +13,7 @@
         <script src="{% static 'js/suncalc.min.js' %}"></script>
         <script src="{% static 'js/mobilelogger.js' %}"></script>
         <script>
-            var username = window.location.href.split('/')[4];
+            var username = "{{ request.display_user.username }}";
             window.google_analytics_uacct = "UA-501381-5";
             $.mobile.ignoreContentEnabled = true;
         </script>
@@ -155,7 +155,7 @@
                 <textarea name="remarks" placeholder="remarks"></textarea>
                 <div id="raw_route"></div>
                 <input type="text" name="route_string" id="route_box">
-                <a href="#one" data-role="button" data-theme="e" id="submit">Submit (requires internet connection)</a>
+                <a href="#" data-role="button" data-theme="e" id="submit">Submit (requires internet connection)</a>
                 <a href="#one" data-role="button" data-theme="e" id="save">Save (submit later)</a>
             </div>
             <div data-role="popup" id="failed_popup" data-overlay-theme="a" data-theme="c" style="max-width:400px;" class="ui-corner-all">

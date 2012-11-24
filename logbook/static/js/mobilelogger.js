@@ -160,6 +160,8 @@ function send_data(data) {
         data: data,
     }).error(function() {
         $('#failed_popup').popup('open');
+    }).success(function() {
+        reset_app();
     });
 }
 
@@ -168,7 +170,7 @@ function get_planes() {
     $.ajax({
         url: '/planes/' + username + '.json',
         type: 'get',
-    }).done(function(res) {
+    }).success(function(res) {
         planes = res;
         for(i in res) {
             var plane = res[i];
@@ -240,6 +242,7 @@ function pop_from_queue() {
 }
 
 function reset_app() {
+    console.log('reset');
     $('#person').val('');
     $('.time_container').text('0');
     $('.time_container.dec').text('0.0');
