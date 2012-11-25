@@ -419,7 +419,7 @@ urlpatterns += patterns('',
     url(
         r'^mobile/(?P<username>%s)$' % username_regex,
         "logbook.views.mobile_new_flight",
-                                                      name="mobile-new-flight",
+                                                                 name="mobile",
     ),
     
     url(

@@ -28,7 +28,13 @@
     <span class="big" id="records-sel">
     <a href="{% url records user.username %}">Records</a></span>
     {% endif %}
-    
+
+    {% if not shared %}
+    &#8226;
+    <span class="big" id="records-sel">
+    <a href="{% url mobile user.username %}">Mobile</a><sup>beta</sup></span>
+    {% endif %}
+
     <br>
     
     {% if not shared or user.get_profile.other_share %}
