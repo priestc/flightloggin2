@@ -311,6 +311,6 @@ def mass_edit(request, page=0):
 
 @render_to('mobile_new_flight.html')
 def mobile_new_flight(request):
-    if not request.user == request.display_user:
-        return HttpResponseForbidden('Please Log in')
-    return {}
+    if request.user == request.display_user or request.display_user.username == 'demo':
+        return {}
+    return HttpResponseForbidden('Please Log in')
