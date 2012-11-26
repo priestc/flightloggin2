@@ -8,6 +8,8 @@ from share.decorator import secret_key
 from annoying.decorators import render_to
 from models import Location, HistoricalIdent
 
+from main.utils import track
+
 ################################
 
 @render_to('location_profile.html')
@@ -132,7 +134,7 @@ def nearby_airports(request):
 
     out = []
     for airport in airports[:10]:
-        if airport.distance.mi < 10:
+        if airport.distance.mi < 5:
             a = {
                 'ident': airport.identifier,
                 'name': airport.name,
@@ -140,6 +142,7 @@ def nearby_airports(request):
             }
             out.append(a)
 
+    track('api-nearby-aiports', {'username': request.user.username})
     return HttpResponse(json.dumps(out), mimetype="application/json")
 
 
