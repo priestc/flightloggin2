@@ -191,10 +191,10 @@ function send_data(data) {
         url: '/new_flight-1/' + username,
         data: data,
     }).error(function() {
+        $.mobile.loading('hide');
         $('#failed_popup').popup('open');
     }).success(function() {
         reset_app();
-        $.mobile.changePage('#one');
     }).done(function() {
         $.mobile.loading('hide');
     });
@@ -305,12 +305,12 @@ function reset_app() {
     var len = get_queue_count();
     if(len) {
         // there are saved flights in the queue, make the button that submits them.
-        var existing_button = $('#submit_queue');
+        var existing_button = $('#submit_saved_flights');
         var text = "Submit " + len + " saved flights";
         if(existing_button.length == 0) {
             //add button to dom
-            var button = $('<a data-theme="b" data-role="button" id="submit_queue">').text(text);
-            $('#queue_length').append(button);
+            var button = $('<a data-theme="b" data-role="button" id="submit_saved_flights">').text(text);
+            $('#saved_flights_button_container').append(button);
             button.button();
         } else {
             // button already exists, update the text.
@@ -318,8 +318,18 @@ function reset_app() {
         }
     } else {
         // no more flights in the queue, remove the button on page one.
-        $('#submit_queue').remove();
+        $('#submit_saved_flights').remove();
     }
+
+    // whenever the button gets destroyed and replaced, this event handler needs to be re-added.
+    $("#submit_saved_flights").unbind('click').click(function() {
+        // the button on the first page that says "submit 3 flights saved locally"
+        $.mobile.changePage('#three');
+        data = pop_from_queue();
+        fill_in_form(data);
+    });
+
+    $.mobile.changePage('#one');
 }
 
 function get_queue_count() {

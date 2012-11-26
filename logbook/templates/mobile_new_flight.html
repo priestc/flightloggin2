@@ -46,7 +46,7 @@
                     <option value="solo">Solo</option>
                 </select>
                 <a href="#two" data-role="button" id="start_button" data-theme="e">Start</a>
-                <div id="queue_length"></div>
+                <div id="saved_flights_button_container"></div>
             </div>
             <div data-role="footer">
                 <h4><a href="/logbook" rel="external">Back to logbook</a> - <a href="#four">Instructions</a></h4>
@@ -276,9 +276,11 @@
         {% googleanalyticsjs %}
 
         <script>
-        get_planes(); // fill in the plane select box (hits the API)
-        $("#clock").jclock({utc: true});
-        reset_app();
+        $(document).ready(function() {
+            get_planes(); // fill in the plane select box (hits the API)
+            $("#clock").jclock({utc: true});
+            reset_app();
+        });
 
         var mct, ect, sunrise, sunset;
         get_location(function(res) {
@@ -304,14 +306,6 @@
                     set_currency_display(plane['currency'])
                 }
             }
-        });
-
-        $("#submit_queue").click(function() {
-            // the button on the first page that says "submit 3 flights saved locally"
-            $.mobile.changePage('#three');
-            data = pop_from_queue();
-            console.log('popped', data);
-            fill_in_form(data);
         });
 
         var updater_id;
@@ -455,6 +449,17 @@
             $('#approaches').text(prev + 1);
         });
 
+        $('#shutdown').click(function() {
+            // the timer has stopped, quit updating the display. Fill in data to page 3.
+            clearInterval(updater_id);
+            var data = get_data(2);
+            get_location(function(res) {
+                route_points.push(['land', res.coords]);
+                fill_in_form(data);
+                prefill_purpose(data);
+            });
+        });
+
         // page 3
 
         $('#results_table button').click(function() {
@@ -466,17 +471,6 @@
             } else if(inp.val() == '') {
                 inp.val(total);
             }
-        });
-
-        $('#shutdown').click(function() {
-            // the timer has stopped, quit updating the display. Fill in data to page 3.
-            clearInterval(updater_id);
-            var data = get_data(2);
-            get_location(function(res) {
-                route_points.push(['land', res.coords]);
-                fill_in_form(data);
-                prefill_purpose(data);
-            });
         });
 
         $("#calc_route").click(function() {
@@ -498,7 +492,6 @@
 
         $("#discard").click(function() {
             reset_app();
-            $.mobile.changePage('#one');
         });
 
         $("#failed_popup #now").click(function() {
