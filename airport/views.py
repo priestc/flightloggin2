@@ -1,6 +1,6 @@
 import json
 
-from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.core.urlresolvers import reverse
 from django.contrib.gis.geos import GEOSGeometry
 
@@ -118,8 +118,12 @@ def nearby_airports(request):
     """
     Return a list of airports that are near the lat and lng included in the POST
     """
-    lng = float(request.GET['lng'])
-    lat = float(request.GET['lat'])
+    try:
+        lng = float(request.GET['lng'])
+        lat = float(request.GET['lat'])
+    except ValueError:
+        return HttpResponseBadRequest('lat/lng must be numbers')
+
     type_ = request.GET['type']
     
     point = GEOSGeometry('POINT(%s %s)' % (lng, lat))
