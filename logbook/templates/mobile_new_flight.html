@@ -99,21 +99,25 @@
                 <div id="day_night"></div>
                 <div id="next">
                     <table>
-                        <tr>
-                            <td>Next Morning Twilight:</td>
-                            <td><span id="morning_twilight"></span> Z</td>
+                        <tr class="bucket_0">
+                            <td class='title'>title</td>
+                            <td><span>number</span> Z</td>
                         </tr>
-                        <tr>
-                            <td>Next Sunrise:</td>
-                            <td><span id="sunrise"></span> Z</td>
+                        <tr class="bucket_1">
+                            <td class='title'>title</td>
+                            <td><span>number</span> Z</td>
                         </tr>
-                        <tr>
-                            <td>Next Sunset:</td>
-                            <td><span id="sunset"></span> Z</td>
+                        <tr class="bucket_2">
+                            <td class='title'>title</td>
+                            <td><span>number</span> Z</td>
                         </tr>
-                        <tr>
-                            <td>Next Evening Twilight:</td>
-                            <td><span id="evening_twilight"></span> Z</td>
+                        <tr class="bucket_3">
+                            <td class='title'>title</td>
+                            <td><span>number</span> Z</td>
+                        </tr>
+                        <tr class="bucket_4">
+                            <td class='title'>title</td>
+                            <td><span>number</span> Z</td>
                         </tr>
                     </table>
                 </div>
@@ -276,235 +280,280 @@
         {% googleanalyticsjs %}
 
         <script>
+
+        var mct, ect, sunrise, sunset;
+        var updater_id;
+        var actual_start;
+        var actual_acc = [0, 0, 0];
+        var hood_start;
+        var hood_acc = [0, 0, 0];
+        var start_time, night_start, night_stop;
+        var route_points = [];
+
         $(document).ready(function() {
             get_planes(); // fill in the plane select box (hits the API)
             $("#clock").jclock({utc: true});
             reset_app();
-        });
 
-        var mct, ect, sunrise, sunset;
-        get_location(function(res) {
-            var times = SunCalc.getTimes(new Date(), res.coords.latitude, res.coords.longitude);
-            mct = [times.dawn.getUTCHours(), times.dawn.getUTCMinutes(), 0];
-            ect = [times.dusk.getUTCHours(), times.dusk.getUTCMinutes(), 0];
-            sunrise = [times.sunrise.getUTCHours(), times.sunrise.getUTCMinutes(), 0];
-            sunset = [times.sunset.getUTCHours(), times.sunset.getUTCMinutes(), 0];
-            $('#next #morning_twilight').text(mct[0] + ":" + zeroFill(mct[1], 2));
-            $('#next #sunset').text(sunset[0] + ":" + zeroFill(sunset[1], 2));
-            $('#next #evening_twilight').text(ect[0] + ":" + zeroFill(ect[1], 2));
-            $('#next #sunrise').text(sunrise[0] + ":" + zeroFill(sunrise[1], 2));
-        });
+            update_sun_table = function(callback) {
+                get_location(function(res) {
+                    var data = SunCalc.getTimes(new Date(), res.coords.latitude, res.coords.longitude);
+                    var times = [];
 
-        // page 1
+                    mct = [data.dawn.getUTCHours(), data.dawn.getUTCMinutes(), 0];
+                    ect = [data.dusk.getUTCHours(), data.dusk.getUTCMinutes(), 0];
+                    sunrise = [data.sunrise.getUTCHours(), data.sunrise.getUTCMinutes(), 0];
+                    sunset = [data.sunset.getUTCHours(), data.sunset.getUTCMinutes(), 0];
 
-        $('select#plane').change(function() {
-            // when the plane selector changes, change the currency display.
-            var selected = $(this).val();
-            for(var p in planes) {
-                var plane = planes[p];
-                if(plane['id'] == selected) {
-                    set_currency_display(plane['currency'])
+                    var sorter = function(a_with_label, b_with_label) {
+                        // a_with_label = ['Sunset', [12, 4, 0]]
+                        var a = a_with_label[1], b = b_with_label[1];
+                        var value = function(x) {return x[0] + (x[1] / 60) + (x[2] / 3600);};
+                        var aa = value(a), bb = value(b);
+                        if(aa == bb) {
+                            return 0;
+                        } else if(aa > bb) {
+                            return 1;
+                        } else if(aa < bb) {
+                            return -1;
+                        }
+                    }
+
+                    times = [['Morning Civil Twilight', mct],
+                             ['Sunset', sunset],
+                             ['Sunrise', sunrise],
+                             ['Evening Civil Twilight', ect],
+                             ['Takeoff', start_time]].sort(sorter);
+
+                    for(i in times) {
+                        var time = times[i];
+                        var label = time[0];
+                        var numbers = time[1];
+                        var disp = numbers[0] + ":" + zeroFill(numbers[1], 2);
+                        var bucket = $('#next .bucket_' + i);
+                        bucket.find('span').text(disp);
+                        bucket.find('td.title').text(label);
+                    }
+                    if(callback) {
+                        callback();
+                    }
+                });
+            }
+
+            // page 1
+
+            $('select#plane').change(function() {
+                // when the plane selector changes, change the currency display.
+                var selected = $(this).val();
+                for(var p in planes) {
+                    var plane = planes[p];
+                    if(plane['id'] == selected) {
+                        set_currency_display(plane['currency'])
+                    }
                 }
-            }
-        });
-
-        var updater_id;
-        $("#start_button").click(function() {
-            start_time = get_current_time();
-            if(is_it_day_or_night('flight') == 'night') {
-                night_start = start_time;
-            }
-
-            get_location(function(res) {
-                route_points.push(['land', res.coords]);
             });
 
-            updater_id = setInterval(function() {
+            
+            $("#start_button").click(function() {
+                start_time = get_current_time();
+                
+                setInterval(update_sun_table, 1800000); // every 30 minutes
+
+                update_sun_table(function() {
+                    // after sun table has been updated, determine if it's
+                    // day or night
+                    if(is_it_day_or_night('flight') == 'night') {
+                        night_start = start_time;
+                    }
+                });
+
+                get_location(function(res) {
+                    route_points.push(['land', res.coords]);
+                });
+
+                updater_id = setInterval(function() {
+                    var now = get_current_time();
+                    update_night_decimal(now);
+                    update_total_decimal(now);
+                    update_hood_decimal(now);
+                    update_actual_decimal(now);
+                }, 5000);
+            });
+
+            // page 2
+
+            
+            function update_actual_decimal(now) {
+                var new_actual = [0, 0, 0];
+                if(actual_start) {
+                    new_actual = get_difference(actual_start, now);
+                }
+                var actual = add_times(actual_acc, new_actual);
+                decimal = tuple_to_display(actual);
+                $('#actual_time').text(decimal);
+            }
+
+            
+            function update_hood_decimal(now) {
+                var new_hood = [0, 0, 0];
+                if(hood_start) {
+                    new_hood = get_difference(hood_start, now);
+                }
+                var hood = add_times(hood_acc, new_hood);
+                decimal = tuple_to_display(hood);
+                $('#hood_time').text(decimal);
+            }
+
+            
+            function update_total_decimal(now) {
+                var elapsed = get_difference(start_time, now);
+                $("#total_time").text(tuple_to_display(elapsed));
+            }
+
+            function update_night_decimal(now) {
+                var currently = is_it_day_or_night('flight');
+                if(night_start && currently == 'day') {
+                    // just switched from night to day
+                    night_stop = now;
+                } else if(!night_start && currently == 'night') {
+                    // just switched from day to night
+                    night_start = now;
+                }
+
+                var duration, decimal;
+                if(night_start && !night_stop) {
+                    // day timer is still going
+                    duration = get_difference(night_start, now);
+                    decimal = tuple_to_display(duration);
+                }
+                if(!night_start) {
+                    // day timer has not been started yet.
+                    decimal = '0.0';
+                }
+                if(night_start && night_stop) {
+                    // night timer is done. Complete.
+                    duration = get_difference(night_start, night_stop);
+                    decimal = tuple_to_display(duration);
+                }
+                $('#night_time').text(decimal);
+            }
+
+            function close_out_hood(now) {
+                if(hood_start) {
+                    var new_hood = get_difference(hood_start, now);
+                    hood_acc = add_times(new_hood, hood_acc);
+                    hood_start = undefined;
+                }
+            }
+
+            function close_out_actual(now) {
+                if(actual_start) {
+                    var new_actual = get_difference(actual_start, now);
+                    actual_acc = add_times(new_actual, actual_acc);
+                    actual_start = undefined;
+                }
+            }
+
+            $('input[name=inst_condition]:radio').click(function() {
+                var cond = $('input[name=inst_condition]:radio:checked').attr('value');
                 var now = get_current_time();
-                update_night_decimal(now);
-                update_total_decimal(now);
-                update_hood_decimal(now);
-                update_actual_decimal(now);
-            }, 5000);
-        });
-
-        // page 2
-
-        var actual_start;
-        var actual_acc = [0, 0, 0];
-        function update_actual_decimal(now) {
-            var new_actual = [0, 0, 0];
-            if(actual_start) {
-                new_actual = get_difference(actual_start, now);
-            }
-            var actual = add_times(actual_acc, new_actual);
-            decimal = tuple_to_display(actual);
-            $('#actual_time').text(decimal);
-        }
-
-        var hood_start;
-        var hood_acc = [0, 0, 0];
-        function update_hood_decimal(now) {
-            var new_hood = [0, 0, 0];
-            if(hood_start) {
-                new_hood = get_difference(hood_start, now);
-            }
-            var hood = add_times(hood_acc, new_hood);
-            decimal = tuple_to_display(hood);
-            $('#hood_time').text(decimal);
-        }
-
-        var start_time;
-        function update_total_decimal(now) {
-            var elapsed = get_difference(start_time, now);
-            $("#total_time").text(tuple_to_display(elapsed));
-        }
-
-        var night_start, night_stop;
-        function update_night_decimal(now) {
-            var currently = is_it_day_or_night('flight');
-            if(night_start && currently == 'day') {
-                // just switched from night to day
-                night_stop = now;
-            } else if(!night_start && currently == 'night') {
-                // just switched from day to night
-                night_start = now;
-            }
-
-            var duration, decimal;
-            if(night_start && !night_stop) {
-                // day timer is still going
-                duration = get_difference(night_start, now);
-                decimal = tuple_to_display(duration);
-            }
-            if(!night_start) {
-                // day timer has not been started yet.
-                decimal = '0.0';
-            }
-            if(night_start && night_stop) {
-                // night timer is done. Complete.
-                duration = get_difference(night_start, night_stop);
-                decimal = tuple_to_display(duration);
-            }
-            $('#night_time').text(decimal);
-        }
-
-        function close_out_hood(now) {
-            if(hood_start) {
-                var new_hood = get_difference(hood_start, now);
-                hood_acc = add_times(new_hood, hood_acc);
-                hood_start = undefined;
-            }
-        }
-
-        function close_out_actual(now) {
-            if(actual_start) {
-                var new_actual = get_difference(actual_start, now);
-                actual_acc = add_times(new_actual, actual_acc);
-                actual_start = undefined;
-            }
-        }
-
-        $('input[name=inst_condition]:radio').click(function() {
-            var cond = $('input[name=inst_condition]:radio:checked').attr('value');
-            var now = get_current_time();
-            if(cond == 'visual') {
-                close_out_actual(now);
-                close_out_hood(now)
-            }
-            if(cond == 'actual') {
-                if(!actual_start) {
-                    actual_start = now;
+                if(cond == 'visual') {
+                    close_out_actual(now);
+                    close_out_hood(now)
                 }
-                close_out_hood(now);
-            }
-            if(cond == 'hood') {
-                if(!hood_start) {
-                    hood_start = now;
+                if(cond == 'actual') {
+                    if(!actual_start) {
+                        actual_start = now;
+                    }
+                    close_out_hood(now);
                 }
-                close_out_actual(now);
-            }
-        });
+                if(cond == 'hood') {
+                    if(!hood_start) {
+                        hood_start = now;
+                    }
+                    close_out_actual(now);
+                }
+            });
 
-        var route_points = [];
-        $('#landing_button').click(function() {
-            var div = "#" + is_it_day_or_night('land') + "_landings";
-            // increment the correct landing box by one landing.
-            var prev = Number($(div).text());
-            $(div).text(prev + 1);
-            get_location(function(res) {
-                route_points.push(['land', res.coords])
+            
+            $('#landing_button').click(function() {
+                var div = "#" + is_it_day_or_night('land') + "_landings";
+                // increment the correct landing box by one landing.
+                var prev = Number($(div).text());
+                $(div).text(prev + 1);
+                get_location(function(res) {
+                    route_points.push(['land', res.coords])
+                });
+            });
+
+            $('#waypoint_button').click(function() {
+                get_location(function(res) {
+                    route_points.push(['waypoint', res.coords]);
+                });
+            });
+
+            $('#approach_button').click(function() {
+                // increment the approach box by one.
+                var prev = Number($('#approaches').text());
+                $('#approaches').text(prev + 1);
+            });
+
+            $('#shutdown').click(function() {
+                // the timer has stopped, quit updating the display. Fill in data to page 3.
+                clearInterval(updater_id);
+                var data = get_data(2);
+                get_location(function(res) {
+                    route_points.push(['land', res.coords]);
+                    fill_in_form(data);
+                    prefill_purpose(data);
+                });
+            });
+
+            // page 3
+
+            $('#results_table button').click(function() {
+                // handle auto buttons on page 3
+                var total = $('input[name=total]').val();
+                var inp = $(this).parent().find('input');
+                if(inp.val() == total) {
+                    inp.val('');
+                } else if(inp.val() == '') {
+                    inp.val(total);
+                }
+            });
+
+            $("#calc_route").click(function() {
+                var data = get_data(3);
+                make_route_selection(data.route_points)
+            });
+
+            $('#submit').click(function() {
+                // the button on the last page that sends data to the flightloggin server.
+                send_data(get_data(3));
+            });
+
+            $('#save').click(function() {
+                // the button on the last page that is an alternate to the submit button
+                // used for when you don't have a data signal and need to log another flight.
+                save_locally(get_data(3));
+                reset_app();
+            });
+
+            $("#discard").click(function() {
+                reset_app();
+            });
+
+            $("#failed_popup #now").click(function() {
+                // send failed, and we want to retry immediately.
+                send_data(get_data(3));
+            });
+
+            $("#failed_popup #later").click(function() {
+                // send failed, and we want to save the data to the queue to be retried later.
+                save_locally(get_data(3));
+                reset_app();
             });
         });
-
-        $('#waypoint_button').click(function() {
-            get_location(function(res) {
-                route_points.push(['waypoint', res.coords]);
-            });
-        });
-
-        $('#approach_button').click(function() {
-            // increment the approach box by one.
-            var prev = Number($('#approaches').text());
-            $('#approaches').text(prev + 1);
-        });
-
-        $('#shutdown').click(function() {
-            // the timer has stopped, quit updating the display. Fill in data to page 3.
-            clearInterval(updater_id);
-            var data = get_data(2);
-            get_location(function(res) {
-                route_points.push(['land', res.coords]);
-                fill_in_form(data);
-                prefill_purpose(data);
-            });
-        });
-
-        // page 3
-
-        $('#results_table button').click(function() {
-            // handle auto buttons on page 3
-            var total = $('input[name=total]').val();
-            var inp = $(this).parent().find('input');
-            if(inp.val() == total) {
-                inp.val('');
-            } else if(inp.val() == '') {
-                inp.val(total);
-            }
-        });
-
-        $("#calc_route").click(function() {
-            var data = get_data(3);
-            make_route_selection(data.route_points)
-        });
-
-        $('#submit').click(function() {
-            // the button on the last page that sends data to the flightloggin server.
-            send_data(get_data(3));
-        });
-
-        $('#save').click(function() {
-            // the button on the last page that is an alternate to the submit button
-            // used for when you don't have a data signal and need to log another flight.
-            save_locally(get_data(3));
-            reset_app();
-        });
-
-        $("#discard").click(function() {
-            reset_app();
-        });
-
-        $("#failed_popup #now").click(function() {
-            // send failed, and we want to retry immediately.
-            send_data(get_data(3));
-        });
-
-        $("#failed_popup #later").click(function() {
-            // send failed, and we want to save the data to the queue to be retried later.
-            save_locally(get_data(3));
-            reset_app();
-        });
-
         </script>
     </body>
 </html>

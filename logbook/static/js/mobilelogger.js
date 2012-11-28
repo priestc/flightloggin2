@@ -20,7 +20,6 @@ function to_julian(tup) {
 function is_it_day_or_night(mode) {
     var t = get_current_time();
     var night, day;
-
     if(mode == 'land') {
         // use civil twilight because thats how the FAA defines night landings
         night = to_julian(ect);
