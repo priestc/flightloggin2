@@ -149,7 +149,7 @@ function get_data(page) {
                   'app', 'sic', 'person', 'route_string'];
 
         var d = new Date();
-        var date = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
+        var date = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
         data['new-date'] = date;
 
         for(i in fields) {
