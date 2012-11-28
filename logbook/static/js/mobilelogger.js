@@ -20,14 +20,16 @@ function to_julian(tup) {
 function is_it_day_or_night(mode) {
     var t = get_current_time();
     var night, day;
-    if(mode == 'land') {
-        // use civil twilight because thats how the FAA defines night landings
+    if(mode == 'flight') {
+        // use civil twilight because thats how the FAA defines night time
         night = to_julian(ect);
         day = to_julian(mct);
-    } else if(mode == 'flight') {
-        // use sunset and sunrise because thats how the FAA defines night and day hour logging.
-        night = to_julian(sunset);
-        day = to_julian(sunrise);
+    } else if(mode == 'land') {
+        // use sunset +1hr and sunrise -1hr because thats how the FAA defines night and day landings
+        var sunset_hr = [sunset[0] + 1, sunset[1], sunset[2]]
+        var sunrise_hr = [sunrise[0] - 1, sunrise[1], sunrise[2]]
+        night = to_julian(sunset_hr);
+        day = to_julian(sunrise_hr);
     } else {
         throw "error";
     }
