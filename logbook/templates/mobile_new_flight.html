@@ -412,7 +412,7 @@
 
             function update_night_decimal(now) {
                 var currently = is_it_day_or_night('flight');
-                if(night_start && currently == 'day') {
+                if(night_start && !night_stop && currently == 'day') {
                     // just switched from night to day
                     night_stop = now;
                 } else if(!night_start && currently == 'night') {
