@@ -80,3 +80,17 @@ ul.messages li.info {
   margin: 5px;
   text-align: center;
 }
+
+#social {
+  width: 100%;
+  padding: 5px;
+  overflow: hidden;
+}
+
+#social .fb-like {
+  float: left;
+}
+
+#social .g-plusone-wrapper {
+  float: right;
+}
