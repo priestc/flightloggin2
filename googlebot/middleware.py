@@ -10,13 +10,13 @@ class LimitBotsMiddleware(object):
         """
         agent = request.META.get('HTTP_USER_AGENT', '').lower()
 
-        overloaded = os.getloadavg()[1] > 3
-
+        is_overloaded = False
         is_bot = False
-        for key in ['googlebot', 'yahoo! slurp', 'bingbot', 'Baiduspider']:
+        for key in ['googlebot', 'yahoo! slurp', 'bingbot', 'Baiduspider', 'YandexBot']:
             if key in agent:
                 is_bot = True
+                is_overloaded = os.getloadavg()[1] > 3
                 break
 
-        if is_bot and overloaded:
+        if is_bot and is_overloaded:
             return HttpResponse("503 - Spider detected, server overloaded, come back later", status=503)
