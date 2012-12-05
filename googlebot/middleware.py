@@ -1,4 +1,4 @@
-import datetime
+import os
 from django.http import HttpResponse
 
 class LimitBotsMiddleware(object):
@@ -11,10 +11,11 @@ class LimitBotsMiddleware(object):
         times
         """
         agent = request.META.get('HTTP_USER_AGENT', 'what').lower()
-        now = datetime.datetime.now().hour
 
-        in_interval = self.bots_start_hour < now < self.bots_stop_hour
+        overloaded = os.getloadavg()[2] > 3
+
         is_googlebot = 'googlebot' in agent
         is_yahoobot = 'yahoo! slurp' in agent
-        if (is_googlebot or is_yahoobot) and not in_interval:
+        is_bingbot = 'bingbot' in agent
+        if (is_googlebot or is_yahoobot or is_bingbot) and not overloaded:
             return HttpResponse("503 - Server Overloaded, come back later", status=503)
