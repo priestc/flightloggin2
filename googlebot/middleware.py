@@ -17,5 +17,5 @@ class LimitBotsMiddleware(object):
         is_googlebot = 'googlebot' in agent
         is_yahoobot = 'yahoo! slurp' in agent
         is_bingbot = 'bingbot' in agent
-        if (is_googlebot or is_yahoobot or is_bingbot) and not overloaded:
+        if (is_googlebot or is_yahoobot or is_bingbot) and overloaded:
             return HttpResponse("503 - Server Overloaded, come back later", status=503)
