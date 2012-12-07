@@ -176,6 +176,11 @@ function get_data(page) {
     return data;
 }
 
+function set_role() {
+    var role = localStorage[username + '_role'];
+    $('#purpose').val(role).selectmenu("refresh", true);
+}
+
 function send_data(data) {
     // send completed flight data to the flight loggin servers
     // `data` is what comes out of the `get_data()` function.

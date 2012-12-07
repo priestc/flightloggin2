@@ -294,6 +294,7 @@
             get_planes(); // fill in the plane select box (hits the API)
             $("#clock").jclock({utc: true});
             reset_app();
+            set_role();
 
             update_sun_table = function(callback) {
                 get_location(function(res) {
@@ -353,7 +354,14 @@
                 }
             });
 
-            
+            $('#purpose').change(function() {
+                // when the role box is changes, store the value locally so
+                // it remembered for next time.
+                var role = $(this).val();
+                localStorage[username + '_role'] = role
+            });
+
+
             $("#start_button").click(function() {
                 start_time = get_current_time();
                 
