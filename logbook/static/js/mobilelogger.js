@@ -211,10 +211,16 @@ function get_planes() {
         for(i in res) {
             var plane = res[i];
             var opt = $('<option>');
+            if(i == 0) {
+                // preselect the latest plane
+                opt.attr('selected', 'selected');
+            }
             opt.attr('value', plane['id']); // the plane_id
             opt.text(plane['tailnumber'] + ' (' + plane['type'] + ')');
             $('select#plane').append(opt);
         }
+        $('select#plane').selectmenu("refresh", true);
+        $('select#plane').trigger('change');
     });
 }
 
