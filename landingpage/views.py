@@ -70,7 +70,7 @@ def reset_password(request):
                 try:
                     send_reset_email(u)
                 except Exception:
-                    messages.error('No email attached to account %' % data)
+                    messages.error(request, 'No email attached to account %' % data)
                 messages.info(request, 'Email sent to %s for user %s' % (u.email, u.username))
 
     return TemplateResponse(request, 'reset_password.html', locals())
