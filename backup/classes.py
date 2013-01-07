@@ -67,13 +67,14 @@ class Backup(object):
         for e in events:
             writer.writerow(["##EVENT", e.date, e.non_flying, e.remarks.encode("utf-8", "ignore")])
         
+        fixer = lambda r: r.encode('ascii', 'replace')
         locations = Location.objects.filter(user=self.user)
         for l in locations:
             x = getattr(l.location, "x", "")
             y = getattr(l.location, "y", "")
             
-            writer.writerow(["##LOC", l.identifier, l.name, x, y,
-                    l.municipality, l.get_loc_type_display()])
+            rowz = ["##LOC", l.identifier, l.name, x, y, fixer(l.municipality), l.get_loc_type_display()]
+            writer.writerow(rowz)
                     
         #save to self.csv before returning, for potential later use
         self.csv = csv_sio
