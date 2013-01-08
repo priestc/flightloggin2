@@ -28,18 +28,23 @@
                 <ul class="nav nav-pills pull-right">
                     <li><a href="#login" data-toggle="modal">Login</a></li>
                 </ul>
-                <h3 class="muted">FlightLogg.in</h3>
+                <h3 class="muted">FlightLogg.in'</h3>
             </div>
 
             <hr>
 
             <div class="jumbotron">
                 <h1>Pilot Logbook software done right.</h1>
-                <p class="lead">For both professional and hobby fliers</p>
+                <p class="lead">For both professional and hobby fliers.<br>Currently serving <strong>{{ stats.total_logged|intcomma }}</strong> flights from <strong>{{ stats.users|intcomma }}</strong> users.</p>
                 <a class="btn btn-large btn-success" href="#register" data-toggle="modal">Signup Now!</a>
             </div>
 
             <hr>
+
+            <div>
+                <div class="g-plusone" ></div>
+                <div class="fb-like" data-href="http://flightlogg.in" data-send="true" data-width="450" data-show-faces="true" data-font="arial"></div>
+            </div>
 
             <div class="row-fluid marketing">
                 <div class="span6">
@@ -158,5 +163,7 @@
               var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
             })();
         </script>
+        {% load analytics %}
+        {% googleanalyticsjs %}
     </body>
 </html>
