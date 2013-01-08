@@ -1,96 +1,36 @@
+.container-narrow {
+    margin: 0 auto;
+    max-width: 700px;
+}
+.container-narrow > hr {
+    margin: 30px 0;
+}
+
+/* Main marketing message and sign up button */
+.jumbotron {
+    margin: 60px 0;
+    text-align: center;
+}
+.jumbotron h1 {
+    font-size: 72px;
+    line-height: 1;
+}
+.jumbotron .btn {
+    font-size: 21px;
+    padding: 14px 24px;
+}
+
+/* Supporting marketing content */
+.marketing {
+    margin: 60px 0;
+}
+.marketing p + h4 {
+    margin-top: 28px;
+}
+
 body {
-  font-family: helvetica;
-  background: #CCE4EB;
-/* IE10 Consumer Preview */ 
-background-image: -ms-linear-gradient(top left, #CCE4EB 0%, #DDF7FF 100%);
-
-/* Mozilla Firefox */ 
-background-image: -moz-linear-gradient(top left, #CCE4EB 0%, #DDF7FF 100%);
-
-/* Opera */ 
-background-image: -o-linear-gradient(top left, #CCE4EB 0%, #DDF7FF 100%);
-
-/* Webkit (Safari/Chrome 10) */ 
-background-image: -webkit-gradient(linear, left top, right bottom, color-stop(0, #CCE4EB), color-stop(1, #DDF7FF));
-
-/* Webkit (Chrome 11+) */ 
-background-image: -webkit-linear-gradient(top left, #CCE4EB 0%, #DDF7FF 100%);
-
-/* W3C Markup, IE10 Release Preview */ 
-background-image: linear-gradient(to bottom right, #CCE4EB 0%, #DDF7FF 100%);
-}
-#box_container {
-  overflow: hidden;
-  height: 400px;
-  padding-bottom: 15px;
-}
-#register {
-  height: 100%;
-  background: white;
-  padding: 5px;
-  border: 1px solid black;
-  text-align: center;
-  float: left;
-  width: 60%;
-}
-#login {
-  height: 100%;
-  float: right;
-  background: white;
-  padding: 5px;
-  width: 35%;
-  text-align: center;
-  border: 1px solid black;
-}
-#register ul.errorlist {
-  color: red;
-  margin-bottom: 0px;
-}
-#register span.helptext {
-  color: #aaaaaa;
-}
-#register table {
-  margin: 0 auto 0 auto;
-}
-#content {
-  margin: 0 auto 0 auto;
-  width: 850px;
-}
-#logo-wrapper {
-  margin: 40px;
-  text-align: center;
-}
-ul.messages li.error {
-  color: red;
-}
-
-ul.messages li.info {
-  color: green;
-}
-#footer {
-  text-align:center;
-  font-size:x-small;
-  color:gray;
-  width:100%
-}
-#reset {
-  background: white;
-  padding: 5px;
-  border: 1px solid black;
-  margin: 5px;
-  text-align: center;
-}
-
-#social {
-  width: 100%;
-  padding: 5px;
-  overflow: hidden;
-}
-
-#social .fb-like {
-  float: left;
-}
-
-#social .g-plusone-wrapper {
-  float: right;
+  background-image: url(/static/clouds3.jpg);
+  background-repeat:no-repeat;
+  background-position:center; 
+  background-size:1600px 1200px;
 }

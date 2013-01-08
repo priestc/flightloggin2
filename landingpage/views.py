@@ -19,7 +19,7 @@ from profile.models import Profile
 from site_stats.models import StatDB
 from forms import RegistrationForm
 
-@cache_page(30 * 60)
+#@cache_page(30 * 60)
 def landingpage(request):
 
     stats = StatDB.objects.latest()

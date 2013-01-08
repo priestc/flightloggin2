@@ -1,111 +1,92 @@
 <!DOCTYPE html>
 <html>
 {% load humanize %}
-  <head>
-    <title>FlightLogg.in' - Online Pilot Logbook</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/landing.css' %}">
-    <meta property="og:title" content="FlightLogg.in&#039;" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="http://flightlogg.in" />
-    <meta property="og:image" content="http://flightlogg.in/static/css/style-2/logo.png" />
-    <meta property="og:site_name" content="FlightLogg.in&#039;" />
-    <meta property="fb:admins" content="12314662" />
-    <meta name="google-site-verification" content="xe-f505ZHR6pNZzKFyeK5PNnZSkSZ8LlW979worOSHM" />
-    <meta name="tinfoil-site-verification" content="3c18536f6a6ba0da54d0b86499640c24e81cef25" />
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <head>
+        <title>FlightLogg.in' - Online Pilot Logbook</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/landing.css' %}">
+        <meta property="og:title" content="FlightLogg.in&#039;" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="http://flightlogg.in" />
+        <meta property="og:image" content="http://flightlogg.in/static/css/style-2/logo.png" />
+        <meta property="og:site_name" content="FlightLogg.in&#039;" />
+        <meta property="fb:admins" content="12314662" />
+        <meta name="google-site-verification" content="xe-f505ZHR6pNZzKFyeK5PNnZSkSZ8LlW979worOSHM" />
+        <meta name="tinfoil-site-verification" content="3c18536f6a6ba0da54d0b86499640c24e81cef25" />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <meta name="DESCRIPTION" content="FlightLoggin' is an online pilot logbook application Gone are the days of using a paper booklet to manage your aviation career data.">
         <meta name="KEYWORDS" content="Airline, Travel, Aircraft, Aviation, Pilot Logbook, Open Source, GPL, Pilot Log, Flight Logbook, web application, Flight Training, Private Pilot">
         <link rel="icon" type="image/png" href="{% static "images/favicon.ico" %}">
-  </head>
-  <body>
-    
-  <div id="content">
-    <div id="logo-wrapper">
-    <img id="logo" src="{% static CSS_URL %}/logo.png" alt="FlightLogg.in' Logo" />
-    </div>
+        <link rel='stylesheet' href='{% static 'bootstrap/css/bootstrap-responsive.min.css' %}' />
+        <link rel='stylesheet' href='{% static 'bootstrap/css/bootstrap.css' %}' />
+    </head>
+    <body>
+        <div class="container-narrow">
 
-    <p style="text-align: center; color: brown">
-      Currently serving <strong>{{ stats.total_logged|intcomma }}</strong> flights from <strong>{{ stats.users|intcomma }}</strong> users.
-    </p>
+            <div class="masthead">
+                <ul class="nav nav-pills pull-right">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+                <h3 class="muted">FlightLogg.in</h3>
+            </div>
 
-    <h3>Your pilot logbook data is too important to be sitting in your flight bag on pages.
-      Its the 21st century already! It is time to digitize! FlightLogg.in' is a
-      free, open source pilot logbook application that you can access from a web browser, or a smartphone.
-      Data is stored on the FlightLogg.in' servers so it stays safe, and you can access from anywhere.</h3>
+            <hr>
 
-    <div class="g-plusone"></div>
+            <div class="jumbotron">
+                <h1>Pilot Logbook software done right.</h1>
+                <p class="lead">For both pros and hobby fliers</p>
+                <a class="btn btn-large btn-success" href="">Signup Now!</a>
+            </div>
 
-    <div class="fb-like" data-href="http://flightlogg.in" data-send="true" data-width="450" data-show-faces="true" data-font="arial"></div>
+            <hr>
 
+            <div class="row-fluid marketing">
+                <div class="span6">
+                    <h4>Web-based</h4>
+                    <p>Works on any modern browser. On a computer or from your mobile phone.</p>
 
-    <div id="box_container">
-      <div id="register">
-        <h2>Register</h2>
-        <form action='.' method='post'>
-          <table>
-            {{ form.as_table }}
-          </table>
-          <br>
-          <input type="submit">
-        </form>
-        <a href="{% url logbook username='demo' %}">Click here to see the demo account</a>
-      </div>
+                    <h4>Email backups</h4>
+                    <p>Never worry again about losing your flight data. FightLogg.in' sends you your logbook data to your email at the end of each day so you are always in control of your flight data.</p>
 
-      <div id="login">
-        <h2>Sign-in</h2>
-        <br><br><br><br>  
-        <form action='{% url new_login %}' method='post'>
-          <label>Username: <input type="text" name='login_username'></label><br>
-          <label>Password: <input type="password" name='login_password'></label>
-          <br>
-          <input type="submit">
-        </form>
-        {% if messages %}
-        <ul class="messages">
-          {% for message in messages %}
-          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-          {% endfor %}
-        </ul>
-        {% endif %}
-        <a href="{%url reset_password %}">Reset Password</a><br>
-        <a href="{% url openid_login %}">Click here to login with OpenID</a>
-      </div>
-    </div>
+                    <h4>Charts and Graphs</h4>
+                    <p>Create graphs and charts to visualize your flight data.</p>
+                </div>
 
-    <br>
-    Key features of FlightLogg.in' include:
-    <ul>
-      <li><strong>Web-based</strong> - Access your data from any internet enabled device</li>
-      <li><strong>Email Backups</strong> - Automatically sends you a copy of all your logbook data to your email for redundancy and piece of mind. If the site ever goes down, you always have the latest copy of your logbook data in your email archives</li>
-      <li><strong>Simple, no-nonsense user interface</strong> - designed for efficiency and easy of use.
-      <li><strong>Open Source</strong> - The code that runs FlightLogg.in' is completely open source.
-      <li><strong>No lock-in</strong> - Export your data at any time in a CSV format that con be read by any program.</li>
-      <li><strong>Ad supported</strong> - No subscription fees.</li>
-      <li><strong>Badges</strong> - Sort of like achievements for the XBox. Unlock badges for
-        logging flights to new airports, logging long flights, and reaching flight hour milestones.
-      <li><strong>Create data visualization</strong> such as graphs and histograms.</li>
-      <li><strong>Location Awareness</strong> - automatically calculates the distance of your flights based on the airport identifiers in the 'route' column.</li>
-    </ul>
+                <div class="span6">
+                    <h4>Automatically calculate flight times</h4>
+                    <p>Ever wondered how many multi-engine hours you have at night? Or how many hours of PIC you have in seaplanes? Answer these questions and more</p>
 
-  </div>
-  <hr>
-  {% include 'footer.html' %}
-  {% load analytics %}
-  {% googleanalyticsjs %}
-<div id="fb-root"></div>
+                    <h4>Efficient Interface</h4>
+                    <p>FlightLoggin's user interface has been designed specifically to create an efficient user experience.
+                     Spend less time logging, and more time flying.</p>
 
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=331657940258873";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-<script type="text/javascript">
-  (function() {
-    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-    po.src = 'https://apis.google.com/js/plusone.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-  })();
-</script>
+                    <h4>Open Source</h4>
+                    <p>The technology that drives FLightLoggin is open source. So </p>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="footer">
+                <p>&copy; FlightLogg.in` 2013</p>
+            </div>
+
+        </div>
+
+        <script>(function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=331657940258873";
+            fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+
+            (function() {
+              var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+              po.src = 'https://apis.google.com/js/plusone.js';
+              var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+            })();
+        </script>
+    </body>
 </html>
