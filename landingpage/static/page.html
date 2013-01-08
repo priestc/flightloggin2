@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+    </head>
+<body>
+    <form id="whole_form"> 
+        image file: <input id="fileBox" type="file"> <input id="upload_image" type="button" value="upload image">
+        <br>
+        image url: <input type="text" name="image_url">
+        <br>
+        <input type="submit">
+    </form>
+    <script>
+        function shipOff(event) {
+            // ship of the image to the server where it is stored in S3
+            var result = event.target.result;
+            var fileName = document.getElementById('fileBox').files[0].name; //Should be 'picture.jpg'
+            $.post('/myscript.php', { data: result, name: fileName }, continueSubmission).done(function(result) {
+                console.log(result);
+            });
+        }
+        $("upload_image").click(function() {
+            // send the file to the backend and then plug the image url into the form
+            var file = document.getElementById('fileBox').files[0]; //Files[0] = 1st file
+            var reader = new FileReader();
+            reader.readAsText(file, 'UTF-8');
+            reader.onload = shipOff;
+            
+        });
+
+        $("submit_form").click(function() {
+            //send all form data to the backend where it will be sent off to mobileworks
+            var url = $('#whole_form input[name=image_url]');
+            $.ajax({  
+                type: "POST",  
+                url: "form",  
+                data: {image_url: url},  
+                success: function() {  
+                  //display message back to user here  
+                }  
+            });
+        });
+
+    </script>
+</body>
+</html>
