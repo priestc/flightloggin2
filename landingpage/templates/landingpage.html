@@ -13,8 +13,8 @@
         <meta name="google-site-verification" content="xe-f505ZHR6pNZzKFyeK5PNnZSkSZ8LlW979worOSHM" />
         <meta name="tinfoil-site-verification" content="3c18536f6a6ba0da54d0b86499640c24e81cef25" />
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-        <meta name="DESCRIPTION" content="FlightLoggin' is an online pilot logbook application Gone are the days of using a paper booklet to manage your aviation career data.">
-        <meta name="KEYWORDS" content="Airline, Travel, Aircraft, Aviation, Pilot Logbook, Open Source, GPL, Pilot Log, Flight Logbook, web application, Flight Training, Private Pilot">
+        <meta name="DESCRIPTION" content="Pilot Logbook software done right.">
+        <meta name="KEYWORDS" content="Airline, Travel, Aircraft, Aviation, Pilot Logbook, Open Source, GPL, Pilot Log, Flight Logbook, web application, Flight Training, Private Pilot, Flight Log">
         <link rel="icon" type="image/png" href="{% static "images/favicon.ico" %}">
         <link rel='stylesheet' href='{% static 'bootstrap/css/bootstrap-responsive.min.css' %}' />
         <link rel='stylesheet' href='{% static 'bootstrap/css/bootstrap.css' %}' />
@@ -26,9 +26,7 @@
 
             <div class="masthead">
                 <ul class="nav nav-pills pull-right">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="#login" data-toggle="modal">Login</a></li>
                 </ul>
                 <h3 class="muted">FlightLogg.in</h3>
             </div>
@@ -37,7 +35,7 @@
 
             <div class="jumbotron">
                 <h1>Pilot Logbook software done right.</h1>
-                <p class="lead">For both pros and hobby fliers</p>
+                <p class="lead">For both professional and hobby fliers</p>
                 <a class="btn btn-large btn-success" href="#register" data-toggle="modal">Signup Now!</a>
             </div>
 
@@ -46,25 +44,25 @@
             <div class="row-fluid marketing">
                 <div class="span6">
                     <h4>Web-based</h4>
-                    <p>Works on any modern browser. On a computer or from your mobile phone.</p>
+                    <p>Works on any modern browser on any system. Windows, Mac, Linux, iOS, or Android. No need to change logbook software when you switch platforms.</p>
 
                     <h4>Email backups</h4>
-                    <p>Never worry again about losing your flight data. FightLogg.in' sends you your logbook data to your email at the end of each day so you are always in control of your flight data.</p>
+                    <p>Never worry again about losing your precious flight data. FightLogg.in' sends you an email of your logbook data at the end of each day. You are always in control of your flight data.</p>
 
                     <h4>Charts and Graphs</h4>
-                    <p>Create graphs and charts to visualize your flight data.</p>
+                    <p>Create graphs and charts to visualize your flight data. Create maps of all the places you've flown to.</p>
                 </div>
 
                 <div class="span6">
                     <h4>Automatically calculate flight times</h4>
-                    <p>Ever wondered how many multi-engine hours you have at night? Or how many hours of PIC you have in seaplanes? Answer these questions and more</p>
+                    <p>Ever wondered how many multi-engine hours you have at night? Or how many hours of PIC you have in seaplanes? Answer these questions and more.</p>
 
                     <h4>Efficient Interface</h4>
                     <p>FlightLoggin's user interface has been designed specifically to create an efficient user experience.
                      Spend less time logging, and more time flying.</p>
 
-                    <h4>Open Source</h4>
-                    <p>The technology that drives FLightLoggin is open source. So </p>
+                    <h4>Free and Open Source</h4>
+                    <p>The technology that drives FLightLoggin is open source. No subscription fees or worry of a company pulling the plug on the project.</p>
                 </div>
             </div>
 
@@ -94,10 +92,56 @@
             </div>
         </form>
 
+        <form method="post" action="{% url reset_password %}">
+            <div id="reset" class="modal hide fade">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3>Reset Password</h3>
+                </div>
+                <div class="modal-body">
+                    <label>Email or username: <input type="text" name="data"></label>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" data-dismiss="modal" class="btn">Close</a>
+                    <input type="submit" class="btn btn-primary" value="Send Reset Email">
+                </div>
+            </div>
+        </form>
+
+        <form method="post" action="{% url new_login %}">
+            <div id="login" class="modal hide fade">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3>Login</h3>
+                </div>
+                <div class="modal-body">
+                    <label>Username: <input type="text" name='login_username'></label><br>
+                    <label>Password: <input type="password" name='login_password'></label>
+                    
+                    {% if messages %}
+                    <ul class="messages">
+                      {% for message in messages %}
+                      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                      {% endfor %}
+                    </ul>
+                    {% endif %}
+                    <br><a href="#reset" data-dismiss="modal" data-toggle="modal">Reset Password</a><br>
+                    <a href="{% url openid_login %}">Login with OpenID</a>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" data-dismiss="modal" class="btn">Close</a>
+                    <input type="submit" class="btn btn-primary" value="Submit">
+                </div>
+            </div>
+        </form>
+
         <script>
             if({% if form.errors %}true{% else %}false{% endif %}) {
-                console.log('errors');
                 $("#register").modal();
+            }
+
+            if({% if messages %}true{% else %}false{% endif %}) {
+                $("#login").modal();
             }
 
             (function(d, s, id) {

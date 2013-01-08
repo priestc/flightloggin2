@@ -64,7 +64,7 @@ def reset_password(request):
 
         users = User.objects.filter(**o)
         if not users.exists():
-            messages.error(request, 'Email or username could not be found')
+            messages.error(request, 'No reset email sent: Email or username does not exist')
         else:
             for u in users:
                 try:
@@ -73,7 +73,7 @@ def reset_password(request):
                     messages.error(request, 'No email attached to account %' % data)
                 messages.info(request, 'Email sent to %s for user %s' % (u.email, u.username))
 
-    return TemplateResponse(request, 'reset_password.html', locals())
+    return HttpResponseRedirect(reverse('landingpage'))
 
 def new_login(request):
     """

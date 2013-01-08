@@ -51,6 +51,14 @@ body {
   color: red;
 }
 
+.info {
+  color: green;
+}
+
+.error {
+  color: red;
+}
+
 .helptext {
   color: gray;
 }
