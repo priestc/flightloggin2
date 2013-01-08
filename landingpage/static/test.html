@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+        <script>
+            function test_dom_fast(tests) {
+                var d0 = new Date();
+                var x = Number($('#fast').text());
+                for(var i=0; i<tests; i++) {
+                    x = (i + x) / 3400;
+                }
+                $('#fast').text(x);
+                var d1 = new Date();
+                return (d1.getTime() - d0.getTime()) / 1000 + "s"
+            }
+
+            function test_dom_slow(tests) {
+                var d0 = new Date();
+                for(var i=0; i<tests; i++) {
+                    var x = Number($('#slow').text());
+                    $('#slow').text((i + x) / 3400);
+                }
+                var d1 = new Date();
+                return (d1.getTime() - d0.getTime()) / 1000 + "s"
+            }
+        </script>
+    </head>
+    <body>
+    Fast: <div id="fast_result"><div id="fast"></div></div>
+    <br><br>
+    Slow: <div id="slow_result"><div id="slow"></div></div>
+    </body>
+    <script>
+        $('#fast_result').text(test_dom_fast(40000));
+        $('#slow_result').text(test_dom_slow(40000));
+    </script>
+</html>
