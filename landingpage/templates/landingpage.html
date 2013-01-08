@@ -18,6 +18,8 @@
         <link rel="icon" type="image/png" href="{% static "images/favicon.ico" %}">
         <link rel='stylesheet' href='{% static 'bootstrap/css/bootstrap-responsive.min.css' %}' />
         <link rel='stylesheet' href='{% static 'bootstrap/css/bootstrap.css' %}' />
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+        <script src='{% static 'bootstrap/js/bootstrap.js' %}'></script>
     </head>
     <body>
         <div class="container-narrow">
@@ -36,7 +38,7 @@
             <div class="jumbotron">
                 <h1>Pilot Logbook software done right.</h1>
                 <p class="lead">For both pros and hobby fliers</p>
-                <a class="btn btn-large btn-success" href="">Signup Now!</a>
+                <a class="btn btn-large btn-success" href="#register" data-toggle="modal">Signup Now!</a>
             </div>
 
             <hr>
@@ -74,12 +76,36 @@
 
         </div>
 
-        <script>(function(d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=331657940258873";
-            fjs.parentNode.insertBefore(js, fjs);
+        <form method="post">
+            <div id="register" class="modal hide fade">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3>Register New Account</h3>
+                </div>
+                <div class="modal-body">
+                    <table>
+                        {{ form.as_table }}
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" data-dismiss="modal" class="btn">Close</a>
+                    <input type="submit" class="btn btn-primary" value="Get Started">
+                </div>
+            </div>
+        </form>
+
+        <script>
+            if({% if form.errors %}true{% else %}false{% endif %}) {
+                console.log('errors');
+                $("#register").modal();
+            }
+
+            (function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); js.id = id;
+                js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=331657940258873";
+                fjs.parentNode.insertBefore(js, fjs);
             }(document, 'script', 'facebook-jssdk'));
 
             (function() {

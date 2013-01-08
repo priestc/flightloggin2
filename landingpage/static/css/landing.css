@@ -34,3 +34,23 @@ body {
   background-position:center; 
   background-size:1600px 1200px;
 }
+
+#id_dob_month {
+  width: 10em;
+}
+
+#id_dob_year {
+  width: 6em;
+}
+
+#id_dob_day {
+  width: 6em;
+}
+
+.errorlist {
+  color: red;
+}
+
+.helptext {
+  color: gray;
+}
