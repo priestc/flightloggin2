@@ -90,12 +90,6 @@ function fill_in_flight(dom_id) {
 		
 	if($("#f" + id + " span.data_app:contains(H)").text())
 		$("#id_new-holding").attr("checked", "checked");
-	
-	// must be at the bottom because it removes the flying events from the dom	
-	var clone = $("#f" + id + " span.data_remarks");
-	$("span.remarks_tag", clone).remove();
-	var remarks = clone.text();
-	$("#id_new-remarks").val(trim(remarks));
 		
 	return
 }
