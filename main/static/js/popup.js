@@ -1,7 +1,7 @@
 function wipe_clean() {
     // uncheck all checkboxes and clear all input boxes
     $("#popup input[type=text], #popup textarea, #popup select").val("");
-    $("#popup input[type=checkbox]").attr("checked", "");
+    $("#popup input[type=checkbox]").removeAttr("checked", "");
 	
     // remove the error messages
     $("#popup td#new_error_cell").text("");

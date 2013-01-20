@@ -71,26 +71,38 @@ function fill_in_flight(dom_id) {
 	var person = $("#f" + id + " span.data_person").text();
 	$("#id_new-person").val(person);
 	
-	//####################################################
-	
-	if($("#f" + id + " span.data_remarks span.remarks_tag:contains([Pilot Checkride])").text())
+	//#################################################### 
+
+	if($("#f" + id + " span.data_remarks span.remarks_tag:contains([Pilot Checkride])").text()) {
 		$("#id_new-pilot_checkride").attr("checked", "checked");
-	
-	if($("#f" + id + " span.data_remarks span.remarks_tag:contains([Instructor Checkride])").text())
+	}
+
+	if($("#f" + id + " span.data_remarks span.remarks_tag:contains([Instructor Checkride])").text()) {
 		$("#id_new-cfi_checkride").attr("checked", "checked");
+    }
 		
-	if($("#f" + id + " span.data_remarks span.remarks_tag:contains([IPC])").text())
-		$("#id_new-ipc").attr("checked", "checked");
+	if($("#f" + id + " span.data_remarks span.remarks_tag:contains([IPC])").text()) {
+        $("#id_new-ipc").attr("checked", "checked");
+    }
 		
-	if($("#f" + id + " span.data_remarks span.remarks_tag:contains([Flight Review])").text())
-		$("#id_new-flight_review").attr("checked", "checked");
+	if($("#f" + id + " span.data_remarks span.remarks_tag:contains([Flight Review])").text()) {
+    	$("#id_new-flight_review").attr("checked", "checked");
+    }
 		
-	if($("#f" + id + " span.data_app:contains(T)").text())
+	if($("#f" + id + " span.data_app:contains(T)").text()) {
 		$("#id_new-tracking").attr("checked", "checked");
-		
-	if($("#f" + id + " span.data_app:contains(H)").text())
+	}
+
+	if($("#f" + id + " span.data_app:contains(H)").text()) {
 		$("#id_new-holding").attr("checked", "checked");
-		
+	}
+
+    // must be at the bottom because it removes the flying events from the dom
+    var clone = $("#f" + id + " span.data_remarks");
+    $("span.remarks_tag", clone).remove();    
+    var remarks = clone.text();    
+    $("#id_new-remarks").val(trim(remarks));
+
 	return
 }
 
