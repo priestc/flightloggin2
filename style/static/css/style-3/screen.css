@@ -570,7 +570,13 @@ table#site_stats img{
 }
 
 #popup #edit_buttons,#popup #new_buttons{
-    padding:10px
+    padding:10px;
+}
+
+#popup #edit_buttons input {
+    /* Put padding between the edit buttons and security checkboxes in flight popup */
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 #popup{

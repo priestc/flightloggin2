@@ -563,6 +563,12 @@ table#site_stats img{
     padding:10px
 }
 
+#popup #edit_buttons input {
+    /* Put padding between the edit buttons and security checkboxes in flight popup */
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
 #popup{
     width:480px
 }
