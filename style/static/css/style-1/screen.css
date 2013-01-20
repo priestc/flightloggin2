@@ -529,6 +529,10 @@ table#site_stats img{
     border:1px dotted red
 }
 
+#dragbar tr {
+    height: 30px;
+}
+
 #popup #dragbar{
     background:#e1b053;
     width:100%;
@@ -551,7 +555,8 @@ table#site_stats img{
 
 #popup #dragbar #close_x{
     cursor:pointer;
-    font-weight:bold
+    font-weight:bold;
+    font-size: large;
 }
 
 #popup #edit_buttons,#popup #new_buttons{
