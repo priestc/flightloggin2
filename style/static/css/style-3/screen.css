@@ -189,14 +189,18 @@ div.other_ad span.corner_ad_text{
     margin-bottom:10px
 }
 
+#nav_bar sup {
+    line-height: 220%;
+    font-size: x-small;
+}
+
 #nav_bar{
     background:#e58d7b;
     color:red;
-    line-height:150%;
+    line-height:160%;
     width:100%;
-    padding:0;
-    padding-top:3px;
-    padding-bottom:3px;
+    padding:3px 0 3px 2px;
+    border-radius: 5px;
     border:1px dashed purple
 }
 
@@ -216,7 +220,9 @@ div.other_ad span.corner_ad_text{
 }
 
 #nav_bar .nav_selected a{
-    background:#d52741
+    background:#d52741;
+    padding: 2px;
+    border-radius: 5px;
 }
 
 div.news_box{

@@ -186,18 +186,22 @@ div.other_ad span.corner_ad_text{
 }
 
 #navbar_header{
-    margin-bottom:10px
+    margin-bottom:10px;
+}
+
+#nav_bar sup {
+    line-height: 220%;
+    font-size: x-small;
 }
 
 #nav_bar{
     background:#665b1e;
     color:#fff;
-    line-height:150%;
+    line-height:160%;
     width:100%;
-    padding:0;
-    padding-top:3px;
-    padding-bottom:3px;
-    border:none
+    padding:3px 0 3px 2px;
+    border:none;
+    border-radius: 5px;
 }
 
 #nav_bar a{
@@ -216,7 +220,9 @@ div.other_ad span.corner_ad_text{
 }
 
 #nav_bar .nav_selected a{
-    background:#5dc7e9
+    background:#5dc7e9;
+    padding: 2px;
+    border-radius: 5px;
 }
 
 div.news_box{
