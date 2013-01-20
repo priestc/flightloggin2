@@ -1374,3 +1374,7 @@ table#import_form input{
     border:default;
     background:default
 }
+
+.center_page_index a {
+    margin: 0 2px 0 2px;
+}

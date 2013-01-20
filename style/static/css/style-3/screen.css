@@ -1385,18 +1385,6 @@ table#import_form input{
     background:default
 }
 
-table#forum{
-    width:100%;
-    border:1px solid green;
-    background:#dfdfdf
-}
-
-table#forum td{
-    padding:4px 0 4px 0;
-    text-align:left
-}
-
-table#forum th{
-    background:#d2d2d2;
-    text-align:left
+.center_page_index a {
+    margin: 0 2px 0 2px;
 }
