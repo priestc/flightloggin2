@@ -15,7 +15,7 @@ class LimitBotsMiddleware(object):
         for key in ['googlebot', 'yahoo! slurp', 'bingbot', 'Baiduspider', 'YandexBot']:
             if key in agent:
                 is_bot = True
-                is_overloaded = os.getloadavg()[1] > 3
+                is_overloaded = os.getloadavg()[1] > 0.95
                 break
 
         if is_bot and is_overloaded:
