@@ -63,19 +63,18 @@ class UserMixin(object):
             return ret
         
         #------------- filter by user ----------------------#
-        
-        if isinstance(u, User):
-            ## filter by user instance
-            kwarg = {user_field: u}
             
-        elif isinstance(u, int):
+        if isinstance(u, int):
             ## filter by user id
             kwarg = {user_field + "__pk": u}  
             
         elif isinstance(u, str):
             ## filter by username
             kwarg = {user_field + "__username": u}
-
+        else:
+            ## filter by user instance
+            kwarg = {user_field: u}
+        
         return self.filter(**kwarg)
 
 ###############################################################################
