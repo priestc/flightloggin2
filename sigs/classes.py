@@ -1,7 +1,5 @@
 import datetime
-import Image
-import ImageFont
-import ImageDraw
+from PIL import Image, ImageFont, ImageDraw
 
 from logbook.constants import FIELD_TITLES, GRAPH_FIELDS
 

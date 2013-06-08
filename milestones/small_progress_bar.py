@@ -1,3 +1,5 @@
+from PIL import Image, ImageFont, ImageDraw
+
 from django.conf import settings
 import os
 font_dir = os.path.join(settings.MEDIA_ROOT, 'fonts')
@@ -33,8 +35,6 @@ class SmallProgressBar(object):
         draw.rectangle([top_right, bottom_left], outline=self.color) 
     
     def output(self):
-        import Image, ImageFont, ImageDraw
-
         im = Image.new("RGBA", (self.width, self.height))
         draw = ImageDraw.Draw(im)
         

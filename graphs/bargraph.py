@@ -1,3 +1,6 @@
+from PIL import ImageFont, ImageDraw, Image
+import os
+
 from django.conf import settings
 
 class BarGraph(object):
@@ -26,8 +29,6 @@ class BarGraph(object):
         self.time = time
         self.agg_type = func
         
-        import ImageFont
-        import os
         font_dir = os.path.join(settings.PROJECT_ROOT, 'static_internal', "fonts")
         
         font =  os.path.join(font_dir, self.regular_font[0])
@@ -67,7 +68,6 @@ class BarGraph(object):
                     (self.bar_pad * (self.num_bars - 1))
                 )
         
-        import Image, ImageDraw
         self.im = Image.new("RGBA", (self.width, height))
         self.draw = ImageDraw.Draw(self.im)
         
@@ -201,8 +201,6 @@ class BarGraph(object):
     def empty(self):
         """ Returns a empty image for when there's nothing to show
         """
-        
-        import Image, ImageDraw
         self.im = Image.new("RGBA", (500, 200))
         self.draw = ImageDraw.Draw(self.im)
         

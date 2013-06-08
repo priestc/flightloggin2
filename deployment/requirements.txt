@@ -22,3 +22,4 @@ PIL
 django-pipeline==1.2.1
 django-easydump
 raven==1.7.3
+django-redis-cache
