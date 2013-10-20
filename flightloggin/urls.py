@@ -330,7 +330,7 @@ urlpatterns += patterns('',
     ),
     
     url(
-        r'^/print/(?P<username>%s).pdf$' % username_regex,
+        r'^print/(?P<username>%s)\.pdf$' % username_regex,
         "pdf.views.pdf",
                                                                     name="pdf",
     ),
