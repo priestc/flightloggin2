@@ -1,23 +1,80 @@
-packages:
+FlightLoggin is an online web-based Pilot Logbook for both
+professional and hobby fliers.
 
-git
-apache2
-mercurial
-bzr
-subversion
-postgres-9.1-postgis
-python-pip
-python-dev
-virtualenv
-libapache2-mod-wsgi
-python-virtualenv
-python-matplotlib
+Visit it online at http://flightlogg.in/
 
-postgresql-contrib-9.1
-proj
-linpng12-dev
-libfreetype6-dev
-libpq-dev
-libgeos-dev
-libproj-dev
-libjpeg62-dev
+
+==Required packages==
+
+If you want to install and deploy a private instance of FlightLoggin
+on your own server, you will need the following major pieces of software:
+
+* git
+* apache2
+* mercurial
+* bzr
+* subversion
+* postgres-9.1-postgis
+* python-pip
+* python-dev
+* virtualenv
+* libapache2-mod-wsgi
+* python-virtualenv
+* python-matplotlib
+
+* postgresql-contrib-9.1
+* proj
+* linpng12-dev
+* libfreetype6-dev
+* libpq-dev
+* libgeos-dev
+* libproj-dev
+* libjpeg62-dev
+
+Some additional details on the specific dependencies and their
+versions are described in the document:
+
+deployment/requirements.txt
+
+
+==Installation==
+
+The installation generally assumes Ubuntu 11.10, but other Linux
+distributions or platforms might be usable with some work.
+
+1) Clone the flightloggin2 GIT repo into /srv/flightloggin2
+
+2) Install the major software components by running:
+
+  deployment/install-apt-packages.sh
+
+3) Prepare empty database and Install GIS support in PostgreSQL:
+
+  deployment/create-database.sh
+  deployment/install-postgis-ubuntu-11.10.bash
+
+5) Deploy Apache settings:
+
+  deployment/install-to-apache.sh
+  deployment/make-dirs.sh
+  deployment/install-favicon.sh
+
+
+6) Configure the application settings by copying the templates and
+   editing the files to customize for your environment:
+
+  cp deployment/local_settings.template local_settings.py
+  vim local_settings.py
+  cp flightloggin/settings_private.template settings_private.py
+  vim settings_private.py
+
+7) (Optional) Configure periodic processes and email handling:
+
+  deployment/install-crontab.sh
+  deployment/install-mail-aliases.sh
+
+8) (Optional) If you want to use Munin for monitoring operations and
+   performance of the system:
+
+  deployment/install-munin-plugins.sh
+
