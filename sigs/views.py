@@ -24,7 +24,7 @@ def all_agg_radiobox(any_=False, prefix="", name='radio'):
     out = []
     
     #grab from global scope so we can ad to it
-    fields = GRAPH_FIELDS
+    fields = list(GRAPH_FIELDS)
     
     if any_:
         fields += ['any']
