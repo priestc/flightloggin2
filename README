@@ -4,7 +4,8 @@ professional and hobby fliers.
 Visit it online at http://flightlogg.in/
 
 
-==Required packages==
+Required packages
+=================
 
 If you want to install and deploy a private instance of FlightLoggin
 on your own server, you will need the following major pieces of software:
@@ -34,10 +35,11 @@ on your own server, you will need the following major pieces of software:
 Some additional details on the specific dependencies and their
 versions are described in the document:
 
-deployment/requirements.txt
+  deployment/requirements.txt
 
 
-==Installation==
+Installation
+============
 
 The installation generally assumes Ubuntu 11.10, but other Linux
 distributions or platforms might be usable with some work.
@@ -79,7 +81,8 @@ distributions or platforms might be usable with some work.
   deployment/install-munin-plugins.sh
 
 
-==User Support==
+User Support
+============
 For technical assistance using FlightLoggin, you can use the following resources:
 
 * Google Groups:  https://groups.google.com/forum/#!forum/flightloggin
