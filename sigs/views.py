@@ -13,8 +13,8 @@ def all_agg_checkbox(prefix=""):
             sel = ""
         
         out.append(
-        """<input %(sel)s type="checkbox" id="%(field)s">
-           <label for="%(field)s">%(display)s</label>""" %
+        """<input %(sel)s type="checkbox" id="c_%(field)s">
+           <label for="c_%(field)s">%(display)s</label>""" %
                 {'sel': sel, 'field': field, 'display': FIELD_TITLES[field]}
         )
     
@@ -23,7 +23,7 @@ def all_agg_checkbox(prefix=""):
 def all_agg_radiobox(any_=False, prefix="", name='radio'):
     out = []
     
-    #grab from global scope so we can ad to it
+    #grab from global scope so we can add to it
     fields = list(GRAPH_FIELDS)
     
     if any_:
@@ -36,8 +36,8 @@ def all_agg_radiobox(any_=False, prefix="", name='radio'):
             sel = ""
             
         out.append(
-        """<input %(sel)s type="radio" id="%(field)s" name="%(name)s">
-           <label for="%(field)s">%(display)s</label>""" %
+        """<input %(sel)s type="radio" id="r_%(field)s" name="%(name)s">
+           <label for="r_%(field)s">%(display)s</label>""" %
                 {'name': name,
                  'sel': sel,
                  'field': field,
