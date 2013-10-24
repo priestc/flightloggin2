@@ -98,6 +98,7 @@ COLUMN_NAMES = {
     "SIMULATED INSTRUMENT": 'sim_inst',
     'SIMINSTR': 'sim_inst',
     "SIM INSTR": 'sim_inst',
+    "HOOD": 'sim_inst',
 				
     "STUDENT": 'student',
     "INSTRUCTOR":'instructor',
