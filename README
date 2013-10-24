@@ -78,3 +78,14 @@ distributions or platforms might be usable with some work.
 
   deployment/install-munin-plugins.sh
 
+
+==User Support==
+For technical assistance using FlightLoggin, you can use the following resources:
+
+* Google Groups:  https://groups.google.com/forum/#!forum/flightloggin
+* Twitter @flightloggin:  https://twitter.com/flightloggin
+
+To report a software bug in FlightLoggin:
+
+* Github issues:  https://github.com/priestc/flightloggin2/issues
+
