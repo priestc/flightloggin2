@@ -1,7 +1,7 @@
 <script type="text/javascript">
-    var edit_url = "{% url edit_flight username=request.display_user.username page=page %}";
-    var delete_url = "{% url delete_flight username=request.display_user.username page=page %}";
-    var new_url = "{% url new_flight username=request.display_user.username page=page %}";
+    var edit_url = "{% url 'edit_flight' username=request.display_user.username page=page %}";
+    var delete_url = "{% url 'delete_flight' username=request.display_user.username page=page %}";
+    var new_url = "{% url 'new_flight' username=request.display_user.username page=page %}";
 </script>
 
 <div id="popup" title="New Entry">

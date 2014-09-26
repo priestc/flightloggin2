@@ -4,7 +4,7 @@
 {% block description %}{{ request.display_user.username|default:"Pilot" }}'s electronic logbook application{% endblock%}
 
 {% block javascript %}
-    <link rel="canonical" href="http://flightlogg.in{% url news %}">
+    <link rel="canonical" href="http://flightlogg.in{% url 'news' %}">
     <link rel="alternate" title="FlightLogg.in' News feed" href="/feeds/news" type="application/rss+xml">
 {% endblock %}
 
