@@ -60,7 +60,6 @@ def site_url(request):
     return {"SITE_URL": url, "GOOGLE_MAPS_KEY": gmk}
 
 def proper_ad(request):
-    return {}    
     u = getattr(request, "display_user", None) or request.user
     style = Profile.get_for_user(u).style
     

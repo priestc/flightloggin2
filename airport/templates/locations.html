@@ -83,7 +83,7 @@ accurately to differentiate between flights that quality for Point to Point XC.
         </tr>
     </table>
     
-    <form id="new_plane_form" action="{% url locations request.display_user.username %}" method="post">
+    <form id="new_plane_form" action="{% url 'locations' request.display_user.username %}" method="post">
         {% csrf_token %}
         <table class="single_column">
             <tbody>
