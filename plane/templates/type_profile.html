@@ -10,7 +10,7 @@
 
 <h1>{{ ty|upper }}</h1>
 
-{% url routes_for_type-kml ty as kml_url %}
+{% url 'routes_for_type-kml' ty as kml_url %}
 {% include "gmaps.html" %}
 
 {% cache 10800 ty_profile ty %}
@@ -37,7 +37,7 @@
     </tr>
 </table>
 <br>
-<img src="{% url histogram-type ty %}" alt="Speed Histogram">
+<img src="{% url 'histogram-type' ty %}" alt="Speed Histogram">
 {% endcache %}
 
 {% endblock %}

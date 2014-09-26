@@ -34,7 +34,6 @@ def figure_navbar(request):
     also add the shared variable so template cache tags don't freak out when
     the request.shared isn't set
     """
-    return {}    
     from django.contrib.auth.models import User
     
     if getattr(request, "display_user", False):
