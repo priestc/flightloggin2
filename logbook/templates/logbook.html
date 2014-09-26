@@ -83,13 +83,13 @@
 
             {% if row.route.simple_rendered %}
             <br>
-            {% url profile-route row.route.simple_rendered as pr %}
+            {% url 'profile-route' row.route.simple_rendered as pr %}
             <a href="{{pr}}">More info about {{ row.route.simple_rendered }}</a>
             {% endif %}
 
             <br>
             {% if row.plane.tailnumber != 'UNKNOWN' %}
-            {% url profile-tailnumber row.plane.tailnumber|upper as pt%}
+            {% url 'profile-tailnumber' row.plane.tailnumber|upper as pt%}
             <a href="{{pt}}">More info about {{ row.plane.tailnumber }}</a>      
             {% endif %}
 
@@ -104,7 +104,7 @@
         </div>
         {% if page_of_flights.object_list and not request.shared %}
         <div style="float:right">
-            <a href="{% url mass-edit username=request.display_user.username page=page_of_flights.number %}">Mass Edit page {{ page_of_flights.number }}</a>
+            <a href="{% url 'mass-edit' username=request.display_user.username page=page_of_flights.number %}">Mass Edit page {{ page_of_flights.number }}</a>
         </div>
         {% endif %}
     </div>

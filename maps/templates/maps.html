@@ -12,7 +12,7 @@ NAVBAR_HIGHLIGHT = "maps-sel";
 
 {% block canvas %}
 
-{% url user-kml request.display_user as kml_url %}
+{% url 'user-kml' request.display_user as kml_url %}
 {% include "gmaps.html" %}
 
 {% endblock %}

@@ -8,7 +8,7 @@
 
 <h1>{{ r|upper }}</h1>
 
-{% url single_route-kml route.pk "r" as kml_url %}
+{% url 'single_route-kml' route.pk "r" as kml_url %}
 {% include "gmaps.html" %}
 
 
