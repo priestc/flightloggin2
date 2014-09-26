@@ -5,7 +5,7 @@
 {% block description %}{{ request.display_user.username }}'s flights{% endblock%}
 
 {% block javascript %}
-<link rel="canonical" href="http://flightlogg.in{% url logbook-page username=request.display_user.username page=page %}">
+<link rel="canonical" href="http://flightlogg.in{% url 'logbook-page' username=request.display_user.username page=page %}">
 <script type="text/javascript" src="{% static "js/popup.js" %}"></script>
 <script type="text/javascript" src="{% static "js/flight_popup.js" %}"></script>
 <script type="text/javascript" src="{% static "js/logbook.js" %}"></script>

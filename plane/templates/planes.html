@@ -60,7 +60,7 @@
 
     <div id="mass_edit_link">
         {% if not request.shared %}
-        <a href="{% url mass-planes request.display_user %}">Mass Edit/Entry</a>
+        <a href="{% url 'mass-planes' request.display_user %}">Mass Edit/Entry</a>
         {% endif %}
     </div>
 
@@ -72,7 +72,7 @@
         </tr>
     </table>
     
-    <form id="new_plane_form" action="{% url planes request.display_user.username %}" method="post">
+    <form id="new_plane_form" action="{% url 'planes' request.display_user.username %}" method="post">
         {% csrf_token %}
         <table class="single_column">
             <tbody>

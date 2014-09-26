@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
-from django.views.generic.simple import direct_to_template, redirect_to
+from django.views.generic.base import TemplateView, RedirectView
 from django.contrib import admin
 
 from django.conf import settings
@@ -54,7 +54,7 @@ urlpatterns = patterns('django_openid_auth.views',
 urlpatterns += patterns('',   
 
     (r'', include('landingpage.urls')),
-    (r'landingpage', redirect_to, {'url': '/'}),
+    (r'landingpage', RedirectView.as_view(url= '/')),
     (r'^planes/', include('plane.urls')),
     (r'^histogram/', include('histogram.urls')),
     (r'^kml/', include('maps.kml_urls')),
@@ -69,8 +69,7 @@ urlpatterns += patterns('',
     
     url(
         r'^privacy_policy$',
-        direct_to_template,
-        {"template": "privacy.html"},
+        TemplateView.as_view(template_name='privacy.html'),
                                                                 name="privacy",
     ),
 
@@ -95,8 +94,8 @@ urlpatterns += patterns('',
     
     url(
         r'^$',
-        redirect_to,
-        {'url': '/landingpage'},
+        RedirectView.as_view(
+        url='/landingpage'),
                                                                     name="root"
     ),
     
@@ -337,15 +336,15 @@ urlpatterns += patterns('',
     
     url(
         r'^states/(?P<username>%s)$' % username_regex,
-        direct_to_template,
-        {"template": "states.html"},
+        TemplateView.as_view(
+        template_name="states.html"),
                                                                  name="states",
     ),
 
     url(
         r'^countries/(?P<username>%s)$' % username_regex,
-        direct_to_template,
-        {"template": "countries.html"},
+        TemplateView.as_view(
+        template_name="countries.html"),
                                                               name="countries",
     ),
     

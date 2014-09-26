@@ -10,7 +10,7 @@
 
 <h1>{{ tn|upper }}</h1>
 
-{% url routes_for_tailnumber-kml tn as kml_url %}
+{% url 'routes_for_tailnumber-kml' tn as kml_url %}
 {% include "gmaps.html" %}
 
 {% cache 10800 tn_profile tn %}

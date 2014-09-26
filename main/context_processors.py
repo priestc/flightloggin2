@@ -34,7 +34,7 @@ def figure_navbar(request):
     also add the shared variable so template cache tags don't freak out when
     the request.shared isn't set
     """
-    
+    return {}    
     from django.contrib.auth.models import User
     
     if getattr(request, "display_user", False):
@@ -61,7 +61,7 @@ def site_url(request):
     return {"SITE_URL": url, "GOOGLE_MAPS_KEY": gmk}
 
 def proper_ad(request):
-    
+    return {}    
     u = getattr(request, "display_user", None) or request.user
     style = Profile.get_for_user(u).style
     

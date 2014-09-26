@@ -2,7 +2,7 @@ from models import AwardedBadge
 from django.db.models import Sum
 
 def badge_count(request):
-	
+	return {}	
 	# displaying the total for the user that own the page
 	u = getattr(request, 'display_user', None)
 
