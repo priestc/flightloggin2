@@ -166,7 +166,7 @@
 	    <Placemark>
 		    <name>{{point.identifier}}</name>
 		    <styleUrl>{{ point.icon }}</styleUrl>
-		    {% url profile-location point.identifier as url %}
+		    {% url "profile-location" point.identifier as url %}
 		    <description>
 		        <![CDATA[<b><a href="http://flightlogg.in{{ url }}">
 		        {{ point.name }}</a></b>
