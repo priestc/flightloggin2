@@ -9,37 +9,37 @@
 			<width>2</width>
 		</LineStyle>
 	</Style>
-	
+
 	<Style id="blue_line">
 		<LineStyle>
 			<color>ccF02814</color>{# 1428F0 #}
 			<width>2</width>
 		</LineStyle>
 	</Style>
-	
+
 	<Style id="red_line">
 		<LineStyle>
 			<color>cc1400D2</color>{# D20014 #}
 			<width>2</width>
 		</LineStyle>
 	</Style>
-	
+
 	<Style id="orange_line">
 		<LineStyle>
 			<color>cc14B1FF</color>{# FFB114 #}
 			<width>2</width>
 		</LineStyle>
 	</Style>
-	
+
 	<Style id="green_line">
 		<LineStyle>
 			<color>cc14F000</color>{# 00F014 #}
 			<width>2</width>
 		</LineStyle>
 	</Style>
-	
+
 	{##########################################}
-	
+
 	<Style id="yellow">
 		<IconStyle>
 			<scale>1.0</scale>
@@ -49,7 +49,7 @@
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
 	</Style>
-	
+
 	<Style id="orange">
 		<IconStyle>
 			<scale>1.0</scale>
@@ -59,7 +59,7 @@
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
 	</Style>
-	
+
 	<Style id="red">
 		<IconStyle>
 			<scale>1.0</scale>
@@ -69,7 +69,7 @@
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
 	</Style>
-	
+
 	<Style id="green">
 		<IconStyle>
 			<scale>1.0</scale>
@@ -79,7 +79,7 @@
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
 	</Style>
-	
+
 	<Style id="purple">
 		<IconStyle>
 			<scale>1.0</scale>
@@ -89,7 +89,7 @@
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
 	</Style>
-	
+
 	<Style id="cyan">
 		<IconStyle>
 			<scale>1.0</scale>
@@ -99,7 +99,7 @@
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
 	</Style>
-	
+
 	<Style id="teal">
 		<IconStyle>
 			<scale>1.0</scale>
@@ -109,7 +109,7 @@
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
 	</Style>
-	
+
 	<Style id="gray">
 		<IconStyle>
 			<scale>1.0</scale>
@@ -129,10 +129,10 @@
 			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
 		</IconStyle>
 	</Style>
-    
+
     {##########################################}
-		
-{% for folder in folders %}	
+
+{% for folder in folders %}
 
     {% if folder.has_routes %}
         <Folder>
@@ -142,14 +142,14 @@
 		        <name>{{route.name}}</name>
 		        <styleUrl>{{folder.style}}</styleUrl>
 		        <description>
-		        {% url profile-route route.name as url %}
+		        {% url "profile-route" route.name as url %}
 		        <![CDATA[<a href="http://flightlogg.in{{ url }}">
 		                 See who has flown this route
 		                 </a>
 		                 ]]>
             </description>
 		        <LineString>
-			        <tessellate>1</tessellate>		
+			        <tessellate>1</tessellate>
 			        <coordinates>
 			        {{route.kml}}
 			        </coordinates>
@@ -180,7 +180,7 @@
 	    {% endfor %}
 	</Folder>
     {% endif %}
-    
+
 {% endfor %}
 </Document>
 </kml>
