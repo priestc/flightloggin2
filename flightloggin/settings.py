@@ -11,7 +11,7 @@ MANAGERS = ADMINS
 
 SECRET_KEY = 'sddjsdfjsdgfjhdgsjfhgdsjfhwnbcgsdjfbmenbfwjg'
 
-ALLOWED_HOSTS = ['flightlogg.in']
+ALLOWED_HOSTS = ['flightlogg.in', 'localhost:8000']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -120,7 +120,7 @@ INSTALLED_APPS = (
     'django.contrib.sitemaps',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    
+
     'logbook',
     'records',
     'plane',
@@ -145,7 +145,7 @@ INSTALLED_APPS = (
     'landingpage',
     'badges',
     'twice_scroll',
-    
+
     'raven.contrib.django',
     'tagging',
     'pagination',
