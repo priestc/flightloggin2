@@ -6,7 +6,7 @@ $(document).ready(function() {
 		zoom: 11,
 		center: chicago
 	}
-	map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+	map = new google.maps.Map(document.getElementById('gmap'), mapOptions);
 
 	var ctaLayer = new google.maps.KmlLayer({url: kml_url});
 	ctaLayer.setMap(map);

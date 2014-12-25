@@ -18,7 +18,7 @@ termcolor==0.1.2
 yolk
 boto
 debug
-PIL
+pillow
 django-pipeline==1.2.1
 django-easydump
 raven==1.7.3
