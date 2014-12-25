@@ -14,23 +14,23 @@
 
 {% block canvas %}
 
-<form id="prefs_form" action="{% url profile request.display_user.username %}" method="post">
+<form id="prefs_form" action="{% url "profile" request.display_user.username %}" method="post">
     {% csrf_token %}
     <div>
         <input class="prefs_submit_button" type="submit" value="Submit Preferences">
     </div>
-    
+
     <fieldset>
 
         <legend>General</legend>
-    
+
         <table class="prefs_table">
             <tr>
                 <th>{{ user_form.username.label_tag }}</th>
                 <td>{{ user_form.username }}</td>
                 <td>{{ user_form.username.errors }}</td>
             </tr>
-            
+
             <tr>
                 <th>{{ user_form.email.label_tag }}</th>
                 <td>{{ user_form.email }}</td>
@@ -38,19 +38,19 @@
                 Note: this email address is completely unrelated to the OpenID account
                 you use to log in with.</td>
             </tr>
-            
+
             <tr>
                 <th>{{ profile_form.real_name.label_tag }}</th>
                 <td>{{ profile_form.real_name }}</td>
                 <td>{{ profile_form.real_name.errors }}</td>
             </tr>
-            
+
             <tr>
                 <th>{{ profile_form.dob.label_tag }}</th>
                 <td>{{ profile_form.dob }}</td>
                 <td>{{ profile_form.date.errors }}</td>
             </tr>
-            
+
             <tr>
                 <th>{{ profile_form.style.label_tag }}</th>
                 <td>{{ profile_form.style }}</td>
@@ -62,14 +62,14 @@
                 <td>{{ profile_form.instance.secret_key }}</td>
                 <td></td>
             </tr>
-            
+
         </table>
     </fieldset>
 
     <fieldset>
 
         <legend>Sharing</legend>
-    
+
         <table class="prefs_table">
         <tr>
                 <th>{{ profile_form.logbook_share.label_tag }}</th>
@@ -77,55 +77,55 @@
                 <td>{{ profile_form.logbook_share.errors }}
                 {{ profile_form.logbook_share.help_text }}</td>
             </tr>
-            
+
             <tr>
                 <th>{{ profile_form.records_share.label_tag }}</th>
                 <td>{{ profile_form.records_share }}</td>
                 <td>{{ profile_form.records_share.errors }}
                 {{ profile_form.records_share.help_text }}</td>
             </tr>
-            
+
             <tr>
                 <th>{{ profile_form.events_share.label_tag }}</th>
                 <td>{{ profile_form.events_share }}</td>
                 <td>{{ profile_form.events_share.errors }}
                 {{ profile_form.events_share.help_text }}</td>
             </tr>
-            
+
             <tr>
                 <th>{{ profile_form.other_share.label_tag }}</th>
                 <td>{{ profile_form.other_share }}</td>
                 <td>{{ profile_form.other_share.help_text }}
                 {{ profile_form.other_share.errors }}</td>
             </tr>
-            
+
             <tr>
                 <th>{{ profile_form.social.label_tag }}</th>
                 <td>{{ profile_form.social }}</td>
                 <td>{{ profile_form.social.help_text }}
                 {{ profile_form.social.errors }}</td>
             </tr>
-            
+
         </table>
     </fieldset>
-    
+
     <fieldset>
 
         <legend>Automatic Backups</legend>
-        
+
         <table class="prefs_table">
             <tr>
                 <th>{{ profile_form.backup_email.label_tag }}</th>
                 <td>{{ profile_form.backup_email }}</td>
                 <td>{{ profile_form.backup_email.errors }}{{ profile_form.backup_email.help_text }}</td>
             </tr>
-            
+
             <tr>
                 <th>{{ profile_form.backup_freq.label_tag }}</th>
                 <td>{{ profile_form.backup_freq }}</td>
                 <td>{{ profile_form.backup_freq.errors }}</td>
             </tr>
-            
+
             <tr>
                 <th>Send Backup Now</th>
                 <td><input type="button" value="Send Email" style="width: auto" onclick="window.open('/{{ request.display_user }}/email-backup.html');"></td>
@@ -137,27 +137,27 @@
     <fieldset id="logbook_section">
 
         <legend>Logbook</legend>
-    
-        <table class="prefs_table">    
-        
+
+        <table class="prefs_table">
+
             <tr>
                 <th>{{ profile_form.per_page.label_tag }}</th>
                 <td>{{ profile_form.per_page }}</td>
                 <td>{{ profile_form.per_page.errors }}</td>
             </tr>
-            
+
             <tr>
                 <th>{{ profile_form.minutes.label_tag }}</th>
                 <td>{{ profile_form.minutes }}</td>
                 <td>{{ profile_form.minutes.errors }}</td>
             </tr>
-            
+
             <tr>
                 <th>{{ profile_form.text_plane.label_tag }}</th>
                 <td>{{ profile_form.text_plane }}</td>
                 <td>{{ profile_form.text_plane.errors }}</td>
             </tr>
-            
+
             <tr>
                 <th>{{ profile_form.date_format.label_tag }}</th>
                 <td>{{ profile_form.date_format }}</td>
@@ -166,18 +166,18 @@
                 </td>
             </tr>
         </table>
-    </fieldset>    
-    
+    </fieldset>
+
     <fieldset id="logbook_section">
 
         <legend>Columns</legend>
-    
-        <table class="prefs_table">    
+
+        <table class="prefs_table">
             <tr>
                 <td colspan="4">
                     <table id="columns_table">
                         <thead>
-                        <tr>    
+                        <tr>
                             <td>Auto<br>Button</td>
                             <td>Display<br>Column</td>
                             <td></td>
@@ -190,15 +190,15 @@
                     </table>
                 </td>
             </tr>
-        
+
         </table>
-        
+
     </fieldset>
-    
+
     <fieldset id="logbook_section">
 
         <legend>Change Password</legend>
-    
+
         <table class="prefs_table">
             <tr>
                 <td>{{ password_form.errors }}</td>
@@ -208,20 +208,20 @@
                 <td>{{ password_form.old }}</td>
                 <td></td>
             </tr>
-            
+
             <tr>
                 <th>{{ password_form.new.label_tag }}</th>
                 <td>{{ password_form.new }}</td>
                 <td></td>
             </tr>
-            
+
             <tr>
                 <th>{{ password_form.new2.label_tag }}</th>
                 <td>{{ password_form.new2 }}</td>
                 <td></td>
             </tr>
         </table>
-        
+
     </fieldset>
 
     <div>
@@ -236,11 +236,11 @@
             <input type="checkbox" class="verify_flights">
             <input id="delete_all_flights" type="submit" name="submit" value="Delete All Flights" disabled="disabled">
             <input type="checkbox" class="verify_flights">
-            <input type="checkbox" class="verify_flights"> 
+            <input type="checkbox" class="verify_flights">
         </div>
-            
+
             <br>
-            
+
         <div class="delete_box">
             <input type="checkbox" class="verify_nonflights">
             <input type="checkbox" class="verify_nonflights">
@@ -248,9 +248,9 @@
             <input type="checkbox" class="verify_nonflights">
             <input type="checkbox" class="verify_nonflights">
         </div>
-            
+
         <br>
-            
+
         <div class="delete_box">
             <input type="checkbox" class="verify_unusedplanes">
             <input type="checkbox" class="verify_unusedplanes">
@@ -258,9 +258,9 @@
             <input type="checkbox" class="verify_unusedplanes">
             <input type="checkbox" class="verify_unusedplanes">
         </div>
-            
+
         <br>
-            
+
         <div class="delete_box">
             <input type="checkbox" class="verify_everything">
             <input type="checkbox" class="verify_everything">
@@ -268,7 +268,7 @@
             <input type="checkbox" class="verify_everything">
             <input type="checkbox" class="verify_everything">
         </div>
-    
+
     </fieldset>
 
 </form>
