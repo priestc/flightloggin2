@@ -13,18 +13,18 @@
         <input type="text" name="q">
         <input type="submit">
     </form>
-    
+
     {% if results %}
         {% autopaginate results 50 %}
     {% endif %}
-    
+
     {% for result in results %}
         {% if forloop.first %}
             <p id="count">Returned {{ count }} results</p>
             <p class="paginate">{% paginate %}</p>
-            
+
             <table id="results_table">
-            <tr>    
+            <tr>
                 <th>Tailnumber</th>
                 <th>Manufacturer</th>
                 <th>Model</th>
@@ -32,15 +32,15 @@
             </tr>
             {% endif %}
 
-            {% url profile-tailnumber result.tailnumber as url %}
+            {% url "profile-tailnumber" result.tailnumber as url %}
 
-            <tr>    
+            <tr>
                 <td><a href="{{ url }}">{{ result.tailnumber }}</a></td>
                 <td>{{ result.manufacturer }}</td>
                 <td>{{ result.model }}</td>
                 <td>{{ result.type }}</td>
             </tr>
-        
+
         {% if forloop.last %}
             </table>
             <p class="paginate">{% paginate %}</p>

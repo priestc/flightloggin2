@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>New Flight</title>
-        <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1"> 
+        <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css">
         <link rel="stylesheet" href="{% static 'mobile_app.css' %}">
         <link rel="stylesheet" href="http://jquerymobile.com/demos/1.2.0/docs/_assets/css/jqm-docs.css">
@@ -203,13 +203,13 @@
                     Select the plane that you will be flying in.
                     If this is the first time you are flying in a particular aircraft,
                     exit the mobile app, and enter the plane through the
-                    <a href="{% url planes request.display_user %}">planes section</a>.
+                    <a href="{% url "planes" request.display_user %}">planes section</a>.
                     The <strong>Role</strong> selector is a to describe what role the logging pilot plays in this flight.
                     This option only effects how the times are automatically copied on the last page.
                 </p>
 
                 <h2>Page 2</h2>
-                
+
                 <p>
                     This page is intended to be used while the airplane is airborne.
                     It has been designed to work without needing an internet connection.
@@ -250,7 +250,7 @@
                 </p>
 
                 <h2>Page 3</h2>
-                
+
                 <p>
                     This page is intended to be completed after you have finished your flight.
                     It requires an internet connection, so wait until you have a signal before completing this page.
@@ -364,7 +364,7 @@
 
             $("#start_button").click(function() {
                 start_time = get_current_time();
-                
+
                 setInterval(update_sun_table, 1800000); // every 30 minutes
 
                 update_sun_table(function() {
@@ -390,7 +390,7 @@
 
             // page 2
 
-            
+
             function update_actual_decimal(now) {
                 var new_actual = [0, 0, 0];
                 if(actual_start) {
@@ -401,7 +401,7 @@
                 $('#actual_time').text(decimal);
             }
 
-            
+
             function update_hood_decimal(now) {
                 var new_hood = [0, 0, 0];
                 if(hood_start) {
@@ -412,7 +412,7 @@
                 $('#hood_time').text(decimal);
             }
 
-            
+
             function update_total_decimal(now) {
                 var elapsed = get_difference(start_time, now);
                 $("#total_time").text(tuple_to_display(elapsed));
@@ -483,7 +483,7 @@
                 }
             });
 
-            
+
             $('#landing_button').click(function() {
                 var div = "#" + is_it_day_or_night('land') + "_landings";
                 // increment the correct landing box by one landing.

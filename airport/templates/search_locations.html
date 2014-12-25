@@ -12,38 +12,38 @@
         <input type="text" name="q">
         <input type="submit">
     </form>
-    
+
     {% if results %}
         {% autopaginate results 50 %}
     {% endif %}
-    
+
     {% for result in results %}
         {% if forloop.first %}
             <p><strong>Returned {{ count }} results</strong></p>
             <p>{% paginate %}</p>
             <table id="results_table">
-            <tr>    
+            <tr>
             <td>Ident</td>
             <td>Name</td>
             <td>Location</td>
         </tr>
         {% endif %}
-        
-        
+
+
             {% ifequal result.loc_class 1 %}
-                {% url profile-airport result.identifier as url %}
+                {% url "profile-airport" result.identifier as url %}
             {% endifequal %}
-            
+
             {% ifequal result.loc_class 2 %}
-                {% url profile-navaid result.identifier as url %}
+                {% url "profile-navaid" result.identifier as url %}
             {% endifequal %}
-            
-        <tr>    
+
+        <tr>
             <td><a href="{{ url }}">{{ result.identifier }}</a></td>
             <td>{{result.name}}</td>
             <td>{{result.location_summary }}</td>
         </tr>
-        
+
         {% if forloop.last %}
             </table>
         {% endif %}
