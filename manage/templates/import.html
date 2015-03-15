@@ -7,9 +7,9 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $("form").submit(function() {
-        
+
             $('#progress').show()
-        
+
         });
     });
     NAVBAR_HIGHLIGHT = "import-sel";
@@ -22,19 +22,19 @@
         <br /><big style="color: red">{{ Error }}</big>
     {% endif %}
 
-    <form id="upform" action="{% url import request.display_user %}" method="post" enctype="multipart/form-data">   
+    <form id="upform" action="{% url "import" request.display_user %}" method="post" enctype="multipart/form-data">   
     <table id="import_form">
         <tbody>
         <tr>
             <td>New File:</td>
-            <td>                
+            <td>
                 {{fileform.file}}<br>{{fileform.file.errors}}</td>
             <td>
                 <input type="submit" value="Preview" name="preview_f">
                 <input type="submit" value="Import" name="import_f">
             </td>
         </tr>
-        
+
         <tr>
             <td>
                 Use previous upload:
@@ -51,14 +51,14 @@
         </tr>
         </form>
     </table>
-    </form>    
-    
+    </form>
+
     <div id="progress" style="display: none">
         Please wait, flights are being processed<br>This make take a long time
         depending on server load and the number of flights being imported<br>
         <img src="{% static 'icons/gray-indicator.gif' %}" />
     </div>
-    
+
     {#########################################################################}
 
     {% if not flight_out %}
@@ -66,27 +66,27 @@
         <hr>
         Use this form to import logbook data from another digital logbook application. Any data in a valid CSV
         format will work.
-        
+
         <h3>Importing from LogShare:</h3>
         Click on "Export your logbook"<br>
         Select either format. (tab-seperated values recommended)
-        
+
         <h3>Importing from ForPilots Logbook:</h3>
         Click file -> export -> CSV<br>
-        The resulting file should be called "export.csv"    
-        
+        The resulting file should be called "export.csv"
+
         <h3>Importing from LogbookPro:</h3>
         Since LogbookPro <span style="text-decoration: line-through;">is a bloated piece of garbage</span>, outputs data in an
         invalid CSV format, you will have to first export your data as Excel spreadsheet (File -> Export -> Export to Excel), then save that
         into CSV format from within Excel. Also note that in order to export to excel, you must have Microsoft Excel installed. If you
         do not have Microsoft Excel, your only option is to export to CSV, then go through the remarks column (or any other column
         that may contain a comma) of each row, inclosing in quotation marks (""), any entries that contain a comma.
-        
+
         <h3>Importing from Excel (or any other spreadsheet application):</h3>
         Click on File -> Save, then in the dialog box, at the bottom, select "CSV (Comma seperated)".<br>
         In order for FlightLogg.in' to know what to do with each column, the headers must be named a certain way. The following are columns
         that FlightLogg.in recognizes:
-        
+
         <ul>
             <li><strong>Date</strong></li>
             <li><strong>Tailnumber</strong></li>
@@ -112,21 +112,21 @@
             <li><strong>Night</strong></li>
             <li><strong>Day Landings</strong></li>
             <li><strong>Night Landings</strong></li>
-            
+
             <li><strong>Person</strong> - Name of the person who rode along in the flight with the logbook owner</li>
             <li><strong>Student</strong> - This column, along with the next three columns will be stored as "Person".</li>
             <li><strong>Instructor</strong> - containing the name of the person who acted as instructor for the flight, not to be confused with "Dual Given"</li>
             <li><strong>Captain</strong></li>
             <li><strong>First Officer</strong></li>
         </ul>
-        
+
         All column names are <strong>not</strong> case sensitive. Some variations in the naming of each columns are tolerated. For instance,
         "Total", "total time", "total duration", and "duration", are all recognized as "total".
-        
+
         <hr>
     </div>
     {% endif %}
-    
+
     {#########################################################################}
 
     {% if flight_out %}
@@ -137,7 +137,7 @@
         {% endfor %}
         </table>
     {% endif %}
-    
+
     {% if non_out %}
         <h2>Non Flying Events:</h2>
         <table class="preview">
@@ -147,14 +147,14 @@
         {% endfor %}
         </table>
     {% endif %}
-    
+
     {% if non_out %}
         <h2>Records:</h2>
         <table class="preview">
         {{records_out.0|safe|linebreaks}}
         </table>
     {% endif %}
-    
+
     {% if plane_out %}
         <h2>Planes:</h2>
         <table class="preview">
@@ -164,6 +164,5 @@
         {% endfor %}
         </table>
     {% endif %}
-	
-{% endblock %}
 
+{% endblock %}

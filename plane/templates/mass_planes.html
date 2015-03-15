@@ -6,7 +6,7 @@
 {% block title %}Mass Edit Planes{% endblock %}
 
 {% block canvas %}
-<form action="{% url mass-planes request.display_user.username %}" method="post">
+<form action="{% url "mass-planes" request.display_user.username %}" method="post">
     {% csrf_token %}
     <div>{{ formset.management_form }}</div>
     <table class="mass_table minor_table">
@@ -29,7 +29,7 @@
         </tfoot>
         <tbody>
             {% for form in formset.forms %}
-            <tr> 
+            <tr>
                 <td>{{form.tailnumber}}{{form.id}}{{form.user}}</td>
                 <td>{{form.manufacturer}}</td>
                 <td>{{form.type}}</td>
