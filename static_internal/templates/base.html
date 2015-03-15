@@ -5,32 +5,33 @@
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <meta name="DESCRIPTION" content="{% block description %}{% endblock %}">
         <meta name="KEYWORDS" content="Airline, Travel, Aircraft, Aviation, Pilot Logbook, Open Source, GPL, Pilot Log, Flight Logbook, web application, Flight Training, Private Pilot">
+        <meta name="microtip" data-currency="btc" content='1FBXrbuqLZkAeKTSNwERmLSbmsN7Mw4UFB'>
         <link rel="icon" type="image/png" href="{% static "images/favicon.ico" %}">
-        
+
         <script type="text/javascript">
             MEDIA_URL = "{{ STATIC_URL }}";
 	        window.google_analytics_uacct = "UA-501381-5";
         </script>
 
         <link rel="stylesheet" type="text/css" href="{% static CSS_URL %}/screen.css">
-		
+
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
         <script type="text/javascript" src="{% static "js/master.js" %}"></script>
         {% block javascript %}{% endblock %}
-		
+
         <title>{% block title %}{% endblock %} - FlightLogg.in - Electronic Pilot Logbook</title>
     </head>
-	
+
     <body>
     <div id="holder">
 
         <div id="logo_header" style="overflow: hidden">
 
             <div id="inner_header">
-            
+
                 <a href="/"><img id="logo" src="{% static CSS_URL %}/logo.png" alt="FlightLogg.in' Logo" /></a>
-                
+
                 <div id="userbox" style="float: right; overflow: hidden">
                     <div style="float: left; margin-top: 10px">
                     {% if DEMO %}
@@ -53,34 +54,34 @@
                         <br><a href="/logout">Log Out</a>
                     {% endif %}
                     </div>
-                    
+
                     <div style="margin-left: 3px; margin-top: 2px; float: right">
                         {% if request.display_user %}
                             {% gravatar request.display_user %}
                         {% else %}
-                        
+
                             {% if user.is_authenticated %}
                                 {% gravatar user %}
                             {% endif %}
-                            
+
                         {% endif %}
                     </div>
-                
+
                 </div>
             </div>
-            
-            
+
+
 
 		</div>
-        
+
         <div id="navbar_header">
             {% with navbar_user as user %}
             {% include "navbar.html" %}
             {% endwith %}
         </div>
-        
+
         <div id="main_content">
-		    
+
             {% block no_canvas %}
             <div id="canvas" class="">
                 <div style="text-align: center; margin: auto auto 10px">
@@ -90,11 +91,11 @@
                 {% block canvas %}{% endblock %}
             </div>
             {% endblock %}
-            
+
 		</div>
 
 		{% include 'footer.html' %}
-		
+
 	</div>
     {% googleanalyticsjs %}
 	</body>

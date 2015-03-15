@@ -13,6 +13,7 @@
         <meta name="google-site-verification" content="xe-f505ZHR6pNZzKFyeK5PNnZSkSZ8LlW979worOSHM" />
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <meta name="DESCRIPTION" content="Pilot Logbook software done right.">
+        <meta name="microtip" data-currency="btc" content='1FBXrbuqLZkAeKTSNwERmLSbmsN7Mw4UFB'>
         <meta name="KEYWORDS" content="Airline, Travel, Aircraft, Aviation, Pilot Logbook, Open Source, GPL, Pilot Log, Flight Logbook, web application, Flight Training, Private Pilot, Flight Log">
         <link rel="icon" type="image/png" href="{% static "images/favicon.ico" %}">
         <link rel='stylesheet' href='{% static 'bootstrap/css/bootstrap-responsive.min.css' %}' />
@@ -126,7 +127,7 @@
                 <div class="modal-body">
                     <label>Username: <input type="text" name='login_username'></label><br>
                     <label>Password: <input type="password" name='login_password'></label>
-                    
+
                     {% if messages %}
                     <ul class="messages">
                       {% for message in messages %}
