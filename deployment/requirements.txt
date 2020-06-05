@@ -1,4 +1,4 @@
-django==1.5.4
+django==1.11.29
 hg+http://bitbucket.org/offline/django-annoying
 git+http://github.com/dcramer/django-devserver.git
 django-extensions
