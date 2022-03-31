@@ -10,7 +10,9 @@ def route_profile(request, r):
     from models import RouteBase
     from plane.models import Plane
     from django.db.models import Sum
-    
+   
+    return HttpResponse("This feature has been temporarily disabled for performance reasons.")
+ 
     try:
         route = Route.objects.filter(simple_rendered__iexact=r)[0]
         rbs = RouteBase.objects\
