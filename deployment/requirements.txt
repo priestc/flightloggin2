@@ -13,7 +13,7 @@ psycopg2
 git+http://github.com/sciyoshi/pyfacebook.git@7ba3654569e2b3d7ecddbe2e05693c24e6d36c24#egg=pyfacebook-0.1-py2.6-dev
 python-openid==2.2.4
 python-dateutil
-reportlab==2.4
+reportlab==3.5.55
 termcolor==0.1.2
 yolk
 boto
