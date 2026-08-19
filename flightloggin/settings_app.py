@@ -40,4 +40,6 @@ EASYDUMP_MANIFESTS = {
     }
 }
 
+EASYDUMP_FAILURE_EMAIL = 'nbvfour@gmail.com'
+
 BADGES_ENABLE = True
