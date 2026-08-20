@@ -10,3 +10,5 @@ dumps
 .DS_Store
 airports/csv
 settings_local.py
+venv2
+.python-version
