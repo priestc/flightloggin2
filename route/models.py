@@ -1,6 +1,6 @@
 import re
 
-from django.contrib.gis.db import models
+from django.db import models
 from django.db.models import Q
 
 from share.middleware import share
@@ -229,7 +229,8 @@ class Route(EnhancedModel):
         
         if not self.land_points:
             self.land_points = Location.objects.filter(
-                    location__isnull=False,    # has valid coordinates
+                    lat__isnull=False,          # has valid coordinates
+                    lng__isnull=False,
                     routebase__route=self,     # is connected to this route
                     routebase__land=True,      # depicts a landing
             ).distinct()
@@ -244,7 +245,8 @@ class Route(EnhancedModel):
         
         if not self.all_points:
             self.all_points = Location.objects.filter(
-                    location__isnull=False,
+                    lat__isnull=False,
+                    lng__isnull=False,
                     routebase__route=self,
             ).distinct()
             
@@ -259,17 +261,17 @@ class Route(EnhancedModel):
         
         if not a:
             a = self._get_AllPoints()
-        
-        mp = a.collect()
-        
+
+        from utils import coord_dist, Point
+        mp = [Point(loc.lng, loc.lat) for loc in a]
+
         dist = []
-        from utils import coord_dist
         for i,point1 in enumerate(mp):
             for j,point2 in enumerate(mp):
                 dist.append(coord_dist(point1, point2))
-        
+
         diameter = max(dist)
-        
+
         return diameter
     
     def get_users(self):
@@ -291,15 +293,15 @@ class Route(EnhancedModel):
         
         if not a:
             a = self._get_AllPoints()
-        
-        mp = a.collect()
-        start = a[0].location
-        
+
+        from utils import coord_dist, Point
+        mp = [Point(loc.lng, loc.lat) for loc in a]
+        start = Point(a[0].lng, a[0].lat)
+
         dist = []
-        from utils import coord_dist
         for i,po in enumerate(mp):
             dist.append(coord_dist(po, start))
-         
+
         return max(dist)
     
     def calc_total_line(self, points="all"):
@@ -312,22 +314,24 @@ class Route(EnhancedModel):
         if points == "land":
             rbs = rbs.exclude(land=False)
         
-        # convert to [(lat,lng), ...] while maintaining the same order
+        from utils import coord_dist, Point
+
+        # convert to [(lng,lat), ...] while maintaining the same order
         # skipping any routebase that has no location
-        points = [(rb.location.location.x, rb.location.location.y)
-                        for rb in rbs if rb.location and rb.location.location]
-        
+        points = [(rb.location.lng, rb.location.lat)
+                        for rb in rbs
+                        if rb.location and rb.location.lat is not None
+                        and rb.location.lng is not None]
+
         dist = []
-        from utils import coord_dist
         for i,po in enumerate(points):
             try:
                 next = points[1+i]
             except IndexError:
                 pass
             else:
-                from django.contrib.gis.geos import Point
-                dist.append(coord_dist(Point(po), Point(next)))
-         
+                dist.append(coord_dist(Point(*po), Point(*next)))
+
         return sum(dist)
     
     ################################

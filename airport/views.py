@@ -2,7 +2,6 @@ import json
 
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.core.urlresolvers import reverse
-from django.contrib.gis.geos import GEOSGeometry
 
 from share.decorator import secret_key
 from annoying.decorators import render_to
@@ -87,7 +86,7 @@ def search_airport(request):
     
     return locals()
 
-@render_to('wiki_airport.html', mimetype="text/plain") #application/xml")
+@render_to('wiki_airport.html', content_type="text/plain") #application/xml")
 def export_to_xml(request, index):
     """
     Export all airports to an XML file for inputting into wikiPLANEia
@@ -125,26 +124,37 @@ def nearby_airports(request):
         return HttpResponseBadRequest('lat/lng must be numbers')
 
     type_ = request.GET['type']
-    
-    point = GEOSGeometry('POINT(%s %s)' % (lng, lat))
 
-    airports = Location.objects\
-                       .exclude(location=None)\
-                       .distance(point)\
-                       .order_by('distance')
-    
+    from route.utils import coord_dist, Point
+    target = Point(lng, lat)
+
+    # rough bounding box pre-filter (~7 miles) so we're not computing exact
+    # distance against every row in the table on every request
+    box = 0.1
+    airports = Location.objects.filter(
+        lat__range=(lat - box, lat + box),
+        lng__range=(lng - box, lng + box),
+    )
+
     if type_ == 'land':
         airports = airports.filter(loc_class=1)
 
+    NM_TO_MI = 1.15078
+    scored = []
+    for airport in airports:
+        dist_mi = coord_dist(Point(airport.lng, airport.lat), target) * NM_TO_MI
+        if dist_mi < 5:
+            scored.append((dist_mi, airport))
+    scored.sort(key=lambda pair: pair[0])
+
     out = []
-    for airport in airports[:10]:
-        if airport.distance.mi < 5:
-            a = {
-                'ident': airport.identifier,
-                'name': airport.name,
-                'distance': "%.2f" % airport.distance.mi,
-            }
-            out.append(a)
+    for dist_mi, airport in scored[:10]:
+        a = {
+            'ident': airport.identifier,
+            'name': airport.name,
+            'distance': "%.2f" % dist_mi,
+        }
+        out.append(a)
 
     track('api-nearby-aiports', {'username': request.user.username})
     return HttpResponse(json.dumps(out), mimetype="application/json")

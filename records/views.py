@@ -37,7 +37,7 @@ def locations(request):
             point = get_point(form.cleaned_data['coordinates'])
             custom = form.save(commit=False)
             custom.loc_class = 3
-            custom.location = point
+            custom.lat, custom.lng = point if point else (None, None)
             custom.user = request.display_user
             
             custom.save()
@@ -56,7 +56,7 @@ def locations(request):
         if form.is_valid():
             point = get_point(form.cleaned_data['coordinates'])
             custom = form.save(commit=False)
-            custom.location = point
+            custom.lat, custom.lng = point if point else (None, None)
             custom.loc_class = 3
             
             custom.save()
@@ -130,19 +130,17 @@ def events(request):
     return locals()
 
 def get_point(val):
-    """Changes "124.1245521,128.212547" to a Point instance"""
-    
-    from django.contrib.gis.geos import Point
-    
+    """Changes "124.1245521,128.212547" to a (lat, lng) tuple"""
+
     if not val:
         return None
-    
+
     if not ',' in val:
         return None
-    try:    
-        x,y = val.split(',')
-        point = Point(float(y),float(x))
+    try:
+        lat, lng = val.split(',')
+        point = (float(lat), float(lng))
     except:
         return None
-    
+
     return point

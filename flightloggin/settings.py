@@ -116,7 +116,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.humanize',
-    'django.contrib.gis',
     'django.contrib.sitemaps',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
@@ -154,8 +153,6 @@ INSTALLED_APPS = (
 )
 
 ################
-
-POSTGIS_TEMPLATE='template_postgis'
 
 AUTH_PROFILE_MODULE = 'profile.Profile'
 

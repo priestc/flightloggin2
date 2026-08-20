@@ -1,17 +1,15 @@
 # encoding: utf-8
 
-import os
-
-from django.contrib.gis.db import models
-#from django.contrib.gis.utils import LayerMapping
+from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Count
 from django.http import Http404
 
 from constants import LOCATION_TYPE, LOCATION_CLASS
 
-from main.enhanced_model import GeoQuerySetManager, EnhancedModel
-from queryset_manager import * 
+from airport.geo_lookup import country_for_point, state_for_point
+from main.enhanced_model import QuerySetManager, EnhancedModel
+from queryset_manager import *
 
 class WikiMixins(object):
     def region_category(self):
@@ -26,7 +24,7 @@ class WikiMixins(object):
                 self.iata_identifier
     
     def wiki_coord(self):
-        return u"{0}° {1}°".format(self.location.y, self.location.x).encode('utf-8')
+        return u"{0}° {1}°".format(self.lat, self.lng).encode('utf-8')
     
     def historical(self):
         out = []
@@ -38,8 +36,8 @@ class WikiMixins(object):
         return "\n".join(out)
 
 class Location(EnhancedModel, WikiMixins):
-    
-    objects = GeoQuerySetManager(LocationQuerySet)
+
+    objects = QuerySetManager(LocationQuerySet)
     
     ## -----------------------------------------------------------------------
     
@@ -64,7 +62,8 @@ class Location(EnhancedModel, WikiMixins):
     municipality = models.CharField(max_length=60, blank=True)
     elevation = models.IntegerField(null=True, blank=True)
     
-    location = models.PointField(null=True, blank=True)
+    lat = models.FloatField(null=True, blank=True)
+    lng = models.FloatField(null=True, blank=True)
     
     ## -----------------------------------------------------------------------
     
@@ -195,31 +194,24 @@ class Location(EnhancedModel, WikiMixins):
         if self.loc_class == 1:
             return super(Location, self).save(*args, **kwargs)
         
-        if self.location and not skip_find_region:
+        if self.lat is not None and self.lng is not None and not skip_find_region:
             # automatically find which country the coordinates fall into
-            loc = self.location.wkt
-            
-            country = getattr(
-              WorldBorders.goon(mpoly__contains=loc), 'iso2',''
-            )
-                
+            country = country_for_point(self.lat, self.lng) or ''
+
             self.country = Country(code=country) # code = pk
-            
+
             if country=='US':
-                state = None
                 # in the US, now find the state
-                state = getattr(
-                  USStates.goon(mpoly__contains=loc), 'state',''
-                )
-                
+                state = state_for_point(self.lat, self.lng)
+
                 if not state:
                     print "NO STATE: %s" % self.identifier
-                    
-                if state:   
+
+                if state:
                     region = state.upper()
                 else:
                     region = "U-A"
-                    
+
                 self.region = Region.goon(code="US-%s" % region)
                 
         return super(Location, self).save(*args, **kwargs)
@@ -250,7 +242,7 @@ class HistoricalIdent(EnhancedModel):
 class Region(EnhancedModel):
     
     ## add custom filterset manager
-    objects = GeoQuerySetManager(CountryRegionQuerySet)
+    objects = QuerySetManager(CountryRegionQuerySet)
     
     code = models.CharField(max_length=48)
     country = models.CharField(max_length=2)
@@ -269,7 +261,7 @@ class Region(EnhancedModel):
 
 class Country(models.Model):
 
-    objects = GeoQuerySetManager(CountryRegionQuerySet)
+    objects = QuerySetManager(CountryRegionQuerySet)
     
     name = models.CharField(max_length=48)
     code = models.CharField(max_length=2, primary_key=True)
@@ -282,96 +274,4 @@ class Country(models.Model):
         verbose_name_plural = "Countries"
         ordering = ('name', )
     
-##############################################################################    
-    
-    
-class WorldBorders(EnhancedModel):
-    name = models.CharField(max_length=50)
-    area = models.IntegerField()
-    pop2005 = models.IntegerField('Population 2005')
-    fips = models.CharField('FIPS Code', max_length=2)
-    iso2 = models.CharField('2 Digit ISO', max_length=2)
-    iso3 = models.CharField('3 Digit ISO', max_length=3)
-    un = models.IntegerField('United Nations Code')
-    region = models.IntegerField('Region Code')
-    subregion = models.IntegerField('Sub-Region Code')
-    lon = models.FloatField()
-    lat = models.FloatField()
-
-    mpoly = models.MultiPolygonField()
-    objects = models.GeoManager()
-
-    class Meta:
-        verbose_name_plural = "World Borders"
-        ordering = ('name', )
-
-    def __unicode__(self):
-        return self.name
-
-worldborders_mapping = {
-    'fips' : 'FIPS',
-    'iso2' : 'ISO2',
-    'iso3' : 'ISO3',
-    'un' : 'UN',
-    'name' : 'NAME',
-    'area' : 'AREA',
-    'pop2005' : 'POP2005',
-    'region' : 'REGION',
-    'subregion' : 'SUBREGION',
-    'lon' : 'LON',
-    'lat' : 'LAT',
-    'mpoly' : 'MULTIPOLYGON',
-}
-
-def import_world(verbose=True):
-    
-    world_shp = os.path.abspath(
-                                os.path.join(os.path.dirname(__file__),
-                                'data/world/TM_WORLD_BORDERS-0.3.shp')
-                            )
-                            
-    lm = LayerMapping(WorldBorders, world_shp, worldborders_mapping,
-                      transform=False, encoding='iso-8859-1')
-
-    lm.save(strict=True, verbose=verbose)
-
 ##############################################################################
-
-class USStates(models.Model):
-    state = models.CharField(max_length=5)
-    name = models.CharField(max_length=24)
-    lon = models.FloatField()
-    lat = models.FloatField()
-    mpoly = models.MultiPolygonField(srid=4269)
-    objects = models.GeoManager()
-    
-    class Meta:
-        verbose_name_plural = "US State Borders"
-        ordering = ('name', )
-    
-    def __unicode__(self):
-        return self.name
-    
-    @classmethod
-    def goon(cls, *args, **kwargs):
-        from annoying.functions import get_object_or_None
-        return get_object_or_None(cls,  *args, **kwargs)
-
-usstates_mapping = {
-    'state' : 'STATE',
-    'name' : 'NAME',
-    'lon' : 'LON',
-    'lat' : 'LAT',
-    'mpoly' : 'MULTIPOLYGON',
-}
-
-def import_state(verbose=True):
-    us_shp = os.path.abspath(
-                                os.path.join(os.path.dirname(__file__),
-                                'data/states/s_01au07.shp')
-                            )
-                            
-    lm = LayerMapping(USStates, us_shp, usstates_mapping,
-                      transform=False, encoding='iso-8859-1')
-
-    lm.save(strict=True, verbose=verbose)

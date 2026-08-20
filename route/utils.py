@@ -1,4 +1,9 @@
 import math
+from collections import namedtuple
+
+# x=longitude, y=latitude, matching the old GEOS Point convention that
+# coord_dist() below was written against.
+Point = namedtuple('Point', ['x', 'y'])
 
 def coord_dist(p1, p2):
     """

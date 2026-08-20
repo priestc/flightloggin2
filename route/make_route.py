@@ -68,11 +68,13 @@ class MakeRoute(object):
             navaid = Location.objects.filter(loc_class=2, identifier=ident)
             #if more than 1 navaids come up,
             if navaid.count() > 1:
-                #run another query to find the nearest
-                last_point = last_rb.location 
-                navaid = navaid.distance(last_point.location)\
-                               .order_by('distance')[0]
-                               
+                #find the nearest one to the last point
+                from utils import coord_dist, Point
+                last_point = last_rb.location
+                target = Point(last_point.lng, last_point.lat)
+                navaid = min(navaid,
+                             key=lambda n: coord_dist(Point(n.lng, n.lat), target))
+
             elif navaid.count() == 0:
                 navaid = None
             else:

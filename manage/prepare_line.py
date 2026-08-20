@@ -142,22 +142,11 @@ class LocationFixer(Fixer):
                 'loc_type': 'solo',
              }
              
-    def location_processor(self):
-        """
-        Grabs the lattitude and longitude from the line and cats them together
-        to output a WKT representation for inputting to the PointField
-        """
-        
-        lat = self.proper_mapper('lat')
-        lng = self.proper_mapper('lng')
-        
-        return "POINT (%s %s)" % (lat, lng)
-        
-        
     def as_dict(self):
         return {
                     'name':          self.proper_mapper('name'),
-                    'location':      self.processor("location"),
+                    'lat':           self.proper_mapper('lat'),
+                    'lng':           self.proper_mapper('lng'),
                     'municipality':  self.proper_mapper("municipality"),
                     "loc_type":      self.proper_mapper("loc_type"),
                }

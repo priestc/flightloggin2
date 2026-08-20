@@ -1,7 +1,5 @@
-from django.contrib.gis.db.models import GeoManager
 from django.db.models import Model, Manager
 
-from django.contrib.gis.db.models.query import GeoQuerySet
 from django.db.models.query import QuerySet
 
 from mixins import UserMixin, GoonMixin
@@ -39,16 +37,10 @@ class ManagerMixin(object):
 class EnhancedQuerySet(QuerySet, UserMixin):
     pass
 
-class EnhancedGeoQuerySet(GeoQuerySet, UserMixin):
-    pass
-
 ###################################################
 
 class QuerySetManager(ManagerMixin, Manager):
     qs = EnhancedQuerySet
-
-class GeoQuerySetManager(ManagerMixin, GeoManager):
-    qs = EnhancedGeoQuerySet
 
 ###################################################
    
